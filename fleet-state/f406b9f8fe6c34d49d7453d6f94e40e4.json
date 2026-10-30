@@ -2,7 +2,7 @@
   "task_id": "f406b9f8fe6c34d49d7453d6f94e40e4",
   "repo": "lab-sandbox/-img-src-https-14.rs-4-a-fooooooooooooooooooooooooooooooooo-href-JaVAScript-26colon-3Bpromp",
   "issue_number": 1,
-  "status": "DISPATCHING",
+  "status": "DISPATCHED",
   "dispatch_id": "9f9fb60eadd549b7b1ee1c907a1ec122",
   "admission": {
     "funding": {
@@ -60,5 +60,5 @@
   ],
   "dispatched_at": "2026-10-30T17:43:49.672252+00:00",
   "attempt": 0,
-  "updated_at": "2026-10-30T17:43:49.672276+00:00"
+  "updated_at": "2026-10-30T17:43:54.358506+00:00"
 }
