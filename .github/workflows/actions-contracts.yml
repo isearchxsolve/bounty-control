@@ -120,4 +120,6 @@ jobs:
 
         python3 -W error scripts/test_competition_linked.py
 
-        python3 -W error scripts/test_unbounded_scope.py'
+        python3 -W error scripts/test_unbounded_scope.py
+
+        python3 -W error scripts/test_non_code_deliverable.py'

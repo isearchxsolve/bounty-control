@@ -1650,6 +1650,26 @@ def is_code_change_request(title: str, body: str, labels: list) -> tuple:
             or re.search(_VIDEO_DELIVERABLE, body_l)):
         return (False, "REFUSED_NOT_A_CODE_CHANGE: video_deliverable: deliverable is not source code")
 
+    # --- 2c. NON-CODE DELIVERABLE (measured 2026-10-30) -------------------
+    # Two live dispatches reached the engineer and were refused there as content and design work:
+    # better-feedback/better-commons#3 ("Content bounty: ...") and ProjectWyvern/frontends#1
+    # ("Concept design: ..."). Neither matched an external, process or code pattern, so the
+    # fail-open tail admitted them and each one spent a claim and a checkout. A deliverable whose
+    # title names copy, a mockup or a design artefact, with no code label, no reproduction and no
+    # code reference, is refused here. "docs" and "documentation" are deliberately NOT in this
+    # list: a documentation fix can be a real code change.
+    non_code_title = re.search(
+        "(?<![a-z])(?:content bounty|concept design|design (?:a|the|an|set of|mockups?)|"
+        "mockups?|wireframes?|logo design|blog posts?|whitepaper|pitch deck|"
+        "marketing (?:campaign|copy)|copywriting|tutorial video)(?![a-z])", title_l)
+    if (non_code_title
+            and not (labels_set & {"bug", "enhancement", "feature", "security", "type/bug",
+                                   "type/feature", "good first issue", "help wanted"})
+            and not _has_code_reference(body_l)
+            and not re.search(_REPRO_EVIDENCE, body_l)):
+        return (False, "REFUSED_NOT_A_CODE_CHANGE: non_code_deliverable: title names copy, design "
+                       "or media, no code label, no reproduction, no code reference")
+
     # --- 3. CODE CHANGE: admit --------------------------------------------
     # Code labels alone are insufficient - they can be applied to anything.
     # Require at least one code keyword in title/body OR a code file reference.
