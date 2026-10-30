@@ -2,7 +2,7 @@
   "task_id": "7a117a6caa82c0b73368b06907dd7728",
   "repo": "dAAAb/BBFT",
   "issue_number": 10,
-  "status": "DISPATCHING",
+  "status": "DISPATCHED",
   "dispatch_id": "2a2ca3d40df74bf3882745a7870255cb",
   "admission": {
     "funding": {
@@ -35,5 +35,5 @@
   ],
   "dispatched_at": "2026-10-30T11:38:17.775235+00:00",
   "attempt": 0,
-  "updated_at": "2026-10-30T11:38:17.775253+00:00"
+  "updated_at": "2026-10-30T11:38:19.424396+00:00"
 }
