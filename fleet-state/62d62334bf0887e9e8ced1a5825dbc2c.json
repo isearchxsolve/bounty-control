@@ -1,0 +1,39 @@
+{
+  "task_id": "62d62334bf0887e9e8ced1a5825dbc2c",
+  "repo": "harmony-one/bounties",
+  "issue_number": 14,
+  "status": "DISPATCHING",
+  "dispatch_id": "935785fb88f54a9e8c85f3458ceca9e5",
+  "admission": {
+    "funding": {
+      "amount": "20000",
+      "currency": "USD",
+      "usd_value": "20000",
+      "quote": {
+        "basis": "USD face value"
+      },
+      "raw": "$20,000",
+      "source_url": "https://github.com/harmony-one/bounties/issues/14",
+      "payer": "lijiang2087"
+    },
+    "technical_signals": [
+      "performance",
+      "transaction"
+    ],
+    "component_references": [],
+    "source_locations": [],
+    "engineering_evidence_sources": [
+      "https://github.com/harmony-one/bounties/issues/14",
+      "https://github.com/harmony-one/bounties/issues/14#issuecomment-810415618"
+    ],
+    "source_issue": "https://github.com/harmony-one/bounties/issues/14",
+    "fetched_at": "2026-10-30T13:21:38.884032+00:00"
+  },
+  "lanes": [
+    "founder",
+    "normal"
+  ],
+  "dispatched_at": "2026-10-30T13:21:40.306806+00:00",
+  "attempt": 0,
+  "updated_at": "2026-10-30T13:21:40.306827+00:00"
+}
