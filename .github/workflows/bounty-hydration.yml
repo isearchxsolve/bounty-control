@@ -1,7 +1,6 @@
 name: Bounty hydration drain
 'on':
-  schedule:
-  - cron: '2,17,32,47 * * * *'
+  # Retired schedule to preserve 100% of API quota for sovereign discovery & delivery
   workflow_dispatch: {}
 concurrency:
   group: bounty-hydration

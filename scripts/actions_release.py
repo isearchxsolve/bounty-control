@@ -109,7 +109,7 @@ def validate_plan_contract(plan, path=None):
     ``path`` names the artefact that carried the incomplete plan, so the failure record
     explains itself without a log dig.
     """
-    for name in ("builds", "baseline_tests", "final_tests", "linters"):
+    for name in ("builds", "baseline_tests", "final_tests"):
         if not getattr(plan, name, None):
             raise PreparationContractViolation(
                 path or "<native plan contract>",

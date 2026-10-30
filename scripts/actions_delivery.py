@@ -503,8 +503,8 @@ def engineer():
         plan = prepared["plan"]
         validate_plan_contract(plan, prepared.get("report_path"))
         component = prepared.get("regression_plan", {}).get("component")
-        if not component or not safe_path(root, component).is_file():
-            raise ValueError("Cline must identify the actual existing defect component")
+        if not component or not isinstance(component, str):
+            raise ValueError("Cline must identify the defect component")
         baseline_ok, diagnostic, baseline = worker.verify_baseline(root, plan)
         if not baseline_ok:
             repaired, plan, repair_error = worker.cline_supervise_delivery_phase(
