@@ -2,7 +2,7 @@
   "task_id": "eb71c78d8f925650e387ba3e6e20247b",
   "repo": "katiejohnson/Labs_Relay",
   "issue_number": 1,
-  "status": "CLAIMED",
+  "status": "REJECTED_PREPARATION",
   "dispatch_id": "75e1f9dd4c6d455780ae28a436d884d9",
   "admission": {
     "funding": {
@@ -38,7 +38,7 @@
   ],
   "dispatched_at": "2026-10-30T14:09:44.603308+00:00",
   "attempt": 1,
-  "updated_at": "2026-10-30T14:09:57.225489+00:00",
+  "updated_at": "2026-10-30T14:13:15.509413+00:00",
   "owner": "41069415466:1",
   "previous_owner": null,
   "previous_status": "DISPATCHED",
@@ -46,5 +46,40 @@
   "harness_sha": "122af062685a0bd1f1d161d9c42a07300819cc15",
   "claimed_at": "2026-10-30T14:09:57.225402+00:00",
   "lease_expires_at": "2026-10-30T18:14:57.225415+00:00",
-  "preparation_budget_seconds": 14400
+  "preparation_budget_seconds": 14400,
+  "at": "2026-10-30T14:13:00.004700+00:00",
+  "reason": "Cline preparation blocked: Issue #1 'Developing a Richer Financial Reputation' is a ConsenSys/Gitcoin hackathon bounty challenge, not a concrete code change to this repository. (1) Non-engineering deliverable: the text defines a broad ideation brief ('rewrite the rules on how we measure an individual's financial reputation'), accepts submissions 'in all formats, including but not limited to wireframes, landing page, prototypes, or production code', and requires a separate 'potential' deliverable (industry/user/use-case, market-disruption research, SME testimonial, blockchain-value proof). This is market validation / a generic product idea, not a reproducible defect or focused engineering feature. (2) Withdrawn funding: gitcoinbot comment 2019-05-14T12:54:31Z states 'The funding of 24.0 ETH (5047.6 USD @ $210.32/ETH) attached to this issue has been cancelled by the bounty submitter'; an earlier state comment (2019-04-14T09:28:42Z) also shows the issue status as 'Cancelled'. (3) Already-competing submissions: merged PRs #3-#13 are the bounty submissions (Enable, Landbrokes, Double dabble, Amerigo/SmartPiggies, Ristretto, Dcred); HEAD commit 437e713e 'updating submissions to just GH' rewrites those submission.md files. (4) The repository is a submissions-collection repo only: root readme.md is the hackathon submission-instructions doc, and the root contains only LICENSE.md, readme.md and the financial-reputation/ and double-opt-in-credit/ submission folders; there is no root manifest, no build, no tests, no lint and no CI (.github absent). Per the delivery rules this is a blocked case (market validation/ideation, withdrawn funding, competing PRs); the checkout was left unchanged and no code was edited.",
+  "declared_reason": "Issue #1 'Developing a Richer Financial Reputation' is a ConsenSys/Gitcoin hackathon bounty challenge, not a concrete code change to this repository. (1) Non-engineering deliverable: the text defines a broad ideation brief ('rewrite the rules on how we measure an individual's financial reputation'), accepts submissions 'in all formats, including but not limited to wireframes, landing page, prototypes, or production code', and requires a separate 'potential' deliverable (industry/user/use-case, market-disruption research, SME testimonial, blockchain-value proof). This is market validation / a generic product idea, not a reproducible defect or focused engineering feature. (2) Withdrawn funding: gitcoinbot comment 2019-05-14T12:54:31Z states 'The funding of 24.0 ETH (5047.6 USD @ $210.32/ETH) attached to this issue has been cancelled by the bounty submitter'; an earlier state comment (2019-04-14T09:28:42Z) also shows the issue status as 'Cancelled'. (3) Already-competing submissions: merged PRs #3-#13 are the bounty submissions (Enable, Landbrokes, Double dabble, Amerigo/SmartPiggies, Ristretto, Dcred); HEAD commit 437e713e 'updating submissions to just GH' rewrites those submission.md files. (4) The repository is a submissions-collection repo only: root readme.md is the hackathon submission-instructions doc, and the root contains only LICENSE.md, readme.md and the financial-reputation/ and double-opt-in-credit/ submission folders; there is no root manifest, no build, no tests, no lint and no CI (.github absent). Per the delivery rules this is a blocked case (market validation/ideation, withdrawn funding, competing PRs); the checkout was left unchanged and no code was edited.",
+  "evidence": {
+    "action": "blocked",
+    "worktree": "/tmp/bounty-workspaces/repos/katiejohnson--Labs_Relay--1",
+    "base_sha": "437e713ef1ed7ff32b1324041d6cb41f99b5bff1",
+    "default_branch": "master",
+    "sources": [
+      {
+        "path": "readme.md",
+        "sha256": "ddbdc64548ad9de48b6d9c4e91e731b284e4b4438b69e798278c589317593fa8"
+      },
+      {
+        "path": "LICENSE.md",
+        "sha256": "002c2696d92b5c8cf956c11072baa58eaf9f6ade995c031ea635c6a1ee342ad1"
+      }
+    ],
+    "run_url": "",
+    "admission": {
+      "amount": "36",
+      "currency": "ETH",
+      "usd_value": "79834.860",
+      "quote": {
+        "usd_rate": "2217.635",
+        "source_url": "https://api.coinbase.com/v2/prices/ETH-USD/spot",
+        "observed_at": "2026-10-30T14:09:55.857379+00:00",
+        "quote_date": null
+      },
+      "raw": "36 ETH",
+      "source_url": "https://github.com/katiejohnson/Labs_Relay/issues/1",
+      "payer": "katiejohnson"
+    }
+  },
+  "finished_at": "2026-10-30T14:13:14.755928+00:00"
 }
