@@ -1,0 +1,44 @@
+{
+  "task_id": "475d1d09e065fdc5d4969d5cb70ddac6",
+  "repo": "Yof3ng/picker",
+  "issue_number": 53,
+  "status": "DISPATCHING",
+  "dispatch_id": "c242e0d1f07746c6876f9e69f37548e8",
+  "admission": {
+    "funding": {
+      "amount": "600",
+      "currency": "USD",
+      "usd_value": "600",
+      "quote": {
+        "basis": "USD face value"
+      },
+      "raw": "600$",
+      "source_url": "https://github.com/Yof3ng/picker/issues/53",
+      "payer": "Yof3ng"
+    },
+    "technical_signals": [
+      "bug",
+      "bug_bounty",
+      "bypass",
+      "cryptography",
+      "distributed",
+      "overflow",
+      "performance"
+    ],
+    "component_references": [
+      "ETHOS"
+    ],
+    "source_locations": [],
+    "engineering_evidence_sources": [
+      "https://github.com/Yof3ng/picker/issues/53"
+    ],
+    "source_issue": "https://github.com/Yof3ng/picker/issues/53",
+    "fetched_at": "2026-10-30T15:14:39.612130+00:00"
+  },
+  "lanes": [
+    "founder"
+  ],
+  "dispatched_at": "2026-10-30T15:14:41.259797+00:00",
+  "attempt": 0,
+  "updated_at": "2026-10-30T15:14:41.259819+00:00"
+}
