@@ -1,0 +1,36 @@
+{
+  "task_id": "f6edd5599c70db503b683151163bcaf3",
+  "repo": "saricizmeli/repo",
+  "issue_number": 26,
+  "status": "DISPATCHING",
+  "dispatch_id": "a1208388a7aa4138b0e18693fd3382fe",
+  "admission": {
+    "funding": {
+      "amount": "260",
+      "currency": "USD",
+      "usd_value": "260",
+      "quote": {
+        "basis": "USD face value"
+      },
+      "raw": "$260",
+      "source_url": "https://github.com/saricizmeli/repo/issues/26#issuecomment-2582859834",
+      "payer": "saricizmeli"
+    },
+    "technical_signals": [
+      "issue"
+    ],
+    "component_references": [],
+    "source_locations": [],
+    "engineering_evidence_sources": [
+      "https://github.com/saricizmeli/repo/issues/26#issuecomment-2582859834"
+    ],
+    "source_issue": "https://github.com/saricizmeli/repo/issues/26",
+    "fetched_at": "2026-10-30T11:17:33.423489+00:00"
+  },
+  "lanes": [
+    "programs"
+  ],
+  "dispatched_at": "2026-10-30T11:17:34.775551+00:00",
+  "attempt": 0,
+  "updated_at": "2026-10-30T11:17:34.775571+00:00"
+}
