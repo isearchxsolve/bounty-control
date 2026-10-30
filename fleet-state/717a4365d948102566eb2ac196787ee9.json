@@ -2,7 +2,7 @@
   "task_id": "717a4365d948102566eb2ac196787ee9",
   "repo": "EtherDotBlue/MythX",
   "issue_number": 4,
-  "status": "CLAIMED",
+  "status": "FAILED_DELIVERABLE_MISSING",
   "dispatch_id": "9c8116828b3645b59ad9052a8f3275e3",
   "admission": {
     "funding": {
@@ -43,7 +43,7 @@
   ],
   "dispatched_at": "2026-10-30T15:40:01.166314+00:00",
   "attempt": 2,
-  "updated_at": "2026-10-30T15:40:16.827303+00:00",
+  "updated_at": "2026-10-30T15:44:55.689578+00:00",
   "owner": "41082812920:1",
   "previous_owner": "41075997612:1",
   "previous_status": "DISPATCHED",
@@ -54,10 +54,10 @@
   "preparation_budget_seconds": 14400,
   "kind": "deliverable_invalid",
   "retryable": true,
-  "diagnostic": "Cline deliverable invalid at /tmp/fleet-artifacts/delivery-supervisor/2be1a9e26d8f476794aaa23c7e039c20.preparation.json: invalid base_sha: ''",
-  "path": "/tmp/fleet-artifacts/delivery-supervisor/2be1a9e26d8f476794aaa23c7e039c20.preparation.json",
+  "diagnostic": "Cline deliverable invalid at /tmp/fleet-artifacts/delivery-supervisor/e7c43278ba9842be94636218411ae6f8.preparation.json: invalid base_sha: ''",
+  "path": "/tmp/fleet-artifacts/delivery-supervisor/e7c43278ba9842be94636218411ae6f8.preparation.json",
   "reason": "invalid base_sha: ''",
-  "at": "2026-10-30T14:58:15.792265+00:00",
+  "at": "2026-10-30T15:44:43.310820+00:00",
   "failures": [
     {
       "run_url": "https://github.com/isearchxsolve/bounty-control/actions/runs/41075997612",
@@ -68,7 +68,17 @@
       "path": "/tmp/fleet-artifacts/delivery-supervisor/2be1a9e26d8f476794aaa23c7e039c20.preparation.json",
       "reason": "invalid base_sha: ''",
       "at": "2026-10-30T14:58:15.792265+00:00"
+    },
+    {
+      "run_url": "https://github.com/isearchxsolve/bounty-control/actions/runs/41082812920",
+      "status": "FAILED_DELIVERABLE_MISSING",
+      "kind": "deliverable_invalid",
+      "retryable": true,
+      "diagnostic": "Cline deliverable invalid at /tmp/fleet-artifacts/delivery-supervisor/e7c43278ba9842be94636218411ae6f8.preparation.json: invalid base_sha: ''",
+      "path": "/tmp/fleet-artifacts/delivery-supervisor/e7c43278ba9842be94636218411ae6f8.preparation.json",
+      "reason": "invalid base_sha: ''",
+      "at": "2026-10-30T15:44:43.310820+00:00"
     }
   ],
-  "finished_at": "2026-10-30T14:58:27.619634+00:00"
+  "finished_at": "2026-10-30T15:44:55.190377+00:00"
 }
