@@ -2,7 +2,7 @@
   "task_id": "59b9eabe39922cfaffb65144f1da8920",
   "repo": "Tyaoo/picker",
   "issue_number": 1497,
-  "status": "CLAIMED",
+  "status": "REJECTED_PREPARATION",
   "dispatch_id": "522f278ebc8b4b4182543f5517d3ef4b",
   "admission": {
     "funding": {
@@ -36,7 +36,7 @@
   ],
   "dispatched_at": "2026-10-30T12:09:03.312153+00:00",
   "attempt": 1,
-  "updated_at": "2026-10-30T12:09:16.950942+00:00",
+  "updated_at": "2026-10-30T12:13:25.824112+00:00",
   "owner": "41053199796:1",
   "previous_owner": null,
   "previous_status": "DISPATCHED",
@@ -44,5 +44,57 @@
   "harness_sha": "122af062685a0bd1f1d161d9c42a07300819cc15",
   "claimed_at": "2026-10-30T12:09:16.950901+00:00",
   "lease_expires_at": "2026-10-30T16:14:16.950910+00:00",
-  "preparation_budget_seconds": 14400
+  "preparation_budget_seconds": 14400,
+  "at": "2026-10-30T12:13:09.203407+00:00",
+  "reason": "Cline preparation blocked: Issue #1497 '[\u6bcf\u65e5\u4fe1\u606f\u6d41] 2026-09-03' (label 'daily', author OWNER Tyaoo, 0 comments) is an AUTOMATICALLY GENERATED daily content-feed issue, not a request for a code change. Its body is a checklist of ~200 external news/article links grouped by source (SecWiki News, \u77e5\u9053\u521b\u5b87404\u5b9e\u9a8c\u5ba4, Doonsec feed, blogs, etc.) under the heading '# \u6bcf\u65e5\u5b89\u5168\u8d44\u8baf(2026-09-03)'. It contains no reproducible defect, no requested feature, and no code-level maintenance request. The repository itself mechanically creates these issues every day: .github/workflows/daily.yml line 40 runs `gh issue create --title \"[\u6bcf\u65e5\u4fe1\u606f\u6d41] `date +'%Y-%m-%d'`\" -F today.md --label \"daily\"` (cron '55 1 * * *'), and daily.yml line 50 commits the generated archive as '\u6bcf\u65e5\u5b89\u5168\u8d44\u8baf(date)'. The 'daily' label is documented in README.md as the auto-applied label for the daily information feed. Sibling open PRs (#1500 'Fix #1499: [\u6bcf\u65e5\u4fe1\u606f\u6d41] 2026-09-05', #1295 'Fix #1006: [\u6bcf\u65e5\u4fe1\u606f\u6d41] 2025-05-13') show automated agents misfiling sibling daily-feed content issues as bug fixes. The admission 'technical_signals' (bug, bug_bounty, cross-tenant, problems) and the $8,000 funding are keyword/classifier artifacts not grounded in the issue text. Per policy (content/documentation deliverable with no repository change), no code change is produced and the checkout is left unchanged.",
+  "declared_reason": "Issue #1497 '[\u6bcf\u65e5\u4fe1\u606f\u6d41] 2026-09-03' (label 'daily', author OWNER Tyaoo, 0 comments) is an AUTOMATICALLY GENERATED daily content-feed issue, not a request for a code change. Its body is a checklist of ~200 external news/article links grouped by source (SecWiki News, \u77e5\u9053\u521b\u5b87404\u5b9e\u9a8c\u5ba4, Doonsec feed, blogs, etc.) under the heading '# \u6bcf\u65e5\u5b89\u5168\u8d44\u8baf(2026-09-03)'. It contains no reproducible defect, no requested feature, and no code-level maintenance request. The repository itself mechanically creates these issues every day: .github/workflows/daily.yml line 40 runs `gh issue create --title \"[\u6bcf\u65e5\u4fe1\u606f\u6d41] `date +'%Y-%m-%d'`\" -F today.md --label \"daily\"` (cron '55 1 * * *'), and daily.yml line 50 commits the generated archive as '\u6bcf\u65e5\u5b89\u5168\u8d44\u8baf(date)'. The 'daily' label is documented in README.md as the auto-applied label for the daily information feed. Sibling open PRs (#1500 'Fix #1499: [\u6bcf\u65e5\u4fe1\u606f\u6d41] 2026-09-05', #1295 'Fix #1006: [\u6bcf\u65e5\u4fe1\u606f\u6d41] 2025-05-13') show automated agents misfiling sibling daily-feed content issues as bug fixes. The admission 'technical_signals' (bug, bug_bounty, cross-tenant, problems) and the $8,000 funding are keyword/classifier artifacts not grounded in the issue text. Per policy (content/documentation deliverable with no repository change), no code change is produced and the checkout is left unchanged.",
+  "evidence": {
+    "action": "blocked",
+    "worktree": "/tmp/bounty-workspaces/repos/Tyaoo--picker--1497",
+    "base_sha": "f1d886f585e807e82f84da6123f4858ef365f461",
+    "default_branch": "main",
+    "sources": [
+      {
+        "path": ".github/workflows/daily.yml",
+        "sha256": "60042e008e529bb95dc2c11b487b77e0f2fdf1b7b3a26b6599ce18787089d309"
+      },
+      {
+        "path": "requirements.txt",
+        "sha256": "0bd080de6e0416d13591bb124ecde53fcd8bed8b91c3cce93caccf2405837639"
+      },
+      {
+        "path": "config.yml",
+        "sha256": "970754f21ec94c92c68bb241c94a5c84eeafec2937d0a4da9892be01fb2bc7e0"
+      },
+      {
+        "path": "README.md",
+        "sha256": "1962b4b04aba89281e8c1c3c7c013fc615f1909ec2e657e5afdc3a31d7baa0b7"
+      },
+      {
+        "path": "bot.py",
+        "sha256": "fb85e5c5c09e0d352db2373435334568d286c89f349fcad2996e502d6fd88b07"
+      },
+      {
+        "path": "yarb.py",
+        "sha256": "87a2d7531e8d407bc789446cb7823eeb09843dff40fa21223e222998d9cc1fd0"
+      },
+      {
+        "path": "install.sh",
+        "sha256": "c76bee4563a42e3b9e6ae1b465bb68a300ab2b6a159919d6b859f3327ece34e0"
+      }
+    ],
+    "run_url": "",
+    "admission": {
+      "amount": "8000",
+      "currency": "USD",
+      "usd_value": "8000",
+      "quote": {
+        "basis": "USD face value"
+      },
+      "raw": "$8,000",
+      "source_url": "https://github.com/Tyaoo/picker/issues/1497",
+      "payer": "Tyaoo"
+    }
+  },
+  "finished_at": "2026-10-30T12:13:25.334884+00:00"
 }
