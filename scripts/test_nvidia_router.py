@@ -7,7 +7,7 @@ import unittest
 
 import nvidia_router as nr
 
-MODEL = "nvidia/nemotron-3.5-super-vl-120b-a12b"
+MODEL = nr.DEFAULT_MODEL
 
 
 def ok_body(text="ok"):

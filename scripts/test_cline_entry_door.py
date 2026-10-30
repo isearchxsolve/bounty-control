@@ -561,7 +561,7 @@ class ProfileCarriesTheGateway(unittest.TestCase):
     readback refuses a profile whose base URL was not persisted. No network, no real auth.
     """
 
-    def _fake_auth_that_persists(self, data_dir, base_url, model="nvidia/nemotron-3.5-super-vl-120b-a12b",
+    def _fake_auth_that_persists(self, data_dir, base_url, model=door.DEFAULT_ENTRY_MODEL,
                                  expected_url="http://127.0.0.1:8099/v1"):
         def run(command, **kwargs):
             os.makedirs(os.path.join(data_dir, "settings"), exist_ok=True)

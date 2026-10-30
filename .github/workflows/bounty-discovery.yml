@@ -41,6 +41,8 @@ jobs:
       env:
         NVIDIA_API_KEY: ${{ secrets.NVIDIA_API_KEY }}
         BOUNTY_ENTRY_DOOR: ${{ vars.ENTRY_DOOR || 'cline' }}
+        BOUNTY_ENTRY_MODEL: ${{ vars.ENTRY_MODEL || 'deepseek-ai/deepseek-v4.1-flash' }}
+        NVIDIA_MODEL: ${{ vars.NVIDIA_MODEL || 'deepseek-ai/deepseek-v4.1-flash' }}
         BOUNTY_AGENT_WORKSPACE: /tmp/bounty-agent
         BOUNTY_AGENT_ROUNDS: '2'
       run: python3 -u scripts/actions_dispatch.py --live --once --queries-per-lane 3 --max-dispatches 2 --lane ${{ vars.ACTIVE_LANES || 'all' }}

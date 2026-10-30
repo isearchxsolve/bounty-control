@@ -36,7 +36,7 @@ import urllib.request
 from pathlib import Path
 
 NIM_URL = os.environ.get("NIM_URL", "https://integrate.api.nvidia.com/v1/chat/completions")
-NIM_MODEL = os.environ.get("NIM_PLANNER_MODEL", "nvidia/nemotron-3.5-super-vl-120b-a12b")
+NIM_MODEL = os.environ.get("NIM_PLANNER_MODEL", "deepseek-ai/deepseek-v4.1-flash")
 NIM_FALLBACK = os.environ.get("NIM_PLANNER_FALLBACK", "nvidia/nemotron-3-ultra-550b-a55b")
 MAX_EXPRESSION_CHARS = 180
 MAX_PROPOSALS_PER_CALL = 8

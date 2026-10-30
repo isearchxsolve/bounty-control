@@ -25,7 +25,7 @@ import uuid
 from typing import Callable, List, Optional, Tuple
 
 NIM_URL = "https://integrate.api.nvidia.com/v1/chat/completions"
-DEFAULT_MODEL = "nvidia/nemotron-3.5-super-vl-120b-a12b"
+DEFAULT_MODEL = os.environ.get("NVIDIA_ROUTER_MODEL", "deepseek-ai/deepseek-v4.1-flash")
 KEYS_ENV = "NVIDIA_KEYS_JSON"
 SINGLE_KEY_ENV = "NVIDIA_API_KEY"
 

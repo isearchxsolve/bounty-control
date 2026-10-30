@@ -117,6 +117,7 @@ def find_issues(root: Optional[str] = None, rounds: int = 2, timeout: int = 1500
         outcome = cline_entry_door.iterate(
             workdir, rounds=rounds, data_dir=os.path.join(workdir, ".cline"),
             limit=limit, timeout=timeout, cline=cline,
+            model=os.environ.get("BOUNTY_ENTRY_MODEL", "deepseek-ai/deepseek-v4.1-flash"),
             first_prompt=cline_entry_door.WORKTREE_PROMPT)
     except Exception as exc:  # a broken door must not stop discovery
         print(json.dumps({"phase": "ENTRY_DOOR", "error": type(exc).__name__,

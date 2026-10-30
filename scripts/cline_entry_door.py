@@ -63,7 +63,10 @@ def resolve_cline(cline: Optional[str] = None) -> List[str]:
     return ["cline"]
 
 
-def prepare_profile(data_dir: str, model: str = "nvidia/nemotron-3.5-super-vl-120b-a12b",
+DEFAULT_ENTRY_MODEL = os.environ.get("BOUNTY_ENTRY_MODEL", "deepseek-ai/deepseek-v4.1-flash")
+
+
+def prepare_profile(data_dir: str, model: str = DEFAULT_ENTRY_MODEL,
                     base_url: Optional[str] = None, cline: Optional[str] = None, timeout: int = 120) -> bool:
     """Configure one Cline data dir exactly as the delivery engine does; True when readback passes.
 
@@ -111,7 +114,7 @@ def run_cline_search(workdir: str, prompt: str = SEARCH_PROMPT, timeout: int = 1
     """Run one agent session that searches, then return what it wrote. No parsing of its prose."""
     os.makedirs(workdir, exist_ok=True)
     data_dir = data_dir or os.path.join(workdir, ".cline")
-    profile_ready = prepare_profile(data_dir, model=model or "nvidia/nemotron-3.5-super-vl-120b-a12b",
+    profile_ready = prepare_profile(data_dir, model=model or DEFAULT_ENTRY_MODEL,
                                     cline=cline)
     target = os.path.join(workdir, "shortlist.jsonl")
     if os.path.exists(target):
@@ -121,7 +124,7 @@ def run_cline_search(workdir: str, prompt: str = SEARCH_PROMPT, timeout: int = 1
     env["CLINE_PROVIDER_SETTINGS_PATH"] = os.path.join(data_dir, "settings", "providers.json")
     command = [*resolve_cline(cline), "--data-dir", data_dir,
                "--provider", "openai-compatible",
-               "--model", model or "nvidia/nemotron-3.5-super-vl-120b-a12b",
+               "--model", model or DEFAULT_ENTRY_MODEL,
                "--key", "nvidia-pool", "-y", "--retries", "2",
                "-t", str(max(60, int(timeout))), "-c", workdir]
     if system_prompt:
