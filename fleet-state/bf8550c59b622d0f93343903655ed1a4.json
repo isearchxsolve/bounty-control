@@ -2,7 +2,7 @@
   "task_id": "bf8550c59b622d0f93343903655ed1a4",
   "repo": "tezos-contrib/gitcoin-bounties",
   "issue_number": 4,
-  "status": "CLAIMED",
+  "status": "REJECTED_PREPARATION",
   "dispatch_id": "d98e4bf438b848dfbf15b3992e1936e6",
   "admission": {
     "funding": {
@@ -35,7 +35,7 @@
   ],
   "dispatched_at": "2026-10-30T17:22:17.293163+00:00",
   "attempt": 1,
-  "updated_at": "2026-10-30T17:22:30.630451+00:00",
+  "updated_at": "2026-10-30T17:25:25.807081+00:00",
   "owner": "41098241567:1",
   "previous_owner": null,
   "previous_status": "DISPATCHED",
@@ -43,5 +43,41 @@
   "harness_sha": "36da4d1f58379020b816cc66cdfa95772df51f6f",
   "claimed_at": "2026-10-30T17:22:30.630397+00:00",
   "lease_expires_at": "2026-10-30T21:27:30.630413+00:00",
-  "preparation_budget_seconds": 14400
+  "preparation_budget_seconds": 14400,
+  "at": "2026-10-30T17:25:11.337456+00:00",
+  "reason": "Cline preparation blocked: Issue #4 'Fractional NFT ownership' is a hackathon/grant CALL FOR OPEN EXPERIMENTATION, not a concrete code change to this repository. Its body explicitly says 'This is a call for open experimentation with solutions' and lists deliverables as a whitepaper, a brand-new 'Decentralized Minimum Viable Product' built from scratch, and a product-backlog writeup, with track rules 'Submissions must be open source (MIT) ... deployed live on the current testnet ... list the addresses of their token contracts'. It contains no component reference, no file path, no reproducible defect, no failing test, and no bounded engineering feature in tezos-contrib/gitcoin-bounties. The repository itself contains only README.md, LICENSE and .gitignore (no code, manifests, lockfiles, CI or tests), so there is nothing to modify and no baseline/regression command to define. Additionally the bounty is already resolved/competed: gitcoinbot records a submission for 1160.1361 XTZ by @giraffekey (fork PR https://github.com/giraffekey/raucous) and the funder Jantinine replied 'Congratulation on your prize, as soon as your address is correct we will distribute the prize', i.e. the awarded funding is no longer live. Per the preparation policy (grant/proposal request, generic product idea without a repository change, already-competing submission / withdrawn funding) the correct action is blocked and the checkout is left unchanged.",
+  "declared_reason": "Issue #4 'Fractional NFT ownership' is a hackathon/grant CALL FOR OPEN EXPERIMENTATION, not a concrete code change to this repository. Its body explicitly says 'This is a call for open experimentation with solutions' and lists deliverables as a whitepaper, a brand-new 'Decentralized Minimum Viable Product' built from scratch, and a product-backlog writeup, with track rules 'Submissions must be open source (MIT) ... deployed live on the current testnet ... list the addresses of their token contracts'. It contains no component reference, no file path, no reproducible defect, no failing test, and no bounded engineering feature in tezos-contrib/gitcoin-bounties. The repository itself contains only README.md, LICENSE and .gitignore (no code, manifests, lockfiles, CI or tests), so there is nothing to modify and no baseline/regression command to define. Additionally the bounty is already resolved/competed: gitcoinbot records a submission for 1160.1361 XTZ by @giraffekey (fork PR https://github.com/giraffekey/raucous) and the funder Jantinine replied 'Congratulation on your prize, as soon as your address is correct we will distribute the prize', i.e. the awarded funding is no longer live. Per the preparation policy (grant/proposal request, generic product idea without a repository change, already-competing submission / withdrawn funding) the correct action is blocked and the checkout is left unchanged.",
+  "evidence": {
+    "action": "blocked",
+    "worktree": "/tmp/bounty-workspaces/repos/tezos-contrib--gitcoin-bounties--4",
+    "base_sha": "abea5186b0bc17ff1692762f009526bec66c9a08",
+    "default_branch": "main",
+    "sources": [
+      {
+        "path": "README.md",
+        "sha256": "8879dd1b60954abfc8066fba140eeef6eca993b9ed608519b9913b2b5d2db29f"
+      },
+      {
+        "path": "LICENSE",
+        "sha256": "26f64c803b07dfcea82ea31790b87fcf5bfc764d63513cfec6af817b62d6bebc"
+      },
+      {
+        "path": ".gitignore",
+        "sha256": "4d543c33deebd0bf72554a02c2f286cb48a134a4fa2a8c754a31d9fdeeab910a"
+      }
+    ],
+    "run_url": "",
+    "admission": {
+      "amount": "7500",
+      "currency": "USD",
+      "usd_value": "7500",
+      "quote": {
+        "basis": "USD face value"
+      },
+      "raw": "$7,500",
+      "source_url": "https://github.com/tezos-contrib/gitcoin-bounties/issues/4",
+      "payer": "Jantinine"
+    }
+  },
+  "finished_at": "2026-10-30T17:25:25.199336+00:00"
 }
