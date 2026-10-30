@@ -2,7 +2,7 @@
   "task_id": "a9ec2677f8139d7ac254fc891113965c",
   "repo": "BruceFeIix/picker",
   "issue_number": 2309,
-  "status": "CLAIMED",
+  "status": "REJECTED_PREPARATION",
   "dispatch_id": "fc31e56469d74b868d65bb3339ef1d4b",
   "admission": {
     "funding": {
@@ -37,7 +37,7 @@
   ],
   "dispatched_at": "2026-10-30T17:01:10.888999+00:00",
   "attempt": 1,
-  "updated_at": "2026-10-30T17:01:24.824055+00:00",
+  "updated_at": "2026-10-30T17:04:31.439764+00:00",
   "owner": "41095097453:1",
   "previous_owner": null,
   "previous_status": "DISPATCHED",
@@ -45,5 +45,53 @@
   "harness_sha": "36da4d1f58379020b816cc66cdfa95772df51f6f",
   "claimed_at": "2026-10-30T17:01:24.824007+00:00",
   "lease_expires_at": "2026-10-30T21:06:24.824021+00:00",
-  "preparation_budget_seconds": 14400
+  "preparation_budget_seconds": 14400,
+  "at": "2026-10-30T17:04:16.288150+00:00",
+  "reason": "Cline preparation blocked: Non-engineering issue. Issue #2309 '[\u6bcf\u65e5\u4fe1\u606f\u6d41] 2026-03-11' (label 'daily') is an auto-generated daily security-news digest posted by the repository's own GitHub Actions bot, not a request for a code change. The 55,126-char body is a markdown list of external article links with '- [ ]' checkboxes grouped by RSS source (e.g. 'SecWiki News', 'Tenable Blog', 'Doonsec feed'); it contains no reproducible defect, no feature specification, no component reference and no repository-change request. Repository BruceFeIix/picker is an RSS/security-news aggregation and push bot (README: a crawler/push program for daily security news, based on GitHub Action automation) whose workflows .github/workflows/daily.yml and issue.yml create one such 'daily info feed'/'daily picks' issue per day; recent issues #2770-#2779 are all identical auto-digests, confirming this is a routine bot artifact and not a discrete engineering task. Context fields are auto-derived noise, not real requirements: admission.technical_signals ['bugs','bypass','cross-tenant','cryptographic','protocol','signature'] are keyword matches from linked article titles (e.g. 'signature verification bypass', 'authentication bypass'), and admission.funding {amount:10000, payer:BruceFeIix} is not backed by any funding/bounty text in the issue body or comments - the issue has 0 comments (REST comments endpoint returned an empty array) and no bounty statement. No open PR references #2309 (GitHub search type:pr state:open => total_count 0), and no prior failures are recorded. This matches the documentation/marketing (informational) non-engineering category, so per instructions the run is blocked with the checkout left unchanged (read-only clone only; no product edits, no branch/PR created).",
+  "declared_reason": "Non-engineering issue. Issue #2309 '[\u6bcf\u65e5\u4fe1\u606f\u6d41] 2026-03-11' (label 'daily') is an auto-generated daily security-news digest posted by the repository's own GitHub Actions bot, not a request for a code change. The 55,126-char body is a markdown list of external article links with '- [ ]' checkboxes grouped by RSS source (e.g. 'SecWiki News', 'Tenable Blog', 'Doonsec feed'); it contains no reproducible defect, no feature specification, no component reference and no repository-change request. Repository BruceFeIix/picker is an RSS/security-news aggregation and push bot (README: a crawler/push program for daily security news, based on GitHub Action automation) whose workflows .github/workflows/daily.yml and issue.yml create one such 'daily info feed'/'daily picks' issue per day; recent issues #2770-#2779 are all identical auto-digests, confirming this is a routine bot artifact and not a discrete engineering task. Context fields are auto-derived noise, not real requirements: admission.technical_signals ['bugs','bypass','cross-tenant','cryptographic','protocol','signature'] are keyword matches from linked article titles (e.g. 'signature verification bypass', 'authentication bypass'), and admission.funding {amount:10000, payer:BruceFeIix} is not backed by any funding/bounty text in the issue body or comments - the issue has 0 comments (REST comments endpoint returned an empty array) and no bounty statement. No open PR references #2309 (GitHub search type:pr state:open => total_count 0), and no prior failures are recorded. This matches the documentation/marketing (informational) non-engineering category, so per instructions the run is blocked with the checkout left unchanged (read-only clone only; no product edits, no branch/PR created).",
+  "evidence": {
+    "action": "blocked",
+    "worktree": "/tmp/bounty-workspaces/repos/BruceFeIix--picker--2309",
+    "base_sha": "cabf4e9212e8fc7c8974b10bf1f735ce145b3b06",
+    "default_branch": "master",
+    "sources": [
+      {
+        "path": "requirements.txt",
+        "sha256": "9b18ebb479dfafdd2369e0705fbf890ce9c2e48bbcf24b1d117af1b07e50ee80"
+      },
+      {
+        "path": "config.yml",
+        "sha256": "8614ba3755bf97b35549f14d5104a7eaf9936a6ba5c1073bc342cec68e19f7ba"
+      },
+      {
+        "path": ".github/workflows/daily.yml",
+        "sha256": "2c135adeb99235f4558f29cfaafcccdc1ddd16dc01b5e62087a1e1ac9a11d555"
+      },
+      {
+        "path": "bot.py",
+        "sha256": "cb2c2a85cc762b016838748e7b1551aa7c84257b8f20d73c8c316843e5d576e9"
+      },
+      {
+        "path": "yarb.py",
+        "sha256": "fbdcaa067f17d4a2e328d70d21f2543f44f6445c4ae15a367d5e00b8dbca1ed0"
+      },
+      {
+        "path": "utils.py",
+        "sha256": "056b729c58bc6306d1e910ec7576028cd328dd2cbb43f06856e84f73718aff25"
+      }
+    ],
+    "run_url": "",
+    "admission": {
+      "amount": "10000",
+      "currency": "USD",
+      "usd_value": "10000",
+      "quote": {
+        "basis": "USD face value"
+      },
+      "raw": "$10K",
+      "source_url": "https://github.com/BruceFeIix/picker/issues/2309",
+      "payer": "BruceFeIix"
+    }
+  },
+  "finished_at": "2026-10-30T17:04:30.976845+00:00"
 }
