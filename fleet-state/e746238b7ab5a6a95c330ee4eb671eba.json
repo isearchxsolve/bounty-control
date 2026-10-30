@@ -2,7 +2,7 @@
   "task_id": "e746238b7ab5a6a95c330ee4eb671eba",
   "repo": "connext/gitcoin",
   "issue_number": 2,
-  "status": "DISPATCHED",
+  "status": "CLAIMED",
   "dispatch_id": "6b2107a59a1042df97f173c2497babcb",
   "admission": {
     "funding": {
@@ -32,6 +32,14 @@
     "normal"
   ],
   "dispatched_at": "2026-10-30T12:50:00.396080+00:00",
-  "attempt": 0,
-  "updated_at": "2026-10-30T12:50:02.366529+00:00"
+  "attempt": 1,
+  "updated_at": "2026-10-30T12:50:12.615064+00:00",
+  "owner": "41058348982:1",
+  "previous_owner": null,
+  "previous_status": "DISPATCHED",
+  "run_url": "https://github.com/isearchxsolve/bounty-control/actions/runs/41058348982",
+  "harness_sha": "122af062685a0bd1f1d161d9c42a07300819cc15",
+  "claimed_at": "2026-10-30T12:50:12.615011+00:00",
+  "lease_expires_at": "2026-10-30T16:55:12.615026+00:00",
+  "preparation_budget_seconds": 14400
 }
