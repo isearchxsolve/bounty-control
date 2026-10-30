@@ -1,0 +1,53 @@
+{
+  "task_id": "27257d2ebb5a86564d46d8cb5bc8772c",
+  "repo": "Circadian-agent/agent-economy-data",
+  "issue_number": 3,
+  "status": "DISPATCHING",
+  "dispatch_id": "8c6cf453bd5342a99b4a4e3ac443fae7",
+  "admission": {
+    "funding": {
+      "amount": "1032",
+      "currency": "USD",
+      "usd_value": "1032",
+      "quote": {
+        "basis": "USD face value"
+      },
+      "raw": "1032 USD",
+      "source_url": "https://github.com/Circadian-agent/agent-economy-data/issues/3#issuecomment-5235044965",
+      "payer": "Circadian-agent"
+    },
+    "technical_signals": [
+      "broken",
+      "bug",
+      "distributed",
+      "error",
+      "failed",
+      "failure",
+      "invariant",
+      "issue",
+      "issues",
+      "problem",
+      "transaction"
+    ],
+    "component_references": [],
+    "source_locations": [],
+    "engineering_evidence_sources": [
+      "https://github.com/Circadian-agent/agent-economy-data/issues/3",
+      "https://github.com/Circadian-agent/agent-economy-data/issues/3#issuecomment-5167972197",
+      "https://github.com/Circadian-agent/agent-economy-data/issues/3#issuecomment-5170740579",
+      "https://github.com/Circadian-agent/agent-economy-data/issues/3#issuecomment-5172909922",
+      "https://github.com/Circadian-agent/agent-economy-data/issues/3#issuecomment-5199814428",
+      "https://github.com/Circadian-agent/agent-economy-data/issues/3#issuecomment-5235044965",
+      "https://github.com/Circadian-agent/agent-economy-data/issues/3#issuecomment-5266668586",
+      "https://github.com/Circadian-agent/agent-economy-data/issues/3#issuecomment-5270549075"
+    ],
+    "source_issue": "https://github.com/Circadian-agent/agent-economy-data/issues/3",
+    "fetched_at": "2026-10-30T11:00:07.085481+00:00"
+  },
+  "lanes": [
+    "founder"
+  ],
+  "dispatched_at": "2026-10-30T11:00:09.147216+00:00",
+  "attempt": 0,
+  "updated_at": "2026-10-30T11:00:09.147237+00:00"
+}
