@@ -2,7 +2,7 @@
   "task_id": "b6c679d063ab26755e11484e0741539e",
   "repo": "SovrynBTC/Ecosystem-Bounties",
   "issue_number": 3,
-  "status": "DISPATCHED",
+  "status": "CLAIMED",
   "dispatch_id": "b38ef0f9c25847c2a1c917ca89372be4",
   "admission": {
     "funding": {
@@ -32,6 +32,14 @@
     "programs"
   ],
   "dispatched_at": "2026-10-30T14:40:52.936976+00:00",
-  "attempt": 0,
-  "updated_at": "2026-10-30T14:40:54.995632+00:00"
+  "attempt": 1,
+  "updated_at": "2026-10-30T14:41:05.583800+00:00",
+  "owner": "41073771615:1",
+  "previous_owner": null,
+  "previous_status": "DISPATCHED",
+  "run_url": "https://github.com/isearchxsolve/bounty-control/actions/runs/41073771615",
+  "harness_sha": "122af062685a0bd1f1d161d9c42a07300819cc15",
+  "claimed_at": "2026-10-30T14:41:05.583747+00:00",
+  "lease_expires_at": "2026-10-30T18:46:05.583762+00:00",
+  "preparation_budget_seconds": 14400
 }
