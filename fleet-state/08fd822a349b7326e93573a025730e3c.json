@@ -2,7 +2,7 @@
   "task_id": "08fd822a349b7326e93573a025730e3c",
   "repo": "Yof3ng/picker",
   "issue_number": 248,
-  "status": "CLAIMED",
+  "status": "REJECTED_PREPARATION",
   "dispatch_id": "ff5038d3f9924e2790b21a8fba9752bf",
   "admission": {
     "funding": {
@@ -41,7 +41,7 @@
   ],
   "dispatched_at": "2026-10-30T16:00:49.510364+00:00",
   "attempt": 2,
-  "updated_at": "2026-10-30T16:01:01.524721+00:00",
+  "updated_at": "2026-10-30T16:04:55.642744+00:00",
   "owner": "41085977466:1",
   "previous_owner": "41082801745:1",
   "previous_status": "DISPATCHED",
@@ -54,7 +54,7 @@
   "retryable": true,
   "inferred": true,
   "diagnostic": "No engineering result and no failure record: the phase was terminated before it could report (exit 143 / runner shutdown)",
-  "at": "2026-10-30T15:42:26.426509+00:00",
+  "at": "2026-10-30T16:04:40.871091+00:00",
   "failures": [
     {
       "run_url": "https://github.com/isearchxsolve/bounty-control/actions/runs/41082801745",
@@ -66,5 +66,43 @@
       "at": "2026-10-30T15:42:26.426509+00:00"
     }
   ],
-  "finished_at": "2026-10-30T15:42:26.426545+00:00"
+  "finished_at": "2026-10-30T16:04:54.894652+00:00",
+  "reason": "Cline preparation blocked: Issue #248 '[\u6bcf\u65e5\u4fe1\u606f\u6d41] 2023-08-01' is NOT a concrete code-change request. It is the auto-generated daily news-digest OUTPUT of this repository's own automation. Evidence: (1) README.md documents the product as '\u4e00\u4e2a\u65b9\u4fbf\u83b7\u53d6\u6bcf\u65e5\u5b89\u5168\u8d44\u8baf\u7684\u722c\u866b\u548c\u63a8\u9001\u7a0b\u5e8f ... \u6bcf\u65e5\u4fe1\u606f\u6d41, \u9ed8\u8ba4\u4e3a\u6bcf\u5929\u65e9\u4e0a9\u70b930\u5206\u63a8\u9001\u6628\u5929\u65b0\u589e\u6587\u7ae0\u5217\u8868' and '\u6bcf\u65e5\u4f1a\u5728issue\u4e2d\u751f\u6210\u6628\u65e5\u4fe1\u606f\u6d41' (a crawler that auto-creates a daily issue listing yesterday's security articles). (2) The issue body is 47,880 chars of pure markdown news links/checkboxes with zero description of a defect, expected/actual behavior, reproduction steps, code location, or requested change; GitHub API status: state=open, labels=['daily'], comments=0, created_at=2023-08-01T02:36:04Z. (3) The admission 'technical_signals' (bug/defect/regression/bugbounty/overflow/problem) are false-positive keyword matches extracted from security-article TITLES inside the digest, e.g. 'Defect Corrections for Work Packages Card', 'PUT Regression Test Scoping - Manage Upgrade Tests App', '#BugBounty #bugbountytips' tweets, and CXSecurity 'Cross-site scripting' advisories - none refer to a defect in this repo's code. (4) Repository state confirms it: Yof3ng/picker is a fork (parent chainreactors/picker); default branch master; HEAD 4a268af78ed31982f869725788980a3e2ccd9d5a 'Delete .github/workflows directory'; content is Python (bot.py, yarb.py, utils.py) + rss/*.opml + config.yml; no test suite, no .github directory, no CI. This is a content/marketing/daily-digest deliverable, a generic non-engineering artifact, not a reproducible defect, feature, or code-level maintenance. Open PRs in Yof3ng/picker: 0. Per policy a non-engineering/content issue must not be turned into a fallback proposal or PR, so the checkout is left unchanged (no branch, remotes, or edits).",
+  "declared_reason": "Issue #248 '[\u6bcf\u65e5\u4fe1\u606f\u6d41] 2023-08-01' is NOT a concrete code-change request. It is the auto-generated daily news-digest OUTPUT of this repository's own automation. Evidence: (1) README.md documents the product as '\u4e00\u4e2a\u65b9\u4fbf\u83b7\u53d6\u6bcf\u65e5\u5b89\u5168\u8d44\u8baf\u7684\u722c\u866b\u548c\u63a8\u9001\u7a0b\u5e8f ... \u6bcf\u65e5\u4fe1\u606f\u6d41, \u9ed8\u8ba4\u4e3a\u6bcf\u5929\u65e9\u4e0a9\u70b930\u5206\u63a8\u9001\u6628\u5929\u65b0\u589e\u6587\u7ae0\u5217\u8868' and '\u6bcf\u65e5\u4f1a\u5728issue\u4e2d\u751f\u6210\u6628\u65e5\u4fe1\u606f\u6d41' (a crawler that auto-creates a daily issue listing yesterday's security articles). (2) The issue body is 47,880 chars of pure markdown news links/checkboxes with zero description of a defect, expected/actual behavior, reproduction steps, code location, or requested change; GitHub API status: state=open, labels=['daily'], comments=0, created_at=2023-08-01T02:36:04Z. (3) The admission 'technical_signals' (bug/defect/regression/bugbounty/overflow/problem) are false-positive keyword matches extracted from security-article TITLES inside the digest, e.g. 'Defect Corrections for Work Packages Card', 'PUT Regression Test Scoping - Manage Upgrade Tests App', '#BugBounty #bugbountytips' tweets, and CXSecurity 'Cross-site scripting' advisories - none refer to a defect in this repo's code. (4) Repository state confirms it: Yof3ng/picker is a fork (parent chainreactors/picker); default branch master; HEAD 4a268af78ed31982f869725788980a3e2ccd9d5a 'Delete .github/workflows directory'; content is Python (bot.py, yarb.py, utils.py) + rss/*.opml + config.yml; no test suite, no .github directory, no CI. This is a content/marketing/daily-digest deliverable, a generic non-engineering artifact, not a reproducible defect, feature, or code-level maintenance. Open PRs in Yof3ng/picker: 0. Per policy a non-engineering/content issue must not be turned into a fallback proposal or PR, so the checkout is left unchanged (no branch, remotes, or edits).",
+  "evidence": {
+    "action": "blocked",
+    "worktree": "/tmp/bounty-workspaces/repos/Yof3ng--picker--248",
+    "base_sha": "4a268af78ed31982f869725788980a3e2ccd9d5a",
+    "default_branch": "master",
+    "sources": [
+      {
+        "path": "requirements.txt",
+        "sha256": "0bd080de6e0416d13591bb124ecde53fcd8bed8b91c3cce93caccf2405837639"
+      },
+      {
+        "path": "install.sh",
+        "sha256": "083bab9e9054241c2386e1abeaab8efd473e49b9ef872799d24b1742e86f2bdb"
+      },
+      {
+        "path": "config.yml",
+        "sha256": "95d4e8ee9a22dd4b897b7ce3dd9edfa1f3fa0e91ddac583bc19b3a19baf2f97f"
+      },
+      {
+        "path": "README.md",
+        "sha256": "1962b4b04aba89281e8c1c3c7c013fc615f1909ec2e657e5afdc3a31d7baa0b7"
+      }
+    ],
+    "run_url": "",
+    "admission": {
+      "amount": "2500",
+      "currency": "USD",
+      "usd_value": "2500",
+      "quote": {
+        "basis": "USD face value"
+      },
+      "raw": "$2500",
+      "source_url": "https://github.com/Yof3ng/picker/issues/248",
+      "payer": "Yof3ng"
+    }
+  }
 }
