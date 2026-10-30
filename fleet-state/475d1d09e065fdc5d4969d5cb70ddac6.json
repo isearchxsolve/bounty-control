@@ -2,7 +2,7 @@
   "task_id": "475d1d09e065fdc5d4969d5cb70ddac6",
   "repo": "Yof3ng/picker",
   "issue_number": 53,
-  "status": "DISPATCHING",
+  "status": "DISPATCHED",
   "dispatch_id": "c242e0d1f07746c6876f9e69f37548e8",
   "admission": {
     "funding": {
@@ -40,5 +40,5 @@
   ],
   "dispatched_at": "2026-10-30T15:14:41.259797+00:00",
   "attempt": 0,
-  "updated_at": "2026-10-30T15:14:41.259819+00:00"
+  "updated_at": "2026-10-30T15:14:43.488546+00:00"
 }
