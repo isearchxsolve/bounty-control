@@ -1,0 +1,64 @@
+{
+  "task_id": "f406b9f8fe6c34d49d7453d6f94e40e4",
+  "repo": "lab-sandbox/-img-src-https-14.rs-4-a-fooooooooooooooooooooooooooooooooo-href-JaVAScript-26colon-3Bpromp",
+  "issue_number": 1,
+  "status": "DISPATCHING",
+  "dispatch_id": "9f9fb60eadd549b7b1ee1c907a1ec122",
+  "admission": {
+    "funding": {
+      "amount": "5000",
+      "currency": "USD",
+      "usd_value": "5000",
+      "quote": {
+        "basis": "USD face value"
+      },
+      "raw": "$5000",
+      "source_url": "https://github.com/lab-sandbox/-img-src-https-14.rs-4-a-fooooooooooooooooooooooooooooooooo-href-JaVAScript-26colon-3Bpromp/issues/1#issuecomment-793242250",
+      "payer": "lab-sandbox"
+    },
+    "technical_signals": [
+      "bug",
+      "bypass",
+      "issuecomment",
+      "issues",
+      "problem"
+    ],
+    "component_references": [
+      "Image()",
+      "Intruders/jsonp_endpoint.txt",
+      "TypeError",
+      "XMLHttpRequest()",
+      "a()",
+      "alert()",
+      "b()",
+      "bo0om.ru/csp.js",
+      "ert()",
+      "evil.site/poc.js",
+      "function()",
+      "i.imgur.com/P8mL8.jpg",
+      "javascript:alert()",
+      "keys()",
+      "phpmyadmin/js/canvg/flashcanvas.swf",
+      "send()",
+      "text()",
+      "toLowerCase()",
+      "toUpperCase()"
+    ],
+    "source_locations": [
+      "bo0om.ru/csp.js",
+      "evil.site/poc.js"
+    ],
+    "engineering_evidence_sources": [
+      "https://github.com/lab-sandbox/-img-src-https-14.rs-4-a-fooooooooooooooooooooooooooooooooo-href-JaVAScript-26colon-3Bpromp/issues/1",
+      "https://github.com/lab-sandbox/-img-src-https-14.rs-4-a-fooooooooooooooooooooooooooooooooo-href-JaVAScript-26colon-3Bpromp/issues/1#issuecomment-793242250"
+    ],
+    "source_issue": "https://github.com/lab-sandbox/-img-src-https-14.rs-4-a-fooooooooooooooooooooooooooooooooo-href-JaVAScript-26colon-3Bpromp/issues/1",
+    "fetched_at": "2026-10-30T17:43:48.082713+00:00"
+  },
+  "lanes": [
+    "founder"
+  ],
+  "dispatched_at": "2026-10-30T17:43:49.672252+00:00",
+  "attempt": 0,
+  "updated_at": "2026-10-30T17:43:49.672276+00:00"
+}
