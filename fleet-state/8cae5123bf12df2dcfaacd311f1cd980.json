@@ -2,7 +2,7 @@
   "task_id": "8cae5123bf12df2dcfaacd311f1cd980",
   "repo": "mistswapdex/mistswap-interface",
   "issue_number": 107,
-  "status": "DISPATCHING",
+  "status": "DISPATCHED",
   "dispatch_id": "95b572db38604ff393b9bb0448245cb5",
   "admission": {
     "funding": {
@@ -34,7 +34,7 @@
   ],
   "dispatched_at": "2026-10-30T17:45:50.641428+00:00",
   "attempt": 1,
-  "updated_at": "2026-10-30T17:45:50.641445+00:00",
+  "updated_at": "2026-10-30T17:45:52.355116+00:00",
   "owner": "41098255553:1",
   "previous_owner": null,
   "previous_status": "DISPATCHED",
