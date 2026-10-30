@@ -1018,6 +1018,17 @@ def parse_lanes(value):
     return lanes
 
 
+def refuse(con, counts, identity, reason):
+    """Count an intake refusal and record it as a refused outcome, in one place.
+
+    The counter and the outcome row can no longer disagree: both come from this call. Before
+    this, intake counted refusals but wrote no outcome, so the planner could not see almost any
+    of them (run 41047576200: 49 refusals counted, 1 outcome row).
+    """
+    counts[reason] += 1
+    record_outcome(con, identity, "refused")
+
+
 def record_outcome(con, identity, outcome):
     """Latest outcome wins: a refused task that later dispatches is credited as dispatched.
 
@@ -1277,7 +1288,7 @@ def discover(lanes, max_dispatches=2, live=False, queries_per_lane=2, state_dir=
                     identity = task_id(context["repo"], context["issue_number"])
                     proof, reason = admit(context, quote=quote)
                     if not proof:
-                        counts[reason] += 1
+                        refuse(con, counts, identity, reason)
                         offer_band, offer_usd = None, None
                         if reason == "CURRENT_ISSUER_OFFER_MISSING":
                             # Classify the missing-offer band with a floor-zero probe of
@@ -1307,7 +1318,7 @@ def discover(lanes, max_dispatches=2, live=False, queries_per_lane=2, state_dir=
                         issue_labels,
                     )
                     if not is_code:
-                        counts[code_reason] += 1
+                        refuse(con, counts, identity, code_reason)
                         first_seen = seen_by_id.get(source_id) or 0
                         if first_seen:
                             first_dispositions.append((time.time() - first_seen) / 60.0)
@@ -1317,7 +1328,7 @@ def discover(lanes, max_dispatches=2, live=False, queries_per_lane=2, state_dir=
                     merge_ok, merge_reason = repository_intent(
                         merge_evidence(api, context["repo"], intent_cache))
                     if not merge_ok:
-                        counts[merge_reason] += 1
+                        refuse(con, counts, identity, merge_reason)
                         first_seen = seen_by_id.get(source_id) or 0
                         if first_seen:
                             first_dispositions.append((time.time() - first_seen) / 60.0)

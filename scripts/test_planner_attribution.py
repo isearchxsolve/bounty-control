@@ -117,5 +117,34 @@ class OutcomeIsDurable(unittest.TestCase):
         self.assertEqual(rows, [("refused",)], "the outcome was not committed")
 
 
+class RefusalsAgreeWithCounter(unittest.TestCase):
+    """The counter and the outcome table must never disagree.
+
+    Regression for run 41047576200: 49 refusals were counted but only 1 outcome row was written,
+    because intake bumped the counter with no matching write. refuse() is the single place both
+    happen, so this test asserts the property directly: N refusals -> N counted AND N rows.
+    """
+
+    def test_every_counted_refusal_has_a_matching_outcome_row(self):
+        import tempfile
+        import actions_dispatch as ad
+        from collections import Counter
+        with tempfile.TemporaryDirectory() as d:
+            con = sqlite3.connect(Path(d) / "agree.sqlite3")
+            con.execute("CREATE TABLE task_outcome(task_id TEXT PRIMARY KEY, outcome TEXT, at REAL)")
+            con.commit()
+            counts = Counter()
+            for i in range(7):
+                ad.refuse(con, counts, f"task-{i}", "CURRENT_ISSUER_OFFER_MISSING")
+            ad.refuse(con, counts, "task-x", "HARD_ISSUE_EVIDENCE_MISSING")
+            refused_rows = con.execute(
+                "SELECT COUNT(*) FROM task_outcome WHERE outcome='refused'").fetchone()[0]
+            con.close()
+        self.assertEqual(counts["CURRENT_ISSUER_OFFER_MISSING"], 7)
+        self.assertEqual(counts["HARD_ISSUE_EVIDENCE_MISSING"], 1)
+        self.assertEqual(refused_rows, sum(counts.values()),
+                         "every counted refusal must be recorded as an outcome row")
+
+
 if __name__ == "__main__":
     unittest.main()
