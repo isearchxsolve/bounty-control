@@ -2,7 +2,7 @@
   "task_id": "5db25ab6f7880515384f5fd75142def1",
   "repo": "Thiesi/Blacksite",
   "issue_number": 30,
-  "status": "DISPATCHING",
+  "status": "DISPATCHED",
   "dispatch_id": "4260715d13d345179d41c6f6ce9f6377",
   "admission": {
     "funding": {
@@ -77,5 +77,5 @@
   ],
   "dispatched_at": "2026-10-30T19:49:13.764760+00:00",
   "attempt": 0,
-  "updated_at": "2026-10-30T19:49:13.764781+00:00"
+  "updated_at": "2026-10-30T19:49:15.721011+00:00"
 }
