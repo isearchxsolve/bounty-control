@@ -2,7 +2,7 @@
   "task_id": "f6edd5599c70db503b683151163bcaf3",
   "repo": "saricizmeli/repo",
   "issue_number": 26,
-  "status": "CLAIMED",
+  "status": "REJECTED_PREPARATION",
   "dispatch_id": "6b7f3c2b2cfc4b198220018a2b2d7e22",
   "admission": {
     "funding": {
@@ -32,7 +32,7 @@
   ],
   "dispatched_at": "2026-10-30T11:43:32.162218+00:00",
   "attempt": 3,
-  "updated_at": "2026-10-30T11:43:43.438051+00:00",
+  "updated_at": "2026-10-30T11:47:19.879649+00:00",
   "owner": "41050137612:1",
   "previous_owner": "41049500677:1",
   "previous_status": "DISPATCHED",
@@ -45,8 +45,8 @@
   "retryable": true,
   "diagnostic": "Cline deliverable invalid at /tmp/fleet-artifacts/delivery-supervisor/f841144e43e8477aba1a5bd0a1789be5.preparation.json: invalid base_sha: ''",
   "path": "/tmp/fleet-artifacts/delivery-supervisor/f841144e43e8477aba1a5bd0a1789be5.preparation.json",
-  "reason": "invalid base_sha: ''",
-  "at": "2026-10-30T11:41:43.320579+00:00",
+  "reason": "Cline preparation blocked: Non-engineering issue in an empty repository. Issue #26 is titled 'Lorem ipsum' with a null/empty body and only three comments, all automated bounty offers (author_comments: '/bounty $11000', '/bounty $260', and the '$260' bounty announcement). It contains no reproducible defect, feature request, or code-level maintenance task. The upstream repository saricizmeli/repo is empty: GitHub API reports size=0, pushed_at (2022-09-10T05:21:36Z) == created_at, open PRs list empty, /branches and /tags return [] and the commits endpoint returns HTTP 409 'Git Repository is empty'; a fresh clone reports 'You appear to have cloned an empty repository' and 'your current branch main does not have any commits yet'. There is no manifest, lockfile, CI, setup doc or source to change, so no bootstrappable toolchain, no green baseline, and no failing reproduction target exist. Classifying as blocked (non-engineering placeholder / no repository change) per task rules; checkout left unchanged.",
+  "at": "2026-10-30T11:47:06.554117+00:00",
   "failures": [
     {
       "run_url": "https://github.com/isearchxsolve/bounty-control/actions/runs/41047037301",
@@ -69,5 +69,25 @@
       "at": "2026-10-30T11:41:43.320579+00:00"
     }
   ],
-  "finished_at": "2026-10-30T11:41:54.084139+00:00"
+  "finished_at": "2026-10-30T11:47:19.126821+00:00",
+  "declared_reason": "Non-engineering issue in an empty repository. Issue #26 is titled 'Lorem ipsum' with a null/empty body and only three comments, all automated bounty offers (author_comments: '/bounty $11000', '/bounty $260', and the '$260' bounty announcement). It contains no reproducible defect, feature request, or code-level maintenance task. The upstream repository saricizmeli/repo is empty: GitHub API reports size=0, pushed_at (2022-09-10T05:21:36Z) == created_at, open PRs list empty, /branches and /tags return [] and the commits endpoint returns HTTP 409 'Git Repository is empty'; a fresh clone reports 'You appear to have cloned an empty repository' and 'your current branch main does not have any commits yet'. There is no manifest, lockfile, CI, setup doc or source to change, so no bootstrappable toolchain, no green baseline, and no failing reproduction target exist. Classifying as blocked (non-engineering placeholder / no repository change) per task rules; checkout left unchanged.",
+  "evidence": {
+    "action": "blocked",
+    "worktree": "/tmp/bounty-workspaces/repos/saricizmeli--repo--26",
+    "base_sha": "0000000000000000000000000000000000000000",
+    "default_branch": "main",
+    "sources": [],
+    "run_url": "",
+    "admission": {
+      "amount": "260",
+      "currency": "USD",
+      "usd_value": "260",
+      "quote": {
+        "basis": "USD face value"
+      },
+      "raw": "$260",
+      "source_url": "https://github.com/saricizmeli/repo/issues/26#issuecomment-2582859834",
+      "payer": "saricizmeli"
+    }
+  }
 }
