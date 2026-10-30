@@ -2,7 +2,7 @@
   "task_id": "e746238b7ab5a6a95c330ee4eb671eba",
   "repo": "connext/gitcoin",
   "issue_number": 2,
-  "status": "DISPATCHING",
+  "status": "DISPATCHED",
   "dispatch_id": "41d8d53895d94c9693f6297ecb415613",
   "admission": {
     "funding": {
@@ -33,7 +33,7 @@
   ],
   "dispatched_at": "2026-10-30T15:40:06.034115+00:00",
   "attempt": 1,
-  "updated_at": "2026-10-30T15:40:06.034131+00:00",
+  "updated_at": "2026-10-30T15:40:07.852039+00:00",
   "owner": "41058348982:1",
   "previous_owner": null,
   "previous_status": "DISPATCHED",
