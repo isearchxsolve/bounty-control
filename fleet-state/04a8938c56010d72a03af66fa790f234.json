@@ -2,7 +2,7 @@
   "task_id": "04a8938c56010d72a03af66fa790f234",
   "repo": "lessuselesss/bounty-crawl",
   "issue_number": 1,
-  "status": "DISPATCHING",
+  "status": "DISPATCHED",
   "dispatch_id": "28130053ef5545c9bbb11121e847b0af",
   "admission": {
     "funding": {
@@ -35,5 +35,5 @@
   ],
   "dispatched_at": "2026-10-30T17:09:24.540668+00:00",
   "attempt": 0,
-  "updated_at": "2026-10-30T17:09:24.540689+00:00"
+  "updated_at": "2026-10-30T17:09:26.230167+00:00"
 }
