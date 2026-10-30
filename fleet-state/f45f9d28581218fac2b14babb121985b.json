@@ -1,0 +1,36 @@
+{
+  "task_id": "f45f9d28581218fac2b14babb121985b",
+  "repo": "saricizmeli/test",
+  "issue_number": 8,
+  "status": "DISPATCHING",
+  "dispatch_id": "5d28a6d28c654e1d8075b7804fc48bb0",
+  "admission": {
+    "funding": {
+      "amount": "500",
+      "currency": "USD",
+      "usd_value": "500",
+      "quote": {
+        "basis": "USD face value"
+      },
+      "raw": "$500",
+      "source_url": "https://github.com/saricizmeli/test/issues/8#issuecomment-2564346406",
+      "payer": "saricizmeli"
+    },
+    "technical_signals": [
+      "issue"
+    ],
+    "component_references": [],
+    "source_locations": [],
+    "engineering_evidence_sources": [
+      "https://github.com/saricizmeli/test/issues/8#issuecomment-1970368309"
+    ],
+    "source_issue": "https://github.com/saricizmeli/test/issues/8",
+    "fetched_at": "2026-10-30T10:12:26.320919+00:00"
+  },
+  "lanes": [
+    "programs"
+  ],
+  "dispatched_at": "2026-10-30T10:13:34.961054+00:00",
+  "attempt": 0,
+  "updated_at": "2026-10-30T10:13:34.961071+00:00"
+}
