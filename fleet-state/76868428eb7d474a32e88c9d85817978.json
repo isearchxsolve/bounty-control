@@ -1,0 +1,42 @@
+{
+  "task_id": "76868428eb7d474a32e88c9d85817978",
+  "repo": "Yof3ng/picker",
+  "issue_number": 125,
+  "status": "DISPATCHING",
+  "dispatch_id": "d5c82a87c16a43ef8b4fedd9e50a3bd3",
+  "admission": {
+    "funding": {
+      "amount": "3500",
+      "currency": "USD",
+      "usd_value": "3500",
+      "quote": {
+        "basis": "USD face value"
+      },
+      "raw": "$3500",
+      "source_url": "https://github.com/Yof3ng/picker/issues/125",
+      "payer": "Yof3ng"
+    },
+    "technical_signals": [
+      "authorization",
+      "bug",
+      "bug_bounty",
+      "bypass",
+      "issue",
+      "memory",
+      "overflow"
+    ],
+    "component_references": [],
+    "source_locations": [],
+    "engineering_evidence_sources": [
+      "https://github.com/Yof3ng/picker/issues/125"
+    ],
+    "source_issue": "https://github.com/Yof3ng/picker/issues/125",
+    "fetched_at": "2026-10-30T16:15:59.080487+00:00"
+  },
+  "lanes": [
+    "founder"
+  ],
+  "dispatched_at": "2026-10-30T16:16:00.271068+00:00",
+  "attempt": 0,
+  "updated_at": "2026-10-30T16:16:00.271084+00:00"
+}
