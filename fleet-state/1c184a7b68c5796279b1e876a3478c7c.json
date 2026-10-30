@@ -2,7 +2,7 @@
   "task_id": "1c184a7b68c5796279b1e876a3478c7c",
   "repo": "priviprotocol/privi-zoo",
   "issue_number": 6,
-  "status": "CLAIMED",
+  "status": "REJECTED_PREPARATION",
   "dispatch_id": "63fd3a50d69949da93dec6bd72698287",
   "admission": {
     "funding": {
@@ -35,7 +35,7 @@
   ],
   "dispatched_at": "2026-10-30T18:49:57.093780+00:00",
   "attempt": 2,
-  "updated_at": "2026-10-30T18:50:10.861497+00:00",
+  "updated_at": "2026-10-30T18:58:33.730628+00:00",
   "owner": "41110245286:1",
   "previous_owner": "41096349094:1",
   "previous_status": "DISPATCHED",
@@ -48,8 +48,8 @@
   "retryable": true,
   "diagnostic": "Cline deliverable invalid at /tmp/fleet-artifacts/delivery-supervisor/2ac778e9d8104d989c0bda11e7093e26.preparation.json: invalid base_sha: ''",
   "path": "/tmp/fleet-artifacts/delivery-supervisor/2ac778e9d8104d989c0bda11e7093e26.preparation.json",
-  "reason": "invalid base_sha: ''",
-  "at": "2026-10-30T17:12:27.338065+00:00",
+  "reason": "Cline preparation blocked: Issue #6 (priviprotocol/privi-zoo, title 'SuhshiSwap (Polygon+BSC+ETH)') is a Gitcoin bounty / grant-proposal solicitation, not a code-level defect or feature for this repository. Its body asks a third party to design and build a brand-new SushiSwap (Polygon/BSC/ETH) integration dApp for the Privi Zoo app store, offering '$10,000-15,000 per application', and invites applicants to submit an approach, prior work links and a timeline ('To apply for this bounty you should: ...'). The 9 comments are Gitcoin bot funding notices and worker applications/funder replies. There is no reproducible defect, no feature spec bound to existing source, and no maintenance task. The target repository is completely empty, so no concrete code change is even possible: GitHub REST /commits and /git/refs return 409 'Git Repository is empty'; /contents returns 'This repository is empty' (404); /branches is []; default_branch 'main' is an unborn HEAD with zero commits (git rev-parse HEAD -> 'unknown revision'); git ls-remote --heads returns nothing; repo metadata size=0, language=null, forks_count=0, stargazers_count=0, pushed_at==created_at==2021-08-20T22:49:11Z. No manifests, lockfiles, CI, AGENTS.md, tests or source files exist, so there is no baseline to establish and no regression command to author. Open PRs: none. Classification per policy: grant/proposal request + generic product idea without a repository change -> action=blocked; checkout left unchanged (no product edits made).",
+  "at": "2026-10-30T18:55:16.392407+00:00",
   "failures": [
     {
       "run_url": "https://github.com/isearchxsolve/bounty-control/actions/runs/41096349094",
@@ -62,5 +62,25 @@
       "at": "2026-10-30T17:12:27.338065+00:00"
     }
   ],
-  "finished_at": "2026-10-30T17:12:38.780672+00:00"
+  "finished_at": "2026-10-30T18:58:33.330069+00:00",
+  "declared_reason": "Issue #6 (priviprotocol/privi-zoo, title 'SuhshiSwap (Polygon+BSC+ETH)') is a Gitcoin bounty / grant-proposal solicitation, not a code-level defect or feature for this repository. Its body asks a third party to design and build a brand-new SushiSwap (Polygon/BSC/ETH) integration dApp for the Privi Zoo app store, offering '$10,000-15,000 per application', and invites applicants to submit an approach, prior work links and a timeline ('To apply for this bounty you should: ...'). The 9 comments are Gitcoin bot funding notices and worker applications/funder replies. There is no reproducible defect, no feature spec bound to existing source, and no maintenance task. The target repository is completely empty, so no concrete code change is even possible: GitHub REST /commits and /git/refs return 409 'Git Repository is empty'; /contents returns 'This repository is empty' (404); /branches is []; default_branch 'main' is an unborn HEAD with zero commits (git rev-parse HEAD -> 'unknown revision'); git ls-remote --heads returns nothing; repo metadata size=0, language=null, forks_count=0, stargazers_count=0, pushed_at==created_at==2021-08-20T22:49:11Z. No manifests, lockfiles, CI, AGENTS.md, tests or source files exist, so there is no baseline to establish and no regression command to author. Open PRs: none. Classification per policy: grant/proposal request + generic product idea without a repository change -> action=blocked; checkout left unchanged (no product edits made).",
+  "evidence": {
+    "action": "blocked",
+    "worktree": "/tmp/bounty-workspaces/repos/priviprotocol--privi-zoo--6",
+    "base_sha": "4b825dc642cb6eb9a060e54bf8d69288fbee4904",
+    "default_branch": "main",
+    "sources": [],
+    "run_url": "",
+    "admission": {
+      "amount": "10000",
+      "currency": "USD",
+      "usd_value": "10000",
+      "quote": {
+        "basis": "USD face value"
+      },
+      "raw": "$10,000",
+      "source_url": "https://github.com/priviprotocol/privi-zoo/issues/6",
+      "payer": "priviprotocol"
+    }
+  }
 }
