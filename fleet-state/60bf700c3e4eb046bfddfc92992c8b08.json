@@ -2,7 +2,7 @@
   "task_id": "60bf700c3e4eb046bfddfc92992c8b08",
   "repo": "StateofScale/State-of-Scale",
   "issue_number": 3,
-  "status": "CLAIMED",
+  "status": "REJECTED_PREPARATION",
   "dispatch_id": "4a53e46e3c604e1bbb155972e271fd4e",
   "admission": {
     "funding": {
@@ -34,7 +34,7 @@
   ],
   "dispatched_at": "2026-10-30T17:08:41.134140+00:00",
   "attempt": 1,
-  "updated_at": "2026-10-30T17:08:53.153940+00:00",
+  "updated_at": "2026-10-30T17:15:43.918007+00:00",
   "owner": "41096225038:1",
   "previous_owner": null,
   "previous_status": "DISPATCHED",
@@ -42,5 +42,33 @@
   "harness_sha": "36da4d1f58379020b816cc66cdfa95772df51f6f",
   "claimed_at": "2026-10-30T17:08:53.153867+00:00",
   "lease_expires_at": "2026-10-30T21:13:53.153901+00:00",
-  "preparation_budget_seconds": 14400
+  "preparation_budget_seconds": 14400,
+  "at": "2026-10-30T17:12:03.946917+00:00",
+  "reason": "Cline preparation blocked: Issue #3 ('Abridged SDK Bounty ($400)') is a Gitcoin hackathon bounty/contest, not a concrete code change to this repository, and its funding is withdrawn. The issue body asks a participant to 'Design and build the best first 2 minutes user experience using the Abridged SDK ... configure an existing app or build a new one from scratch' with submission requirements to join the State of Scale discord, submit via Gitcoin, post to the Flex dApp, and tweet with #stateofscale. These are contest/judging criteria (a generic product idea using a third-party SDK), not a reproducible defect or engineering feature in StateofScale/State-of-Scale. Funding was cancelled: gitcoinbot comment 2019-07-22 (https://github.com/StateofScale/State-of-Scale/issues/3#issuecomment-513998596) states 'Issue Status: 1. Open 2. Cancelled ... The funding of 400.0 DAI (400.0 USD @ $1.0/DAI) attached to this issue has been cancelled by the bounty submitter.' Maintainer StateofScale comment 2019-07-24 confirms: 'Apologies on canceling. This bounty was a part of a hackathon and unfortunately was decided that we had too few participants to justify the contest.' Repo state confirms there is nothing to implement: GitHub API repo metadata shows size=8 KB, language=null, description='State of Scale is an educational hackathon event ...', default_branch='master', pushed_at='2019-07-15T06:48:42Z'; the entire repository tree contains only a single file README.md (contents API), and README.md itself states 'This repo is meant to coordinate the bounties put up for the hackathon' (no code, manifests, dependencies, tests, or CI). No open pull requests exist (pulls?state=open -> 0), so there is no competing PR either. Per the blocked-classification rule covering withdrawn funding and a generic product idea without a repository change, this issue is not eligible for a code fix. Checkout left unchanged; no worktree created at the target path.",
+  "declared_reason": "Issue #3 ('Abridged SDK Bounty ($400)') is a Gitcoin hackathon bounty/contest, not a concrete code change to this repository, and its funding is withdrawn. The issue body asks a participant to 'Design and build the best first 2 minutes user experience using the Abridged SDK ... configure an existing app or build a new one from scratch' with submission requirements to join the State of Scale discord, submit via Gitcoin, post to the Flex dApp, and tweet with #stateofscale. These are contest/judging criteria (a generic product idea using a third-party SDK), not a reproducible defect or engineering feature in StateofScale/State-of-Scale. Funding was cancelled: gitcoinbot comment 2019-07-22 (https://github.com/StateofScale/State-of-Scale/issues/3#issuecomment-513998596) states 'Issue Status: 1. Open 2. Cancelled ... The funding of 400.0 DAI (400.0 USD @ $1.0/DAI) attached to this issue has been cancelled by the bounty submitter.' Maintainer StateofScale comment 2019-07-24 confirms: 'Apologies on canceling. This bounty was a part of a hackathon and unfortunately was decided that we had too few participants to justify the contest.' Repo state confirms there is nothing to implement: GitHub API repo metadata shows size=8 KB, language=null, description='State of Scale is an educational hackathon event ...', default_branch='master', pushed_at='2019-07-15T06:48:42Z'; the entire repository tree contains only a single file README.md (contents API), and README.md itself states 'This repo is meant to coordinate the bounties put up for the hackathon' (no code, manifests, dependencies, tests, or CI). No open pull requests exist (pulls?state=open -> 0), so there is no competing PR either. Per the blocked-classification rule covering withdrawn funding and a generic product idea without a repository change, this issue is not eligible for a code fix. Checkout left unchanged; no worktree created at the target path.",
+  "evidence": {
+    "action": "blocked",
+    "worktree": "/tmp/bounty-workspaces/repos/StateofScale--State-of-Scale--3",
+    "base_sha": "a72c9ddaf677bb9da3e2ad29b3da80b1b2475007",
+    "default_branch": "master",
+    "sources": [
+      {
+        "path": "README.md",
+        "sha256": "4ac7fe1514b5fec694fe5e7cdedea9a7d0e49efb4d45e0a86fecb0ab5f24701e"
+      }
+    ],
+    "run_url": "",
+    "admission": {
+      "amount": "400",
+      "currency": "USD",
+      "usd_value": "400",
+      "quote": {
+        "basis": "USD face value"
+      },
+      "raw": "$400",
+      "source_url": "https://github.com/StateofScale/State-of-Scale/issues/3",
+      "payer": "OKDuncan"
+    }
+  },
+  "finished_at": "2026-10-30T17:15:43.250522+00:00"
 }
