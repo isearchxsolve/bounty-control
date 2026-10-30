@@ -1,0 +1,15 @@
+{
+  "task_id": "e10e9ed69761872dedad25b88f89848a",
+  "repo": "microg/GmsCore",
+  "issue_number": 1272,
+  "attempt": 1,
+  "status": "CLAIMED",
+  "owner": "41022506511:1",
+  "previous_owner": null,
+  "previous_status": null,
+  "run_url": "https://github.com/isearchxsolve/bounty-control/actions/runs/41022506511",
+  "harness_sha": "25ac5ec13b387b126c22028fc9c06e2cade3a338",
+  "claimed_at": "2026-10-30T07:50:27.186558+00:00",
+  "lease_expires_at": "2026-10-30T11:55:27.186573+00:00",
+  "updated_at": "2026-10-30T07:50:27.186607+00:00"
+}
