@@ -2,7 +2,7 @@
   "task_id": "ad4605399dad32426a1b7292cd87d043",
   "repo": "xmtplabs/ethshanghai-2022",
   "issue_number": 2,
-  "status": "DISPATCHING",
+  "status": "DISPATCHED",
   "dispatch_id": "febcfb3b2f424e8baba7dc6e7fb1c608",
   "admission": {
     "funding": {
@@ -36,5 +36,5 @@
   ],
   "dispatched_at": "2026-10-30T14:39:41.007273+00:00",
   "attempt": 0,
-  "updated_at": "2026-10-30T14:39:41.007294+00:00"
+  "updated_at": "2026-10-30T14:39:42.751808+00:00"
 }
