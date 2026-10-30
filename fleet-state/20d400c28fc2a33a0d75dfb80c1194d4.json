@@ -2,7 +2,7 @@
   "task_id": "20d400c28fc2a33a0d75dfb80c1194d4",
   "repo": "nknorg/nBounty",
   "issue_number": 6,
-  "status": "DISPATCHED",
+  "status": "CLAIMED",
   "dispatch_id": "0875b4559c36426caec013e664dd0d64",
   "admission": {
     "funding": {
@@ -33,6 +33,14 @@
     "normal"
   ],
   "dispatched_at": "2026-10-30T14:39:35.253835+00:00",
-  "attempt": 0,
-  "updated_at": "2026-10-30T14:39:37.175974+00:00"
+  "attempt": 1,
+  "updated_at": "2026-10-30T14:39:49.116406+00:00",
+  "owner": "41073573358:1",
+  "previous_owner": null,
+  "previous_status": "DISPATCHED",
+  "run_url": "https://github.com/isearchxsolve/bounty-control/actions/runs/41073573358",
+  "harness_sha": "122af062685a0bd1f1d161d9c42a07300819cc15",
+  "claimed_at": "2026-10-30T14:39:49.116350+00:00",
+  "lease_expires_at": "2026-10-30T18:44:49.116365+00:00",
+  "preparation_budget_seconds": 14400
 }
