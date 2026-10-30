@@ -2,7 +2,7 @@
   "task_id": "f96bab08d0a0eb7fc83332ae5a5158d7",
   "repo": "go-gitea/gitea",
   "issue_number": 14186,
-  "status": "DISPATCHING",
+  "status": "DISPATCHED",
   "dispatch_id": "6b51cd9d59fc4c61b59a54bc1ad172c8",
   "admission": {
     "funding": {
@@ -41,5 +41,5 @@
   ],
   "dispatched_at": "2026-10-30T14:08:28.878662+00:00",
   "attempt": 0,
-  "updated_at": "2026-10-30T14:08:28.878678+00:00"
+  "updated_at": "2026-10-30T14:08:30.591446+00:00"
 }
