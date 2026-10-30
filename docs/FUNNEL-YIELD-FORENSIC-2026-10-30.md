@@ -801,3 +801,64 @@ Two consequences, both taken:
    runners and the competition gate does the refusing. It is a lottery ticket that costs
    nothing to hold, and the moment an uncontested funded ticket appears, the pipeline takes it.
    It is no longer the plan.
+
+### 15. The two-edged sword: hard AND burning, or it is not our ticket
+
+Baba's law, 2026-10-30, in two messages: *"the claimant got no reply cause target issuer had
+no urgency.. no ugs in live production burning millions each second. thats why we target silo
+wounded founders and startup"*, then *"its a two edged sword the issue is fundamentally hard
+and live in production burning millions each second from silo cofounders and startups
+pocket"*.
+
+Either edge alone is a losing ticket, and this month produced both failures:
+
+| shape | why it loses | evidence |
+| --- | --- | --- |
+| **hard, cold** | nobody answers - the issuer feels no cost per hour | `microg/GmsCore#580` funded $250, claimant waiting **since April** for a maintainer word; `#2843` untouched since March |
+| **burning, trivial** | solved within hours by whoever reads it first; the moat protects nothing | bystanders open PRs on funded microG issues within 36 hours (`#3943`, `#3944` one minute apart) |
+| **hard and burning** | the only shape we win: slop cannot take it, and the payer is losing money while we work | target shape, not yet hit in the bounty channel |
+
+#### 15.1 It is now one number, not two sorts
+
+`scripts/urgency_score.py` scores the payer's own words: production-down (40), revenue
+bleeding (35), contract/SLA pressure and security incident (30), escalation language (20),
+growth pressure (15), and **-30 for a calm payer** ("no rush", "nice to have", "take your
+time"). Age subtracts, because a wound described a year ago is not bleeding today
+(-25 beyond 365 days, -10 beyond 180). Self-test 13/13.
+
+`two_edged_score()` in `actions_dispatch.py` is the conjunction:
+
+```
+hard    = min(100, hardness_score(hardness_view(item)))
+burning = min(100, urgency_score(urgency_view(item)))
+score   = min(hard, burning) + 0.25 * burning
+```
+
+The `min` means a missing edge cannot be compensated by strength in the other - that is the
+whole point of a conjunction. The small urgency term then separates the two failures: between
+a hot trivial ticket and a hard dead one, the hot one at least might answer us. Both edges cap
+at 100 so one runaway signal cannot manufacture a match. The sort is now:
+
+**band -> two-edged conjunction -> solvency -> difficulty -> quietness**
+
+#### 15.2 Measured on the four funded tickets
+
+| ticket | money | hardness | urgency | two-edged | verdict |
+| --- | --- | --- | --- | --- | --- |
+| `microg/GmsCore#2994` | $14,999 | -15 | -25 | **-31.2** | one edge only |
+| `microg/GmsCore#2843` | $2,340 | 95 | -25 | **-31.2** | one edge only - hard, dead since March |
+| `microg/GmsCore#1272` | $300 | -15 | -25 | **-31.2** | one edge only |
+| `microg/GmsCore#580` | $250 | -15 | -25 | **-31.2** | one edge only |
+| synthetic founder wound | - | 150 | 55 | **68.8** | the shape we want |
+
+$17,889 of real funded money now ranks **below a ticket that does not exist yet**. That is the
+honest result: the bounty boards sell hard-and-cold almost exclusively, which is exactly why
+claimants sit for months and why this channel is not the plan (section 14.4).
+
+#### 15.3 Known limitation, stated rather than hidden
+
+Hardness is a vocabulary test over the ticket text (46 terms, +30 each, value and competition
+bonuses). A ticket that is genuinely deep but described plainly - `#2994` asks for "RCS
+Support" and scores **-15** - is under-scored. The fix is repro evidence rather than more
+keywords: a stack trace, a failing test, a benchmark, or a linked code path should count as
+hard evidence. Not built yet, and not pretended to be.

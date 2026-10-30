@@ -20,6 +20,7 @@ from bounty_admission import admit, competition, NON_WORK, repository_intent, FU
 from bounty_fx import quote
 from discovery_horizon import Horizon
 from hardness_score import hardness_score
+from urgency_score import urgency_score
 from liquidity_score import rank_key as liquidity_rank_key
 
 QUERY_CONFIG = json.loads(Path(__file__).with_name("bounty_queries.json").read_text(encoding="utf-8"))
@@ -408,8 +409,76 @@ def hardness_view(candidate):
     return view
 
 
+def urgency_view(candidate):
+    """Map a candidate onto the fields :mod:`urgency_score` reads.
+
+    ``age_days`` is supplied from the issue's own ``created_at`` because a dramatic
+    complaint written two years ago is not a payer bleeding today, and the scorer must be
+    able to discount it. A missing or unparseable timestamp passes ``None``, which the
+    scorer treats as unknown - never as fresh.
+    """
+    context = candidate.get("context") or {}
+    issue = context.get("issue") or candidate.get("issue") or {}
+    labels = issue.get("labels") or candidate.get("labels") or ()
+    age_days = None
+    stamp = issue.get("created_at") or candidate.get("created_at")
+    if isinstance(stamp, str) and len(stamp) >= 10:
+        try:
+            created = datetime.strptime(stamp[:10], "%Y-%m-%d").replace(tzinfo=timezone.utc)
+            age_days = max(0, (datetime.now(timezone.utc) - created).days)
+        except ValueError:
+            age_days = None
+    return {
+        "title": issue.get("title") or "",
+        "body": issue.get("body") or "",
+        "labels": labels,
+        "age_days": age_days,
+    }
+
+
+
+EDGE_CAP = 100.0
+URGENCY_BONUS = 0.25
+
+
+def two_edged_score(item):
+    """The conjunction Baba named: fundamentally hard AND burning in production.
+
+    Both edges, or it is not our ticket:
+
+    * hard but cold (a volunteer project with a funded ticket open since 2018) - nobody
+      answers, because nobody is losing money per hour. Measured: the Google Cast claimant
+      has waited since April for a maintainer word.
+    * burning but trivial - solved within hours by whoever reads it first, and our moat
+      does not protect an easy patch. Measured: bystanders open PRs on funded microG issues
+      within 36 hours and land none of them, but on trivial tickets they land.
+
+    The joint term is the minimum of the two normalised edges, so a missing edge cannot be
+    compensated by strength in the other. ``URGENCY_BONUS`` then separates the two failures:
+    between a hot trivial ticket and a hard dead one, the hot one at least might answer.
+
+    Both scorers cap at ``EDGE_CAP`` so one runaway signal cannot manufacture a match, and a
+    calm payer's negative urgency still drags the whole score below zero.
+    """
+    hard = min(EDGE_CAP, hardness_score(hardness_view(item[1]))[0])
+    burning = min(EDGE_CAP, urgency_score(urgency_view(item[1]))[0])
+    return min(hard, burning) + URGENCY_BONUS * burning
+
+
+
 def candidate_sort_key(item):
-    """Priority band, then the most liquid payer, then the hardest problem, then quiet.
+    """Band, then the two-edged conjunction, then solvency, then difficulty, then quiet.
+
+    Baba's law, 2026-10-30: a claimant waited since April for a maintainer word on a funded
+    microG ticket because the issuing project had no urgency - nobody was losing money per
+    hour. Urgency therefore predicts REPLY LATENCY, which is the constraint this funnel
+    actually starves on, while solvency predicts whether the payer can pay at all. A payer
+    who never answers is worth nothing however rich, so urgency is decided first inside the
+    band; solvency is next; difficulty then decides which burning problem we can win.
+
+    The band still dominates: a cold founder issue ranks below a hot one only within its own
+    band, never across bands.
+    
 
     The band still dominates: a busy founder issue outranks a quiet normal one. Inside a
     band the payer's ability to pay decides before repository velocity does, because a
@@ -424,6 +493,7 @@ def candidate_sort_key(item):
     the ticket's own vocabulary is evidence of it.
     """
     return (candidate_priority_key(item[1]),
+            -two_edged_score(item),
             -liquidity_rank_key(liquidity_view(item[1]))[0],
             -hardness_score(hardness_view(item[1]))[0],
             velocity_sort_key(item))
