@@ -2,7 +2,7 @@
   "task_id": "80678955da9bf0c8b1f0765f16b53585",
   "repo": "TigerVNC/tigervnc",
   "issue_number": 398,
-  "status": "CLAIMED",
+  "status": "FAILED_DELIVERABLE_MISSING",
   "dispatch_id": "6ec00632bc614066b2ed760fdc681fec",
   "admission": {
     "funding": {
@@ -40,7 +40,7 @@
   ],
   "dispatched_at": "2026-10-30T13:05:46.561670+00:00",
   "attempt": 2,
-  "updated_at": "2026-10-30T13:06:04.062543+00:00",
+  "updated_at": "2026-10-30T13:18:20.677828+00:00",
   "owner": "41060408738:1",
   "previous_owner": "41042320457:1",
   "previous_status": "DISPATCHED",
@@ -51,10 +51,10 @@
   "preparation_budget_seconds": 14400,
   "kind": "deliverable_invalid",
   "retryable": true,
-  "diagnostic": "Cline deliverable invalid at /tmp/fleet-artifacts/delivery-supervisor/01bb8a70625d4eb3b6b8f440953eeb59.preparation.json: Cline preparation must leave a clean, unchanged upstream baseline (dirty: tests/unit/CMakeLists.txt, tests/unit/vncviewerconfig.cxx)",
-  "path": "/tmp/fleet-artifacts/delivery-supervisor/01bb8a70625d4eb3b6b8f440953eeb59.preparation.json",
-  "reason": "Cline preparation must leave a clean, unchanged upstream baseline (dirty: tests/unit/CMakeLists.txt, tests/unit/vncviewerconfig.cxx)",
-  "at": "2026-10-30T10:50:08.784782+00:00",
+  "diagnostic": "Cline deliverable invalid at /tmp/fleet-artifacts/delivery-supervisor/7d65caae3454480b8cdb4cf7dce50077.preparation.json: Mandatory native plan phase missing: linters",
+  "path": "/tmp/fleet-artifacts/delivery-supervisor/7d65caae3454480b8cdb4cf7dce50077.preparation.json",
+  "reason": "Mandatory native plan phase missing: linters",
+  "at": "2026-10-30T13:18:07.493323+00:00",
   "failures": [
     {
       "run_url": "https://github.com/isearchxsolve/bounty-control/actions/runs/41042320457",
@@ -65,7 +65,17 @@
       "path": "/tmp/fleet-artifacts/delivery-supervisor/01bb8a70625d4eb3b6b8f440953eeb59.preparation.json",
       "reason": "Cline preparation must leave a clean, unchanged upstream baseline (dirty: tests/unit/CMakeLists.txt, tests/unit/vncviewerconfig.cxx)",
       "at": "2026-10-30T10:50:08.784782+00:00"
+    },
+    {
+      "run_url": "https://github.com/isearchxsolve/bounty-control/actions/runs/41060408738",
+      "status": "FAILED_DELIVERABLE_MISSING",
+      "kind": "deliverable_invalid",
+      "retryable": true,
+      "diagnostic": "Cline deliverable invalid at /tmp/fleet-artifacts/delivery-supervisor/7d65caae3454480b8cdb4cf7dce50077.preparation.json: Mandatory native plan phase missing: linters",
+      "path": "/tmp/fleet-artifacts/delivery-supervisor/7d65caae3454480b8cdb4cf7dce50077.preparation.json",
+      "reason": "Mandatory native plan phase missing: linters",
+      "at": "2026-10-30T13:18:07.493323+00:00"
     }
   ],
-  "finished_at": "2026-10-30T10:50:23.594461+00:00"
+  "finished_at": "2026-10-30T13:18:20.082311+00:00"
 }
