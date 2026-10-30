@@ -2,7 +2,7 @@
   "task_id": "bf8550c59b622d0f93343903655ed1a4",
   "repo": "tezos-contrib/gitcoin-bounties",
   "issue_number": 4,
-  "status": "DISPATCHING",
+  "status": "DISPATCHED",
   "dispatch_id": "d98e4bf438b848dfbf15b3992e1936e6",
   "admission": {
     "funding": {
@@ -35,5 +35,5 @@
   ],
   "dispatched_at": "2026-10-30T17:22:17.293163+00:00",
   "attempt": 0,
-  "updated_at": "2026-10-30T17:22:17.293180+00:00"
+  "updated_at": "2026-10-30T17:22:19.228057+00:00"
 }
