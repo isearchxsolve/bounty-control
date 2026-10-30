@@ -1,0 +1,47 @@
+{
+  "task_id": "7b7796d4998fe5414a64c4a7a1a786a8",
+  "repo": "Yof3ng/picker",
+  "issue_number": 41,
+  "status": "DISPATCHING",
+  "dispatch_id": "3d9aae1ff31f44c984ad4f8d16f550f6",
+  "admission": {
+    "funding": {
+      "amount": "10000",
+      "currency": "USD",
+      "usd_value": "10000",
+      "quote": {
+        "basis": "USD face value"
+      },
+      "raw": "$10K",
+      "source_url": "https://github.com/Yof3ng/picker/issues/41",
+      "payer": "Yof3ng"
+    },
+    "technical_signals": [
+      "bug",
+      "bug_bounty",
+      "encryption",
+      "error",
+      "issue",
+      "memory",
+      "overflow",
+      "problem",
+      "signature"
+    ],
+    "component_references": [
+      "owent.net/2023/2304.html",
+      "resultFieldStringValueByName()"
+    ],
+    "source_locations": [],
+    "engineering_evidence_sources": [
+      "https://github.com/Yof3ng/picker/issues/41"
+    ],
+    "source_issue": "https://github.com/Yof3ng/picker/issues/41",
+    "fetched_at": "2026-10-30T13:53:20.442984+00:00"
+  },
+  "lanes": [
+    "founder"
+  ],
+  "dispatched_at": "2026-10-30T13:53:21.480509+00:00",
+  "attempt": 0,
+  "updated_at": "2026-10-30T13:53:21.480525+00:00"
+}
