@@ -2,7 +2,7 @@
   "task_id": "543c2ded32a157fd1d95b1657d167cf3",
   "repo": "pyodide/pyodide-recipes",
   "issue_number": 187,
-  "status": "CLAIMED",
+  "status": "FAILED_MISSING_TERMINAL_RECEIPT",
   "dispatch_id": "2acd84f1807f48c2a5b126a2f31f1daf",
   "admission": {
     "funding": {
@@ -50,7 +50,7 @@
   ],
   "dispatched_at": "2026-10-30T19:22:08.754374+00:00",
   "attempt": 1,
-  "updated_at": "2026-10-30T19:22:29.161602+00:00",
+  "updated_at": "2026-10-30T19:44:56.880619+00:00",
   "owner": "41114706314:1",
   "previous_owner": null,
   "previous_status": "DISPATCHED",
@@ -58,5 +58,7 @@
   "harness_sha": "68bec9f147297aaccdac2690477e9735ab13b716",
   "claimed_at": "2026-10-30T19:22:29.161547+00:00",
   "lease_expires_at": "2026-10-30T23:27:29.161564+00:00",
-  "preparation_budget_seconds": 14400
+  "preparation_budget_seconds": 14400,
+  "diagnostic": "Actions run completed (failure) without terminal callback; artifacts retained",
+  "observed_at": "2026-10-30T19:44:56.880602+00:00"
 }
