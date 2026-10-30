@@ -258,7 +258,7 @@ def quote_states_an_amount(quote: str) -> bool:
     return bool(AMOUNT_RE.search(quote or ""))
 
 
-def verify_rows(rows: List[dict], fetch: Callable[[str, int], Optional[dict]] = fetch_issue,
+def verify_rows(rows: List[dict], fetch: Optional[Callable[[str, int], Optional[dict]]] = None,
                 limit: int = 12) -> Dict[str, List[dict]]:
     """Admit only rows whose issue exists, is open, and whose reward quote is really there.
 
@@ -271,6 +271,8 @@ def verify_rows(rows: List[dict], fetch: Callable[[str, int], Optional[dict]] = 
     ``boxbilling/boxbilling#889`` ("[WILL PAY FOR CODE]") are real buyers with no number.
     Those deserve their own queue, not a rejection.
     """
+    if fetch is None:
+        fetch = fetch_issue
     admitted: List[dict] = []
     refused: List[dict] = []
     unpriced: List[dict] = []

@@ -237,3 +237,33 @@ marketplace/service leg, which is why the two-legged law exists.
 The engine is built, its gates are honest, and its queue is finally one queue. What it has never
 had is a customer with money on fire — and the harder a ticket is, the less the crowd is the
 obstacle and the more the payer's urgency is.
+
+## 14. The agent door, wired (2026-10-30)
+
+Law 85 came out of this work: endless hand-rolling is the signal that a judgement has been written
+as static code. Applied here as a split: **the agent decides what to look at; code decides whether
+the claim is true.**
+
+| piece | who | why |
+|---|---|---|
+| what to search, which issues pay, how to recover a refused row | the agent | judgement |
+| issue exists / open / not a PR | `queue_agent_rows` re-fetch | fact |
+| quoted reward sentence appears literally | `issue_scout.quote_is_present` | fact |
+| the quote names an amount | `quote_states_an_amount` | fact |
+| repo health, capacity, admission, dispatch gates | unchanged | fact |
+
+Wiring: `BOUNTY_ENTRY_DOOR=cline` (default in the workflow, `vars.ENTRY_DOOR` overrides) makes
+`discover()` call `agent_door.find_issues()` **after** the static lanes, then
+`queue_agent_rows()` writes the survivors through `store_pending_item()` - the same writer the
+search lanes use, so there is one queue shape and one admission path.
+
+Fail-closed reasons, all named in the log: `DOOR_DISABLED`, `CLINE_UNAVAILABLE`,
+`GATEWAY_UNAVAILABLE`, `DOOR_FAILED`, `NO_ROWS`. A door failure costs a cycle's time and nothing
+else, because the static lanes have already run.
+
+Measured before wiring: 5 real `gh search issues` calls, 10 rows, 0 agent-authored assumptions -
+every row re-fetched. After the amount guard, 5 admitted ($250, $350, 250 USDC, $50, $25) and
+5 refused (`REWARD_QUOTE_HAS_NO_AMOUNT`).
+
+Tests: `test_agent_door.py` (7) and `test_agent_queue.py` (5) plus the 43 door tests and the
+existing discovery suites - 91 green, no network.
