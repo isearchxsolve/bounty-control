@@ -2,8 +2,8 @@
   "task_id": "e746238b7ab5a6a95c330ee4eb671eba",
   "repo": "connext/gitcoin",
   "issue_number": 2,
-  "status": "FAILED_DELIVERABLE_MISSING",
-  "dispatch_id": "6b2107a59a1042df97f173c2497babcb",
+  "status": "DISPATCHING",
+  "dispatch_id": "41d8d53895d94c9693f6297ecb415613",
   "admission": {
     "funding": {
       "amount": "250",
@@ -25,15 +25,15 @@
       "https://github.com/connext/gitcoin/issues/2#issuecomment-1069666658"
     ],
     "source_issue": "https://github.com/connext/gitcoin/issues/2",
-    "fetched_at": "2026-10-30T12:49:59.066064+00:00"
+    "fetched_at": "2026-10-30T15:40:04.845499+00:00"
   },
   "lanes": [
     "founder",
     "normal"
   ],
-  "dispatched_at": "2026-10-30T12:50:00.396080+00:00",
+  "dispatched_at": "2026-10-30T15:40:06.034115+00:00",
   "attempt": 1,
-  "updated_at": "2026-10-30T12:52:36.335450+00:00",
+  "updated_at": "2026-10-30T15:40:06.034131+00:00",
   "owner": "41058348982:1",
   "previous_owner": null,
   "previous_status": "DISPATCHED",
