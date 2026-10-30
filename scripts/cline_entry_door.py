@@ -396,6 +396,12 @@ DOWNSTREAM_CHECKS = [
     ("CURRENT_ISSUER_OFFER_MISSING",
      "no fundable offer for a trusted issuer survives; a real figure in the issue is the only "
      "way through."),
+    ("COMPETITION_OPEN_PR_EXISTS",
+     "an unmerged open pull request already exists for this issue; never compete on pre-empted work."),
+    ("DEFECT_NOT_IN_REPOSITORY",
+     "the defect is in an external bridge/wallet/service or desktop environment, not this repository's codebase."),
+    ("UNBOUNDED_SCOPE",
+     "the issue is a whole-product roadmap or rewrite rather than a bounded, deliverable engineering fix."),
     ("REPORTED_BEHAVIOUR_DECLARED_BY_DESIGN", "the issue states the behaviour is by design."),
     ("REPOSITORY_DOES_NOT_MERGE", "the repository's history shows it does not merge outside work."),
     ("CLOSED_OR_READ_ONLY", "the issue is closed or the repository is read-only."),
@@ -432,6 +438,14 @@ Find work on GitHub that pays for engineering, and record what you find. You are
 ## The gates that fire after you submit
 
 {downstream}
+
+## Pre-screen rules to survive downstream gates
+
+Before you add an issue to shortlist.jsonl:
+1. Check competition: run `gh pr list --repo <repo> --state open`. If an open PR already addresses this issue, drop it (COMPETITION_OPEN_PR_EXISTS).
+2. Check mergeability: run `gh pr list --repo <repo> --state closed --limit 5`. If the repository never merges outside PRs, drop it (REPOSITORY_DOES_NOT_MERGE).
+3. Check locality: the defect must exist in this repository's own files, not in an external service or hardware wallet (DEFECT_NOT_IN_REPOSITORY).
+4. Check scope: single bounded engineering fix or feature, not an entire product roadmap (UNBOUNDED_SCOPE).
 
 ## Your job is recall, not precision
 
