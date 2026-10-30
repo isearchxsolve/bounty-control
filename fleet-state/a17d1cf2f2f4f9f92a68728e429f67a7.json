@@ -1,0 +1,50 @@
+{
+  "task_id": "a17d1cf2f2f4f9f92a68728e429f67a7",
+  "repo": "ProjectWyvern/dao.projectwyvern.com",
+  "issue_number": 1,
+  "status": "DISPATCHING",
+  "dispatch_id": "6c894cd15d0746d5a257ec2af7aff43e",
+  "admission": {
+    "funding": {
+      "amount": "0.4",
+      "currency": "ETH",
+      "usd_value": "895.9340",
+      "quote": {
+        "usd_rate": "2239.835",
+        "source_url": "https://api.coinbase.com/v2/prices/ETH-USD/spot",
+        "observed_at": "2026-10-30T17:43:11.783621+00:00",
+        "quote_date": null
+      },
+      "raw": "0.4 ETH",
+      "source_url": "https://github.com/ProjectWyvern/dao.projectwyvern.com/issues/1#issuecomment-372542435",
+      "payer": "protinam"
+    },
+    "technical_signals": [
+      "issue",
+      "latency",
+      "transaction",
+      "transactions"
+    ],
+    "component_references": [
+      "ERC20"
+    ],
+    "source_locations": [],
+    "engineering_evidence_sources": [
+      "https://github.com/ProjectWyvern/dao.projectwyvern.com/issues/1",
+      "https://github.com/ProjectWyvern/dao.projectwyvern.com/issues/1#issuecomment-358145869",
+      "https://github.com/ProjectWyvern/dao.projectwyvern.com/issues/1#issuecomment-358811535",
+      "https://github.com/ProjectWyvern/dao.projectwyvern.com/issues/1#issuecomment-359868074",
+      "https://github.com/ProjectWyvern/dao.projectwyvern.com/issues/1#issuecomment-372537247"
+    ],
+    "source_issue": "https://github.com/ProjectWyvern/dao.projectwyvern.com/issues/1",
+    "fetched_at": "2026-10-30T17:43:37.491175+00:00"
+  },
+  "lanes": [
+    "founder",
+    "programs",
+    "startup"
+  ],
+  "dispatched_at": "2026-10-30T17:43:39.385202+00:00",
+  "attempt": 0,
+  "updated_at": "2026-10-30T17:43:39.385223+00:00"
+}
