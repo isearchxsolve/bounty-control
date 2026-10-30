@@ -2,7 +2,7 @@
   "task_id": "23a8ec468f54416c493225178857283b",
   "repo": "reef-defi/reef-finance-bounties",
   "issue_number": 2,
-  "status": "DISPATCHING",
+  "status": "DISPATCHED",
   "dispatch_id": "7cc069a8b1034507a0b640554f567324",
   "admission": {
     "funding": {
@@ -32,5 +32,5 @@
   ],
   "dispatched_at": "2026-10-30T11:43:37.645251+00:00",
   "attempt": 0,
-  "updated_at": "2026-10-30T11:43:37.645272+00:00"
+  "updated_at": "2026-10-30T11:43:39.529941+00:00"
 }
