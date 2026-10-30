@@ -1354,8 +1354,17 @@ def discover(lanes, max_dispatches=2, live=False, queries_per_lane=2, state_dir=
                 try:
                     state, _ = store.read(identity)
                     if not retry_eligible(state):
-                        counts["terminal_refusal" if str(state.get("status", "")).startswith("REJECTED_")
-                               else "already_owned"] += 1
+                        # A written verdict is retired from the candidate table, not just skipped.
+                        # Skipping alone left the row in place, so every cycle re-read the same
+                        # tombstone and reported it as qualified supply: run 41029772339 showed
+                        # qualified_unique 2 with dispatched [] because both rows were already
+                        # REJECTED_PREPARATION. The verdict itself is still preserved in the store.
+                        if str(state.get("status", "")).startswith("REJECTED_"):
+                            counts["terminal_refusal"] += 1
+                            con.execute("DELETE FROM candidates WHERE task_id=?", (identity,))
+                            con.commit()
+                        else:
+                            counts["already_owned"] += 1
                         continue
                     current = api.issue_context(candidate["context"]["repo"], candidate["context"]["issue_number"])
                     query_exclusion = refreshed_query_exclusion(current)

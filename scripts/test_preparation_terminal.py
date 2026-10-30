@@ -194,6 +194,20 @@ class RedispatchTests(unittest.TestCase):
         for status in ("DELIVERED", "PUBLISHED_PENDING_CHECKS", "CLOSED_UNMERGED"):
             self.assertFalse(retry_eligible({"status": status}), status)
 
+    def test_a_terminal_verdict_retires_its_candidate_row(self):
+        """A refusal recorded in the store must leave the candidate table, not linger as supply.
+
+        Measured on run 41029772339: qualified_unique 2 with dispatched [], because both rows were
+        already REJECTED_PREPARATION and were skipped without being removed, so every cycle
+        re-reported them as qualified.
+        """
+        source = (HERE / "actions_dispatch.py").read_text(encoding="utf-8")
+        self.assertIn("if not retry_eligible(state):", source)
+        block = source.split("if not retry_eligible(state):", 1)[1].split("current = api.issue_context", 1)[0]
+        self.assertIn("DELETE FROM candidates WHERE task_id=?", block,
+                      "a terminal verdict must retire its candidate row")
+        self.assertIn('startswith("REJECTED_")', block)
+
     def test_the_dispatch_gate_counts_a_refusal_separately(self):
         source = (HERE / "actions_dispatch.py").read_text(encoding="utf-8")
         self.assertIn("terminal_refusal", source)
