@@ -2,7 +2,7 @@
   "task_id": "e4f3b3398924f7772bf634fcc2ab3499",
   "repo": "GnosisEcosystemFund/Gnosis-Bounties-",
   "issue_number": 15,
-  "status": "CLAIMED",
+  "status": "REJECTED_PREPARATION",
   "dispatch_id": "1eff6f5092604533b2214ebcd4b23621",
   "admission": {
     "funding": {
@@ -36,7 +36,7 @@
   ],
   "dispatched_at": "2026-10-30T17:08:36.155346+00:00",
   "attempt": 1,
-  "updated_at": "2026-10-30T17:08:48.635048+00:00",
+  "updated_at": "2026-10-30T17:12:15.310297+00:00",
   "owner": "41096211119:1",
   "previous_owner": null,
   "previous_status": "DISPATCHED",
@@ -44,5 +44,36 @@
   "harness_sha": "36da4d1f58379020b816cc66cdfa95772df51f6f",
   "claimed_at": "2026-10-30T17:08:48.635000+00:00",
   "lease_expires_at": "2026-10-30T21:13:48.635013+00:00",
-  "preparation_budget_seconds": 14400
+  "preparation_budget_seconds": 14400,
+  "at": "2026-10-30T17:11:58.134239+00:00",
+  "reason": "Cline preparation blocked: Classification: non-engineering, withdrawn funding. Issue #15 ('Integrate the Gnosis Safe into your ETHCapeTown Project') is a Gitcoin hackathon bounty that asks participants to build an EXTERNAL ETHCapeTown project integrating Gnosis Safe and provide proof they #buidled during the event. Criteria are 'Related to the Gnosis Safe / Readme with setup instructions / All code in English / Open source code / Provide proof that you #buidled during ETHCapeTown'. It requests no concrete code change to this repository, which contains only a single README.md (a bounty-listing repo) with no source, manifests, build, tests, or CI. Additionally the funding is withdrawn: author comment 492656018 (gitcoinbot, 2019-05-15T13:32:45Z) states '__The funding of 3.0 ETH (692.59 USD @ $230.86/ETH) attached to this issue has been cancelled by the bounty submitter__'. Both independently mandate blocked: this is a grant/hackathon proposal request with no repository change AND the funding/claim is no longer live. Checkout left unchanged.",
+  "declared_reason": "Classification: non-engineering, withdrawn funding. Issue #15 ('Integrate the Gnosis Safe into your ETHCapeTown Project') is a Gitcoin hackathon bounty that asks participants to build an EXTERNAL ETHCapeTown project integrating Gnosis Safe and provide proof they #buidled during the event. Criteria are 'Related to the Gnosis Safe / Readme with setup instructions / All code in English / Open source code / Provide proof that you #buidled during ETHCapeTown'. It requests no concrete code change to this repository, which contains only a single README.md (a bounty-listing repo) with no source, manifests, build, tests, or CI. Additionally the funding is withdrawn: author comment 492656018 (gitcoinbot, 2019-05-15T13:32:45Z) states '__The funding of 3.0 ETH (692.59 USD @ $230.86/ETH) attached to this issue has been cancelled by the bounty submitter__'. Both independently mandate blocked: this is a grant/hackathon proposal request with no repository change AND the funding/claim is no longer live. Checkout left unchanged.",
+  "evidence": {
+    "action": "blocked",
+    "worktree": "/tmp/bounty-workspaces/repos/GnosisEcosystemFund--Gnosis-Bounties---15",
+    "base_sha": "035b22272e38f3381c91dc4343d8074241a6aa44",
+    "default_branch": "master",
+    "sources": [
+      {
+        "path": "README.md",
+        "sha256": "cffe6effb75fa319dc7da80c538c398c9f910bcf2d321e5789441b4751957cf6"
+      }
+    ],
+    "run_url": "",
+    "admission": {
+      "amount": "3",
+      "currency": "ETH",
+      "usd_value": "6709.845",
+      "quote": {
+        "usd_rate": "2236.615",
+        "source_url": "https://api.coinbase.com/v2/prices/ETH-USD/spot",
+        "observed_at": "2026-10-30T17:08:47.384121+00:00",
+        "quote_date": null
+      },
+      "raw": "3 ETH",
+      "source_url": "https://github.com/GnosisEcosystemFund/Gnosis-Bounties-/issues/15",
+      "payer": "GnosisEcosystemFund"
+    }
+  },
+  "finished_at": "2026-10-30T17:12:14.726136+00:00"
 }
