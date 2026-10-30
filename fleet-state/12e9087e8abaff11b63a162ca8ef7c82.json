@@ -2,7 +2,7 @@
   "task_id": "12e9087e8abaff11b63a162ca8ef7c82",
   "repo": "abdul-rahhman-siddiqui/testing-issue-tracker",
   "issue_number": 253,
-  "status": "DISPATCHED",
+  "status": "CLAIMED",
   "dispatch_id": "7c933603520144f4a2d4f0113738a9ab",
   "admission": {
     "funding": {
@@ -33,6 +33,14 @@
     "founder"
   ],
   "dispatched_at": "2026-10-30T12:44:35.259303+00:00",
-  "attempt": 0,
-  "updated_at": "2026-10-30T12:44:37.009947+00:00"
+  "attempt": 1,
+  "updated_at": "2026-10-30T12:44:48.758273+00:00",
+  "owner": "41057647759:1",
+  "previous_owner": null,
+  "previous_status": "DISPATCHED",
+  "run_url": "https://github.com/isearchxsolve/bounty-control/actions/runs/41057647759",
+  "harness_sha": "122af062685a0bd1f1d161d9c42a07300819cc15",
+  "claimed_at": "2026-10-30T12:44:48.758233+00:00",
+  "lease_expires_at": "2026-10-30T16:49:48.758241+00:00",
+  "preparation_budget_seconds": 14400
 }
