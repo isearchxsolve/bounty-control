@@ -2,8 +2,8 @@
   "task_id": "beba21803c6b3b82c91cb55cc058ffdf",
   "repo": "galacticcouncil/amsterdot-bounties-2022",
   "issue_number": 1,
-  "status": "FAILED_DELIVERABLE_MISSING",
-  "dispatch_id": "394864b94ef845bdaf3e70f84604cf2a",
+  "status": "DISPATCHING",
+  "dispatch_id": "b914d5d981a34fa3ba86668718738f99",
   "admission": {
     "funding": {
       "amount": "150000",
@@ -25,14 +25,14 @@
       "https://github.com/galacticcouncil/amsterdot-bounties-2022/issues/1"
     ],
     "source_issue": "https://github.com/galacticcouncil/amsterdot-bounties-2022/issues/1",
-    "fetched_at": "2026-10-30T13:40:44.630305+00:00"
+    "fetched_at": "2026-10-30T14:08:36.117590+00:00"
   },
   "lanes": [
     "founder"
   ],
-  "dispatched_at": "2026-10-30T13:40:45.952709+00:00",
+  "dispatched_at": "2026-10-30T14:08:37.242376+00:00",
   "attempt": 1,
-  "updated_at": "2026-10-30T13:44:30.880131+00:00",
+  "updated_at": "2026-10-30T14:08:37.242392+00:00",
   "owner": "41065219737:1",
   "previous_owner": null,
   "previous_status": "DISPATCHED",
