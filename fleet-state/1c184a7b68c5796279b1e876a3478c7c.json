@@ -1,0 +1,39 @@
+{
+  "task_id": "1c184a7b68c5796279b1e876a3478c7c",
+  "repo": "priviprotocol/privi-zoo",
+  "issue_number": 6,
+  "status": "DISPATCHING",
+  "dispatch_id": "607fa1e6c93748c585d922daaff79f1a",
+  "admission": {
+    "funding": {
+      "amount": "10000",
+      "currency": "USD",
+      "usd_value": "10000",
+      "quote": {
+        "basis": "USD face value"
+      },
+      "raw": "$10,000",
+      "source_url": "https://github.com/priviprotocol/privi-zoo/issues/6",
+      "payer": "priviprotocol"
+    },
+    "technical_signals": [
+      "protocol",
+      "protocols",
+      "transaction"
+    ],
+    "component_references": [],
+    "source_locations": [],
+    "engineering_evidence_sources": [
+      "https://github.com/priviprotocol/privi-zoo/issues/6"
+    ],
+    "source_issue": "https://github.com/priviprotocol/privi-zoo/issues/6",
+    "fetched_at": "2026-10-30T17:09:28.849877+00:00"
+  },
+  "lanes": [
+    "founder",
+    "programs"
+  ],
+  "dispatched_at": "2026-10-30T17:09:30.976874+00:00",
+  "attempt": 0,
+  "updated_at": "2026-10-30T17:09:30.976896+00:00"
+}
