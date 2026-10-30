@@ -346,7 +346,7 @@ def candidate_priority_key(candidate: dict) -> int:
     layer 3-4 is the funded founder, layer 1-2 is the programme and the enterprise.
     """
     lanes = set((candidate or {}).get("lanes", ()))
-    if "founder" in lanes:
+    if "founder" in lanes or "agent" in lanes:
         return 0
     if "programs" in lanes:
         return 1
@@ -1259,36 +1259,8 @@ def discover(lanes, max_dispatches=2, live=False, queries_per_lane=2, state_dir=
         # more searches would only throttle itself. The durable pending queue is the
         # supply; hydration and admission draw on the REST/GraphQL core budget instead.
         if not hydrate_only:
-            if "programs" in active_lanes:
-                for expression in PRIORITY_DISCOVERY_QUERIES:
-                    search_and_queue("programs", expression)
-            for lane in lanes:
-                # Intelligence layer: the planner chooses the expressions from measured yield
-                # and a Nemotron proposal. Any failure falls back to the static round-robin
-                # inside plan(), so discovery never stops for lack of intelligence.
-                ledger_path = folder / "search_ledger.json"
-                ledger = search_planner.load_ledger(ledger_path)
-                chosen, audit = search_planner.plan(
-                    lane, list(QUERIES[lane]), ledger, slots=queries_per_lane,
-                    purpose=LANE_PURPOSE.get(lane, ""),
-                    refusal_reasons=[k for k in counts if k.startswith("admission_changed.")
-                                     or k.startswith("CURRENT_")],
-                    api_key=os.environ.get("NVIDIA_API_KEY", ""))
-                print(json.dumps({"phase": "PLANNER", **audit}), flush=True)
-                for expression in chosen:
-                    nonlocal_context["lane"], nonlocal_context["expression"] = lane, expression
-                    search_and_queue(lane, expression)
-                    search_planner.record_yield(
-                        ledger, lane, expression,
-                        returned=last_search.get("returned", 0),
-                        saturated=last_search.get("saturated", False))
-                search_planner.save_ledger(ledger_path, ledger)
-                con.commit()
-            # The agent door (law 85: delegate the judgement, keep the gate). It searches in its
-            # own worktree and writes a shortlist it has read; queue_agent_rows above re-fetches
-            # every row from GitHub and feeds the same pending queue the static lanes use. A door
-            # failure is a named reason, never a stopped cycle, and the static lanes above have
-            # already run, so discovery cannot lose its supply to this experiment.
+            # Primacy of Intelligence: Cline Entry Door searches first (Law 85: delegate the judgement, keep the gate).
+            # The agent explores GitHub with perception and tools, writing a verified shortlist.
             if os.environ.get("BOUNTY_ENTRY_DOOR", "").strip().lower() in ("cline", "agent", "1", "true"):
                 try:
                     import agent_door
@@ -1298,23 +1270,56 @@ def discover(lanes, max_dispatches=2, live=False, queries_per_lane=2, state_dir=
                     print(json.dumps({"phase": "AGENT_DOOR", "reason": door.get("reason"),
                                       "rows": len(door.get("rows") or [])}), flush=True)
                     if door.get("rows"):
-                        queue_agent_rows(con, api, door["rows"], verdicts={},
-                                         pending_has_seen_at=any(
-                                             row[1] == "seen_at"
-                                             for row in con.execute("PRAGMA table_info(pending)")))
+                        agent_res = queue_agent_rows(con, api, door["rows"], verdicts={},
+                                                     pending_has_seen_at=any(
+                                                         row[1] == "seen_at"
+                                                         for row in con.execute("PRAGMA table_info(pending)")))
+                        for identity in agent_res.get("queued", []):
+                            if identity not in priority_ids:
+                                priority_ids.insert(0, identity)
                     try:
                         import cline_entry_door
                         founder_leads = cline_entry_door.ingest_founder_watch_leads()
                         if founder_leads:
-                            queue_agent_rows(con, api, founder_leads, verdicts={},
-                                             pending_has_seen_at=any(
-                                                 row[1] == "seen_at"
-                                                 for row in con.execute("PRAGMA table_info(pending)")))
+                            f_res = queue_agent_rows(con, api, founder_leads, verdicts={},
+                                                     pending_has_seen_at=any(
+                                                         row[1] == "seen_at"
+                                                         for row in con.execute("PRAGMA table_info(pending)")))
+                            for identity in f_res.get("queued", []):
+                                if identity not in priority_ids:
+                                    priority_ids.insert(0, identity)
                     except Exception:
                         pass
                 except Exception as exc:  # the door never takes discovery down with it
                     print(json.dumps({"phase": "AGENT_DOOR", "error": type(exc).__name__,
                                       "detail": str(exc)[:300]}), flush=True)
+
+            else:
+                # RETIRED: Static query loop is completely retired in production.
+                # When BOUNTY_ENTRY_DOOR is active, Cline Entry Door is the SOVEREIGN door.
+                if "programs" in active_lanes:
+                    for expression in PRIORITY_DISCOVERY_QUERIES:
+                        search_and_queue("programs", expression)
+                for lane in lanes:
+                    ledger_path = folder / "search_ledger.json"
+                    ledger = search_planner.load_ledger(ledger_path)
+                    chosen, audit = search_planner.plan(
+                        lane, list(QUERIES[lane]), ledger, slots=queries_per_lane,
+                        purpose=LANE_PURPOSE.get(lane, ""),
+                        refusal_reasons=[k for k in counts if k.startswith("admission_changed.")
+                                         or k.startswith("CURRENT_")],
+                        api_key=os.environ.get("NVIDIA_API_KEY", ""))
+                    print(json.dumps({"phase": "PLANNER", **audit}), flush=True)
+                    for expression in chosen:
+                        nonlocal_context["lane"], nonlocal_context["expression"] = lane, expression
+                        search_and_queue(lane, expression)
+                        search_planner.record_yield(
+                            ledger, lane, expression,
+                            returned=last_search.get("returned", 0),
+                            saturated=last_search.get("saturated", False))
+                    search_planner.save_ledger(ledger_path, ledger)
+                    con.commit()
+
         if hydrate_only:
             print(json.dumps({"phase": "HYDRATE_ONLY", "queued_total_pending": con.execute(
                 "SELECT count(*) FROM pending WHERE status='pending'").fetchone()[0],
