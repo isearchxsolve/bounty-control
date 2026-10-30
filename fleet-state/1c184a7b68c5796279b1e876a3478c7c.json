@@ -2,7 +2,7 @@
   "task_id": "1c184a7b68c5796279b1e876a3478c7c",
   "repo": "priviprotocol/privi-zoo",
   "issue_number": 6,
-  "status": "DISPATCHING",
+  "status": "DISPATCHED",
   "dispatch_id": "607fa1e6c93748c585d922daaff79f1a",
   "admission": {
     "funding": {
@@ -35,5 +35,5 @@
   ],
   "dispatched_at": "2026-10-30T17:09:30.976874+00:00",
   "attempt": 0,
-  "updated_at": "2026-10-30T17:09:30.976896+00:00"
+  "updated_at": "2026-10-30T17:09:32.977677+00:00"
 }
