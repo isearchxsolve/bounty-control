@@ -2,7 +2,7 @@
   "task_id": "2cb74c12aed15880f05f90002e054900",
   "repo": "Opty-Fi/megagraph",
   "issue_number": 25,
-  "status": "CLAIMED",
+  "status": "REJECTED_PREPARATION",
   "dispatch_id": "a8789337815b4608af61585eb4cc730d",
   "admission": {
     "funding": {
@@ -32,7 +32,7 @@
   ],
   "dispatched_at": "2026-10-30T07:53:21.035643+00:00",
   "attempt": 1,
-  "updated_at": "2026-10-30T07:53:33.984566+00:00",
+  "updated_at": "2026-10-30T07:56:54.011888+00:00",
   "owner": "41022846484:1",
   "previous_owner": null,
   "previous_status": "DISPATCHED",
@@ -40,5 +40,28 @@
   "harness_sha": "25ac5ec13b387b126c22028fc9c06e2cade3a338",
   "claimed_at": "2026-10-30T07:53:33.984519+00:00",
   "lease_expires_at": "2026-10-30T11:58:33.984531+00:00",
-  "preparation_budget_seconds": 14400
+  "preparation_budget_seconds": 14400,
+  "at": "2026-10-30T07:56:38.424615+00:00",
+  "reason": "Cline preparation blocked: Non-live funding: issue #25 is a template, not a real bounty. Exact evidence: (1) issue title is literally 'Sample Bounty template' (https://api.github.com/repos/Opty-Fi/megagraph/issues/25 -> title). (2) Maintainer/triager uwe (author_association CONTRIBUTOR, Opty-Fi org) stated in issue comment 1061476520 on 2022-03-08T07:12:41Z: 'This ticket is just a sample bounty (not a real one). Our bounty board is at https://app.dework.xyz/... (at the moment all subgraph bounties are in progress - please check back in a few days)'. This explicitly disavows the 1000 USDC 'Prize Bounty' as not real/not live. (3) No repository work is outstanding for it: no fix/bounty-25 branch exists and no open/closed PR references issue #25 or a UniswapV2 subgraph (remote heads: master, dev, OPTY-1282, turbo-aave; PRs #1-#74 are unrelated OptyFi protocol work). (4) The body points to a non-existent guide path 'issues/CONTRIBUTING.md', a template artifact. Per the task rules, a sample/withdrawn/non-real bounty is not a live claim; the checkout is intentionally left unchanged and no fork/PR was created.",
+  "declared_reason": "Non-live funding: issue #25 is a template, not a real bounty. Exact evidence: (1) issue title is literally 'Sample Bounty template' (https://api.github.com/repos/Opty-Fi/megagraph/issues/25 -> title). (2) Maintainer/triager uwe (author_association CONTRIBUTOR, Opty-Fi org) stated in issue comment 1061476520 on 2022-03-08T07:12:41Z: 'This ticket is just a sample bounty (not a real one). Our bounty board is at https://app.dework.xyz/... (at the moment all subgraph bounties are in progress - please check back in a few days)'. This explicitly disavows the 1000 USDC 'Prize Bounty' as not real/not live. (3) No repository work is outstanding for it: no fix/bounty-25 branch exists and no open/closed PR references issue #25 or a UniswapV2 subgraph (remote heads: master, dev, OPTY-1282, turbo-aave; PRs #1-#74 are unrelated OptyFi protocol work). (4) The body points to a non-existent guide path 'issues/CONTRIBUTING.md', a template artifact. Per the task rules, a sample/withdrawn/non-real bounty is not a live claim; the checkout is intentionally left unchanged and no fork/PR was created.",
+  "evidence": {
+    "action": "blocked",
+    "worktree": "/tmp/bounty-workspaces/repos/Opty-Fi--megagraph--25",
+    "base_sha": "9c5ec5209d9185163afda8553f4497ac9e33f795",
+    "default_branch": "master",
+    "sources": [],
+    "run_url": "",
+    "admission": {
+      "amount": "1000",
+      "currency": "USDC",
+      "usd_value": "1000",
+      "quote": {
+        "basis": "USD-denominated stablecoin offer"
+      },
+      "raw": "1000 USDC",
+      "source_url": "https://github.com/Opty-Fi/megagraph/issues/25",
+      "payer": "dhruvinparikh"
+    }
+  },
+  "finished_at": "2026-10-30T07:56:53.320615+00:00"
 }
