@@ -1,0 +1,38 @@
+{
+  "task_id": "26f623bf18ea815861f275af12e4104a",
+  "repo": "Fraud-Detection-and-Defense/opendata-hackathon-GR15",
+  "issue_number": 3,
+  "status": "DISPATCHING",
+  "dispatch_id": "eb9ec51b4a754d79a638e1716d18328e",
+  "admission": {
+    "funding": {
+      "amount": "7500",
+      "currency": "USD",
+      "usd_value": "7500",
+      "quote": {
+        "basis": "USD face value"
+      },
+      "raw": "$7,500",
+      "source_url": "https://github.com/Fraud-Detection-and-Defense/opendata-hackathon-GR15/issues/3",
+      "payer": "epowell101"
+    },
+    "technical_signals": [
+      "algorithms",
+      "problems"
+    ],
+    "component_references": [],
+    "source_locations": [],
+    "engineering_evidence_sources": [
+      "https://github.com/Fraud-Detection-and-Defense/opendata-hackathon-GR15/issues/3"
+    ],
+    "source_issue": "https://github.com/Fraud-Detection-and-Defense/opendata-hackathon-GR15/issues/3",
+    "fetched_at": "2026-10-30T12:09:07.170964+00:00"
+  },
+  "lanes": [
+    "founder",
+    "normal"
+  ],
+  "dispatched_at": "2026-10-30T12:09:08.659596+00:00",
+  "attempt": 0,
+  "updated_at": "2026-10-30T12:09:08.659610+00:00"
+}
