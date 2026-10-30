@@ -2,7 +2,7 @@
   "task_id": "21628904963c541d4b3fa1f968d542ef",
   "repo": "stan-dev/sgb",
   "issue_number": 7,
-  "status": "CLAIMED",
+  "status": "REJECTED_PREPARATION",
   "dispatch_id": "ee1744904f1940559453a6839ad5a030",
   "admission": {
     "funding": {
@@ -48,7 +48,7 @@
   ],
   "dispatched_at": "2026-10-30T19:06:00.267726+00:00",
   "attempt": 1,
-  "updated_at": "2026-10-30T19:06:15.162426+00:00",
+  "updated_at": "2026-10-30T19:10:25.464623+00:00",
   "owner": "41112413143:1",
   "previous_owner": null,
   "previous_status": "DISPATCHED",
@@ -56,5 +56,33 @@
   "harness_sha": "2e2cda3dc5900de390e8402fda1b160f9b17ff6c",
   "claimed_at": "2026-10-30T19:06:15.162355+00:00",
   "lease_expires_at": "2026-10-30T23:11:15.162386+00:00",
-  "preparation_budget_seconds": 14400
+  "preparation_budget_seconds": 14400,
+  "at": "2026-10-30T19:10:04.916218+00:00",
+  "reason": "Cline preparation blocked: Issue stan-dev/sgb#7 'Funding Stan features' is a governance/policy discussion, not a concrete code change to this repository. Its body asks to 'discuss how Stan should handle these requests and to make a public document on how a corporation or person can pay for feature development' (options: GitHub bounties/issuehunt.io, paying Stan directly, NumFOCUS lawyer work orders). All 11 comments are policy debate (bounty vs. direct payment, contracts, PR-review indirection). This is a documentation/governance deliverable and a willingness-to-pay/proposal discussion, not a reproducible defect, engineering feature, or code-level maintenance. Repository state confirms there is nothing to change: the default branch 'main' (SHA 8725d3cf9c4221f2ebd174e90bc8a18c44d358c2) contains ONLY README.md (repo description: 'Stan Governing Body issue tracker and meeting notes'), with language=null, size=0, no manifests, no lockfiles, no CI workflows, no tests and no source code, so there is no toolchain and no reproducible defect target. No live funding is attached to this issue: the detected $25K (admission.funding.source_url = https://github.com/stan-dev/sgb/issues/7#issuecomment-1048075587) is a comment by mitzimorris describing a HISTORICAL 2017 Facebook Prophet bounty to Andrew Gelman for standalone generated quantities, not an active commitment to this issue. 0 open pull requests exist, so no competing PR. Per policy, this non-engineering/documentation-discussion issue must not be turned into a fallback proposal or PR; the checkout is left unchanged.",
+  "declared_reason": "Issue stan-dev/sgb#7 'Funding Stan features' is a governance/policy discussion, not a concrete code change to this repository. Its body asks to 'discuss how Stan should handle these requests and to make a public document on how a corporation or person can pay for feature development' (options: GitHub bounties/issuehunt.io, paying Stan directly, NumFOCUS lawyer work orders). All 11 comments are policy debate (bounty vs. direct payment, contracts, PR-review indirection). This is a documentation/governance deliverable and a willingness-to-pay/proposal discussion, not a reproducible defect, engineering feature, or code-level maintenance. Repository state confirms there is nothing to change: the default branch 'main' (SHA 8725d3cf9c4221f2ebd174e90bc8a18c44d358c2) contains ONLY README.md (repo description: 'Stan Governing Body issue tracker and meeting notes'), with language=null, size=0, no manifests, no lockfiles, no CI workflows, no tests and no source code, so there is no toolchain and no reproducible defect target. No live funding is attached to this issue: the detected $25K (admission.funding.source_url = https://github.com/stan-dev/sgb/issues/7#issuecomment-1048075587) is a comment by mitzimorris describing a HISTORICAL 2017 Facebook Prophet bounty to Andrew Gelman for standalone generated quantities, not an active commitment to this issue. 0 open pull requests exist, so no competing PR. Per policy, this non-engineering/documentation-discussion issue must not be turned into a fallback proposal or PR; the checkout is left unchanged.",
+  "evidence": {
+    "action": "blocked",
+    "worktree": "/tmp/bounty-workspaces/repos/stan-dev--sgb--7",
+    "base_sha": "8725d3cf9c4221f2ebd174e90bc8a18c44d358c2",
+    "default_branch": "main",
+    "sources": [
+      {
+        "path": "README.md",
+        "sha256": "e7508a389145618825362c6ffb89d9a5dd9372bea7383011e3f08122f780a473"
+      }
+    ],
+    "run_url": "",
+    "admission": {
+      "amount": "25000",
+      "currency": "USD",
+      "usd_value": "25000",
+      "quote": {
+        "basis": "USD face value"
+      },
+      "raw": "$25K",
+      "source_url": "https://github.com/stan-dev/sgb/issues/7#issuecomment-1048075587",
+      "payer": "mitzimorris"
+    }
+  },
+  "finished_at": "2026-10-30T19:10:24.859867+00:00"
 }
