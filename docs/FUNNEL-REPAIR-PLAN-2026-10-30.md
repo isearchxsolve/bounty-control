@@ -1427,6 +1427,35 @@ integrity problem, not a test-coverage one, and it is listed as open rather than
 
 | Step | Done when |
 | --- | --- |
-| C1 | a workflow run completes checkout on `master` - **blocked**: Actions billing on the private repo (forensic 12.4). Proven structurally meanwhile: the fixed tree carries one gitlink, `.gitmodules` declares it with a url |
+| C1 | **DONE, observational.** A workflow run completes checkout: `41004884451` (contracts, success) and `41005024759` (discovery, success 3m13s) in the public `bounty-control` repository, whose log shows the `git submodule foreach --recursive` step - the exact command that killed every job since `b1cfd41` - completing (forensic 12.5) |
 | C2 | a real `/claim #<n>` posts on an issue whose comments carry a trusted bot, and the ledger records it |
 | C3 | the unmocked live-API test is identified and marked network, so `discover` completes offline |
+| C4 | a live tick classifies candidates with named reasons instead of crashing: run `41005024759` searched five lanes and emitted `CURRENT_ISSUER_OFFER_MISSING` / `HARD_ISSUE_EVIDENCE_MISSING` - **DONE** |
+
+## R12 - the moat is wired, and the bands match the evidence (DONE 2026-10-30)
+
+Closes the two divergences forensic 13 found between the doctrine and the running code.
+
+| item | state | receipt |
+| --- | --- | --- |
+| `hardness_score.py` extracted as the single home, 46 patterns, original weights | DONE | self-test 13/13 |
+| hardness inserted into `candidate_sort_key` between liquidity and velocity | DONE | `test_hardness_ordering` 12 tests |
+| founders lead the bands, programmes second | DONE | `test_dispatch_velocity` rewritten with the reason |
+| guard: the dispatcher must import the moat | DONE | AST assertion in `test_hardness_ordering.WiringTest` |
+| unmeasured comment count earns no bonus | DONE | explicit test |
+| 750,000 KB capacity ceiling raised | **NOT DONE, deliberately** | a 3.38 GB repo cannot be prepared here; see forensic 13.3 |
+
+### R12.1 acceptance
+
+| # | criterion | how it was met |
+| --- | --- | --- |
+| R12a | a hard ticket outranks a trivial one in the same band | `test_hard_ticket_beats_trivial_one_in_same_band` |
+| R12b | hardness still loses to liquidity | `test_solvency_still_beats_hardness` |
+| R12c | band still dominates hardness | `test_band_dominates_hardness` |
+| R12d | the moat cannot silently become dead code again | source-level import assertion |
+| R12e | the whole contracts suite stays green | 444 tests, 25.9 s, exit 0 |
+
+### R12.2 one number
+
+A candidate's queue position is now decided by four things in this order: **band, solvency,
+hardness, quietness**. Before this lane it was three, and hardness was not one of them.

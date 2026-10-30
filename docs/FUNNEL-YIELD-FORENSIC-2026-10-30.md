@@ -615,3 +615,119 @@ a scratch tree could kill every job including ones that never touched it.
 **Stated honestly:** the tree is clean and the rule is pinned by test, but no CI run has yet executed
 on the fixed commit. The proof is structural, not observational, and it stays labelled that way until
 billing is restored and one tick completes.
+
+### 12.5 The split: the pipeline now lives in a public repository
+
+Actions was billing-blocked on the private archive, and private-repo minutes could never have
+covered this pipeline anyway:
+
+```
+crons:  '7,22,37,52 * * * *'  +  '2,17,32,47 * * * *'  +  '*/10 * * * *'   = up to 14 runs/hour
+free private allowance                                                      = 2,000 min/month
+```
+
+At ~1 min a run that is ~10,000 min/month - five times the allowance, every month, forever. Public
+repositories get standard runners free and unmetered, so the funnel moved out and the archive stayed
+private. This was a deliberate decision, taken with the user's explicit delegation, not a default.
+
+- **Published:** `https://github.com/isearchxsolve/bounty-control` (public) - 205 files, 4 MB:
+  the five workflows, 194 engine and test modules, the fixture samples the contracts need, and the
+  three funnel documents. Commit `5b68549`.
+- **Deliberately not published:** the family archive itself (AGENTS.md and family material stay
+  private), `autonomous_icu_pipeline.db` and `deliveries.db` (state), and every file the scrape
+  flagged. Measured before the first push: 0 hits for `nvapi-`, `sk-or-v1`, `ghp_` (beyond a regex
+  and a docstring example), `AKIA`, RSA blocks or assigned passwords; 0 hits for vault paths, phone
+  numbers, DIN, and 0 for Raktima, 498A, IndusInd, Arifine, Soltus, KreditBee, Silchar, pins.txt.
+- **Secrets carried across by name only:** `GH_PAT` and `TOKENHARBOR_KEYS_JSON` (both were already
+  the only two the workflows reference), set from `vault/` without printing a value.
+- **Verified before the first push, in the extracted tree:** 432 contract tests, exit 0, 30.4s.
+
+**The oracle finally answered.** Two runs, both green:
+
+| run | workflow | result |
+| --- | --- | --- |
+| `41004884451` | Actions migration contracts | **success** (04:48) |
+| `41005024759` | Bounty discovery and reconciliation | **success, 3m13s** (04:49) |
+
+The second run's log shows the exact command that used to kill every job now passing:
+
+```
+[command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only ...
+```
+
+That is C1 satisfied **observationally**, not structurally - see the acceptance row in the repair plan.
+
+**What the live tick actually did:** five lanes searched (`programs`, `normal`, `startup`, `founder`,
+plus the Expensify program query), and every candidate was gated with a named reason -
+`CURRENT_ISSUER_OFFER_MISSING` for the lordajax.com issues whose funding is not a trusted offer, and
+`HARD_ISSUE_EVIDENCE_MISSING` for a run of `test`-shaped repos. No admission passed this window, which
+is the gates working, not the engine failing.
+
+Archive state: all five of its workflows now answer `HTTP 403 Unable to disable a workflow that is not
+active` - GitHub itself suspended them under the billing block, so the two repositories cannot
+double-dispatch while both exist.
+
+### 13. Two doctrine gaps found by reading the code, and both closed
+
+Baba asked for confirmation of three assumptions about the pipeline. Two of them were **not**
+what the running code did, so the code was brought to the doctrine rather than the doctrine to
+the code.
+
+#### 13.1 The Hardness Moat existed and was never imported
+
+`autonomous_icu_pipeline.py:3234` carries `HARDNESS_PATTERNS` (46 patterns: race condition,
+deadlock, use-after-free, consensus, raft, zk-snark, reentrancy, io_uring, ebpf, p99, zero-copy)
+and `score_hardness_and_competition()`: +30 per pattern, +50 for a $500+ ticket, +25 for $100+,
+and a competition bonus **only when the ticket is hard** (+50 at 0 comments, +35 at <=2, +20 at
+<=4, -15 above 15).
+
+Nothing in the CI chain ran it. `actions_dispatch.py` did not import it, no workflow invoked it,
+and its only runner was `active_icu_supervisor.py`, which is not in CI. The live lane ranked by
+band, then liquidity, then repository quietness, and **never scored hardness once**. That is the
+identical defect `liquidity_score.py` had before commit `449e17e` wired it: written, correct,
+unused.
+
+**Closed:** `scripts/hardness_score.py` is now the single home (standalone, no pipeline imports,
+`--self-test` 13/13, weights unchanged so behaviour stays comparable), and
+`candidate_sort_key` reads:
+
+```python
+(band, -liquidity, -hardness, velocity)
+```
+
+Solvency still decides first, because a payer who cannot pay is worthless however terrifying the
+ticket. Hardness then beats quietness, because a quiet repository is only a *proxy* for
+competition while the ticket's own vocabulary is evidence of it. Unmeasured stays unmeasured: an
+unknown comment count earns neither bonus nor penalty.
+
+#### 13.2 The bands were ordered against the measured evidence
+
+The order was `programs(0) founder(1) startup(2) normal(3)`. The programmes lane led, yet its
+flagship target is `Expensify/App` at **3,384,503 KB**, which `capacity_exclusions` refuses at a
+750,000 KB ceiling. Measured on run `40898443331`: all six qualified candidates were that one
+repository and `dispatched` was empty. A lane that leads and is then discarded starves everything
+behind it.
+
+**Decision (taken, not asked): founders first.**
+
+| band | before | after |
+| --- | --- | --- |
+| founder (layer 3-4, `SILO_FOUNDER_TARGETING_SPEC.md`) | 1 | **0** |
+| programs | 0 | 1 |
+| startup | 2 | 2 |
+| normal | 3 | 3 |
+
+The old order's test was rewritten with the reason in its docstring, not deleted and not
+weakened - it still asserts all five bands and still asserts that the strongest lane present
+decides.
+
+#### 13.3 The capability limit that stays, stated plainly
+
+The 750,000 KB ceiling was **not** raised to make the new ordering look brave. This runner cannot
+prepare a 3.38 GB repository, and pretending otherwise would produce exactly the silent failure
+the receipt law forbids. The honest consequence is recorded: the biggest, hardest codebases remain
+out of reach until a runner with that capacity exists, and that is a capacity problem, not an
+ordering problem.
+
+**Verification:** 444 tests OK in 25.9 s (35 contracts modules + `test_hardness_ordering`, 12
+tests), pushed as `551bd61` to the public `bounty-control` repository.

@@ -89,7 +89,9 @@ reviewed it**, and the follow-up lane that would convert it does not exist yet.
 | O13 | **No payout account exists** - no Algora, Opire or Stripe credential in `vault/` | even a claim + a reward would have nowhere to land | OPEN - needs you: signup + KYC cannot be delegated |
 | O14 | The full suite cannot run in one pass locally (an unmocked live GitHub search test) | 20-minute timeout, so "suite green" is only ever said about a subset | OPEN - identify and mark it network (R11 C3) |
 | O15 | 17 open PRs in repos that have never reviewed anything (7 in one repo alone) | nudge list of 14 is mostly mills; the honest list is 3-5 | OPEN - target-quality gate, not yet specced |
-| O16 | **GitHub Actions is billing-blocked on this private repo**: "recent account payments have failed or your spending limit needs to be increased" - the first run on `4651377` never started | no workflow can run, so no green tick can serve as an oracle; the checkout fix is proven from the commit tree instead (forensic 12.4) | OPEN - **yours**: Billing & plans |
+| O16 | **RESOLVED 2026-10-30.** Actions was billing-blocked on the private archive and could never have carried 14 runs/hour on 2,000 private min/month | the funnel now runs in the public `isearchxsolve/bounty-control` (205 files, secrets carried by name): contracts `41004884451` green, discovery `41005024759` green in 3m13s | CLOSED - and the archive's own workflows are suspended by GitHub, so no double-dispatch (forensic 12.5) |
+| O17 | **Hardness affected no dispatch until 2026-10-30**: the moat existed in `autonomous_icu_pipeline.py` and was imported by nothing in CI | wired into `candidate_sort_key` as band -> solvency -> hardness -> quietness, with a source-level test that fails if the import disappears (forensic 13.1, repair R12) | CLOSED |
+| O18 | The **750,000 KB capacity ceiling** excludes the biggest codebases (Expensify/App = 3,384,503 KB) where the hardest tickets live | not raised - this runner cannot prepare them, and a fake allowance would fail silently | OPEN - a capacity problem, needs a bigger runner, not a looser gate |
 
 ## Closed as "do not build", with the reason
 
