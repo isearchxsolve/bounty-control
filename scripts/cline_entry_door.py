@@ -155,7 +155,7 @@ def run_cline_search(workdir: str, prompt: str = SEARCH_PROMPT, timeout: int = 1
             print(f"CLINE {stream}: {safe}", flush=True)
 
     try:
-        process = subprocess.Popen(command, cwd=workdir, stdout=subprocess.PIPE,
+        process = subprocess.Popen(command, cwd=workdir, stdin=subprocess.DEVNULL, stdout=subprocess.PIPE,
                                    stderr=subprocess.PIPE, text=True, encoding="utf-8",
                                    errors="replace", bufsize=1, env=env)
     except OSError as exc:
