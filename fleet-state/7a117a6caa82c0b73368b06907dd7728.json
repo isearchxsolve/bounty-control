@@ -1,0 +1,39 @@
+{
+  "task_id": "7a117a6caa82c0b73368b06907dd7728",
+  "repo": "dAAAb/BBFT",
+  "issue_number": 10,
+  "status": "DISPATCHING",
+  "dispatch_id": "2a2ca3d40df74bf3882745a7870255cb",
+  "admission": {
+    "funding": {
+      "amount": "0.12",
+      "currency": "ETH",
+      "usd_value": "268.98900",
+      "quote": {
+        "usd_rate": "2241.575",
+        "source_url": "https://api.coinbase.com/v2/prices/ETH-USD/spot",
+        "observed_at": "2026-10-30T11:38:16.797891+00:00",
+        "quote_date": null
+      },
+      "raw": "0.12 ETH",
+      "source_url": "https://github.com/dAAAb/BBFT/issues/10",
+      "payer": "dAAAb"
+    },
+    "technical_signals": [
+      "issue"
+    ],
+    "component_references": [],
+    "source_locations": [],
+    "engineering_evidence_sources": [
+      "https://github.com/dAAAb/BBFT/issues/10"
+    ],
+    "source_issue": "https://github.com/dAAAb/BBFT/issues/10",
+    "fetched_at": "2026-10-30T11:38:16.725935+00:00"
+  },
+  "lanes": [
+    "normal"
+  ],
+  "dispatched_at": "2026-10-30T11:38:17.775235+00:00",
+  "attempt": 0,
+  "updated_at": "2026-10-30T11:38:17.775253+00:00"
+}
