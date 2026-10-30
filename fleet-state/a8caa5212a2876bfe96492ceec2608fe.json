@@ -2,7 +2,7 @@
   "task_id": "a8caa5212a2876bfe96492ceec2608fe",
   "repo": "katiejohnson/Labs_Relay",
   "issue_number": 2,
-  "status": "CLAIMED",
+  "status": "REJECTED_PREPARATION",
   "dispatch_id": "ed8cea23b04c4587aea1ce52d7f742f4",
   "admission": {
     "funding": {
@@ -38,7 +38,7 @@
   ],
   "dispatched_at": "2026-10-30T14:09:50.842987+00:00",
   "attempt": 1,
-  "updated_at": "2026-10-30T14:10:03.690739+00:00",
+  "updated_at": "2026-10-30T14:13:39.974853+00:00",
   "owner": "41069426940:1",
   "previous_owner": null,
   "previous_status": "DISPATCHED",
@@ -46,5 +46,44 @@
   "harness_sha": "122af062685a0bd1f1d161d9c42a07300819cc15",
   "claimed_at": "2026-10-30T14:10:03.690691+00:00",
   "lease_expires_at": "2026-10-30T18:15:03.690704+00:00",
-  "preparation_budget_seconds": 14400
+  "preparation_budget_seconds": 14400,
+  "at": "2026-10-30T14:13:24.930426+00:00",
+  "reason": "Cline preparation blocked: Issue #2 'Inventing Double-Opt-In Credit' is a completed 2019 ConsenSys Labs Open Finance hackathon bounty challenge, not a concrete code change to this repository. (1) The issue body is an open-ended hackathon call for submissions ('product' + 'potential'); it explicitly accepts 'wireframes, landing page, prototypes, or production code' plus a report/presentation/video and requires market research, an SME advisor testimonial, and proof blockchain adds value. Submission deadline was 11:59 PM EDT 2019-04-30. This is a generic product idea / design-marketing deliverable with no reproducible defect or focused engineering feature to implement. (2) Funding is completed/withdrawn: gitcoinbot comment id 492375379 (2019-05-14T19:24:24Z) states 'This Bounty has been completed.', and the 36 ETH funding was fully paid out as tips on 2019-05-14 to owans (6 ETH), ugolino (6 ETH), tspoff (6 ETH), drdgvhbh (6 ETH), tobyjaguar (2+2 ETH), cs79 (1.99 ETH). (3) The target already has competing submissions merged into this repo under double-opt-in-credit/ (LandBrokes, SmartPiggies, double-dabble, enable) via PRs #3-#11, plus a referenced external submission PR (aj07/Dcred, issue comment id 492369657). The repository is a submission-collection repo (readme.md: 'Submitting Open Finance Bounties') with no root build/test/lint/CI infrastructure. The fix/bounty-2 branch contains zero product edits; no baseline or regression commands were run because fabricating a regression plan would turn a rejected/non-engineering, completed-funding issue into a fallback proposal.",
+  "declared_reason": "Issue #2 'Inventing Double-Opt-In Credit' is a completed 2019 ConsenSys Labs Open Finance hackathon bounty challenge, not a concrete code change to this repository. (1) The issue body is an open-ended hackathon call for submissions ('product' + 'potential'); it explicitly accepts 'wireframes, landing page, prototypes, or production code' plus a report/presentation/video and requires market research, an SME advisor testimonial, and proof blockchain adds value. Submission deadline was 11:59 PM EDT 2019-04-30. This is a generic product idea / design-marketing deliverable with no reproducible defect or focused engineering feature to implement. (2) Funding is completed/withdrawn: gitcoinbot comment id 492375379 (2019-05-14T19:24:24Z) states 'This Bounty has been completed.', and the 36 ETH funding was fully paid out as tips on 2019-05-14 to owans (6 ETH), ugolino (6 ETH), tspoff (6 ETH), drdgvhbh (6 ETH), tobyjaguar (2+2 ETH), cs79 (1.99 ETH). (3) The target already has competing submissions merged into this repo under double-opt-in-credit/ (LandBrokes, SmartPiggies, double-dabble, enable) via PRs #3-#11, plus a referenced external submission PR (aj07/Dcred, issue comment id 492369657). The repository is a submission-collection repo (readme.md: 'Submitting Open Finance Bounties') with no root build/test/lint/CI infrastructure. The fix/bounty-2 branch contains zero product edits; no baseline or regression commands were run because fabricating a regression plan would turn a rejected/non-engineering, completed-funding issue into a fallback proposal.",
+  "evidence": {
+    "action": "blocked",
+    "worktree": "/tmp/bounty-workspaces/repos/katiejohnson--Labs_Relay--2",
+    "base_sha": "437e713ef1ed7ff32b1324041d6cb41f99b5bff1",
+    "default_branch": "master",
+    "sources": [
+      {
+        "path": "readme.md",
+        "sha256": "ddbdc64548ad9de48b6d9c4e91e731b284e4b4438b69e798278c589317593fa8"
+      },
+      {
+        "path": "double-opt-in-credit/submission.md",
+        "sha256": "2ce79be04c4edba0d42f0b64f923d2d8062b4dc20cea1685cc9978446480f49e"
+      },
+      {
+        "path": "LICENSE.md",
+        "sha256": "002c2696d92b5c8cf956c11072baa58eaf9f6ade995c031ea635c6a1ee342ad1"
+      }
+    ],
+    "run_url": "",
+    "admission": {
+      "amount": "36",
+      "currency": "ETH",
+      "usd_value": "79834.860",
+      "quote": {
+        "usd_rate": "2217.635",
+        "source_url": "https://api.coinbase.com/v2/prices/ETH-USD/spot",
+        "observed_at": "2026-10-30T14:10:01.779980+00:00",
+        "quote_date": null
+      },
+      "raw": "36 ETH",
+      "source_url": "https://github.com/katiejohnson/Labs_Relay/issues/2",
+      "payer": "katiejohnson"
+    }
+  },
+  "finished_at": "2026-10-30T14:13:39.445538+00:00"
 }
