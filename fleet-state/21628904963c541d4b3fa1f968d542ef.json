@@ -1,0 +1,52 @@
+{
+  "task_id": "21628904963c541d4b3fa1f968d542ef",
+  "repo": "stan-dev/sgb",
+  "issue_number": 7,
+  "status": "DISPATCHING",
+  "dispatch_id": "ee1744904f1940559453a6839ad5a030",
+  "admission": {
+    "funding": {
+      "amount": "25000",
+      "currency": "USD",
+      "usd_value": "25000",
+      "quote": {
+        "basis": "USD face value"
+      },
+      "raw": "$25K",
+      "source_url": "https://github.com/stan-dev/sgb/issues/7#issuecomment-1048075587",
+      "payer": "mitzimorris"
+    },
+    "technical_signals": [
+      "bug",
+      "consensus",
+      "error",
+      "issue",
+      "issued",
+      "issuehunt",
+      "issues",
+      "problem"
+    ],
+    "component_references": [],
+    "source_locations": [],
+    "engineering_evidence_sources": [
+      "https://github.com/stan-dev/sgb/issues/7",
+      "https://github.com/stan-dev/sgb/issues/7#issuecomment-1045989889",
+      "https://github.com/stan-dev/sgb/issues/7#issuecomment-1055940304",
+      "https://github.com/stan-dev/sgb/issues/7#issuecomment-1057283181",
+      "https://github.com/stan-dev/sgb/issues/7#issuecomment-1057292308",
+      "https://github.com/stan-dev/sgb/issues/7#issuecomment-1057344172",
+      "https://github.com/stan-dev/sgb/issues/7#issuecomment-1057346436"
+    ],
+    "source_issue": "https://github.com/stan-dev/sgb/issues/7",
+    "fetched_at": "2026-10-30T19:05:59.020624+00:00"
+  },
+  "lanes": [
+    "founder",
+    "normal",
+    "programs",
+    "startup"
+  ],
+  "dispatched_at": "2026-10-30T19:06:00.267726+00:00",
+  "attempt": 0,
+  "updated_at": "2026-10-30T19:06:00.267743+00:00"
+}
