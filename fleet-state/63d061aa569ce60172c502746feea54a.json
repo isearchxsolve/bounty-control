@@ -2,7 +2,7 @@
   "task_id": "63d061aa569ce60172c502746feea54a",
   "repo": "BruceFeIix/picker",
   "issue_number": 1940,
-  "status": "CLAIMED",
+  "status": "REJECTED_PREPARATION",
   "dispatch_id": "61854d60bc184720adf0ae3954715998",
   "admission": {
     "funding": {
@@ -39,7 +39,7 @@
   ],
   "dispatched_at": "2026-10-30T14:56:50.191234+00:00",
   "attempt": 1,
-  "updated_at": "2026-10-30T14:57:03.935279+00:00",
+  "updated_at": "2026-10-30T15:00:53.344109+00:00",
   "owner": "41076167166:1",
   "previous_owner": null,
   "previous_status": "DISPATCHED",
@@ -47,5 +47,65 @@
   "harness_sha": "122af062685a0bd1f1d161d9c42a07300819cc15",
   "claimed_at": "2026-10-30T14:57:03.935230+00:00",
   "lease_expires_at": "2026-10-30T19:02:03.935244+00:00",
-  "preparation_budget_seconds": 14400
+  "preparation_budget_seconds": 14400,
+  "at": "2026-10-30T15:00:38.955058+00:00",
+  "reason": "Cline preparation blocked: Issue #1940 \"[\u6bcf\u65e5\u4fe1\u606f\u6d41] 2025-09-08\" is NOT a concrete code-change request to this repository. BruceFeIix/picker is a Python RSS aggregator; its own GitHub Actions workflow .github/workflows/daily.yml runs `gh issue create --title \"[\u6bcf\u65e5\u4fe1\u606f\u6d41] `date +%Y-%m-%d`\" -F today.md --label daily`, which auto-generates one digest issue per day. The fetched issue body (187 lines) contains ONLY news-source headings and 154 checkbox link items (e.g. \"- SecWiki News\"), with zero prose, no bug/defect description, no reproduction, no feature request and no referenced source location. The admission metadata is a keyword false-positive scraped from article headlines: funding \"500$\" comes from the headline \"How I Discovered Account Takeover (ATO) via IDOR lead to 500$ bounty\"; signals bug_bounty/broken/errors/problem/performance come from headlines \"Bug Bounty in InfoSec Write-ups\", \"12. Broken Access Control\", \"Turn Forbidden Errors into Bug Bounty Wins\", \"Solving the N+1 Query Problem\"; component \"EDITION\" comes from \"Security Affairs newsletter Round 540 ... INTERNATIONAL EDITION\". No open PR references #1940 and prior_failures is empty. Blocked per policy: auto-generated documentation/content digest, not an engineering change. Checkout left unchanged (no branch, no edits)",
+  "declared_reason": "Issue #1940 \"[\u6bcf\u65e5\u4fe1\u606f\u6d41] 2025-09-08\" is NOT a concrete code-change request to this repository. BruceFeIix/picker is a Python RSS aggregator; its own GitHub Actions workflow .github/workflows/daily.yml runs `gh issue create --title \"[\u6bcf\u65e5\u4fe1\u606f\u6d41] `date +%Y-%m-%d`\" -F today.md --label daily`, which auto-generates one digest issue per day. The fetched issue body (187 lines) contains ONLY news-source headings and 154 checkbox link items (e.g. \"- SecWiki News\"), with zero prose, no bug/defect description, no reproduction, no feature request and no referenced source location. The admission metadata is a keyword false-positive scraped from article headlines: funding \"500$\" comes from the headline \"How I Discovered Account Takeover (ATO) via IDOR lead to 500$ bounty\"; signals bug_bounty/broken/errors/problem/performance come from headlines \"Bug Bounty in InfoSec Write-ups\", \"12. Broken Access Control\", \"Turn Forbidden Errors into Bug Bounty Wins\", \"Solving the N+1 Query Problem\"; component \"EDITION\" comes from \"Security Affairs newsletter Round 540 ... INTERNATIONAL EDITION\". No open PR references #1940 and prior_failures is empty. Blocked per policy: auto-generated documentation/content digest, not an engineering change. Checkout left unchanged (no branch, no edits)",
+  "evidence": {
+    "action": "blocked",
+    "worktree": "/tmp/bounty-workspaces/repos/BruceFeIix--picker--1940",
+    "base_sha": "cabf4e9212e8fc7c8974b10bf1f735ce145b3b06",
+    "default_branch": "master",
+    "sources": [
+      {
+        "path": "README.md",
+        "sha256": "9f84c7652f20a8f79e03d1220cdba4d86cd22162320c81701191ca87d6afdc9f"
+      },
+      {
+        "path": "requirements.txt",
+        "sha256": "9b18ebb479dfafdd2369e0705fbf890ce9c2e48bbcf24b1d117af1b07e50ee80"
+      },
+      {
+        "path": "install.sh",
+        "sha256": "083bab9e9054241c2386e1abeaab8efd473e49b9ef872799d24b1742e86f2bdb"
+      },
+      {
+        "path": "config.yml",
+        "sha256": "8614ba3755bf97b35549f14d5104a7eaf9936a6ba5c1073bc342cec68e19f7ba"
+      },
+      {
+        "path": "bot.py",
+        "sha256": "cb2c2a85cc762b016838748e7b1551aa7c84257b8f20d73c8c316843e5d576e9"
+      },
+      {
+        "path": "yarb.py",
+        "sha256": "fbdcaa067f17d4a2e328d70d21f2543f44f6445c4ae15a367d5e00b8dbca1ed0"
+      },
+      {
+        "path": "utils.py",
+        "sha256": "056b729c58bc6306d1e910ec7576028cd328dd2cbb43f06856e84f73718aff25"
+      },
+      {
+        "path": ".github/workflows/daily.yml",
+        "sha256": "2c135adeb99235f4558f29cfaafcccdc1ddd16dc01b5e62087a1e1ac9a11d555"
+      },
+      {
+        "path": ".github/workflows/issue.yml",
+        "sha256": "78cf233cbd70a6775fec30918bbba3cecf71b6a998e30738e7860114544b40ee"
+      }
+    ],
+    "run_url": "",
+    "admission": {
+      "amount": "500",
+      "currency": "USD",
+      "usd_value": "500",
+      "quote": {
+        "basis": "USD face value"
+      },
+      "raw": "500$",
+      "source_url": "https://github.com/BruceFeIix/picker/issues/1940",
+      "payer": "BruceFeIix"
+    }
+  },
+  "finished_at": "2026-10-30T15:00:52.579988+00:00"
 }
