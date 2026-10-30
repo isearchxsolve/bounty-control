@@ -2,8 +2,8 @@
   "task_id": "49253b5a9b99bc7332f6c28400048958",
   "repo": "intuition-box/Liquid-Democracy",
   "issue_number": 2,
-  "status": "FAILED_RUNNER_SHUTDOWN",
-  "dispatch_id": "28b7566e31ed41d59b424b132bea45f4",
+  "status": "DISPATCHING",
+  "dispatch_id": "cbdfcf06071e48b58f6704a5c544e279",
   "admission": {
     "funding": {
       "amount": "3000",
@@ -28,14 +28,14 @@
       "https://github.com/intuition-box/Liquid-Democracy/issues/2"
     ],
     "source_issue": "https://github.com/intuition-box/Liquid-Democracy/issues/2",
-    "fetched_at": "2026-10-30T15:40:00.772422+00:00"
+    "fetched_at": "2026-10-30T16:00:54.298390+00:00"
   },
   "lanes": [
     "founder"
   ],
-  "dispatched_at": "2026-10-30T15:40:02.075970+00:00",
+  "dispatched_at": "2026-10-30T16:00:56.225589+00:00",
   "attempt": 1,
-  "updated_at": "2026-10-30T15:42:22.140569+00:00",
+  "updated_at": "2026-10-30T16:00:56.225605+00:00",
   "owner": "41082816638:1",
   "previous_owner": null,
   "previous_status": "DISPATCHED",
