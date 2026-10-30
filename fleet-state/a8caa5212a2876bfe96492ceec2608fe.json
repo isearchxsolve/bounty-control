@@ -1,0 +1,42 @@
+{
+  "task_id": "a8caa5212a2876bfe96492ceec2608fe",
+  "repo": "katiejohnson/Labs_Relay",
+  "issue_number": 2,
+  "status": "DISPATCHING",
+  "dispatch_id": "ed8cea23b04c4587aea1ce52d7f742f4",
+  "admission": {
+    "funding": {
+      "amount": "36",
+      "currency": "ETH",
+      "usd_value": "79838.100",
+      "quote": {
+        "usd_rate": "2217.725",
+        "source_url": "https://api.coinbase.com/v2/prices/ETH-USD/spot",
+        "observed_at": "2026-10-30T14:09:43.269677+00:00",
+        "quote_date": null
+      },
+      "raw": "36 ETH",
+      "source_url": "https://github.com/katiejohnson/Labs_Relay/issues/2",
+      "payer": "katiejohnson"
+    },
+    "technical_signals": [
+      "algorithm",
+      "algorithms",
+      "problem"
+    ],
+    "component_references": [],
+    "source_locations": [],
+    "engineering_evidence_sources": [
+      "https://github.com/katiejohnson/Labs_Relay/issues/2"
+    ],
+    "source_issue": "https://github.com/katiejohnson/Labs_Relay/issues/2",
+    "fetched_at": "2026-10-30T14:09:48.943797+00:00"
+  },
+  "lanes": [
+    "founder",
+    "normal"
+  ],
+  "dispatched_at": "2026-10-30T14:09:50.842987+00:00",
+  "attempt": 0,
+  "updated_at": "2026-10-30T14:09:50.843003+00:00"
+}
