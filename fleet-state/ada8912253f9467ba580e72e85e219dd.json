@@ -1,0 +1,42 @@
+{
+  "task_id": "ada8912253f9467ba580e72e85e219dd",
+  "repo": "Scottcjn/rustchain-bounties",
+  "issue_number": 58,
+  "status": "DISPATCHING",
+  "dispatch_id": "e06d449aa21a4a7cbe7dc1fb518d3616",
+  "admission": {
+    "funding": {
+      "amount": "0",
+      "currency": "FOUNDER",
+      "usd_value": "0",
+      "quote": {
+        "basis": "Repository Owner Request"
+      },
+      "raw": "OWNER",
+      "source_url": "https://github.com/Scottcjn/rustchain-bounties/issues/58",
+      "payer": "Scottcjn"
+    },
+    "technical_signals": [
+      "consensus",
+      "protocol"
+    ],
+    "component_references": [],
+    "source_locations": [],
+    "engineering_evidence_sources": [
+      "https://github.com/Scottcjn/rustchain-bounties/issues/58",
+      "https://github.com/Scottcjn/rustchain-bounties/issues/58#issuecomment-3863268245",
+      "https://github.com/Scottcjn/rustchain-bounties/issues/58#issuecomment-3934602478"
+    ],
+    "source_issue": "https://github.com/Scottcjn/rustchain-bounties/issues/58",
+    "fetched_at": "2026-10-30T19:49:18.184644+00:00"
+  },
+  "lanes": [
+    "founder",
+    "normal",
+    "programs",
+    "startup"
+  ],
+  "dispatched_at": "2026-10-30T19:49:24.723885+00:00",
+  "attempt": 0,
+  "updated_at": "2026-10-30T19:49:24.723906+00:00"
+}
