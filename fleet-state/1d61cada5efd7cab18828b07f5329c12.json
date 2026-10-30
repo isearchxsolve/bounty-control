@@ -2,7 +2,7 @@
   "task_id": "1d61cada5efd7cab18828b07f5329c12",
   "repo": "RUMBO-IA/Rumbo",
   "issue_number": 135,
-  "status": "DISPATCHED",
+  "status": "CLAIMED",
   "dispatch_id": "22878d8c362340d682b2db34909489d2",
   "admission": {
     "funding": {
@@ -105,6 +105,14 @@
     "programs"
   ],
   "dispatched_at": "2026-10-30T19:05:51.737502+00:00",
-  "attempt": 0,
-  "updated_at": "2026-10-30T19:05:53.589969+00:00"
+  "attempt": 1,
+  "updated_at": "2026-10-30T19:06:04.721812+00:00",
+  "owner": "41112388497:1",
+  "previous_owner": null,
+  "previous_status": "DISPATCHED",
+  "run_url": "https://github.com/isearchxsolve/bounty-control/actions/runs/41112388497",
+  "harness_sha": "2e2cda3dc5900de390e8402fda1b160f9b17ff6c",
+  "claimed_at": "2026-10-30T19:06:04.721780+00:00",
+  "lease_expires_at": "2026-10-30T23:11:04.721788+00:00",
+  "preparation_budget_seconds": 14400
 }
