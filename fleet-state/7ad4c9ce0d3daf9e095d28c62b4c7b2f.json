@@ -2,7 +2,7 @@
   "task_id": "7ad4c9ce0d3daf9e095d28c62b4c7b2f",
   "repo": "Yof3ng/picker",
   "issue_number": 284,
-  "status": "CLAIMED",
+  "status": "REJECTED_PREPARATION",
   "dispatch_id": "1d698bed57484e1694ec5d4ef8cf7524",
   "admission": {
     "funding": {
@@ -41,7 +41,7 @@
   ],
   "dispatched_at": "2026-10-30T16:19:13.016800+00:00",
   "attempt": 1,
-  "updated_at": "2026-10-30T16:19:28.785116+00:00",
+  "updated_at": "2026-10-30T16:23:24.472420+00:00",
   "owner": "41088804758:1",
   "previous_owner": null,
   "previous_status": "DISPATCHED",
@@ -49,5 +49,49 @@
   "harness_sha": "433c7a4bb1b65ef59acd912e931ae740b043ed32",
   "claimed_at": "2026-10-30T16:19:28.785064+00:00",
   "lease_expires_at": "2026-10-30T20:24:28.785078+00:00",
-  "preparation_budget_seconds": 14400
+  "preparation_budget_seconds": 14400,
+  "at": "2026-10-30T16:23:11.344769+00:00",
+  "reason": "Cline preparation blocked: Issue #284 is not a code-change request. Title '[\u6bcf\u65e5\u4fe1\u606f\u6d41] 2023-08-19' = 'Daily Info Feed 2023-08-19'; body is a 37364-char daily security-news link digest, labeled 'daily', 0 comments, created 2023-08-19T02:11:51Z, and byte-identical (only a trailing blank line differs) to the repository's own generated data file archive/daily/2023/2023-08-19.md (issue-body sha256 a665215f... vs archive sha256 eed0f2f5...). README.md confirms picker is a crawler/pusher ('\u6bcf\u65e5\u4f1a\u5728issue\u4e2d\u751f\u6210\u6628\u65e5\u4fe1\u606f\u6d41' -> 'each day it generates yesterday's info feed as an issue'), and this fork carries 293 near-identical open daily digests (e.g. #288-#302). The admission 'technical_signals' (bug, bug_bounty, failure, memory, performance, protocols) are keyword false-positives harvested from aggregated news HEADLINES, not defects of this repository. No reproducible defect, feature, or code-level maintenance is described; this is an auto-generated content/documentation deliverable. No open PRs exist on Yof3ng/picker (no competing PR). Checkout left unchanged (read-only clone).",
+  "declared_reason": "Issue #284 is not a code-change request. Title '[\u6bcf\u65e5\u4fe1\u606f\u6d41] 2023-08-19' = 'Daily Info Feed 2023-08-19'; body is a 37364-char daily security-news link digest, labeled 'daily', 0 comments, created 2023-08-19T02:11:51Z, and byte-identical (only a trailing blank line differs) to the repository's own generated data file archive/daily/2023/2023-08-19.md (issue-body sha256 a665215f... vs archive sha256 eed0f2f5...). README.md confirms picker is a crawler/pusher ('\u6bcf\u65e5\u4f1a\u5728issue\u4e2d\u751f\u6210\u6628\u65e5\u4fe1\u606f\u6d41' -> 'each day it generates yesterday's info feed as an issue'), and this fork carries 293 near-identical open daily digests (e.g. #288-#302). The admission 'technical_signals' (bug, bug_bounty, failure, memory, performance, protocols) are keyword false-positives harvested from aggregated news HEADLINES, not defects of this repository. No reproducible defect, feature, or code-level maintenance is described; this is an auto-generated content/documentation deliverable. No open PRs exist on Yof3ng/picker (no competing PR). Checkout left unchanged (read-only clone).",
+  "evidence": {
+    "action": "blocked",
+    "worktree": "/tmp/bounty-workspaces/repos/Yof3ng--picker--284",
+    "base_sha": "4a268af78ed31982f869725788980a3e2ccd9d5a",
+    "default_branch": "master",
+    "sources": [
+      {
+        "path": "requirements.txt",
+        "sha256": "0bd080de6e0416d13591bb124ecde53fcd8bed8b91c3cce93caccf2405837639"
+      },
+      {
+        "path": "install.sh",
+        "sha256": "083bab9e9054241c2386e1abeaab8efd473e49b9ef872799d24b1742e86f2bdb"
+      },
+      {
+        "path": "config.yml",
+        "sha256": "95d4e8ee9a22dd4b897b7ce3dd9edfa1f3fa0e91ddac583bc19b3a19baf2f97f"
+      },
+      {
+        "path": "README.md",
+        "sha256": "1962b4b04aba89281e8c1c3c7c013fc615f1909ec2e657e5afdc3a31d7baa0b7"
+      },
+      {
+        "path": "archive/daily/2023/2023-08-19.md",
+        "sha256": "eed0f2f57878fd590ec11791f719480981f965487c6acf6d5a5a5c6327e3eb87"
+      }
+    ],
+    "run_url": "",
+    "admission": {
+      "amount": "2500",
+      "currency": "USD",
+      "usd_value": "2500",
+      "quote": {
+        "basis": "USD face value"
+      },
+      "raw": "$2,500",
+      "source_url": "https://github.com/Yof3ng/picker/issues/284",
+      "payer": "Yof3ng"
+    }
+  },
+  "finished_at": "2026-10-30T16:23:24.023732+00:00"
 }
