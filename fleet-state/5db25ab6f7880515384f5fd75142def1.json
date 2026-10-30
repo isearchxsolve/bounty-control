@@ -1,0 +1,81 @@
+{
+  "task_id": "5db25ab6f7880515384f5fd75142def1",
+  "repo": "Thiesi/Blacksite",
+  "issue_number": 30,
+  "status": "DISPATCHING",
+  "dispatch_id": "4260715d13d345179d41c6f6ce9f6377",
+  "admission": {
+    "funding": {
+      "amount": "0",
+      "currency": "FOUNDER",
+      "usd_value": "0",
+      "quote": {
+        "basis": "Repository Owner Request"
+      },
+      "raw": "OWNER",
+      "source_url": "https://github.com/Thiesi/Blacksite/issues/30",
+      "payer": "Thiesi"
+    },
+    "technical_signals": [
+      "atomically",
+      "authorization",
+      "bug",
+      "bypass",
+      "crash",
+      "failure",
+      "issue",
+      "issue56",
+      "issuecomment",
+      "issued",
+      "issues",
+      "performance",
+      "precision",
+      "protocol",
+      "regression",
+      "transaction"
+    ],
+    "component_references": [
+      "5.3/5.4",
+      "5.5/6.4",
+      "8.2/8.4",
+      "Main5.2/5.3",
+      "content/hints.json",
+      "content/palette.json",
+      "design5.3/8.5/8.6",
+      "docs/design/00-game-design.md",
+      "docs/design/01-entities.md",
+      "docs/design/02-architecture.md",
+      "docs/design/03-terminal-ui.md",
+      "docs/ops/combat.md",
+      "docs/ops/npcs.md",
+      "docs/plan/01-netbbs-platform.md",
+      "docs/plan/s21-relay-handoff.md",
+      "docs/plan/slices/S30-onboarding-and-help.md",
+      "docs/upstream/02-session-limits.md",
+      "docs/world/05-story-arcs.md",
+      "docs/world/07-glossary.md",
+      "docs/world/08-found-texts.md",
+      "src/blacksite/server/hints.py"
+    ],
+    "source_locations": [
+      "src/blacksite/server/hints.py"
+    ],
+    "engineering_evidence_sources": [
+      "https://github.com/Thiesi/Blacksite/issues/30",
+      "https://github.com/Thiesi/Blacksite/issues/30#issuecomment-6323891145",
+      "https://github.com/Thiesi/Blacksite/issues/30#issuecomment-6325295582",
+      "https://github.com/Thiesi/Blacksite/issues/30#issuecomment-6335985415",
+      "https://github.com/Thiesi/Blacksite/issues/30#issuecomment-6339132538",
+      "https://github.com/Thiesi/Blacksite/issues/30#issuecomment-6375168971"
+    ],
+    "source_issue": "https://github.com/Thiesi/Blacksite/issues/30",
+    "fetched_at": "2026-10-30T19:49:10.985565+00:00"
+  },
+  "lanes": [
+    "founder",
+    "programs"
+  ],
+  "dispatched_at": "2026-10-30T19:49:13.764760+00:00",
+  "attempt": 0,
+  "updated_at": "2026-10-30T19:49:13.764781+00:00"
+}
