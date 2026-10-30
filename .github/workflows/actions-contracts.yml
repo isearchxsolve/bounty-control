@@ -108,4 +108,10 @@ jobs:
 
         python3 -W error scripts/test_refusal_census.py
 
-        python3 -W error scripts/test_failure_digest.py'
+        python3 -W error scripts/test_failure_digest.py
+
+        python3 -W error scripts/test_hardness_ordering.py
+
+        python3 -W error scripts/test_competition_evidence.py
+
+        python3 -W error scripts/test_urgency_ordering.py'
