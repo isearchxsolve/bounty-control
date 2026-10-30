@@ -2,7 +2,7 @@
   "task_id": "beba21803c6b3b82c91cb55cc058ffdf",
   "repo": "galacticcouncil/amsterdot-bounties-2022",
   "issue_number": 1,
-  "status": "DISPATCHED",
+  "status": "CLAIMED",
   "dispatch_id": "394864b94ef845bdaf3e70f84604cf2a",
   "admission": {
     "funding": {
@@ -31,6 +31,14 @@
     "founder"
   ],
   "dispatched_at": "2026-10-30T13:40:45.952709+00:00",
-  "attempt": 0,
-  "updated_at": "2026-10-30T13:40:48.096848+00:00"
+  "attempt": 1,
+  "updated_at": "2026-10-30T13:40:59.489900+00:00",
+  "owner": "41065219737:1",
+  "previous_owner": null,
+  "previous_status": "DISPATCHED",
+  "run_url": "https://github.com/isearchxsolve/bounty-control/actions/runs/41065219737",
+  "harness_sha": "122af062685a0bd1f1d161d9c42a07300819cc15",
+  "claimed_at": "2026-10-30T13:40:59.489813+00:00",
+  "lease_expires_at": "2026-10-30T17:45:59.489827+00:00",
+  "preparation_budget_seconds": 14400
 }
