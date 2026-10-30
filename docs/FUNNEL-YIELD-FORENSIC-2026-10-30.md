@@ -731,3 +731,73 @@ ordering problem.
 
 **Verification:** 444 tests OK in 25.9 s (35 contracts modules + `test_hardness_ordering`, 12
 tests), pushed as `551bd61` to the public `bounty-control` repository.
+
+### 14. The bounty channel measured through the browser, and one real gate defect fixed
+
+Baba's instruction removed the need for his hands: Agent 360 on Profile 17 answered the market
+question directly, and the answer changed the plan.
+
+#### 14.1 Algora no longer sells bounties
+
+`console.algora.io` in a live browser redirects to the hiring landing page; the rendered text
+contains **zero** occurrences of "bounty". `algora.io/bounties` returns 404. Independent
+reporting agrees: the global board is gone, only per-org URLs survive. Opire resolves but does
+not answer; BountyHub has 17 open issues worldwide; TaskBounty's label returns 0. A September
+scan put the entire visible market at **290 bounties worth $19,543**, of which 269 were Algora -
+i.e. the money largely left with the platform.
+
+#### 14.2 The defect this exposed: we trusted a bot name that does not exist
+
+The gate's trust list carried `bountyhub-bot`. The marker actually posted is
+**`bountyhub-app[bot]`**. Measured on `moorcheh-ai/memanto#1852`, which carries *"A bounty of
+$100.00 has been created ... on BountyHub"* and was refused as `CURRENT_ISSUER_OFFER_MISSING`.
+A funded ticket was indistinguishable from an unfunded one.
+
+After the fix, the first genuine admissions on record - **5 of 45 probed**, against **0 of 24**
+from three earlier query shapes on the same day:
+
+| issue | amount | note |
+| --- | --- | --- |
+| `microg/GmsCore#2994` | $14,999 | RCS support, accumulated over 3 contributions |
+| `microg/GmsCore#2843` | $2,340 | WearOS support |
+| `microg/GmsCore#1272` | $300 | Nearby Share, funded 2026-10-26 |
+| `microg/GmsCore#580` | $250 | Google Cast |
+| `jain-Igtm/CashGPT#1` | $79,200 | **refused**: "CashGPT Live Room" is a chat thread, not a deliverable |
+
+The last row closed a second hole: an owner-written amount inside a chat-room issue passed the
+issuer gate because the owner is trusted by design and no engineering was requested.
+
+#### 14.3 Then the competition gate refused every one of them - correctly
+
+All four funded microG tickets are covered by open pull requests opened in the 36 hours before
+this measurement:
+
+| issue | competing PR | author | opened |
+| --- | --- | --- | --- |
+| #580 Google Cast | #3943 | MilindChatrabhuji | 2026-10-29 09:40 |
+| #1272 Nearby Share | #3944 | MilindChatrabhuji | 2026-10-29 09:41 |
+| #2994 RCS | #3945 | Dimank92 | 2026-10-29 17:27 |
+| #2843 WearOS | #3949 | fangjian-bit | 2026-10-30 05:34 |
+
+`MilindChatrabhuji` is also the login posting `/attempt` on `documenso#3463` and
+`novuhq/novu#12761`. Other autonomous agents are already doing this, and they arrive within
+hours of funding. Live dispatch confirmed the refusal: claim job `41010953607` died with
+`ValueError: Competing open PR: https://github.com/microg/GmsCore/pull/3944`.
+
+**So the funnel now works as a filter end to end** - it saw $17,889 of real money and refused
+all of it for a stated, correct reason, where this morning it could not see the money at all.
+
+#### 14.4 What this changes about the plan
+
+The bounty channel is a race decided in hours by rivals who are already inside it, with a total
+visible pot near $19.5k that has mostly left with Algora. Racing it harder is not a strategy.
+
+Two consequences, both taken:
+
+1. **The engine's paying work is work where we are the reviewer** - the paid service lanes
+   (DEV-B Rs 25,000, IDEA-B USD 100) and the repository-licence offers. There the offer is a
+   client, not a board, and no competitor can pre-empt it with a PR.
+2. **The bounty lane stays alive but cheap** - discovery and admission run free on public
+   runners and the competition gate does the refusing. It is a lottery ticket that costs
+   nothing to hold, and the moment an uncontested funded ticket appears, the pipeline takes it.
+   It is no longer the plan.
