@@ -2,7 +2,7 @@
   "task_id": "e746238b7ab5a6a95c330ee4eb671eba",
   "repo": "connext/gitcoin",
   "issue_number": 2,
-  "status": "CLAIMED",
+  "status": "FAILED_DELIVERABLE_MISSING",
   "dispatch_id": "81177c5523ab4a3fbb3ae3b7317e3e29",
   "admission": {
     "funding": {
@@ -33,7 +33,7 @@
   ],
   "dispatched_at": "2026-10-30T15:57:57.515908+00:00",
   "attempt": 3,
-  "updated_at": "2026-10-30T15:58:09.871062+00:00",
+  "updated_at": "2026-10-30T16:02:32.147724+00:00",
   "owner": "41085540232:1",
   "previous_owner": "41082824792:1",
   "previous_status": "DISPATCHED",
@@ -42,12 +42,12 @@
   "claimed_at": "2026-10-30T15:58:09.871014+00:00",
   "lease_expires_at": "2026-10-30T20:03:09.871027+00:00",
   "preparation_budget_seconds": 14400,
-  "kind": "runner_shutdown",
+  "kind": "deliverable_invalid",
   "retryable": true,
-  "diagnostic": "No engineering result and no failure record: the phase was terminated before it could report (exit 143 / runner shutdown)",
-  "path": "/tmp/fleet-artifacts/delivery-supervisor/2a9fe293db11441faae06ac7f218c25c.preparation.json",
-  "reason": "invalid base_sha: None",
-  "at": "2026-10-30T15:42:01.769172+00:00",
+  "diagnostic": "Cline deliverable invalid at /tmp/fleet-artifacts/delivery-supervisor/4e1d1cdde16b4579a0540d6c6024ba11.preparation.json: invalid base_sha: ''",
+  "path": "/tmp/fleet-artifacts/delivery-supervisor/4e1d1cdde16b4579a0540d6c6024ba11.preparation.json",
+  "reason": "invalid base_sha: ''",
+  "at": "2026-10-30T16:02:21.892718+00:00",
   "failures": [
     {
       "run_url": "https://github.com/isearchxsolve/bounty-control/actions/runs/41058348982",
@@ -67,8 +67,18 @@
       "inferred": true,
       "diagnostic": "No engineering result and no failure record: the phase was terminated before it could report (exit 143 / runner shutdown)",
       "at": "2026-10-30T15:42:01.769172+00:00"
+    },
+    {
+      "run_url": "https://github.com/isearchxsolve/bounty-control/actions/runs/41085540232",
+      "status": "FAILED_DELIVERABLE_MISSING",
+      "kind": "deliverable_invalid",
+      "retryable": true,
+      "diagnostic": "Cline deliverable invalid at /tmp/fleet-artifacts/delivery-supervisor/4e1d1cdde16b4579a0540d6c6024ba11.preparation.json: invalid base_sha: ''",
+      "path": "/tmp/fleet-artifacts/delivery-supervisor/4e1d1cdde16b4579a0540d6c6024ba11.preparation.json",
+      "reason": "invalid base_sha: ''",
+      "at": "2026-10-30T16:02:21.892718+00:00"
     }
   ],
-  "finished_at": "2026-10-30T15:42:01.769205+00:00",
+  "finished_at": "2026-10-30T16:02:31.655244+00:00",
   "inferred": true
 }
