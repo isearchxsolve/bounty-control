@@ -2,7 +2,7 @@
   "task_id": "a8caa5212a2876bfe96492ceec2608fe",
   "repo": "katiejohnson/Labs_Relay",
   "issue_number": 2,
-  "status": "DISPATCHING",
+  "status": "DISPATCHED",
   "dispatch_id": "ed8cea23b04c4587aea1ce52d7f742f4",
   "admission": {
     "funding": {
@@ -38,5 +38,5 @@
   ],
   "dispatched_at": "2026-10-30T14:09:50.842987+00:00",
   "attempt": 0,
-  "updated_at": "2026-10-30T14:09:50.843003+00:00"
+  "updated_at": "2026-10-30T14:09:53.171174+00:00"
 }
