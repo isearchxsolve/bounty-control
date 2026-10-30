@@ -2,7 +2,7 @@
   "task_id": "d9b5ec95b1742261baa23931737eefd3",
   "repo": "creative-visionary/Fish_Media",
   "issue_number": 18,
-  "status": "DISPATCHED",
+  "status": "CLAIMED",
   "dispatch_id": "df4c5189dbf744f9acc69016c40d8726",
   "admission": {
     "funding": {
@@ -36,6 +36,14 @@
     "founder"
   ],
   "dispatched_at": "2026-10-30T16:41:27.045178+00:00",
-  "attempt": 0,
-  "updated_at": "2026-10-30T16:41:28.587259+00:00"
+  "attempt": 1,
+  "updated_at": "2026-10-30T16:41:39.906704+00:00",
+  "owner": "41092174250:1",
+  "previous_owner": null,
+  "previous_status": "DISPATCHED",
+  "run_url": "https://github.com/isearchxsolve/bounty-control/actions/runs/41092174250",
+  "harness_sha": "9d0070af8f144ba3b94f832acba18c33aab6cb2a",
+  "claimed_at": "2026-10-30T16:41:39.906654+00:00",
+  "lease_expires_at": "2026-10-30T20:46:39.906667+00:00",
+  "preparation_budget_seconds": 14400
 }
