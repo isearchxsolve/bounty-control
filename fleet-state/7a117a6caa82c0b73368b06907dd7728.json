@@ -2,7 +2,7 @@
   "task_id": "7a117a6caa82c0b73368b06907dd7728",
   "repo": "dAAAb/BBFT",
   "issue_number": 10,
-  "status": "CLAIMED",
+  "status": "REJECTED_PREPARATION",
   "dispatch_id": "2a2ca3d40df74bf3882745a7870255cb",
   "admission": {
     "funding": {
@@ -35,7 +35,7 @@
   ],
   "dispatched_at": "2026-10-30T11:38:17.775235+00:00",
   "attempt": 1,
-  "updated_at": "2026-10-30T11:38:29.532786+00:00",
+  "updated_at": "2026-10-30T11:41:54.561598+00:00",
   "owner": "41049509855:1",
   "previous_owner": null,
   "previous_status": "DISPATCHED",
@@ -43,5 +43,36 @@
   "harness_sha": "b47ebb9441241e29e7c161adb45ba97a519b856a",
   "claimed_at": "2026-10-30T11:38:29.532732+00:00",
   "lease_expires_at": "2026-10-30T15:43:29.532749+00:00",
-  "preparation_budget_seconds": 14400
+  "preparation_budget_seconds": 14400,
+  "at": "2026-10-30T11:41:38.882378+00:00",
+  "reason": "Cline preparation blocked: Issue #10 requests a documentation/content deliverable, not a concrete code change to this repository, and the bounty is already completed and paid out. The issue asks a human to manually proofread/repair the AI-transcribed Mandarin subtitle file 'ep26 diss dapp \u7684\u7537\u4eba \u3010\u4e0d\u670d\u4f86\u8faf\u3011.mp3.mp3-\u5b57\u5e55.srt' using Amara and the YouTube video, then submit a PR to the (defunct) Gitcoin Bounty page for review. The repository dAAAb/BBFT is a pure content store (only .srt subtitle files + LICENSE + README.md + mp3/ audio tree); GitHub reports its primary language as null and there is no build system, no manifests/lockfiles, no CI workflow, no tests, and no source code to change. Gitcoin bot comments in the issue show the lifecycle is finished: funding raised 0.1 -> 0.12 ETH, work started by @chinyh, work submitted as PR #11, and then 'The funding of 0.12 ETH ... has been approved & issued to @chinyh.' with Issue Status 4. Done. PR #11 ('Update and rename ep26 diss dapp \u7684\u7537\u4eba \u3010\u4e0d\u670d\u4f86\u8faf\u3011.mp3.mp3-\u5b57\u5e55.srt ...') was merged 2020-04-02T18:15:48Z and already delivered exactly what the issue requested; the repository README also marks the EP26 bounty '\u2705'. This is therefore simultaneously (a) a documentation/marketing/content deliverable rather than an engineering defect or feature, (b) withdrawn/exhausted funding, and (c) an already-completed competing deliverable. Per the phase rules no fallback proposal or PR will be manufactured and the checkout is left unchanged. Note: PR #17 (ep29 subtitle) is open but is unrelated to EP26/issue #10.",
+  "declared_reason": "Issue #10 requests a documentation/content deliverable, not a concrete code change to this repository, and the bounty is already completed and paid out. The issue asks a human to manually proofread/repair the AI-transcribed Mandarin subtitle file 'ep26 diss dapp \u7684\u7537\u4eba \u3010\u4e0d\u670d\u4f86\u8faf\u3011.mp3.mp3-\u5b57\u5e55.srt' using Amara and the YouTube video, then submit a PR to the (defunct) Gitcoin Bounty page for review. The repository dAAAb/BBFT is a pure content store (only .srt subtitle files + LICENSE + README.md + mp3/ audio tree); GitHub reports its primary language as null and there is no build system, no manifests/lockfiles, no CI workflow, no tests, and no source code to change. Gitcoin bot comments in the issue show the lifecycle is finished: funding raised 0.1 -> 0.12 ETH, work started by @chinyh, work submitted as PR #11, and then 'The funding of 0.12 ETH ... has been approved & issued to @chinyh.' with Issue Status 4. Done. PR #11 ('Update and rename ep26 diss dapp \u7684\u7537\u4eba \u3010\u4e0d\u670d\u4f86\u8faf\u3011.mp3.mp3-\u5b57\u5e55.srt ...') was merged 2020-04-02T18:15:48Z and already delivered exactly what the issue requested; the repository README also marks the EP26 bounty '\u2705'. This is therefore simultaneously (a) a documentation/marketing/content deliverable rather than an engineering defect or feature, (b) withdrawn/exhausted funding, and (c) an already-completed competing deliverable. Per the phase rules no fallback proposal or PR will be manufactured and the checkout is left unchanged. Note: PR #17 (ep29 subtitle) is open but is unrelated to EP26/issue #10.",
+  "evidence": {
+    "action": "blocked",
+    "worktree": "/tmp/bounty-workspaces/repos/dAAAb--BBFT--10",
+    "base_sha": "40f4634f8930969be2b5985fe9fe93d45f8ce412",
+    "default_branch": "master",
+    "sources": [
+      {
+        "path": "README.md",
+        "sha256": "0699fa2eebda1c5ff08734f9a7ef793b1a392fb04e37cfbfd6e3aea698ef46ef"
+      }
+    ],
+    "run_url": "",
+    "admission": {
+      "amount": "0.12",
+      "currency": "ETH",
+      "usd_value": "268.92420",
+      "quote": {
+        "usd_rate": "2241.035",
+        "source_url": "https://api.coinbase.com/v2/prices/ETH-USD/spot",
+        "observed_at": "2026-10-30T11:38:28.223852+00:00",
+        "quote_date": null
+      },
+      "raw": "0.12 ETH",
+      "source_url": "https://github.com/dAAAb/BBFT/issues/10",
+      "payer": "dAAAb"
+    }
+  },
+  "finished_at": "2026-10-30T11:41:53.886251+00:00"
 }
