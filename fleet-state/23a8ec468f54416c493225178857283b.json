@@ -2,7 +2,7 @@
   "task_id": "23a8ec468f54416c493225178857283b",
   "repo": "reef-defi/reef-finance-bounties",
   "issue_number": 2,
-  "status": "CLAIMED",
+  "status": "REJECTED_PREPARATION",
   "dispatch_id": "7cc069a8b1034507a0b640554f567324",
   "admission": {
     "funding": {
@@ -32,7 +32,7 @@
   ],
   "dispatched_at": "2026-10-30T11:43:37.645251+00:00",
   "attempt": 1,
-  "updated_at": "2026-10-30T11:43:51.716151+00:00",
+  "updated_at": "2026-10-30T11:46:32.279548+00:00",
   "owner": "41050147527:1",
   "previous_owner": null,
   "previous_status": "DISPATCHED",
@@ -40,5 +40,33 @@
   "harness_sha": "b47ebb9441241e29e7c161adb45ba97a519b856a",
   "claimed_at": "2026-10-30T11:43:51.716096+00:00",
   "lease_expires_at": "2026-10-30T15:48:51.716112+00:00",
-  "preparation_budget_seconds": 14400
+  "preparation_budget_seconds": 14400,
+  "at": "2026-10-30T11:46:20.150493+00:00",
+  "reason": "Cline preparation blocked: Issue #2 is a Gitcoin hackathon bounty announcement / grant-style solicitation, not a concrete code change to this repository, and its funding is already paid out. Evidence from the complete issue context (fetched 2026-10-30T11:43:50Z) and live repo inspection: (1) The issue body offers a prize pool of '$20,000 in REEF' (Gold Pearl $11,000 / Silver Coral $6,000 / Bronze Seashell $3,000) and asks external teams to BUILD a new NFT-marketplace dApp and publish it as an open-source GitHub project with a demo video; it defines judging criteria and submission requirements -- i.e. a market/idea solicitation, not a defect or feature request against reef-defi/reef-finance-bounties. (2) The repository at issue #2's base is a bounties LISTING repo: the only tracked file is README.md (content: '# reef-finance-bounties\\n\\nProject bounties for Reef Finance Hackathon'), sha256 94f161ffe42114e00fc40ba432eb5621edf1aa8e7703c71f95892d8b6da58b2f; there are no manifests, lockfiles, CI, source, or tests, so there is no component to reproduce a defect in or to change. (3) gitcoinbot comment 968367499 (2021-11-14T21:33:02Z): 'The funding of 758150.1137 REEF (24010.78 USD @ $0.03/REEF) attached to this issue has been approved & issued to @akashjha011.' -- funding is withdrawn/consumed, not live. Work was submitted (comment 963327496) to an EXTERNAL competitor repo https://github.com/Vikings-Tech/reef-nft-marketplace, and the prize was issued to that submitter; this is an already-rewarded/competing submission. (4) Live GitHub checks: repo has a single branch main; no open PRs in this repo (PRs #6/#8/#9 all closed); sibling issues #3 and #1 are the same style of hackathon announcement. No prior_failures and no owned_pr in the context. Per the non-engineering/withdrawn-funding rule, no fallback proposal or PR is manufactured; the checkout is left unchanged (clean tree at base SHA d09f83094096c263d0d2a84f64aeb2f338818cfa).",
+  "declared_reason": "Issue #2 is a Gitcoin hackathon bounty announcement / grant-style solicitation, not a concrete code change to this repository, and its funding is already paid out. Evidence from the complete issue context (fetched 2026-10-30T11:43:50Z) and live repo inspection: (1) The issue body offers a prize pool of '$20,000 in REEF' (Gold Pearl $11,000 / Silver Coral $6,000 / Bronze Seashell $3,000) and asks external teams to BUILD a new NFT-marketplace dApp and publish it as an open-source GitHub project with a demo video; it defines judging criteria and submission requirements -- i.e. a market/idea solicitation, not a defect or feature request against reef-defi/reef-finance-bounties. (2) The repository at issue #2's base is a bounties LISTING repo: the only tracked file is README.md (content: '# reef-finance-bounties\\n\\nProject bounties for Reef Finance Hackathon'), sha256 94f161ffe42114e00fc40ba432eb5621edf1aa8e7703c71f95892d8b6da58b2f; there are no manifests, lockfiles, CI, source, or tests, so there is no component to reproduce a defect in or to change. (3) gitcoinbot comment 968367499 (2021-11-14T21:33:02Z): 'The funding of 758150.1137 REEF (24010.78 USD @ $0.03/REEF) attached to this issue has been approved & issued to @akashjha011.' -- funding is withdrawn/consumed, not live. Work was submitted (comment 963327496) to an EXTERNAL competitor repo https://github.com/Vikings-Tech/reef-nft-marketplace, and the prize was issued to that submitter; this is an already-rewarded/competing submission. (4) Live GitHub checks: repo has a single branch main; no open PRs in this repo (PRs #6/#8/#9 all closed); sibling issues #3 and #1 are the same style of hackathon announcement. No prior_failures and no owned_pr in the context. Per the non-engineering/withdrawn-funding rule, no fallback proposal or PR is manufactured; the checkout is left unchanged (clean tree at base SHA d09f83094096c263d0d2a84f64aeb2f338818cfa).",
+  "evidence": {
+    "action": "blocked",
+    "worktree": "/tmp/bounty-workspaces/repos/reef-defi--reef-finance-bounties--2",
+    "base_sha": "d09f83094096c263d0d2a84f64aeb2f338818cfa",
+    "default_branch": "main",
+    "sources": [
+      {
+        "path": "README.md",
+        "sha256": "94f161ffe42114e00fc40ba432eb5621edf1aa8e7703c71f95892d8b6da58b2f"
+      }
+    ],
+    "run_url": "",
+    "admission": {
+      "amount": "20000",
+      "currency": "USD",
+      "usd_value": "20000",
+      "quote": {
+        "basis": "USD face value"
+      },
+      "raw": "$20,000",
+      "source_url": "https://github.com/reef-defi/reef-finance-bounties/issues/2",
+      "payer": "matjazonline"
+    }
+  },
+  "finished_at": "2026-10-30T11:46:31.862560+00:00"
 }
