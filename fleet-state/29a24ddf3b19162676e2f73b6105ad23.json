@@ -1,0 +1,37 @@
+{
+  "task_id": "29a24ddf3b19162676e2f73b6105ad23",
+  "repo": "bandprotocol/cross-chain-hackthon",
+  "issue_number": 3,
+  "status": "DISPATCHING",
+  "dispatch_id": "52044b2ec3d241a8ac6106168a6a0607",
+  "admission": {
+    "funding": {
+      "amount": "2000",
+      "currency": "USD",
+      "usd_value": "2000",
+      "quote": {
+        "basis": "USD face value"
+      },
+      "raw": "$2000",
+      "source_url": "https://github.com/bandprotocol/cross-chain-hackthon/issues/3",
+      "payer": "smiled0g"
+    },
+    "technical_signals": [
+      "protocol"
+    ],
+    "component_references": [],
+    "source_locations": [],
+    "engineering_evidence_sources": [
+      "https://github.com/bandprotocol/cross-chain-hackthon/issues/3"
+    ],
+    "source_issue": "https://github.com/bandprotocol/cross-chain-hackthon/issues/3",
+    "fetched_at": "2026-10-30T13:40:39.901543+00:00"
+  },
+  "lanes": [
+    "founder",
+    "normal"
+  ],
+  "dispatched_at": "2026-10-30T13:40:41.043140+00:00",
+  "attempt": 0,
+  "updated_at": "2026-10-30T13:40:41.043157+00:00"
+}
