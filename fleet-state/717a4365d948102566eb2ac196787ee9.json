@@ -1,0 +1,47 @@
+{
+  "task_id": "717a4365d948102566eb2ac196787ee9",
+  "repo": "EtherDotBlue/MythX",
+  "issue_number": 4,
+  "status": "DISPATCHING",
+  "dispatch_id": "ccea230461ff4cac85a02e8a643200e8",
+  "admission": {
+    "funding": {
+      "amount": "1",
+      "currency": "ETH",
+      "usd_value": "2232.81",
+      "quote": {
+        "usd_rate": "2232.81",
+        "source_url": "https://api.coinbase.com/v2/prices/ETH-USD/spot",
+        "observed_at": "2026-10-30T14:55:40.321843+00:00",
+        "quote_date": null
+      },
+      "raw": "1 ETH",
+      "source_url": "https://github.com/EtherDotBlue/MythX/issues/4",
+      "payer": "EtherDotBlue"
+    },
+    "technical_signals": [
+      "bugs",
+      "issue",
+      "issuecomment",
+      "issues"
+    ],
+    "component_references": [],
+    "source_locations": [],
+    "engineering_evidence_sources": [
+      "https://github.com/EtherDotBlue/MythX/issues/4#issuecomment-605416670",
+      "https://github.com/EtherDotBlue/MythX/issues/4#issuecomment-606362915",
+      "https://github.com/EtherDotBlue/MythX/issues/4#issuecomment-607635954",
+      "https://github.com/EtherDotBlue/MythX/issues/4#issuecomment-611459851",
+      "https://github.com/EtherDotBlue/MythX/issues/4#issuecomment-611488483"
+    ],
+    "source_issue": "https://github.com/EtherDotBlue/MythX/issues/4",
+    "fetched_at": "2026-10-30T14:55:40.261327+00:00"
+  },
+  "lanes": [
+    "founder",
+    "normal"
+  ],
+  "dispatched_at": "2026-10-30T14:55:42.173958+00:00",
+  "attempt": 0,
+  "updated_at": "2026-10-30T14:55:42.173973+00:00"
+}
