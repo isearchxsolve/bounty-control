@@ -2,8 +2,8 @@
   "task_id": "8cae5123bf12df2dcfaacd311f1cd980",
   "repo": "mistswapdex/mistswap-interface",
   "issue_number": 107,
-  "status": "FAILED_DELIVERABLE_MISSING",
-  "dispatch_id": "d71ced5676ee4f13b66d9d636d12071d",
+  "status": "DISPATCHING",
+  "dispatch_id": "95b572db38604ff393b9bb0448245cb5",
   "admission": {
     "funding": {
       "amount": "300",
@@ -27,14 +27,14 @@
       "https://github.com/mistswapdex/mistswap-interface/issues/107"
     ],
     "source_issue": "https://github.com/mistswapdex/mistswap-interface/issues/107",
-    "fetched_at": "2026-10-30T17:22:21.682863+00:00"
+    "fetched_at": "2026-10-30T17:45:49.587104+00:00"
   },
   "lanes": [
     "programs"
   ],
-  "dispatched_at": "2026-10-30T17:22:23.024266+00:00",
+  "dispatched_at": "2026-10-30T17:45:50.641428+00:00",
   "attempt": 1,
-  "updated_at": "2026-10-30T17:42:34.678997+00:00",
+  "updated_at": "2026-10-30T17:45:50.641445+00:00",
   "owner": "41098255553:1",
   "previous_owner": null,
   "previous_status": "DISPATCHED",
