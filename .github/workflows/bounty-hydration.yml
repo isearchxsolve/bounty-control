@@ -1,0 +1,52 @@
+name: Bounty hydration drain
+'on':
+  schedule:
+  - cron: '2,17,32,47 * * * *'
+  workflow_dispatch: {}
+concurrency:
+  group: bounty-hydration
+  cancel-in-progress: false
+permissions:
+  contents: write
+  actions: read
+jobs:
+  hydrate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    env:
+      GH_TOKEN: ${{ secrets.GH_PAT }}
+      BOUNTY_STATE_DIR: /tmp/bounty-hydration
+    steps:
+    - uses: actions/checkout@v4
+      with:
+        persist-credentials: false
+        sparse-checkout: '/scripts/
+
+          /.github/
+
+          /.gitmodules'
+        sparse-checkout-cone-mode: false
+    - uses: actions/cache/restore@v4
+      with:
+        path: ${{ env.BOUNTY_STATE_DIR }}
+        key: hydration-${{ github.run_id }}-${{ github.run_attempt }}
+        restore-keys: hydration-
+    - name: Drain the durable pending queue on the core API budget
+      # Hydration-only lane: no search-API calls (the discovery lane saturates the 30/min
+      # search ceiling with its own queries), so the drain draws on the REST/GraphQL core
+      # budget and is not throttled by the 65-second secondary search waits. Shared durable
+      # ownership (bounty-control branch, Contents-API CAS) keeps dispatch safe against the
+      # concurrent discovery lane.
+      run: python3 -u scripts/actions_dispatch.py --live --once --hydrate-only --hydrate-batch 300 --max-dispatches 2 --lane all
+    - uses: actions/cache/save@v4
+      if: always()
+      with:
+        path: ${{ env.BOUNTY_STATE_DIR }}
+        key: hydration-${{ github.run_id }}-${{ github.run_attempt }}
+    - uses: actions/upload-artifact@v4
+      if: always()
+      with:
+        name: hydration-${{ github.run_id }}
+        path: ${{ env.BOUNTY_STATE_DIR }}
+        if-no-files-found: error
+        retention-days: 14

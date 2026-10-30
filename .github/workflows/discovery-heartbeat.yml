@@ -1,0 +1,39 @@
+name: Discovery heartbeat
+# F8: the discovery cron is erratic -- even a correct schedule can simply not fire. This job's
+# only responsibility is to notice that and re-dispatch discovery, so the pipeline does not stop
+# when it is only driven by hand. It holds when a run is queued/in progress, when a fresh run
+# already exists, when its own cooldown is active, or when the probe itself errors.
+'on':
+  schedule:
+  - cron: '*/10 * * * *'
+  workflow_dispatch:
+    inputs:
+      dry_run:
+        description: Decide and report without dispatching
+        type: boolean
+        default: false
+concurrency:
+  group: discovery-heartbeat
+  cancel-in-progress: false
+permissions:
+  contents: read
+  actions: write
+jobs:
+  beat:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    env:
+      GH_TOKEN: ${{ secrets.GH_PAT }}
+    steps:
+    - uses: actions/checkout@v4
+      with:
+        persist-credentials: false
+        sparse-checkout: '/scripts/'
+        sparse-checkout-cone-mode: false
+    - name: Probe discovery and dispatch only if it has gone stale
+      run: |
+        if [ "${{ inputs.dry_run }}" = "true" ]; then
+          python3 -u scripts/discovery_heartbeat.py --dry-run
+        else
+          python3 -u scripts/discovery_heartbeat.py
+        fi

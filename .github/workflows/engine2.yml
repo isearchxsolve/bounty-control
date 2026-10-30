@@ -1,0 +1,230 @@
+name: Bounty delivery
+run-name: 'bounty ${{ github.event.client_payload.task_id || inputs.mode }} ${{ github.event.client_payload.repo || inputs.target_repo }} #${{ github.event.client_payload.issue_number
+  || inputs.issue_number }}'
+'on':
+  repository_dispatch:
+    types:
+    - bounty_task_dispatch
+  workflow_dispatch:
+    inputs:
+      mode:
+        type: choice
+        options:
+        - canary
+        - deliver
+        default: canary
+      target_repo:
+        description: Original owner/repository (delivery only)
+        required: false
+      issue_number:
+        description: Original issue number (delivery only)
+        required: false
+      force_recovery:
+        description: Authorize one bounded fourth recovery attempt
+        type: boolean
+        default: false
+concurrency:
+  group: bounty-${{ github.event.client_payload.repo || inputs.target_repo || 'canary' }}-${{ github.event.client_payload.issue_number || inputs.issue_number
+    || github.run_id }}
+  cancel-in-progress: false
+permissions:
+  contents: read
+jobs:
+  claim:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    env:
+      FLEET_ARTIFACT_DIR: /tmp/fleet-artifacts
+    permissions:
+      contents: write
+      actions: read
+    outputs:
+      mode: ${{ steps.claim.outputs.mode }}
+      task_id: ${{ steps.claim.outputs.task_id }}
+    steps:
+    - uses: actions/checkout@v4
+      with:
+        ref: ${{ github.sha }}
+        persist-credentials: false
+        sparse-checkout: '/scripts/
+
+          /.github/
+
+          /.gitmodules'
+        sparse-checkout-cone-mode: false
+    - name: Validate original task and reserve durable ownership
+      id: claim
+      env:
+        GH_TOKEN: ${{ secrets.GH_PAT || github.token }}
+      run: python3 scripts/actions_delivery.py claim
+    - uses: actions/upload-artifact@v4
+      if: always()
+      with:
+        name: task-claim-${{ github.run_id }}
+        path: ${{ env.FLEET_ARTIFACT_DIR }}
+        if-no-files-found: error
+        retention-days: 14
+  engineer:
+    runs-on: ubuntu-latest
+    timeout-minutes: 330
+    env:
+      FLEET_ARTIFACT_DIR: /tmp/fleet-artifacts
+      FLEET_SANDBOX_DIR: /tmp/bounty-workspaces
+      CLINE_DATA_DIR: /tmp/bounty-cline
+    needs: claim
+    outputs:
+      verdict: ${{ steps.engineer.outputs.verdict }}
+    steps:
+    - uses: actions/checkout@v4
+      with:
+        ref: ${{ github.sha }}
+        persist-credentials: false
+        sparse-checkout: '/scripts/
+
+          /.github/
+
+          /.gitmodules'
+        sparse-checkout-cone-mode: false
+    - name: Configure runner memory and disk headroom
+      # F7: headroom is best-effort and says so. This step once failed the whole run
+      # (two recorded failures) because a step meant to *help* could kill the job before
+      # Cline started. A run without swap may still succeed; a run killed by its preparer
+      # cannot. Only the toolchain cleanup, which frees what this step exists to free,
+      # is allowed to stay meaningful.
+      run: |
+        set +e
+        echo "=== CLEANING UNUSED RUNNER TOOLCHAINS TO FREE DISK ==="
+        sudo rm -rf /usr/share/dotnet /usr/local/lib/android /opt/ghc /usr/local/share/boost
+        df -h
+        sudo fallocate -l 8G /swapfile_extra 2>/dev/null || sudo dd if=/dev/zero of=/swapfile_extra bs=1M count=8192 2>/dev/null
+        sudo chmod 600 /swapfile_extra 2>/dev/null
+        sudo mkswap /swapfile_extra 2>/dev/null
+        sudo swapon /swapfile_extra 2>/dev/null
+        if [ $? -ne 0 ]; then echo "HEADROOM swap unavailable; continuing best-effort"; fi
+        echo "=== CONFIGURED RUNNER SWAP AND HEADROOM ==="
+        free -h
+        df -h
+    - uses: actions/download-artifact@v4
+      with:
+        name: task-claim-${{ github.run_id }}
+        path: ${{ env.FLEET_ARTIFACT_DIR }}
+    - name: Verified minimal agent runtime
+      run: bash scripts/bootstrap-node.sh
+    # Warm the package-manager caches across runs. This is what large repositories do instead of
+    # reinstalling cold every build (Expensify/App keeps node_modules on a sticky disk and shards
+    # its test cache per chunk). It does not raise the memory ceiling; it removes repeated download
+    # and extraction work from a job that has a 300s preparation window to spend.
+    - name: Restore package manager caches
+      uses: actions/cache@v4
+      with:
+        path: |
+          ~/.npm
+          ~/.cache/pip
+          ~/.bun/install/cache
+        key: pkgcache-${{ runner.os }}-${{ github.run_id }}-${{ github.run_attempt }}
+        restore-keys: |
+          pkgcache-${{ runner.os }}-
+    - name: Install the executable actually used by the worker
+      run: 'npm install --global --no-audit --no-fund cline@3.0.74
+
+        cline --version'
+    - name: Cline-first engineering and independent native verification
+      id: engineer
+      env:
+        GH_TOKEN: ${{ github.token }}
+        TOKENHARBOR_KEYS_JSON: ${{ secrets.TOKENHARBOR_KEYS_JSON }}
+        ENGINE_ID: actions-${{ github.run_id }}
+        CLINE_TOTAL_BUDGET_SECONDS: '14400'
+        # The dispatch payload still carries a preparation window, and it can only shorten
+        # the run if it is smaller than the four-hour budget. Since 2026-10-29 it is always
+        # the full window: shortening preparation on a contended repository removed the
+        # deliverable on the largest repository in the pool rather than bounding its race.
+        PREPARATION_BUDGET_SECONDS: ${{ github.event.client_payload.preparation_budget_seconds || '' }}
+        # F14: the runner has ~7 GiB usable, and the swap added above does not add real
+        # memory -- it only turns a fast OOM into a slow one. Cline's own sub-tooling
+        # raised the heap to 8192MB and OOM'd with exit 134 on Expensify/App, so the cap
+        # is set here and the fan-out is bounded rather than left to the toolchain.
+        NODE_OPTIONS: '--max-old-space-size=3072'
+        UV_THREADPOOL_SIZE: '2'
+      run: python3 -u scripts/actions_delivery.py engineer
+      timeout-minutes: 300
+    - uses: actions/upload-artifact@v4
+      if: always()
+      with:
+        name: task-engineering-${{ github.run_id }}
+        path: ${{ env.FLEET_ARTIFACT_DIR }}
+        if-no-files-found: error
+        retention-days: 14
+  publish:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    env:
+      FLEET_ARTIFACT_DIR: /tmp/fleet-artifacts
+    needs:
+    - claim
+    - engineer
+    if: needs.claim.outputs.mode == 'deliver' && needs.engineer.result == 'success' && needs.engineer.outputs.verdict
+      == 'verified'
+    steps:
+    - uses: actions/checkout@v4
+      with:
+        ref: ${{ github.sha }}
+        persist-credentials: false
+        sparse-checkout: '/scripts/
+
+          /.github/
+
+          /.gitmodules'
+        sparse-checkout-cone-mode: false
+    - uses: actions/download-artifact@v4
+      with:
+        name: task-engineering-${{ github.run_id }}
+        path: ${{ env.FLEET_ARTIFACT_DIR }}
+    - name: Validate release objects and publish without executing target code
+      env:
+        GH_TOKEN: ${{ secrets.GH_PAT }}
+      run: python3 scripts/actions_delivery.py publish
+    - uses: actions/upload-artifact@v4
+      if: always()
+      with:
+        name: task-publication-${{ github.run_id }}
+        path: ${{ env.FLEET_ARTIFACT_DIR }}
+        if-no-files-found: error
+        retention-days: 14
+  reconcile:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    env:
+      FLEET_ARTIFACT_DIR: /tmp/fleet-artifacts
+      ENGINEERING_JOB_RESULT: ${{ needs.engineer.result }}
+      PUBLICATION_JOB_RESULT: ${{ needs.publish.result }}
+      TASK_MODE: ${{ needs.claim.outputs.mode }}
+    needs:
+    - claim
+    - engineer
+    - publish
+    if: always()
+    permissions:
+      contents: write
+      actions: read
+    steps:
+    - uses: actions/checkout@v4
+      with:
+        ref: ${{ github.sha }}
+        persist-credentials: false
+        sparse-checkout: '/scripts/
+
+          /.github/
+
+          /.gitmodules'
+        sparse-checkout-cone-mode: false
+    - uses: actions/download-artifact@v4
+      with:
+        pattern: task-*
+        merge-multiple: true
+        path: ${{ env.FLEET_ARTIFACT_DIR }}
+    - name: Reconcile actual terminal result
+      env:
+        GH_TOKEN: ${{ secrets.GH_PAT || github.token }}
+      run: "status=failure\nif [ \"$ENGINEERING_JOB_RESULT\" = success ]; then\n  if [ \"$TASK_MODE\" = canary ] || [ \"$PUBLICATION_JOB_RESULT\" = success\
+        \ ]; then\n    status=success\n  fi\nfi\npython3 scripts/actions_delivery.py finish --job-status \"$status\""

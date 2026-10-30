@@ -1,0 +1,49 @@
+name: Bounty discovery and reconciliation
+'on':
+  schedule:
+  - cron: '7,22,37,52 * * * *'
+  workflow_dispatch: {}
+concurrency:
+  group: bounty-discovery
+  cancel-in-progress: false
+permissions:
+  contents: write
+  actions: read
+jobs:
+  discover:
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    env:
+      GH_TOKEN: ${{ secrets.GH_PAT }}
+      BOUNTY_STATE_DIR: /tmp/bounty-discovery
+    steps:
+    - uses: actions/checkout@v4
+      with:
+        persist-credentials: false
+        sparse-checkout: '/scripts/
+
+          /.github/
+
+          /.gitmodules'
+        sparse-checkout-cone-mode: false
+    - uses: actions/cache/restore@v4
+      with:
+        path: ${{ env.BOUNTY_STATE_DIR }}
+        key: discovery-${{ github.run_id }}-${{ github.run_attempt }}
+        restore-keys: discovery-
+    - name: Reconcile actual results and repair owned failing PRs
+      run: python3 -u scripts/actions_reconcile.py --repair
+    - name: Search all lanes and dispatch qualified originals
+      run: python3 -u scripts/actions_dispatch.py --live --once --queries-per-lane 3 --max-dispatches 2 --lane ${{ vars.ACTIVE_LANES || 'all' }}
+    - uses: actions/cache/save@v4
+      if: always()
+      with:
+        path: ${{ env.BOUNTY_STATE_DIR }}
+        key: discovery-${{ github.run_id }}-${{ github.run_attempt }}
+    - uses: actions/upload-artifact@v4
+      if: always()
+      with:
+        name: discovery-${{ github.run_id }}
+        path: ${{ env.BOUNTY_STATE_DIR }}
+        if-no-files-found: error
+        retention-days: 14

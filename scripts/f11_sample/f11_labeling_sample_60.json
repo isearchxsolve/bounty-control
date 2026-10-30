@@ -1,0 +1,1109 @@
+[
+  {
+    "task_id": "51",
+    "repo": "alfrexo95/bounty-bot",
+    "number": 51,
+    "title": "💰 Bounty Seguro (Ver enlace): 💰 Bounty Seguro (Ver enlace): 💰 Bounty Seguro (Ver",
+    "body_preview": "🤖 **Bounty con Pago Garantizado (Escrow)**\n\n- **Título:** 💰 Bounty Seguro (Ver enlace): 💰 Bounty Seguro (Ver enlace): 💰 Bounty Seguro (Ver\n- **Monto:** Ver enlace\n- **Plataforma:** GitHub Issue\n- **En",
+    "labels": [
+      "bounty",
+      "escrow"
+    ],
+    "has_code_reference": false,
+    "state": "open",
+    "created_at": "2026-10-27T15:14:59Z",
+    "html_url": "https://github.com/alfrexo95/bounty-bot/issues/51",
+    "hand_label": "not_code_change_external",
+    "hand_label_justification": "Automated bounty escrow link aggregation post with no repository code change requested"
+  },
+  {
+    "task_id": "1",
+    "repo": "tine1117/oss-hunter-livefire",
+    "number": 1,
+    "title": "parse_duration drops the days (d) unit",
+    "body_preview": "## Bug\n\n`parse_duration` silently drops the **days** (`d`) unit. The README lists `d` as a\nsupported unit, but the parser ignores it and returns a wrong (too-small) result\ninstead of raising or counti",
+    "labels": [
+      "💎 Bounty",
+      "$50"
+    ],
+    "has_code_reference": false,
+    "state": "open",
+    "created_at": "2026-06-01T14:37:16Z",
+    "html_url": "https://github.com/tine1117/oss-hunter-livefire/issues/1",
+    "hand_label": "needs_code_change",
+    "hand_label_justification": "Concrete parser defect: parse_duration silently drops days unit in codebase"
+  },
+  {
+    "task_id": "13",
+    "repo": "PG-AGI/toingg-jarvis",
+    "number": 13,
+    "title": "[Feature]:  Cross-platform packaging and native installers for Windows, Linux, and macOS",
+    "body_preview": "### What problem does this solve?\n\nCurrently, installation may require manual dependency setup and command-line steps, which increases friction for end users.\n\nThis creates the following issues:\n\nMore",
+    "labels": [
+      "enhancement",
+      "approved",
+      "reward eligible",
+      "💎 Bounty",
+      "$5"
+    ],
+    "has_code_reference": true,
+    "state": "open",
+    "created_at": "2026-05-20T13:00:41Z",
+    "html_url": "https://github.com/PG-AGI/toingg-jarvis/issues/13",
+    "hand_label": "needs_code_change",
+    "hand_label_justification": "Feature request for cross-platform packaging and installer build scripts"
+  },
+  {
+    "task_id": "11",
+    "repo": "PG-AGI/toingg-jarvis",
+    "number": 11,
+    "title": "[Feature]:  Integrate Pipecat with Gemini API for real-time voice and multimodal conversations",
+    "body_preview": "### What problem does this solve?\n\nThe current backend uses Toingg as the primary voice and conversation engine. While functional, there is currently no support for Pipecat and [Google Gemini API](htt",
+    "labels": [
+      "enhancement",
+      "help wanted",
+      "approved",
+      "priority: high",
+      "reward eligible",
+      "💎 Bounty",
+      "$5",
+      "💰 Rewarded"
+    ],
+    "has_code_reference": false,
+    "state": "open",
+    "created_at": "2026-05-20T12:57:42Z",
+    "html_url": "https://github.com/PG-AGI/toingg-jarvis/issues/11",
+    "hand_label": "needs_code_change",
+    "hand_label_justification": "Feature integration: Pipecat and Gemini API real-time voice integration in backend"
+  },
+  {
+    "task_id": "29",
+    "repo": "SecureBananaLabs/bug-bounty",
+    "number": 29,
+    "title": "Implement a fully functional Admin Panel",
+    "body_preview": "**Goals**\n- Replace the placeholder `AdminPanelPage` with a fully functional admin panel for the freelance platform\n- Provide admins with visibility and control over users, jobs, disputes, and platfor",
+    "labels": [
+      "good first issue",
+      "bug bounty",
+      "AI agent friendly",
+      "bounty",
+      "💎 Bounty",
+      "$1k",
+      "$1"
+    ],
+    "has_code_reference": false,
+    "state": "open",
+    "created_at": "2026-05-17T05:53:20Z",
+    "html_url": "https://github.com/SecureBananaLabs/bug-bounty/issues/29",
+    "hand_label": "needs_code_change",
+    "hand_label_justification": "Frontend implementation: replace placeholder AdminPanelPage with functional UI code"
+  },
+  {
+    "task_id": "1",
+    "repo": "UnsafeLabs/RFC-5322",
+    "number": 1,
+    "title": "[bounty $400] Implement ABNF-compliant email address parser with full §3.2–§4.4 coverage",
+    "body_preview": "`source.md` contains the complete RFC 5322 specification (Internet Message Format). We need a **fully conformant email address parser** in Python that implements the complete ABNF grammar from section",
+    "labels": [
+      "good first issue",
+      "help wanted",
+      "💎 Bounty",
+      "$400"
+    ],
+    "has_code_reference": true,
+    "state": "open",
+    "created_at": "2026-05-17T03:33:08Z",
+    "html_url": "https://github.com/UnsafeLabs/RFC-5322/issues/1",
+    "hand_label": "needs_code_change",
+    "hand_label_justification": "Implement RFC 5322 ABNF-compliant email address parser in Python"
+  },
+  {
+    "task_id": "202",
+    "repo": "ClankerNation/OpenAgents",
+    "number": 202,
+    "title": "[ Bounty $8k ] [ API ] Add structured error responses with error codes — security critical",
+    "body_preview": "API errors return inconsistent formats. Some return strings, others return FastAPI default validation errors.\n\n### Implementation\n\n- Define error schema: `{code: string, message: string, details: obje",
+    "labels": [
+      "Autonomus Agents Only",
+      "good first issue",
+      "help wanted",
+      "💎 Bounty",
+      "high-value",
+      "crypto-eligible",
+      "$8k"
+    ],
+    "has_code_reference": false,
+    "state": "open",
+    "created_at": "2026-05-16T09:01:37Z",
+    "html_url": "https://github.com/ClankerNation/OpenAgents/issues/202",
+    "hand_label": "needs_code_change",
+    "hand_label_justification": "API security fix: implement structured error response schema in FastAPI"
+  },
+  {
+    "task_id": "201",
+    "repo": "ClankerNation/OpenAgents",
+    "number": 201,
+    "title": "[ Bounty $7k ] [ Solidity ] Fix Timelock queued transactions can be executed after delay expires — testnet finding",
+    "body_preview": "Queued transactions in `contracts/governance/Timelock.sol` have no `GRACE_PERIOD` after `eta`. A transaction queued with `eta = now + 2 days` remains executable forever after day 2.\n\n### Fix\n\n- Add `G",
+    "labels": [
+      "Autonomus Agents Only",
+      "good first issue",
+      "help wanted",
+      "💎 Bounty",
+      "high-value",
+      "crypto-eligible",
+      "$7k"
+    ],
+    "has_code_reference": false,
+    "state": "open",
+    "created_at": "2026-05-16T09:01:35Z",
+    "html_url": "https://github.com/ClankerNation/OpenAgents/issues/201",
+    "hand_label": "needs_code_change",
+    "hand_label_justification": "Solidity smart contract defect: add GRACE_PERIOD check in Timelock.sol"
+  },
+  {
+    "task_id": "200",
+    "repo": "ClankerNation/OpenAgents",
+    "number": 200,
+    "title": "[ Bounty $2k ] [ API ] Fix ratelimit.py doesn't differentiate authenticated vs anonymous limits — backwards compat",
+    "body_preview": "Rate limiter in `api/middleware/ratelimit.py` applies same limit to all users. Authenticated users with API keys should get higher limits.\n\n### Fix\n\n- 60 req/min for anonymous\n- 300 req/min for authen",
+    "labels": [
+      "Autonomus Agents Only",
+      "good first issue",
+      "help wanted",
+      "💎 Bounty",
+      "high-value",
+      "crypto-eligible",
+      "$2k"
+    ],
+    "has_code_reference": true,
+    "state": "open",
+    "created_at": "2026-05-16T09:01:32Z",
+    "html_url": "https://github.com/ClankerNation/OpenAgents/issues/200",
+    "hand_label": "needs_code_change",
+    "hand_label_justification": "API middleware defect: differentiate rate limits for authenticated vs anonymous users in ratelimit.py"
+  },
+  {
+    "task_id": "199",
+    "repo": "ClankerNation/OpenAgents",
+    "number": 199,
+    "title": "[ Bounty $3k ] [ SDK ] Add contract deployment helpers to SDK — code review finding",
+    "body_preview": "The SDK can interact with deployed contracts but has no deployment utilities. Users must use hardhat separately.\n\n### Implementation\n\n- Add `deployContract(abi, bytecode, args)` method\n- Wait for depl",
+    "labels": [
+      "Autonomus Agents Only",
+      "good first issue",
+      "help wanted",
+      "💎 Bounty",
+      "high-value",
+      "crypto-eligible",
+      "$3k"
+    ],
+    "has_code_reference": false,
+    "state": "open",
+    "created_at": "2026-05-16T09:01:30Z",
+    "html_url": "https://github.com/ClankerNation/OpenAgents/issues/199",
+    "hand_label": "needs_code_change",
+    "hand_label_justification": "SDK feature: add deployContract helper functions to SDK codebase"
+  },
+  {
+    "task_id": "1668",
+    "repo": "MyZubster-Ecosystem/myzubster",
+    "number": 1668,
+    "title": "[ONION / FEDERATION] Voluntary privacy-first registry of independent MyZubster Tor nodes",
+    "body_preview": "## Goal\nCreate a **voluntary, privacy-preserving registry of MyZubster installations reachable over Tor Onion**, so we can count *reported and independently checked nodes*, rather than confusing GitHu",
+    "labels": [],
+    "has_code_reference": false,
+    "state": "open",
+    "created_at": "2026-10-27T17:37:45Z",
+    "html_url": "https://github.com/MyZubster-Ecosystem/myzubster/issues/1668",
+    "hand_label": "not_code_change_process",
+    "hand_label_justification": "Meta/federation registry proposal across external Tor node operators"
+  },
+  {
+    "task_id": "633",
+    "repo": "momoponwork1415-lgtm/wordpress-bounty-harness",
+    "number": 633,
+    "title": "#629 段階 1 PR 3: 本番 20 対象 k=2 で v14-wide と比べる",
+    "body_preview": "## 問い\n\n同じ 20 対象 k=2 で、partitioned は v14-wide（契約 v4）と比べて、群の数、段 1b を通る数、Lab で観測できる数、1 対象あたりの時間と token がどう動くか。script の行と AI の行の使用率はいくらか。\n\n## 範囲（#629 の段階 1、PR 3「測定」）\n\n- 分母は台帳にある v14-wide の Trial（同じ対象、契約 v",
+    "labels": [],
+    "has_code_reference": false,
+    "state": "open",
+    "created_at": "2026-10-27T15:34:54Z",
+    "html_url": "https://github.com/momoponwork1415-lgtm/wordpress-bounty-harness/issues/633",
+    "hand_label": "not_code_change_process",
+    "hand_label_justification": "Experiment measurement and benchmarking tracking ticket"
+  },
+  {
+    "task_id": "3285",
+    "repo": "tmsteph/3dvr-portal",
+    "number": 3285,
+    "title": "Open-source contribution candidate: Hacker Fab",
+    "body_preview": "## Current verified status — October 24, 2026, 06:35 PDT\n\n- **Upstream coordination published:** [Thomas's fragmented-GRBL-ACK review on hacker-fab/stepper PR #55](https://github.com/hacker-fab/steppe",
+    "labels": [],
+    "has_code_reference": true,
+    "state": "open",
+    "created_at": "2026-10-20T21:15:26Z",
+    "html_url": "https://github.com/tmsteph/3dvr-portal/issues/3285",
+    "hand_label": "not_code_change_external",
+    "hand_label_justification": "External contribution tracking to separate hacker-fab upstream repository"
+  },
+  {
+    "task_id": "1665",
+    "repo": "MyZubster-Ecosystem/myzubster",
+    "number": 1665,
+    "title": "[ONION PILOT] Integrate MyZubster homepage with restored Tor v3 endpoint (Wasim opt-in)",
+    "body_preview": "## Verified baseline — 27 October 2026\nThe existing isolated Tor v3 Onion pilot was restored on the VPS, preserving the original service identity. A request through an independent Tor SOCKS client ret",
+    "labels": [],
+    "has_code_reference": true,
+    "state": "open",
+    "created_at": "2026-10-27T16:21:05Z",
+    "html_url": "https://github.com/MyZubster-Ecosystem/myzubster/issues/1665",
+    "hand_label": "not_code_change_process",
+    "hand_label_justification": "VPS infrastructure deployment and Tor v3 onion service operational coordination"
+  },
+  {
+    "task_id": "163",
+    "repo": "bujiproject-art/agentmidasopendevteam",
+    "number": 163,
+    "title": "Availability inquiry: USD 100 FAQ Manager bounty",
+    "body_preview": "Is the USD 100 FAQ Manager bounty still available? Please confirm acceptance criteria, payout timing, supported payout countries and verification requirements. I use AI-assisted development with repro",
+    "labels": [],
+    "has_code_reference": false,
+    "state": "open",
+    "created_at": "2026-10-27T17:30:31Z",
+    "html_url": "https://github.com/bujiproject-art/agentmidasopendevteam/issues/163",
+    "hand_label": "not_code_change_process",
+    "hand_label_justification": "Process inquiry asking about bounty availability and payout terms"
+  },
+  {
+    "task_id": "3",
+    "repo": "me-fake-you/clearsheet-offers",
+    "number": 3,
+    "title": "Revenue reset: prioritize verified cashflow over infrastructure",
+    "body_preview": "Track only actions that can plausibly produce verified revenue without upfront spend. Current constraints: 0 Upwork Connects, no pending Upwork invitations, no existing Stripe payment links, AgentMail",
+    "labels": [],
+    "has_code_reference": false,
+    "state": "open",
+    "created_at": "2026-09-10T13:11:05Z",
+    "html_url": "https://github.com/me-fake-you/clearsheet-offers/issues/3",
+    "hand_label": "not_code_change_process",
+    "hand_label_justification": "Meta strategy and revenue prioritization discussion ticket"
+  },
+  {
+    "task_id": "1575",
+    "repo": "Zoverions/AXIOM-MESH",
+    "number": 1575,
+    "title": "Watch findings integration backlog — architecture/security conformance",
+    "body_preview": "## Purpose\n\nTurn recurring substantive AXIOM watch findings into repository-native falsification targets, conformance fixtures, crosswalks, or implementation work instead of leaving them only in discu",
+    "labels": [],
+    "has_code_reference": false,
+    "state": "open",
+    "created_at": "2026-09-11T13:45:07Z",
+    "html_url": "https://github.com/Zoverions/AXIOM-MESH/issues/1575",
+    "hand_label": "not_code_change_process",
+    "hand_label_justification": "Architecture backlog tracking watch findings for future roadmap"
+  },
+  {
+    "task_id": "940",
+    "repo": "limitlessprojects/Go-Hybrid",
+    "number": 940,
+    "title": "Triage Board (auto-updated daily — pin me)",
+    "body_preview": "# Triage Board\n\nGenerated 2026-10-27 17:21 UTC by `tools/triage_bot.py scan` — review-first automation.\nThe bot never merges and never closes. Buckets: `CONFLICTS` x15, `DUP` x91, `LAND-CANDIDATE` x30",
+    "labels": [],
+    "has_code_reference": true,
+    "state": "open",
+    "created_at": "2026-10-19T20:42:04Z",
+    "html_url": "https://github.com/limitlessprojects/Go-Hybrid/issues/940",
+    "hand_label": "not_code_change_process",
+    "hand_label_justification": "Auto-generated daily triage board by review bot"
+  },
+  {
+    "task_id": "2064",
+    "repo": "limitlessprojects/Go-Hybrid",
+    "number": 2064,
+    "title": "[soundness] hy-emit: O8 slot loan with parenthesized base (&(m)[k]) returns empty place_root and emits store-back after task spawn (data race)",
+    "body_preview": "### The smallest `.hy` program that demonstrates it\n\n```hy\n// repro_paren_loan.hy\npackage main\n\nstruct item {\n    n int\n}\n\nfn worker(m map[string]item, done chan int) {\n    total := 0\n    for _ in 0..",
+    "labels": [],
+    "has_code_reference": true,
+    "state": "open",
+    "created_at": "2026-10-27T17:19:27Z",
+    "html_url": "https://github.com/limitlessprojects/Go-Hybrid/issues/2064",
+    "hand_label": "needs_code_change",
+    "hand_label_justification": "Compiler soundness bug: data race emitted on parenthesized base in hy-emit"
+  },
+  {
+    "task_id": "1467",
+    "repo": "SlopDotCash/slopdotcash",
+    "number": 1467,
+    "title": "Owner steps after the 26 October finish pass",
+    "body_preview": "> **Current corrections — 27 October 2026.** The 07:35 snapshot below is retained as history; its unchecked boxes are not a fresh request to repeat completed actions.\n>\n> - **1.1, Ethereum project sel",
+    "labels": [],
+    "has_code_reference": true,
+    "state": "open",
+    "created_at": "2026-10-27T07:32:09Z",
+    "html_url": "https://github.com/SlopDotCash/slopdotcash/issues/1467",
+    "hand_label": "not_code_change_process",
+    "hand_label_justification": "Meta operational checklist for repository owner"
+  },
+  {
+    "task_id": "62",
+    "repo": "kellan/outlanders2-wiki",
+    "number": 62,
+    "title": "Icon extraction still needed: game-composited tiles, need icons, frames and a few broken glyphs",
+    "body_preview": "Follow-up to #56. The wiki now draws icons the field-guide way, but it works from incomplete art.\n\n## What we have\n- 80 glyph images, holding only each glyph's **line layer**.\n- #61 adds a stand-in wh",
+    "labels": [
+      "enhancement"
+    ],
+    "has_code_reference": true,
+    "state": "open",
+    "created_at": "2026-10-26T15:53:35Z",
+    "html_url": "https://github.com/kellan/outlanders2-wiki/issues/62",
+    "hand_label": "not_code_change_external",
+    "hand_label_justification": "Art and graphics extraction request for game tiles and icons"
+  },
+  {
+    "task_id": "157",
+    "repo": "lometur/HearthDAoC",
+    "number": 157,
+    "title": "Bot arc: gamebots get and choose good period gear and weapons",
+    "body_preview": "The owner asked (2026-10-21): \"a part of making the bots efficient is i want to make sure they are good at getting good equipement and weapons, picking the right spells, good specs that complement the",
+    "labels": [
+      "enhancement",
+      "area:gameplay",
+      "P2"
+    ],
+    "has_code_reference": true,
+    "state": "open",
+    "created_at": "2026-10-21T16:19:34Z",
+    "html_url": "https://github.com/lometur/HearthDAoC/issues/157",
+    "hand_label": "needs_code_change",
+    "hand_label_justification": "Game bot AI logic enhancement in gameplay equipment selection code"
+  },
+  {
+    "task_id": "244",
+    "repo": "ddboy19912/bonded",
+    "number": 244,
+    "title": "Realistic attacks: break agents before attackers do (scoring, realistic jobs, tradecraft, adaptive attacker, every vector)",
+    "body_preview": "Bonded's job is to break AI agents that move money before dangerous parties do, and to price what's left. Today every model in the Bonded Index scores 92 to 100. That's partly a scoring bug, and partl",
+    "labels": [
+      "enhancement"
+    ],
+    "has_code_reference": true,
+    "state": "open",
+    "created_at": "2026-10-27T01:07:00Z",
+    "html_url": "https://github.com/ddboy19912/bonded/issues/244",
+    "hand_label": "not_code_change_process",
+    "hand_label_justification": "High-level research vision and methodology manifesto"
+  },
+  {
+    "task_id": "65",
+    "repo": "oll4com/spaceapp",
+    "number": 65,
+    "title": "[$450] One command to run the full SpaceApp stack from source for contributors",
+    "body_preview": "## Context\n\nA contributor can build SpaceApp, run its test suites and run a simulated CLI task (`npm run smoke:offline`), but cannot easily run the **whole application from source**. `CONTRIBUTING.md`",
+    "labels": [
+      "enhancement",
+      "help wanted",
+      "💎 Bounty"
+    ],
+    "has_code_reference": true,
+    "state": "open",
+    "created_at": "2026-10-16T05:30:34Z",
+    "html_url": "https://github.com/oll4com/spaceapp/issues/65",
+    "hand_label": "needs_code_change",
+    "hand_label_justification": "Developer tooling feature: single command launcher script for local stack"
+  },
+  {
+    "task_id": "64",
+    "repo": "oll4com/spaceapp",
+    "number": 64,
+    "title": "[$400] Per-service container images: ship each image only the code and dependencies it runs",
+    "body_preview": "## Context\n\nSpaceApp publishes three images from one `Dockerfile`: `spaceapp-core` (API, web server, Temporal worker), `spaceapp-cli` (the CLI host that runs the AI coding CLIs in PTYs) and `spaceapp-",
+    "labels": [
+      "enhancement",
+      "help wanted",
+      "💎 Bounty"
+    ],
+    "has_code_reference": true,
+    "state": "open",
+    "created_at": "2026-10-16T05:30:32Z",
+    "html_url": "https://github.com/oll4com/spaceapp/issues/64",
+    "hand_label": "needs_code_change",
+    "hand_label_justification": "Dockerfile multi-stage optimization: per-service container image separation"
+  },
+  {
+    "task_id": "63",
+    "repo": "oll4com/spaceapp",
+    "number": 63,
+    "title": "[$600] Support rootless Podman as a container engine in the run-spaceapp launcher",
+    "body_preview": "## Context\n\nThe `run-spaceapp` launcher (`packages/run-spaceapp`) installs and runs SpaceApp as a Docker Compose stack (`templates/compose.yml`: core, CLI, browser, PostgreSQL/pgvector, Temporal). Doc",
+    "labels": [
+      "enhancement",
+      "help wanted",
+      "💎 Bounty"
+    ],
+    "has_code_reference": true,
+    "state": "open",
+    "created_at": "2026-10-16T05:30:31Z",
+    "html_url": "https://github.com/oll4com/spaceapp/issues/63",
+    "hand_label": "needs_code_change",
+    "hand_label_justification": "Launcher script feature: support rootless Podman engine in run-spaceapp"
+  },
+  {
+    "task_id": "62",
+    "repo": "oll4com/spaceapp",
+    "number": 62,
+    "title": "[$750] WebGL renderer for the 3D memory graph: 50,000 nodes at interactive frame rates",
+    "body_preview": "## Context\n\nThe Memory workspace has a 3D view of the memory graph (files, memory records, topics and their relations). It is one of SpaceApp's most visible features. Today it does not scale:\n\n- **Ren",
+    "labels": [
+      "enhancement",
+      "help wanted",
+      "💎 Bounty"
+    ],
+    "has_code_reference": true,
+    "state": "open",
+    "created_at": "2026-10-16T05:30:26Z",
+    "html_url": "https://github.com/oll4com/spaceapp/issues/62",
+    "hand_label": "needs_code_change",
+    "hand_label_justification": "Frontend performance: WebGL renderer implementation for 3D memory graph"
+  },
+  {
+    "task_id": "61",
+    "repo": "oll4com/spaceapp",
+    "number": 61,
+    "title": "[$600] Export worker and workflow spans over OTLP: one trace from API request to every Temporal activity",
+    "body_preview": "## Context\n\nThe API can already export its request spans over OTLP/HTTP JSON. The exporter has no dependencies, is off by default and is switched on with `SPACE_OTEL_EXPORTER_OTLP_ENDPOINT` (`apps/api",
+    "labels": [
+      "enhancement",
+      "help wanted",
+      "💎 Bounty"
+    ],
+    "has_code_reference": true,
+    "state": "open",
+    "created_at": "2026-10-16T05:30:25Z",
+    "html_url": "https://github.com/oll4com/spaceapp/issues/61",
+    "hand_label": "needs_code_change",
+    "hand_label_justification": "Telemetry feature: OTLP span exporter for Temporal worker orchestration"
+  },
+  {
+    "task_id": "60",
+    "repo": "oll4com/spaceapp",
+    "number": 60,
+    "title": "[$400] Test every Temporal workflow on a real time-skipping test server and gate replay determinism in CI",
+    "body_preview": "## Context\n\nSpaceApp runs its long-lived orchestration on Temporal (`apps/worker`): Room Agent supervision, chat turns, Dot goals and memory maintenance. These workflows use signals, `condition()` tim",
+    "labels": [
+      "enhancement",
+      "help wanted",
+      "💎 Bounty"
+    ],
+    "has_code_reference": true,
+    "state": "open",
+    "created_at": "2026-10-16T05:30:20Z",
+    "html_url": "https://github.com/oll4com/spaceapp/issues/60",
+    "hand_label": "needs_code_change",
+    "hand_label_justification": "Test infrastructure: automated Temporal workflow CI tests and determinism gate"
+  },
+  {
+    "task_id": "71",
+    "repo": "outerbase/starbasedb",
+    "number": 71,
+    "title": "Improve test coverage with Vitest",
+    "body_preview": "**Is your feature request related to a problem? Please describe.**\nCurrently the test coverage of the project is nearly non-existent. We do have and use Vitest as a dependency in the Starbase project ",
+    "labels": [
+      "enhancement",
+      "💎 Bounty",
+      "💰 Rewarded"
+    ],
+    "has_code_reference": false,
+    "state": "open",
+    "created_at": "2025-01-23T20:00:07Z",
+    "html_url": "https://github.com/outerbase/starbasedb/issues/71",
+    "hand_label": "needs_code_change",
+    "hand_label_justification": "Test implementation: add Vitest unit test suite to codebase"
+  },
+  {
+    "task_id": "2",
+    "repo": "WholeTroutMedia/open-source-bounties",
+    "number": 2,
+    "title": "[Verified Fix Ready (Exit Code 0) - Sealed for Original Repo Owner & @jaharoni Review] zio/zio#8686 - Fix ZStream.groupedWithin hang on infinite streams with filtered empty chunks (series/1.x)",
+    "body_preview": "## Staged Solution Vault & Maintainer Fast-Track Access\n\n> **Status**: **SOLVED & DETERMINISTICALLY VERIFIED (`Exit Code 0`) - STAGED FOR HUMAN REVIEW**\n>\n> **Private Review Staging**: While awaiting ",
+    "labels": [
+      "bounty-draft",
+      "difficulty: medium",
+      "audit: extend-stalled",
+      "forked: WholeTroutMedia",
+      "verified: exit-0"
+    ],
+    "has_code_reference": true,
+    "state": "open",
+    "created_at": "2026-10-26T13:42:45Z",
+    "html_url": "https://github.com/WholeTroutMedia/open-source-bounties/issues/2",
+    "hand_label": "not_code_change_external",
+    "hand_label_justification": "Third-party bounty broker linking to external solution vault behind paywall"
+  },
+  {
+    "task_id": "1",
+    "repo": "WholeTroutMedia/open-source-bounties",
+    "number": 1,
+    "title": "[Verified Fix Ready (Exit Code 0) - Sealed for Original Repo Owner & @jaharoni Review] Kludex/starlette#843 - Add Request.path_for and relative URL resolution alongside Request.url_for",
+    "body_preview": "## Staged Solution Vault & Maintainer Fast-Track Access\n\n> **Status**: **SOLVED & DETERMINISTICALLY VERIFIED (`Exit Code 0`) - STAGED FOR HUMAN REVIEW**\n>\n> **Private Review Staging**: While awaiting ",
+    "labels": [
+      "bounty-draft",
+      "difficulty: easy",
+      "audit: extend-stalled",
+      "forked: WholeTroutMedia",
+      "verified: exit-0"
+    ],
+    "has_code_reference": true,
+    "state": "open",
+    "created_at": "2026-10-26T13:42:41Z",
+    "html_url": "https://github.com/WholeTroutMedia/open-source-bounties/issues/1",
+    "hand_label": "not_code_change_external",
+    "hand_label_justification": "Third-party bounty broker linking to external solution vault behind paywall"
+  },
+  {
+    "task_id": "1962",
+    "repo": "limitlessprojects/Go-Hybrid",
+    "number": 1962,
+    "title": "Serial by default: safe execution first",
+    "body_preview": "### The idea, in a paragraph\n\nIn an opt-in closed fork-join scope, make task execution safe by default. Rather than reject tasks whenever shared-data independence cannot be proved, the compiler orders",
+    "labels": [
+      "💎 Bounty",
+      "wildcard"
+    ],
+    "has_code_reference": false,
+    "state": "open",
+    "created_at": "2026-10-26T23:47:30Z",
+    "html_url": "https://github.com/limitlessprojects/Go-Hybrid/issues/1962",
+    "hand_label": "needs_code_change",
+    "hand_label_justification": "Compiler concurrency feature: serial-by-default execution in fork-join scope"
+  },
+  {
+    "task_id": "1669",
+    "repo": "limitlessprojects/Go-Hybrid",
+    "number": 1669,
+    "title": "[wildcard] Structured Task Scopes & Affine Cancellation Tokens: eliminating goroutine leaks from GUARANTEES.md Row 12",
+    "body_preview": "### The idea, in a paragraph\n\nIntroduce lexically-bounded Structured Task Scopes (`scope { ... }` blocks) and Affine Cancellation Tokens into Hybrid, elevating concurrency from uncoordinated \"fire-and",
+    "labels": [
+      "💎 Bounty",
+      "wildcard"
+    ],
+    "has_code_reference": false,
+    "state": "open",
+    "created_at": "2026-10-25T08:30:52Z",
+    "html_url": "https://github.com/limitlessprojects/Go-Hybrid/issues/1669",
+    "hand_label": "needs_code_change",
+    "hand_label_justification": "Compiler language feature: structured task scopes and cancellation tokens"
+  },
+  {
+    "task_id": "757",
+    "repo": "limitlessprojects/Go-Hybrid",
+    "number": 757,
+    "title": "[wildcard] Kill libhyrt.a, cgo, and the 3-tier FFI bridge: AOT-transpile Rust boundary crates via wasm32 to pure bounds-checked Go (wasm2go linear-memory arenas per OwnHandle)",
+    "body_preview": "### The idea, in a paragraph\n\nEliminate libhyrt.a, cgo, and the 3-tier C ABI bridge (descriptors.md SMALL / DEFAULT / STACK_SWITCH) by compiling Rust boundary crates (serde_json, flate2, regex, sha2, ",
+    "labels": [
+      "💎 Bounty",
+      "wildcard"
+    ],
+    "has_code_reference": true,
+    "state": "open",
+    "created_at": "2026-10-19T02:10:37Z",
+    "html_url": "https://github.com/limitlessprojects/Go-Hybrid/issues/757",
+    "hand_label": "needs_code_change",
+    "hand_label_justification": "FFI compiler bridge refactoring: wasm2go AOT transpiler replacement"
+  },
+  {
+    "task_id": "695",
+    "repo": "limitlessprojects/Go-Hybrid",
+    "number": 695,
+    "title": "[wildcard] Eliminate the Checker/Emitter Semantic Split: Emit-Driven Verification via Explicit Desugared MIR (`hy-mir`)",
+    "body_preview": "### The idea, in a paragraph\n\nReplace the direct `hy-syntax (AST) -> hy-check` and `hy-syntax (AST) -> hy-emit` dual-interpretation pipeline with a single, explicit, desugared Mid-level Intermediate R",
+    "labels": [
+      "💎 Bounty",
+      "wildcard"
+    ],
+    "has_code_reference": false,
+    "state": "open",
+    "created_at": "2026-10-18T17:07:14Z",
+    "html_url": "https://github.com/limitlessprojects/Go-Hybrid/issues/695",
+    "hand_label": "needs_code_change",
+    "hand_label_justification": "Compiler architecture refactoring: desugared MIR pipeline implementation"
+  },
+  {
+    "task_id": "634",
+    "repo": "limitlessprojects/Go-Hybrid",
+    "number": 634,
+    "title": "[wildcard] Delete sendability analysis: task regions as serializable transactions",
+    "body_preview": "### The idea, in a paragraph\n\nReplace Hybrid's Tier-0 \"prove a value sendable\" rule only for an explicitly opted-in checked task region with a software-transactional shared-heap membrane. Each reachab",
+    "labels": [
+      "💎 Bounty",
+      "wildcard"
+    ],
+    "has_code_reference": false,
+    "state": "open",
+    "created_at": "2026-10-18T11:46:52Z",
+    "html_url": "https://github.com/limitlessprojects/Go-Hybrid/issues/634",
+    "hand_label": "needs_code_change",
+    "hand_label_justification": "Compiler analysis replacement: transactional memory regions for task scopes"
+  },
+  {
+    "task_id": "610",
+    "repo": "limitlessprojects/Go-Hybrid",
+    "number": 610,
+    "title": "[wildcard] Make FFI claims proof-carrying: verify boundary contracts against the linked Rust artifact",
+    "body_preview": "### The idea, in a paragraph\n\nStop treating a hand-written descriptor as evidence that a Rust export is safe to call. Make every Hybrid/Rust export carry a machine-checkable boundary contract generate",
+    "labels": [
+      "💎 Bounty",
+      "wildcard"
+    ],
+    "has_code_reference": true,
+    "state": "open",
+    "created_at": "2026-10-18T09:41:00Z",
+    "html_url": "https://github.com/limitlessprojects/Go-Hybrid/issues/610",
+    "hand_label": "needs_code_change",
+    "hand_label_justification": "Compiler verification feature: proof-carrying FFI contract validation"
+  },
+  {
+    "task_id": "605",
+    "repo": "limitlessprojects/Go-Hybrid",
+    "number": 605,
+    "title": "[wildcard]",
+    "body_preview": "### The idea, in a paragraph\n\nIntroduce an opt-in **Replayable Task Island** for Hybrid: a closed region of concurrent tasks that the compiler transforms into a deterministic, cooperatively scheduled ",
+    "labels": [
+      "💎 Bounty",
+      "wildcard"
+    ],
+    "has_code_reference": false,
+    "state": "open",
+    "created_at": "2026-10-18T09:07:30Z",
+    "html_url": "https://github.com/limitlessprojects/Go-Hybrid/issues/605",
+    "hand_label": "needs_code_change",
+    "hand_label_justification": "Compiler feature: replayable task island closed concurrency regions"
+  },
+  {
+    "task_id": "462",
+    "repo": "limitlessprojects/Go-Hybrid",
+    "number": 462,
+    "title": "[wildcard] Isolated WASM task cells: replace cross-task alias proofs with a wire boundary",
+    "body_preview": "### The idea, in a paragraph\n\nAdd an opt-in **isolated-cell backend** for coarse Hybrid tasks: compile each task entry point and its reachable Go code into a separate WebAssembly instance, with its ow",
+    "labels": [
+      "💎 Bounty",
+      "wildcard"
+    ],
+    "has_code_reference": false,
+    "state": "open",
+    "created_at": "2026-10-17T15:01:39Z",
+    "html_url": "https://github.com/limitlessprojects/Go-Hybrid/issues/462",
+    "hand_label": "needs_code_change",
+    "hand_label_justification": "Compiler backend feature: isolated WASM task cell wire boundary"
+  },
+  {
+    "task_id": "187",
+    "repo": "commonworld-one/commonworld",
+    "number": 187,
+    "title": "[Bug bounty] GET /v1/sections/{slug}/tags with an uppercase slug returns 404 route_not_found (not case-insensitive like the posts filter)",
+    "body_preview": "### Page URL or endpoint\n\nGET /v1/sections/{slug}/tags (https://staging.commonworld.one/v1/sections/General/tags)\n\n### What happened and what you expected\n\nReported by an independent AI assistant (age",
+    "labels": [
+      "bug",
+      "outside-signal"
+    ],
+    "has_code_reference": true,
+    "state": "open",
+    "created_at": "2026-10-27T17:33:54Z",
+    "html_url": "https://github.com/commonworld-one/commonworld/issues/187",
+    "hand_label": "needs_code_change",
+    "hand_label_justification": "API routing defect: make section tag slug matching case-insensitive"
+  },
+  {
+    "task_id": "186",
+    "repo": "commonworld-one/commonworld",
+    "number": 186,
+    "title": "[Bug bounty] GET /v1/posts: unknown `author` handle returns 200 with an empty list, while unknown `section`/`tag` now return 400",
+    "body_preview": "### Page URL or endpoint\n\nGET /v1/posts (https://staging.commonworld.one/v1/posts?author=nope)\n\n### What happened and what you expected\n\nReported by an independent AI assistant (agent) doing a read-on",
+    "labels": [
+      "bug",
+      "outside-signal"
+    ],
+    "has_code_reference": true,
+    "state": "open",
+    "created_at": "2026-10-27T17:33:29Z",
+    "html_url": "https://github.com/commonworld-one/commonworld/issues/186",
+    "hand_label": "needs_code_change",
+    "hand_label_justification": "API query validation fix: return 400 for unknown author handle in GET /v1/posts"
+  },
+  {
+    "task_id": "628",
+    "repo": "Ensrick/vermintide-2-tweaker",
+    "number": 628,
+    "title": "Unify synthetic weapon and salvage contracts",
+    "body_preview": "**Symptom:** Crafted synthetic weapons can equip/persist yet remain absent from Salvage; confirmed for placeholder-visual Dawi Maces.\n\n**Evidence:** VT2 weapon identity spans `ItemMasterList`, exact b",
+    "labels": [
+      "bug",
+      "cim",
+      "CWV",
+      "cross-mod",
+      "verify-fix",
+      "1-major",
+      "architecture"
+    ],
+    "has_code_reference": false,
+    "state": "open",
+    "created_at": "2026-07-15T18:14:09Z",
+    "html_url": "https://github.com/Ensrick/vermintide-2-tweaker/issues/628",
+    "hand_label": "needs_code_change",
+    "hand_label_justification": "Mod game script defect: unify synthetic weapon and salvage contracts"
+  },
+  {
+    "task_id": "11398",
+    "repo": "SecureBananaLabs/bug-bounty",
+    "number": 11398,
+    "title": "Automate Bug Detection and Reviews",
+    "body_preview": "Automate Low Hanging fruit bug detection and issue creation recursively.\n\nThis issue is an issue focused on creating more issues:\n1. Find a feature/bug to work on from this repository\n2. Create a GitH",
+    "labels": [
+      "bug",
+      "documentation",
+      "enhancement",
+      "good first issue",
+      "help wanted",
+      "bug bounty",
+      "AI agent friendly",
+      "bounty",
+      "💎 Bounty",
+      "$780",
+      "$1k",
+      "$1.2k"
+    ],
+    "has_code_reference": false,
+    "state": "open",
+    "created_at": "2026-07-25T09:51:18Z",
+    "html_url": "https://github.com/SecureBananaLabs/bug-bounty/issues/11398",
+    "hand_label": "not_code_change_process",
+    "hand_label_justification": "Meta issue asking to automate recursive bug detection and issue creation"
+  },
+  {
+    "task_id": "2850",
+    "repo": "SecureBananaLabs/bug-bounty",
+    "number": 2850,
+    "title": "upload endpoint accepts empty file submissions as successful uploads",
+    "body_preview": "## Bug\n\n`POST /api/uploads` currently returns `201` with `success: true` even when the multipart request does not include a `file` field. The response reports `status: \"no-file\"`, but it is still trea",
+    "labels": [
+      "bug",
+      "enhancement",
+      "good first issue",
+      "help wanted",
+      "bug bounty",
+      "AI agent friendly",
+      "bounty",
+      "💎 Bounty",
+      "$780"
+    ],
+    "has_code_reference": false,
+    "state": "open",
+    "created_at": "2026-05-31T12:42:16Z",
+    "html_url": "https://github.com/SecureBananaLabs/bug-bounty/issues/2850",
+    "hand_label": "needs_code_change",
+    "hand_label_justification": "API validation defect: reject empty multipart file uploads with 400"
+  },
+  {
+    "task_id": "2847",
+    "repo": "SecureBananaLabs/bug-bounty",
+    "number": 2847,
+    "title": "auth refresh endpoint issues tokens without verifying the requester",
+    "body_preview": "## Bug\n\n`POST /api/auth/refresh` currently issues a fresh access token without checking the requester at all. The service also signs that token for the hard-coded subject `usr_existing` with role `cli",
+    "labels": [
+      "bug",
+      "enhancement",
+      "good first issue",
+      "help wanted",
+      "bug bounty",
+      "AI agent friendly",
+      "bounty",
+      "💎 Bounty",
+      "$780"
+    ],
+    "has_code_reference": false,
+    "state": "open",
+    "created_at": "2026-05-31T12:35:50Z",
+    "html_url": "https://github.com/SecureBananaLabs/bug-bounty/issues/2847",
+    "hand_label": "needs_code_change",
+    "hand_label_justification": "Authentication security defect: verify requester identity in POST /api/auth/refresh"
+  },
+  {
+    "task_id": "2845",
+    "repo": "SecureBananaLabs/bug-bounty",
+    "number": 2845,
+    "title": "registerUser access token can reference a different user id",
+    "body_preview": "## Bug\n\n`registerUser()` currently builds the returned `id` and the JWT `sub` with two separate `Date.now()` calls. If time advances between those calls, the API can return one user id while signing a",
+    "labels": [
+      "bug",
+      "enhancement",
+      "good first issue",
+      "help wanted",
+      "bug bounty",
+      "AI agent friendly",
+      "bounty",
+      "💎 Bounty",
+      "$780"
+    ],
+    "has_code_reference": true,
+    "state": "open",
+    "created_at": "2026-05-31T12:31:25Z",
+    "html_url": "https://github.com/SecureBananaLabs/bug-bounty/issues/2845",
+    "hand_label": "needs_code_change",
+    "hand_label_justification": "Backend registration bug: fix Date.now() ID mismatch in registerUser"
+  },
+  {
+    "task_id": "2782",
+    "repo": "SecureBananaLabs/bug-bounty",
+    "number": 2782,
+    "title": "CORS configured without origin allowlist in app.js (reissue via #743)",
+    "body_preview": "## Security: Unrestricted CORS policy\n\n**Description:** The API currently uses `cors()` with no origin restrictions.\n\n**File:** `apps/api/src/app.js`\n\n**Current code:**\n```js\napp.use(cors());\n```\n\n**E",
+    "labels": [
+      "bug",
+      "enhancement",
+      "good first issue",
+      "help wanted",
+      "bug bounty",
+      "AI agent friendly",
+      "bounty",
+      "💎 Bounty",
+      "$780"
+    ],
+    "has_code_reference": true,
+    "state": "open",
+    "created_at": "2026-05-31T09:57:22Z",
+    "html_url": "https://github.com/SecureBananaLabs/bug-bounty/issues/2782",
+    "hand_label": "needs_code_change",
+    "hand_label_justification": "Security policy fix: configure origin allowlist for CORS in apps/api/src/app.js"
+  },
+  {
+    "task_id": "2779",
+    "repo": "SecureBananaLabs/bug-bounty",
+    "number": 2779,
+    "title": "POST /api/users endpoint missing authentication middleware (reissue via #743)",
+    "body_preview": "## Security: Unauthenticated user creation endpoint\n\n**Description:** The API exposes `POST /api/users` without auth middleware, allowing unauthenticated user creation.\n\n**File:** `apps/api/src/routes",
+    "labels": [
+      "bug",
+      "enhancement",
+      "good first issue",
+      "help wanted",
+      "bug bounty",
+      "AI agent friendly",
+      "bounty",
+      "💎 Bounty",
+      "$780"
+    ],
+    "has_code_reference": true,
+    "state": "open",
+    "created_at": "2026-05-31T09:50:31Z",
+    "html_url": "https://github.com/SecureBananaLabs/bug-bounty/issues/2779",
+    "hand_label": "needs_code_change",
+    "hand_label_justification": "Security route fix: add authentication middleware to POST /api/users"
+  },
+  {
+    "task_id": "2773",
+    "repo": "SecureBananaLabs/bug-bounty",
+    "number": 2773,
+    "title": "POST /api/proposals endpoint missing authentication middleware (reissue via #743)",
+    "body_preview": "## Security: Unauthenticated proposal creation endpoint\n\n**Description:** The API exposes `POST /api/proposals` without auth middleware, allowing unauthenticated users to create proposals.\n\n**File:** ",
+    "labels": [
+      "bug",
+      "enhancement",
+      "good first issue",
+      "help wanted",
+      "bug bounty",
+      "AI agent friendly",
+      "bounty",
+      "💎 Bounty",
+      "$780"
+    ],
+    "has_code_reference": true,
+    "state": "open",
+    "created_at": "2026-05-31T09:43:35Z",
+    "html_url": "https://github.com/SecureBananaLabs/bug-bounty/issues/2773",
+    "hand_label": "needs_code_change",
+    "hand_label_justification": "Security route fix: add authentication middleware to POST /api/proposals"
+  },
+  {
+    "task_id": "105015",
+    "repo": "Expensify/App",
+    "number": 105015,
+    "title": "[$175] Onboarding - Explain how to merge when \"We couldn't add [work email]\" blocks the user",
+    "body_preview": "## Problem\nSome users sign up with a phone number or a personal email. In onboarding, they then enter a work email that already has an Expensify account. They see the generic \"We couldn't add [email]\"",
+    "labels": [
+      "External",
+      "Daily"
+    ],
+    "has_code_reference": true,
+    "state": "open",
+    "created_at": "2026-10-26T14:49:35Z",
+    "html_url": "https://github.com/Expensify/App/issues/105015",
+    "hand_label": "needs_code_change",
+    "hand_label_justification": "Frontend onboarding UX: add error handling and merge instructions for existing email"
+  },
+  {
+    "task_id": "105012",
+    "repo": "Expensify/App",
+    "number": 105012,
+    "title": "[$175] Update okhttp",
+    "body_preview": "### Problem\n\nWe use `okhttp` and it has an update we should use.\n\n### Solution\n\nUpdate it\n\n<details><summary>Issue Owner</summary>Current Issue Owner: @TaduJR</details>\n<details><summary>Upwork Automa",
+    "labels": [
+      "Reviewing",
+      "External",
+      "Daily"
+    ],
+    "has_code_reference": false,
+    "state": "open",
+    "created_at": "2026-10-26T14:30:56Z",
+    "html_url": "https://github.com/Expensify/App/issues/105012",
+    "hand_label": "needs_code_change",
+    "hand_label_justification": "Dependency upgrade: update okhttp library in build manifests"
+  },
+  {
+    "task_id": "104909",
+    "repo": "Expensify/App",
+    "number": 104909,
+    "title": "[$175] Show the workspace default bank account first in the Pay menu",
+    "body_preview": "Coming from customer feedback @trjExpensify and I were discussing, let's show the workspace's default bank account first in NewDot's Pay menu.\n\n### Details\n\n- When multiple eligible accounts belong to",
+    "labels": [
+      "Reviewing",
+      "External",
+      "Weekly"
+    ],
+    "has_code_reference": false,
+    "state": "open",
+    "created_at": "2026-10-23T20:23:35Z",
+    "html_url": "https://github.com/Expensify/App/issues/104909",
+    "hand_label": "needs_code_change",
+    "hand_label_justification": "Frontend UI change: display workspace default bank account first in Pay menu"
+  },
+  {
+    "task_id": "104821",
+    "repo": "Expensify/App",
+    "number": 104821,
+    "title": "[$175] Copilot - Show the selected user and add a Next button to the Add copilot user-selection step",
+    "body_preview": "**Problem**\nWhen a user adds a copilot (Account > Security > Add copilot), tapping a user immediately opens the permission level step. The row never shows as selected, it can't be unselected, and ther",
+    "labels": [
+      "Reviewing",
+      "External",
+      "Weekly",
+      "Improvement"
+    ],
+    "has_code_reference": true,
+    "state": "open",
+    "created_at": "2026-10-23T07:49:56Z",
+    "html_url": "https://github.com/Expensify/App/issues/104821",
+    "hand_label": "needs_code_change",
+    "hand_label_justification": "Frontend UI feature: show selected copilot user and add explicit Next button"
+  },
+  {
+    "task_id": "104742",
+    "repo": "Expensify/App",
+    "number": 104742,
+    "title": "[Due for payment 2026-11-02] [$175] [Performance] Reduce Search re-renders when opening reports",
+    "body_preview": "## Objective\n\nReduce unnecessary Search row re-renders when opening a report to improve `ManualOpenReport`, particularly on slower machines.\n\nParent: https://github.com/Expensify/App/issues/77173\n\n[Sl",
+    "labels": [
+      "External",
+      "Daily",
+      "Overdue"
+    ],
+    "has_code_reference": false,
+    "state": "open",
+    "created_at": "2026-10-22T13:59:06Z",
+    "html_url": "https://github.com/Expensify/App/issues/104742",
+    "hand_label": "needs_code_change",
+    "hand_label_justification": "React performance optimization: eliminate unnecessary Search row re-renders"
+  },
+  {
+    "task_id": "104726",
+    "repo": "Expensify/App",
+    "number": 104726,
+    "title": "[$75] Track Concierge messages sent with FullStory custom event",
+    "body_preview": "## Problem\n\nFullStory can't see keyboard events on their own. When a user presses Enter to send a message to Concierge, the key press creates no other event that FullStory records. So we can't track w",
+    "labels": [
+      "Reviewing",
+      "External",
+      "Weekly",
+      "Improvement",
+      "Task"
+    ],
+    "has_code_reference": true,
+    "state": "open",
+    "created_at": "2026-10-22T12:51:14Z",
+    "html_url": "https://github.com/Expensify/App/issues/104726",
+    "hand_label": "needs_code_change",
+    "hand_label_justification": "Analytics telemetry addition: fire FullStory custom event on Concierge message send"
+  },
+  {
+    "task_id": "104579",
+    "repo": "Expensify/App",
+    "number": 104579,
+    "title": "[$175] [CFI] Show the \"Discard changes?\" modal when exiting the Create expense flow with unsaved edits",
+    "body_preview": "## Problem\nWhen you create an expense, it's easy to lose your work. For example, you add a receipt and start coding the expense on the confirmation page. Then you click outside the RHP or navigate awa",
+    "labels": [
+      "External",
+      "Daily",
+      "Improvement"
+    ],
+    "has_code_reference": false,
+    "state": "open",
+    "created_at": "2026-10-21T14:04:42Z",
+    "html_url": "https://github.com/Expensify/App/issues/104579",
+    "hand_label": "needs_code_change",
+    "hand_label_justification": "Frontend navigation guard: show Discard changes modal on unsaved expense edit exit"
+  },
+  {
+    "task_id": "104530",
+    "repo": "Expensify/App",
+    "number": 104530,
+    "title": "[$175] Migrate ShareActionHandlerModule to Nitro",
+    "body_preview": "[ShareActionHandlerModule](https://github.com/Expensify/App/blob/main/src/libs/ShareActionHandlerModule/index.ts) is a legacy module using the Old Arch compatibility layer (i.e: eagerly loaded on star",
+    "labels": [
+      "Reviewing",
+      "External",
+      "Weekly"
+    ],
+    "has_code_reference": true,
+    "state": "open",
+    "created_at": "2026-10-21T05:53:55Z",
+    "html_url": "https://github.com/Expensify/App/issues/104530",
+    "hand_label": "needs_code_change",
+    "hand_label_justification": "Architecture migration: migrate legacy ShareActionHandlerModule to Nitro modules"
+  },
+  {
+    "task_id": "104505",
+    "repo": "Expensify/App",
+    "number": 104505,
+    "title": "[$250] [Sentry: APP-N5H] HybridApp Android: native tab bar crashes with more than 6 items",
+    "body_preview": "## Sentry\n\nhttps://expensify.sentry.io/issues/APP-N5H\n\n## Impact (snapshot at filing)\n\n- Users (total since first seen): 39\n- Events: 143\n- Users (last 14d, all versions): 39\n- Users (last 14d, produc",
+    "labels": [
+      "Reviewing",
+      "External",
+      "Weekly"
+    ],
+    "has_code_reference": true,
+    "state": "open",
+    "created_at": "2026-10-20T20:11:15Z",
+    "html_url": "https://github.com/Expensify/App/issues/104505",
+    "hand_label": "needs_code_change",
+    "hand_label_justification": "Mobile Android defect: fix native tab bar crash when item count exceeds 6"
+  },
+  {
+    "task_id": "104504",
+    "repo": "Expensify/App",
+    "number": 104504,
+    "title": "[$175] [Sentry: APP-JVF] Web: useSidebarOrderedReports setState loop, \"Maximum update depth exceeded\"",
+    "body_preview": "## Sentry\n\nhttps://expensify.sentry.io/issues/APP-JVF\n\n## Impact (snapshot at filing)\n\n- Users (total since first seen): 68\n- Events: 110\n- Users (last 14d, all versions): 20\n- Users (last 14d, produc",
+    "labels": [
+      "External",
+      "Daily",
+      "Overdue"
+    ],
+    "has_code_reference": true,
+    "state": "open",
+    "created_at": "2026-10-20T20:11:06Z",
+    "html_url": "https://github.com/Expensify/App/issues/104504",
+    "hand_label": "needs_code_change",
+    "hand_label_justification": "React hook defect: eliminate infinite setState loop in useSidebarOrderedReports"
+  }
+]

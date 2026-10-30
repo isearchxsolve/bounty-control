@@ -1,0 +1,482 @@
+[
+  {
+    "repo": "alfrexo95/bounty-bot",
+    "number": 51,
+    "title": "💰 Bounty Seguro (Ver enlace): 💰 Bounty Seguro (Ver enlace): 💰 Bounty Seguro (Ver",
+    "expected": "not_code_change_external",
+    "admitted": false,
+    "reason": "REFUSED_NOT_A_CODE_CHANGE: external: title matches external patterns"
+  },
+  {
+    "repo": "tine1117/oss-hunter-livefire",
+    "number": 1,
+    "title": "parse_duration drops the days (d) unit",
+    "expected": "needs_code_change",
+    "admitted": true,
+    "reason": "needs_code_change"
+  },
+  {
+    "repo": "PG-AGI/toingg-jarvis",
+    "number": 13,
+    "title": "[Feature]:  Cross-platform packaging and native installers for Windows, Linux, a",
+    "expected": "needs_code_change",
+    "admitted": true,
+    "reason": "needs_code_change"
+  },
+  {
+    "repo": "PG-AGI/toingg-jarvis",
+    "number": 11,
+    "title": "[Feature]:  Integrate Pipecat with Gemini API for real-time voice and multimodal",
+    "expected": "needs_code_change",
+    "admitted": true,
+    "reason": "needs_code_change"
+  },
+  {
+    "repo": "SecureBananaLabs/bug-bounty",
+    "number": 29,
+    "title": "Implement a fully functional Admin Panel",
+    "expected": "needs_code_change",
+    "admitted": true,
+    "reason": "needs_code_change"
+  },
+  {
+    "repo": "UnsafeLabs/RFC-5322",
+    "number": 1,
+    "title": "[bounty $400] Implement ABNF-compliant email address parser with full §3.2–§4.4 ",
+    "expected": "needs_code_change",
+    "admitted": true,
+    "reason": "needs_code_change"
+  },
+  {
+    "repo": "ClankerNation/OpenAgents",
+    "number": 202,
+    "title": "[ Bounty $8k ] [ API ] Add structured error responses with error codes — securit",
+    "expected": "needs_code_change",
+    "admitted": true,
+    "reason": "needs_code_change"
+  },
+  {
+    "repo": "ClankerNation/OpenAgents",
+    "number": 201,
+    "title": "[ Bounty $7k ] [ Solidity ] Fix Timelock queued transactions can be executed aft",
+    "expected": "needs_code_change",
+    "admitted": true,
+    "reason": "needs_code_change"
+  },
+  {
+    "repo": "ClankerNation/OpenAgents",
+    "number": 200,
+    "title": "[ Bounty $2k ] [ API ] Fix ratelimit.py doesn't differentiate authenticated vs a",
+    "expected": "needs_code_change",
+    "admitted": true,
+    "reason": "needs_code_change"
+  },
+  {
+    "repo": "ClankerNation/OpenAgents",
+    "number": 199,
+    "title": "[ Bounty $3k ] [ SDK ] Add contract deployment helpers to SDK — code review find",
+    "expected": "needs_code_change",
+    "admitted": true,
+    "reason": "needs_code_change"
+  },
+  {
+    "repo": "MyZubster-Ecosystem/myzubster",
+    "number": 1668,
+    "title": "[ONION / FEDERATION] Voluntary privacy-first registry of independent MyZubster T",
+    "expected": "not_code_change_process",
+    "admitted": true,
+    "reason": "unclear_fail_open"
+  },
+  {
+    "repo": "momoponwork1415-lgtm/wordpress-bounty-harness",
+    "number": 633,
+    "title": "#629 段階 1 PR 3: 本番 20 対象 k=2 で v14-wide と比べる",
+    "expected": "not_code_change_process",
+    "admitted": true,
+    "reason": "unclear_fail_open"
+  },
+  {
+    "repo": "tmsteph/3dvr-portal",
+    "number": 3285,
+    "title": "Open-source contribution candidate: Hacker Fab",
+    "expected": "not_code_change_external",
+    "admitted": true,
+    "reason": "unclear_fail_open"
+  },
+  {
+    "repo": "MyZubster-Ecosystem/myzubster",
+    "number": 1665,
+    "title": "[ONION PILOT] Integrate MyZubster homepage with restored Tor v3 endpoint (Wasim ",
+    "expected": "not_code_change_process",
+    "admitted": true,
+    "reason": "needs_code_change"
+  },
+  {
+    "repo": "bujiproject-art/agentmidasopendevteam",
+    "number": 163,
+    "title": "Availability inquiry: USD 100 FAQ Manager bounty",
+    "expected": "not_code_change_process",
+    "admitted": false,
+    "reason": "REFUSED_NOT_A_CODE_CHANGE: process: title matches process patterns"
+  },
+  {
+    "repo": "me-fake-you/clearsheet-offers",
+    "number": 3,
+    "title": "Revenue reset: prioritize verified cashflow over infrastructure",
+    "expected": "not_code_change_process",
+    "admitted": true,
+    "reason": "unclear_fail_open"
+  },
+  {
+    "repo": "Zoverions/AXIOM-MESH",
+    "number": 1575,
+    "title": "Watch findings integration backlog — architecture/security conformance",
+    "expected": "not_code_change_process",
+    "admitted": true,
+    "reason": "unclear_fail_open"
+  },
+  {
+    "repo": "limitlessprojects/Go-Hybrid",
+    "number": 940,
+    "title": "Triage Board (auto-updated daily — pin me)",
+    "expected": "not_code_change_process",
+    "admitted": true,
+    "reason": "needs_code_change"
+  },
+  {
+    "repo": "limitlessprojects/Go-Hybrid",
+    "number": 2064,
+    "title": "[soundness] hy-emit: O8 slot loan with parenthesized base (&(m)[k]) returns empt",
+    "expected": "needs_code_change",
+    "admitted": true,
+    "reason": "needs_code_change"
+  },
+  {
+    "repo": "SlopDotCash/slopdotcash",
+    "number": 1467,
+    "title": "Owner steps after the 26 October finish pass",
+    "expected": "not_code_change_process",
+    "admitted": true,
+    "reason": "unclear_fail_open"
+  },
+  {
+    "repo": "kellan/outlanders2-wiki",
+    "number": 62,
+    "title": "Icon extraction still needed: game-composited tiles, need icons, frames and a fe",
+    "expected": "not_code_change_external",
+    "admitted": true,
+    "reason": "needs_code_change"
+  },
+  {
+    "repo": "lometur/HearthDAoC",
+    "number": 157,
+    "title": "Bot arc: gamebots get and choose good period gear and weapons",
+    "expected": "needs_code_change",
+    "admitted": true,
+    "reason": "needs_code_change"
+  },
+  {
+    "repo": "ddboy19912/bonded",
+    "number": 244,
+    "title": "Realistic attacks: break agents before attackers do (scoring, realistic jobs, tr",
+    "expected": "not_code_change_process",
+    "admitted": true,
+    "reason": "needs_code_change"
+  },
+  {
+    "repo": "oll4com/spaceapp",
+    "number": 65,
+    "title": "[$450] One command to run the full SpaceApp stack from source for contributors",
+    "expected": "needs_code_change",
+    "admitted": true,
+    "reason": "needs_code_change"
+  },
+  {
+    "repo": "oll4com/spaceapp",
+    "number": 64,
+    "title": "[$400] Per-service container images: ship each image only the code and dependenc",
+    "expected": "needs_code_change",
+    "admitted": true,
+    "reason": "needs_code_change"
+  },
+  {
+    "repo": "oll4com/spaceapp",
+    "number": 63,
+    "title": "[$600] Support rootless Podman as a container engine in the run-spaceapp launche",
+    "expected": "needs_code_change",
+    "admitted": true,
+    "reason": "needs_code_change"
+  },
+  {
+    "repo": "oll4com/spaceapp",
+    "number": 62,
+    "title": "[$750] WebGL renderer for the 3D memory graph: 50,000 nodes at interactive frame",
+    "expected": "needs_code_change",
+    "admitted": true,
+    "reason": "needs_code_change"
+  },
+  {
+    "repo": "oll4com/spaceapp",
+    "number": 61,
+    "title": "[$600] Export worker and workflow spans over OTLP: one trace from API request to",
+    "expected": "needs_code_change",
+    "admitted": true,
+    "reason": "needs_code_change"
+  },
+  {
+    "repo": "oll4com/spaceapp",
+    "number": 60,
+    "title": "[$400] Test every Temporal workflow on a real time-skipping test server and gate",
+    "expected": "needs_code_change",
+    "admitted": true,
+    "reason": "needs_code_change"
+  },
+  {
+    "repo": "outerbase/starbasedb",
+    "number": 71,
+    "title": "Improve test coverage with Vitest",
+    "expected": "needs_code_change",
+    "admitted": true,
+    "reason": "needs_code_change"
+  },
+  {
+    "repo": "WholeTroutMedia/open-source-bounties",
+    "number": 2,
+    "title": "[Verified Fix Ready (Exit Code 0) - Sealed for Original Repo Owner & @jaharoni R",
+    "expected": "not_code_change_external",
+    "admitted": true,
+    "reason": "needs_code_change"
+  },
+  {
+    "repo": "WholeTroutMedia/open-source-bounties",
+    "number": 1,
+    "title": "[Verified Fix Ready (Exit Code 0) - Sealed for Original Repo Owner & @jaharoni R",
+    "expected": "not_code_change_external",
+    "admitted": true,
+    "reason": "needs_code_change"
+  },
+  {
+    "repo": "limitlessprojects/Go-Hybrid",
+    "number": 1962,
+    "title": "Serial by default: safe execution first",
+    "expected": "needs_code_change",
+    "admitted": true,
+    "reason": "unclear_fail_open"
+  },
+  {
+    "repo": "limitlessprojects/Go-Hybrid",
+    "number": 1669,
+    "title": "[wildcard] Structured Task Scopes & Affine Cancellation Tokens: eliminating goro",
+    "expected": "needs_code_change",
+    "admitted": true,
+    "reason": "unclear_fail_open"
+  },
+  {
+    "repo": "limitlessprojects/Go-Hybrid",
+    "number": 757,
+    "title": "[wildcard] Kill libhyrt.a, cgo, and the 3-tier FFI bridge: AOT-transpile Rust bo",
+    "expected": "needs_code_change",
+    "admitted": true,
+    "reason": "unclear_fail_open"
+  },
+  {
+    "repo": "limitlessprojects/Go-Hybrid",
+    "number": 695,
+    "title": "[wildcard] Eliminate the Checker/Emitter Semantic Split: Emit-Driven Verificatio",
+    "expected": "needs_code_change",
+    "admitted": true,
+    "reason": "unclear_fail_open"
+  },
+  {
+    "repo": "limitlessprojects/Go-Hybrid",
+    "number": 634,
+    "title": "[wildcard] Delete sendability analysis: task regions as serializable transaction",
+    "expected": "needs_code_change",
+    "admitted": true,
+    "reason": "unclear_fail_open"
+  },
+  {
+    "repo": "limitlessprojects/Go-Hybrid",
+    "number": 610,
+    "title": "[wildcard] Make FFI claims proof-carrying: verify boundary contracts against the",
+    "expected": "needs_code_change",
+    "admitted": true,
+    "reason": "unclear_fail_open"
+  },
+  {
+    "repo": "limitlessprojects/Go-Hybrid",
+    "number": 605,
+    "title": "[wildcard]",
+    "expected": "needs_code_change",
+    "admitted": true,
+    "reason": "unclear_fail_open"
+  },
+  {
+    "repo": "limitlessprojects/Go-Hybrid",
+    "number": 462,
+    "title": "[wildcard] Isolated WASM task cells: replace cross-task alias proofs with a wire",
+    "expected": "needs_code_change",
+    "admitted": true,
+    "reason": "unclear_fail_open"
+  },
+  {
+    "repo": "commonworld-one/commonworld",
+    "number": 187,
+    "title": "[Bug bounty] GET /v1/sections/{slug}/tags with an uppercase slug returns 404 rou",
+    "expected": "needs_code_change",
+    "admitted": true,
+    "reason": "needs_code_change"
+  },
+  {
+    "repo": "commonworld-one/commonworld",
+    "number": 186,
+    "title": "[Bug bounty] GET /v1/posts: unknown `author` handle returns 200 with an empty li",
+    "expected": "needs_code_change",
+    "admitted": true,
+    "reason": "needs_code_change"
+  },
+  {
+    "repo": "Ensrick/vermintide-2-tweaker",
+    "number": 628,
+    "title": "Unify synthetic weapon and salvage contracts",
+    "expected": "needs_code_change",
+    "admitted": true,
+    "reason": "needs_code_change"
+  },
+  {
+    "repo": "SecureBananaLabs/bug-bounty",
+    "number": 11398,
+    "title": "Automate Bug Detection and Reviews",
+    "expected": "not_code_change_process",
+    "admitted": true,
+    "reason": "needs_code_change"
+  },
+  {
+    "repo": "SecureBananaLabs/bug-bounty",
+    "number": 2850,
+    "title": "upload endpoint accepts empty file submissions as successful uploads",
+    "expected": "needs_code_change",
+    "admitted": true,
+    "reason": "needs_code_change"
+  },
+  {
+    "repo": "SecureBananaLabs/bug-bounty",
+    "number": 2847,
+    "title": "auth refresh endpoint issues tokens without verifying the requester",
+    "expected": "needs_code_change",
+    "admitted": true,
+    "reason": "needs_code_change"
+  },
+  {
+    "repo": "SecureBananaLabs/bug-bounty",
+    "number": 2845,
+    "title": "registerUser access token can reference a different user id",
+    "expected": "needs_code_change",
+    "admitted": true,
+    "reason": "needs_code_change"
+  },
+  {
+    "repo": "SecureBananaLabs/bug-bounty",
+    "number": 2782,
+    "title": "CORS configured without origin allowlist in app.js (reissue via #743)",
+    "expected": "needs_code_change",
+    "admitted": true,
+    "reason": "needs_code_change"
+  },
+  {
+    "repo": "SecureBananaLabs/bug-bounty",
+    "number": 2779,
+    "title": "POST /api/users endpoint missing authentication middleware (reissue via #743)",
+    "expected": "needs_code_change",
+    "admitted": true,
+    "reason": "needs_code_change"
+  },
+  {
+    "repo": "SecureBananaLabs/bug-bounty",
+    "number": 2773,
+    "title": "POST /api/proposals endpoint missing authentication middleware (reissue via #743",
+    "expected": "needs_code_change",
+    "admitted": true,
+    "reason": "needs_code_change"
+  },
+  {
+    "repo": "Expensify/App",
+    "number": 105015,
+    "title": "[$175] Onboarding - Explain how to merge when \"We couldn't add [work email]\" blo",
+    "expected": "needs_code_change",
+    "admitted": true,
+    "reason": "unclear_fail_open"
+  },
+  {
+    "repo": "Expensify/App",
+    "number": 105012,
+    "title": "[$175] Update okhttp",
+    "expected": "needs_code_change",
+    "admitted": true,
+    "reason": "unclear_fail_open"
+  },
+  {
+    "repo": "Expensify/App",
+    "number": 104909,
+    "title": "[$175] Show the workspace default bank account first in the Pay menu",
+    "expected": "needs_code_change",
+    "admitted": true,
+    "reason": "unclear_fail_open"
+  },
+  {
+    "repo": "Expensify/App",
+    "number": 104821,
+    "title": "[$175] Copilot - Show the selected user and add a Next button to the Add copilot",
+    "expected": "needs_code_change",
+    "admitted": true,
+    "reason": "needs_code_change"
+  },
+  {
+    "repo": "Expensify/App",
+    "number": 104742,
+    "title": "[Due for payment 2026-11-02] [$175] [Performance] Reduce Search re-renders when ",
+    "expected": "needs_code_change",
+    "admitted": true,
+    "reason": "needs_code_change"
+  },
+  {
+    "repo": "Expensify/App",
+    "number": 104726,
+    "title": "[$75] Track Concierge messages sent with FullStory custom event",
+    "expected": "needs_code_change",
+    "admitted": true,
+    "reason": "unclear_fail_open"
+  },
+  {
+    "repo": "Expensify/App",
+    "number": 104579,
+    "title": "[$175] [CFI] Show the \"Discard changes?\" modal when exiting the Create expense f",
+    "expected": "needs_code_change",
+    "admitted": true,
+    "reason": "unclear_fail_open"
+  },
+  {
+    "repo": "Expensify/App",
+    "number": 104530,
+    "title": "[$175] Migrate ShareActionHandlerModule to Nitro",
+    "expected": "needs_code_change",
+    "admitted": true,
+    "reason": "needs_code_change"
+  },
+  {
+    "repo": "Expensify/App",
+    "number": 104505,
+    "title": "[$250] [Sentry: APP-N5H] HybridApp Android: native tab bar crashes with more tha",
+    "expected": "needs_code_change",
+    "admitted": true,
+    "reason": "unclear_fail_open"
+  },
+  {
+    "repo": "Expensify/App",
+    "number": 104504,
+    "title": "[$175] [Sentry: APP-JVF] Web: useSidebarOrderedReports setState loop, \"Maximum u",
+    "expected": "needs_code_change",
+    "admitted": true,
+    "reason": "unclear_fail_open"
+  }
+]
