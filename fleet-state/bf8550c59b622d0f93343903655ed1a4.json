@@ -1,0 +1,39 @@
+{
+  "task_id": "bf8550c59b622d0f93343903655ed1a4",
+  "repo": "tezos-contrib/gitcoin-bounties",
+  "issue_number": 4,
+  "status": "DISPATCHING",
+  "dispatch_id": "d98e4bf438b848dfbf15b3992e1936e6",
+  "admission": {
+    "funding": {
+      "amount": "7500",
+      "currency": "USD",
+      "usd_value": "7500",
+      "quote": {
+        "basis": "USD face value"
+      },
+      "raw": "$7,500",
+      "source_url": "https://github.com/tezos-contrib/gitcoin-bounties/issues/4",
+      "payer": "Jantinine"
+    },
+    "technical_signals": [
+      "distributed",
+      "issued",
+      "protocol"
+    ],
+    "component_references": [],
+    "source_locations": [],
+    "engineering_evidence_sources": [
+      "https://github.com/tezos-contrib/gitcoin-bounties/issues/4"
+    ],
+    "source_issue": "https://github.com/tezos-contrib/gitcoin-bounties/issues/4",
+    "fetched_at": "2026-10-30T17:22:15.952443+00:00"
+  },
+  "lanes": [
+    "founder",
+    "normal"
+  ],
+  "dispatched_at": "2026-10-30T17:22:17.293163+00:00",
+  "attempt": 0,
+  "updated_at": "2026-10-30T17:22:17.293180+00:00"
+}
