@@ -1,0 +1,40 @@
+{
+  "task_id": "ad4605399dad32426a1b7292cd87d043",
+  "repo": "xmtplabs/ethshanghai-2022",
+  "issue_number": 2,
+  "status": "DISPATCHING",
+  "dispatch_id": "febcfb3b2f424e8baba7dc6e7fb1c608",
+  "admission": {
+    "funding": {
+      "amount": "2500.0",
+      "currency": "ETH",
+      "usd_value": "5535737.5000",
+      "quote": {
+        "usd_rate": "2214.295",
+        "source_url": "https://api.coinbase.com/v2/prices/ETH-USD/spot",
+        "observed_at": "2026-10-30T14:39:39.696796+00:00",
+        "quote_date": null
+      },
+      "raw": "ETH 2.5k",
+      "source_url": "https://github.com/xmtplabs/ethshanghai-2022/issues/2",
+      "payer": "saulmc"
+    },
+    "technical_signals": [
+      "protocol"
+    ],
+    "component_references": [],
+    "source_locations": [],
+    "engineering_evidence_sources": [
+      "https://github.com/xmtplabs/ethshanghai-2022/issues/2"
+    ],
+    "source_issue": "https://github.com/xmtplabs/ethshanghai-2022/issues/2",
+    "fetched_at": "2026-10-30T14:39:39.628057+00:00"
+  },
+  "lanes": [
+    "founder",
+    "normal"
+  ],
+  "dispatched_at": "2026-10-30T14:39:41.007273+00:00",
+  "attempt": 0,
+  "updated_at": "2026-10-30T14:39:41.007294+00:00"
+}
