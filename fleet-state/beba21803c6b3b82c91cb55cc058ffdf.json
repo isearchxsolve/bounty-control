@@ -2,7 +2,7 @@
   "task_id": "beba21803c6b3b82c91cb55cc058ffdf",
   "repo": "galacticcouncil/amsterdot-bounties-2022",
   "issue_number": 1,
-  "status": "CLAIMED",
+  "status": "REJECTED_PREPARATION",
   "dispatch_id": "b914d5d981a34fa3ba86668718738f99",
   "admission": {
     "funding": {
@@ -32,7 +32,7 @@
   ],
   "dispatched_at": "2026-10-30T14:08:37.242376+00:00",
   "attempt": 2,
-  "updated_at": "2026-10-30T14:08:51.017228+00:00",
+  "updated_at": "2026-10-30T14:15:03.771921+00:00",
   "owner": "41069251019:1",
   "previous_owner": "41065219737:1",
   "previous_status": "DISPATCHED",
@@ -45,8 +45,8 @@
   "retryable": true,
   "diagnostic": "Cline deliverable invalid at /tmp/fleet-artifacts/delivery-supervisor/ebbf0cb6e1d548ddb9cfb0eef6d931af.preparation.json: invalid base_sha: ''",
   "path": "/tmp/fleet-artifacts/delivery-supervisor/ebbf0cb6e1d548ddb9cfb0eef6d931af.preparation.json",
-  "reason": "invalid base_sha: ''",
-  "at": "2026-10-30T13:44:21.287733+00:00",
+  "reason": "Cline preparation blocked: Issue #1 'Create UI for NFT Auctions (Basilisk)' is a 2022 bounty/hackathon announcement, not a concrete code change to this repository. It asks contestants to build a NEW Basilisk NFT-auction UI plus indexing middleware in their own public repos and submit it via PR carrying team name/size/contact, a BSX payout address, a description, links to the external repos and a 5-min video. The repository galacticcouncil/amsterdot-bounties-2022 is completely EMPTY: GitHub API reports size=0, contents/ returns 404 'This repository is empty.', branches=[] , languages={}, git/refs returns 409 'Git Repository is empty.', and a real clone produces branch main with no commits (rev-parse HEAD fails). Therefore there is no source code, manifest, lockfile, CI workflow, AGENTS.md or reproducible defect in this repository to fix. The submission window closed June 20 2022 with winners notified in June 2022, so the claim/funding is not live; the $150,000 is the referenced Polkadot-treasury shared prize pool, not a dev bounty on this repo. There are 0 pull requests (all states) and 0 branches; issue #5 'KodaDot: Basilisk NFT marketplace implementation' is a closed competing submission. This is a grant/proposal/product-idea request with expired submissions, so per the classification rule it is blocked and the checkout is left unchanged.",
+  "at": "2026-10-30T14:14:49.499647+00:00",
   "failures": [
     {
       "run_url": "https://github.com/isearchxsolve/bounty-control/actions/runs/41065219737",
@@ -59,5 +59,25 @@
       "at": "2026-10-30T13:44:21.287733+00:00"
     }
   ],
-  "finished_at": "2026-10-30T13:44:30.387851+00:00"
+  "finished_at": "2026-10-30T14:15:02.798948+00:00",
+  "declared_reason": "Issue #1 'Create UI for NFT Auctions (Basilisk)' is a 2022 bounty/hackathon announcement, not a concrete code change to this repository. It asks contestants to build a NEW Basilisk NFT-auction UI plus indexing middleware in their own public repos and submit it via PR carrying team name/size/contact, a BSX payout address, a description, links to the external repos and a 5-min video. The repository galacticcouncil/amsterdot-bounties-2022 is completely EMPTY: GitHub API reports size=0, contents/ returns 404 'This repository is empty.', branches=[] , languages={}, git/refs returns 409 'Git Repository is empty.', and a real clone produces branch main with no commits (rev-parse HEAD fails). Therefore there is no source code, manifest, lockfile, CI workflow, AGENTS.md or reproducible defect in this repository to fix. The submission window closed June 20 2022 with winners notified in June 2022, so the claim/funding is not live; the $150,000 is the referenced Polkadot-treasury shared prize pool, not a dev bounty on this repo. There are 0 pull requests (all states) and 0 branches; issue #5 'KodaDot: Basilisk NFT marketplace implementation' is a closed competing submission. This is a grant/proposal/product-idea request with expired submissions, so per the classification rule it is blocked and the checkout is left unchanged.",
+  "evidence": {
+    "action": "blocked",
+    "worktree": "/tmp/bounty-workspaces/repos/galacticcouncil--amsterdot-bounties-2022--1",
+    "base_sha": "4b825dc642cb6eb9a060e54bf8d69288fbee4904",
+    "default_branch": "main",
+    "sources": [],
+    "run_url": "",
+    "admission": {
+      "amount": "150000",
+      "currency": "USD",
+      "usd_value": "150000",
+      "quote": {
+        "basis": "USD face value"
+      },
+      "raw": "$150,000",
+      "source_url": "https://github.com/galacticcouncil/amsterdot-bounties-2022/issues/1",
+      "payer": "cl0w5"
+    }
+  }
 }
