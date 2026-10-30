@@ -1316,8 +1316,12 @@ def discover(lanes, max_dispatches=2, live=False, queries_per_lane=2, state_dir=
                 candidate["size_kb"] = repository_size_kb(api, repo, size_cache)
                 if not hydrate_only:
                     candidate["velocity_24h"] = repository_velocity(api, repo, velocity_cache)
+                # hydrate-only runs never measure velocity (they run on the REST/GraphQL
+                # core budget, not the search API), so this must read through .get. Direct
+                # indexing raised KeyError('velocity_24h') the moment the drainer finally had
+                # candidates to drain - see test_hydrate_only_path.py for the full account.
                 candidate["preparation_budget_seconds"] = preparation_budget_seconds(
-                    candidate["velocity_24h"])
+                    candidate.get("velocity_24h"))
             candidates = dict(sorted(candidates.items(), key=candidate_sort_key))
             for identity, candidate in candidates.items():
                 if len(dispatched) >= min(max_dispatches, headroom):

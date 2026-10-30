@@ -8,7 +8,7 @@ says so in the same voice as what is.
 
 ## 1. Verdict in one paragraph
 
-The **code is repaired and green** (473 tests local, CI green on `02b8a3c`, eight repairs landed
+The **code is repaired and green** (nine repairs, 477 tests local, CI green on `02b8a3c`, nine repairs landed
 tonight, five workflows active). The **schedule has never fired once** — every run in the repo's
 history is a `push` or a `workflow_dispatch` I triggered by hand (`push=6, workflow_dispatch=4`,
 zero `schedule`). The **funnel is alive and honest but empty**: a live run searched 680 issues
@@ -73,12 +73,20 @@ actions-contracts.yml  on every push                     -> the contract test wa
 | 6 | `ebc5a52` | difficulty and urgency were separate sorts; neither alone is a strategy | `two_edged_score = min(hard, burn) + 0.25*burn`; 15 tests |
 | 7 | `02b8a3c` | none of the three new test modules was in the CI list | run `41014254815` executes 12 + 11 + 11 tests inside CI |
 | 8 | `b3eed93` | the durable queue was two silos: discovery wrote `discovery-*`, hydration read `hydration-*` | hydration run `41016832562` reads `queued_total_pending: 33` — the exact rows discovery queued |
+| 9 | (this commit) | that same run then died `KeyError: 'velocity_24h'`: the drain indexes a field hydrate-only runs never measure | `scripts/test_hydrate_only_path.py` (4 tests) + a clean drain on the next run |
 
-Repair 8 is the most consequential. Measured before it: discovery run `41015165018` reported
+Repairs 8 and 9 masked each other, which is the clearest lesson of the night. Repair 8 is the most consequential. Measured before it: discovery run `41015165018` reported
 `pending_hydration: 890`; hydration run `41015801660` then reported `queued_total_pending: 0` and
 drained nothing. Two state directories (`/tmp/bounty-discovery`, `/tmp/bounty-hydration`) behind
 two cache prefixes. The drainer could never see what the finder found, so every discovery run
 rediscovered from scratch and burned the search budget it believed it was saving.
+
+Repair 8 then exposed repair 9, because the two defects hid each other. The empty queue meant the
+drain loop body never executed, so nobody ever hit `KeyError: 'velocity_24h'` - an index into a
+field that hydrate-only runs deliberately never measure, three lines below a comment explaining
+that they never measure it. The moment the queue was joined, run `41016832562` saw 33 rows, entered
+the loop, and failed. A drain that reports success while doing nothing and a drain that crashes on
+contact look identical from the outside: both produce zero dispatches.
 
 ---
 
