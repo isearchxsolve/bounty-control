@@ -2,7 +2,7 @@
   "task_id": "475d1d09e065fdc5d4969d5cb70ddac6",
   "repo": "Yof3ng/picker",
   "issue_number": 53,
-  "status": "CLAIMED",
+  "status": "REJECTED_PREPARATION",
   "dispatch_id": "c242e0d1f07746c6876f9e69f37548e8",
   "admission": {
     "funding": {
@@ -40,7 +40,7 @@
   ],
   "dispatched_at": "2026-10-30T15:14:41.259797+00:00",
   "attempt": 1,
-  "updated_at": "2026-10-30T15:14:52.932605+00:00",
+  "updated_at": "2026-10-30T15:18:17.804003+00:00",
   "owner": "41078897847:1",
   "previous_owner": null,
   "previous_status": "DISPATCHED",
@@ -48,5 +48,57 @@
   "harness_sha": "122af062685a0bd1f1d161d9c42a07300819cc15",
   "claimed_at": "2026-10-30T15:14:52.932550+00:00",
   "lease_expires_at": "2026-10-30T19:19:52.932565+00:00",
-  "preparation_budget_seconds": 14400
+  "preparation_budget_seconds": 14400,
+  "at": "2026-10-30T15:18:01.312567+00:00",
+  "reason": "Cline preparation blocked: Non-engineering issue: #53 is an auto-generated daily content post, not a request for a concrete code change. Title '[\u6bcf\u65e5\u4fe1\u606f\u6d41] 2023-04-25' (Daily information feed). Label 'daily', author_association OWNER, state open, 0 comments. The entire 42,406-character body is a markdown checklist of third-party security/blog links grouped by source (e.g. Malwarebytes Labs, Security Affairs, SAP Blogs, \u5b89\u5168\u8109\u640f) with no defect, no reproduction steps, no feature request, no acceptance criteria and no code-level maintenance request. The repository is a Python RSS-aggregation + push bot (README.md: '\u4e00\u4e2a\u65b9\u4fbf\u83b7\u53d6\u6bcf\u65e5\u5b89\u5168\u8d44\u8baf\u7684\u722c\u866b\u548c\u63a8\u9001\u7a0b\u5e8f'); this issue is one of thousands of identical automated posts (see issues #288-#302 alternating '[\u6bcf\u65e5\u4fe1\u606f\u6d41]'/label daily and '[\u6bcf\u65e5\u7cbe\u9009]'/label dailypick). Issue #53 timeline has only 'labeled/mentioned/subscribed' events; there is no funding, bounty or claim comment, and there is no FUNDING.yml (HTTP 404). No competing pull request exists (search is:pr is:open => total_count 0). The context admission.technical_signals (bug, bug_bounty, bypass, cryptography, distributed, overflow, performance) and component_references ('ETHOS') appear nowhere in the issue text and are spurious. Repo has no test suite and no CI (HEAD commit 4a268af 'Delete .github/workflows directory'). No code change is warranted; per policy the checkout is left unchanged and no PR/branch is created.",
+  "declared_reason": "Non-engineering issue: #53 is an auto-generated daily content post, not a request for a concrete code change. Title '[\u6bcf\u65e5\u4fe1\u606f\u6d41] 2023-04-25' (Daily information feed). Label 'daily', author_association OWNER, state open, 0 comments. The entire 42,406-character body is a markdown checklist of third-party security/blog links grouped by source (e.g. Malwarebytes Labs, Security Affairs, SAP Blogs, \u5b89\u5168\u8109\u640f) with no defect, no reproduction steps, no feature request, no acceptance criteria and no code-level maintenance request. The repository is a Python RSS-aggregation + push bot (README.md: '\u4e00\u4e2a\u65b9\u4fbf\u83b7\u53d6\u6bcf\u65e5\u5b89\u5168\u8d44\u8baf\u7684\u722c\u866b\u548c\u63a8\u9001\u7a0b\u5e8f'); this issue is one of thousands of identical automated posts (see issues #288-#302 alternating '[\u6bcf\u65e5\u4fe1\u606f\u6d41]'/label daily and '[\u6bcf\u65e5\u7cbe\u9009]'/label dailypick). Issue #53 timeline has only 'labeled/mentioned/subscribed' events; there is no funding, bounty or claim comment, and there is no FUNDING.yml (HTTP 404). No competing pull request exists (search is:pr is:open => total_count 0). The context admission.technical_signals (bug, bug_bounty, bypass, cryptography, distributed, overflow, performance) and component_references ('ETHOS') appear nowhere in the issue text and are spurious. Repo has no test suite and no CI (HEAD commit 4a268af 'Delete .github/workflows directory'). No code change is warranted; per policy the checkout is left unchanged and no PR/branch is created.",
+  "evidence": {
+    "action": "blocked",
+    "worktree": "/tmp/bounty-workspaces/repos/Yof3ng--picker--53",
+    "base_sha": "4a268af78ed31982f869725788980a3e2ccd9d5a",
+    "default_branch": "master",
+    "sources": [
+      {
+        "path": "README.md",
+        "sha256": "1962b4b04aba89281e8c1c3c7c013fc615f1909ec2e657e5afdc3a31d7baa0b7"
+      },
+      {
+        "path": "requirements.txt",
+        "sha256": "0bd080de6e0416d13591bb124ecde53fcd8bed8b91c3cce93caccf2405837639"
+      },
+      {
+        "path": "install.sh",
+        "sha256": "083bab9e9054241c2386e1abeaab8efd473e49b9ef872799d24b1742e86f2bdb"
+      },
+      {
+        "path": "config.yml",
+        "sha256": "95d4e8ee9a22dd4b897b7ce3dd9edfa1f3fa0e91ddac583bc19b3a19baf2f97f"
+      },
+      {
+        "path": "yarb.py",
+        "sha256": "87a2d7531e8d407bc789446cb7823eeb09843dff40fa21223e222998d9cc1fd0"
+      },
+      {
+        "path": "bot.py",
+        "sha256": "8744822811b3d26784685419285d21d3a9529b5d4daac70a758f91f1352ea819"
+      },
+      {
+        "path": "utils.py",
+        "sha256": "5c08284c9f885f91d7de59493feaf7be0c5020af96e236c02a44db8f5a884e2a"
+      }
+    ],
+    "run_url": "",
+    "admission": {
+      "amount": "600",
+      "currency": "USD",
+      "usd_value": "600",
+      "quote": {
+        "basis": "USD face value"
+      },
+      "raw": "600$",
+      "source_url": "https://github.com/Yof3ng/picker/issues/53",
+      "payer": "Yof3ng"
+    }
+  },
+  "finished_at": "2026-10-30T15:18:17.045180+00:00"
 }
