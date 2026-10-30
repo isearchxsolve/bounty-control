@@ -2,7 +2,7 @@
   "task_id": "49253b5a9b99bc7332f6c28400048958",
   "repo": "intuition-box/Liquid-Democracy",
   "issue_number": 2,
-  "status": "DISPATCHED",
+  "status": "CLAIMED",
   "dispatch_id": "28b7566e31ed41d59b424b132bea45f4",
   "admission": {
     "funding": {
@@ -34,6 +34,14 @@
     "founder"
   ],
   "dispatched_at": "2026-10-30T15:40:02.075970+00:00",
-  "attempt": 0,
-  "updated_at": "2026-10-30T15:40:03.717628+00:00"
+  "attempt": 1,
+  "updated_at": "2026-10-30T15:40:18.419213+00:00",
+  "owner": "41082816638:1",
+  "previous_owner": null,
+  "previous_status": "DISPATCHED",
+  "run_url": "https://github.com/isearchxsolve/bounty-control/actions/runs/41082816638",
+  "harness_sha": "806c4513bded47674edf64dd33ab93dd48e82d8c",
+  "claimed_at": "2026-10-30T15:40:18.419163+00:00",
+  "lease_expires_at": "2026-10-30T19:45:18.419177+00:00",
+  "preparation_budget_seconds": 14400
 }
