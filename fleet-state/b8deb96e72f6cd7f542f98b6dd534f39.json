@@ -1,0 +1,36 @@
+{
+  "task_id": "b8deb96e72f6cd7f542f98b6dd534f39",
+  "repo": "better-feedback/better-commons",
+  "issue_number": 3,
+  "status": "DISPATCHING",
+  "dispatch_id": "fd8c389486f74ba78f2eb4dfd0eaae47",
+  "admission": {
+    "funding": {
+      "amount": "500",
+      "currency": "USD",
+      "usd_value": "500",
+      "quote": {
+        "basis": "USD face value"
+      },
+      "raw": "500 USD",
+      "source_url": "https://github.com/better-feedback/better-commons/issues/3",
+      "payer": "seichris"
+    },
+    "technical_signals": [
+      "issue"
+    ],
+    "component_references": [],
+    "source_locations": [],
+    "engineering_evidence_sources": [
+      "https://github.com/better-feedback/better-commons/issues/3#issuecomment-1167410504"
+    ],
+    "source_issue": "https://github.com/better-feedback/better-commons/issues/3",
+    "fetched_at": "2026-10-30T09:38:48.404791+00:00"
+  },
+  "lanes": [
+    "normal"
+  ],
+  "dispatched_at": "2026-10-30T09:38:50.058359+00:00",
+  "attempt": 0,
+  "updated_at": "2026-10-30T09:38:50.058378+00:00"
+}
