@@ -8,6 +8,7 @@ row that is not real is the false positive this door exists to stop.
 import json
 import os
 import re
+import shutil
 import tempfile
 import unittest
 from unittest import mock
@@ -27,6 +28,8 @@ def setUpModule():
 def tearDownModule():
     if _PROFILE_PATCH is not None:
         _PROFILE_PATCH.stop()
+    if os.path.exists("W"):
+        shutil.rmtree("W", ignore_errors=True)
 
 
 ISSUE = {
@@ -296,9 +299,8 @@ class UnpricedLeadStream(unittest.TestCase):
     """The unpriced rows must survive the run as a file, not just a printed line."""
 
     def _workdir(self):
-        import tempfile
         workdir = tempfile.mkdtemp()
-        self.addCleanup(lambda: __import__("shutil").rmtree(workdir, ignore_errors=True))
+        self.addCleanup(lambda: shutil.rmtree(workdir, ignore_errors=True))
         return workdir
 
     def test_leads_are_written_to_their_own_file(self):
@@ -345,6 +347,10 @@ def offline_verify(rows, limit=12):
 class FeedbackLoop(unittest.TestCase):
     """Cline is not judged once and dismissed: refusals come back to it as instructions."""
 
+    def setUp(self):
+        self.workdir = tempfile.mkdtemp()
+        self.addCleanup(lambda: shutil.rmtree(self.workdir, ignore_errors=True))
+
     def test_a_refusal_reason_reaches_the_agents_next_round(self):
         prompts = []
         rounds = [
@@ -356,7 +362,7 @@ class FeedbackLoop(unittest.TestCase):
             prompts.append(prompt)
             return rounds[len(prompts) - 1]
 
-        result = door.iterate("W", rounds=3, run=run, verify=offline_verify)
+        result = door.iterate(self.workdir, rounds=3, run=run, verify=offline_verify)
         self.assertEqual(len(prompts), 2, "one correction round")
         self.assertIn("REWARD_QUOTE_NOT_IN_ISSUE", prompts[1])
         self.assertIn("acme/http#7", prompts[1])
@@ -369,7 +375,7 @@ class FeedbackLoop(unittest.TestCase):
             calls.append(prompt)
             return {"exit_code": 0, "rows": [row()], "tail": "", "wrote_file": True}
 
-        result = door.iterate("W", rounds=5, run=run, verify=offline_verify)
+        result = door.iterate(self.workdir, rounds=5, run=run, verify=offline_verify)
         self.assertEqual(len(calls), 1, "a clean round needs no correction")
         self.assertEqual(len(result["admitted"]), 1)
 
@@ -381,7 +387,7 @@ class FeedbackLoop(unittest.TestCase):
             return {"exit_code": 0, "rows": [row(reward_quote="still paraphrased")],
                     "tail": "", "wrote_file": True}
 
-        result = door.iterate("W", rounds=3, run=run, verify=offline_verify)
+        result = door.iterate(self.workdir, rounds=3, run=run, verify=offline_verify)
         self.assertEqual(len(calls), 3)
         self.assertEqual(result["admitted"], [])
         self.assertEqual(result["refused"][0]["reason"], "REWARD_QUOTE_NOT_IN_ISSUE")
@@ -405,7 +411,7 @@ class FeedbackLoop(unittest.TestCase):
                 return {"admitted": [rounds[0]["rows"][0]], "refused": [{"row": row(issue=8), "reason": "ISSUE_NOT_OPEN"}]}
             return {"admitted": [rounds[1]["rows"][0], rounds[1]["rows"][1]], "refused": []}
 
-        result = door.iterate("W", rounds=3, run=run, verify=verify)
+        result = door.iterate(self.workdir, rounds=3, run=run, verify=verify)
         issues = sorted(r["issue"] for r in result["admitted"])
         self.assertEqual(issues, [7, 8], "no duplicate rows after correction")
 
@@ -417,7 +423,6 @@ class FeedbackLoop(unittest.TestCase):
         compounding. The loop now re-appends admitted rows before the next round runs.
         """
         import json
-        import tempfile
 
         workdir = tempfile.mkdtemp()
         self.addCleanup(lambda: __import__("shutil").rmtree(workdir, ignore_errors=True))
@@ -445,7 +450,6 @@ class FeedbackLoop(unittest.TestCase):
 
     def test_the_merge_does_not_duplicate_a_row_the_agent_resubmits(self):
         import json
-        import tempfile
 
         workdir = tempfile.mkdtemp()
         self.addCleanup(lambda: __import__("shutil").rmtree(workdir, ignore_errors=True))
@@ -545,7 +549,8 @@ class FreshStart(unittest.TestCase):
             prompts.append(prompt)
             return {"exit_code": 0, "rows": [row()], "tail": "", "wrote_file": True}
 
-        door.iterate("W", rounds=1, run=run, verify=offline_verify)
+        with tempfile.TemporaryDirectory() as tmp_w:
+            door.iterate(tmp_w, rounds=1, run=run, verify=offline_verify)
         self.assertTrue(prompts[0].startswith(door.FRESH_START))
 
 
@@ -631,8 +636,9 @@ class EngineParity(unittest.TestCase):
             seen.update(kwargs.get("env") or {})
             return FakeProcess([])
 
-        with mock.patch.object(door, "prepare_profile", lambda *a, **k: True),                 mock.patch.object(door.subprocess, "Popen", fake):
-            door.run_cline_search("W")
+        with tempfile.TemporaryDirectory() as tmp_w:
+            with mock.patch.object(door, "prepare_profile", lambda *a, **k: True),                     mock.patch.object(door.subprocess, "Popen", fake):
+                door.run_cline_search(tmp_w)
         self.assertTrue(seen["CLINE_PROVIDER_SETTINGS_PATH"].endswith("providers.json"))
 
 

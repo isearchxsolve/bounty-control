@@ -1119,7 +1119,9 @@ def queue_agent_rows(con, api, rows, verdicts=None, pending_has_seen_at=True):
         item = dict(issue)
         item["repository_url"] = f"https://api.github.com/repos/{repo}"
         item["number"] = number
-        identity = store_pending_item(con, item, AGENT_LANE, AGENT_EXPRESSION,
+        lane = row.get("lane") or AGENT_LANE
+        expression = row.get("expression") or AGENT_EXPRESSION
+        identity = store_pending_item(con, item, lane, expression,
                                      verdicts or {}, pending_has_seen_at)
         queued.append(identity)
     con.commit()
@@ -1300,6 +1302,16 @@ def discover(lanes, max_dispatches=2, live=False, queries_per_lane=2, state_dir=
                                          pending_has_seen_at=any(
                                              row[1] == "seen_at"
                                              for row in con.execute("PRAGMA table_info(pending)")))
+                    try:
+                        import cline_entry_door
+                        founder_leads = cline_entry_door.ingest_founder_watch_leads()
+                        if founder_leads:
+                            queue_agent_rows(con, api, founder_leads, verdicts={},
+                                             pending_has_seen_at=any(
+                                                 row[1] == "seen_at"
+                                                 for row in con.execute("PRAGMA table_info(pending)")))
+                    except Exception:
+                        pass
                 except Exception as exc:  # the door never takes discovery down with it
                     print(json.dumps({"phase": "AGENT_DOOR", "error": type(exc).__name__,
                                       "detail": str(exc)[:300]}), flush=True)

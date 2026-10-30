@@ -83,6 +83,14 @@ class AgentRowsAreReFetched(unittest.TestCase):
         self.assertEqual((lane, expression),
                          (actions_dispatch.AGENT_LANE, actions_dispatch.AGENT_EXPRESSION))
 
+    def test_founder_lane_is_recorded_when_provided(self):
+        con = database()
+        api = FakeApi({"a/b#7": issue(7)})
+        result = actions_dispatch.queue_agent_rows(con, api, [{"repo": "a/b", "issue": 7, "lane": "founder"}])
+        self.assertEqual(len(result["queued"]), 1)
+        row = con.execute("SELECT lanes FROM pending").fetchone()
+        self.assertEqual(json.loads(row[0]), ["founder"])
+
 
 if __name__ == "__main__":
     unittest.main()

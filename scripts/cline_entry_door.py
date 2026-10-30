@@ -311,16 +311,24 @@ def verify_rows(rows: List[dict], fetch: Optional[Callable[[str, int], Optional[
             refused.append({"row": row, "reason": "REWARD_QUOTE_NOT_IN_ISSUE"})
             continue
 
+        author_assoc = str(issue.get("author_association") or issue.get("authorAssociation") or "").upper()
+        is_founder = (author_assoc == "OWNER") or bool(row.get("is_founder_wound"))
+        lane = "founder" if is_founder else "bounty"
+
         if not quote_states_an_amount(quote):
             # Real intent, missing figure. Quarantined, never counted as a refusal.
             unpriced.append({"row": row, "reason": "REWARD_QUOTE_HAS_NO_AMOUNT",
                              "repo": repo, "issue": number,
+                             "lane": lane,
+                             "author_association": author_assoc,
                              "url": row.get("url") or f"https://github.com/{repo}/issues/{number}",
                              "reward_quote": quote, "why_now": row.get("why_now")})
             continue
 
         admitted.append({"repo": repo, "issue": number, "url": row.get("url") or
                          f"https://github.com/{repo}/issues/{number}",
+                         "lane": lane,
+                         "author_association": author_assoc,
                          "reward_quote": quote, "reward_usd": row.get("reward_usd"),
                          "scope_quote": row.get("scope_quote"), "why_now": row.get("why_now")})
     return {"admitted": admitted, "refused": refused, "unpriced": unpriced}
@@ -359,10 +367,12 @@ DOMAIN = """This pipeline turns GitHub issues into delivered fixes for the money
 author promises. A paid task must be: an open issue, on a repository that actually merges outside
 work, that asks for engineering (code, tests, fixes) rather than writing or events or opinions,
 and whose reward is stated in figures inside the issue itself - "I will pay" with no number is not
-a reward, and a figure hidden behind a link is not a figure. The gates below are the acceptance
-criteria; aim every row at them. Do not exclude a row to be safe: submit anything that
-plausibly meets these criteria, and the gates will verify each one exactly and tell you which
-failed. How you find rows is entirely your choice.
+a reward, and a figure hidden behind a link is not a figure. In addition to direct bounties,
+critical production outages announced by repository owners (author_association: OWNER) are
+high-priority engineering leads: record them quoting the owner's statement of the breakdown.
+The gates below are the acceptance criteria; aim every row at them. Do not exclude a row to be
+safe: submit anything that plausibly meets these criteria, and the gates will verify each one
+exactly and tell you which failed. How you find rows is entirely your choice.
 """
 
 
@@ -567,6 +577,48 @@ def iterate(workdir: str, rounds: int = 3, run=run_cline_search, verify=verify_r
 
 
 UNPRICED_LEADS = "unpriced-leads.jsonl"
+FOUNDER_WATCH_STATE = r"D:\anonym\war-log\roadmap\founders-watch-state.json"
+
+
+def ingest_founder_watch_leads(state_path: Optional[str] = None) -> List[dict]:
+    """Ingest leads discovered by the continuous founders-watch listener.
+
+    Reads owner-authored wounds from the listener ledger and formats them as qualified leads.
+    """
+    path = state_path or os.environ.get("FOUNDER_WATCH_STATE", FOUNDER_WATCH_STATE)
+    if not os.path.exists(path):
+        return []
+    try:
+        with open(path, encoding="utf-8") as f:
+            data = json.load(f)
+    except (OSError, ValueError):
+        return []
+    leads = []
+    for item in data.get("seen", []):
+        if "#" not in item:
+            continue
+        parts = item.split("#")
+        repo, num_str = parts[0], parts[1]
+        try:
+            num = int(num_str)
+        except ValueError:
+            continue
+        leads.append({
+            "repo": repo,
+            "issue": num,
+            "lane": "founder",
+            "author_association": "OWNER",
+            "reason": "FOUNDER_WATCH_OWNER_WOUND",
+            "url": f"https://github.com/{repo}/issues/{num}",
+            "reward_quote": "Production outage announced by repository owner",
+            "scope_quote": "Fix critical defect for repository founder",
+            "why_now": "Repository owner announced outage/defect on GitHub",
+            "is_code_task": True,
+        })
+    return leads
+
+
+
 
 
 def write_unpriced_leads(workdir: str, unpriced: List[dict]) -> str:
@@ -601,6 +653,8 @@ def write_unpriced_leads(workdir: str, unpriced: List[dict]) -> str:
             continue
         existing.add(key)
         added.append({"repo": entry.get("repo"), "issue": entry.get("issue"),
+                      "lane": entry.get("lane") or "bounty",
+                      "author_association": entry.get("author_association"),
                       "url": entry.get("url"), "reward_quote": entry.get("reward_quote"),
                       "why_now": entry.get("why_now"),
                       "reason": entry.get("reason")})
