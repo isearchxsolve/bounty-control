@@ -2,7 +2,7 @@
   "task_id": "38d0a12ad70c1c6f6fb74f112f6230e9",
   "repo": "Tyaoo/picker",
   "issue_number": 1474,
-  "status": "CLAIMED",
+  "status": "REJECTED_PREPARATION",
   "dispatch_id": "00be5b781b6e45c4b298d4dbe8eaa724",
   "admission": {
     "funding": {
@@ -36,7 +36,7 @@
   ],
   "dispatched_at": "2026-10-30T16:15:54.980646+00:00",
   "attempt": 1,
-  "updated_at": "2026-10-30T16:16:10.866805+00:00",
+  "updated_at": "2026-10-30T16:19:45.388685+00:00",
   "owner": "41088298692:1",
   "previous_owner": null,
   "previous_status": "DISPATCHED",
@@ -44,5 +44,41 @@
   "harness_sha": "433c7a4bb1b65ef59acd912e931ae740b043ed32",
   "claimed_at": "2026-10-30T16:16:10.866756+00:00",
   "lease_expires_at": "2026-10-30T20:21:10.866769+00:00",
-  "preparation_budget_seconds": 14400
+  "preparation_budget_seconds": 14400,
+  "at": "2026-10-30T16:19:19.580773+00:00",
+  "reason": "Cline preparation blocked: Issue #1474 ('[\u6bcf\u65e5\u4fe1\u606f\u6d41] 2026-08-11', label 'daily', 25086-char body) is NOT a code-change request. It is an auto-generated daily RSS/information-feed digest: a flat markdown list of external security-news/blog links with unchecked [ ] boxes. It states no defect, no reproducer, no feature, no file/component, and no engineering ask. Root cause is the project's own CI: .github/workflows/daily.yml:40 runs `gh issue create --title \"[\u6bcf\u65e5\u4fe1\u606f\u6d41] $(date +'%Y-%m-%d')\" -F today.md --label \"daily\"`, so these issues are produced mechanically every day. Evidence it is non-engineering: (1) the only label on the issue is 'daily'; (2) GitHub search `repo:Tyaoo/picker 1474 type:pr` returns total_count 0, i.e. no PR (competing or otherwise) and nothing to fix; (3) the admission 'technical_signals' are false keyword matches inside feed TITLES (e.g. the Microsoft blog post 'DeadLock ransomware...', 'Exploit for Use After Free', password-database headlines) and the '$1,000 / USD face value' 'funding' is text-scraped from a single link title 'They Gave Me $1,000 After I Found Their Entire Student Database Exposed!' - there is no live bounty; payer 'Tyaoo' is the account that posts the digest. This matches the 'documentation/marketing/content deliverable' + 'no repository change' + withdrawn/spurious-funding block criteria. Checkout left unchanged; no tools installed, no branch fix/bounty-1474 created, no edits made.",
+  "declared_reason": "Issue #1474 ('[\u6bcf\u65e5\u4fe1\u606f\u6d41] 2026-08-11', label 'daily', 25086-char body) is NOT a code-change request. It is an auto-generated daily RSS/information-feed digest: a flat markdown list of external security-news/blog links with unchecked [ ] boxes. It states no defect, no reproducer, no feature, no file/component, and no engineering ask. Root cause is the project's own CI: .github/workflows/daily.yml:40 runs `gh issue create --title \"[\u6bcf\u65e5\u4fe1\u606f\u6d41] $(date +'%Y-%m-%d')\" -F today.md --label \"daily\"`, so these issues are produced mechanically every day. Evidence it is non-engineering: (1) the only label on the issue is 'daily'; (2) GitHub search `repo:Tyaoo/picker 1474 type:pr` returns total_count 0, i.e. no PR (competing or otherwise) and nothing to fix; (3) the admission 'technical_signals' are false keyword matches inside feed TITLES (e.g. the Microsoft blog post 'DeadLock ransomware...', 'Exploit for Use After Free', password-database headlines) and the '$1,000 / USD face value' 'funding' is text-scraped from a single link title 'They Gave Me $1,000 After I Found Their Entire Student Database Exposed!' - there is no live bounty; payer 'Tyaoo' is the account that posts the digest. This matches the 'documentation/marketing/content deliverable' + 'no repository change' + withdrawn/spurious-funding block criteria. Checkout left unchanged; no tools installed, no branch fix/bounty-1474 created, no edits made.",
+  "evidence": {
+    "action": "blocked",
+    "worktree": "/tmp/bounty-workspaces/repos/Tyaoo--picker--1474",
+    "base_sha": "f1d886f585e807e82f84da6123f4858ef365f461",
+    "default_branch": "main",
+    "sources": [
+      {
+        "path": "requirements.txt",
+        "sha256": "0bd080de6e0416d13591bb124ecde53fcd8bed8b91c3cce93caccf2405837639"
+      },
+      {
+        "path": "config.yml",
+        "sha256": "970754f21ec94c92c68bb241c94a5c84eeafec2937d0a4da9892be01fb2bc7e0"
+      },
+      {
+        "path": ".github/workflows/daily.yml",
+        "sha256": "60042e008e529bb95dc2c11b487b77e0f2fdf1b7b3a26b6599ce18787089d309"
+      }
+    ],
+    "run_url": "",
+    "admission": {
+      "amount": "1000",
+      "currency": "USD",
+      "usd_value": "1000",
+      "quote": {
+        "basis": "USD face value"
+      },
+      "raw": "$1,000",
+      "source_url": "https://github.com/Tyaoo/picker/issues/1474",
+      "payer": "Tyaoo"
+    }
+  },
+  "finished_at": "2026-10-30T16:19:44.846881+00:00"
 }
