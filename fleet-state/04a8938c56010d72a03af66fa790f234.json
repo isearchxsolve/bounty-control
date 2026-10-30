@@ -2,7 +2,7 @@
   "task_id": "04a8938c56010d72a03af66fa790f234",
   "repo": "lessuselesss/bounty-crawl",
   "issue_number": 1,
-  "status": "CLAIMED",
+  "status": "REJECTED_PREPARATION",
   "dispatch_id": "28130053ef5545c9bbb11121e847b0af",
   "admission": {
     "funding": {
@@ -35,7 +35,7 @@
   ],
   "dispatched_at": "2026-10-30T17:09:24.540668+00:00",
   "attempt": 1,
-  "updated_at": "2026-10-30T17:09:36.053711+00:00",
+  "updated_at": "2026-10-30T17:14:31.297395+00:00",
   "owner": "41096328722:1",
   "previous_owner": null,
   "previous_status": "DISPATCHED",
@@ -43,5 +43,53 @@
   "harness_sha": "36da4d1f58379020b816cc66cdfa95772df51f6f",
   "claimed_at": "2026-10-30T17:09:36.053662+00:00",
   "lease_expires_at": "2026-10-30T21:14:36.053676+00:00",
-  "preparation_budget_seconds": 14400
+  "preparation_budget_seconds": 14400,
+  "at": "2026-10-30T17:13:57.368337+00:00",
+  "reason": "Cline preparation blocked: Issue #1 is a coverage-growth PROPOSAL that explicitly asks for acceptance before any code change, not a concrete engineering request. Exact text: 'I can prepare a PR with the organization additions if this proposal is accepted.' and 'Let me know if you'd like me to proceed with creating the PR!' It contains a multi-week 'Implementation Proposal' (Phase 1/2/3) and 'Validation Completed - Analyzed GitHub activity', i.e. proposal/market material. There is NO live funding: the $75,000 in admission.funding is derived verbatim from the issue's own speculative impact bullet 'Estimated Additional Value: $15,000-$75,000'. The issue has no bounty label (repo labels are only bug/documentation/duplicate/enhancement/good first issue/help wanted/invalid/question/wontfix), no FUNDING.yml, no funding-platform link, and only one bot auto-claim comment ('Auto-claim: I'm taking this on', mudaly10-coder, 2025-10-19). The proposal is also obsolete: default branch main already ships 91 organizations (data/organizations.json total_organizations=91, 91 actual entries; README states '91+ organizations'), which already exceeds the requested 40->58. And the owner already implemented this exact feature: commit 5739f6550fd93fb368d658d8dcc0d2ffebcb6987 'feat: expand scraper coverage with 18 validated organizations' on branch origin/expand-organizations-18, cross-referenced from issue #1 (event 'referenced' at 2025-09-24T02:31:28Z, actor lessuselesss). No product edits were made; the checkout was left on main.",
+  "declared_reason": "Issue #1 is a coverage-growth PROPOSAL that explicitly asks for acceptance before any code change, not a concrete engineering request. Exact text: 'I can prepare a PR with the organization additions if this proposal is accepted.' and 'Let me know if you'd like me to proceed with creating the PR!' It contains a multi-week 'Implementation Proposal' (Phase 1/2/3) and 'Validation Completed - Analyzed GitHub activity', i.e. proposal/market material. There is NO live funding: the $75,000 in admission.funding is derived verbatim from the issue's own speculative impact bullet 'Estimated Additional Value: $15,000-$75,000'. The issue has no bounty label (repo labels are only bug/documentation/duplicate/enhancement/good first issue/help wanted/invalid/question/wontfix), no FUNDING.yml, no funding-platform link, and only one bot auto-claim comment ('Auto-claim: I'm taking this on', mudaly10-coder, 2025-10-19). The proposal is also obsolete: default branch main already ships 91 organizations (data/organizations.json total_organizations=91, 91 actual entries; README states '91+ organizations'), which already exceeds the requested 40->58. And the owner already implemented this exact feature: commit 5739f6550fd93fb368d658d8dcc0d2ffebcb6987 'feat: expand scraper coverage with 18 validated organizations' on branch origin/expand-organizations-18, cross-referenced from issue #1 (event 'referenced' at 2025-09-24T02:31:28Z, actor lessuselesss). No product edits were made; the checkout was left on main.",
+  "evidence": {
+    "action": "blocked",
+    "worktree": "/tmp/bounty-workspaces/repos/lessuselesss--bounty-crawl--1",
+    "base_sha": "b4f92bc9b6c1fe975a579f817de9484921836336",
+    "default_branch": "main",
+    "sources": [
+      {
+        "path": "deno.json",
+        "sha256": "eb44ba3aed9db34986a5b3cd1f2ce2b3d948b6dbc353a6ff919eacf26caf619c"
+      },
+      {
+        "path": "deno.lock",
+        "sha256": "ab8e9e09ce713713c67f0ef326b9c3ea80ad83cf1aa0c0c3cb20563980627072"
+      },
+      {
+        "path": "config/scraper-config.json",
+        "sha256": "b986fc59cf4db2530049d8b6698316ef1d1a853e112eedfa2f711276ba357208"
+      },
+      {
+        "path": "data/organizations.json",
+        "sha256": "719a79daf98e0efd772c44040803e2bbd30f198952b127f4cfb6be0ad15a2416"
+      },
+      {
+        "path": ".github/workflows/full-scrape.yml",
+        "sha256": "b23acf9023f64b5f414d269fe7194b3892312e4564d06733a805a3182615be27"
+      },
+      {
+        "path": "src/index.ts",
+        "sha256": "5c5a2dab5b02f55a048ccc80ac9b6e4945861528a52526cda2bfb65b13ce97c2"
+      }
+    ],
+    "run_url": "",
+    "admission": {
+      "amount": "75000",
+      "currency": "USD",
+      "usd_value": "75000",
+      "quote": {
+        "basis": "USD face value"
+      },
+      "raw": "$75,000",
+      "source_url": "https://github.com/lessuselesss/bounty-crawl/issues/1",
+      "payer": "lessuselesss"
+    }
+  },
+  "finished_at": "2026-10-30T17:14:30.789358+00:00"
 }
