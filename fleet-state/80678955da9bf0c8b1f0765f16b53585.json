@@ -2,8 +2,8 @@
   "task_id": "80678955da9bf0c8b1f0765f16b53585",
   "repo": "TigerVNC/tigervnc",
   "issue_number": 398,
-  "status": "FAILED_DELIVERABLE_MISSING",
-  "dispatch_id": "6ec00632bc614066b2ed760fdc681fec",
+  "status": "DISPATCHING",
+  "dispatch_id": "f752d5b71dce40458ffb0863c34156a2",
   "admission": {
     "funding": {
       "amount": "250",
@@ -31,16 +31,16 @@
       "https://github.com/TigerVNC/tigervnc/issues/398#issuecomment-322790403"
     ],
     "source_issue": "https://github.com/TigerVNC/tigervnc/issues/398",
-    "fetched_at": "2026-10-30T13:05:44.655441+00:00"
+    "fetched_at": "2026-10-30T13:21:44.439423+00:00"
   },
   "lanes": [
     "founder",
     "normal",
     "programs"
   ],
-  "dispatched_at": "2026-10-30T13:05:46.561670+00:00",
+  "dispatched_at": "2026-10-30T13:21:46.179150+00:00",
   "attempt": 2,
-  "updated_at": "2026-10-30T13:18:20.677828+00:00",
+  "updated_at": "2026-10-30T13:21:46.179169+00:00",
   "owner": "41060408738:1",
   "previous_owner": "41042320457:1",
   "previous_status": "DISPATCHED",
