@@ -47,3 +47,49 @@ and the independently re-fetched issues are the proof.
 ## Next
 Wire the door into discovery, and put `scaffold_workspace`, the engine flag set and the amount guard
 behind tests in CI (43 door tests pass locally, no network).
+
+## Second round: autonomy, on Baba's order (2026-10-30 ~15:30-16:00 UTC)
+
+Order: "do not handcuff Cline, let it exercise full autonomy; external validation gates are there
+to guard and feed feedback to it."
+
+**Removed from the brief** (they were judgements written as instructions): the numbered first step,
+the list of `gh search` commands, and the digests/hackathons/design-only taxonomy.
+**Kept:** environment facts (no source code here, `gh` authenticated, the shell is PowerShell) and
+the output contract `shortlist.jsonl`, because code needs an interface at all.
+**Gates:** unchanged, and the feedback now states what each check means instead of a repair script.
+
+### Local proof with no recipe
+`D:\tmp\scout-auto.log` (run-a09ef17a2c): 4 `gh search` calls, 30 `gh issue view` calls, 3 rows,
+**2 admitted, 1 refused**. Nothing in the brief told it what to search or what counts as money.
+
+### The gates earned their keep, and one of them was wrong
+Refused rows were re-read from source, not argued with:
+- `Rooner-Plugins/bank-value-changes#3` quotes "I'm willing to pay for this to be added." — real
+  intent, **no amount anywhere in the issue**. Correct refusal.
+- `boxbilling/boxbilling#889` is titled "[WILL PAY FOR CODE]" and states **no figure**. Correct.
+- `microg/GmsCore#2994` was refused by **our own bug**: the bounty is written `[14999$]` and the
+  amount pattern only allowed `$14999`. Fixed, pinned with a regression test.
+
+### Feedback loop measured
+`D:\tmp\scout-feedback.log`: round 1 = 4 rows / 2 admitted; round 2 = 3 rows / 1 admitted; union
+3 admitted. The refusals reached the agent (`REWARD_QUOTE_HAS_NO_AMOUNT` appears twice in its
+transcript), but it repeated the class instead of repairing it — it rewrote the file from scratch
+and dropped rows it had already won. That is the next fix, and it is an interface fix, not a rule:
+give it an append-only round file and let code keep what already passed.
+
+### CI proof, first attempt (run 41082208983, commit 806c451)
+    ENTRY_DOOR cline INSTALLING cline@3.0.74
+    NVIDIA_PROXY up on http://127.0.0.1:8099/v1 keys=1
+    ENTRY_DOOR gateway UP
+    history round1: 9 rows, 8 admitted, 1 refused | round2: 9 rows, 1 admitted, 8 refused
+    AGENT_DOOR reason=OK rows=8
+    AGENT_QUEUE queued=8 skipped=0
+
+### What is NOT proven
+- No door row was dispatched in that cycle: the 2 dispatches came from the pre-existing backlog
+  (task ids 717a4365…, e746238b…, neither in the door's 8).
+- The `CURRENT_ISSUER_OFFER_MISSING` / `NO_TRUSTED_OFFER` refusals in that window were **static-lane**
+  rows — the door ids do not intersect them. The door's 8 rows are in the persisted queue and get
+  their turn on a later cycle; that is the check to run next.
+- Round 2 admitting 1 of 9 is a real weakness in how the feedback is shaped, not a gate fault.
