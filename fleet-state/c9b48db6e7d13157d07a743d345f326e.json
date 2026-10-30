@@ -2,7 +2,7 @@
   "task_id": "c9b48db6e7d13157d07a743d345f326e",
   "repo": "harmonylion/ideamarkets",
   "issue_number": 12,
-  "status": "CLAIMED",
+  "status": "REJECTED_PREPARATION",
   "dispatch_id": "6da030b0a2d943ba94feabd91baf3c4e",
   "admission": {
     "funding": {
@@ -33,7 +33,7 @@
   ],
   "dispatched_at": "2026-10-30T18:17:21.537338+00:00",
   "attempt": 1,
-  "updated_at": "2026-10-30T18:17:37.844838+00:00",
+  "updated_at": "2026-10-30T18:20:28.682750+00:00",
   "owner": "41105646267:1",
   "previous_owner": null,
   "previous_status": "DISPATCHED",
@@ -41,5 +41,33 @@
   "harness_sha": "e99d6b458707d7c67cdeb1acf7a7b50ac1c44ba2",
   "claimed_at": "2026-10-30T18:17:37.844791+00:00",
   "lease_expires_at": "2026-10-30T22:22:37.844805+00:00",
-  "preparation_budget_seconds": 14400
+  "preparation_budget_seconds": 14400,
+  "at": "2026-10-30T18:20:16.605150+00:00",
+  "reason": "Cline preparation blocked: Issue #12 'Keyword NFTs \u2014 Ideamarket variant' is a whole-product bounty/product spec, not a concrete, focused code change to this repository. The GitHub repo harmonylion/ideamarkets (default branch 'master', base_sha 41e699b8368e4ade92c8b379b19463969cd7688d) contains ONLY README.md (1317 bytes, 3 commits total: 5aa2f79 Initial commit, 3cb11e3/41e699b Update README.md). There is no source code, no language manifest, no lockfile, no CI workflow, and no build/test toolchain anywhere in the full history (git ls-tree -r HEAD => README.md only; git log --all --name-only => README.md only; git show-ref => single ref refs/heads/master; git tag => none). The issue asks to design and build an entire dApp from scratch: Harberger-tax keyword-NFT smart contracts, a CoinMarketCap/ideamarket.io-style frontend with MetaMask, 'proof-of-lost-keys', mainnet deployment, and connection to the owner's domain. Payment is explicitly contingent on non-code outcomes ('Paid when: 1) Live on mainnet 2) Decent-looking front end 3) Connected to my domain') and the item is framed as a $1,500 open bounty/grant (\"$1,500 bounty, go!\") \u2014 i.e. a generic product idea + proposal/bounty request rather than a reproducible defect, specific bounded feature, or focused maintenance task in this repo. The real application codebase does not live here at all: this repo is a README-only placeholder, development happens on GitLab (https://gitlab.com/IdeaMarket/app-v2, HTTP 200), and the GitHub repo is used only as a Gitcoin PR mirror (open PRs #15/#17/#19 titled '[Gitcoin] ...' whose bodies state 'the original Gitlab PR can be found here', all from competitor fork Bobface/ideamarkets). Because the target repo has no code or toolchain, no environment baseline (baseline_tests), no build/lint, and no defect-specific regression reproduction (regression_plan) can be constructed, and no concrete repository change is requested. Per the blocked criteria (generic product idea without a repository change; grant/proposal request; already-competing work), the checkout is left unchanged at master and no work branch is created.",
+  "declared_reason": "Issue #12 'Keyword NFTs \u2014 Ideamarket variant' is a whole-product bounty/product spec, not a concrete, focused code change to this repository. The GitHub repo harmonylion/ideamarkets (default branch 'master', base_sha 41e699b8368e4ade92c8b379b19463969cd7688d) contains ONLY README.md (1317 bytes, 3 commits total: 5aa2f79 Initial commit, 3cb11e3/41e699b Update README.md). There is no source code, no language manifest, no lockfile, no CI workflow, and no build/test toolchain anywhere in the full history (git ls-tree -r HEAD => README.md only; git log --all --name-only => README.md only; git show-ref => single ref refs/heads/master; git tag => none). The issue asks to design and build an entire dApp from scratch: Harberger-tax keyword-NFT smart contracts, a CoinMarketCap/ideamarket.io-style frontend with MetaMask, 'proof-of-lost-keys', mainnet deployment, and connection to the owner's domain. Payment is explicitly contingent on non-code outcomes ('Paid when: 1) Live on mainnet 2) Decent-looking front end 3) Connected to my domain') and the item is framed as a $1,500 open bounty/grant (\"$1,500 bounty, go!\") \u2014 i.e. a generic product idea + proposal/bounty request rather than a reproducible defect, specific bounded feature, or focused maintenance task in this repo. The real application codebase does not live here at all: this repo is a README-only placeholder, development happens on GitLab (https://gitlab.com/IdeaMarket/app-v2, HTTP 200), and the GitHub repo is used only as a Gitcoin PR mirror (open PRs #15/#17/#19 titled '[Gitcoin] ...' whose bodies state 'the original Gitlab PR can be found here', all from competitor fork Bobface/ideamarkets). Because the target repo has no code or toolchain, no environment baseline (baseline_tests), no build/lint, and no defect-specific regression reproduction (regression_plan) can be constructed, and no concrete repository change is requested. Per the blocked criteria (generic product idea without a repository change; grant/proposal request; already-competing work), the checkout is left unchanged at master and no work branch is created.",
+  "evidence": {
+    "action": "blocked",
+    "worktree": "/tmp/bounty-workspaces/repos/harmonylion--ideamarkets--12",
+    "base_sha": "41e699b8368e4ade92c8b379b19463969cd7688d",
+    "default_branch": "master",
+    "sources": [
+      {
+        "path": "README.md",
+        "sha256": "9638b6cdeb54a2146bb4c78b55802af0e8933efb00373a4d6e9487bf452d6075"
+      }
+    ],
+    "run_url": "",
+    "admission": {
+      "amount": "1500",
+      "currency": "USD",
+      "usd_value": "1500",
+      "quote": {
+        "basis": "USD face value"
+      },
+      "raw": "$1,500",
+      "source_url": "https://github.com/harmonylion/ideamarkets/issues/12",
+      "payer": "harmonylion"
+    }
+  },
+  "finished_at": "2026-10-30T18:20:28.088079+00:00"
 }
