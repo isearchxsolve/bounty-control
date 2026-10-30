@@ -2,7 +2,7 @@
   "task_id": "27257d2ebb5a86564d46d8cb5bc8772c",
   "repo": "Circadian-agent/agent-economy-data",
   "issue_number": 3,
-  "status": "DISPATCHING",
+  "status": "DISPATCHED",
   "dispatch_id": "8c6cf453bd5342a99b4a4e3ac443fae7",
   "admission": {
     "funding": {
@@ -49,5 +49,5 @@
   ],
   "dispatched_at": "2026-10-30T11:00:09.147216+00:00",
   "attempt": 0,
-  "updated_at": "2026-10-30T11:00:09.147237+00:00"
+  "updated_at": "2026-10-30T11:00:11.847644+00:00"
 }
