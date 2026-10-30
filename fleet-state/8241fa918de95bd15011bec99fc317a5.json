@@ -2,7 +2,7 @@
   "task_id": "8241fa918de95bd15011bec99fc317a5",
   "repo": "bandprotocol/cross-chain-hackthon",
   "issue_number": 2,
-  "status": "DISPATCHING",
+  "status": "DISPATCHED",
   "dispatch_id": "ba101cc3225148a28c93cf71930f7572",
   "admission": {
     "funding": {
@@ -34,5 +34,5 @@
   ],
   "dispatched_at": "2026-10-30T13:05:52.138852+00:00",
   "attempt": 0,
-  "updated_at": "2026-10-30T13:05:52.138871+00:00"
+  "updated_at": "2026-10-30T13:05:54.041090+00:00"
 }
