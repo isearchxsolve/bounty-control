@@ -1,0 +1,42 @@
+{
+  "task_id": "80678955da9bf0c8b1f0765f16b53585",
+  "repo": "TigerVNC/tigervnc",
+  "issue_number": 398,
+  "status": "DISPATCHING",
+  "dispatch_id": "392d53150be84f3c93f37fade6b718bb",
+  "admission": {
+    "funding": {
+      "amount": "250",
+      "currency": "USD",
+      "usd_value": "250",
+      "quote": {
+        "basis": "USD face value"
+      },
+      "raw": "$250",
+      "source_url": "https://github.com/TigerVNC/tigervnc/issues/398#issuecomment-322790403",
+      "payer": "CendioOssman"
+    },
+    "technical_signals": [
+      "issue",
+      "issuecomment",
+      "issues",
+      "problem"
+    ],
+    "component_references": [],
+    "source_locations": [],
+    "engineering_evidence_sources": [
+      "https://github.com/TigerVNC/tigervnc/issues/398",
+      "https://github.com/TigerVNC/tigervnc/issues/398#issuecomment-317788337",
+      "https://github.com/TigerVNC/tigervnc/issues/398#issuecomment-318061731",
+      "https://github.com/TigerVNC/tigervnc/issues/398#issuecomment-322790403"
+    ],
+    "source_issue": "https://github.com/TigerVNC/tigervnc/issues/398",
+    "fetched_at": "2026-10-30T10:39:10.423806+00:00"
+  },
+  "lanes": [
+    "founder"
+  ],
+  "dispatched_at": "2026-10-30T10:39:12.133189+00:00",
+  "attempt": 0,
+  "updated_at": "2026-10-30T10:39:12.133205+00:00"
+}
