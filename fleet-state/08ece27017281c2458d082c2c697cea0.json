@@ -2,7 +2,7 @@
   "task_id": "08ece27017281c2458d082c2c697cea0",
   "repo": "bandprotocol/cross-chain-hackthon",
   "issue_number": 1,
-  "status": "CLAIMED",
+  "status": "REJECTED_PREPARATION",
   "dispatch_id": "a38be7c6ed6645ffbccd12bf1f28b9c4",
   "admission": {
     "funding": {
@@ -33,7 +33,7 @@
   ],
   "dispatched_at": "2026-10-30T15:14:55.601808+00:00",
   "attempt": 1,
-  "updated_at": "2026-10-30T15:15:07.267460+00:00",
+  "updated_at": "2026-10-30T15:18:12.284489+00:00",
   "owner": "41078936271:1",
   "previous_owner": null,
   "previous_status": "DISPATCHED",
@@ -41,5 +41,33 @@
   "harness_sha": "122af062685a0bd1f1d161d9c42a07300819cc15",
   "claimed_at": "2026-10-30T15:15:07.267407+00:00",
   "lease_expires_at": "2026-10-30T19:20:07.267424+00:00",
-  "preparation_budget_seconds": 14400
+  "preparation_budget_seconds": 14400,
+  "at": "2026-10-30T15:17:58.734550+00:00",
+  "reason": "Cline preparation blocked: Not an engineering/code task AND funding withdrawn. Issue #1 'Dynamic IBC for Band Protocol in Agoric Smart Contract Platform' is a Gitcoin hackathon PRIZE/CHALLENGE announcement ('Prize Bounty $500 in BAND & 3 x Ledger Nano S', 'Submission Requirements', 'Judging Criteria', 'Submission Deadline May 11th'), i.e. a grant/hackathon-proposal + generic product idea, not a reproducible defect or focused feature request against this repository. Independently, the funding is CANCELLED: gitcoinbot comment 655220057 (2020-07-08) states 'The funding of 1000.0 BAND (1729.0 USD @ $1.73/BAND) attached to this issue has been cancelled by the bounty submitter', and prior comment 654075434 asked 'is this bounty still alive?'. Repository state confirms there is no software to change: bandprotocol/cross-chain-hackthon (default_branch=master, size=0, language=null, pushed_at=2020-04-16) contains exactly ONE file, README.md (68 bytes: '# cross-chain-hackthon Challenges for the cross-chain hackthon'), on a single commit fd69f955508c0804958712158c7a697c4a5d873a. No AGENTS.md, manifests, lockfiles, CI, tests, or source code exist. No open or closed PRs exist (0), and no competing PR on fix/bounty-1. Nothing to bootstrap, build, lint, or test. Checkout left unchanged (git status clean).",
+  "declared_reason": "Not an engineering/code task AND funding withdrawn. Issue #1 'Dynamic IBC for Band Protocol in Agoric Smart Contract Platform' is a Gitcoin hackathon PRIZE/CHALLENGE announcement ('Prize Bounty $500 in BAND & 3 x Ledger Nano S', 'Submission Requirements', 'Judging Criteria', 'Submission Deadline May 11th'), i.e. a grant/hackathon-proposal + generic product idea, not a reproducible defect or focused feature request against this repository. Independently, the funding is CANCELLED: gitcoinbot comment 655220057 (2020-07-08) states 'The funding of 1000.0 BAND (1729.0 USD @ $1.73/BAND) attached to this issue has been cancelled by the bounty submitter', and prior comment 654075434 asked 'is this bounty still alive?'. Repository state confirms there is no software to change: bandprotocol/cross-chain-hackthon (default_branch=master, size=0, language=null, pushed_at=2020-04-16) contains exactly ONE file, README.md (68 bytes: '# cross-chain-hackthon Challenges for the cross-chain hackthon'), on a single commit fd69f955508c0804958712158c7a697c4a5d873a. No AGENTS.md, manifests, lockfiles, CI, tests, or source code exist. No open or closed PRs exist (0), and no competing PR on fix/bounty-1. Nothing to bootstrap, build, lint, or test. Checkout left unchanged (git status clean).",
+  "evidence": {
+    "action": "blocked",
+    "worktree": "/tmp/bounty-workspaces/repos/bandprotocol--cross-chain-hackthon--1",
+    "base_sha": "fd69f955508c0804958712158c7a697c4a5d873a",
+    "default_branch": "master",
+    "sources": [
+      {
+        "path": "README.md",
+        "sha256": "d854cbb5568f7894bf7da4ae7634c73f66316801fec3cba6090ff05c9c1039ca"
+      }
+    ],
+    "run_url": "",
+    "admission": {
+      "amount": "500",
+      "currency": "USD",
+      "usd_value": "500",
+      "quote": {
+        "basis": "USD face value"
+      },
+      "raw": "$500",
+      "source_url": "https://github.com/bandprotocol/cross-chain-hackthon/issues/1",
+      "payer": "smiled0g"
+    }
+  },
+  "finished_at": "2026-10-30T15:18:11.767647+00:00"
 }
