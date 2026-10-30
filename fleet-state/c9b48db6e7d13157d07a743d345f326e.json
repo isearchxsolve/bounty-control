@@ -2,7 +2,7 @@
   "task_id": "c9b48db6e7d13157d07a743d345f326e",
   "repo": "harmonylion/ideamarkets",
   "issue_number": 12,
-  "status": "DISPATCHED",
+  "status": "CLAIMED",
   "dispatch_id": "6da030b0a2d943ba94feabd91baf3c4e",
   "admission": {
     "funding": {
@@ -32,6 +32,14 @@
     "startup"
   ],
   "dispatched_at": "2026-10-30T18:17:21.537338+00:00",
-  "attempt": 0,
-  "updated_at": "2026-10-30T18:17:23.310701+00:00"
+  "attempt": 1,
+  "updated_at": "2026-10-30T18:17:37.844838+00:00",
+  "owner": "41105646267:1",
+  "previous_owner": null,
+  "previous_status": "DISPATCHED",
+  "run_url": "https://github.com/isearchxsolve/bounty-control/actions/runs/41105646267",
+  "harness_sha": "e99d6b458707d7c67cdeb1acf7a7b50ac1c44ba2",
+  "claimed_at": "2026-10-30T18:17:37.844791+00:00",
+  "lease_expires_at": "2026-10-30T22:22:37.844805+00:00",
+  "preparation_budget_seconds": 14400
 }
