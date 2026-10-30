@@ -2,8 +2,8 @@
   "task_id": "f6edd5599c70db503b683151163bcaf3",
   "repo": "saricizmeli/repo",
   "issue_number": 26,
-  "status": "FAILED_DELIVERABLE_MISSING",
-  "dispatch_id": "fa3220db037f4e988b923590dd91d4fb",
+  "status": "DISPATCHING",
+  "dispatch_id": "6b7f3c2b2cfc4b198220018a2b2d7e22",
   "admission": {
     "funding": {
       "amount": "260",
@@ -25,14 +25,14 @@
       "https://github.com/saricizmeli/repo/issues/26#issuecomment-2582859834"
     ],
     "source_issue": "https://github.com/saricizmeli/repo/issues/26",
-    "fetched_at": "2026-10-30T11:38:12.461435+00:00"
+    "fetched_at": "2026-10-30T11:43:30.901507+00:00"
   },
   "lanes": [
     "programs"
   ],
-  "dispatched_at": "2026-10-30T11:38:13.337029+00:00",
+  "dispatched_at": "2026-10-30T11:43:32.162218+00:00",
   "attempt": 2,
-  "updated_at": "2026-10-30T11:41:56.855860+00:00",
+  "updated_at": "2026-10-30T11:43:32.162236+00:00",
   "owner": "41049500677:1",
   "previous_owner": "41047037301:1",
   "previous_status": "DISPATCHED",
