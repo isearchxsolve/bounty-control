@@ -2,7 +2,7 @@
   "task_id": "f96bab08d0a0eb7fc83332ae5a5158d7",
   "repo": "go-gitea/gitea",
   "issue_number": 14186,
-  "status": "DISPATCHED",
+  "status": "CLAIMED",
   "dispatch_id": "6b51cd9d59fc4c61b59a54bc1ad172c8",
   "admission": {
     "funding": {
@@ -40,6 +40,14 @@
     "programs"
   ],
   "dispatched_at": "2026-10-30T14:08:28.878662+00:00",
-  "attempt": 0,
-  "updated_at": "2026-10-30T14:08:30.591446+00:00"
+  "attempt": 1,
+  "updated_at": "2026-10-30T14:08:46.748591+00:00",
+  "owner": "41069227141:1",
+  "previous_owner": null,
+  "previous_status": "DISPATCHED",
+  "run_url": "https://github.com/isearchxsolve/bounty-control/actions/runs/41069227141",
+  "harness_sha": "122af062685a0bd1f1d161d9c42a07300819cc15",
+  "claimed_at": "2026-10-30T14:08:46.748541+00:00",
+  "lease_expires_at": "2026-10-30T18:13:46.748555+00:00",
+  "preparation_budget_seconds": 14400
 }
