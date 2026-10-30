@@ -2,7 +2,7 @@
   "task_id": "2cb74c12aed15880f05f90002e054900",
   "repo": "Opty-Fi/megagraph",
   "issue_number": 25,
-  "status": "DISPATCHING",
+  "status": "DISPATCHED",
   "dispatch_id": "a8789337815b4608af61585eb4cc730d",
   "admission": {
     "funding": {
@@ -32,5 +32,5 @@
   ],
   "dispatched_at": "2026-10-30T07:53:21.035643+00:00",
   "attempt": 0,
-  "updated_at": "2026-10-30T07:53:21.035660+00:00"
+  "updated_at": "2026-10-30T07:53:22.854443+00:00"
 }
