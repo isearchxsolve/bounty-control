@@ -116,4 +116,6 @@ jobs:
 
         python3 -W error scripts/test_urgency_ordering.py
 
-        python3 -W error scripts/test_hydrate_only_path.py'
+        python3 -W error scripts/test_hydrate_only_path.py
+
+        python3 -W error scripts/test_competition_linked.py'

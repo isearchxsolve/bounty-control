@@ -712,7 +712,17 @@ def competition(api, repo, number, own_head=None):
         if own_head and pull["head"]["sha"] == own_head:
             continue
         if linked.get("state") == "open":
-            raise ValueError("Linked open PR: " + pull["html_url"])
+            # A link is not a claimant. This branch used to refuse on any open linked pull
+            # request while the branch above it had already been taught to weigh evidence, so
+            # the same pull request was nominal in one loop and fatal in the other. Measured
+            # 2026-10-30: four funded microG tickets were dispatchable by every other gate and
+            # every one of them died here.
+            real, evidence = competition_evidence(api, repo, pull)
+            if real:
+                raise ValueError("Linked open PR: " + pull["html_url"])
+            nominal.append(evidence)
+            print("  nominal competition ignored:", evidence.get("reason"),
+                  pull["html_url"])
         if pull.get("merged_at"):
             body = pull.get("body") or ""
             fixed_section = re.search(
