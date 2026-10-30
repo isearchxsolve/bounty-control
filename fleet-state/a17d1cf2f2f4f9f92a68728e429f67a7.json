@@ -2,7 +2,7 @@
   "task_id": "a17d1cf2f2f4f9f92a68728e429f67a7",
   "repo": "ProjectWyvern/dao.projectwyvern.com",
   "issue_number": 1,
-  "status": "CLAIMED",
+  "status": "REJECTED_PREPARATION",
   "dispatch_id": "6c894cd15d0746d5a257ec2af7aff43e",
   "admission": {
     "funding": {
@@ -46,7 +46,7 @@
   ],
   "dispatched_at": "2026-10-30T17:43:39.385202+00:00",
   "attempt": 1,
-  "updated_at": "2026-10-30T17:43:51.936637+00:00",
+  "updated_at": "2026-10-30T17:51:38.794353+00:00",
   "owner": "41101092900:1",
   "previous_owner": null,
   "previous_status": "DISPATCHED",
@@ -54,5 +54,56 @@
   "harness_sha": "e99d6b458707d7c67cdeb1acf7a7b50ac1c44ba2",
   "claimed_at": "2026-10-30T17:43:51.936560+00:00",
   "lease_expires_at": "2026-10-30T21:48:51.936573+00:00",
-  "preparation_budget_seconds": 14400
+  "preparation_budget_seconds": 14400,
+  "at": "2026-10-30T17:47:49.436172+00:00",
+  "reason": "Cline preparation blocked: Withdrawn funding. The engineering request is concrete (client-side simulation of proposal execution with results rendered on the Proposal page), but the Gitcoin bounty attached to issue #1 was clawed back/refunded, so the claim is no longer live. Evidence, in chronological order: owocki (Gitcoin) comment 372536347 (2018-03-13T03:38:32Z) opened the clawback ('do you want to kill the bounty here ... itll mean you get that 0.4 ETH back'); owocki comment 372541062 (2018-03-13T04:10:44Z) gave the recovery steps; protinam comment 372542435 (2018-03-13T04:21:00Z) confirmed completion: 'I had to use a different account to claim the bounty, but otherwise that worked (0.4 ETH back), thanks. Unfortunately this didn't receive a lot of interest, so I don't think I'll reopen the bounty right now.' This final comment is exactly the URL recorded in admission.funding.source_url (https://github.com/ProjectWyvern/dao.projectwyvern.com/issues/1#issuecomment-372542435), i.e. the funding record points at its own refund. The issue has had no activity since 2018-03-13, has 22/22 comments visible (complete), state=open but unfunded, prior_failures=[] and owned_pr=null, and there are 0 open pull requests on the repository (checked https://api.github.com/repos/ProjectWyvern/dao.projectwyvern.com/pulls?state=open). No code change, test plan, or PR is produced; the isolated checkout was created and left unmodified (clean git status).",
+  "declared_reason": "Withdrawn funding. The engineering request is concrete (client-side simulation of proposal execution with results rendered on the Proposal page), but the Gitcoin bounty attached to issue #1 was clawed back/refunded, so the claim is no longer live. Evidence, in chronological order: owocki (Gitcoin) comment 372536347 (2018-03-13T03:38:32Z) opened the clawback ('do you want to kill the bounty here ... itll mean you get that 0.4 ETH back'); owocki comment 372541062 (2018-03-13T04:10:44Z) gave the recovery steps; protinam comment 372542435 (2018-03-13T04:21:00Z) confirmed completion: 'I had to use a different account to claim the bounty, but otherwise that worked (0.4 ETH back), thanks. Unfortunately this didn't receive a lot of interest, so I don't think I'll reopen the bounty right now.' This final comment is exactly the URL recorded in admission.funding.source_url (https://github.com/ProjectWyvern/dao.projectwyvern.com/issues/1#issuecomment-372542435), i.e. the funding record points at its own refund. The issue has had no activity since 2018-03-13, has 22/22 comments visible (complete), state=open but unfunded, prior_failures=[] and owned_pr=null, and there are 0 open pull requests on the repository (checked https://api.github.com/repos/ProjectWyvern/dao.projectwyvern.com/pulls?state=open). No code change, test plan, or PR is produced; the isolated checkout was created and left unmodified (clean git status).",
+  "evidence": {
+    "action": "blocked",
+    "worktree": "/tmp/bounty-workspaces/repos/ProjectWyvern--dao.projectwyvern.com--1",
+    "base_sha": "f0dbe10a53fc637029a79d7665941a1ef1f0c8c9",
+    "default_branch": "master",
+    "sources": [
+      {
+        "path": "package.json",
+        "sha256": "5745481cd97b9f039aee6a276d212a2a0c3118730ba9566f3001310c16b46cd0"
+      },
+      {
+        "path": "yarn.lock",
+        "sha256": "a0fdcdc04c7cea0ae745733ba76a0d918bd35aa4293017a30aeb8dbdf6954bcf"
+      },
+      {
+        "path": "poi.config.js",
+        "sha256": "44fe12e6d66beaeed5af34f9ef32b7c39c9752deac6c75bdaefaa144b63efbe1"
+      },
+      {
+        "path": "scripts/build.sh",
+        "sha256": "f230c9aa7368d9d00547d0d7286940cec39ab4bba449756401d55261d0802e17"
+      },
+      {
+        "path": ".gitmodules",
+        "sha256": "83ad94d904fa0e9eacc1f7dfe700f3019569780043ce9f96132ee7effe5df9de"
+      },
+      {
+        "path": "README.md",
+        "sha256": "a0ad79d756772ab44740a1c56a54e8ae6d5792ed72d5827aa8622c93c429212b"
+      }
+    ],
+    "run_url": "",
+    "admission": {
+      "amount": "0.4",
+      "currency": "ETH",
+      "usd_value": "896.0740",
+      "quote": {
+        "usd_rate": "2240.185",
+        "source_url": "https://api.coinbase.com/v2/prices/ETH-USD/spot",
+        "observed_at": "2026-10-30T17:43:50.372094+00:00",
+        "quote_date": null
+      },
+      "raw": "0.4 ETH",
+      "source_url": "https://github.com/ProjectWyvern/dao.projectwyvern.com/issues/1#issuecomment-372542435",
+      "payer": "protinam"
+    }
+  },
+  "finished_at": "2026-10-30T17:51:38.294085+00:00"
 }
