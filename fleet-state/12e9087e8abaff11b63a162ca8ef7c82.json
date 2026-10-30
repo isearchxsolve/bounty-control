@@ -2,7 +2,7 @@
   "task_id": "12e9087e8abaff11b63a162ca8ef7c82",
   "repo": "abdul-rahhman-siddiqui/testing-issue-tracker",
   "issue_number": 253,
-  "status": "CLAIMED",
+  "status": "REJECTED_PREPARATION",
   "dispatch_id": "a159fb2e796640bab6ff0b8f41c7f6c3",
   "admission": {
     "funding": {
@@ -34,7 +34,7 @@
   ],
   "dispatched_at": "2026-10-30T13:20:59.705282+00:00",
   "attempt": 3,
-  "updated_at": "2026-10-30T13:21:14.046717+00:00",
+  "updated_at": "2026-10-30T13:27:17.556804+00:00",
   "owner": "41062502566:1",
   "previous_owner": "41060097583:1",
   "previous_status": "DISPATCHED",
@@ -47,8 +47,8 @@
   "retryable": true,
   "diagnostic": "Cline deliverable invalid at /tmp/fleet-artifacts/delivery-supervisor/832414775a1b440bb0d295cabaf1eab0.preparation.json: invalid base_sha: ''",
   "path": "/tmp/fleet-artifacts/delivery-supervisor/832414775a1b440bb0d295cabaf1eab0.preparation.json",
-  "reason": "invalid base_sha: ''",
-  "at": "2026-10-30T13:06:30.170971+00:00",
+  "reason": "Cline preparation blocked: BLOCKED: repository abdul-rahhman-siddiqui/testing-issue-tracker is an empty Git repository with no code to change. Evidence (2026-10-30): `git ls-remote --heads --tags --exit-code upstream` exits 2, advertising zero refs; the local checkout at /tmp/bounty-workspaces/repos/abdul-rahhman-siddiqui--testing-issue-tracker--253 contains only .git (HEAD -> refs/heads/main, unborn; `git rev-parse --verify HEAD` exits 128); GitHub REST GET /repos/.../commits -> 409 'Git Repository is empty', /branches -> [], /tags -> [], /contents/ -> 404 'This repository is empty'; default_branch='main', size=0, language=null. There is no manifest, lockfile, CI workflow, AGENTS.md, source file or test target, so no reproducible defect, specific feature, or code-level maintenance in THIS repository can exist. Issue #253 is an automated PerfAI vision-agent scanner report ('Enumerable Resource ID', CWE-340 / API8:2023, MEDIUM) whose Build Details name an unrelated project (commit URL https://GTHUB.com/PerfAI-Inc/WebUI/commit/4323bd7e... , 'Repository Name: Pet_Store', spec https://api.perfai.ai/api/v1/vision-agent/oas/6a2a1bf7e12222f62acce43f, label Name-bookstore.perfai.co); admission recorded component_references=[] and source_locations=[]. Its recommendation (replace sequential integer ids with UUIDv4/ULID and enforce object-level authorization on the /integrations endpoint) targets that external service, not this repository. Live checks: issue state=open, closed_at=null, funding $500 USD from the issue itself; 0 open pull requests, 0 branches, 0 tags -> funding live, no competition, no withdrawal. Not a concrete change to this repository -> blocked; checkout left unchanged. base_sha note: the upstream default branch 'main' has no commit (empty repository), so no real commit SHA exists to record; the value written is the canonical git empty-tree object id 4b825dc642cb6eb9a060e54bf8d69288fbee4904, the only object this checkout resolves.",
+  "at": "2026-10-30T13:27:04.213948+00:00",
   "failures": [
     {
       "run_url": "https://github.com/isearchxsolve/bounty-control/actions/runs/41057647759",
@@ -71,5 +71,25 @@
       "at": "2026-10-30T13:06:30.170971+00:00"
     }
   ],
-  "finished_at": "2026-10-30T13:06:42.206285+00:00"
+  "finished_at": "2026-10-30T13:27:17.018881+00:00",
+  "declared_reason": "BLOCKED: repository abdul-rahhman-siddiqui/testing-issue-tracker is an empty Git repository with no code to change. Evidence (2026-10-30): `git ls-remote --heads --tags --exit-code upstream` exits 2, advertising zero refs; the local checkout at /tmp/bounty-workspaces/repos/abdul-rahhman-siddiqui--testing-issue-tracker--253 contains only .git (HEAD -> refs/heads/main, unborn; `git rev-parse --verify HEAD` exits 128); GitHub REST GET /repos/.../commits -> 409 'Git Repository is empty', /branches -> [], /tags -> [], /contents/ -> 404 'This repository is empty'; default_branch='main', size=0, language=null. There is no manifest, lockfile, CI workflow, AGENTS.md, source file or test target, so no reproducible defect, specific feature, or code-level maintenance in THIS repository can exist. Issue #253 is an automated PerfAI vision-agent scanner report ('Enumerable Resource ID', CWE-340 / API8:2023, MEDIUM) whose Build Details name an unrelated project (commit URL https://GTHUB.com/PerfAI-Inc/WebUI/commit/4323bd7e... , 'Repository Name: Pet_Store', spec https://api.perfai.ai/api/v1/vision-agent/oas/6a2a1bf7e12222f62acce43f, label Name-bookstore.perfai.co); admission recorded component_references=[] and source_locations=[]. Its recommendation (replace sequential integer ids with UUIDv4/ULID and enforce object-level authorization on the /integrations endpoint) targets that external service, not this repository. Live checks: issue state=open, closed_at=null, funding $500 USD from the issue itself; 0 open pull requests, 0 branches, 0 tags -> funding live, no competition, no withdrawal. Not a concrete change to this repository -> blocked; checkout left unchanged. base_sha note: the upstream default branch 'main' has no commit (empty repository), so no real commit SHA exists to record; the value written is the canonical git empty-tree object id 4b825dc642cb6eb9a060e54bf8d69288fbee4904, the only object this checkout resolves.",
+  "evidence": {
+    "action": "blocked",
+    "worktree": "/tmp/bounty-workspaces/repos/abdul-rahhman-siddiqui--testing-issue-tracker--253",
+    "base_sha": "4b825dc642cb6eb9a060e54bf8d69288fbee4904",
+    "default_branch": "main",
+    "sources": [],
+    "run_url": "",
+    "admission": {
+      "amount": "500",
+      "currency": "USD",
+      "usd_value": "500",
+      "quote": {
+        "basis": "USD face value"
+      },
+      "raw": "$500",
+      "source_url": "https://github.com/abdul-rahhman-siddiqui/testing-issue-tracker/issues/253",
+      "payer": "abdul-rahhman-siddiqui"
+    }
+  }
 }
