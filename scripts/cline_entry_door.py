@@ -416,13 +416,17 @@ RSN = chr(10)
 def render_task_file() -> str:
     checks = RSN.join(f"- {code}: {meaning}" for code, meaning in GATE_CHECKS)
     downstream = RSN.join(f"- {code}: {meaning}" for code, meaning in DOWNSTREAM_CHECKS)
-    return f"""# Scout task
+    return f"""# Engineering Entry Gate Auditor Task
 
-Find work on GitHub that pays for engineering, and record what you find. You are not asked to write or change any code here.
+Find work on GitHub that qualifies for engineering delivery, and record verified candidates. You are not asked to write or change code in this scratch workspace.
 
 ## The domain
 
 {DOMAIN.strip()}
+
+There are two streams of genuine work:
+1. Funded Bounties: An open issue with committed monetary payment figures stated in the issue text or comments.
+2. Wounded Founders: An open issue created by the repository OWNER (author_association: OWNER) announcing production downtime, outages, critical regressions, or backend hardening.
 
 ## Facts about this workspace
 
@@ -439,18 +443,18 @@ Find work on GitHub that pays for engineering, and record what you find. You are
 
 {downstream}
 
-## Pre-screen rules to survive downstream gates
+## Mandatory Pre-Screen Audit (Apply Before Shortlisting)
 
-Before you add an issue to shortlist.jsonl:
-1. Check competition: run `gh pr list --repo <repo> --state open`. If an open PR already addresses this issue, drop it (COMPETITION_OPEN_PR_EXISTS).
-2. Check mergeability: run `gh pr list --repo <repo> --state closed --limit 5`. If the repository never merges outside PRs, drop it (REPOSITORY_DOES_NOT_MERGE).
-3. Check locality: the defect must exist in this repository's own files, not in an external service or hardware wallet (DEFECT_NOT_IN_REPOSITORY).
-4. Check scope: single bounded engineering fix or feature, not an entire product roadmap (UNBOUNDED_SCOPE).
+Before you record any issue into shortlist.jsonl, audit it as an engineer:
+1. Repository Sanity: Run `gh api repos/<repo>/contents`. If the repository has no real application code (e.g. only a README or empty template), drop it immediately.
+2. Zero-Competition: Run `gh pr list --repo <repo> --state open`. If an unmerged open PR already addresses this issue, drop it immediately (COMPETITION_OPEN_PR_EXISTS).
+3. Mergeability: Run `gh pr list --repo <repo> --state closed --limit 5`. If the repository closes external PRs without merging, drop it immediately (REPOSITORY_DOES_NOT_MERGE).
+4. Locality: Confirm the defect lives in this repository's own code, not in a 3rd party bridge, hardware wallet firmware, or desktop environment setup (DEFECT_NOT_IN_REPOSITORY).
+5. Bounded Scope: Ensure it is a concrete, bounded bugfix or feature, not an entire product roadmap or rewrite (UNBOUNDED_SCOPE).
 
 ## Your job is recall, not precision
 
 Do not exclude a row to be safe: submit anything that plausibly meets these criteria, and the gates will verify it exactly and report the failures.
-
 You are the search half of this system. The checks above are run by code against the source
 after you finish, and they are exact. A row you drop is a lead nobody will ever see again; a
 row you submit that fails is a line in a report that costs nothing.
@@ -469,9 +473,7 @@ will do it better than your guess.
      "reward_usd": <number or null>, "scope_quote": "<sentence copied exactly, saying what to build>",
      "why_now": "<one short line: why this is work we can deliver>"}}
 
-Only record issues you actually opened and read. Then stop. Do not stop early because you
-are unsure about a row: an uncertain row that fails a gate is worth more to us than a row
-you never wrote down.
+Only record issues you actually opened, audited, and read. Then finish.
 """
 
 
