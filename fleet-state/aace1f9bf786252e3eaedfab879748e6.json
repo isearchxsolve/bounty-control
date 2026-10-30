@@ -1,0 +1,42 @@
+{
+  "task_id": "aace1f9bf786252e3eaedfab879748e6",
+  "repo": "SovrynBTC/Ecosystem-Bounties",
+  "issue_number": 4,
+  "status": "DISPATCHING",
+  "dispatch_id": "dc19af1881d94620bff78b9e03f2953e",
+  "admission": {
+    "funding": {
+      "amount": "2000",
+      "currency": "USD",
+      "usd_value": "2000",
+      "quote": {
+        "basis": "USD face value"
+      },
+      "raw": "$2000",
+      "source_url": "https://github.com/SovrynBTC/Ecosystem-Bounties/issues/4",
+      "payer": "Ingalandia"
+    },
+    "technical_signals": [
+      "transaction",
+      "transactions"
+    ],
+    "component_references": [
+      "ERC1155",
+      "ERC20",
+      "ERC721"
+    ],
+    "source_locations": [],
+    "engineering_evidence_sources": [
+      "https://github.com/SovrynBTC/Ecosystem-Bounties/issues/4"
+    ],
+    "source_issue": "https://github.com/SovrynBTC/Ecosystem-Bounties/issues/4",
+    "fetched_at": "2026-10-30T14:55:34.727259+00:00"
+  },
+  "lanes": [
+    "founder",
+    "programs"
+  ],
+  "dispatched_at": "2026-10-30T14:55:36.013320+00:00",
+  "attempt": 0,
+  "updated_at": "2026-10-30T14:55:36.013336+00:00"
+}
