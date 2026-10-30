@@ -2,7 +2,7 @@
   "task_id": "f8a1e6f6f2d1048ac40fe68e47021337",
   "repo": "ruohong2018/ruohong2018.github.io",
   "issue_number": 1125,
-  "status": "DISPATCHED",
+  "status": "CLAIMED",
   "dispatch_id": "ebb1c000d59540448f1ce532b5e54039",
   "admission": {
     "funding": {
@@ -37,6 +37,14 @@
     "founder"
   ],
   "dispatched_at": "2026-10-30T17:01:16.679565+00:00",
-  "attempt": 0,
-  "updated_at": "2026-10-30T17:01:18.466398+00:00"
+  "attempt": 1,
+  "updated_at": "2026-10-30T17:01:30.639788+00:00",
+  "owner": "41095114677:1",
+  "previous_owner": null,
+  "previous_status": "DISPATCHED",
+  "run_url": "https://github.com/isearchxsolve/bounty-control/actions/runs/41095114677",
+  "harness_sha": "36da4d1f58379020b816cc66cdfa95772df51f6f",
+  "claimed_at": "2026-10-30T17:01:30.639734+00:00",
+  "lease_expires_at": "2026-10-30T21:06:30.639751+00:00",
+  "preparation_budget_seconds": 14400
 }
