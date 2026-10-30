@@ -2,7 +2,7 @@
   "task_id": "ccc604919c3ed98630b3a52e3f17773e",
   "repo": "Tyaoo/picker",
   "issue_number": 995,
-  "status": "DISPATCHED",
+  "status": "CLAIMED",
   "dispatch_id": "7ee9b5dea46e4bcaa3f234797a8090ab",
   "admission": {
     "funding": {
@@ -36,6 +36,14 @@
     "founder"
   ],
   "dispatched_at": "2026-10-30T15:13:40.154927+00:00",
-  "attempt": 0,
-  "updated_at": "2026-10-30T15:13:41.965708+00:00"
+  "attempt": 1,
+  "updated_at": "2026-10-30T15:13:54.461255+00:00",
+  "owner": "41078736426:1",
+  "previous_owner": null,
+  "previous_status": "DISPATCHED",
+  "run_url": "https://github.com/isearchxsolve/bounty-control/actions/runs/41078736426",
+  "harness_sha": "122af062685a0bd1f1d161d9c42a07300819cc15",
+  "claimed_at": "2026-10-30T15:13:54.461213+00:00",
+  "lease_expires_at": "2026-10-30T19:18:54.461222+00:00",
+  "preparation_budget_seconds": 14400
 }
