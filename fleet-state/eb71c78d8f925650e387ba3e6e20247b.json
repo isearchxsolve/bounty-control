@@ -2,7 +2,7 @@
   "task_id": "eb71c78d8f925650e387ba3e6e20247b",
   "repo": "katiejohnson/Labs_Relay",
   "issue_number": 1,
-  "status": "DISPATCHED",
+  "status": "CLAIMED",
   "dispatch_id": "75e1f9dd4c6d455780ae28a436d884d9",
   "admission": {
     "funding": {
@@ -37,6 +37,14 @@
     "normal"
   ],
   "dispatched_at": "2026-10-30T14:09:44.603308+00:00",
-  "attempt": 0,
-  "updated_at": "2026-10-30T14:09:46.726753+00:00"
+  "attempt": 1,
+  "updated_at": "2026-10-30T14:09:57.225489+00:00",
+  "owner": "41069415466:1",
+  "previous_owner": null,
+  "previous_status": "DISPATCHED",
+  "run_url": "https://github.com/isearchxsolve/bounty-control/actions/runs/41069415466",
+  "harness_sha": "122af062685a0bd1f1d161d9c42a07300819cc15",
+  "claimed_at": "2026-10-30T14:09:57.225402+00:00",
+  "lease_expires_at": "2026-10-30T18:14:57.225415+00:00",
+  "preparation_budget_seconds": 14400
 }
