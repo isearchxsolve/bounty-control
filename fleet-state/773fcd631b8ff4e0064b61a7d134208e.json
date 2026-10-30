@@ -2,7 +2,7 @@
   "task_id": "773fcd631b8ff4e0064b61a7d134208e",
   "repo": "ProjectWyvern/frontends",
   "issue_number": 1,
-  "status": "DISPATCHED",
+  "status": "CLAIMED",
   "dispatch_id": "bdb98040f3ed4e54b711c2b5f3d8675b",
   "admission": {
     "funding": {
@@ -33,6 +33,14 @@
     "startup"
   ],
   "dispatched_at": "2026-10-30T08:58:06.832068+00:00",
-  "attempt": 0,
-  "updated_at": "2026-10-30T08:58:08.727948+00:00"
+  "attempt": 1,
+  "updated_at": "2026-10-30T08:58:22.584210+00:00",
+  "owner": "41030017960:1",
+  "previous_owner": null,
+  "previous_status": "DISPATCHED",
+  "run_url": "https://github.com/isearchxsolve/bounty-control/actions/runs/41030017960",
+  "harness_sha": "4707c558e63d17826ff3be09ee20f98d542c7335",
+  "claimed_at": "2026-10-30T08:58:22.584163+00:00",
+  "lease_expires_at": "2026-10-30T13:03:22.584176+00:00",
+  "preparation_budget_seconds": 14400
 }
