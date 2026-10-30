@@ -2,7 +2,7 @@
   "task_id": "43fc5d7378fb3bb8386008ddf0b3d88a",
   "repo": "Fraud-Detection-and-Defense/opendata-hackathon-GR15",
   "issue_number": 4,
-  "status": "DISPATCHING",
+  "status": "DISPATCHED",
   "dispatch_id": "cd1e8e97a3224844b0a248f1b8f0df4e",
   "admission": {
     "funding": {
@@ -33,5 +33,5 @@
   ],
   "dispatched_at": "2026-10-30T12:41:14.689118+00:00",
   "attempt": 0,
-  "updated_at": "2026-10-30T12:41:14.689137+00:00"
+  "updated_at": "2026-10-30T12:41:16.716765+00:00"
 }
