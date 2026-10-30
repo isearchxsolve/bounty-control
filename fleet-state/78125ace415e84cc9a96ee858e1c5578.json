@@ -2,7 +2,7 @@
   "task_id": "78125ace415e84cc9a96ee858e1c5578",
   "repo": "reef-defi/reef-finance-bounties",
   "issue_number": 3,
-  "status": "CLAIMED",
+  "status": "REJECTED_PREPARATION",
   "dispatch_id": "b3c11e5568d44e1d95ad844060a55446",
   "admission": {
     "funding": {
@@ -33,7 +33,7 @@
   ],
   "dispatched_at": "2026-10-30T12:17:36.067985+00:00",
   "attempt": 1,
-  "updated_at": "2026-10-30T12:17:47.299014+00:00",
+  "updated_at": "2026-10-30T12:21:43.866474+00:00",
   "owner": "41054248333:1",
   "previous_owner": null,
   "previous_status": "DISPATCHED",
@@ -41,5 +41,33 @@
   "harness_sha": "122af062685a0bd1f1d161d9c42a07300819cc15",
   "claimed_at": "2026-10-30T12:17:47.298961+00:00",
   "lease_expires_at": "2026-10-30T16:22:47.298976+00:00",
-  "preparation_budget_seconds": 14400
+  "preparation_budget_seconds": 14400,
+  "at": "2026-10-30T12:21:25.469967+00:00",
+  "reason": "Cline preparation blocked: Not a concrete code change to this repository, and the funding is no longer live. (1) Issue #3 is a Gitcoin hackathon PRIZE ANNOUNCEMENT for an external product, not a defect/feature/maintenance request against reef-finance-bounties: body says 'Reef Finance Hackathon: Build Innitial Dex Offering (IDO) dApp with EVM Solidity support on Reef chain', 'This hackathon features a total of $30,000 in REEF' (Gold Pearl $16,000 / Silver Coral $9,000 / Bronze Seashell $5,000), and 'Submission Requirements - Functionally working, publicly available dApp on Reef chain. - A demo video of website example. - Project sources published on GitHub as open source MIT licence.' Submissions are external MIT GitHub projects, so there is no in-repo code change to implement. (2) Repository state confirms there is nothing to change: the default branch 'main' at d09f83094096c263d0d2a84f64aeb2f338818cfa contains exactly one tracked file, README.md (69 bytes, '# reef-finance-bounties\\n\\nProject bounties for Reef Finance Hackathon'), with 2 commits total (bacb602 Initial commit, d09f830 Update README.md), no manifests, lockfiles, source files, tests, CI workflows or setup docs; architecture/ecosystem is therefore markdown-only with no buildable/runnable component (no baseline_tests and no failing reproduction can exist). (3) Funding is already paid out, i.e. not live: gitcoinbot comment 968367897 (https://github.com/reef-defi/reef-finance-bounties/issues/3#issuecomment-968367897, 2021-11-14T21:34:54Z) states '__The funding of 1137225.1706 REEF (36016.17 USD @ $0.03/REEF) attached to this issue has been approved & issued to @briancraig.__' (Gitcoin issue 100026840; issue #3 state=open, updated_at 2021-11-15T02:39:39Z, 8/8 comments retrieved). (4) Competition/submission already exists: GitHub API reports 0 open pull requests and 3 closed, unmerged PRs (#9 'ui-examplses', #8 'GRAFANA DASHBOARD', #6 'Create DEFi DEVELOPMENT'), plus multiple claimed 'work has been started'/'work ... has been submitted' bot comments (users rsacannabis, luisantoniocrag, nqtacn). Per the classification rules this is a grant/hackathon-submission/product-idea request with withdrawn (settled) funding, so no checkout was modified, no fallback proposal or PR was manufactured, and no plan/regression_plan is proposed.",
+  "declared_reason": "Not a concrete code change to this repository, and the funding is no longer live. (1) Issue #3 is a Gitcoin hackathon PRIZE ANNOUNCEMENT for an external product, not a defect/feature/maintenance request against reef-finance-bounties: body says 'Reef Finance Hackathon: Build Innitial Dex Offering (IDO) dApp with EVM Solidity support on Reef chain', 'This hackathon features a total of $30,000 in REEF' (Gold Pearl $16,000 / Silver Coral $9,000 / Bronze Seashell $5,000), and 'Submission Requirements - Functionally working, publicly available dApp on Reef chain. - A demo video of website example. - Project sources published on GitHub as open source MIT licence.' Submissions are external MIT GitHub projects, so there is no in-repo code change to implement. (2) Repository state confirms there is nothing to change: the default branch 'main' at d09f83094096c263d0d2a84f64aeb2f338818cfa contains exactly one tracked file, README.md (69 bytes, '# reef-finance-bounties\\n\\nProject bounties for Reef Finance Hackathon'), with 2 commits total (bacb602 Initial commit, d09f830 Update README.md), no manifests, lockfiles, source files, tests, CI workflows or setup docs; architecture/ecosystem is therefore markdown-only with no buildable/runnable component (no baseline_tests and no failing reproduction can exist). (3) Funding is already paid out, i.e. not live: gitcoinbot comment 968367897 (https://github.com/reef-defi/reef-finance-bounties/issues/3#issuecomment-968367897, 2021-11-14T21:34:54Z) states '__The funding of 1137225.1706 REEF (36016.17 USD @ $0.03/REEF) attached to this issue has been approved & issued to @briancraig.__' (Gitcoin issue 100026840; issue #3 state=open, updated_at 2021-11-15T02:39:39Z, 8/8 comments retrieved). (4) Competition/submission already exists: GitHub API reports 0 open pull requests and 3 closed, unmerged PRs (#9 'ui-examplses', #8 'GRAFANA DASHBOARD', #6 'Create DEFi DEVELOPMENT'), plus multiple claimed 'work has been started'/'work ... has been submitted' bot comments (users rsacannabis, luisantoniocrag, nqtacn). Per the classification rules this is a grant/hackathon-submission/product-idea request with withdrawn (settled) funding, so no checkout was modified, no fallback proposal or PR was manufactured, and no plan/regression_plan is proposed.",
+  "evidence": {
+    "action": "blocked",
+    "worktree": "/tmp/bounty-workspaces/repos/reef-defi--reef-finance-bounties--3",
+    "base_sha": "d09f83094096c263d0d2a84f64aeb2f338818cfa",
+    "default_branch": "main",
+    "sources": [
+      {
+        "path": "README.md",
+        "sha256": "94f161ffe42114e00fc40ba432eb5621edf1aa8e7703c71f95892d8b6da58b2f"
+      }
+    ],
+    "run_url": "",
+    "admission": {
+      "amount": "30000",
+      "currency": "USD",
+      "usd_value": "30000",
+      "quote": {
+        "basis": "USD face value"
+      },
+      "raw": "$30,000",
+      "source_url": "https://github.com/reef-defi/reef-finance-bounties/issues/3",
+      "payer": "matjazonline"
+    }
+  },
+  "finished_at": "2026-10-30T12:21:43.240018+00:00"
 }
