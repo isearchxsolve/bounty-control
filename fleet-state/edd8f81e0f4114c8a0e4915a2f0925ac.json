@@ -2,7 +2,7 @@
   "task_id": "edd8f81e0f4114c8a0e4915a2f0925ac",
   "repo": "1rec3/holobionte-1rec3",
   "issue_number": 24,
-  "status": "CLAIMED",
+  "status": "REJECTED_PREPARATION",
   "dispatch_id": "e51a1ec57a8449ffb84b7cb61ab51caa",
   "admission": {
     "funding": {
@@ -64,7 +64,7 @@
   ],
   "dispatched_at": "2026-10-30T15:13:46.587152+00:00",
   "attempt": 1,
-  "updated_at": "2026-10-30T15:13:58.406147+00:00",
+  "updated_at": "2026-10-30T15:18:38.516611+00:00",
   "owner": "41078753871:1",
   "previous_owner": null,
   "previous_status": "DISPATCHED",
@@ -72,5 +72,44 @@
   "harness_sha": "122af062685a0bd1f1d161d9c42a07300819cc15",
   "claimed_at": "2026-10-30T15:13:58.406093+00:00",
   "lease_expires_at": "2026-10-30T19:18:58.406110+00:00",
-  "preparation_budget_seconds": 14400
+  "preparation_budget_seconds": 14400,
+  "at": "2026-10-30T15:18:23.261763+00:00",
+  "reason": "Cline preparation blocked: Issue #24 is NOT a concrete, reproducible code change to this repository. Title: 'SRNDPS 28NOV2025: Reino RANUDOMIX + 13 Clanes + Recursos 13km + Espacios Abandonados'. The body and all 13 comments (all authored by saul3273, author_association COLLABORATOR) are a symbolic/creative 'serendipity' brainstorm: a frog-mythology mapping (RANUDOMIX = RANU+DOM+MIX+8(infinity)), a table of 13 Hylidae 'LLM clans' mapped to Skylander toys, a list of abandoned buildings in Tenerife and their possible legal occupation, a 13km resource list, and grant/monetization wishes. The only 'acciones inmediatas' checklist items are: apply to the NLnet grant before 1 DIC 2025, identify an abandoned plot/building in La Laguna, contact the Ayuntamiento for temporary cession, document 13km resources for a proposal, and 'activate 13 Skylanders'. Comments add: apply NLnet grant (up to 50k EUR), integrate MCP ecosystem, map the network in Kumu.io, coordinate GPTs, search Gitcoin bounties, compile a Tidal playlist, share in WhatsApp. These are grant/proposal, marketing/documentation and generic-product-idea deliverables with no executable defect, no failing behaviour, no file-level change request and no acceptance criteria. Per the classification gate this is a grant/proposal + documentation/marketing/generic-idea issue: blocked, no checkout/PR produced. Repository state confirms no code-level target: no AGENTS.md, no .github/ or any CI workflow, no root manifest/lockfile, no test suite/framework; the requested 'kingdom' content already exists as docs (docs/REINO_DE_RANAS/*.md, HTML galleries). Admission's component_references cite docs/grants/NGI-Zero-Dante.md and functions add_expert_from_device()/demo_holobionte_1rec3(), but none are present in the repo and none are requested as a change by the issue. Funding (1000 EUR, payer saul3273, https://github.com/1rec3/holobionte-1rec3/issues/24#issuecomment-3590922697) is still referenced, but funding presence does not convert a non-engineering issue into a code task. No competing open PR: the repo has zero open pull requests (all PRs #4-#14 are closed). No branch fix/bounty-24 exists upstream (HTTP 404). Checkout left unchanged.",
+  "declared_reason": "Issue #24 is NOT a concrete, reproducible code change to this repository. Title: 'SRNDPS 28NOV2025: Reino RANUDOMIX + 13 Clanes + Recursos 13km + Espacios Abandonados'. The body and all 13 comments (all authored by saul3273, author_association COLLABORATOR) are a symbolic/creative 'serendipity' brainstorm: a frog-mythology mapping (RANUDOMIX = RANU+DOM+MIX+8(infinity)), a table of 13 Hylidae 'LLM clans' mapped to Skylander toys, a list of abandoned buildings in Tenerife and their possible legal occupation, a 13km resource list, and grant/monetization wishes. The only 'acciones inmediatas' checklist items are: apply to the NLnet grant before 1 DIC 2025, identify an abandoned plot/building in La Laguna, contact the Ayuntamiento for temporary cession, document 13km resources for a proposal, and 'activate 13 Skylanders'. Comments add: apply NLnet grant (up to 50k EUR), integrate MCP ecosystem, map the network in Kumu.io, coordinate GPTs, search Gitcoin bounties, compile a Tidal playlist, share in WhatsApp. These are grant/proposal, marketing/documentation and generic-product-idea deliverables with no executable defect, no failing behaviour, no file-level change request and no acceptance criteria. Per the classification gate this is a grant/proposal + documentation/marketing/generic-idea issue: blocked, no checkout/PR produced. Repository state confirms no code-level target: no AGENTS.md, no .github/ or any CI workflow, no root manifest/lockfile, no test suite/framework; the requested 'kingdom' content already exists as docs (docs/REINO_DE_RANAS/*.md, HTML galleries). Admission's component_references cite docs/grants/NGI-Zero-Dante.md and functions add_expert_from_device()/demo_holobionte_1rec3(), but none are present in the repo and none are requested as a change by the issue. Funding (1000 EUR, payer saul3273, https://github.com/1rec3/holobionte-1rec3/issues/24#issuecomment-3590922697) is still referenced, but funding presence does not convert a non-engineering issue into a code task. No competing open PR: the repo has zero open pull requests (all PRs #4-#14 are closed). No branch fix/bounty-24 exists upstream (HTTP 404). Checkout left unchanged.",
+  "evidence": {
+    "action": "blocked",
+    "worktree": "/tmp/bounty-workspaces/repos/1rec3--holobionte-1rec3--24",
+    "base_sha": "c6b5710b047e79f89c7ee4c7931c2f9baf300bc3",
+    "default_branch": "main",
+    "sources": [
+      {
+        "path": "README.md",
+        "sha256": "5f502d0467fc170d3447a577eac455b8b425eb1bc4ce82d18648666a2709a7cb"
+      },
+      {
+        "path": "simbiontes/nuandi-electron/package.json",
+        "sha256": "54f65ef99f761322cbeb993b5b76b96f15fce895178a8a78e7d6547d727382a3"
+      },
+      {
+        "path": "HITOS.md",
+        "sha256": "82cc41a85839a2547033b894f396966cb9ee86fd436cb1a2289f28600ba96388"
+      }
+    ],
+    "run_url": "",
+    "admission": {
+      "amount": "1000",
+      "currency": "EUR",
+      "usd_value": "1117.2000",
+      "quote": {
+        "usd_rate": "1.1172",
+        "source_url": "https://api.frankfurter.dev/v1/latest?base=EUR&symbols=USD",
+        "observed_at": "2026-10-30T15:13:56.974613+00:00",
+        "quote_date": "2026-10-30"
+      },
+      "raw": "1000\u20ac",
+      "source_url": "https://github.com/1rec3/holobionte-1rec3/issues/24#issuecomment-3590922697",
+      "payer": "saul3273"
+    }
+  },
+  "finished_at": "2026-10-30T15:18:37.958825+00:00"
 }
