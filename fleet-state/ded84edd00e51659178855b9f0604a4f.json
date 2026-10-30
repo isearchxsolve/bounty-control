@@ -2,7 +2,7 @@
   "task_id": "ded84edd00e51659178855b9f0604a4f",
   "repo": "teamleaderleo/bot-observatory",
   "issue_number": 7,
-  "status": "DISPATCHED",
+  "status": "CLAIMED",
   "dispatch_id": "c066be02f180454badd62fb0da36b0ca",
   "admission": {
     "funding": {
@@ -33,6 +33,14 @@
     "startup"
   ],
   "dispatched_at": "2026-10-30T11:17:29.145908+00:00",
-  "attempt": 0,
-  "updated_at": "2026-10-30T11:17:31.090224+00:00"
+  "attempt": 1,
+  "updated_at": "2026-10-30T11:17:41.170366+00:00",
+  "owner": "41047029087:1",
+  "previous_owner": null,
+  "previous_status": "DISPATCHED",
+  "run_url": "https://github.com/isearchxsolve/bounty-control/actions/runs/41047029087",
+  "harness_sha": "b2d3bd952fb9ae8ae5e9b8714a4a28d187c6f77c",
+  "claimed_at": "2026-10-30T11:17:41.170306+00:00",
+  "lease_expires_at": "2026-10-30T15:22:41.170317+00:00",
+  "preparation_budget_seconds": 14400
 }
