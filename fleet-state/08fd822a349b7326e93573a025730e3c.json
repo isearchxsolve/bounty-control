@@ -2,8 +2,8 @@
   "task_id": "08fd822a349b7326e93573a025730e3c",
   "repo": "Yof3ng/picker",
   "issue_number": 248,
-  "status": "FAILED_RUNNER_SHUTDOWN",
-  "dispatch_id": "0d3ba61bcb974369bba9e982a7ae71ed",
+  "status": "DISPATCHING",
+  "dispatch_id": "ff5038d3f9924e2790b21a8fba9752bf",
   "admission": {
     "funding": {
       "amount": "2500",
@@ -34,14 +34,14 @@
       "https://github.com/Yof3ng/picker/issues/248"
     ],
     "source_issue": "https://github.com/Yof3ng/picker/issues/248",
-    "fetched_at": "2026-10-30T15:39:56.281115+00:00"
+    "fetched_at": "2026-10-30T16:00:47.902135+00:00"
   },
   "lanes": [
     "founder"
   ],
-  "dispatched_at": "2026-10-30T15:39:57.283242+00:00",
+  "dispatched_at": "2026-10-30T16:00:49.510364+00:00",
   "attempt": 1,
-  "updated_at": "2026-10-30T15:42:27.290431+00:00",
+  "updated_at": "2026-10-30T16:00:49.510380+00:00",
   "owner": "41082801745:1",
   "previous_owner": null,
   "previous_status": "DISPATCHED",
