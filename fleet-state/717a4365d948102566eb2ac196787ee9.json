@@ -2,7 +2,7 @@
   "task_id": "717a4365d948102566eb2ac196787ee9",
   "repo": "EtherDotBlue/MythX",
   "issue_number": 4,
-  "status": "DISPATCHING",
+  "status": "DISPATCHED",
   "dispatch_id": "ccea230461ff4cac85a02e8a643200e8",
   "admission": {
     "funding": {
@@ -43,5 +43,5 @@
   ],
   "dispatched_at": "2026-10-30T14:55:42.173958+00:00",
   "attempt": 0,
-  "updated_at": "2026-10-30T14:55:42.173973+00:00"
+  "updated_at": "2026-10-30T14:55:43.896756+00:00"
 }
