@@ -2,7 +2,7 @@
   "task_id": "f96bab08d0a0eb7fc83332ae5a5158d7",
   "repo": "go-gitea/gitea",
   "issue_number": 14186,
-  "status": "CLAIMED",
+  "status": "REJECTED_PREPARATION",
   "dispatch_id": "be8d7a052d14429ea259aff7da70aebb",
   "admission": {
     "funding": {
@@ -41,7 +41,7 @@
   ],
   "dispatched_at": "2026-10-30T18:49:48.500384+00:00",
   "attempt": 2,
-  "updated_at": "2026-10-30T18:50:03.855238+00:00",
+  "updated_at": "2026-10-30T18:54:29.150956+00:00",
   "owner": "41110223591:1",
   "previous_owner": "41069227141:1",
   "previous_status": "DISPATCHED",
@@ -54,8 +54,8 @@
   "retryable": true,
   "diagnostic": "Cline deliverable invalid at /tmp/fleet-artifacts/delivery-supervisor/65283c5a74294fdf939d6f8995b6172b.preparation.json: invalid base_sha: ''",
   "path": "/tmp/fleet-artifacts/delivery-supervisor/65283c5a74294fdf939d6f8995b6172b.preparation.json",
-  "reason": "invalid base_sha: ''",
-  "at": "2026-10-30T14:12:19.662989+00:00",
+  "reason": "Cline preparation blocked: Issue go-gitea/gitea#14186 'Design Discussion: ActivityPub support + ForgeFed vocabulary' is not a concrete, scoped code change to this repository. GitHub labels are 'type/proposal' and 'topic/federation'. The author explicitly opens it as a discussion, not an implementation: 'I'm not comfortable making the changes required, especially w/o without serious design discussions.' The body contains a time-sensitive GRANT/proposal request ('(Optional, Time-Sensitive) Grant Opportunity' -> NLNet NGI Search & Discovery 5-50k EUR and DAPSI 50k+ EUR, 'would need 1 or more Gitea community member volunteers'), and the requested deliverable is a whole new federation subsystem (Actors, Sending/Receiving Activities, Serving/Fetching ActivityStreams, inbox/outbox collections, HTTP-signature keypairs, DB<->ActivityStreams mapping) with no reproducible defect, no acceptance criteria and no bounded feature. There is no live funding bound to this issue: the admission's cited source (comment 875958307, techknowlogick) is a general remark that 'over 1K USD has been collected as bounties working on various PRs' and a recommendation to pay the developer directly, not a bounty for #14186. The other cited source (comment 922633276) is only a pointer to pinned issue #16827. No bounded engineering deliverable can be defined, so per policy a proposal/grant request and generic product idea is BLOCKED and the checkout is left unchanged.",
+  "at": "2026-10-30T18:54:13.386332+00:00",
   "failures": [
     {
       "run_url": "https://github.com/isearchxsolve/bounty-control/actions/runs/41069227141",
@@ -68,5 +68,54 @@
       "at": "2026-10-30T14:12:19.662989+00:00"
     }
   ],
-  "finished_at": "2026-10-30T14:12:30.919200+00:00"
+  "finished_at": "2026-10-30T18:54:28.700809+00:00",
+  "declared_reason": "Issue go-gitea/gitea#14186 'Design Discussion: ActivityPub support + ForgeFed vocabulary' is not a concrete, scoped code change to this repository. GitHub labels are 'type/proposal' and 'topic/federation'. The author explicitly opens it as a discussion, not an implementation: 'I'm not comfortable making the changes required, especially w/o without serious design discussions.' The body contains a time-sensitive GRANT/proposal request ('(Optional, Time-Sensitive) Grant Opportunity' -> NLNet NGI Search & Discovery 5-50k EUR and DAPSI 50k+ EUR, 'would need 1 or more Gitea community member volunteers'), and the requested deliverable is a whole new federation subsystem (Actors, Sending/Receiving Activities, Serving/Fetching ActivityStreams, inbox/outbox collections, HTTP-signature keypairs, DB<->ActivityStreams mapping) with no reproducible defect, no acceptance criteria and no bounded feature. There is no live funding bound to this issue: the admission's cited source (comment 875958307, techknowlogick) is a general remark that 'over 1K USD has been collected as bounties working on various PRs' and a recommendation to pay the developer directly, not a bounty for #14186. The other cited source (comment 922633276) is only a pointer to pinned issue #16827. No bounded engineering deliverable can be defined, so per policy a proposal/grant request and generic product idea is BLOCKED and the checkout is left unchanged.",
+  "evidence": {
+    "action": "blocked",
+    "worktree": "/tmp/bounty-workspaces/repos/go-gitea--gitea--14186",
+    "base_sha": "6a8eec1cc3c9f081a591c0c386c8d8c467031a6d",
+    "default_branch": "main",
+    "sources": [
+      {
+        "path": "go.mod",
+        "sha256": "d4f120214ae46dc2f89cb9e22cf296dda9e04fb65fb22fd0d46507e63acad50b"
+      },
+      {
+        "path": "go.sum",
+        "sha256": "e2af3bffc47b817da0e67ca65b0c07d0403165e531c63ed29d8beab8b152caa5"
+      },
+      {
+        "path": "Makefile",
+        "sha256": "d4135d37fb1aceeb0153ff34a489d8662b3b21620d1a7615a027b399b8d5fe6e"
+      },
+      {
+        "path": "package.json",
+        "sha256": "5a5cdd67f189f54168c59eac6e635198767b6b75e07020d526fa90f644eb581c"
+      },
+      {
+        "path": "pnpm-lock.yaml",
+        "sha256": "eb29f6089d5c61a65a2f700f88483ccd53b00a720776eb3779f6d4848983b77d"
+      },
+      {
+        "path": "AGENTS.md",
+        "sha256": "fc90385a88f8e5081a9b7a51a5e9d4c710f71d811bb89395981fff7127dfb968"
+      },
+      {
+        "path": ".github/workflows/pull-compliance.yml",
+        "sha256": "998ce9d2e10512cbcd384355621577d5e021213fdec392c4daa727db5f0610c3"
+      }
+    ],
+    "run_url": "",
+    "admission": {
+      "amount": "1000",
+      "currency": "USD",
+      "usd_value": "1000",
+      "quote": {
+        "basis": "USD face value"
+      },
+      "raw": "1K USD",
+      "source_url": "https://github.com/go-gitea/gitea/issues/14186#issuecomment-875958307",
+      "payer": "techknowlogick"
+    }
+  }
 }
