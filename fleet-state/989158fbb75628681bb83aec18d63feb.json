@@ -2,7 +2,7 @@
   "task_id": "989158fbb75628681bb83aec18d63feb",
   "repo": "GnosisEcosystemFund/Gnosis-Bounties-",
   "issue_number": 18,
-  "status": "DISPATCHED",
+  "status": "CLAIMED",
   "dispatch_id": "574d57c4b2b449fba31c7ed5e318373b",
   "admission": {
     "funding": {
@@ -35,6 +35,14 @@
     "founder"
   ],
   "dispatched_at": "2026-10-30T16:47:58.197441+00:00",
-  "attempt": 0,
-  "updated_at": "2026-10-30T16:48:00.228285+00:00"
+  "attempt": 1,
+  "updated_at": "2026-10-30T16:48:19.173188+00:00",
+  "owner": "41093147238:1",
+  "previous_owner": null,
+  "previous_status": "DISPATCHED",
+  "run_url": "https://github.com/isearchxsolve/bounty-control/actions/runs/41093147238",
+  "harness_sha": "9d0070af8f144ba3b94f832acba18c33aab6cb2a",
+  "claimed_at": "2026-10-30T16:48:19.173141+00:00",
+  "lease_expires_at": "2026-10-30T20:53:19.173154+00:00",
+  "preparation_budget_seconds": 14400
 }
