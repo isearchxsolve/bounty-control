@@ -1,0 +1,41 @@
+{
+  "task_id": "d9b5ec95b1742261baa23931737eefd3",
+  "repo": "creative-visionary/Fish_Media",
+  "issue_number": 18,
+  "status": "DISPATCHING",
+  "dispatch_id": "df4c5189dbf744f9acc69016c40d8726",
+  "admission": {
+    "funding": {
+      "amount": "100000",
+      "currency": "USD",
+      "usd_value": "100000",
+      "quote": {
+        "basis": "USD face value"
+      },
+      "raw": "$100,000",
+      "source_url": "https://github.com/creative-visionary/Fish_Media/issues/18",
+      "payer": "ShortTimeNoSee"
+    },
+    "technical_signals": [
+      "bug",
+      "cryptographically",
+      "encryption",
+      "error",
+      "issue",
+      "problem"
+    ],
+    "component_references": [],
+    "source_locations": [],
+    "engineering_evidence_sources": [
+      "https://github.com/creative-visionary/Fish_Media/issues/18"
+    ],
+    "source_issue": "https://github.com/creative-visionary/Fish_Media/issues/18",
+    "fetched_at": "2026-10-30T16:41:26.251921+00:00"
+  },
+  "lanes": [
+    "founder"
+  ],
+  "dispatched_at": "2026-10-30T16:41:27.045178+00:00",
+  "attempt": 0,
+  "updated_at": "2026-10-30T16:41:27.045219+00:00"
+}
