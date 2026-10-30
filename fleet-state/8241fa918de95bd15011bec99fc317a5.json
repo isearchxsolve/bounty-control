@@ -2,7 +2,7 @@
   "task_id": "8241fa918de95bd15011bec99fc317a5",
   "repo": "bandprotocol/cross-chain-hackthon",
   "issue_number": 2,
-  "status": "CLAIMED",
+  "status": "REJECTED_PREPARATION",
   "dispatch_id": "ba101cc3225148a28c93cf71930f7572",
   "admission": {
     "funding": {
@@ -34,7 +34,7 @@
   ],
   "dispatched_at": "2026-10-30T13:05:52.138852+00:00",
   "attempt": 1,
-  "updated_at": "2026-10-30T13:06:03.437154+00:00",
+  "updated_at": "2026-10-30T13:09:22.983611+00:00",
   "owner": "41060416428:1",
   "previous_owner": null,
   "previous_status": "DISPATCHED",
@@ -42,5 +42,33 @@
   "harness_sha": "122af062685a0bd1f1d161d9c42a07300819cc15",
   "claimed_at": "2026-10-30T13:06:03.437104+00:00",
   "lease_expires_at": "2026-10-30T17:11:03.437120+00:00",
-  "preparation_budget_seconds": 14400
+  "preparation_budget_seconds": 14400,
+  "at": "2026-10-30T13:09:09.762519+00:00",
+  "reason": "Cline preparation blocked: Issue #2 ('Build a DeFi Application with Band Protocol Price Feed over Cosmos IBC') is a Gitcoin hackathon bounty challenge, not a concrete code change to this repository: it asks submitters to build an external cross-chain DeFi project (stablecoin/synthetic/lending/DEX/insurance) that consumes BandChain oracle data over Cosmos IBC, with a submission deadline of May 11th and Gitcoin judging criteria. It is a grant/proposal/generic product-idea request with no reproducible defect, feature, or maintenance target against bandprotocol/cross-chain-hackthon. Additionally the funding is withdrawn: gitcoinbot comment id 614909482 announced '4000.0 BAND' funding, then the final gitcoinbot comment states 'The funding of 4000.0 BAND attached to this issue has been cancelled by the bounty submitter'. Repository state confirms no engineering surface: default branch master at fd69f955508c0804958712158c7a697c4a5d873a contains only a single 68-byte README.md ('# cross-chain-hackthon\\nChallenges for the cross-chain hackthon \\uD83D\\uDD25\\n'); no manifests, lockfiles, source, tests, or CI. No open pull requests (state=open returns []) and no competing PR. Per admission rule, this is a grant/proposal/generic-product-idea and withdrawn-funding case; checkout left unchanged.",
+  "declared_reason": "Issue #2 ('Build a DeFi Application with Band Protocol Price Feed over Cosmos IBC') is a Gitcoin hackathon bounty challenge, not a concrete code change to this repository: it asks submitters to build an external cross-chain DeFi project (stablecoin/synthetic/lending/DEX/insurance) that consumes BandChain oracle data over Cosmos IBC, with a submission deadline of May 11th and Gitcoin judging criteria. It is a grant/proposal/generic product-idea request with no reproducible defect, feature, or maintenance target against bandprotocol/cross-chain-hackthon. Additionally the funding is withdrawn: gitcoinbot comment id 614909482 announced '4000.0 BAND' funding, then the final gitcoinbot comment states 'The funding of 4000.0 BAND attached to this issue has been cancelled by the bounty submitter'. Repository state confirms no engineering surface: default branch master at fd69f955508c0804958712158c7a697c4a5d873a contains only a single 68-byte README.md ('# cross-chain-hackthon\\nChallenges for the cross-chain hackthon \\uD83D\\uDD25\\n'); no manifests, lockfiles, source, tests, or CI. No open pull requests (state=open returns []) and no competing PR. Per admission rule, this is a grant/proposal/generic-product-idea and withdrawn-funding case; checkout left unchanged.",
+  "evidence": {
+    "action": "blocked",
+    "worktree": "/tmp/bounty-workspaces/repos/bandprotocol--cross-chain-hackthon--2",
+    "base_sha": "fd69f955508c0804958712158c7a697c4a5d873a",
+    "default_branch": "master",
+    "sources": [
+      {
+        "path": "README.md",
+        "sha256": "d854cbb5568f7894bf7da4ae7634c73f66316801fec3cba6090ff05c9c1039ca"
+      }
+    ],
+    "run_url": "",
+    "admission": {
+      "amount": "2000",
+      "currency": "USD",
+      "usd_value": "2000",
+      "quote": {
+        "basis": "USD face value"
+      },
+      "raw": "$2000",
+      "source_url": "https://github.com/bandprotocol/cross-chain-hackthon/issues/2",
+      "payer": "smiled0g"
+    }
+  },
+  "finished_at": "2026-10-30T13:09:22.413209+00:00"
 }
