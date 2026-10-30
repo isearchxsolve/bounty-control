@@ -2,7 +2,7 @@
   "task_id": "e8e192c950a80ede57a86b7d0e1a3b02",
   "repo": "guxiaoguo/bugbounty",
   "issue_number": 3,
-  "status": "DISPATCHED",
+  "status": "CLAIMED",
   "dispatch_id": "15acd6c6bc394bbe8b2e9fc8a357c9ee",
   "admission": {
     "funding": {
@@ -45,6 +45,14 @@
     "founder"
   ],
   "dispatched_at": "2026-10-30T16:41:31.368929+00:00",
-  "attempt": 0,
-  "updated_at": "2026-10-30T16:41:32.966872+00:00"
+  "attempt": 1,
+  "updated_at": "2026-10-30T16:41:43.186353+00:00",
+  "owner": "41092186587:1",
+  "previous_owner": null,
+  "previous_status": "DISPATCHED",
+  "run_url": "https://github.com/isearchxsolve/bounty-control/actions/runs/41092186587",
+  "harness_sha": "9d0070af8f144ba3b94f832acba18c33aab6cb2a",
+  "claimed_at": "2026-10-30T16:41:43.186299+00:00",
+  "lease_expires_at": "2026-10-30T20:46:43.186315+00:00",
+  "preparation_budget_seconds": 14400
 }
