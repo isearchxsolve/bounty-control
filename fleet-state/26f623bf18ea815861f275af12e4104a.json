@@ -2,7 +2,7 @@
   "task_id": "26f623bf18ea815861f275af12e4104a",
   "repo": "Fraud-Detection-and-Defense/opendata-hackathon-GR15",
   "issue_number": 3,
-  "status": "CLAIMED",
+  "status": "REJECTED_PREPARATION",
   "dispatch_id": "eb9ec51b4a754d79a638e1716d18328e",
   "admission": {
     "funding": {
@@ -34,7 +34,7 @@
   ],
   "dispatched_at": "2026-10-30T12:09:08.659596+00:00",
   "attempt": 1,
-  "updated_at": "2026-10-30T12:09:21.986696+00:00",
+  "updated_at": "2026-10-30T12:13:47.803658+00:00",
   "owner": "41053211421:1",
   "previous_owner": null,
   "previous_status": "DISPATCHED",
@@ -42,5 +42,33 @@
   "harness_sha": "122af062685a0bd1f1d161d9c42a07300819cc15",
   "claimed_at": "2026-10-30T12:09:21.986646+00:00",
   "lease_expires_at": "2026-10-30T16:14:21.986660+00:00",
-  "preparation_budget_seconds": 14400
+  "preparation_budget_seconds": 14400,
+  "at": "2026-10-30T12:13:35.845635+00:00",
+  "reason": "Cline preparation blocked: Issue #3 'Hack Human incentives' is a Gitcoin hackathon PRIZE-BOUNTY / analysis-deliverable announcement, not a request for a concrete code change to this repository. Evidence: (1) The issue body is a challenge brief ('Prize Bounty: Winners will split $7,500 paid out in ETH'; 'Challenge Description: ... analyze a dataset ...'; 'Submission Requirements: ... follow the instructions on the Gitcoin hackathon site to submit your analysis'; 'Judging Criteria: ... make observations about how to grade grants for their eligibility'; 'Winner Announcement Date: Halloween - October 31, 2022'). (2) The issue has no repository-scoped technical content: admission.component_references == [], admission.source_locations == [], engineering_evidence_sources is only the issue URL, labels == [], milestone == None, assignees == []. (3) gitcoinbot comment 2022-10-30T02:48:14Z reports 'Issue Status: ... 3. Submitted' with 8 external submissions (ttigre, soptq, baokiddy, agnes0x, junta, spacetristan, mawut0r, mapldx), each pointing to external artifacts (personal GitHub repos, Notion, Google Colab, Streamlit) - i.e. the bounty is already concluded/funded-submitted and there is no competing in-repo PR. (4) The repository itself is a bounty/issues/submissions board: description 'Bounties & issues for the post GR15 open data hackathon', 12 KB, contents are only README.md, LICENSE, 'DuneDetective submissions', 'HumanHacker submissions', 'ODSworkingfiles', 'SybilSlayer submissions' (each submissions dir holds only an 'example' file). There is no source code, no package manifest (package.json/requirements.txt/pyproject.toml -> HTTP 404), no CI (.github/workflows -> HTTP 404), no AGENTS.md (404), and no test/build toolchain. (5) Only branch is 'main'; open+closed PR count is 0; the requested 'fix/bounty-3' branch does not exist. (6) Issue events show the bounty lifecycle already advanced past submission (mention/subscribe events by submitters on 2026-10-30 through 2026-11-01). This matches the exclude list (hackathon/grant-proposal/data-science deliverable, concluded funding) rather than 'a reproducible defect, specific engineering feature, or focused code-level maintenance'. No checkout, edit, build, test, push or PR was performed; the worktree is intentionally absent/unchanged.",
+  "declared_reason": "Issue #3 'Hack Human incentives' is a Gitcoin hackathon PRIZE-BOUNTY / analysis-deliverable announcement, not a request for a concrete code change to this repository. Evidence: (1) The issue body is a challenge brief ('Prize Bounty: Winners will split $7,500 paid out in ETH'; 'Challenge Description: ... analyze a dataset ...'; 'Submission Requirements: ... follow the instructions on the Gitcoin hackathon site to submit your analysis'; 'Judging Criteria: ... make observations about how to grade grants for their eligibility'; 'Winner Announcement Date: Halloween - October 31, 2022'). (2) The issue has no repository-scoped technical content: admission.component_references == [], admission.source_locations == [], engineering_evidence_sources is only the issue URL, labels == [], milestone == None, assignees == []. (3) gitcoinbot comment 2022-10-30T02:48:14Z reports 'Issue Status: ... 3. Submitted' with 8 external submissions (ttigre, soptq, baokiddy, agnes0x, junta, spacetristan, mawut0r, mapldx), each pointing to external artifacts (personal GitHub repos, Notion, Google Colab, Streamlit) - i.e. the bounty is already concluded/funded-submitted and there is no competing in-repo PR. (4) The repository itself is a bounty/issues/submissions board: description 'Bounties & issues for the post GR15 open data hackathon', 12 KB, contents are only README.md, LICENSE, 'DuneDetective submissions', 'HumanHacker submissions', 'ODSworkingfiles', 'SybilSlayer submissions' (each submissions dir holds only an 'example' file). There is no source code, no package manifest (package.json/requirements.txt/pyproject.toml -> HTTP 404), no CI (.github/workflows -> HTTP 404), no AGENTS.md (404), and no test/build toolchain. (5) Only branch is 'main'; open+closed PR count is 0; the requested 'fix/bounty-3' branch does not exist. (6) Issue events show the bounty lifecycle already advanced past submission (mention/subscribe events by submitters on 2026-10-30 through 2026-11-01). This matches the exclude list (hackathon/grant-proposal/data-science deliverable, concluded funding) rather than 'a reproducible defect, specific engineering feature, or focused code-level maintenance'. No checkout, edit, build, test, push or PR was performed; the worktree is intentionally absent/unchanged.",
+  "evidence": {
+    "action": "blocked",
+    "worktree": "/tmp/bounty-workspaces/repos/Fraud-Detection-and-Defense--opendata-hackathon-GR15--3",
+    "base_sha": "41b21ee9703cbf8be73e3d594de84d1d95b3feb5",
+    "default_branch": "main",
+    "sources": [
+      {
+        "path": "README.md",
+        "sha256": "b9e8e01c05af917d365ff903129d1e1d7333093083cc390bed85115c9ae9c5c0"
+      }
+    ],
+    "run_url": "",
+    "admission": {
+      "amount": "7500",
+      "currency": "USD",
+      "usd_value": "7500",
+      "quote": {
+        "basis": "USD face value"
+      },
+      "raw": "$7,500",
+      "source_url": "https://github.com/Fraud-Detection-and-Defense/opendata-hackathon-GR15/issues/3",
+      "payer": "epowell101"
+    }
+  },
+  "finished_at": "2026-10-30T12:13:47.204934+00:00"
 }
