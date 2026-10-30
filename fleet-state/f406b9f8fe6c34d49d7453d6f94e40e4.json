@@ -2,7 +2,7 @@
   "task_id": "f406b9f8fe6c34d49d7453d6f94e40e4",
   "repo": "lab-sandbox/-img-src-https-14.rs-4-a-fooooooooooooooooooooooooooooooooo-href-JaVAScript-26colon-3Bpromp",
   "issue_number": 1,
-  "status": "CLAIMED",
+  "status": "REJECTED_PREPARATION",
   "dispatch_id": "9f9fb60eadd549b7b1ee1c907a1ec122",
   "admission": {
     "funding": {
@@ -60,7 +60,7 @@
   ],
   "dispatched_at": "2026-10-30T17:43:49.672252+00:00",
   "attempt": 1,
-  "updated_at": "2026-10-30T17:44:01.729164+00:00",
+  "updated_at": "2026-10-30T17:52:12.470830+00:00",
   "owner": "41101112690:1",
   "previous_owner": null,
   "previous_status": "DISPATCHED",
@@ -68,5 +68,49 @@
   "harness_sha": "e99d6b458707d7c67cdeb1acf7a7b50ac1c44ba2",
   "claimed_at": "2026-10-30T17:44:01.729114+00:00",
   "lease_expires_at": "2026-10-30T21:49:01.729128+00:00",
-  "preparation_budget_seconds": 14400
+  "preparation_budget_seconds": 14400,
+  "at": "2026-10-30T17:51:52.098840+00:00",
+  "reason": "Cline preparation blocked: NOT AN ENGINEERING ISSUE. Repo lab-sandbox/-img-src-...-3Bpromp is a GitHub Learning Lab sandbox whose default branch name, file contents and README are raw XSS payload text (README.md = '# -greaterlesssvgonloadalert-xss-greater-x.y-course' + a quoted svg/onload payload; .github/ISSUE_TEMPLATE/custom.md name/about/title/labels = a quoted img onerror payload; .github/workflows/main.yml = a video/source onerror payload i.e. not valid workflow YAML; config.yml = Learning Lab course config). Issue #1 title and body are the same XSS payload with no defect description, component, stack trace, expected behavior or requested code change; all 4 comments are pasted PayloadsAllTheThings README text and screenshot images, not technical discussion. Repository contains 6 tracked files and ZERO manifests, lockfiles, source packages, tests, linters or build tooling (grep for package.json/Cargo.toml/go.mod/Makefile/tsconfig/etc = NONE), so there is no runnable code in which a reproducible defect could exist. No open or closed PRs exist (api /pulls?state=all = []); only one branch on the repo. The admission funding of 5000 USD is spurious: source_url is issue comment 793242250, whose body is a scraped PayloadsAllTheThings/XSS-Injection README that merely cites the blog title 'Sleeping stored Google XSS Awakens a 5000 Bounty by Patrik Fehrenbach'; there is no bounty/funding/payment statement from lab-sandbox for this issue. No concrete code change can be requested or made. Checkout left unchanged (no edits, no fix branch).",
+  "declared_reason": "NOT AN ENGINEERING ISSUE. Repo lab-sandbox/-img-src-...-3Bpromp is a GitHub Learning Lab sandbox whose default branch name, file contents and README are raw XSS payload text (README.md = '# -greaterlesssvgonloadalert-xss-greater-x.y-course' + a quoted svg/onload payload; .github/ISSUE_TEMPLATE/custom.md name/about/title/labels = a quoted img onerror payload; .github/workflows/main.yml = a video/source onerror payload i.e. not valid workflow YAML; config.yml = Learning Lab course config). Issue #1 title and body are the same XSS payload with no defect description, component, stack trace, expected behavior or requested code change; all 4 comments are pasted PayloadsAllTheThings README text and screenshot images, not technical discussion. Repository contains 6 tracked files and ZERO manifests, lockfiles, source packages, tests, linters or build tooling (grep for package.json/Cargo.toml/go.mod/Makefile/tsconfig/etc = NONE), so there is no runnable code in which a reproducible defect could exist. No open or closed PRs exist (api /pulls?state=all = []); only one branch on the repo. The admission funding of 5000 USD is spurious: source_url is issue comment 793242250, whose body is a scraped PayloadsAllTheThings/XSS-Injection README that merely cites the blog title 'Sleeping stored Google XSS Awakens a 5000 Bounty by Patrik Fehrenbach'; there is no bounty/funding/payment statement from lab-sandbox for this issue. No concrete code change can be requested or made. Checkout left unchanged (no edits, no fix branch).",
+  "evidence": {
+    "action": "blocked",
+    "worktree": "/tmp/bounty-workspaces/repos/lab-sandbox---img-src-https-14.rs-4-a-fooooooooooooooooooooooooooooooooo-href-JaVAScript-26colon-3Bpromp--1",
+    "base_sha": "1609c557732518c49bb5fe102fcc912d5d40354a",
+    "default_branch": "<%<!--'%><script>alert(1);</script--->",
+    "sources": [
+      {
+        "path": "README.md",
+        "sha256": "171605340e2e13b66218ce76ca94c4b92c003f15c30f49886cc18ce5b9e3b602"
+      },
+      {
+        "path": "config.yml",
+        "sha256": "e515b75d74bd21336710052c4cc432f547e5ca7fa657a6b49b788b08c3ce3f09"
+      },
+      {
+        "path": "responses/new-issue.md",
+        "sha256": "ad92d396518918fd3269deda5dbe5bea2a98aec4c7f95e54b843561313771aa1"
+      },
+      {
+        "path": ".github/ISSUE_TEMPLATE/custom.md",
+        "sha256": "4da1e209eb6a854e618df7d5d9f91df0fb92093e8bbbd557c7dd4008cef157b0"
+      },
+      {
+        "path": ".github/workflows/main.yml",
+        "sha256": "463d16c54756bd54a390e9851a7cdf1c8396ea5d70492b66948d5b8074ac6dd3"
+      }
+    ],
+    "run_url": "",
+    "admission": {
+      "amount": "5000",
+      "currency": "USD",
+      "usd_value": "5000",
+      "quote": {
+        "basis": "USD face value"
+      },
+      "raw": "$5000",
+      "source_url": "https://github.com/lab-sandbox/-img-src-https-14.rs-4-a-fooooooooooooooooooooooooooooooooo-href-JaVAScript-26colon-3Bpromp/issues/1#issuecomment-793242250",
+      "payer": "lab-sandbox"
+    }
+  },
+  "finished_at": "2026-10-30T17:52:11.985924+00:00"
 }
