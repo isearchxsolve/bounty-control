@@ -2,7 +2,7 @@
   "task_id": "b6c679d063ab26755e11484e0741539e",
   "repo": "SovrynBTC/Ecosystem-Bounties",
   "issue_number": 3,
-  "status": "CLAIMED",
+  "status": "REJECTED_PREPARATION",
   "dispatch_id": "b38ef0f9c25847c2a1c917ca89372be4",
   "admission": {
     "funding": {
@@ -33,7 +33,7 @@
   ],
   "dispatched_at": "2026-10-30T14:40:52.936976+00:00",
   "attempt": 1,
-  "updated_at": "2026-10-30T14:41:05.583800+00:00",
+  "updated_at": "2026-10-30T14:44:10.131437+00:00",
   "owner": "41073771615:1",
   "previous_owner": null,
   "previous_status": "DISPATCHED",
@@ -41,5 +41,33 @@
   "harness_sha": "122af062685a0bd1f1d161d9c42a07300819cc15",
   "claimed_at": "2026-10-30T14:41:05.583747+00:00",
   "lease_expires_at": "2026-10-30T18:46:05.583762+00:00",
-  "preparation_budget_seconds": 14400
+  "preparation_budget_seconds": 14400,
+  "at": "2026-10-30T14:43:53.935763+00:00",
+  "reason": "Cline preparation blocked: Issue #3 'Sovryn Contract Governance Dashboard' is a Gitcoin bounty/grant product request, not a concrete code change to SovrynBTC/Ecosystem-Bounties. Evidence: (1) The issue text solicits development+design labour for an EXTERNAL product: 'This bounty covers the cost of developing according to the following spec plus domain registration and 6 months of hosting on a dedicated public webpage', with a rate card ('$2000/week for fulltime dev work', '$750/week for design work') and 'Contact @ingalandia on Twitter or email (i@sovryn.app) to claim this bounty and negotiate timeline before beginning work.' It specifies a data dashboard fed from The Graph/RSK, i.e. a from-scratch web product deliverable, not a defect or focused feature in this repository. (2) Repository state confirms there is no code surface to change: default branch 'main' has exactly one commit 9c012499504c724310c7adff494781a3cfc7ec3a ('Initial commit') whose only tracked file is README.md (114 bytes, a one-line description). GET /languages returns {} (no source code); there is no .github, no CI, no manifest, no lockfile, no test harness. (3) Funding is not live: the claim link recorded in the issue's own gitcoinbot comment, https://gitcoin.co/issue/sovrynbtc/ecosystem-bounties/3/100027887, returns HTTP 404 (Gitcoin-classic is defunct), and the bounty is a 2022 request whose repository was last pushed 2021-12-27. (4) No competition to build on: GET /pulls?state=all returns 0 pull requests. Per the phase rules, a grant/proposal request or a generic product idea without a repository change must be reported blocked with the checkout left unchanged; no baseline/regression commands apply because there is no buildable target in this repository.",
+  "declared_reason": "Issue #3 'Sovryn Contract Governance Dashboard' is a Gitcoin bounty/grant product request, not a concrete code change to SovrynBTC/Ecosystem-Bounties. Evidence: (1) The issue text solicits development+design labour for an EXTERNAL product: 'This bounty covers the cost of developing according to the following spec plus domain registration and 6 months of hosting on a dedicated public webpage', with a rate card ('$2000/week for fulltime dev work', '$750/week for design work') and 'Contact @ingalandia on Twitter or email (i@sovryn.app) to claim this bounty and negotiate timeline before beginning work.' It specifies a data dashboard fed from The Graph/RSK, i.e. a from-scratch web product deliverable, not a defect or focused feature in this repository. (2) Repository state confirms there is no code surface to change: default branch 'main' has exactly one commit 9c012499504c724310c7adff494781a3cfc7ec3a ('Initial commit') whose only tracked file is README.md (114 bytes, a one-line description). GET /languages returns {} (no source code); there is no .github, no CI, no manifest, no lockfile, no test harness. (3) Funding is not live: the claim link recorded in the issue's own gitcoinbot comment, https://gitcoin.co/issue/sovrynbtc/ecosystem-bounties/3/100027887, returns HTTP 404 (Gitcoin-classic is defunct), and the bounty is a 2022 request whose repository was last pushed 2021-12-27. (4) No competition to build on: GET /pulls?state=all returns 0 pull requests. Per the phase rules, a grant/proposal request or a generic product idea without a repository change must be reported blocked with the checkout left unchanged; no baseline/regression commands apply because there is no buildable target in this repository.",
+  "evidence": {
+    "action": "blocked",
+    "worktree": "/tmp/bounty-workspaces/repos/SovrynBTC--Ecosystem-Bounties--3",
+    "base_sha": "9c012499504c724310c7adff494781a3cfc7ec3a",
+    "default_branch": "main",
+    "sources": [
+      {
+        "path": "README.md",
+        "sha256": "f5818cf04c476f4def07b1ef4c5727d21348a2439df1a1432be323dc3db44eca"
+      }
+    ],
+    "run_url": "",
+    "admission": {
+      "amount": "2000",
+      "currency": "USD",
+      "usd_value": "2000",
+      "quote": {
+        "basis": "USD face value"
+      },
+      "raw": "$2000",
+      "source_url": "https://github.com/SovrynBTC/Ecosystem-Bounties/issues/3",
+      "payer": "Ingalandia"
+    }
+  },
+  "finished_at": "2026-10-30T14:44:09.493166+00:00"
 }
