@@ -1,0 +1,37 @@
+{
+  "task_id": "78125ace415e84cc9a96ee858e1c5578",
+  "repo": "reef-defi/reef-finance-bounties",
+  "issue_number": 3,
+  "status": "DISPATCHING",
+  "dispatch_id": "b3c11e5568d44e1d95ad844060a55446",
+  "admission": {
+    "funding": {
+      "amount": "30000",
+      "currency": "USD",
+      "usd_value": "30000",
+      "quote": {
+        "basis": "USD face value"
+      },
+      "raw": "$30,000",
+      "source_url": "https://github.com/reef-defi/reef-finance-bounties/issues/3",
+      "payer": "matjazonline"
+    },
+    "technical_signals": [
+      "transaction"
+    ],
+    "component_references": [],
+    "source_locations": [],
+    "engineering_evidence_sources": [
+      "https://github.com/reef-defi/reef-finance-bounties/issues/3"
+    ],
+    "source_issue": "https://github.com/reef-defi/reef-finance-bounties/issues/3",
+    "fetched_at": "2026-10-30T12:17:34.945343+00:00"
+  },
+  "lanes": [
+    "founder",
+    "normal"
+  ],
+  "dispatched_at": "2026-10-30T12:17:36.067985+00:00",
+  "attempt": 0,
+  "updated_at": "2026-10-30T12:17:36.068006+00:00"
+}
