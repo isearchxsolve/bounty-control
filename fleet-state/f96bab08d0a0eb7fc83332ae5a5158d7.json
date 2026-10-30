@@ -2,8 +2,8 @@
   "task_id": "f96bab08d0a0eb7fc83332ae5a5158d7",
   "repo": "go-gitea/gitea",
   "issue_number": 14186,
-  "status": "FAILED_DELIVERABLE_MISSING",
-  "dispatch_id": "6b51cd9d59fc4c61b59a54bc1ad172c8",
+  "status": "DISPATCHING",
+  "dispatch_id": "be8d7a052d14429ea259aff7da70aebb",
   "admission": {
     "funding": {
       "amount": "1000",
@@ -33,15 +33,15 @@
       "https://github.com/go-gitea/gitea/issues/14186#issuecomment-922633276"
     ],
     "source_issue": "https://github.com/go-gitea/gitea/issues/14186",
-    "fetched_at": "2026-10-30T14:08:23.448115+00:00"
+    "fetched_at": "2026-10-30T18:49:40.373137+00:00"
   },
   "lanes": [
     "founder",
     "programs"
   ],
-  "dispatched_at": "2026-10-30T14:08:28.878662+00:00",
+  "dispatched_at": "2026-10-30T18:49:48.500384+00:00",
   "attempt": 1,
-  "updated_at": "2026-10-30T14:12:31.561442+00:00",
+  "updated_at": "2026-10-30T18:49:48.500401+00:00",
   "owner": "41069227141:1",
   "previous_owner": null,
   "previous_status": "DISPATCHED",
