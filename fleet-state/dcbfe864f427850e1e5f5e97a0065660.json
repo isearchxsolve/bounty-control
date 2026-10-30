@@ -1,0 +1,40 @@
+{
+  "task_id": "dcbfe864f427850e1e5f5e97a0065660",
+  "repo": "chosencharacters/squidBounties",
+  "issue_number": 1,
+  "status": "DISPATCHING",
+  "dispatch_id": "898ea33e8be849cb8132bae0ecec0ddc",
+  "admission": {
+    "funding": {
+      "amount": "250",
+      "currency": "USD",
+      "usd_value": "250",
+      "quote": {
+        "basis": "USD face value"
+      },
+      "raw": "$250",
+      "source_url": "https://github.com/chosencharacters/squidBounties/issues/1",
+      "payer": "chosencharacters"
+    },
+    "technical_signals": [
+      "issue",
+      "issuecomment",
+      "issues",
+      "performance"
+    ],
+    "component_references": [],
+    "source_locations": [],
+    "engineering_evidence_sources": [
+      "https://github.com/chosencharacters/squidBounties/issues/1#issuecomment-606558461",
+      "https://github.com/chosencharacters/squidBounties/issues/1#issuecomment-683379598"
+    ],
+    "source_issue": "https://github.com/chosencharacters/squidBounties/issues/1",
+    "fetched_at": "2026-10-30T18:32:51.455211+00:00"
+  },
+  "lanes": [
+    "programs"
+  ],
+  "dispatched_at": "2026-10-30T18:32:52.931135+00:00",
+  "attempt": 0,
+  "updated_at": "2026-10-30T18:32:52.931154+00:00"
+}
