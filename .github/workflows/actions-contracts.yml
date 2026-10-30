@@ -122,4 +122,8 @@ jobs:
 
         python3 -W error scripts/test_unbounded_scope.py
 
-        python3 -W error scripts/test_non_code_deliverable.py'
+        python3 -W error scripts/test_non_code_deliverable.py
+
+        python3 -W error scripts/test_search_planner.py
+
+        python3 -W error scripts/test_planner_attribution.py'

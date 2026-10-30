@@ -23,7 +23,14 @@ from hardness_score import hardness_score
 from urgency_score import urgency_score
 from liquidity_score import rank_key as liquidity_rank_key
 
+import search_planner
 QUERY_CONFIG = json.loads(Path(__file__).with_name("bounty_queries.json").read_text(encoding="utf-8"))
+LANE_PURPOSE = {
+    "founder": "Funded founder-stage repos with a paid bounty and a concrete code change.",
+    "programs": "Paid bounty programmes (Algora, Polar, Opire and similar) with a reward on the issue.",
+    "startup": "Early-stage startup repos that attach a paid bounty to a real code change.",
+    "normal": "Ordinary open-source repos with a bounty attached to a reproducible defect or feature.",
+}
 PRIORITY_DISCOVERY_QUERIES = tuple(QUERY_CONFIG.pop("priority_discovery", ()))
 QUERIES = QUERY_CONFIG
 SEARCH_QUALIFIERS = (
@@ -1023,6 +1030,11 @@ def discover(lanes, max_dispatches=2, live=False, queries_per_lane=2, state_dir=
     con.execute("CREATE TABLE IF NOT EXISTS pending(task_id TEXT PRIMARY KEY, payload TEXT, lanes TEXT, "
                 "signature TEXT, checked REAL DEFAULT 0, status TEXT DEFAULT 'pending')")
     con.execute("CREATE TABLE IF NOT EXISTS metadata(name TEXT PRIMARY KEY,value TEXT)")
+    # Which search expression surfaced each task. Kept in its own table so the pending schema
+    # and every reader of it stay unchanged; it exists so an outcome can be credited back to
+    # the query that found the work.
+    con.execute("CREATE TABLE IF NOT EXISTS task_expression(task_id TEXT, lane TEXT, "
+                "expression TEXT, PRIMARY KEY(task_id, lane, expression))")
     con.execute("CREATE TABLE IF NOT EXISTS repo_intent(repository TEXT PRIMARY KEY, verdict TEXT, "
                 "merged INTEGER, total INTEGER, evidence TEXT, probed_at REAL)")
     con.execute("CREATE TABLE IF NOT EXISTS repo_capacity(repository TEXT PRIMARY KEY, size_kb INTEGER, "
@@ -1069,12 +1081,16 @@ def discover(lanes, max_dispatches=2, live=False, queries_per_lane=2, state_dir=
     priority_ids = []
     verdicts = {r[0]: r[1] for r in con.execute("SELECT repository,verdict FROM repo_intent")}
 
+    last_search = {}
+    nonlocal_context = {"lane": "", "expression": ""}
     def search_and_queue(lane, expression):
         window = horizon.window(expression)
         rows, total, saturated, branch_totals = query_expression_window(api, expression, window)
         recent, fresh_total, _fresh_saturated, fresh_branch_totals = query_expression_window(
             api, expression, fresh=30)
         counts[lane + ".raw"] += len(rows) + len(recent)
+        last_search["saturated"] = bool(saturated)
+        last_search["returned"] = len(rows) + len(recent)
         queries = build_issue_search_queries(expression, window=window)
         fresh_queries = build_issue_search_queries(expression, fresh=30)
         print(json.dumps({"phase": "SEARCH", "lane": lane, "expression": expression,
@@ -1115,6 +1131,9 @@ def discover(lanes, max_dispatches=2, live=False, queries_per_lane=2, state_dir=
             elif verdicts.get(repository) == "REPOSITORY_DOES_NOT_MERGE":
                 status = REPO_INTENT_RETIRED
             first_seen = (old[4] if old and old[4] else time.time()) if old else time.time()
+            if nonlocal_context["expression"]:
+                con.execute("INSERT OR IGNORE INTO task_expression VALUES(?,?,?)",
+                            (identity, nonlocal_context["lane"], nonlocal_context["expression"]))
             if pending_has_seen_at:
                 con.execute("INSERT OR REPLACE INTO pending(task_id,payload,lanes,signature,"
                             "checked,status,seen_at) VALUES(?,?,?,?,?,?,?)",
@@ -1156,13 +1175,27 @@ def discover(lanes, max_dispatches=2, live=False, queries_per_lane=2, state_dir=
                 for expression in PRIORITY_DISCOVERY_QUERIES:
                     search_and_queue("programs", expression)
             for lane in lanes:
-                start_row = con.execute("SELECT position FROM cursors WHERE lane=?", (lane,)).fetchone()
-                start = start_row[0] if start_row else 0
-                for offset in range(min(queries_per_lane, len(QUERIES[lane]))):
-                    expression = QUERIES[lane][(start + offset) % len(QUERIES[lane])]
+                # Intelligence layer: the planner chooses the expressions from measured yield
+                # and a Nemotron proposal. Any failure falls back to the static round-robin
+                # inside plan(), so discovery never stops for lack of intelligence.
+                ledger_path = Path(state_dir or ".") / "search_ledger.json"
+                ledger = search_planner.load_ledger(ledger_path)
+                chosen, audit = search_planner.plan(
+                    lane, list(QUERIES[lane]), ledger, slots=queries_per_lane,
+                    purpose=LANE_PURPOSE.get(lane, ""),
+                    refusal_reasons=[k for k in counts if k.startswith("admission_changed.")
+                                     or k.startswith("CURRENT_")],
+                    api_key=os.environ.get("NVIDIA_API_KEY", ""))
+                print(json.dumps({"phase": "PLANNER", **audit}), flush=True)
+                for expression in chosen:
+                    nonlocal_context["lane"], nonlocal_context["expression"] = lane, expression
                     search_and_queue(lane, expression)
-                con.execute("INSERT OR REPLACE INTO cursors VALUES(?,?)",
-                            (lane, (start + queries_per_lane) % len(QUERIES[lane])))
+                    search_planner.record_yield(
+                        ledger, lane, expression,
+                        returned=last_search.get("returned", 0),
+                        saturated=last_search.get("saturated", False),
+                        dispatch_ready=0, refused=0)
+                search_planner.save_ledger(ledger_path, ledger)
                 con.commit()
         if hydrate_only:
             print(json.dumps({"phase": "HYDRATE_ONLY", "queued_total_pending": con.execute(
