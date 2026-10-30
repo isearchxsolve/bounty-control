@@ -2,7 +2,7 @@
   "task_id": "aace1f9bf786252e3eaedfab879748e6",
   "repo": "SovrynBTC/Ecosystem-Bounties",
   "issue_number": 4,
-  "status": "CLAIMED",
+  "status": "REJECTED_PREPARATION",
   "dispatch_id": "dc19af1881d94620bff78b9e03f2953e",
   "admission": {
     "funding": {
@@ -38,7 +38,7 @@
   ],
   "dispatched_at": "2026-10-30T14:55:36.013320+00:00",
   "attempt": 1,
-  "updated_at": "2026-10-30T14:55:48.308567+00:00",
+  "updated_at": "2026-10-30T14:59:40.298981+00:00",
   "owner": "41075984891:1",
   "previous_owner": null,
   "previous_status": "DISPATCHED",
@@ -46,5 +46,33 @@
   "harness_sha": "122af062685a0bd1f1d161d9c42a07300819cc15",
   "claimed_at": "2026-10-30T14:55:48.308525+00:00",
   "lease_expires_at": "2026-10-30T19:00:48.308535+00:00",
-  "preparation_budget_seconds": 14400
+  "preparation_budget_seconds": 14400,
+  "at": "2026-10-30T14:59:23.098404+00:00",
+  "reason": "Cline preparation blocked: Issue #4 'Allowance Revocation Tool' is a bounty/grant offering US$2000 to develop a brand-new standalone web product (an ERC20/ERC721/ERC1155 allowance edit/revoke dApp with Portis, injected web3, and Trezor/Ledger hardware-wallet support, derivation-path and 100-address selection, token/allowance listing, and revoke-all batching), plus domain registration and 6 months of hosting. It explicitly asks the reader to 'claim this bounty and negotiate timeline before beginning work' and to build/host the product on a separate dedicated webpage. It requests no concrete code change to this repository: SovrynBTC/Ecosystem-Bounties is a bounty index whose entire content is a single 114-byte README.md ('A collection of small open project assignments geared towards expanding the Sovryn ecosystem') on one 'Initial commit' (9c01249). There is no product source, manifest, lockfile, CI workflow, or test suite to change or to reproduce a defect against. There are no open pull requests (PR count 0) and only the 'main' branch exists, so there is no repository-level engineering task and no competing PR. This is a grant/proposal-style bounty for external product development (a generic product idea without a repository change), which is out of scope for a code-change delivery, so no fix branch, plan, or pull request is produced and the checkout is left unchanged.",
+  "declared_reason": "Issue #4 'Allowance Revocation Tool' is a bounty/grant offering US$2000 to develop a brand-new standalone web product (an ERC20/ERC721/ERC1155 allowance edit/revoke dApp with Portis, injected web3, and Trezor/Ledger hardware-wallet support, derivation-path and 100-address selection, token/allowance listing, and revoke-all batching), plus domain registration and 6 months of hosting. It explicitly asks the reader to 'claim this bounty and negotiate timeline before beginning work' and to build/host the product on a separate dedicated webpage. It requests no concrete code change to this repository: SovrynBTC/Ecosystem-Bounties is a bounty index whose entire content is a single 114-byte README.md ('A collection of small open project assignments geared towards expanding the Sovryn ecosystem') on one 'Initial commit' (9c01249). There is no product source, manifest, lockfile, CI workflow, or test suite to change or to reproduce a defect against. There are no open pull requests (PR count 0) and only the 'main' branch exists, so there is no repository-level engineering task and no competing PR. This is a grant/proposal-style bounty for external product development (a generic product idea without a repository change), which is out of scope for a code-change delivery, so no fix branch, plan, or pull request is produced and the checkout is left unchanged.",
+  "evidence": {
+    "action": "blocked",
+    "worktree": "/tmp/bounty-workspaces/repos/SovrynBTC--Ecosystem-Bounties--4",
+    "base_sha": "9c012499504c724310c7adff494781a3cfc7ec3a",
+    "default_branch": "main",
+    "sources": [
+      {
+        "path": "README.md",
+        "sha256": "f5818cf04c476f4def07b1ef4c5727d21348a2439df1a1432be323dc3db44eca"
+      }
+    ],
+    "run_url": "",
+    "admission": {
+      "amount": "2000",
+      "currency": "USD",
+      "usd_value": "2000",
+      "quote": {
+        "basis": "USD face value"
+      },
+      "raw": "$2000",
+      "source_url": "https://github.com/SovrynBTC/Ecosystem-Bounties/issues/4",
+      "payer": "Ingalandia"
+    }
+  },
+  "finished_at": "2026-10-30T14:59:39.331954+00:00"
 }
