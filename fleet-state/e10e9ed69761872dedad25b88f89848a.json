@@ -3,7 +3,7 @@
   "repo": "microg/GmsCore",
   "issue_number": 1272,
   "attempt": 1,
-  "status": "CLAIMED",
+  "status": "REJECTED_PREPARATION",
   "owner": "41022506511:1",
   "previous_owner": null,
   "previous_status": null,
@@ -11,5 +11,49 @@
   "harness_sha": "25ac5ec13b387b126c22028fc9c06e2cade3a338",
   "claimed_at": "2026-10-30T07:50:27.186558+00:00",
   "lease_expires_at": "2026-10-30T11:55:27.186573+00:00",
-  "updated_at": "2026-10-30T07:50:27.186607+00:00"
+  "updated_at": "2026-10-30T07:55:27.107388+00:00",
+  "at": "2026-10-30T07:55:14.799366+00:00",
+  "reason": "Cline preparation blocked: Issue #1272 'Implementation of Nearby Share' (enhancement, open since 2020-11-17) is not a concrete, scoped code change or a reproducible defect. Its full text is only: 'Is it possible to add Nearby Share to MicroG and also make it work with the normal Play Services?' All 29 comments are expressions of support / protocol links / questions; the only 'scope' appears in the two most recent comments (2026-10-29) after a $300 BountyHub bounty was posted. Implementing it means reverse-engineering and shipping Google's proprietary Quick Share / Nearby Share / Nearby Connections stack (BLE discovery, mDNS, Wi-Fi Aware/Direct, UKEY2 encryption, Google-account identity) end-to-end in microG - an open-ended R&D project, not a focused engineering feature or fix, with no reproducible failure and no acceptance criteria in the issue. More decisively, the bounty is ALREADY BEING ACTIVELY COMPETED by multiple open pull requests that directly target #1272: PR #3933 'feat(nearby): implement Nearby Share / Quick Share support (#1272)' by Saik2789 (open, created 2026-10-27, 6092 additions / 47 files, head branch Saik2789:feat/bounty-1272, body contains '/claim #1272'); PR #3940 'nearby: wire Connections API to the Nearby Share engine (on top of #3933)' by reinaldyalt (open, created 2026-10-28); PR #3944 'feat(nearby): implement Nearby Sharing / Quick Share service interfaces and endpoints (#1272)' by MilindChatrabhuji (open, created 2026-10-29); plus closed competitor PR #3932 'Implement Nearby Share (Quick Share) and Nearby Connections support - Fixes #1272' by gamgsp. This is an 'already-competing pull request' situation, so per policy this preparation is blocked and the checkout was left unchanged (no branch, no edits, no builds). Supporting repository state: microG's only nearby module is play-services-nearby, which implements only Exposure Notification (COVID); there is no Nearby Share/Connections implementation at master 342c2801.",
+  "declared_reason": "Issue #1272 'Implementation of Nearby Share' (enhancement, open since 2020-11-17) is not a concrete, scoped code change or a reproducible defect. Its full text is only: 'Is it possible to add Nearby Share to MicroG and also make it work with the normal Play Services?' All 29 comments are expressions of support / protocol links / questions; the only 'scope' appears in the two most recent comments (2026-10-29) after a $300 BountyHub bounty was posted. Implementing it means reverse-engineering and shipping Google's proprietary Quick Share / Nearby Share / Nearby Connections stack (BLE discovery, mDNS, Wi-Fi Aware/Direct, UKEY2 encryption, Google-account identity) end-to-end in microG - an open-ended R&D project, not a focused engineering feature or fix, with no reproducible failure and no acceptance criteria in the issue. More decisively, the bounty is ALREADY BEING ACTIVELY COMPETED by multiple open pull requests that directly target #1272: PR #3933 'feat(nearby): implement Nearby Share / Quick Share support (#1272)' by Saik2789 (open, created 2026-10-27, 6092 additions / 47 files, head branch Saik2789:feat/bounty-1272, body contains '/claim #1272'); PR #3940 'nearby: wire Connections API to the Nearby Share engine (on top of #3933)' by reinaldyalt (open, created 2026-10-28); PR #3944 'feat(nearby): implement Nearby Sharing / Quick Share service interfaces and endpoints (#1272)' by MilindChatrabhuji (open, created 2026-10-29); plus closed competitor PR #3932 'Implement Nearby Share (Quick Share) and Nearby Connections support - Fixes #1272' by gamgsp. This is an 'already-competing pull request' situation, so per policy this preparation is blocked and the checkout was left unchanged (no branch, no edits, no builds). Supporting repository state: microG's only nearby module is play-services-nearby, which implements only Exposure Notification (COVID); there is no Nearby Share/Connections implementation at master 342c2801.",
+  "evidence": {
+    "action": "blocked",
+    "worktree": "/tmp/bounty-workspaces/repos/microg--GmsCore--1272",
+    "base_sha": "342c28011b46a164b969f62acaaa32941927c4b4",
+    "default_branch": "master",
+    "sources": [
+      {
+        "path": "build.gradle",
+        "sha256": "b4c233e87eb28e18659057df1ed62e15b402046c859fcbf441dd0bb7f0f67931"
+      },
+      {
+        "path": "settings.gradle",
+        "sha256": "184a1225296f240f1786f0f12f028d804471ba0cbb79584e92e25701422064a1"
+      },
+      {
+        "path": "gradle/wrapper/gradle-wrapper.properties",
+        "sha256": "a6b59c7242e86d352a742bf1217495f81e93312b09af32782d1906b3fdd72a9b"
+      },
+      {
+        "path": ".github/workflows/build.yml",
+        "sha256": "22520277eb7087bac7878becf3d5c7e0560590195fb1ffd671835cc11915a5af"
+      },
+      {
+        "path": "play-services-nearby/build.gradle",
+        "sha256": "4c3a02c8e3edc150c59f65cc7663bc77be27a990e637fc0b3e74d98b81fa495d"
+      }
+    ],
+    "run_url": "",
+    "admission": {
+      "amount": "300.00",
+      "currency": "USD",
+      "usd_value": "300.00",
+      "quote": {
+        "basis": "USD face value"
+      },
+      "raw": "$300.00",
+      "source_url": "https://github.com/microg/GmsCore/issues/1272#issuecomment-6417334756",
+      "payer": "bountyhub-bot"
+    }
+  },
+  "finished_at": "2026-10-30T07:55:26.455036+00:00"
 }
