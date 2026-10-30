@@ -1,0 +1,45 @@
+{
+  "task_id": "f96bab08d0a0eb7fc83332ae5a5158d7",
+  "repo": "go-gitea/gitea",
+  "issue_number": 14186,
+  "status": "DISPATCHING",
+  "dispatch_id": "6b51cd9d59fc4c61b59a54bc1ad172c8",
+  "admission": {
+    "funding": {
+      "amount": "1000",
+      "currency": "USD",
+      "usd_value": "1000",
+      "quote": {
+        "basis": "USD face value"
+      },
+      "raw": "1K USD",
+      "source_url": "https://github.com/go-gitea/gitea/issues/14186#issuecomment-875958307",
+      "payer": "techknowlogick"
+    },
+    "technical_signals": [
+      "failed",
+      "issue",
+      "issues",
+      "problems",
+      "signature",
+      "signatures"
+    ],
+    "component_references": [
+      "createFn()"
+    ],
+    "source_locations": [],
+    "engineering_evidence_sources": [
+      "https://github.com/go-gitea/gitea/issues/14186",
+      "https://github.com/go-gitea/gitea/issues/14186#issuecomment-922633276"
+    ],
+    "source_issue": "https://github.com/go-gitea/gitea/issues/14186",
+    "fetched_at": "2026-10-30T14:08:23.448115+00:00"
+  },
+  "lanes": [
+    "founder",
+    "programs"
+  ],
+  "dispatched_at": "2026-10-30T14:08:28.878662+00:00",
+  "attempt": 0,
+  "updated_at": "2026-10-30T14:08:28.878678+00:00"
+}
