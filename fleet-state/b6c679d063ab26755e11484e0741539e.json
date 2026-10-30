@@ -2,7 +2,7 @@
   "task_id": "b6c679d063ab26755e11484e0741539e",
   "repo": "SovrynBTC/Ecosystem-Bounties",
   "issue_number": 3,
-  "status": "DISPATCHING",
+  "status": "DISPATCHED",
   "dispatch_id": "b38ef0f9c25847c2a1c917ca89372be4",
   "admission": {
     "funding": {
@@ -33,5 +33,5 @@
   ],
   "dispatched_at": "2026-10-30T14:40:52.936976+00:00",
   "attempt": 0,
-  "updated_at": "2026-10-30T14:40:52.936993+00:00"
+  "updated_at": "2026-10-30T14:40:54.995632+00:00"
 }
