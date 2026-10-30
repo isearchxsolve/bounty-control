@@ -25,7 +25,8 @@ BOUNTY_ACCOUNT = (os.environ.get("BOUNTY_ACCOUNT")
 # $250 floor keeps 60.4%. 2000 was a closed door, not a filter. The default is now the
 # market median; BOUNTY_FLOOR overrides it per run or per environment without a commit.
 FLOOR = Decimal(os.environ.get("BOUNTY_FLOOR") or "250")
-TRUSTED_BOTS = {"algora-pbc", "algora-io[bot]", "polar-sh[bot]", "opire[bot]"}
+TRUSTED_BOTS = {"algora-pbc", "algora-io[bot]", "polar-sh[bot]", "opire[bot]",
+                "bountyhub-app", "bountyhub-bot"}
 ISSUERS = {"OWNER", "MEMBER", "COLLABORATOR"}
 NON_WORK = re.compile(
     r"\b(?:digest|newsletter|willingness.to.pay|validation plan|ad spend|"
@@ -180,6 +181,11 @@ EXPLICIT_DEADLINE = re.compile(
 
 def trusted(context, document):
     """Is this document written by the party that can commit the project's money?
+
+    BountyHub's marker is ``bountyhub-app[bot]``, measured 2026-10-30 on
+    ``moorcheh-ai/memanto#1852`` ("A bounty of $100.00 has been created by ..."). Without
+    that login a genuine funded issue reads as no offer at all, which is exactly how a
+    live $100 bounty was refused as CURRENT_ISSUER_OFFER_MISSING.
 
     Platform bots publish the funding attestation itself, so their login has to be
     recognised in both spellings: GitHub apps report ``algora-pbc[bot]`` while the
@@ -536,6 +542,11 @@ def admit(context, quote=None, floor=FLOOR):
     if offer_expired(context):
         return None, "EXPIRED_OFFER"
     title, body = issue["title"], issue.get("body") or ""
+    # A "live room" is a chat thread, not a deliverable: measured 2026-10-30 on
+    # jain-Igtm/CashGPT#1, whose owner-written $79,200 amount passed the issuer gate
+    # while the issue asked for no engineering at all.
+    if re.search(r"\blive room\b|\bchat ?room\b|\bcommunity (?:review|thread)\b", title, re.I):
+        return None, "MIRROR_OR_NON_ENGINEERING"
     if NON_WORK.search(title) or re.search(r"automated\s+(?:superteam\s+)?digest|mirrored from|status:\s*done", body, re.I):
         return None, "MIRROR_OR_NON_ENGINEERING"
     if re.search(r"\b(?:ad spend|marketing campaign|willingness.to.pay|market validation)\b", body, re.I):

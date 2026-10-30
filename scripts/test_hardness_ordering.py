@@ -149,3 +149,39 @@ class WiringTest(unittest.TestCase):
 
 if __name__ == "__main__":
     unittest.main()
+
+
+class BountyHubMarkerTest(unittest.TestCase):
+    """The surviving platform's marker must be recognised, on its measured spelling.
+
+    Found 2026-10-30: BountyHub posts from ``bountyhub-app[bot]``, not the guessed
+    ``bountyhub-bot``. Before this test a live $100 bounty on moorcheh-ai/memanto#1852
+    read as no offer at all, so a real funded ticket was indistinguishable from an
+    unfunded one.
+    """
+
+    def test_the_measured_bot_login_is_trusted(self):
+        import bounty_admission
+        context = {"repository": {"owner": {"login": "moorcheh-ai"}}}
+        document = {"user": {"login": "bountyhub-app[bot]"}, "author_association": "NONE"}
+        self.assertTrue(bounty_admission.trusted(context, document))
+
+    def test_a_stranger_quoting_the_same_words_is_not_trusted(self):
+        import bounty_admission
+        context = {"repository": {"owner": {"login": "moorcheh-ai"}}}
+        document = {"user": {"login": "random-user"}, "author_association": "NONE"}
+        self.assertFalse(bounty_admission.trusted(context, document))
+
+    def test_chat_rooms_are_not_deliverables(self):
+        import bounty_admission
+        context = {"issue": {"title": "CashGPT Live Room", "body": "", "state": "open",
+                            "user": {"login": "jain-Igtm"}, "labels": [], "comments": 0,
+                            "html_url": "https://github.com/jain-Igtm/CashGPT/issues/1"},
+                   "repository": {"full_name": "jain-Igtm/CashGPT",
+                                  "owner": {"login": "jain-Igtm"},
+                                  "archived": False, "disabled": False},
+                   "complete_comments": True, "comments": [], "repo": "jain-Igtm/CashGPT",
+                   "fetched_at": "2026-10-30T00:00:00+00:00"}
+        proof, reason = bounty_admission.admit(context)
+        self.assertIsNone(proof)
+        self.assertEqual(reason, "MIRROR_OR_NON_ENGINEERING")

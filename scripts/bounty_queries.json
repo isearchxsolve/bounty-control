@@ -4,7 +4,7 @@
   ],
   "normal": [
     "commenter:algora-pbc is:issue is:open \"bounty\"",
-    "label:\"\ud83d\udc8e Bounty\" is:issue is:open",
+    "label:\"💎 Bounty\" is:issue is:open",
     "\"/bounty $\" is:issue is:open",
     "opire.dev is:issue is:open",
     "\"/reward\" is:issue is:open",
@@ -17,7 +17,7 @@
     "label:bounty \"$200\" is:issue is:open",
     "label:bounty \"$500\" is:issue is:open",
     "\"will pay\" \"$100\" is:issue is:open",
-    "label:\"\ud83d\udcb0 Bounty\" is:issue is:open",
+    "label:\"💰 Bounty\" is:issue is:open",
     "bounty in:title",
     "\"will pay\"",
     "label:bounty",
@@ -25,7 +25,7 @@
   ],
   "startup": [
     "\"/bounty $\" is:issue is:open",
-    "label:\"\ud83d\udc8e Bounty\" is:issue is:open",
+    "label:\"💎 Bounty\" is:issue is:open",
     "commenter:algora-pbc is:issue is:open \"bounty\"",
     "\"/bounty\" \"wallet\" OR \"solana\" OR \"token\" is:issue is:open",
     "label:bounty \"wallet\" OR \"solana\" OR \"token\" is:issue is:open",
@@ -70,6 +70,8 @@
     "bountyhub-bot agent is:issue is:open"
   ],
   "programs": [
+    "in:comments bountyhub-bot is:issue is:open",
+    "in:comments bountyhub-app is:issue is:open",
     "repo:Expensify/App label:External is:issue is:open",
     "repo:eclipse-mosquitto/mosquitto label:\"Status: Available\" is:issue is:open",
     "repo:stakwork/sphinx-tribes label:bounties is:issue is:open",
