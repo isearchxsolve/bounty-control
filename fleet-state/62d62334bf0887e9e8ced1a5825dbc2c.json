@@ -2,7 +2,7 @@
   "task_id": "62d62334bf0887e9e8ced1a5825dbc2c",
   "repo": "harmony-one/bounties",
   "issue_number": 14,
-  "status": "CLAIMED",
+  "status": "REJECTED_PREPARATION",
   "dispatch_id": "935785fb88f54a9e8c85f3458ceca9e5",
   "admission": {
     "funding": {
@@ -35,7 +35,7 @@
   ],
   "dispatched_at": "2026-10-30T13:21:40.306806+00:00",
   "attempt": 1,
-  "updated_at": "2026-10-30T13:21:56.895434+00:00",
+  "updated_at": "2026-10-30T13:25:12.388928+00:00",
   "owner": "41062595184:1",
   "previous_owner": null,
   "previous_status": "DISPATCHED",
@@ -43,5 +43,45 @@
   "harness_sha": "122af062685a0bd1f1d161d9c42a07300819cc15",
   "claimed_at": "2026-10-30T13:21:56.895376+00:00",
   "lease_expires_at": "2026-10-30T17:26:56.895395+00:00",
-  "preparation_budget_seconds": 14400
+  "preparation_budget_seconds": 14400,
+  "at": "2026-10-30T13:24:58.225106+00:00",
+  "reason": "Cline preparation blocked: Issue #14 in harmony-one/bounties is not a concrete code change to this repository and its funding is withdrawn. (1) Non-engineering request: the body asks to 'Speed up Harmony's transaction finality time from 2 seconds down to 1 second by implementing networking upgrades outlined in harmony.one/networking' with only 'topics to explore' (libp2p fine-tuning, HIPv2, RaptorQ, UDP transport, benchmarking) and explicitly open-ended acceptance criteria: 'This is a multi-part bounty, each with its own criteria. Our team will help you scope out each project.' There is no reproducible defect, no specific feature, and no repository file/component to modify. This is a grant/proposal-style bounty / generic product idea, matching the blocked category. (2) Withdrawn funding: gitcoinbot comments at 2021-05-22T04:49:32Z and 2021-08-24T17:13:08Z both read 'The funding of 100658.9789 ONE ... attached to this issue has been cancelled by the bounty submitter' - the bounty is no longer live. (3) Wrong repository type: harmony-one/bounties is itself the bounty-spec/program repository (README: 'Anyone can start a bounty in this repo'; it contains only README.md, LICENSE, docs/guideline.md and .github/ISSUE_TEMPLATE/bounty.md), with no build/test/lint toolchain and no protocol source, so no code change or regression test applies here. Per policy this rejected/non-engineering issue is not converted into a fallback proposal or PR; checkout left unchanged. No competing open PRs (only 3 PRs ever, all closed).",
+  "declared_reason": "Issue #14 in harmony-one/bounties is not a concrete code change to this repository and its funding is withdrawn. (1) Non-engineering request: the body asks to 'Speed up Harmony's transaction finality time from 2 seconds down to 1 second by implementing networking upgrades outlined in harmony.one/networking' with only 'topics to explore' (libp2p fine-tuning, HIPv2, RaptorQ, UDP transport, benchmarking) and explicitly open-ended acceptance criteria: 'This is a multi-part bounty, each with its own criteria. Our team will help you scope out each project.' There is no reproducible defect, no specific feature, and no repository file/component to modify. This is a grant/proposal-style bounty / generic product idea, matching the blocked category. (2) Withdrawn funding: gitcoinbot comments at 2021-05-22T04:49:32Z and 2021-08-24T17:13:08Z both read 'The funding of 100658.9789 ONE ... attached to this issue has been cancelled by the bounty submitter' - the bounty is no longer live. (3) Wrong repository type: harmony-one/bounties is itself the bounty-spec/program repository (README: 'Anyone can start a bounty in this repo'; it contains only README.md, LICENSE, docs/guideline.md and .github/ISSUE_TEMPLATE/bounty.md), with no build/test/lint toolchain and no protocol source, so no code change or regression test applies here. Per policy this rejected/non-engineering issue is not converted into a fallback proposal or PR; checkout left unchanged. No competing open PRs (only 3 PRs ever, all closed).",
+  "evidence": {
+    "action": "blocked",
+    "worktree": "/tmp/bounty-workspaces/repos/harmony-one--bounties--14",
+    "base_sha": "8f44eb17eba5cf8f20bc0633d0c099dc0c8ea30a",
+    "default_branch": "main",
+    "sources": [
+      {
+        "path": "README.md",
+        "sha256": "0b18bd62270e3af1f802d025eae3347e06ef128889253e0d5d937ceb4f8de9f8"
+      },
+      {
+        "path": "docs/guideline.md",
+        "sha256": "3df8c423ab82369de7107656392637fc62a0367b2b05e217eb39c4f91a72f6e3"
+      },
+      {
+        "path": ".github/ISSUE_TEMPLATE/bounty.md",
+        "sha256": "c2f4bf56bc05ed2605fa546343faeafe98a6bc541790665f3b050129fdc87181"
+      },
+      {
+        "path": "LICENSE",
+        "sha256": "86fcdd74cd564d28d7c60a3be30b6cff828b8e1e4218aa77634e276c762c5cdc"
+      }
+    ],
+    "run_url": "",
+    "admission": {
+      "amount": "20000",
+      "currency": "USD",
+      "usd_value": "20000",
+      "quote": {
+        "basis": "USD face value"
+      },
+      "raw": "$20,000",
+      "source_url": "https://github.com/harmony-one/bounties/issues/14",
+      "payer": "lijiang2087"
+    }
+  },
+  "finished_at": "2026-10-30T13:25:11.748690+00:00"
 }
