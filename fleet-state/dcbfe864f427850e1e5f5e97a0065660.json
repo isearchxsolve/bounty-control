@@ -2,7 +2,7 @@
   "task_id": "dcbfe864f427850e1e5f5e97a0065660",
   "repo": "chosencharacters/squidBounties",
   "issue_number": 1,
-  "status": "CLAIMED",
+  "status": "REJECTED_PREPARATION",
   "dispatch_id": "898ea33e8be849cb8132bae0ecec0ddc",
   "admission": {
     "funding": {
@@ -36,7 +36,7 @@
   ],
   "dispatched_at": "2026-10-30T18:32:52.931135+00:00",
   "attempt": 1,
-  "updated_at": "2026-10-30T18:33:06.513487+00:00",
+  "updated_at": "2026-10-30T18:36:53.330644+00:00",
   "owner": "41107873540:1",
   "previous_owner": null,
   "previous_status": "DISPATCHED",
@@ -44,5 +44,33 @@
   "harness_sha": "3bf112c7a2d5d4abc164c32c7c87513625ba9c9d",
   "claimed_at": "2026-10-30T18:33:06.513437+00:00",
   "lease_expires_at": "2026-10-30T22:38:06.513451+00:00",
-  "preparation_budget_seconds": 14400
+  "preparation_budget_seconds": 14400,
+  "at": "2026-10-30T18:36:38.426446+00:00",
+  "reason": "Cline preparation blocked: Issue #1 ('$250 - FlxShaderShape (or \"Mask\")') is a bounty-board entry, not a concrete code change to this repository. chosencharacters/squidBounties contains exactly ONE tracked file, README.md (6 commits, all 'Update README.md'; no source, no haxelib.json/package.json, no lockfile, no CI workflow, no tests, no build system; the only branch is master). README.md states the repo is a bounty listing: line 8 'All available bounties are listed on the [Issues] tab above as open issues' and line 17 'If this is a HaxeFlixel bounty it must be accepted by the HaxeFlixel organization.' The issue body requests a feature ('FlxShaderShape' applying a shader/water effect to an arbitrary shape on an FlxCamera) that by the repo's own rules must land in the HaxeFlixel/OpenFL organization repositories (HaxeFlixel/flixel or flixel-addons), not in squidBounties. There is no source file, manifest, or testable code path in this checkout to fix or extend, so no reproducible defect, engineering feature, or code-level maintenance can be delivered against this repository; doing so would be an off-target fallback proposal, which the task explicitly forbids. Funding status is live-but-claimed (issue OPEN, label 'claimed', owner comment 683379598 on 2020-08-30 'No, this bounty is still in progress') and there are 0 pull requests (no competing PR), so the sole decisive blocker is that the requested deliverable belongs to a different repository than the one under test. Checkout left unchanged (commit ad36daf checked out, clean working tree).",
+  "declared_reason": "Issue #1 ('$250 - FlxShaderShape (or \"Mask\")') is a bounty-board entry, not a concrete code change to this repository. chosencharacters/squidBounties contains exactly ONE tracked file, README.md (6 commits, all 'Update README.md'; no source, no haxelib.json/package.json, no lockfile, no CI workflow, no tests, no build system; the only branch is master). README.md states the repo is a bounty listing: line 8 'All available bounties are listed on the [Issues] tab above as open issues' and line 17 'If this is a HaxeFlixel bounty it must be accepted by the HaxeFlixel organization.' The issue body requests a feature ('FlxShaderShape' applying a shader/water effect to an arbitrary shape on an FlxCamera) that by the repo's own rules must land in the HaxeFlixel/OpenFL organization repositories (HaxeFlixel/flixel or flixel-addons), not in squidBounties. There is no source file, manifest, or testable code path in this checkout to fix or extend, so no reproducible defect, engineering feature, or code-level maintenance can be delivered against this repository; doing so would be an off-target fallback proposal, which the task explicitly forbids. Funding status is live-but-claimed (issue OPEN, label 'claimed', owner comment 683379598 on 2020-08-30 'No, this bounty is still in progress') and there are 0 pull requests (no competing PR), so the sole decisive blocker is that the requested deliverable belongs to a different repository than the one under test. Checkout left unchanged (commit ad36daf checked out, clean working tree).",
+  "evidence": {
+    "action": "blocked",
+    "worktree": "/tmp/bounty-workspaces/repos/chosencharacters--squidBounties--1",
+    "base_sha": "ad36daf90fc03d3aeb8e04f4d4059d8ee99470d7",
+    "default_branch": "master",
+    "sources": [
+      {
+        "path": "README.md",
+        "sha256": "2964ffa4d01eeeb5e6c8c932ccf0ea35bcb79789af68a0bf2c0081b662459649"
+      }
+    ],
+    "run_url": "",
+    "admission": {
+      "amount": "250",
+      "currency": "USD",
+      "usd_value": "250",
+      "quote": {
+        "basis": "USD face value"
+      },
+      "raw": "$250",
+      "source_url": "https://github.com/chosencharacters/squidBounties/issues/1",
+      "payer": "chosencharacters"
+    }
+  },
+  "finished_at": "2026-10-30T18:36:52.593669+00:00"
 }
