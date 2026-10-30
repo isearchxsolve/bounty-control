@@ -2,7 +2,7 @@
   "task_id": "600fe8961b027bcfd5c5a865fa2619c6",
   "repo": "Fraud-Detection-and-Defense/opendata-hackathon-GR15",
   "issue_number": 2,
-  "status": "CLAIMED",
+  "status": "REJECTED_PREPARATION",
   "dispatch_id": "4cc33fc759e74eb581c196d1cd1a6fe9",
   "admission": {
     "funding": {
@@ -33,7 +33,7 @@
   ],
   "dispatched_at": "2026-10-30T12:17:31.081685+00:00",
   "attempt": 1,
-  "updated_at": "2026-10-30T12:17:40.412211+00:00",
+  "updated_at": "2026-10-30T12:20:45.446592+00:00",
   "owner": "41054236657:1",
   "previous_owner": null,
   "previous_status": "DISPATCHED",
@@ -41,5 +41,33 @@
   "harness_sha": "122af062685a0bd1f1d161d9c42a07300819cc15",
   "claimed_at": "2026-10-30T12:17:40.412160+00:00",
   "lease_expires_at": "2026-10-30T16:22:40.412175+00:00",
-  "preparation_budget_seconds": 14400
+  "preparation_budget_seconds": 14400,
+  "at": "2026-10-30T12:20:32.283893+00:00",
+  "reason": "Cline preparation blocked: Issue #2 'Sybil Slayer Bounties' is a hackathon prize bounty, not a concrete code change to this repository. The issue body offers a share of $10,000 in ETH and asks participants to submit data-science analyses / curated on-chain datasets through an EXTERNAL Gitcoin hackathon site (https://gitcoin.co/hackathon/datascience/onboard), judged on the accuracy of predictions and the value of shared datasets. It contains no reproducible defect, no engineering feature request, no component reference, and no source location. The repository is a docs/submissions container, not a software project: git ls-remote shows a single branch main (41b21ee9703cbf8be73e3d594de84d1d95b3feb5); the tree contains only 'DuneDetective submissions/', 'HumanHacker submissions/', 'SybilSlayer submissions/', 'ODSworkingfiles/', LICENSE (CC0-1.0) and README.md (334 bytes). There is no manifest, lockfile, CI workflow, language, test suite, or build/lint tooling (GitHub API: language=null, size=12KB, open_issues_count=3, archived=false). Default-branch HEAD commit is dated 2022-10-02T18:30:52Z and the repo's pushed_at is 2022-10-02T18:30:52Z. Funding is not live: the issue itself states 'Winners will be announced on Halloween - October 31, 2022', the Gitcoin bot thread and all 6 comments are from Sep-Oct 2022, and the repo has been dormant since Oct 2022. There are no open or historical pull requests (pulls?state=all => []). This falls under the hackathon-competition / non-engineering-deliverable / expired-funding exclusion, so the task is blocked and the checkout is left unchanged (no worktree created).",
+  "declared_reason": "Issue #2 'Sybil Slayer Bounties' is a hackathon prize bounty, not a concrete code change to this repository. The issue body offers a share of $10,000 in ETH and asks participants to submit data-science analyses / curated on-chain datasets through an EXTERNAL Gitcoin hackathon site (https://gitcoin.co/hackathon/datascience/onboard), judged on the accuracy of predictions and the value of shared datasets. It contains no reproducible defect, no engineering feature request, no component reference, and no source location. The repository is a docs/submissions container, not a software project: git ls-remote shows a single branch main (41b21ee9703cbf8be73e3d594de84d1d95b3feb5); the tree contains only 'DuneDetective submissions/', 'HumanHacker submissions/', 'SybilSlayer submissions/', 'ODSworkingfiles/', LICENSE (CC0-1.0) and README.md (334 bytes). There is no manifest, lockfile, CI workflow, language, test suite, or build/lint tooling (GitHub API: language=null, size=12KB, open_issues_count=3, archived=false). Default-branch HEAD commit is dated 2022-10-02T18:30:52Z and the repo's pushed_at is 2022-10-02T18:30:52Z. Funding is not live: the issue itself states 'Winners will be announced on Halloween - October 31, 2022', the Gitcoin bot thread and all 6 comments are from Sep-Oct 2022, and the repo has been dormant since Oct 2022. There are no open or historical pull requests (pulls?state=all => []). This falls under the hackathon-competition / non-engineering-deliverable / expired-funding exclusion, so the task is blocked and the checkout is left unchanged (no worktree created).",
+  "evidence": {
+    "action": "blocked",
+    "worktree": "/tmp/bounty-workspaces/repos/Fraud-Detection-and-Defense--opendata-hackathon-GR15--2",
+    "base_sha": "41b21ee9703cbf8be73e3d594de84d1d95b3feb5",
+    "default_branch": "main",
+    "sources": [
+      {
+        "path": "README.md",
+        "sha256": "b9e8e01c05af917d365ff903129d1e1d7333093083cc390bed85115c9ae9c5c0"
+      }
+    ],
+    "run_url": "",
+    "admission": {
+      "amount": "10000",
+      "currency": "USD",
+      "usd_value": "10000",
+      "quote": {
+        "basis": "USD face value"
+      },
+      "raw": "$10,000",
+      "source_url": "https://github.com/Fraud-Detection-and-Defense/opendata-hackathon-GR15/issues/2",
+      "payer": "epowell101"
+    }
+  },
+  "finished_at": "2026-10-30T12:20:44.833087+00:00"
 }
