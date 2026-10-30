@@ -2,7 +2,7 @@
   "task_id": "1ef17572b54c86d2d228e0d90a8a73ac",
   "repo": "nknorg/nBounty",
   "issue_number": 7,
-  "status": "CLAIMED",
+  "status": "REJECTED_PREPARATION",
   "dispatch_id": "068f8ebf9799497597ff7905955d1a88",
   "admission": {
     "funding": {
@@ -33,7 +33,7 @@
   ],
   "dispatched_at": "2026-10-30T16:47:52.415767+00:00",
   "attempt": 1,
-  "updated_at": "2026-10-30T16:48:05.738739+00:00",
+  "updated_at": "2026-10-30T16:53:15.754281+00:00",
   "owner": "41093129683:1",
   "previous_owner": null,
   "previous_status": "DISPATCHED",
@@ -41,5 +41,28 @@
   "harness_sha": "9d0070af8f144ba3b94f832acba18c33aab6cb2a",
   "claimed_at": "2026-10-30T16:48:05.738670+00:00",
   "lease_expires_at": "2026-10-30T20:53:05.738685+00:00",
-  "preparation_budget_seconds": 14400
+  "preparation_budget_seconds": 14400,
+  "at": "2026-10-30T16:53:00.773626+00:00",
+  "reason": "Cline preparation blocked: Issue #7 '[Gitcoin GR11] Improve Documentation for NKN SDK' is a documentation/marketing deliverable, not a concrete code change to this repository, and its funding is not live. (1) The body asks technical writers to 'Improve documentation for Go/JS/Java SDK, preferably create complete, developer friendly getting started, tutorial and full walkthrough examples' via a Gitcoin hackathon bounty; acceptance criterion is only 'All documentation submitted via github'. (2) Repository nknorg/nBounty is a bounty-tracking repo: its master tree contains ONLY .gitignore and README.md (verified via GitHub contents API), so there is no SDK source to change. (3) Funding already paid: gitcoinbot comment 944478209 (2021-10-15T17:37:28Z) states 'The funding of 3750.0 USDT (3750.00 USD @ $1.0/USDT) attached to this issue has been approved & issued to @cryptofervid', and the winning work is an external PR https://github.com/cryptofervid/nkn-java-website (gitcoinbot comment 929559904). Submissions were due 2021-09-29 and winners announced 2021-10-12, so the campaign is concluded and no funding remains to claim. (4) No competing open PR in nknorg/nBounty: only unrelated PR #12 'Create blank.yml'. Per the classification rules this is a documentation deliverable with withdrawn/paid funding and an already-completed out-of-repo submission, so the checkout was left unchanged and no fallback proposal or PR was created.",
+  "declared_reason": "Issue #7 '[Gitcoin GR11] Improve Documentation for NKN SDK' is a documentation/marketing deliverable, not a concrete code change to this repository, and its funding is not live. (1) The body asks technical writers to 'Improve documentation for Go/JS/Java SDK, preferably create complete, developer friendly getting started, tutorial and full walkthrough examples' via a Gitcoin hackathon bounty; acceptance criterion is only 'All documentation submitted via github'. (2) Repository nknorg/nBounty is a bounty-tracking repo: its master tree contains ONLY .gitignore and README.md (verified via GitHub contents API), so there is no SDK source to change. (3) Funding already paid: gitcoinbot comment 944478209 (2021-10-15T17:37:28Z) states 'The funding of 3750.0 USDT (3750.00 USD @ $1.0/USDT) attached to this issue has been approved & issued to @cryptofervid', and the winning work is an external PR https://github.com/cryptofervid/nkn-java-website (gitcoinbot comment 929559904). Submissions were due 2021-09-29 and winners announced 2021-10-12, so the campaign is concluded and no funding remains to claim. (4) No competing open PR in nknorg/nBounty: only unrelated PR #12 'Create blank.yml'. Per the classification rules this is a documentation deliverable with withdrawn/paid funding and an already-completed out-of-repo submission, so the checkout was left unchanged and no fallback proposal or PR was created.",
+  "evidence": {
+    "action": "blocked",
+    "worktree": "/tmp/bounty-workspaces/repos/nknorg--nBounty--7",
+    "base_sha": "776ec5cd0a191695e2153d38d256624cdb5d857a",
+    "default_branch": "master",
+    "sources": [],
+    "run_url": "",
+    "admission": {
+      "amount": "3750",
+      "currency": "USDT",
+      "usd_value": "3750",
+      "quote": {
+        "basis": "USD-denominated stablecoin offer"
+      },
+      "raw": "3,750 USDT",
+      "source_url": "https://github.com/nknorg/nBounty/issues/7",
+      "payer": "yilunzhang"
+    }
+  },
+  "finished_at": "2026-10-30T16:53:15.023954+00:00"
 }
