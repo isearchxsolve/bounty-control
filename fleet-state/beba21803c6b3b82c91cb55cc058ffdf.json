@@ -1,0 +1,36 @@
+{
+  "task_id": "beba21803c6b3b82c91cb55cc058ffdf",
+  "repo": "galacticcouncil/amsterdot-bounties-2022",
+  "issue_number": 1,
+  "status": "DISPATCHING",
+  "dispatch_id": "394864b94ef845bdaf3e70f84604cf2a",
+  "admission": {
+    "funding": {
+      "amount": "150000",
+      "currency": "USD",
+      "usd_value": "150000",
+      "quote": {
+        "basis": "USD face value"
+      },
+      "raw": "$150,000",
+      "source_url": "https://github.com/galacticcouncil/amsterdot-bounties-2022/issues/1",
+      "payer": "cl0w5"
+    },
+    "technical_signals": [
+      "broken"
+    ],
+    "component_references": [],
+    "source_locations": [],
+    "engineering_evidence_sources": [
+      "https://github.com/galacticcouncil/amsterdot-bounties-2022/issues/1"
+    ],
+    "source_issue": "https://github.com/galacticcouncil/amsterdot-bounties-2022/issues/1",
+    "fetched_at": "2026-10-30T13:40:44.630305+00:00"
+  },
+  "lanes": [
+    "founder"
+  ],
+  "dispatched_at": "2026-10-30T13:40:45.952709+00:00",
+  "attempt": 0,
+  "updated_at": "2026-10-30T13:40:45.952726+00:00"
+}
