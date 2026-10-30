@@ -2,7 +2,7 @@
   "task_id": "e746238b7ab5a6a95c330ee4eb671eba",
   "repo": "connext/gitcoin",
   "issue_number": 2,
-  "status": "CLAIMED",
+  "status": "FAILED_RUNNER_SHUTDOWN",
   "dispatch_id": "41d8d53895d94c9693f6297ecb415613",
   "admission": {
     "funding": {
@@ -33,7 +33,7 @@
   ],
   "dispatched_at": "2026-10-30T15:40:06.034115+00:00",
   "attempt": 2,
-  "updated_at": "2026-10-30T15:40:20.832473+00:00",
+  "updated_at": "2026-10-30T15:42:02.528929+00:00",
   "owner": "41082824792:1",
   "previous_owner": "41058348982:1",
   "previous_status": "DISPATCHED",
@@ -42,12 +42,12 @@
   "claimed_at": "2026-10-30T15:40:20.832413+00:00",
   "lease_expires_at": "2026-10-30T19:45:20.832428+00:00",
   "preparation_budget_seconds": 14400,
-  "kind": "deliverable_invalid",
+  "kind": "runner_shutdown",
   "retryable": true,
-  "diagnostic": "Cline deliverable invalid at /tmp/fleet-artifacts/delivery-supervisor/2a9fe293db11441faae06ac7f218c25c.preparation.json: invalid base_sha: None",
+  "diagnostic": "No engineering result and no failure record: the phase was terminated before it could report (exit 143 / runner shutdown)",
   "path": "/tmp/fleet-artifacts/delivery-supervisor/2a9fe293db11441faae06ac7f218c25c.preparation.json",
   "reason": "invalid base_sha: None",
-  "at": "2026-10-30T12:52:25.275639+00:00",
+  "at": "2026-10-30T15:42:01.769172+00:00",
   "failures": [
     {
       "run_url": "https://github.com/isearchxsolve/bounty-control/actions/runs/41058348982",
@@ -58,7 +58,17 @@
       "path": "/tmp/fleet-artifacts/delivery-supervisor/2a9fe293db11441faae06ac7f218c25c.preparation.json",
       "reason": "invalid base_sha: None",
       "at": "2026-10-30T12:52:25.275639+00:00"
+    },
+    {
+      "run_url": "https://github.com/isearchxsolve/bounty-control/actions/runs/41082824792",
+      "status": "FAILED_RUNNER_SHUTDOWN",
+      "kind": "runner_shutdown",
+      "retryable": true,
+      "inferred": true,
+      "diagnostic": "No engineering result and no failure record: the phase was terminated before it could report (exit 143 / runner shutdown)",
+      "at": "2026-10-30T15:42:01.769172+00:00"
     }
   ],
-  "finished_at": "2026-10-30T12:52:35.720013+00:00"
+  "finished_at": "2026-10-30T15:42:01.769205+00:00",
+  "inferred": true
 }
