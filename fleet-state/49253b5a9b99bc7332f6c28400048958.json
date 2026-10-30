@@ -2,7 +2,7 @@
   "task_id": "49253b5a9b99bc7332f6c28400048958",
   "repo": "intuition-box/Liquid-Democracy",
   "issue_number": 2,
-  "status": "CLAIMED",
+  "status": "FAILED_DELIVERABLE_MISSING",
   "dispatch_id": "cbdfcf06071e48b58f6704a5c544e279",
   "admission": {
     "funding": {
@@ -35,7 +35,7 @@
   ],
   "dispatched_at": "2026-10-30T16:00:56.225589+00:00",
   "attempt": 2,
-  "updated_at": "2026-10-30T16:01:07.837695+00:00",
+  "updated_at": "2026-10-30T16:05:00.070251+00:00",
   "owner": "41085996936:1",
   "previous_owner": "41082816638:1",
   "previous_status": "DISPATCHED",
@@ -44,11 +44,11 @@
   "claimed_at": "2026-10-30T16:01:07.837640+00:00",
   "lease_expires_at": "2026-10-30T20:06:07.837655+00:00",
   "preparation_budget_seconds": 14400,
-  "kind": "runner_shutdown",
+  "kind": "deliverable_invalid",
   "retryable": true,
   "inferred": true,
-  "diagnostic": "No engineering result and no failure record: the phase was terminated before it could report (exit 143 / runner shutdown)",
-  "at": "2026-10-30T15:42:21.537075+00:00",
+  "diagnostic": "Cline deliverable invalid at /tmp/fleet-artifacts/delivery-supervisor/4a3d6e8d44294705a4bb2fe0f3be7919.preparation.json: invalid base_sha: ''",
+  "at": "2026-10-30T16:04:46.047918+00:00",
   "failures": [
     {
       "run_url": "https://github.com/isearchxsolve/bounty-control/actions/runs/41082816638",
@@ -58,7 +58,19 @@
       "inferred": true,
       "diagnostic": "No engineering result and no failure record: the phase was terminated before it could report (exit 143 / runner shutdown)",
       "at": "2026-10-30T15:42:21.537075+00:00"
+    },
+    {
+      "run_url": "https://github.com/isearchxsolve/bounty-control/actions/runs/41085996936",
+      "status": "FAILED_DELIVERABLE_MISSING",
+      "kind": "deliverable_invalid",
+      "retryable": true,
+      "diagnostic": "Cline deliverable invalid at /tmp/fleet-artifacts/delivery-supervisor/4a3d6e8d44294705a4bb2fe0f3be7919.preparation.json: invalid base_sha: ''",
+      "path": "/tmp/fleet-artifacts/delivery-supervisor/4a3d6e8d44294705a4bb2fe0f3be7919.preparation.json",
+      "reason": "invalid base_sha: ''",
+      "at": "2026-10-30T16:04:46.047918+00:00"
     }
   ],
-  "finished_at": "2026-10-30T15:42:21.537110+00:00"
+  "finished_at": "2026-10-30T16:04:59.133961+00:00",
+  "path": "/tmp/fleet-artifacts/delivery-supervisor/4a3d6e8d44294705a4bb2fe0f3be7919.preparation.json",
+  "reason": "invalid base_sha: ''"
 }
