@@ -2,7 +2,7 @@
   "task_id": "c9b48db6e7d13157d07a743d345f326e",
   "repo": "harmonylion/ideamarkets",
   "issue_number": 12,
-  "status": "DISPATCHING",
+  "status": "DISPATCHED",
   "dispatch_id": "6da030b0a2d943ba94feabd91baf3c4e",
   "admission": {
     "funding": {
@@ -33,5 +33,5 @@
   ],
   "dispatched_at": "2026-10-30T18:17:21.537338+00:00",
   "attempt": 0,
-  "updated_at": "2026-10-30T18:17:21.537360+00:00"
+  "updated_at": "2026-10-30T18:17:23.310701+00:00"
 }
