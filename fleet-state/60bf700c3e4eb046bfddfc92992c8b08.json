@@ -1,0 +1,38 @@
+{
+  "task_id": "60bf700c3e4eb046bfddfc92992c8b08",
+  "repo": "StateofScale/State-of-Scale",
+  "issue_number": 3,
+  "status": "DISPATCHING",
+  "dispatch_id": "4a53e46e3c604e1bbb155972e271fd4e",
+  "admission": {
+    "funding": {
+      "amount": "400",
+      "currency": "USD",
+      "usd_value": "400",
+      "quote": {
+        "basis": "USD face value"
+      },
+      "raw": "$400",
+      "source_url": "https://github.com/StateofScale/State-of-Scale/issues/3",
+      "payer": "OKDuncan"
+    },
+    "technical_signals": [
+      "issuecomment",
+      "issues"
+    ],
+    "component_references": [],
+    "source_locations": [],
+    "engineering_evidence_sources": [
+      "https://github.com/StateofScale/State-of-Scale/issues/3#issuecomment-514741929",
+      "https://github.com/StateofScale/State-of-Scale/issues/3#issuecomment-518985297"
+    ],
+    "source_issue": "https://github.com/StateofScale/State-of-Scale/issues/3",
+    "fetched_at": "2026-10-30T17:08:39.861375+00:00"
+  },
+  "lanes": [
+    "founder"
+  ],
+  "dispatched_at": "2026-10-30T17:08:41.134140+00:00",
+  "attempt": 0,
+  "updated_at": "2026-10-30T17:08:41.134159+00:00"
+}
