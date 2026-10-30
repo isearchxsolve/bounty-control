@@ -2,7 +2,7 @@
   "task_id": "e128998b18a70bb4aa43fe7c4e08d9fb",
   "repo": "nknorg/nBounty",
   "issue_number": 5,
-  "status": "DISPATCHING",
+  "status": "DISPATCHED",
   "dispatch_id": "50a4706a002f41fdbd84eb65108b065c",
   "admission": {
     "funding": {
@@ -33,5 +33,5 @@
   ],
   "dispatched_at": "2026-10-30T14:40:59.258469+00:00",
   "attempt": 0,
-  "updated_at": "2026-10-30T14:40:59.258488+00:00"
+  "updated_at": "2026-10-30T14:41:01.347887+00:00"
 }
