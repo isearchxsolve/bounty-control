@@ -2,7 +2,7 @@
   "task_id": "49253b5a9b99bc7332f6c28400048958",
   "repo": "intuition-box/Liquid-Democracy",
   "issue_number": 2,
-  "status": "CLAIMED",
+  "status": "FAILED_DELIVERABLE_MISSING",
   "dispatch_id": "d6dde1a883b043f485344af7d7689fb8",
   "admission": {
     "funding": {
@@ -35,7 +35,7 @@
   ],
   "dispatched_at": "2026-10-30T16:16:05.586273+00:00",
   "attempt": 3,
-  "updated_at": "2026-10-30T16:16:21.678447+00:00",
+  "updated_at": "2026-10-30T16:19:19.237859+00:00",
   "owner": "41088322798:1",
   "previous_owner": "41085996936:1",
   "previous_status": "DISPATCHED",
@@ -47,8 +47,8 @@
   "kind": "deliverable_invalid",
   "retryable": true,
   "inferred": true,
-  "diagnostic": "Cline deliverable invalid at /tmp/fleet-artifacts/delivery-supervisor/4a3d6e8d44294705a4bb2fe0f3be7919.preparation.json: invalid base_sha: ''",
-  "at": "2026-10-30T16:04:46.047918+00:00",
+  "diagnostic": "Cline deliverable invalid at /tmp/fleet-artifacts/delivery-supervisor/b1ecf113e9be4cd3a9328aac5a232567.preparation.json: invalid base_sha: ''",
+  "at": "2026-10-30T16:19:10.061766+00:00",
   "failures": [
     {
       "run_url": "https://github.com/isearchxsolve/bounty-control/actions/runs/41082816638",
@@ -68,9 +68,19 @@
       "path": "/tmp/fleet-artifacts/delivery-supervisor/4a3d6e8d44294705a4bb2fe0f3be7919.preparation.json",
       "reason": "invalid base_sha: ''",
       "at": "2026-10-30T16:04:46.047918+00:00"
+    },
+    {
+      "run_url": "https://github.com/isearchxsolve/bounty-control/actions/runs/41088322798",
+      "status": "FAILED_DELIVERABLE_MISSING",
+      "kind": "deliverable_invalid",
+      "retryable": true,
+      "diagnostic": "Cline deliverable invalid at /tmp/fleet-artifacts/delivery-supervisor/b1ecf113e9be4cd3a9328aac5a232567.preparation.json: invalid base_sha: ''",
+      "path": "/tmp/fleet-artifacts/delivery-supervisor/b1ecf113e9be4cd3a9328aac5a232567.preparation.json",
+      "reason": "invalid base_sha: ''",
+      "at": "2026-10-30T16:19:10.061766+00:00"
     }
   ],
-  "finished_at": "2026-10-30T16:04:59.133961+00:00",
-  "path": "/tmp/fleet-artifacts/delivery-supervisor/4a3d6e8d44294705a4bb2fe0f3be7919.preparation.json",
+  "finished_at": "2026-10-30T16:19:18.624247+00:00",
+  "path": "/tmp/fleet-artifacts/delivery-supervisor/b1ecf113e9be4cd3a9328aac5a232567.preparation.json",
   "reason": "invalid base_sha: ''"
 }
