@@ -2,7 +2,7 @@
   "task_id": "3e2994b53c04d68e5cf6340437705c94",
   "repo": "kendraio/kendraio-app",
   "issue_number": 184,
-  "status": "CLAIMED",
+  "status": "REJECTED_PREPARATION",
   "dispatch_id": "9e4ec4bf2de64303bf2d3140dee4fc11",
   "admission": {
     "funding": {
@@ -32,7 +32,7 @@
   ],
   "dispatched_at": "2026-10-30T08:10:01.041222+00:00",
   "attempt": 1,
-  "updated_at": "2026-10-30T08:10:17.886567+00:00",
+  "updated_at": "2026-10-30T08:13:40.015960+00:00",
   "owner": "41024629998:1",
   "previous_owner": null,
   "previous_status": "DISPATCHED",
@@ -40,5 +40,49 @@
   "harness_sha": "4d6a25eb2b433ba15801e9eaad4f550aae1920c8",
   "claimed_at": "2026-10-30T08:10:17.886517+00:00",
   "lease_expires_at": "2026-10-30T12:15:17.886532+00:00",
-  "preparation_budget_seconds": 14400
+  "preparation_budget_seconds": 14400,
+  "at": "2026-10-30T08:13:25.409224+00:00",
+  "reason": "Cline preparation blocked: Issue #184 'Kendraio App MusicBrainz integration (bounty)' is a bounty/grant-style proposal request, not a concrete code change (reproducible defect, specific engineering feature, or focused maintenance). It is additionally disqualified by effectively withdrawn/disclaimed funding and an already-competing open PR. Exact evidence: (1) PROPOSAL/HUMAN-GATING requirement - the issue body itself begins 'Formal notice: Don't proceed unless we have a Zoom video call first. Not interested in AI sloprs!' and Deliverable #1 is 'A proposal written out before work starts and agreed upon beforehand in our Google Drive.'; (2) FUNDING DISCLAIMED BY PAYER - maintainer/payer dahacouk (repo MEMBER, org kendraio) commented 2026-08-27T16:28:33Z: 'Oh, no! This has been listed in bounty scouts! Any human reading this I'll be honest... This is a 5 year old bounty. In the advent of AI slop I'll be very unlikely to payout. But if you are simply happy to just play around with Kendraio App local-first, no-code, malleable-interface concepts then great. But if you want a quick buck then move along. Cheers!' (issue created 2021-04-27, i.e. ~5 years old; latest body notice 2026-08-28T12:11:11Z reinforces the Zoom-call gate); (3) ALREADY-COMPETING PR - open PR #614 'Add MusicBrainz adapter workflows' (head codex/musicbrainz-adapter fc2ea44accf7b729667d150db4ddf1a65af269ee, base develop, opened 2026-08-20T19:21:08Z) implements the same deliverables (artist search, artist lookup, artist release browsing, release details, Release Editor seeding upload path) and is the bounty submission cross-referenced in the issue timeline (2026-08-20T19:21:09Z). Per policy this must not be converted into a fallback proposal or PR; checkout left unchanged (clean, develop @ base_sha, no fix branch created).",
+  "declared_reason": "Issue #184 'Kendraio App MusicBrainz integration (bounty)' is a bounty/grant-style proposal request, not a concrete code change (reproducible defect, specific engineering feature, or focused maintenance). It is additionally disqualified by effectively withdrawn/disclaimed funding and an already-competing open PR. Exact evidence: (1) PROPOSAL/HUMAN-GATING requirement - the issue body itself begins 'Formal notice: Don't proceed unless we have a Zoom video call first. Not interested in AI sloprs!' and Deliverable #1 is 'A proposal written out before work starts and agreed upon beforehand in our Google Drive.'; (2) FUNDING DISCLAIMED BY PAYER - maintainer/payer dahacouk (repo MEMBER, org kendraio) commented 2026-08-27T16:28:33Z: 'Oh, no! This has been listed in bounty scouts! Any human reading this I'll be honest... This is a 5 year old bounty. In the advent of AI slop I'll be very unlikely to payout. But if you are simply happy to just play around with Kendraio App local-first, no-code, malleable-interface concepts then great. But if you want a quick buck then move along. Cheers!' (issue created 2021-04-27, i.e. ~5 years old; latest body notice 2026-08-28T12:11:11Z reinforces the Zoom-call gate); (3) ALREADY-COMPETING PR - open PR #614 'Add MusicBrainz adapter workflows' (head codex/musicbrainz-adapter fc2ea44accf7b729667d150db4ddf1a65af269ee, base develop, opened 2026-08-20T19:21:08Z) implements the same deliverables (artist search, artist lookup, artist release browsing, release details, Release Editor seeding upload path) and is the bounty submission cross-referenced in the issue timeline (2026-08-20T19:21:09Z). Per policy this must not be converted into a fallback proposal or PR; checkout left unchanged (clean, develop @ base_sha, no fix branch created).",
+  "evidence": {
+    "action": "blocked",
+    "worktree": "/tmp/bounty-workspaces/repos/kendraio--kendraio-app--184",
+    "base_sha": "1d35c79b88f7f26476b7c68d9f216e792de2be64",
+    "default_branch": "develop",
+    "sources": [
+      {
+        "path": "package.json",
+        "sha256": "447d3743964657ad4ef019693bdbafc8cfbb30ea29e0359ae16dbbaac5301f60"
+      },
+      {
+        "path": "package-lock.json",
+        "sha256": "f2262c5563a08d0940c4ffff659fd57a933b6d5602aa9b7bea39433c999f0169"
+      },
+      {
+        "path": "angular.json",
+        "sha256": "9813a48375d08f96cefa22ccbe329ac96828b58cecc767c3cc42a9f409dc3b64"
+      },
+      {
+        "path": ".github/workflows/main.yml",
+        "sha256": "8dfa74339f87646da29428589a62b70a6270ef0664ef2b61acf1f23767f7ea79"
+      },
+      {
+        "path": ".github/workflows/vercel_deployment_tests.yml",
+        "sha256": "526172cefed28bec3fcbf33f2e744cdd2cac9d4a02dac9a552b1205d54d964ae"
+      }
+    ],
+    "run_url": "",
+    "admission": {
+      "amount": "500",
+      "currency": "USD",
+      "usd_value": "500",
+      "quote": {
+        "basis": "USD face value"
+      },
+      "raw": "$500",
+      "source_url": "https://github.com/kendraio/kendraio-app/issues/184",
+      "payer": "dahacouk"
+    }
+  },
+  "finished_at": "2026-10-30T08:13:39.573279+00:00"
 }
