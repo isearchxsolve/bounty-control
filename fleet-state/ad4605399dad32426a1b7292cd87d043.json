@@ -2,7 +2,7 @@
   "task_id": "ad4605399dad32426a1b7292cd87d043",
   "repo": "xmtplabs/ethshanghai-2022",
   "issue_number": 2,
-  "status": "CLAIMED",
+  "status": "REJECTED_PREPARATION",
   "dispatch_id": "febcfb3b2f424e8baba7dc6e7fb1c608",
   "admission": {
     "funding": {
@@ -36,7 +36,7 @@
   ],
   "dispatched_at": "2026-10-30T14:39:41.007273+00:00",
   "attempt": 1,
-  "updated_at": "2026-10-30T14:39:52.355315+00:00",
+  "updated_at": "2026-10-30T14:43:47.333492+00:00",
   "owner": "41073585466:1",
   "previous_owner": null,
   "previous_status": "DISPATCHED",
@@ -44,5 +44,36 @@
   "harness_sha": "122af062685a0bd1f1d161d9c42a07300819cc15",
   "claimed_at": "2026-10-30T14:39:52.355268+00:00",
   "lease_expires_at": "2026-10-30T18:44:52.355280+00:00",
-  "preparation_budget_seconds": 14400
+  "preparation_budget_seconds": 14400,
+  "at": "2026-10-30T14:42:51.534242+00:00",
+  "reason": "Cline preparation blocked: Not a concrete code change to this repository, and funding is withdrawn. (1) Classification: Issue #2 'ETH Shanghai Hackathon 2022 Bounty #2' is a Gitcoin hackathon bounty (label 'enhancement') asking participants to BUILD A NEW external application by forking the external repo github.com/xmtp/example-chat-react and integrating Lit Protocol; it is a generic product/bounty idea with no referenced source component or code-level deliverable inside xmtplabs/ethshanghai-2022 (admission.component_references=[] and source_locations=[]). (2) Repository state: the default branch 'main' contains exactly ONE file, README.md (git ls-files => 'README.md'), which is only a link list of the two sponsored hackathon bounties. There is no manifest, lockfile, source code, test suite or CI (language=null, size=8KB), so there is no ecosystem, no build/lint/test to run, and no defect to reproduce in-repo. (3) Funding is withdrawn/issued: gitcoinbot comment 1161511207 (2022-06-21, author_association NONE) states 'The funding of 1.2425 ETH (2500.00 USD @ $1159.58/ETH) attached to this issue has been approved & issued to @nfttopbest.' The earlier gitcoinbot comment 1132501057 (2022-05-27) lists 7 external submissions (work submitted => Done stage), all as external PRs to participants' own forks (e.g. NftTopBest/web3nft.social, georgefane/lit-xmtp). (4) No competing/owned PR exists in this repo: GET /repos/xmtplabs/ethshanghai-2022/pulls?state=all => 0; git ls-remote refs/pull/* => empty; only refs/heads/main exists. Per the blocked criteria (generic product idea without a repository change AND withdrawn funding) no fix branch, edits, or PR will be created; the checkout is left unchanged (git status --porcelain empty; only remote 'upstream' added for traceability).",
+  "declared_reason": "Not a concrete code change to this repository, and funding is withdrawn. (1) Classification: Issue #2 'ETH Shanghai Hackathon 2022 Bounty #2' is a Gitcoin hackathon bounty (label 'enhancement') asking participants to BUILD A NEW external application by forking the external repo github.com/xmtp/example-chat-react and integrating Lit Protocol; it is a generic product/bounty idea with no referenced source component or code-level deliverable inside xmtplabs/ethshanghai-2022 (admission.component_references=[] and source_locations=[]). (2) Repository state: the default branch 'main' contains exactly ONE file, README.md (git ls-files => 'README.md'), which is only a link list of the two sponsored hackathon bounties. There is no manifest, lockfile, source code, test suite or CI (language=null, size=8KB), so there is no ecosystem, no build/lint/test to run, and no defect to reproduce in-repo. (3) Funding is withdrawn/issued: gitcoinbot comment 1161511207 (2022-06-21, author_association NONE) states 'The funding of 1.2425 ETH (2500.00 USD @ $1159.58/ETH) attached to this issue has been approved & issued to @nfttopbest.' The earlier gitcoinbot comment 1132501057 (2022-05-27) lists 7 external submissions (work submitted => Done stage), all as external PRs to participants' own forks (e.g. NftTopBest/web3nft.social, georgefane/lit-xmtp). (4) No competing/owned PR exists in this repo: GET /repos/xmtplabs/ethshanghai-2022/pulls?state=all => 0; git ls-remote refs/pull/* => empty; only refs/heads/main exists. Per the blocked criteria (generic product idea without a repository change AND withdrawn funding) no fix branch, edits, or PR will be created; the checkout is left unchanged (git status --porcelain empty; only remote 'upstream' added for traceability).",
+  "evidence": {
+    "action": "blocked",
+    "worktree": "/tmp/bounty-workspaces/repos/xmtplabs--ethshanghai-2022--2",
+    "base_sha": "97378d55179a379a1589b992bf6e32829d4dd6cb",
+    "default_branch": "main",
+    "sources": [
+      {
+        "path": "README.md",
+        "sha256": "c4b31556b7c8c6abe7d4718d70dce4ae2426c961a4d563a6dc67995275898d4c"
+      }
+    ],
+    "run_url": "",
+    "admission": {
+      "amount": "2500.0",
+      "currency": "ETH",
+      "usd_value": "5535737.5000",
+      "quote": {
+        "usd_rate": "2214.295",
+        "source_url": "https://api.coinbase.com/v2/prices/ETH-USD/spot",
+        "observed_at": "2026-10-30T14:39:51.234296+00:00",
+        "quote_date": null
+      },
+      "raw": "ETH 2.5k",
+      "source_url": "https://github.com/xmtplabs/ethshanghai-2022/issues/2",
+      "payer": "saulmc"
+    }
+  },
+  "finished_at": "2026-10-30T14:43:46.597387+00:00"
 }
