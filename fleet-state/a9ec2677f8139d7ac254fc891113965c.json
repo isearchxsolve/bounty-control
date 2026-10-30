@@ -1,0 +1,41 @@
+{
+  "task_id": "a9ec2677f8139d7ac254fc891113965c",
+  "repo": "BruceFeIix/picker",
+  "issue_number": 2309,
+  "status": "DISPATCHING",
+  "dispatch_id": "fc31e56469d74b868d65bb3339ef1d4b",
+  "admission": {
+    "funding": {
+      "amount": "10000",
+      "currency": "USD",
+      "usd_value": "10000",
+      "quote": {
+        "basis": "USD face value"
+      },
+      "raw": "$10K",
+      "source_url": "https://github.com/BruceFeIix/picker/issues/2309",
+      "payer": "BruceFeIix"
+    },
+    "technical_signals": [
+      "bugs",
+      "bypass",
+      "cross-tenant",
+      "cryptographic",
+      "protocol",
+      "signature"
+    ],
+    "component_references": [],
+    "source_locations": [],
+    "engineering_evidence_sources": [
+      "https://github.com/BruceFeIix/picker/issues/2309"
+    ],
+    "source_issue": "https://github.com/BruceFeIix/picker/issues/2309",
+    "fetched_at": "2026-10-30T17:01:09.573053+00:00"
+  },
+  "lanes": [
+    "founder"
+  ],
+  "dispatched_at": "2026-10-30T17:01:10.888999+00:00",
+  "attempt": 0,
+  "updated_at": "2026-10-30T17:01:10.889017+00:00"
+}
