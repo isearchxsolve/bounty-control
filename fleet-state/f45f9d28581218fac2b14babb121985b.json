@@ -2,7 +2,7 @@
   "task_id": "f45f9d28581218fac2b14babb121985b",
   "repo": "saricizmeli/test",
   "issue_number": 8,
-  "status": "DISPATCHING",
+  "status": "DISPATCHED",
   "dispatch_id": "5d28a6d28c654e1d8075b7804fc48bb0",
   "admission": {
     "funding": {
@@ -32,5 +32,5 @@
   ],
   "dispatched_at": "2026-10-30T10:13:34.961054+00:00",
   "attempt": 0,
-  "updated_at": "2026-10-30T10:13:34.961071+00:00"
+  "updated_at": "2026-10-30T10:13:36.549838+00:00"
 }
