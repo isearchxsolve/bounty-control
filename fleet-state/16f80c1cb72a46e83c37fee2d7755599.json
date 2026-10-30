@@ -2,7 +2,7 @@
   "task_id": "16f80c1cb72a46e83c37fee2d7755599",
   "repo": "abdul-rahhman-siddiqui/testing-issue-tracker",
   "issue_number": 246,
-  "status": "CLAIMED",
+  "status": "FAILED_DELIVERABLE_MISSING",
   "dispatch_id": "41b8f645d0984f2d8ad2f2585a89b3db",
   "admission": {
     "funding": {
@@ -34,7 +34,7 @@
   ],
   "dispatched_at": "2026-10-30T12:44:27.265684+00:00",
   "attempt": 1,
-  "updated_at": "2026-10-30T12:44:38.605496+00:00",
+  "updated_at": "2026-10-30T12:47:58.369475+00:00",
   "owner": "41057633175:1",
   "previous_owner": null,
   "previous_status": "DISPATCHED",
@@ -42,5 +42,24 @@
   "harness_sha": "122af062685a0bd1f1d161d9c42a07300819cc15",
   "claimed_at": "2026-10-30T12:44:38.605445+00:00",
   "lease_expires_at": "2026-10-30T16:49:38.605462+00:00",
-  "preparation_budget_seconds": 14400
+  "preparation_budget_seconds": 14400,
+  "kind": "deliverable_invalid",
+  "retryable": true,
+  "diagnostic": "Cline deliverable invalid at /tmp/fleet-artifacts/delivery-supervisor/fd8e1ef62c9a4e3a9b6b10419f75f445.preparation.json: invalid base_sha: ''",
+  "path": "/tmp/fleet-artifacts/delivery-supervisor/fd8e1ef62c9a4e3a9b6b10419f75f445.preparation.json",
+  "reason": "invalid base_sha: ''",
+  "at": "2026-10-30T12:47:46.574322+00:00",
+  "failures": [
+    {
+      "run_url": "https://github.com/isearchxsolve/bounty-control/actions/runs/41057633175",
+      "status": "FAILED_DELIVERABLE_MISSING",
+      "kind": "deliverable_invalid",
+      "retryable": true,
+      "diagnostic": "Cline deliverable invalid at /tmp/fleet-artifacts/delivery-supervisor/fd8e1ef62c9a4e3a9b6b10419f75f445.preparation.json: invalid base_sha: ''",
+      "path": "/tmp/fleet-artifacts/delivery-supervisor/fd8e1ef62c9a4e3a9b6b10419f75f445.preparation.json",
+      "reason": "invalid base_sha: ''",
+      "at": "2026-10-30T12:47:46.574322+00:00"
+    }
+  ],
+  "finished_at": "2026-10-30T12:47:57.713747+00:00"
 }
