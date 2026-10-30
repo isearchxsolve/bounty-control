@@ -2,7 +2,7 @@
   "task_id": "5db25ab6f7880515384f5fd75142def1",
   "repo": "Thiesi/Blacksite",
   "issue_number": 30,
-  "status": "DISPATCHED",
+  "status": "CLAIMED",
   "dispatch_id": "4260715d13d345179d41c6f6ce9f6377",
   "admission": {
     "funding": {
@@ -76,6 +76,14 @@
     "programs"
   ],
   "dispatched_at": "2026-10-30T19:49:13.764760+00:00",
-  "attempt": 0,
-  "updated_at": "2026-10-30T19:49:15.721011+00:00"
+  "attempt": 1,
+  "updated_at": "2026-10-30T19:49:29.607837+00:00",
+  "owner": "41118354606:1",
+  "previous_owner": null,
+  "previous_status": "DISPATCHED",
+  "run_url": "https://github.com/isearchxsolve/bounty-control/actions/runs/41118354606",
+  "harness_sha": "1e04b468c4deecf4ad44bb88ee88538555ec2de9",
+  "claimed_at": "2026-10-30T19:49:29.607777+00:00",
+  "lease_expires_at": "2026-10-30T23:54:29.607794+00:00",
+  "preparation_budget_seconds": 14400
 }
