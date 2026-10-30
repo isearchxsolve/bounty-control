@@ -146,5 +146,70 @@ class RefusalsAgreeWithCounter(unittest.TestCase):
                          "every counted refusal must be recorded as an outcome row")
 
 
+class DispatchIsAbsorbing(unittest.TestCase):
+    """Reaching engineering cannot be undone by a later intake refusal.
+
+    Regression for run 41050399125: two genuinely dispatched tasks were re-admitted, refused at
+    intake, and overwritten to 'refused', so the planner lost credit for the only dispatches it had.
+    """
+
+    def _db(self, directory):
+        con = sqlite3.connect(Path(directory) / "abs.sqlite3")
+        con.execute("CREATE TABLE task_outcome(task_id TEXT PRIMARY KEY, outcome TEXT, at REAL)")
+        con.commit()
+        return con
+
+    def test_a_later_intake_refusal_does_not_erase_a_dispatch(self):
+        import tempfile
+        import actions_dispatch as ad
+        with tempfile.TemporaryDirectory() as d:
+            con = self._db(d)
+            ad.record_outcome(con, "t1", "dispatched")
+            ad.record_outcome(con, "t1", "refused")
+            got = con.execute("SELECT outcome FROM task_outcome WHERE task_id='t1'").fetchone()[0]
+            con.close()
+        self.assertEqual(got, "dispatched")
+
+    def test_a_refusal_then_a_dispatch_ends_dispatched(self):
+        import tempfile
+        import actions_dispatch as ad
+        with tempfile.TemporaryDirectory() as d:
+            con = self._db(d)
+            ad.record_outcome(con, "t2", "refused")
+            ad.record_outcome(con, "t2", "dispatched")
+            got = con.execute("SELECT outcome FROM task_outcome WHERE task_id='t2'").fetchone()[0]
+            con.close()
+        self.assertEqual(got, "dispatched")
+
+
+class PostDispatchRefusalStillCountsAsDispatched(unittest.TestCase):
+    """A task refused by the engineer reached engineering: it is dispatched, reported as wasted."""
+
+    def test_attribution_separates_the_two_kinds_of_refusal(self):
+        import tempfile
+        with tempfile.TemporaryDirectory() as d:
+            con = sqlite3.connect(Path(d) / "post.sqlite3")
+            con.executescript("""
+                CREATE TABLE task_expression(task_id TEXT, lane TEXT, expression TEXT);
+                CREATE TABLE task_outcome(task_id TEXT PRIMARY KEY, outcome TEXT, at REAL);
+                CREATE TABLE pending(task_id TEXT PRIMARY KEY, payload TEXT, lanes TEXT,
+                                     signature TEXT, checked REAL DEFAULT 0, status TEXT DEFAULT 'pending');
+            """)
+            con.executemany("INSERT INTO task_expression VALUES(?,?,?)",
+                            [("a", "normal", "E"), ("b", "normal", "E"), ("c", "normal", "E")])
+            con.executemany("INSERT INTO task_outcome VALUES(?,?,0)",
+                            [("a", "dispatched"), ("b", "refused_after_dispatch"), ("c", "refused")])
+            con.executemany("INSERT INTO pending(task_id,payload,lanes,signature) VALUES(?,'{}','[]','s')",
+                            [("a",), ("b",), ("c",)])
+            con.commit()
+            ledger = {}
+            sp.attribute(con, ledger)
+            con.close()
+        entry = ledger["normal|E"]
+        self.assertEqual((entry["tasks"], entry["dispatched"], entry["refused"]), (3, 2, 1),
+                         "a post-dispatch refusal counts as dispatched, not as a door refusal")
+        self.assertEqual(entry["wasted"], 1)
+
+
 if __name__ == "__main__":
     unittest.main()

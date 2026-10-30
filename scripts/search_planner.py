@@ -125,10 +125,11 @@ def set_outcomes(ledger: dict, lane: str, expression: str, *, tasks: int, dispat
 
 ATTRIBUTION_SQL = """
     SELECT te.lane, te.expression, COUNT(DISTINCT te.task_id),
-           SUM(CASE WHEN tof.outcome = 'dispatched' THEN 1 ELSE 0 END),
+           SUM(CASE WHEN tof.outcome IN ('dispatched', 'refused_after_dispatch') THEN 1 ELSE 0 END),
            SUM(CASE WHEN tof.outcome = 'refused' OR p.status LIKE 'rejected%'
                          OR p.status LIKE 'query_excluded%' OR p.status LIKE 'current%'
-                    THEN 1 ELSE 0 END)
+                    THEN 1 ELSE 0 END),
+           SUM(CASE WHEN tof.outcome = 'refused_after_dispatch' THEN 1 ELSE 0 END)
     FROM task_expression te
     LEFT JOIN task_outcome tof ON tof.task_id = te.task_id
     LEFT JOIN pending p ON p.task_id = te.task_id
@@ -143,9 +144,12 @@ def attribute(con, ledger: dict) -> int:
     spend the rate limit the discovery run depends on.
     """
     rows = con.execute(ATTRIBUTION_SQL).fetchall()
-    for lane, expression, tasks, dispatched, refused in rows:
+    for lane, expression, tasks, dispatched, refused, wasted in rows:
         set_outcomes(ledger, lane, expression, tasks=tasks or 0,
                      dispatched=dispatched or 0, refused=refused or 0)
+        # Reported, not scored: the work did reach engineering, and a post-dispatch refusal is
+        # the engineer's judgement, not evidence the query was wrong.
+        ledger[f"{lane}|{expression}"]["wasted"] = wasted or 0
     return len(rows)
 
 
@@ -178,7 +182,8 @@ def propose(lane: str, purpose: str, ledger_rows: list[dict], refusal_reasons: l
     best = sorted(ledger_rows, key=score, reverse=True)[:12]
     evidence = [
         {"expression": r["expression"], "issues_found": r.get("tasks", 0),
-         "dispatched": r.get("dispatched", 0), "refused": r.get("refused", 0)}
+         "dispatched": r.get("dispatched", 0), "refused": r.get("refused", 0),
+         "refused_after_dispatch": r.get("wasted", 0)}
         for r in best
     ]
     prompt = (

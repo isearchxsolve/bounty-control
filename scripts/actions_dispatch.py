@@ -1030,12 +1030,16 @@ def refuse(con, counts, identity, reason):
 
 
 def record_outcome(con, identity, outcome):
-    """Latest outcome wins: a refused task that later dispatches is credited as dispatched.
+    """Record what a task became. Dispatch is absorbing; everything else is latest-wins.
 
-    Commits on every call. Measured on run 41042914871: the outcome hooks sat after the last
-    commit in their branches, so task_outcome was empty despite hundreds of refusals. An outcome
-    the planner cannot read back is not an outcome.
+    Measured on run 41050399125: two tasks that had genuinely reached engineering were re-admitted
+    on a later run and refused at intake, which overwrote them to 'refused'. Reaching engineering
+    is a fact that happened; a later intake refusal cannot un-dispatch it, so 'dispatched' is never
+    downgraded.
     """
+    existing = con.execute("SELECT outcome FROM task_outcome WHERE task_id=?", (identity,)).fetchone()
+    if existing and existing[0] == "dispatched" and outcome != "dispatched":
+        return
     con.execute("INSERT OR REPLACE INTO task_outcome VALUES(?,?,?)",
                 (identity, outcome, time.time()))
     con.commit()
@@ -1426,7 +1430,7 @@ def discover(lanes, max_dispatches=2, live=False, queries_per_lane=2, state_dir=
                         # REJECTED_PREPARATION. The verdict itself is still preserved in the store.
                         if str(state.get("status", "")).startswith("REJECTED_"):
                             counts["terminal_refusal"] += 1
-                            record_outcome(con, identity, "refused")
+                            record_outcome(con, identity, "refused_after_dispatch")
                             con.execute("DELETE FROM candidates WHERE task_id=?", (identity,))
                             con.commit()
                         else:
