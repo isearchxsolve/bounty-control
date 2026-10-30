@@ -2,7 +2,7 @@
   "task_id": "dcbfe864f427850e1e5f5e97a0065660",
   "repo": "chosencharacters/squidBounties",
   "issue_number": 1,
-  "status": "DISPATCHED",
+  "status": "CLAIMED",
   "dispatch_id": "898ea33e8be849cb8132bae0ecec0ddc",
   "admission": {
     "funding": {
@@ -35,6 +35,14 @@
     "programs"
   ],
   "dispatched_at": "2026-10-30T18:32:52.931135+00:00",
-  "attempt": 0,
-  "updated_at": "2026-10-30T18:32:54.481543+00:00"
+  "attempt": 1,
+  "updated_at": "2026-10-30T18:33:06.513487+00:00",
+  "owner": "41107873540:1",
+  "previous_owner": null,
+  "previous_status": "DISPATCHED",
+  "run_url": "https://github.com/isearchxsolve/bounty-control/actions/runs/41107873540",
+  "harness_sha": "3bf112c7a2d5d4abc164c32c7c87513625ba9c9d",
+  "claimed_at": "2026-10-30T18:33:06.513437+00:00",
+  "lease_expires_at": "2026-10-30T22:38:06.513451+00:00",
+  "preparation_budget_seconds": 14400
 }
