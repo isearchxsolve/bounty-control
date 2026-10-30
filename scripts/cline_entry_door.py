@@ -31,39 +31,7 @@ FRESH_START = """Ignore any earlier conversation in this session, if one exists.
 Nothing was handed to you to read: no file, no list, no message. The work is described below.
 
 """
-SEARCH_PROMPT = FRESH_START + """You are the entry door of a bounty pipeline. Your job is to FIND work, not to \
-judge a list you are given.
-
-Do not explore this machine. The workspace is empty on purpose: there is no task file to recover,
-no earlier prompt to find, and no source code here to study. Your only source of truth is GitHub,
-reached through the gh commands below. Do not read, list or search local directories.
-
-The shell here is Windows PowerShell. Use one command per tool call and PowerShell syntax only:
-no "&&", no "ls -la", no "cat", no "grep", no "find", no "2>/dev/null". A failing shell command
-wastes the whole run, so keep each call small and simple.
-
-STEP 1 - do this first, as your very first tool call, before listing directories or reading
-anything: run a GitHub search. For example:
-  gh search issues --label bounty --state open --limit 40 --json number,title,url,repository
-
-  gh search issues --label bounty --state open --limit 40 --json number,title,url,repository
-  gh search issues "bounty" --state open --limit 40 --json number,title,url,repository
-  gh search issues "reward" --state open --limit 40 --json number,title,url,repository
-Read promising issues with: gh issue view <number> --repo <repo> --json title,body,labels,state,comments
-
-Skip and do not report: automated daily digests, hackathons, contests and prize announcements,
-marketing or content writing, design-only asks, anything already fixed, and anything whose money
-is only behind a link you cannot read.
-
-Target: 8 to 12 rows. For each, the money must be stated in the issue's own words. Then WRITE the \
-file shortlist.jsonl in your current directory, one JSON object per line, and finish:
-{"repo": "owner/name", "issue": 123, "url": "https://github.com/owner/name/issues/123",
- "is_code_task": true, "reward_quote": "<sentence copied exactly from the issue>",
- "reward_usd": <number or null>, "scope_quote": "<sentence copied exactly, saying what to build>",
- "why_now": "<one short line: why this is work we can deliver>"}
-
-Only write rows you have actually read. A row you did not open is worse than no row.
-"""
+SEARCH_PROMPT = FRESH_START + """Read TASK.md in this worktree and do the work it describes. Write shortlist.jsonl in this directory, then finish."""
 
 
 SCOUT_SYSTEM = (
@@ -264,7 +232,10 @@ def fetch_issue(repo: str, issue: int, gh: str = "gh") -> Optional[dict]:
     return document if isinstance(document, dict) else None
 
 
-AMOUNT_RE = re.compile(r"(?:[$€£₹]\s?\d|\d[\d,.]*\s*(?:k|usd|usdc|usdt|dai|eth|btc|sol|inr|eur|gbp|rs))", re.I)
+AMOUNT_RE = re.compile(
+    r"(?:[$€£₹]\s?\d"          # $250, Rs 250
+    r"|\d[\d,.]*\s*(?:[$€£₹]|k|usd|usdc|usdt|dai|eth|btc|sol|inr|eur|gbp|rs))",
+    re.I)  # measured: a real bounty was written "14999$" and the first pattern refused it
 
 
 def quote_states_an_amount(quote: str) -> bool:
@@ -325,17 +296,17 @@ def verify_rows(rows: List[dict], fetch: Callable[[str, int], Optional[dict]] = 
     return {"admitted": admitted, "refused": refused}
 
 
-FEEDBACK_PROMPT = FRESH_START + """The gates read your shortlist and refused part of it. Every refusal below is a real check against the source; do not argue with a refusal, fix it or drop the row.
+FEEDBACK_PROMPT = FRESH_START + """The gates read the shortlist you wrote and refused part of it. Each refusal below is a check made against the source, so it is a fact about the row, not an opinion.
 
 {refusals}
 
-Do this now:
-1. For REWARD_QUOTE_NOT_IN_ISSUE: re-open the issue and copy the money sentence EXACTLY as it appears, including any backslash escapes you see in the raw text; if no sentence states the money, drop the row.
-2. For ISSUE_NOT_FOUND or ISSUE_NOT_OPEN: drop the row and replace it with a real open issue.
-3. For DUPLICATE_ROW or MALFORMED_ROW: drop it.
-4. Keep every row that was admitted, and find more real work to replace what you dropped.
+What each check means, when you need it:
+- REWARD_QUOTE_NOT_IN_ISSUE: that sentence is not in the issue text. Copy it exactly, or drop the row.
+- REWARD_QUOTE_HAS_NO_AMOUNT: the sentence is real but names no money. Find the sentence that does.
+- ISSUE_NOT_FOUND, ISSUE_NOT_OPEN, AGENT_NOT_A_CODE_TASK, MALFORMED_ROW, DUPLICATE_ROW: drop the row.
 
-Write shortlist.jsonl again from scratch in your current directory, same JSON shape, then finish.
+Row 0 was accepted, so the shape is right. Write shortlist.jsonl again from scratch, with the
+accepted rows kept and the refused ones repaired or replaced. Then finish.
 """
 
 
@@ -352,35 +323,29 @@ def fresh_workspace(root: str) -> str:
 
 TASK_FILE = """# Scout task
 
-Your job in this worktree is to FIND payable work on GitHub and record it. There is no source code
-here and you are not asked to write or change any code.
+Find work on GitHub that pays for engineering, and record what you find. You are not asked to write
+or change any code here.
 
-## How to search
+## Facts about this workspace
 
-The shell is Windows PowerShell. Run one command per tool call, PowerShell syntax only: no "&&",
-no "ls -la", no "cat", no "grep", no "2>/dev/null".
-
-    gh search issues --label bounty --state open --limit 40 --json number,title,url,repository
-    gh search issues "bounty" --state open --limit 40 --json number,title,url,repository
-    gh issue view <number> --repo <owner>/<name> --json title,body,labels,state,comments
-
-## What counts
-
-Money must be stated in the issue's own words. Skip automated digests, hackathons, contests and
-prize announcements, marketing or content writing, design-only asks, and pseudo-bounties where the
-money only exists behind a link.
+- There is no source code in it, and nothing to fix. It is a scratch worktree.
+- `gh` is installed and authenticated.
+- The shell is Windows PowerShell: one command per tool call, and POSIX-only commands
+  (`ls -la`, `cat`, `grep`, `&&`, `2>/dev/null`) fail here.
+- Money and scope must be quoted in an issue's own words; a claim you cannot quote is not evidence.
 
 ## What to produce
 
-Write `shortlist.jsonl` in this directory, one JSON object per line, 8 to 12 rows:
+`shortlist.jsonl` in this directory, one JSON object per line:
 
     {"repo": "owner/name", "issue": 123, "url": "https://github.com/owner/name/issues/123",
      "is_code_task": true, "reward_quote": "<sentence copied exactly from the issue>",
      "reward_usd": <number or null>, "scope_quote": "<sentence copied exactly, saying what to build>",
      "why_now": "<one short line: why this is work we can deliver>"}
 
-Only record issues you actually opened. A row you did not read is worse than no row. Then stop.
+Only record issues you actually opened and read. Then stop.
 """
+
 
 WORKTREE_PROMPT = ("Read TASK.md in this worktree and carry it out exactly. Write shortlist.jsonl in "
                    "this directory, then finish.")

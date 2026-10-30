@@ -187,13 +187,18 @@ class AgentOutputContract(unittest.TestCase):
 
 
 class PromptShape(unittest.TestCase):
-    def test_the_prompt_tells_the_agent_to_search_and_to_write_the_file(self):
-        self.assertIn("gh search issues", door.SEARCH_PROMPT)
+    def test_the_prompt_does_not_script_the_search(self):
+        """Baba, 2026-10-30: full autonomy, the gates guard and report. A prompt that names the
+        queries is a script, and a script cannot find what its author did not think of."""
+        self.assertNotIn("gh search", door.SEARCH_PROMPT)
+        self.assertNotIn("--label", door.SEARCH_PROMPT)
         self.assertIn("shortlist.jsonl", door.SEARCH_PROMPT)
 
-    def test_the_prompt_names_the_junk_measured_in_production(self):
+    def test_the_junk_taxonomy_lives_in_the_gates_not_the_prompt(self):
+        """The prompt used to list digests, hackathons and design-only asks. That list is a
+        judgement, so it was removed: the gates refuse a row and the feedback says why."""
         for phrase in ("digests", "hackathons", "design-only"):
-            self.assertIn(phrase, door.SEARCH_PROMPT)
+            self.assertNotIn(phrase, door.SEARCH_PROMPT)
 
 
 if __name__ == "__main__":
@@ -411,11 +416,9 @@ class FreshWorkspace(unittest.TestCase):
         with tempfile.TemporaryDirectory() as root:
             self.assertNotEqual(door.fresh_workspace(root), door.fresh_workspace(root))
 
-    def test_the_prompt_forbids_exploring_the_machine(self):
-        """Measured: an empty workspace inside the repo made the agent read our own source."""
-        self.assertIn("Do not explore this machine", door.SEARCH_PROMPT)
-        self.assertIn("STEP 1", door.SEARCH_PROMPT)
-        self.assertIn("GitHub", door.SEARCH_PROMPT)
+    def test_the_brief_says_the_machine_has_nothing_to_explore(self):
+        self.assertIn("no source code", door.TASK_FILE)
+        self.assertNotIn("STEP 1", door.TASK_FILE)
 
 
 class EngineParity(unittest.TestCase):
@@ -454,39 +457,57 @@ class EngineParity(unittest.TestCase):
         self.assertTrue(seen["CLINE_PROVIDER_SETTINGS_PATH"].endswith("providers.json"))
 
 
-    def test_the_prompt_names_the_shell_so_commands_do_not_fail(self):
-        """Measured: bash syntax in PowerShell killed every tool call in one run."""
-        self.assertIn("PowerShell", door.SEARCH_PROMPT)
-        self.assertIn('no "&&"', door.SEARCH_PROMPT)
+    def test_the_shell_is_named_in_the_brief_as_an_environment_fact(self):
+        """PowerShell is a fact about the machine, not a judgement about the work."""
+        self.assertIn("PowerShell", door.TASK_FILE)
 
 
 class ScoutWorktree(unittest.TestCase):
-    """Measured: a bare empty directory made the agent hunt for a repo and never search."""
+    """The brief states facts and the output contract. Judgement is the agent's, and the gates
+    refuse and explain - they are the guardrail, not a recipe in the prompt."""
 
-    def test_the_workspace_carries_a_task_file_naming_the_shell_and_the_output(self):
-        with tempfile.TemporaryDirectory() as root:
-            path = door.scaffold_workspace(root)
-            with open(os.path.join(path, "TASK.md"), encoding="utf-8") as handle:
-                task = handle.read()
-            self.assertIn("gh search issues", task)
-            self.assertIn("PowerShell", task)
-            self.assertIn("shortlist.jsonl", task)
-            self.assertTrue(os.path.isdir(os.path.join(path, ".git")), "a worktree, like the engine gives")
+    def setUp(self):
+        self.root = tempfile.mkdtemp(prefix="door-scaffold-")
+        self.workdir = door.scaffold_workspace(self.root)
 
-    def test_the_first_round_can_be_given_the_worktree_prompt(self):
-        prompts = []
+    def tearDown(self):
+        import shutil
+        shutil.rmtree(self.root, ignore_errors=True)
 
-        def run(workdir, prompt=None, **kwargs):
-            prompts.append(prompt)
-            return {"exit_code": 0, "rows": [row()], "tail": "", "wrote_file": True}
+    def test_the_brief_is_written_into_the_worktree(self):
+        task = os.path.join(self.workdir, "TASK.md")
+        self.assertTrue(os.path.isfile(task))
 
-        door.iterate("W", rounds=1, run=run, verify=offline_verify,
-                     first_prompt=door.WORKTREE_PROMPT)
-        self.assertEqual(prompts[0], door.WORKTREE_PROMPT)
+    def test_the_brief_names_the_output_contract(self):
+        text = open(os.path.join(self.workdir, "TASK.md"), encoding="utf-8").read()
+        for field in ("shortlist.jsonl", "reward_quote", "reward_usd", "repo", "issue"):
+            self.assertIn(field, text)
 
-    def test_the_prompt_points_at_the_task_file(self):
+    def test_the_brief_states_the_workspace_has_no_code(self):
+        text = open(os.path.join(self.workdir, "TASK.md"), encoding="utf-8").read()
+        self.assertIn("no source code", text)
+
+    def test_the_brief_prescribes_no_search_recipe(self):
+        """Measured handcuffs, removed on Baba's order: a numbered first step, a list of search
+        commands and a taxonomy of what counts as money. Those are judgements."""
+        text = open(os.path.join(self.workdir, "TASK.md"), encoding="utf-8").read()
+        self.assertNotIn("STEP 1", text)
+        self.assertNotIn("--label bounty", text)
+        self.assertNotIn("gh search issues", text)
+        self.assertNotIn("Skip and do not report", text)
+
+    def test_the_worktree_is_a_git_repository(self):
+        self.assertTrue(os.path.isdir(os.path.join(self.workdir, ".git")))
+
+    def test_the_prompt_points_at_the_brief_and_nothing_else(self):
         self.assertIn("TASK.md", door.WORKTREE_PROMPT)
+        self.assertIn("shortlist.jsonl", door.WORKTREE_PROMPT)
+        self.assertLess(len(door.SEARCH_PROMPT), 700, "a long prompt is a script in disguise")
 
+    def test_the_feedback_reports_checks_not_a_repair_script(self):
+        self.assertIn("{refusals}", door.FEEDBACK_PROMPT)
+        self.assertIn("REWARD_QUOTE_HAS_NO_AMOUNT", door.FEEDBACK_PROMPT)
+        self.assertNotIn("Do this now:", door.FEEDBACK_PROMPT)
 
 
 class AmountGuard(unittest.TestCase):
@@ -498,5 +519,7 @@ class AmountGuard(unittest.TestCase):
     def test_real_amounts_are_accepted(self):
         for quote in ("$250 bounty available for a verified fix",
                       "BOUNTY - $50 USD", "### Bounty: 1,250 USDC (Escrow Locked)",
-                      "Budget: 900 USD", "reward of 3 ETH"):
+                      "Budget: 900 USD", "reward of 3 ETH",
+                      # measured live: this real bounty was refused by the first version
+                      "[BOUNTY] RCS Support [14999$]", "-> /bounty $700"):
             self.assertTrue(door.quote_states_an_amount(quote), quote)
