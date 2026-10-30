@@ -2,7 +2,7 @@
   "task_id": "b8deb96e72f6cd7f542f98b6dd534f39",
   "repo": "better-feedback/better-commons",
   "issue_number": 3,
-  "status": "DISPATCHED",
+  "status": "CLAIMED",
   "dispatch_id": "fd8c389486f74ba78f2eb4dfd0eaae47",
   "admission": {
     "funding": {
@@ -31,6 +31,14 @@
     "normal"
   ],
   "dispatched_at": "2026-10-30T09:38:50.058359+00:00",
-  "attempt": 0,
-  "updated_at": "2026-10-30T09:38:52.162005+00:00"
+  "attempt": 1,
+  "updated_at": "2026-10-30T09:39:02.946947+00:00",
+  "owner": "41034955246:1",
+  "previous_owner": null,
+  "previous_status": "DISPATCHED",
+  "run_url": "https://github.com/isearchxsolve/bounty-control/actions/runs/41034955246",
+  "harness_sha": "f43d151c000334fe421335253546604bbeef36fc",
+  "claimed_at": "2026-10-30T09:39:02.946887+00:00",
+  "lease_expires_at": "2026-10-30T13:44:02.946907+00:00",
+  "preparation_budget_seconds": 14400
 }
