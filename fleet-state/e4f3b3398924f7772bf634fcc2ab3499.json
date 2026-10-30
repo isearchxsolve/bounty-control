@@ -2,7 +2,7 @@
   "task_id": "e4f3b3398924f7772bf634fcc2ab3499",
   "repo": "GnosisEcosystemFund/Gnosis-Bounties-",
   "issue_number": 15,
-  "status": "DISPATCHING",
+  "status": "DISPATCHED",
   "dispatch_id": "1eff6f5092604533b2214ebcd4b23621",
   "admission": {
     "funding": {
@@ -36,5 +36,5 @@
   ],
   "dispatched_at": "2026-10-30T17:08:36.155346+00:00",
   "attempt": 0,
-  "updated_at": "2026-10-30T17:08:36.155364+00:00"
+  "updated_at": "2026-10-30T17:08:37.846814+00:00"
 }
