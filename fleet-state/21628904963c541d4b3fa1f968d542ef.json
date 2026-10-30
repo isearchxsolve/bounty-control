@@ -2,7 +2,7 @@
   "task_id": "21628904963c541d4b3fa1f968d542ef",
   "repo": "stan-dev/sgb",
   "issue_number": 7,
-  "status": "DISPATCHING",
+  "status": "DISPATCHED",
   "dispatch_id": "ee1744904f1940559453a6839ad5a030",
   "admission": {
     "funding": {
@@ -48,5 +48,5 @@
   ],
   "dispatched_at": "2026-10-30T19:06:00.267726+00:00",
   "attempt": 0,
-  "updated_at": "2026-10-30T19:06:00.267743+00:00"
+  "updated_at": "2026-10-30T19:06:02.091269+00:00"
 }
