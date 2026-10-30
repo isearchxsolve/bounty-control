@@ -2,7 +2,7 @@
   "task_id": "beba21803c6b3b82c91cb55cc058ffdf",
   "repo": "galacticcouncil/amsterdot-bounties-2022",
   "issue_number": 1,
-  "status": "DISPATCHING",
+  "status": "DISPATCHED",
   "dispatch_id": "b914d5d981a34fa3ba86668718738f99",
   "admission": {
     "funding": {
@@ -32,7 +32,7 @@
   ],
   "dispatched_at": "2026-10-30T14:08:37.242376+00:00",
   "attempt": 1,
-  "updated_at": "2026-10-30T14:08:37.242392+00:00",
+  "updated_at": "2026-10-30T14:08:38.829806+00:00",
   "owner": "41065219737:1",
   "previous_owner": null,
   "previous_status": "DISPATCHED",
