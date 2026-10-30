@@ -2,7 +2,7 @@
   "task_id": "49253b5a9b99bc7332f6c28400048958",
   "repo": "intuition-box/Liquid-Democracy",
   "issue_number": 2,
-  "status": "DISPATCHING",
+  "status": "DISPATCHED",
   "dispatch_id": "28b7566e31ed41d59b424b132bea45f4",
   "admission": {
     "funding": {
@@ -35,5 +35,5 @@
   ],
   "dispatched_at": "2026-10-30T15:40:02.075970+00:00",
   "attempt": 0,
-  "updated_at": "2026-10-30T15:40:02.075989+00:00"
+  "updated_at": "2026-10-30T15:40:03.717628+00:00"
 }
