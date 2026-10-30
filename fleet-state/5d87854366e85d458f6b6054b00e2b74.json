@@ -2,7 +2,7 @@
   "task_id": "5d87854366e85d458f6b6054b00e2b74",
   "repo": "Tyaoo/picker",
   "issue_number": 1233,
-  "status": "CLAIMED",
+  "status": "REJECTED_PREPARATION",
   "dispatch_id": "2d9eb82668854f91832d0cf6f30ef768",
   "admission": {
     "funding": {
@@ -42,7 +42,7 @@
   ],
   "dispatched_at": "2026-10-30T13:43:38.883346+00:00",
   "attempt": 1,
-  "updated_at": "2026-10-30T13:43:53.953176+00:00",
+  "updated_at": "2026-10-30T13:46:54.456143+00:00",
   "owner": "41065626804:1",
   "previous_owner": null,
   "previous_status": "DISPATCHED",
@@ -50,5 +50,28 @@
   "harness_sha": "122af062685a0bd1f1d161d9c42a07300819cc15",
   "claimed_at": "2026-10-30T13:43:53.953122+00:00",
   "lease_expires_at": "2026-10-30T17:48:53.953138+00:00",
-  "preparation_budget_seconds": 14400
+  "preparation_budget_seconds": 14400,
+  "at": "2026-10-30T13:46:43.243086+00:00",
+  "reason": "Cline preparation blocked: Issue #1233 is an auto-generated daily information-feed digest, not a request for a concrete code change. Title '[\u6bcf\u65e5\u4fe1\u606f\u6d41] 2025-12-26' (= 'Daily Information Feed 2025-12-26'), label 'daily', 0 comments, and the body is nothing but an aggregated list of RSS news links with '- [ ] [title](url)' checkboxes. There is no defect report, no reproduction, no expected-vs-actual behavior, and no feature request. Repository state confirms this is the product's own automation output: README (https://raw.githubusercontent.com/Tyaoo/picker/main/README.md) states the four push types are daily feed/pick digests and '\u6bcf\u65e5\u4f1a\u5728issue\u4e2d\u751f\u6210\u6628\u65e5\u4fe1\u606f\u6d41' ('a daily feed issue is generated every day'); the repo is a crawler/pusher (bot.py, yarb.py, utils.py, config.yml, rss/) and ALL open issues are titled '[\u6bcf\u65e5\u4fe1\u606f\u6d41] <date>' (e.g. #1557 #1556 ... #1233). The admission metadata is a false positive from keyword matching over the aggregated article titles, not engineering evidence: funding '$5,500' is literally the article title 'How I Found a $5,500 Bug Using Just Reconnaissance' (https://infosecwriteups.com/how-i-found-a-5-500-bug-using-just-reconnaissance-2768fdba5ff2); 'cryptography'/'encryption' from 'Post-Quantum Cryptography: Why Your Encryption Has a 5-Year Shelf Life'; 'latency'/'performance' from 'Why Low Latency Financial Systems Still Favor Determinism'; 'race condition'/'bug bounty' from 'How I Found a $10,800 Business Impact Bug: Race Condition & Broken Access Control'. component_references and source_locations are empty. No funding-withdrawal and no competing/owned PR exists for this issue: GitHub search for open PRs mentioning 1233 returns total_count=0, and the only 3 open PRs (#1518, #1500 'Fix #1499', #1295 'Fix #1006') target unrelated daily-digest issues. Adding an automated 'Fix #1233' patch would be exactly the prohibited fallback: turning a non-engineering, auto-generated content/digest issue into a pull request. Checkout was intentionally NOT created (no /tmp/bounty-workspaces/repos/Tyaoo--picker--1233) and upstream was left unchanged.",
+  "declared_reason": "Issue #1233 is an auto-generated daily information-feed digest, not a request for a concrete code change. Title '[\u6bcf\u65e5\u4fe1\u606f\u6d41] 2025-12-26' (= 'Daily Information Feed 2025-12-26'), label 'daily', 0 comments, and the body is nothing but an aggregated list of RSS news links with '- [ ] [title](url)' checkboxes. There is no defect report, no reproduction, no expected-vs-actual behavior, and no feature request. Repository state confirms this is the product's own automation output: README (https://raw.githubusercontent.com/Tyaoo/picker/main/README.md) states the four push types are daily feed/pick digests and '\u6bcf\u65e5\u4f1a\u5728issue\u4e2d\u751f\u6210\u6628\u65e5\u4fe1\u606f\u6d41' ('a daily feed issue is generated every day'); the repo is a crawler/pusher (bot.py, yarb.py, utils.py, config.yml, rss/) and ALL open issues are titled '[\u6bcf\u65e5\u4fe1\u606f\u6d41] <date>' (e.g. #1557 #1556 ... #1233). The admission metadata is a false positive from keyword matching over the aggregated article titles, not engineering evidence: funding '$5,500' is literally the article title 'How I Found a $5,500 Bug Using Just Reconnaissance' (https://infosecwriteups.com/how-i-found-a-5-500-bug-using-just-reconnaissance-2768fdba5ff2); 'cryptography'/'encryption' from 'Post-Quantum Cryptography: Why Your Encryption Has a 5-Year Shelf Life'; 'latency'/'performance' from 'Why Low Latency Financial Systems Still Favor Determinism'; 'race condition'/'bug bounty' from 'How I Found a $10,800 Business Impact Bug: Race Condition & Broken Access Control'. component_references and source_locations are empty. No funding-withdrawal and no competing/owned PR exists for this issue: GitHub search for open PRs mentioning 1233 returns total_count=0, and the only 3 open PRs (#1518, #1500 'Fix #1499', #1295 'Fix #1006') target unrelated daily-digest issues. Adding an automated 'Fix #1233' patch would be exactly the prohibited fallback: turning a non-engineering, auto-generated content/digest issue into a pull request. Checkout was intentionally NOT created (no /tmp/bounty-workspaces/repos/Tyaoo--picker--1233) and upstream was left unchanged.",
+  "evidence": {
+    "action": "blocked",
+    "worktree": "/tmp/bounty-workspaces/repos/Tyaoo--picker--1233",
+    "base_sha": "f1d886f585e807e82f84da6123f4858ef365f461",
+    "default_branch": "main",
+    "sources": [],
+    "run_url": "",
+    "admission": {
+      "amount": "5500",
+      "currency": "USD",
+      "usd_value": "5500",
+      "quote": {
+        "basis": "USD face value"
+      },
+      "raw": "$5,500",
+      "source_url": "https://github.com/Tyaoo/picker/issues/1233",
+      "payer": "Tyaoo"
+    }
+  },
+  "finished_at": "2026-10-30T13:46:54.010793+00:00"
 }
