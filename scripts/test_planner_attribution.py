@@ -38,5 +38,60 @@ class AttributionTable(unittest.TestCase):
                              "re-seeing the same task must not double-credit the expression")
 
 
+class OutcomeAttribution(unittest.TestCase):
+    """Runs the real attribution SQL on a real database with hand-worked answers.
+
+    Expected, worked by hand:
+      E1 surfaces t1 (dispatched), t2 (refused, and also rejected by status: counts ONCE), t3 (open).
+         -> tasks 3, dispatched 1, refused 1.
+      E2 surfaces t4 (refused), t5 (dispatched).
+         -> tasks 2, dispatched 1, refused 1.
+    """
+
+    def _db(self, directory):
+        con = sqlite3.connect(Path(directory) / "attr.sqlite3")
+        con.executescript("""
+            CREATE TABLE task_expression(task_id TEXT, lane TEXT, expression TEXT,
+                                         PRIMARY KEY(task_id, lane, expression));
+            CREATE TABLE task_outcome(task_id TEXT PRIMARY KEY, outcome TEXT, at REAL);
+            CREATE TABLE pending(task_id TEXT PRIMARY KEY, payload TEXT, lanes TEXT,
+                                 signature TEXT, checked REAL DEFAULT 0, status TEXT DEFAULT 'pending');
+        """)
+        con.executemany("INSERT INTO task_expression VALUES(?,?,?)", [
+            ("t1", "startup", "E1"), ("t2", "startup", "E1"), ("t3", "startup", "E1"),
+            ("t4", "startup", "E2"), ("t5", "startup", "E2")])
+        con.executemany("INSERT INTO task_outcome VALUES(?,?,0)", [
+            ("t1", "dispatched"), ("t2", "refused"), ("t4", "refused"), ("t5", "dispatched")])
+        con.executemany("INSERT INTO pending(task_id,payload,lanes,signature,status) VALUES(?,?,?,?,?)", [
+            ("t1", "{}", "[]", "s", "checked"), ("t2", "{}", "[]", "s", "rejected_repository_intent"),
+            ("t3", "{}", "[]", "s", "checked"), ("t4", "{}", "[]", "s", "query_excluded_assigned"),
+            ("t5", "{}", "[]", "s", "checked")])
+        con.commit()
+        return con
+
+    def test_counts_match_the_hand_worked_answers(self):
+        import tempfile
+        with tempfile.TemporaryDirectory() as d:
+            con = self._db(d)
+            ledger = {}
+            credited = sp.attribute(con, ledger)
+            con.close()
+        self.assertEqual(credited, 2)
+        e1, e2 = ledger["startup|E1"], ledger["startup|E2"]
+        self.assertEqual((e1["tasks"], e1["dispatched"], e1["refused"]), (3, 1, 1),
+                         "a task refused AND rejected by status must count once")
+        self.assertEqual((e2["tasks"], e2["dispatched"], e2["refused"]), (2, 1, 1))
+
+    def test_rerunning_attribution_does_not_double_count(self):
+        import tempfile
+        with tempfile.TemporaryDirectory() as d:
+            con = self._db(d)
+            ledger = {}
+            sp.attribute(con, ledger)
+            sp.attribute(con, ledger)
+            con.close()
+        self.assertEqual(ledger["startup|E1"]["tasks"], 3)
+
+
 if __name__ == "__main__":
     unittest.main()

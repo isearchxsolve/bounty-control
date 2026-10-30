@@ -92,35 +92,82 @@ def save_ledger(path: Path, ledger: dict) -> None:
     tmp.replace(path)
 
 
-def record_yield(ledger: dict, lane: str, expression: str, *, returned: int, saturated: bool,
-                 dispatch_ready: int, refused: int) -> None:
-    """Fold one search's measured output into the ledger. Counts only; no guesses."""
+def record_yield(ledger: dict, lane: str, expression: str, *, returned: int, saturated: bool) -> None:
+    """Record one search run: how much it returned and whether GitHub saturated.
+
+    Volume is recorded for diagnosis only. It does not feed the score; outcomes do (set_outcomes).
+    """
     key = f"{lane}|{expression}"
     entry = ledger.setdefault(key, {"lane": lane, "expression": expression, "runs": 0,
-                                    "returned": 0, "saturated_runs": 0,
-                                    "dispatch_ready": 0, "refused": 0, "last_run": 0.0})
+                                    "returned": 0, "saturated_runs": 0, "last_run": 0.0})
     entry["runs"] += 1
     entry["returned"] += int(returned)
     entry["saturated_runs"] += int(bool(saturated))
-    entry["dispatch_ready"] += int(dispatch_ready)
-    entry["refused"] += int(refused)
     entry["last_run"] = time.time()
 
 
-def score(entry: dict) -> float:
-    """Expected dispatch-ready candidates per search run, shrunk toward zero for few runs.
+def set_outcomes(ledger: dict, lane: str, expression: str, *, tasks: int, dispatched: int,
+                 refused: int) -> None:
+    """Record what an expression's tasks became. Counts are SET, not incremented.
 
-    The shrinkage stops a single lucky run from outranking an expression with a long record.
-    An expression that keeps returning refused work is penalised, because the engineer would
-    refuse it after a claim and a checkout.
+    The caller recomputes them from the durable task table on every run, so re-counting the same
+    history never double-credits an expression. ``tasks`` is every distinct issue the expression
+    surfaced; ``dispatched`` reached engineering; ``refused`` was turned away at admission or by
+    the engineer.
     """
-    runs = max(entry.get("runs", 0), 0)
-    if runs == 0:
-        return 0.0
-    rate = entry.get("dispatch_ready", 0) / runs
-    refusal = entry.get("refused", 0) / runs
-    prior_weight = 3.0
-    return (rate * runs + 0.0 * prior_weight) / (runs + prior_weight) - 0.5 * refusal
+    key = f"{lane}|{expression}"
+    entry = ledger.setdefault(key, {"lane": lane, "expression": expression, "runs": 0,
+                                    "returned": 0, "saturated_runs": 0, "last_run": 0.0})
+    entry["tasks"] = int(tasks)
+    entry["dispatched"] = int(dispatched)
+    entry["refused"] = int(refused)
+
+
+ATTRIBUTION_SQL = """
+    SELECT te.lane, te.expression, COUNT(DISTINCT te.task_id),
+           SUM(CASE WHEN tof.outcome = 'dispatched' THEN 1 ELSE 0 END),
+           SUM(CASE WHEN tof.outcome = 'refused' OR p.status LIKE 'rejected%'
+                         OR p.status LIKE 'query_excluded%' OR p.status LIKE 'current%'
+                    THEN 1 ELSE 0 END)
+    FROM task_expression te
+    LEFT JOIN task_outcome tof ON tof.task_id = te.task_id
+    LEFT JOIN pending p ON p.task_id = te.task_id
+    GROUP BY te.lane, te.expression
+"""
+
+
+def attribute(con, ledger: dict) -> int:
+    """Credit each expression with what its tasks became, from the local tables only.
+
+    Returns the number of expressions credited. Pure SQL joins: no API calls, so it cannot
+    spend the rate limit the discovery run depends on.
+    """
+    rows = con.execute(ATTRIBUTION_SQL).fetchall()
+    for lane, expression, tasks, dispatched, refused in rows:
+        set_outcomes(ledger, lane, expression, tasks=tasks or 0,
+                     dispatched=dispatched or 0, refused=refused or 0)
+    return len(rows)
+
+
+# Prior for an expression with no record: a 20% dispatch rate, weighted as 30 tasks. A
+# measured record has to beat this prior to outrank it. Without the prior, one lucky task
+# (1 of 1 dispatched) would look better than 8 of 30.
+PRIOR_RATE = 0.2
+PRIOR_TASKS = 30.0
+
+
+def score(entry: dict) -> float:
+    """Smoothed dispatch rate per surfaced task, penalised by refusals.
+
+    Measures what an expression is worth: of the issues it finds, how many reach engineering.
+    Volume is deliberately not rewarded: 1,000 refused issues are worth less than 5 that ship.
+    """
+    tasks = max(entry.get("tasks", 0), 0)
+    dispatched = max(entry.get("dispatched", 0), 0)
+    refused = max(entry.get("refused", 0), 0)
+    smoothed = (dispatched + PRIOR_RATE * PRIOR_TASKS) / (tasks + PRIOR_TASKS)
+    refusal_rate = refused / tasks if tasks else 0.0
+    return smoothed - 0.5 * refusal_rate
 
 
 def propose(lane: str, purpose: str, ledger_rows: list[dict], refusal_reasons: list[str],
@@ -130,8 +177,8 @@ def propose(lane: str, purpose: str, ledger_rows: list[dict], refusal_reasons: l
         return [], "no_key"
     best = sorted(ledger_rows, key=score, reverse=True)[:12]
     evidence = [
-        {"expression": r["expression"], "runs": r["runs"], "returned": r["returned"],
-         "dispatch_ready": r["dispatch_ready"], "refused": r["refused"]}
+        {"expression": r["expression"], "issues_found": r.get("tasks", 0),
+         "dispatched": r.get("dispatched", 0), "refused": r.get("refused", 0)}
         for r in best
     ]
     prompt = (
@@ -209,7 +256,9 @@ def plan(lane: str, static_queries: list[str], ledger: dict, *, slots: int, purp
     """
     rng = rng or random.Random()
     rows = [v for v in ledger.values() if v.get("lane") == lane]
-    proven = sorted((r for r in rows if r["runs"] and score(r) > 0), key=score, reverse=True)
+    # Exploit only what has actually dispatched work. An expression that has only returned
+    # issues is not proven, however many times it ran.
+    proven = sorted((r for r in rows if r.get("dispatched", 0) > 0), key=score, reverse=True)
     tried = {r["expression"] for r in rows}
     untried = [q for q in static_queries if q not in tried]
 

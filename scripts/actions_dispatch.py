@@ -1018,6 +1018,12 @@ def parse_lanes(value):
     return lanes
 
 
+def record_outcome(con, identity, outcome):
+    """Latest outcome wins: a refused task that later dispatches is credited as dispatched."""
+    con.execute("INSERT OR REPLACE INTO task_outcome VALUES(?,?,?)",
+                (identity, outcome, time.time()))
+
+
 def discover(lanes, max_dispatches=2, live=False, queries_per_lane=2, state_dir=None,
              hydrate_only=False, hydrate_batch=None):
     folder = Path(state_dir or os.environ.get("BOUNTY_STATE_DIR", Path(__file__).resolve().parents[1] / "scratch/actions-discovery"))
@@ -1035,6 +1041,10 @@ def discover(lanes, max_dispatches=2, live=False, queries_per_lane=2, state_dir=
     # the query that found the work.
     con.execute("CREATE TABLE IF NOT EXISTS task_expression(task_id TEXT, lane TEXT, "
                 "expression TEXT, PRIMARY KEY(task_id, lane, expression))")
+    # What each task became, recorded where the pipeline already decides it. Local only: reading
+    # the store per task would cost a GitHub API call each, and the rate limit is shared.
+    con.execute("CREATE TABLE IF NOT EXISTS task_outcome(task_id TEXT PRIMARY KEY, outcome TEXT, "
+                "at REAL)")
     con.execute("CREATE TABLE IF NOT EXISTS repo_intent(repository TEXT PRIMARY KEY, verdict TEXT, "
                 "merged INTEGER, total INTEGER, evidence TEXT, probed_at REAL)")
     con.execute("CREATE TABLE IF NOT EXISTS repo_capacity(repository TEXT PRIMARY KEY, size_kb INTEGER, "
@@ -1178,7 +1188,7 @@ def discover(lanes, max_dispatches=2, live=False, queries_per_lane=2, state_dir=
                 # Intelligence layer: the planner chooses the expressions from measured yield
                 # and a Nemotron proposal. Any failure falls back to the static round-robin
                 # inside plan(), so discovery never stops for lack of intelligence.
-                ledger_path = Path(state_dir or ".") / "search_ledger.json"
+                ledger_path = folder / "search_ledger.json"
                 ledger = search_planner.load_ledger(ledger_path)
                 chosen, audit = search_planner.plan(
                     lane, list(QUERIES[lane]), ledger, slots=queries_per_lane,
@@ -1193,8 +1203,7 @@ def discover(lanes, max_dispatches=2, live=False, queries_per_lane=2, state_dir=
                     search_planner.record_yield(
                         ledger, lane, expression,
                         returned=last_search.get("returned", 0),
-                        saturated=last_search.get("saturated", False),
-                        dispatch_ready=0, refused=0)
+                        saturated=last_search.get("saturated", False))
                 search_planner.save_ledger(ledger_path, ledger)
                 con.commit()
         if hydrate_only:
@@ -1370,6 +1379,7 @@ def discover(lanes, max_dispatches=2, live=False, queries_per_lane=2, state_dir=
                     if repo not in capacity_excluded:
                         capacity_excluded.append(repo)
                     counts["CAPACITY_EXCLUDED"] += 1
+                    record_outcome(con, identity, "refused")
                     con.execute("DELETE FROM candidates WHERE task_id=?", (identity,))
                     con.commit()
                     print(json.dumps({"phase": "CAPACITY_EXCLUDED", "task_id": identity,
@@ -1394,6 +1404,7 @@ def discover(lanes, max_dispatches=2, live=False, queries_per_lane=2, state_dir=
                         # REJECTED_PREPARATION. The verdict itself is still preserved in the store.
                         if str(state.get("status", "")).startswith("REJECTED_"):
                             counts["terminal_refusal"] += 1
+                            record_outcome(con, identity, "refused")
                             con.execute("DELETE FROM candidates WHERE task_id=?", (identity,))
                             con.commit()
                         else:
@@ -1407,12 +1418,14 @@ def discover(lanes, max_dispatches=2, live=False, queries_per_lane=2, state_dir=
                         con.execute("DELETE FROM candidates WHERE task_id=?", (identity,))
                         con.commit()
                         counts["CURRENT_" + query_exclusion.upper()] += 1
+                        record_outcome(con, identity, "refused")
                         continue
                     proof, reason = admit(current, quote=quote)
                     if not proof:
                         con.execute("DELETE FROM candidates WHERE task_id=?", (identity,))
                         con.commit()
                         counts["admission_changed." + reason] += 1
+                        record_outcome(con, identity, "refused")
                         continue
                     current_labels = [l.get("name", "") if isinstance(l, dict) else str(l) for l in current["issue"].get("labels", [])]
                     is_code, code_reason = is_code_change_request(
@@ -1424,13 +1437,20 @@ def discover(lanes, max_dispatches=2, live=False, queries_per_lane=2, state_dir=
                         con.execute("DELETE FROM candidates WHERE task_id=?", (identity,))
                         con.commit()
                         counts["admission_changed." + code_reason] += 1
+                        record_outcome(con, identity, "refused")
                         continue
                     competition(api, current["repo"], current["issue_number"], own_head=(state or {}).get("head_sha"))
                     dispatched.append(dispatch(api, store, current, proof, candidate["lanes"],
                                               preparation_budget=candidate.get("preparation_budget_seconds")))
+                    record_outcome(con, identity, "dispatched")
                 except (ValueError, GitHubError) as exc:
                     counts["dispatch_deferred"] += 1
                     print(json.dumps({"phase": "DISPATCH_DIAGNOSTIC", "task_id": identity, "error": str(exc)}), flush=True)
+        # Credit every expression with what its tasks became. Pure local joins: no API calls.
+        # Recomputed from the durable tables each run, so nothing is double-counted.
+        ledger = search_planner.load_ledger(folder / "search_ledger.json")
+        search_planner.attribute(con, ledger)
+        search_planner.save_ledger(folder / "search_ledger.json", ledger)
         if first_dispositions:
             ordered = sorted(first_dispositions)
             median_minutes = ordered[len(ordered) // 2]
