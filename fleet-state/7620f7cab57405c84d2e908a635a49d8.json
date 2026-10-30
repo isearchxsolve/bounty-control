@@ -2,7 +2,7 @@
   "task_id": "7620f7cab57405c84d2e908a635a49d8",
   "repo": "nknorg/nBounty",
   "issue_number": 2,
-  "status": "CLAIMED",
+  "status": "REJECTED_PREPARATION",
   "dispatch_id": "5bd6ac4e506646aaa6608378ad1f78d7",
   "admission": {
     "funding": {
@@ -33,7 +33,7 @@
   ],
   "dispatched_at": "2026-10-30T12:49:55.087901+00:00",
   "attempt": 1,
-  "updated_at": "2026-10-30T12:50:08.418943+00:00",
+  "updated_at": "2026-10-30T12:54:21.160640+00:00",
   "owner": "41058334815:1",
   "previous_owner": null,
   "previous_status": "DISPATCHED",
@@ -41,5 +41,37 @@
   "harness_sha": "122af062685a0bd1f1d161d9c42a07300819cc15",
   "claimed_at": "2026-10-30T12:50:08.418893+00:00",
   "lease_expires_at": "2026-10-30T16:55:08.418908+00:00",
-  "preparation_budget_seconds": 14400
+  "preparation_budget_seconds": 14400,
+  "at": "2026-10-30T12:54:05.919072+00:00",
+  "reason": "Cline preparation blocked: Issue #2 (\"[Gitcoin GR11] NKN Rust SDK\") is a 2021 Gitcoin GR11 bounty/hackathon proposal requesting a brand-new, separately-hosted NKN Rust SDK (\"Develope a NKN SDK for Rust language\"; acceptance criteria: open source on GitHub, test cases/examples, cross-testing with Go/JS SDKs, demo app). It does NOT request any concrete code change to this repository. nknorg/nBounty is an empty placeholder repo: the entire tracked tree at master (776ec5c) is only README.md (\"# nBounty\\n\\nNKN bounty program\") and .gitignore (2 files); GitHub API reports size=0, language=null, no manifests, no CI, no build/test toolchain to baseline or regress. Funding/claim is not live: the GR11 hackathon submission deadline was 2021-09-29 with winners announced 2021-10-12, and gitcoinbot recorded submitted work for @giraffekey (PR https://github.com/giraffekey/nkn-sdk-rust), i.e. a competing submission already exists. There is no reproducible defect, no engineering feature, and no focused maintenance task in this repository; this falls under grant/proposal request + generic product idea without a repository change + stale/no-longer-live funding. Per policy this is not converted into a fallback proposal or PR; the checkout is left unchanged on master.",
+  "declared_reason": "Issue #2 (\"[Gitcoin GR11] NKN Rust SDK\") is a 2021 Gitcoin GR11 bounty/hackathon proposal requesting a brand-new, separately-hosted NKN Rust SDK (\"Develope a NKN SDK for Rust language\"; acceptance criteria: open source on GitHub, test cases/examples, cross-testing with Go/JS SDKs, demo app). It does NOT request any concrete code change to this repository. nknorg/nBounty is an empty placeholder repo: the entire tracked tree at master (776ec5c) is only README.md (\"# nBounty\\n\\nNKN bounty program\") and .gitignore (2 files); GitHub API reports size=0, language=null, no manifests, no CI, no build/test toolchain to baseline or regress. Funding/claim is not live: the GR11 hackathon submission deadline was 2021-09-29 with winners announced 2021-10-12, and gitcoinbot recorded submitted work for @giraffekey (PR https://github.com/giraffekey/nkn-sdk-rust), i.e. a competing submission already exists. There is no reproducible defect, no engineering feature, and no focused maintenance task in this repository; this falls under grant/proposal request + generic product idea without a repository change + stale/no-longer-live funding. Per policy this is not converted into a fallback proposal or PR; the checkout is left unchanged on master.",
+  "evidence": {
+    "action": "blocked",
+    "worktree": "/tmp/bounty-workspaces/repos/nknorg--nBounty--2",
+    "base_sha": "776ec5cd0a191695e2153d38d256624cdb5d857a",
+    "default_branch": "master",
+    "sources": [
+      {
+        "path": "README.md",
+        "sha256": "b89a80187afa4256a1a0893e4b43f4835413dae4b2418220eaee3df94530330b"
+      },
+      {
+        "path": ".gitignore",
+        "sha256": "ee469ba29530d6f9e2af74e89068d5a6bb9b09a7363e221f0e6caf72fae6a916"
+      }
+    ],
+    "run_url": "",
+    "admission": {
+      "amount": "15000",
+      "currency": "USDT",
+      "usd_value": "15000",
+      "quote": {
+        "basis": "USD-denominated stablecoin offer"
+      },
+      "raw": "15,000 USDT",
+      "source_url": "https://github.com/nknorg/nBounty/issues/2",
+      "payer": "yilunzhang"
+    }
+  },
+  "finished_at": "2026-10-30T12:54:20.654446+00:00"
 }
