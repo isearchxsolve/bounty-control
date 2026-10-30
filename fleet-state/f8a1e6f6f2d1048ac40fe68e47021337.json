@@ -2,7 +2,7 @@
   "task_id": "f8a1e6f6f2d1048ac40fe68e47021337",
   "repo": "ruohong2018/ruohong2018.github.io",
   "issue_number": 1125,
-  "status": "CLAIMED",
+  "status": "REJECTED_PREPARATION",
   "dispatch_id": "ebb1c000d59540448f1ce532b5e54039",
   "admission": {
     "funding": {
@@ -38,7 +38,7 @@
   ],
   "dispatched_at": "2026-10-30T17:01:16.679565+00:00",
   "attempt": 1,
-  "updated_at": "2026-10-30T17:01:30.639788+00:00",
+  "updated_at": "2026-10-30T17:04:35.351655+00:00",
   "owner": "41095114677:1",
   "previous_owner": null,
   "previous_status": "DISPATCHED",
@@ -46,5 +46,73 @@
   "harness_sha": "36da4d1f58379020b816cc66cdfa95772df51f6f",
   "claimed_at": "2026-10-30T17:01:30.639734+00:00",
   "lease_expires_at": "2026-10-30T21:06:30.639751+00:00",
-  "preparation_budget_seconds": 14400
+  "preparation_budget_seconds": 14400,
+  "at": "2026-10-30T17:04:23.143112+00:00",
+  "reason": "Cline preparation blocked: Issue #1125 is an auto-generated daily content-feed issue, not a request for a concrete code change. Evidence: (1) Title is \"[\u6bcf\u65e5\u4fe1\u606f\u6d41] 2026-03-11\" (\"[Daily Information Feed] 2026-03-11\") and it carries only the repository's auto-applied `daily` label (label id 4883815292) with milestone=None, assignees=[], comments=[]. (2) The 40,891-character body is solely a bulleted list of external security-news hyperlinks (e.g. trickest/cve commits, 4hou.com, bunniestudios.com, anquanke.com, securelist.com, reddit r/ReverseEngineering, bleepingcomputer.com, mp.weixin.qq.com WeChat posts) with no reproducible defect, stack trace, feature specification, code snippet, file/component reference, or acceptance criteria. (3) The repository is an automated RSS aggregation/push bot (README: \"\u4e00\u4e2a\u65b9\u4fbf\u83b7\u53d6\u6bcf\u65e5\u5b89\u5168\u8d44\u8baf\u7684\u722c\u866b\u548c\u63a8\u9001\u7a0b\u5e8f\"; Python bot.py/yarb.py/utils.py). Its .github/workflows/daily.yml step at line 38 is exactly what produced this issue: gh issue create --title \"[\u6bcf\u65e5\u4fe1\u606f\u6d41] date\" -F today.md --label \"daily\". So #1125 is pipeline output (yesterday's today.md rendered as an issue), not an engineering work item. (4) Issue state=open. Only one unrelated PR is open: #1361 (head fix-issue-1360, \"fix: update wechatRSS OPML feed URL in config.json\"), which does not compete with #1125. Per the classification policy this is a documentation/content deliverable with no repository code change, so it is blocked rather than converted into a fallback patch or PR. The isolated checkout was created clean from upstream master and left byte-for-byte unchanged (git status clean at base_sha d51bad12e8b4edfcd4196d59dfdb5ac1427ea24c).",
+  "declared_reason": "Issue #1125 is an auto-generated daily content-feed issue, not a request for a concrete code change. Evidence: (1) Title is \"[\u6bcf\u65e5\u4fe1\u606f\u6d41] 2026-03-11\" (\"[Daily Information Feed] 2026-03-11\") and it carries only the repository's auto-applied `daily` label (label id 4883815292) with milestone=None, assignees=[], comments=[]. (2) The 40,891-character body is solely a bulleted list of external security-news hyperlinks (e.g. trickest/cve commits, 4hou.com, bunniestudios.com, anquanke.com, securelist.com, reddit r/ReverseEngineering, bleepingcomputer.com, mp.weixin.qq.com WeChat posts) with no reproducible defect, stack trace, feature specification, code snippet, file/component reference, or acceptance criteria. (3) The repository is an automated RSS aggregation/push bot (README: \"\u4e00\u4e2a\u65b9\u4fbf\u83b7\u53d6\u6bcf\u65e5\u5b89\u5168\u8d44\u8baf\u7684\u722c\u866b\u548c\u63a8\u9001\u7a0b\u5e8f\"; Python bot.py/yarb.py/utils.py). Its .github/workflows/daily.yml step at line 38 is exactly what produced this issue: gh issue create --title \"[\u6bcf\u65e5\u4fe1\u606f\u6d41] date\" -F today.md --label \"daily\". So #1125 is pipeline output (yesterday's today.md rendered as an issue), not an engineering work item. (4) Issue state=open. Only one unrelated PR is open: #1361 (head fix-issue-1360, \"fix: update wechatRSS OPML feed URL in config.json\"), which does not compete with #1125. Per the classification policy this is a documentation/content deliverable with no repository code change, so it is blocked rather than converted into a fallback patch or PR. The isolated checkout was created clean from upstream master and left byte-for-byte unchanged (git status clean at base_sha d51bad12e8b4edfcd4196d59dfdb5ac1427ea24c).",
+  "evidence": {
+    "action": "blocked",
+    "worktree": "/tmp/bounty-workspaces/repos/ruohong2018--ruohong2018.github.io--1125",
+    "base_sha": "d51bad12e8b4edfcd4196d59dfdb5ac1427ea24c",
+    "default_branch": "master",
+    "sources": [
+      {
+        "path": "requirements.txt",
+        "sha256": "116c08e02cbb0f92aef8e277a45c1f0628bf517eb332ce52399a41f024c927f0"
+      },
+      {
+        "path": "install.sh",
+        "sha256": "e893c3d8899015f56b8aba0502fe6ba36e4cd8e8fd9fe28cfac7904c07d80e81"
+      },
+      {
+        "path": ".github/workflows/daily.yml",
+        "sha256": "0976c4913dd5741d2acc400154315a64a900e1b506735685d0651326a33f1378"
+      },
+      {
+        "path": ".github/workflows/pick.yml",
+        "sha256": "8751282ab4a2414b15a861edf3cd1c55a970737e83d9994f52d80914ef86e0d7"
+      },
+      {
+        "path": ".github/workflows/issue.yml",
+        "sha256": "78cf233cbd70a6775fec30918bbba3cecf71b6a998e30738e7860114544b40ee"
+      },
+      {
+        "path": ".github/workflows/comment.yml",
+        "sha256": "fadb102b39eb540f5b9fc2571ebd48b229dcee2068f3d3a1de6dac49b43e51e0"
+      },
+      {
+        "path": "config.json",
+        "sha256": "5c8d99974aebae28e535fcef799a7b631c8387b8e26ba85844a4334dca52ed78"
+      },
+      {
+        "path": "config.yml",
+        "sha256": "86f59dcd8a0a89e2eb0ef0fb35711ce139c5d8cbbc9ba730a7705405e48c415f"
+      },
+      {
+        "path": "bot.py",
+        "sha256": "7732c374bb35b4f4c08f7c219a4a74a8b222e1ca6866944649b40852b521409e"
+      },
+      {
+        "path": "yarb.py",
+        "sha256": "12c21e259507749a745bac6de491f46d6c76abba160a59e2a639150d7235bf3a"
+      },
+      {
+        "path": "utils.py",
+        "sha256": "0798dba38f573564aaf35fabe8d6998f80d72b926aab35cee8afb09b5fa516ee"
+      }
+    ],
+    "run_url": "",
+    "admission": {
+      "amount": "10000",
+      "currency": "USD",
+      "usd_value": "10000",
+      "quote": {
+        "basis": "USD face value"
+      },
+      "raw": "$10K",
+      "source_url": "https://github.com/ruohong2018/ruohong2018.github.io/issues/1125",
+      "payer": "ruohong2018"
+    }
+  },
+  "finished_at": "2026-10-30T17:04:34.913604+00:00"
 }
