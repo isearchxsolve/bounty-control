@@ -2,7 +2,7 @@
   "task_id": "773fcd631b8ff4e0064b61a7d134208e",
   "repo": "ProjectWyvern/frontends",
   "issue_number": 1,
-  "status": "CLAIMED",
+  "status": "REJECTED_PREPARATION",
   "dispatch_id": "bdb98040f3ed4e54b711c2b5f3d8675b",
   "admission": {
     "funding": {
@@ -34,7 +34,7 @@
   ],
   "dispatched_at": "2026-10-30T08:58:06.832068+00:00",
   "attempt": 1,
-  "updated_at": "2026-10-30T08:58:22.584210+00:00",
+  "updated_at": "2026-10-30T09:03:11.493946+00:00",
   "owner": "41030017960:1",
   "previous_owner": null,
   "previous_status": "DISPATCHED",
@@ -42,5 +42,37 @@
   "harness_sha": "4707c558e63d17826ff3be09ee20f98d542c7335",
   "claimed_at": "2026-10-30T08:58:22.584163+00:00",
   "lease_expires_at": "2026-10-30T13:03:22.584176+00:00",
-  "preparation_budget_seconds": 14400
+  "preparation_budget_seconds": 14400,
+  "at": "2026-10-30T09:03:00.127563+00:00",
+  "reason": "Cline preparation blocked: Issue #1 ('Concept design: smart contract marketplace') does not request a concrete code change to this repository. It is a DESIGN/DOCUMENTATION deliverable: the body asks to 'Design a set of desktop web UI mockups and UX flow descriptions' and to 'Submit your concept design as a PR to this repository, following the folder structure of the template ... including functionality descriptions and UI mockups.' There is no reproducible defect and no engineering feature to implement in code; the requested artifacts are PNG mockups plus prose UX-flow descriptions under concepts/. The repository itself is a concept-only repo (description 'Wyvern Protocol Frontend Concept Development'; README: 'Collection of concept designs for frontends'), containing only README.md and concepts/example (README.md + 7 PNGs) and no application source. Additionally the deliverable is already covered by an open competing PR: PR #7 'Concept design: Smart Contract Marketplace frontend & UX flows (closes #1)' by s6pa1rta3n-lab (opened 2026-08-30) adds concepts/smart-contract-marketplace/README.md plus 8 mockup PNGs and edits README.md; PR #6 (Jbry123, 2018) is also an open competing submission. Funding is effectively dead: the Gitcoin bounty (gitcoin.co/issue/ProjectWyvern/frontends/1/323) was escalated to Gitcoin's moderation team for inactivity, repeated 'Is this bounty still open?' questions were left unanswered by the funder, and the repository's last push was 2018-05-19. Per policy this is a documentation/design deliverable with an already-competing PR -> blocked; the checkout was left unchanged and no fork/PR was created.",
+  "declared_reason": "Issue #1 ('Concept design: smart contract marketplace') does not request a concrete code change to this repository. It is a DESIGN/DOCUMENTATION deliverable: the body asks to 'Design a set of desktop web UI mockups and UX flow descriptions' and to 'Submit your concept design as a PR to this repository, following the folder structure of the template ... including functionality descriptions and UI mockups.' There is no reproducible defect and no engineering feature to implement in code; the requested artifacts are PNG mockups plus prose UX-flow descriptions under concepts/. The repository itself is a concept-only repo (description 'Wyvern Protocol Frontend Concept Development'; README: 'Collection of concept designs for frontends'), containing only README.md and concepts/example (README.md + 7 PNGs) and no application source. Additionally the deliverable is already covered by an open competing PR: PR #7 'Concept design: Smart Contract Marketplace frontend & UX flows (closes #1)' by s6pa1rta3n-lab (opened 2026-08-30) adds concepts/smart-contract-marketplace/README.md plus 8 mockup PNGs and edits README.md; PR #6 (Jbry123, 2018) is also an open competing submission. Funding is effectively dead: the Gitcoin bounty (gitcoin.co/issue/ProjectWyvern/frontends/1/323) was escalated to Gitcoin's moderation team for inactivity, repeated 'Is this bounty still open?' questions were left unanswered by the funder, and the repository's last push was 2018-05-19. Per policy this is a documentation/design deliverable with an already-competing PR -> blocked; the checkout was left unchanged and no fork/PR was created.",
+  "evidence": {
+    "action": "blocked",
+    "worktree": "/tmp/bounty-workspaces/repos/ProjectWyvern--frontends--1",
+    "base_sha": "39058c49d08e873170def5d8cd375ca87067be9a",
+    "default_branch": "master",
+    "sources": [
+      {
+        "path": "README.md",
+        "sha256": "f5c053a55f1e520a6654338fa86b2e7765c5fadc07b07e57ef1ea8ef27467de8"
+      },
+      {
+        "path": "concepts/example/README.md",
+        "sha256": "design-concept doc (1678 bytes), not code - see evidence"
+      }
+    ],
+    "run_url": "",
+    "admission": {
+      "amount": "500",
+      "currency": "USD",
+      "usd_value": "500",
+      "quote": {
+        "basis": "USD face value"
+      },
+      "raw": "$500",
+      "source_url": "https://github.com/ProjectWyvern/frontends/issues/1#issuecomment-385192391",
+      "payer": "protinam"
+    }
+  },
+  "finished_at": "2026-10-30T09:03:10.974901+00:00"
 }
