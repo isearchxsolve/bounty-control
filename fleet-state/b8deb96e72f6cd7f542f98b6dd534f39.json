@@ -2,7 +2,7 @@
   "task_id": "b8deb96e72f6cd7f542f98b6dd534f39",
   "repo": "better-feedback/better-commons",
   "issue_number": 3,
-  "status": "CLAIMED",
+  "status": "REJECTED_PREPARATION",
   "dispatch_id": "fd8c389486f74ba78f2eb4dfd0eaae47",
   "admission": {
     "funding": {
@@ -32,7 +32,7 @@
   ],
   "dispatched_at": "2026-10-30T09:38:50.058359+00:00",
   "attempt": 1,
-  "updated_at": "2026-10-30T09:39:02.946947+00:00",
+  "updated_at": "2026-10-30T09:42:11.921991+00:00",
   "owner": "41034955246:1",
   "previous_owner": null,
   "previous_status": "DISPATCHED",
@@ -40,5 +40,53 @@
   "harness_sha": "f43d151c000334fe421335253546604bbeef36fc",
   "claimed_at": "2026-10-30T09:39:02.946887+00:00",
   "lease_expires_at": "2026-10-30T13:44:02.946907+00:00",
-  "preparation_budget_seconds": 14400
+  "preparation_budget_seconds": 14400,
+  "at": "2026-10-30T09:41:57.295898+00:00",
+  "reason": "Cline preparation blocked: Issue #3 is a content/marketing deliverable, not a concrete code change to this repository. Title: 'Content bounty: Conviction voting'. Body: 'Write a blog post explaining the benefits of Conviction Voting, to earn 500 USD.' Labels: open, bounty, Giveth. It requests a written blog post (prose/content asset), not a reproducible defect, specific engineering feature, or code-level maintenance task. Repository evidence confirms no code target exists: (1) the repo is a Next.js/TypeScript bounty-board app (package.json name 'better-app', scripts dev/build/start/lint; no content/blog pipeline); (2) a case-insensitive search across all *.ts/*.tsx/*.js/*.json/*.md tracked files for 'conviction' and 'blog' returns zero matches; (3) README explicitly states issues 'could range from feature requests, to DAO proposals or content marketing ideas', matching this item exactly. The requested deliverable cannot be expressed as a failing-then-passing regression test against repository code, so a regression_plan reproduction is impossible without manufacturing data. No competing PR for issue #3 exists: the only open PR is #6 'Redact sensitive bounty output and logs' (unrelated). Per delivery rules, documentation/marketing deliverables must be action=blocked. Checkout was cloned to the requested worktree and left unchanged at upstream default branch main@b9df39e654dd71f05d71c2ac5ccf844c0f6774e0; no fix/bounty-3 branch created, no edits made, no fork or PR opened. Funding is live ($500 USD pledged by seichris) but the funded work item is out of scope for engineering delivery.",
+  "declared_reason": "Issue #3 is a content/marketing deliverable, not a concrete code change to this repository. Title: 'Content bounty: Conviction voting'. Body: 'Write a blog post explaining the benefits of Conviction Voting, to earn 500 USD.' Labels: open, bounty, Giveth. It requests a written blog post (prose/content asset), not a reproducible defect, specific engineering feature, or code-level maintenance task. Repository evidence confirms no code target exists: (1) the repo is a Next.js/TypeScript bounty-board app (package.json name 'better-app', scripts dev/build/start/lint; no content/blog pipeline); (2) a case-insensitive search across all *.ts/*.tsx/*.js/*.json/*.md tracked files for 'conviction' and 'blog' returns zero matches; (3) README explicitly states issues 'could range from feature requests, to DAO proposals or content marketing ideas', matching this item exactly. The requested deliverable cannot be expressed as a failing-then-passing regression test against repository code, so a regression_plan reproduction is impossible without manufacturing data. No competing PR for issue #3 exists: the only open PR is #6 'Redact sensitive bounty output and logs' (unrelated). Per delivery rules, documentation/marketing deliverables must be action=blocked. Checkout was cloned to the requested worktree and left unchanged at upstream default branch main@b9df39e654dd71f05d71c2ac5ccf844c0f6774e0; no fix/bounty-3 branch created, no edits made, no fork or PR opened. Funding is live ($500 USD pledged by seichris) but the funded work item is out of scope for engineering delivery.",
+  "evidence": {
+    "action": "blocked",
+    "worktree": "/tmp/bounty-workspaces/repos/better-feedback--better-commons--3",
+    "base_sha": "b9df39e654dd71f05d71c2ac5ccf844c0f6774e0",
+    "default_branch": "main",
+    "sources": [
+      {
+        "path": "package.json",
+        "sha256": "4699fe74f532581c77045edcd12019ef87c2abcd4f2bfe859d5d3e8f92127e14"
+      },
+      {
+        "path": "yarn.lock",
+        "sha256": "b9de6692634a55c7070ac02e4cc696d324623552db35ff1b3a3ae1e808c23360"
+      },
+      {
+        "path": "README.md",
+        "sha256": "f979c492217829f0cc82b9cdf55161d7333634880485940f40565a70002dcba3"
+      },
+      {
+        "path": "jest.config.js",
+        "sha256": "4d9d6fc50fa699075445d8f8a1144fcc8991b34197c5ac8182721404bdf6ef14"
+      },
+      {
+        "path": "tsconfig.json",
+        "sha256": "56883f842e33922a72dacccf1842cfe366023360687554273c1099d046ccee2b"
+      },
+      {
+        "path": ".eslintrc.json",
+        "sha256": "1589a15e55fbebc6519c95d91d8f0a090618f20dc78e479858b9c27552484961"
+      }
+    ],
+    "run_url": "",
+    "admission": {
+      "amount": "500",
+      "currency": "USD",
+      "usd_value": "500",
+      "quote": {
+        "basis": "USD face value"
+      },
+      "raw": "500 USD",
+      "source_url": "https://github.com/better-feedback/better-commons/issues/3",
+      "payer": "seichris"
+    }
+  },
+  "finished_at": "2026-10-30T09:42:11.323177+00:00"
 }
