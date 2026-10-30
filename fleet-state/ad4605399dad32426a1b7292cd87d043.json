@@ -2,7 +2,7 @@
   "task_id": "ad4605399dad32426a1b7292cd87d043",
   "repo": "xmtplabs/ethshanghai-2022",
   "issue_number": 2,
-  "status": "DISPATCHED",
+  "status": "CLAIMED",
   "dispatch_id": "febcfb3b2f424e8baba7dc6e7fb1c608",
   "admission": {
     "funding": {
@@ -35,6 +35,14 @@
     "normal"
   ],
   "dispatched_at": "2026-10-30T14:39:41.007273+00:00",
-  "attempt": 0,
-  "updated_at": "2026-10-30T14:39:42.751808+00:00"
+  "attempt": 1,
+  "updated_at": "2026-10-30T14:39:52.355315+00:00",
+  "owner": "41073585466:1",
+  "previous_owner": null,
+  "previous_status": "DISPATCHED",
+  "run_url": "https://github.com/isearchxsolve/bounty-control/actions/runs/41073585466",
+  "harness_sha": "122af062685a0bd1f1d161d9c42a07300819cc15",
+  "claimed_at": "2026-10-30T14:39:52.355268+00:00",
+  "lease_expires_at": "2026-10-30T18:44:52.355280+00:00",
+  "preparation_budget_seconds": 14400
 }
