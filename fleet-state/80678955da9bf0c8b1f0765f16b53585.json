@@ -2,7 +2,7 @@
   "task_id": "80678955da9bf0c8b1f0765f16b53585",
   "repo": "TigerVNC/tigervnc",
   "issue_number": 398,
-  "status": "CLAIMED",
+  "status": "FAILED_DELIVERABLE_MISSING",
   "dispatch_id": "392d53150be84f3c93f37fade6b718bb",
   "admission": {
     "funding": {
@@ -38,7 +38,7 @@
   ],
   "dispatched_at": "2026-10-30T10:39:12.133189+00:00",
   "attempt": 1,
-  "updated_at": "2026-10-30T10:39:25.133550+00:00",
+  "updated_at": "2026-10-30T10:50:24.155198+00:00",
   "owner": "41042320457:1",
   "previous_owner": null,
   "previous_status": "DISPATCHED",
@@ -46,5 +46,24 @@
   "harness_sha": "b102bf0a4bd737a2f28aedb691e4dda6d9d08ae2",
   "claimed_at": "2026-10-30T10:39:25.133496+00:00",
   "lease_expires_at": "2026-10-30T14:44:25.133513+00:00",
-  "preparation_budget_seconds": 14400
+  "preparation_budget_seconds": 14400,
+  "kind": "deliverable_invalid",
+  "retryable": true,
+  "diagnostic": "Cline deliverable invalid at /tmp/fleet-artifacts/delivery-supervisor/01bb8a70625d4eb3b6b8f440953eeb59.preparation.json: Cline preparation must leave a clean, unchanged upstream baseline (dirty: tests/unit/CMakeLists.txt, tests/unit/vncviewerconfig.cxx)",
+  "path": "/tmp/fleet-artifacts/delivery-supervisor/01bb8a70625d4eb3b6b8f440953eeb59.preparation.json",
+  "reason": "Cline preparation must leave a clean, unchanged upstream baseline (dirty: tests/unit/CMakeLists.txt, tests/unit/vncviewerconfig.cxx)",
+  "at": "2026-10-30T10:50:08.784782+00:00",
+  "failures": [
+    {
+      "run_url": "https://github.com/isearchxsolve/bounty-control/actions/runs/41042320457",
+      "status": "FAILED_DELIVERABLE_MISSING",
+      "kind": "deliverable_invalid",
+      "retryable": true,
+      "diagnostic": "Cline deliverable invalid at /tmp/fleet-artifacts/delivery-supervisor/01bb8a70625d4eb3b6b8f440953eeb59.preparation.json: Cline preparation must leave a clean, unchanged upstream baseline (dirty: tests/unit/CMakeLists.txt, tests/unit/vncviewerconfig.cxx)",
+      "path": "/tmp/fleet-artifacts/delivery-supervisor/01bb8a70625d4eb3b6b8f440953eeb59.preparation.json",
+      "reason": "Cline preparation must leave a clean, unchanged upstream baseline (dirty: tests/unit/CMakeLists.txt, tests/unit/vncviewerconfig.cxx)",
+      "at": "2026-10-30T10:50:08.784782+00:00"
+    }
+  ],
+  "finished_at": "2026-10-30T10:50:23.594461+00:00"
 }
