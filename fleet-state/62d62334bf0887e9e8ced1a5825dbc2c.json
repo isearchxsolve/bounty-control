@@ -2,7 +2,7 @@
   "task_id": "62d62334bf0887e9e8ced1a5825dbc2c",
   "repo": "harmony-one/bounties",
   "issue_number": 14,
-  "status": "DISPATCHED",
+  "status": "CLAIMED",
   "dispatch_id": "935785fb88f54a9e8c85f3458ceca9e5",
   "admission": {
     "funding": {
@@ -34,6 +34,14 @@
     "normal"
   ],
   "dispatched_at": "2026-10-30T13:21:40.306806+00:00",
-  "attempt": 0,
-  "updated_at": "2026-10-30T13:21:42.273372+00:00"
+  "attempt": 1,
+  "updated_at": "2026-10-30T13:21:56.895434+00:00",
+  "owner": "41062595184:1",
+  "previous_owner": null,
+  "previous_status": "DISPATCHED",
+  "run_url": "https://github.com/isearchxsolve/bounty-control/actions/runs/41062595184",
+  "harness_sha": "122af062685a0bd1f1d161d9c42a07300819cc15",
+  "claimed_at": "2026-10-30T13:21:56.895376+00:00",
+  "lease_expires_at": "2026-10-30T17:26:56.895395+00:00",
+  "preparation_budget_seconds": 14400
 }
