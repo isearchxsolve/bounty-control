@@ -2,7 +2,7 @@
   "task_id": "1d61cada5efd7cab18828b07f5329c12",
   "repo": "RUMBO-IA/Rumbo",
   "issue_number": 135,
-  "status": "CLAIMED",
+  "status": "REJECTED_PREPARATION",
   "dispatch_id": "22878d8c362340d682b2db34909489d2",
   "admission": {
     "funding": {
@@ -106,7 +106,7 @@
   ],
   "dispatched_at": "2026-10-30T19:05:51.737502+00:00",
   "attempt": 1,
-  "updated_at": "2026-10-30T19:06:04.721812+00:00",
+  "updated_at": "2026-10-30T19:10:41.247668+00:00",
   "owner": "41112388497:1",
   "previous_owner": null,
   "previous_status": "DISPATCHED",
@@ -114,5 +114,56 @@
   "harness_sha": "2e2cda3dc5900de390e8402fda1b160f9b17ff6c",
   "claimed_at": "2026-10-30T19:06:04.721780+00:00",
   "lease_expires_at": "2026-10-30T23:11:04.721788+00:00",
-  "preparation_budget_seconds": 14400
+  "preparation_budget_seconds": 14400,
+  "at": "2026-10-30T19:10:22.918618+00:00",
+  "reason": "Cline preparation blocked: Issue #135 (RUMBO-IA/Rumbo) is titled 'Cashflow execution ledger \u2014 2026-09-13' and its entire body is a business/commercial cashflow ledger: an objective to 'Create near-term online cashflow', a canonical revenue state machine (DISCOVERED -> ... -> PAID), a list of Upwork/Meta commercial application lanes with states like APPLICATION_READY_NOT_SUBMITTED, and a direct-bounty audit. It requests no concrete code change to this repository. Its stated 'Next gate' is 'authenticated submission of the prepared commercial applications' \u2014 an external platform action, not a repo engineering task. All 47 comments (author fscfede-beep) are cashflow execution/reconciliation updates (Upwork proposals, Gmail/Calendar sweeps, bounty-source audits); none asks for any implementable change to RUMBO-IA/Rumbo. A repo-wide grep for '#135' and 'execution ledger' finds zero matches in any tracked file, confirming no code artifact is expected. The funding signal attached by admission (GBP 280, amount.usd_value 375.17, source https://github.com/RUMBO-IA/Rumbo/issues/135#issuecomment-5657914406) is itself explicitly retracted in that very comment: 'Gmail reply 1a09d7a59706b617 from Rytis M / QuietForgeTools explicitly clarifies that the GBP 280 amount is a client-paid discovery/test fee payable to QuietForgeTools, and that they are not currently hiring or offering a GBP 280 developer contract' with state QUIETFORGETOOLS_RFQ = CLOSED_NOT_HIRING. So there is neither a live funded engineering task nor a repository code change requested. Classification per policy: documentation/marketing/business deliverable with withdrawn funding -> blocked, checkout left unchanged. No branches/PRs created, no code edited. (For completeness: 27 open PRs exist upstream and none references issue #135, so this is not an already-competing PR case either; it is simply a non-engineering ledger issue.)",
+  "declared_reason": "Issue #135 (RUMBO-IA/Rumbo) is titled 'Cashflow execution ledger \u2014 2026-09-13' and its entire body is a business/commercial cashflow ledger: an objective to 'Create near-term online cashflow', a canonical revenue state machine (DISCOVERED -> ... -> PAID), a list of Upwork/Meta commercial application lanes with states like APPLICATION_READY_NOT_SUBMITTED, and a direct-bounty audit. It requests no concrete code change to this repository. Its stated 'Next gate' is 'authenticated submission of the prepared commercial applications' \u2014 an external platform action, not a repo engineering task. All 47 comments (author fscfede-beep) are cashflow execution/reconciliation updates (Upwork proposals, Gmail/Calendar sweeps, bounty-source audits); none asks for any implementable change to RUMBO-IA/Rumbo. A repo-wide grep for '#135' and 'execution ledger' finds zero matches in any tracked file, confirming no code artifact is expected. The funding signal attached by admission (GBP 280, amount.usd_value 375.17, source https://github.com/RUMBO-IA/Rumbo/issues/135#issuecomment-5657914406) is itself explicitly retracted in that very comment: 'Gmail reply 1a09d7a59706b617 from Rytis M / QuietForgeTools explicitly clarifies that the GBP 280 amount is a client-paid discovery/test fee payable to QuietForgeTools, and that they are not currently hiring or offering a GBP 280 developer contract' with state QUIETFORGETOOLS_RFQ = CLOSED_NOT_HIRING. So there is neither a live funded engineering task nor a repository code change requested. Classification per policy: documentation/marketing/business deliverable with withdrawn funding -> blocked, checkout left unchanged. No branches/PRs created, no code edited. (For completeness: 27 open PRs exist upstream and none references issue #135, so this is not an already-competing PR case either; it is simply a non-engineering ledger issue.)",
+  "evidence": {
+    "action": "blocked",
+    "worktree": "/tmp/bounty-workspaces/repos/RUMBO-IA--Rumbo--135",
+    "base_sha": "fbf6ce514ca98718ee126d650effb1b67bd76528",
+    "default_branch": "main",
+    "sources": [
+      {
+        "path": "README.md",
+        "sha256": "1dc0f330bec713ff2c1da920ee1828bc2688fd53039a64126982957fc0bef929"
+      },
+      {
+        "path": "vercel.json",
+        "sha256": "76f02b6ae93d8b7581daa118ec99df4453d0098e06b61ec210ecec001e05a98d"
+      },
+      {
+        "path": "systems/agent-reliability/pyproject.toml",
+        "sha256": "6794d2045c3b3336ee39d153bb992fa5b18844b6592cc314dde8dee048565aa8"
+      },
+      {
+        "path": ".github/workflows/privacy-gate.yml",
+        "sha256": "b2f9e4919268b618e6d601c0e9280df8b376a9dec338e71483d3c4a551795bc6"
+      },
+      {
+        "path": ".github/workflows/agent-reliability-ci.yml",
+        "sha256": "1cdd890e616e078a30289783c692fddf058ad66c10a15a252f15d94016b2bcb2"
+      },
+      {
+        "path": ".github/workflows/brand-gate.yml",
+        "sha256": "fa74e2eb5352f4dbedcc054a413424bac988bb57bd0619cba74f555dd4bfed96"
+      }
+    ],
+    "run_url": "",
+    "admission": {
+      "amount": "280",
+      "currency": "GBP",
+      "usd_value": "375.1720",
+      "quote": {
+        "usd_rate": "1.3399",
+        "source_url": "https://api.frankfurter.dev/v1/latest?base=GBP&symbols=USD",
+        "observed_at": "2026-10-30T19:06:02.698113+00:00",
+        "quote_date": "2026-10-30"
+      },
+      "raw": "\u00a3280",
+      "source_url": "https://github.com/RUMBO-IA/Rumbo/issues/135#issuecomment-5657914406",
+      "payer": "fscfede-beep"
+    }
+  },
+  "finished_at": "2026-10-30T19:10:40.632680+00:00"
 }
