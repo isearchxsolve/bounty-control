@@ -2,7 +2,7 @@
   "task_id": "8cae5123bf12df2dcfaacd311f1cd980",
   "repo": "mistswapdex/mistswap-interface",
   "issue_number": 107,
-  "status": "CLAIMED",
+  "status": "REJECTED_PREPARATION",
   "dispatch_id": "95b572db38604ff393b9bb0448245cb5",
   "admission": {
     "funding": {
@@ -34,7 +34,7 @@
   ],
   "dispatched_at": "2026-10-30T17:45:50.641428+00:00",
   "attempt": 2,
-  "updated_at": "2026-10-30T17:49:05.891978+00:00",
+  "updated_at": "2026-10-30T18:12:16.128147+00:00",
   "owner": "41101351896:1",
   "previous_owner": "41098255553:1",
   "previous_status": "DISPATCHED",
@@ -47,8 +47,8 @@
   "retryable": true,
   "diagnostic": "Cline deliverable invalid at /tmp/fleet-artifacts/delivery-supervisor/fc03fba1cdca4e379a8250b1bb0fb417.preparation.json: Cline preparation must leave a clean, unchanged upstream baseline (dirty: package.json, yarn.lock)",
   "path": "/tmp/fleet-artifacts/delivery-supervisor/fc03fba1cdca4e379a8250b1bb0fb417.preparation.json",
-  "reason": "Cline preparation must leave a clean, unchanged upstream baseline (dirty: package.json, yarn.lock)",
-  "at": "2026-10-30T17:42:18.022679+00:00",
+  "reason": "Cline preparation blocked: blocked: issue #107 reports a wallet-level signing failure, not a reproducible defect in this repository. Funding is present and not withdrawn ($300 MIST, issuecomment-1149197275, kasumi-1, 2022-06-07) and there is no competing work (open PRs are only #61 graph_farms and #28 harvest_all; the issue timeline holds no cross-reference and a repo-wide PR search for 107 returns nothing). The report says that with MetaMask + a Trezor One the confirmation pop-up closes before the device ever signs, on MistSwap and TangoSwap (both SmartBCH) while SushiSwap on Ethereum mainnet works. That exact symptom is a long-standing third-party defect, not a defect of this tree: trezor/connect#784 'Metamask + Trezor pop up window automatically closes without signing' (open, 143 comments, reported against Uniswap/ETH, Polygon, Avalanche and Harmony; the only working remedies in that thread are device-side - firmware downgrade, disabled safety checks, another wallet) and MetaMask/metamask-extension#10896 'MetaMask Pop-up Window Always Unexpectedly Closes Right Before Entering PIN on Hardware Wallet' (labels area-hardware, hardware-trezor; reproduction step 'Approve/Swap on, e.g., Uniswap'). The repository's write paths carry no hardware-wallet-specific signing: swaps go through ethers signer.sendTransaction (src/hooks/useSwapCallback.ts:351-361), approvals through tokenContract.approve (src/hooks/useApproveCallback.ts:91-100) and wraps through deposit/withdraw (src/hooks/useWrapCallback.ts:56-59,83-85); all are plain eth_sendTransaction calls. The only non-standard signing path (provider.isMetaMask=false plus eth_sign, src/hooks/useSwapCallback.ts:418-481) is Archer-relay-only and Archer is switched off for this deployment (doArcher/archerRelay = undefined, src/pages/exchange/swap/[[...tokens]].tsx:127-129; ARCHER_RELAY_URI = {}, src/config/archer.ts:5-6). A direct diff of this hook against its parent interface (snkashis/sushiswap-interface@master) shows the transaction path is identical except for a fork-only forced legacy fee (gasPrice: getGasPrice(), 1.05 Gwei, src/functions/trade.ts:44-51); that value equals SmartBCH's protocol minimum and editing it would be a speculative change with a real risk of underpriced ordinary swaps, not a fix, and it cannot be validated here because the configured RPC (src/config/rpc.ts:4) does not answer and the project is defunct (app.mistswap.fi redirects to a parked domain-sale listing, no commits since 2022). Reproducing the reported abort needs a physical Trezor One bound to a MetaMask hardware account, which this runner does not have, so no honest red-then-green repository test can exist for a fault that lives in the MetaMask <-> Trezor Connect bridge. (Context, not the refusal reason: the repo's own unit suite is not runnable at base either - .github/workflows/tests.yaml:64 runs 'yarn test', package.json has no test script, and jest is absent from package.json and yarn.lock.) Checkout left unchanged: master at 0229c7e2ac16aabe898d210d9ce22837d6c7d134, working tree clean, no fix branch created, no product edits. Unblocking evidence would be an interface-side log or traceback, or a device-backed reproduction, showing the abort originates in this codebase.",
+  "at": "2026-10-30T18:12:02.746579+00:00",
   "failures": [
     {
       "run_url": "https://github.com/isearchxsolve/bounty-control/actions/runs/41098255553",
@@ -61,5 +61,70 @@
       "at": "2026-10-30T17:42:18.022679+00:00"
     }
   ],
-  "finished_at": "2026-10-30T17:42:33.985674+00:00"
+  "finished_at": "2026-10-30T18:12:15.609413+00:00",
+  "declared_reason": "blocked: issue #107 reports a wallet-level signing failure, not a reproducible defect in this repository. Funding is present and not withdrawn ($300 MIST, issuecomment-1149197275, kasumi-1, 2022-06-07) and there is no competing work (open PRs are only #61 graph_farms and #28 harvest_all; the issue timeline holds no cross-reference and a repo-wide PR search for 107 returns nothing). The report says that with MetaMask + a Trezor One the confirmation pop-up closes before the device ever signs, on MistSwap and TangoSwap (both SmartBCH) while SushiSwap on Ethereum mainnet works. That exact symptom is a long-standing third-party defect, not a defect of this tree: trezor/connect#784 'Metamask + Trezor pop up window automatically closes without signing' (open, 143 comments, reported against Uniswap/ETH, Polygon, Avalanche and Harmony; the only working remedies in that thread are device-side - firmware downgrade, disabled safety checks, another wallet) and MetaMask/metamask-extension#10896 'MetaMask Pop-up Window Always Unexpectedly Closes Right Before Entering PIN on Hardware Wallet' (labels area-hardware, hardware-trezor; reproduction step 'Approve/Swap on, e.g., Uniswap'). The repository's write paths carry no hardware-wallet-specific signing: swaps go through ethers signer.sendTransaction (src/hooks/useSwapCallback.ts:351-361), approvals through tokenContract.approve (src/hooks/useApproveCallback.ts:91-100) and wraps through deposit/withdraw (src/hooks/useWrapCallback.ts:56-59,83-85); all are plain eth_sendTransaction calls. The only non-standard signing path (provider.isMetaMask=false plus eth_sign, src/hooks/useSwapCallback.ts:418-481) is Archer-relay-only and Archer is switched off for this deployment (doArcher/archerRelay = undefined, src/pages/exchange/swap/[[...tokens]].tsx:127-129; ARCHER_RELAY_URI = {}, src/config/archer.ts:5-6). A direct diff of this hook against its parent interface (snkashis/sushiswap-interface@master) shows the transaction path is identical except for a fork-only forced legacy fee (gasPrice: getGasPrice(), 1.05 Gwei, src/functions/trade.ts:44-51); that value equals SmartBCH's protocol minimum and editing it would be a speculative change with a real risk of underpriced ordinary swaps, not a fix, and it cannot be validated here because the configured RPC (src/config/rpc.ts:4) does not answer and the project is defunct (app.mistswap.fi redirects to a parked domain-sale listing, no commits since 2022). Reproducing the reported abort needs a physical Trezor One bound to a MetaMask hardware account, which this runner does not have, so no honest red-then-green repository test can exist for a fault that lives in the MetaMask <-> Trezor Connect bridge. (Context, not the refusal reason: the repo's own unit suite is not runnable at base either - .github/workflows/tests.yaml:64 runs 'yarn test', package.json has no test script, and jest is absent from package.json and yarn.lock.) Checkout left unchanged: master at 0229c7e2ac16aabe898d210d9ce22837d6c7d134, working tree clean, no fix branch created, no product edits. Unblocking evidence would be an interface-side log or traceback, or a device-backed reproduction, showing the abort originates in this codebase.",
+  "evidence": {
+    "action": "blocked",
+    "worktree": "/tmp/bounty-workspaces/repos/mistswapdex--mistswap-interface--107",
+    "base_sha": "0229c7e2ac16aabe898d210d9ce22837d6c7d134",
+    "default_branch": "master",
+    "sources": [
+      {
+        "path": "src/hooks/useSwapCallback.ts",
+        "sha256": "5e3a9d181f84c4a64f5fd6d9e63b61c47b15320ca3f4c8e76857c704150fb894"
+      },
+      {
+        "path": "src/hooks/useApproveCallback.ts",
+        "sha256": "87661ed16efc5784831acf371bfa597cec9c403cfd1f1e1df3bbe914a85d12e7"
+      },
+      {
+        "path": "src/hooks/useWrapCallback.ts",
+        "sha256": "4d25556dd97c82ab90352c4848b9aca4f3ab3c644c713e996544f5e166f6bf70"
+      },
+      {
+        "path": "src/functions/trade.ts",
+        "sha256": "eb7de89fdace65fe1718ba242aa159a3a0863082f49f2ef30b3e6fc10ff7e961"
+      },
+      {
+        "path": "src/config/archer.ts",
+        "sha256": "6f3541c38d10834b710cc6d47b82c094a611fecdaabe7bab9d3be3d823c65ff2"
+      },
+      {
+        "path": "src/pages/exchange/swap/[[...tokens]].tsx",
+        "sha256": "978aa8420e23af088a238e0ce4e795665ad90f6cac2a770d2b8ba1710d6458d1"
+      },
+      {
+        "path": "package.json",
+        "sha256": "ebda57981c12c0d7299866ac68a8986805a6b3886d50c53c963bef64b0844f81"
+      },
+      {
+        "path": "yarn.lock",
+        "sha256": "eaee63186a5f685fe967f0276409b1bf3816453c3a11fbef555486b49b543aaf"
+      },
+      {
+        "path": ".github/workflows/tests.yaml",
+        "sha256": "659e9b3bcb8e95149364ba96fb769182d8055b9e4fe596321948863ecd461f0c"
+      },
+      {
+        "path": ".nvmrc",
+        "sha256": "8695ddd40c0cafe99cb341318c31a1764b18ff198ff8665cedad1b24bc1e42ca"
+      },
+      {
+        "path": "README.md",
+        "sha256": "4995143b653305eb15f64b78cd3502cb119c8350972bfd191c388f518a217c34"
+      }
+    ],
+    "run_url": "",
+    "admission": {
+      "amount": "300",
+      "currency": "USD",
+      "usd_value": "300",
+      "quote": {
+        "basis": "USD face value"
+      },
+      "raw": "$300",
+      "source_url": "https://github.com/mistswapdex/mistswap-interface/issues/107#issuecomment-1149197275",
+      "payer": "kasumi-1"
+    }
+  }
 }
