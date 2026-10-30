@@ -1,0 +1,40 @@
+{
+  "task_id": "e4f3b3398924f7772bf634fcc2ab3499",
+  "repo": "GnosisEcosystemFund/Gnosis-Bounties-",
+  "issue_number": 15,
+  "status": "DISPATCHING",
+  "dispatch_id": "1eff6f5092604533b2214ebcd4b23621",
+  "admission": {
+    "funding": {
+      "amount": "3",
+      "currency": "ETH",
+      "usd_value": "6709.155",
+      "quote": {
+        "usd_rate": "2236.385",
+        "source_url": "https://api.coinbase.com/v2/prices/ETH-USD/spot",
+        "observed_at": "2026-10-30T17:08:29.344170+00:00",
+        "quote_date": null
+      },
+      "raw": "3 ETH",
+      "source_url": "https://github.com/GnosisEcosystemFund/Gnosis-Bounties-/issues/15",
+      "payer": "GnosisEcosystemFund"
+    },
+    "technical_signals": [
+      "issue",
+      "protocols"
+    ],
+    "component_references": [],
+    "source_locations": [],
+    "engineering_evidence_sources": [
+      "https://github.com/GnosisEcosystemFund/Gnosis-Bounties-/issues/15"
+    ],
+    "source_issue": "https://github.com/GnosisEcosystemFund/Gnosis-Bounties-/issues/15",
+    "fetched_at": "2026-10-30T17:08:34.975857+00:00"
+  },
+  "lanes": [
+    "founder"
+  ],
+  "dispatched_at": "2026-10-30T17:08:36.155346+00:00",
+  "attempt": 0,
+  "updated_at": "2026-10-30T17:08:36.155364+00:00"
+}
