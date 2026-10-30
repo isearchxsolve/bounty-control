@@ -1,0 +1,38 @@
+{
+  "task_id": "8cae5123bf12df2dcfaacd311f1cd980",
+  "repo": "mistswapdex/mistswap-interface",
+  "issue_number": 107,
+  "status": "DISPATCHING",
+  "dispatch_id": "d71ced5676ee4f13b66d9d636d12071d",
+  "admission": {
+    "funding": {
+      "amount": "300",
+      "currency": "USD",
+      "usd_value": "300",
+      "quote": {
+        "basis": "USD face value"
+      },
+      "raw": "$300",
+      "source_url": "https://github.com/mistswapdex/mistswap-interface/issues/107#issuecomment-1149197275",
+      "payer": "kasumi-1"
+    },
+    "technical_signals": [
+      "bug",
+      "fails",
+      "issue"
+    ],
+    "component_references": [],
+    "source_locations": [],
+    "engineering_evidence_sources": [
+      "https://github.com/mistswapdex/mistswap-interface/issues/107"
+    ],
+    "source_issue": "https://github.com/mistswapdex/mistswap-interface/issues/107",
+    "fetched_at": "2026-10-30T17:22:21.682863+00:00"
+  },
+  "lanes": [
+    "programs"
+  ],
+  "dispatched_at": "2026-10-30T17:22:23.024266+00:00",
+  "attempt": 0,
+  "updated_at": "2026-10-30T17:22:23.024283+00:00"
+}
