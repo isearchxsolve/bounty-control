@@ -2,7 +2,7 @@
   "task_id": "d9b5ec95b1742261baa23931737eefd3",
   "repo": "creative-visionary/Fish_Media",
   "issue_number": 18,
-  "status": "DISPATCHING",
+  "status": "DISPATCHED",
   "dispatch_id": "df4c5189dbf744f9acc69016c40d8726",
   "admission": {
     "funding": {
@@ -37,5 +37,5 @@
   ],
   "dispatched_at": "2026-10-30T16:41:27.045178+00:00",
   "attempt": 0,
-  "updated_at": "2026-10-30T16:41:27.045219+00:00"
+  "updated_at": "2026-10-30T16:41:28.587259+00:00"
 }
