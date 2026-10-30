@@ -1,0 +1,37 @@
+{
+  "task_id": "e746238b7ab5a6a95c330ee4eb671eba",
+  "repo": "connext/gitcoin",
+  "issue_number": 2,
+  "status": "DISPATCHING",
+  "dispatch_id": "6b2107a59a1042df97f173c2497babcb",
+  "admission": {
+    "funding": {
+      "amount": "250",
+      "currency": "USDC",
+      "usd_value": "250",
+      "quote": {
+        "basis": "USD-denominated stablecoin offer"
+      },
+      "raw": "250 USDC",
+      "source_url": "https://github.com/connext/gitcoin/issues/2",
+      "payer": "A-Keyboard"
+    },
+    "technical_signals": [
+      "issue"
+    ],
+    "component_references": [],
+    "source_locations": [],
+    "engineering_evidence_sources": [
+      "https://github.com/connext/gitcoin/issues/2#issuecomment-1069666658"
+    ],
+    "source_issue": "https://github.com/connext/gitcoin/issues/2",
+    "fetched_at": "2026-10-30T12:49:59.066064+00:00"
+  },
+  "lanes": [
+    "founder",
+    "normal"
+  ],
+  "dispatched_at": "2026-10-30T12:50:00.396080+00:00",
+  "attempt": 0,
+  "updated_at": "2026-10-30T12:50:00.396100+00:00"
+}
