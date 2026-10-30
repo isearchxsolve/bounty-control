@@ -2,7 +2,7 @@
   "task_id": "ada8912253f9467ba580e72e85e219dd",
   "repo": "Scottcjn/rustchain-bounties",
   "issue_number": 58,
-  "status": "CLAIMED",
+  "status": "REJECTED_PREPARATION",
   "dispatch_id": "e06d449aa21a4a7cbe7dc1fb518d3616",
   "admission": {
     "funding": {
@@ -38,7 +38,7 @@
   ],
   "dispatched_at": "2026-10-30T19:49:24.723885+00:00",
   "attempt": 1,
-  "updated_at": "2026-10-30T19:49:42.621046+00:00",
+  "updated_at": "2026-10-30T19:54:26.298511+00:00",
   "owner": "41118381303:1",
   "previous_owner": null,
   "previous_status": "DISPATCHED",
@@ -46,5 +46,61 @@
   "harness_sha": "1e04b468c4deecf4ad44bb88ee88538555ec2de9",
   "claimed_at": "2026-10-30T19:49:42.620971+00:00",
   "lease_expires_at": "2026-10-30T23:54:42.621010+00:00",
-  "preparation_budget_seconds": 14400
+  "preparation_budget_seconds": 14400,
+  "at": "2026-10-30T19:54:08.453446+00:00",
+  "reason": "Cline preparation blocked: Issue #58 is a Red Team bounty whose stated deliverable is an attack report: 'Attack methodology', 'Evidence of consensus break (screenshots, logs)', 'Impact assessment', 'Recommended mitigations'. It targets three LIVE external attestation nodes (50.28.86.131, 50.28.86.153, 76.8.228.245:8099) and asks the researcher to 'break' cross-node consensus. It does not request any reproducible defect, feature, or maintenance change inside Scottcjn/rustchain-bounties. This repository contains no 3-node consensus implementation: all consensus/P2P code lives in the separate repository Scottcjn/Rustchain (owner comment 3934602478: 'Fix: PR Scottcjn/Rustchain#301 merged.'). The only in-repo consensus artifacts are historical submissions for a DIFFERENT issue (bounties/issue-2418-attestation-replay-cross-node/) that are patches against the Rustchain node repo, not this one. The bounty is already fulfilled/competed: the owner paid 30 RTC to @liu971227-sys (comment 3934602478) and 200 RTC to @allornothingai (comment 4064710904), and other claimants already filed competing reports/PRs against Scottcjn/Rustchain (maelrx PRs Scottcjn/Rustchain#4218 and #4657 on 2026-05-10/11; bat123121567890-cmd submission 2026-07-06; fresh claims by byctrl/calproencrip/jairojr32-svg on 2026-10-29). No open PR in Scottcjn/rustchain-bounties references issue #58 (GitHub search type:pr state:open returned total_count=0). Per the classification rule (documentation deliverable / already-competed and disbursed bounty), this must not be converted into a fallback code change or PR. Checkout left unchanged at upstream main.",
+  "declared_reason": "Issue #58 is a Red Team bounty whose stated deliverable is an attack report: 'Attack methodology', 'Evidence of consensus break (screenshots, logs)', 'Impact assessment', 'Recommended mitigations'. It targets three LIVE external attestation nodes (50.28.86.131, 50.28.86.153, 76.8.228.245:8099) and asks the researcher to 'break' cross-node consensus. It does not request any reproducible defect, feature, or maintenance change inside Scottcjn/rustchain-bounties. This repository contains no 3-node consensus implementation: all consensus/P2P code lives in the separate repository Scottcjn/Rustchain (owner comment 3934602478: 'Fix: PR Scottcjn/Rustchain#301 merged.'). The only in-repo consensus artifacts are historical submissions for a DIFFERENT issue (bounties/issue-2418-attestation-replay-cross-node/) that are patches against the Rustchain node repo, not this one. The bounty is already fulfilled/competed: the owner paid 30 RTC to @liu971227-sys (comment 3934602478) and 200 RTC to @allornothingai (comment 4064710904), and other claimants already filed competing reports/PRs against Scottcjn/Rustchain (maelrx PRs Scottcjn/Rustchain#4218 and #4657 on 2026-05-10/11; bat123121567890-cmd submission 2026-07-06; fresh claims by byctrl/calproencrip/jairojr32-svg on 2026-10-29). No open PR in Scottcjn/rustchain-bounties references issue #58 (GitHub search type:pr state:open returned total_count=0). Per the classification rule (documentation deliverable / already-competed and disbursed bounty), this must not be converted into a fallback code change or PR. Checkout left unchanged at upstream main.",
+  "evidence": {
+    "action": "blocked",
+    "worktree": "/tmp/bounty-workspaces/repos/Scottcjn--rustchain-bounties--58",
+    "base_sha": "1cf0fd118cfedf25517ffe45a392ab3b910b2607",
+    "default_branch": "main",
+    "sources": [
+      {
+        "path": "package.json",
+        "sha256": "5bd68d8f7c26db699840b711bb3127741f70bb5cd4b42d30c0a1a87e5490c916"
+      },
+      {
+        "path": "requirements.txt",
+        "sha256": "ae12a02603eb01f7bcd5988f72531046505effdc054ff5699d1c677c1cf127d1"
+      },
+      {
+        "path": "pytest.ini",
+        "sha256": "c809c969ec7e11b9ff37784e9c6fcc0b7c5148d168e18b05aed797e03fbd6ead"
+      },
+      {
+        "path": "SECURITY.md",
+        "sha256": "cd5d6942c66cb4bc93eaf5cd7961f858189047bdf81aa9ee5eadc85d0add57ad"
+      },
+      {
+        "path": "CONTRIBUTING.md",
+        "sha256": "8c02e49def7b04b3b28fd03f2117b613d265e721242a8c8b40c5f656a9f810a0"
+      },
+      {
+        "path": "README.md",
+        "sha256": "120fb8f1ddd597f46c0460926c7e60335f1f6f0693529af4d1c35cb9c38c5ea1"
+      },
+      {
+        "path": ".github/workflows/bounty-claim-tests.yml",
+        "sha256": "84c5ac298855c44c84e9214778a42beb08398dcb5afc546d80ee65a7c538fbde"
+      },
+      {
+        "path": ".github/workflows/verify-bounties.yml",
+        "sha256": "64cbed74fb7d796eb78466dc93783e69aadb691e289d45ab73be74a01e0338ed"
+      }
+    ],
+    "run_url": "",
+    "admission": {
+      "amount": "0",
+      "currency": "FOUNDER",
+      "usd_value": "0",
+      "quote": {
+        "basis": "Repository Owner Request"
+      },
+      "raw": "OWNER",
+      "source_url": "https://github.com/Scottcjn/rustchain-bounties/issues/58",
+      "payer": "Scottcjn"
+    }
+  },
+  "finished_at": "2026-10-30T19:54:25.679359+00:00"
 }
