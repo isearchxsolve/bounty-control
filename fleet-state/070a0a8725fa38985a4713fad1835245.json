@@ -2,7 +2,7 @@
   "task_id": "070a0a8725fa38985a4713fad1835245",
   "repo": "reef-defi/reef-finance-bounties",
   "issue_number": 1,
-  "status": "DISPATCHED",
+  "status": "CLAIMED",
   "dispatch_id": "a2a41a03080742c0b0a45415d068cc7b",
   "admission": {
     "funding": {
@@ -32,6 +32,14 @@
     "normal"
   ],
   "dispatched_at": "2026-10-30T12:41:00.829299+00:00",
-  "attempt": 0,
-  "updated_at": "2026-10-30T12:41:02.844793+00:00"
+  "attempt": 1,
+  "updated_at": "2026-10-30T12:41:12.148236+00:00",
+  "owner": "41057192137:1",
+  "previous_owner": null,
+  "previous_status": "DISPATCHED",
+  "run_url": "https://github.com/isearchxsolve/bounty-control/actions/runs/41057192137",
+  "harness_sha": "122af062685a0bd1f1d161d9c42a07300819cc15",
+  "claimed_at": "2026-10-30T12:41:12.148186+00:00",
+  "lease_expires_at": "2026-10-30T16:46:12.148200+00:00",
+  "preparation_budget_seconds": 14400
 }
