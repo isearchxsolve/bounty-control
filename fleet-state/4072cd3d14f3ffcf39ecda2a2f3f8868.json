@@ -2,7 +2,7 @@
   "task_id": "4072cd3d14f3ffcf39ecda2a2f3f8868",
   "repo": "Tyaoo/picker",
   "issue_number": 978,
-  "status": "CLAIMED",
+  "status": "REJECTED_PREPARATION",
   "dispatch_id": "3731698718264388ab5275c5d8c4acee",
   "admission": {
     "funding": {
@@ -36,7 +36,7 @@
   ],
   "dispatched_at": "2026-10-30T14:56:44.190664+00:00",
   "attempt": 1,
-  "updated_at": "2026-10-30T14:56:56.766084+00:00",
+  "updated_at": "2026-10-30T15:00:26.062259+00:00",
   "owner": "41076152359:1",
   "previous_owner": null,
   "previous_status": "DISPATCHED",
@@ -44,5 +44,69 @@
   "harness_sha": "122af062685a0bd1f1d161d9c42a07300819cc15",
   "claimed_at": "2026-10-30T14:56:56.766037+00:00",
   "lease_expires_at": "2026-10-30T19:01:56.766050+00:00",
-  "preparation_budget_seconds": 14400
+  "preparation_budget_seconds": 14400,
+  "at": "2026-10-30T15:00:12.399403+00:00",
+  "reason": "Cline preparation blocked: Issue #978 is titled '[\u6bcf\u65e5\u4fe1\u606f\u6d41] 2025-04-15' (label 'daily') and is an auto-generated daily security-news aggregation feed written by the repository owner by the repo's own automation (.github/workflows/daily.yml). Its 341-line body is solely a bulleted list of external news/RSS links with '[ ]' task checkboxes and zero technical content: no code, no stack trace/traceback, no error message, no file/function/symbol reference, no reproduction steps, and no feature request. It requests no concrete code change to this repository. The admission 'technical_signals' (bug, bug_bounty, bypass, protocol, transaction) are spurious keyword matches from the link text and the $10,000 figure is face-value metadata with no real escrow/payment mechanism. Repository state confirms the nature: HEAD is commit f1d886f '\u6bcf\u65e5\u5b89\u5168\u8d44\u8baf(2026-10-30)' and the entire history is auto-committed '\u6bcf\u65e5\u5b89\u5168\u8d44\u8baf(YYYY-MM-DD)' feed snapshots. Open PRs 1500 ('Fix #1499: [\u6bcf\u65e5\u4fe1\u606f\u6d41] 2026-09-05') and 1295 ('Fix #1006: [\u6bcf\u65e5\u4fe1\u606f\u6d41] 2025-05-13') are other agents 'fixing' identical feed issues, confirming these are content deliverables, not defects. No PR competes for #978 and no source location/component is referenced. Per the phase rule this is a documentation/content deliverable with no repository change: action=blocked. The checkout was left pristine (git status clean at main @ f1d886f585e807e82f84da6123f4858ef365f461).",
+  "declared_reason": "Issue #978 is titled '[\u6bcf\u65e5\u4fe1\u606f\u6d41] 2025-04-15' (label 'daily') and is an auto-generated daily security-news aggregation feed written by the repository owner by the repo's own automation (.github/workflows/daily.yml). Its 341-line body is solely a bulleted list of external news/RSS links with '[ ]' task checkboxes and zero technical content: no code, no stack trace/traceback, no error message, no file/function/symbol reference, no reproduction steps, and no feature request. It requests no concrete code change to this repository. The admission 'technical_signals' (bug, bug_bounty, bypass, protocol, transaction) are spurious keyword matches from the link text and the $10,000 figure is face-value metadata with no real escrow/payment mechanism. Repository state confirms the nature: HEAD is commit f1d886f '\u6bcf\u65e5\u5b89\u5168\u8d44\u8baf(2026-10-30)' and the entire history is auto-committed '\u6bcf\u65e5\u5b89\u5168\u8d44\u8baf(YYYY-MM-DD)' feed snapshots. Open PRs 1500 ('Fix #1499: [\u6bcf\u65e5\u4fe1\u606f\u6d41] 2026-09-05') and 1295 ('Fix #1006: [\u6bcf\u65e5\u4fe1\u606f\u6d41] 2025-05-13') are other agents 'fixing' identical feed issues, confirming these are content deliverables, not defects. No PR competes for #978 and no source location/component is referenced. Per the phase rule this is a documentation/content deliverable with no repository change: action=blocked. The checkout was left pristine (git status clean at main @ f1d886f585e807e82f84da6123f4858ef365f461).",
+  "evidence": {
+    "action": "blocked",
+    "worktree": "/tmp/bounty-workspaces/repos/Tyaoo--picker--978",
+    "base_sha": "f1d886f585e807e82f84da6123f4858ef365f461",
+    "default_branch": "main",
+    "sources": [
+      {
+        "path": "requirements.txt",
+        "sha256": "0bd080de6e0416d13591bb124ecde53fcd8bed8b91c3cce93caccf2405837639"
+      },
+      {
+        "path": "bot.py",
+        "sha256": "fb85e5c5c09e0d352db2373435334568d286c89f349fcad2996e502d6fd88b07"
+      },
+      {
+        "path": "yarb.py",
+        "sha256": "87a2d7531e8d407bc789446cb7823eeb09843dff40fa21223e222998d9cc1fd0"
+      },
+      {
+        "path": "utils.py",
+        "sha256": "5c08284c9f885f91d7de59493feaf7be0c5020af96e236c02a44db8f5a884e2a"
+      },
+      {
+        "path": "config.yml",
+        "sha256": "970754f21ec94c92c68bb241c94a5c84eeafec2937d0a4da9892be01fb2bc7e0"
+      },
+      {
+        "path": "install.sh",
+        "sha256": "c76bee4563a42e3b9e6ae1b465bb68a300ab2b6a159919d6b859f3327ece34e0"
+      },
+      {
+        "path": ".github/workflows/daily.yml",
+        "sha256": "60042e008e529bb95dc2c11b487b77e0f2fdf1b7b3a26b6599ce18787089d309"
+      },
+      {
+        "path": ".github/workflows/issue.yml",
+        "sha256": "78cf233cbd70a6775fec30918bbba3cecf71b6a998e30738e7860114544b40ee"
+      },
+      {
+        "path": ".github/workflows/pick.yml",
+        "sha256": "af069fc76c011248c82288abf54867ede1028cd506151e47bbf5829613906d98"
+      },
+      {
+        "path": ".github/workflows/comment.yml",
+        "sha256": "fadb102b39eb540f5b9fc2571ebd48b229dcee2068f3d3a1de6dac49b43e51e0"
+      }
+    ],
+    "run_url": "",
+    "admission": {
+      "amount": "10000",
+      "currency": "USD",
+      "usd_value": "10000",
+      "quote": {
+        "basis": "USD face value"
+      },
+      "raw": "$10,000",
+      "source_url": "https://github.com/Tyaoo/picker/issues/978",
+      "payer": "Tyaoo"
+    }
+  },
+  "finished_at": "2026-10-30T15:00:25.332368+00:00"
 }
