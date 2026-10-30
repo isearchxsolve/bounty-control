@@ -118,4 +118,6 @@ jobs:
 
         python3 -W error scripts/test_hydrate_only_path.py
 
-        python3 -W error scripts/test_competition_linked.py'
+        python3 -W error scripts/test_competition_linked.py
+
+        python3 -W error scripts/test_unbounded_scope.py'

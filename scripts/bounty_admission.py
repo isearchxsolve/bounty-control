@@ -145,6 +145,18 @@ HARD = re.compile(
     r"regressions?|crash\w*|panic\w*|corrupt\w*|transactions?|consensus|ABI|"
     r"performance|distributed|schedulers?|algorithms?|cryptograph\w*|"
     r"encryption|signatures?|deadlocks?|bug\w*|error\w*|fail\w*|broken|issue\w*|problem\w*|defect\w*)\b", re.I)
+WISH = re.compile(
+    "(?<![a-z])is it possible(?![a-z])|(?<![a-z])would it be possible(?![a-z])|"
+    "(?<![a-z])any (?:chance|way)(?![a-z])|"
+    "(?<![a-z])would be (?:nice|great|good|cool)(?![a-z])|(?<![a-z])feature request(?![a-z])|"
+    "(?<![a-z])(?:please|kindly) (?:add|support|implement|provide)(?![a-z])|"
+    "(?<![a-z])possible to (?:add|support|implement)(?![a-z])", re.I)
+
+DEFECT_ANCHOR = re.compile(
+    "traceback|stack ?trace|exception|error:|panic:|segfault|"
+    "expected.{0,80}actual|steps to reproduce|reproduc[a-z]*|"
+    "(?<![a-z])regression(?![a-z])|fails? (?:when|with|on)|crash(?:es)? (?:when|on)", re.I)
+
 COMPONENT = re.compile(
     r"(?<!https://)(?:[\w.-]+/)+[\w.-]+\.[a-zA-Z0-9]+|"
     r"\b[A-Za-z_][A-Za-z0-9_:]*\(\)|\b(?:E[A-Z0-9_]{4,}|[A-Z][A-Za-z]+Error)\b")
@@ -533,6 +545,29 @@ def engineering_signal(evidence):
     return vocabulary or bool(evidence["source_locations"])
 
 
+def unbounded_scope(context, evidence):
+    """Is this a wish, or work that can be finished?
+
+    Measured 2026-10-30 on microg/GmsCore#1272, a USD 300 bounty that passed admission, claim and
+    a real Cline checkout before the engineer refused it: the entire issue is one sentence,
+    "Is it possible to add Nearby Share to MicroG and also make it work with the normal Play
+    Services?", open since 2020 with 29 comments of support. Implementing it means shipping
+    Google's proprietary Quick Share stack end to end - no reproducible defect, no acceptance
+    criteria, no finish line.
+
+    A wish is refused at the door so the claim, the checkout and the engineer's hour are spent on
+    something that can be delivered. The refusal needs BOTH a wish form and no defect anchor: a
+    request phrased politely that carries a traceback, a reproduction or a located source file is
+    an ordinary bug report and passes untouched.
+    """
+    issue = context["issue"]
+    title, body = issue["title"], issue.get("body") or ""
+    text = title + " " + body
+    wish = bool(WISH.search(title)) or (bool(WISH.search(body)) and len(body) < 1500)
+    anchored = bool(DEFECT_ANCHOR.search(text)) or bool(evidence.get("source_locations"))
+    return "UNBOUNDED_SCOPE" if wish and not anchored else None
+
+
 def admit(context, quote=None, floor=FLOOR):
     """Return proof or a reason; untrusted payee text never becomes an offer."""
     issue, metadata = context["issue"], context["repository"]
@@ -572,6 +607,9 @@ def admit(context, quote=None, floor=FLOOR):
         # Named for the old, narrower test on purpose: one counter keeps the refusal rate
         # comparable across the change. The proof below carries which evidence was missing.
         return None, "HARD_ISSUE_EVIDENCE_MISSING"
+    unbounded = unbounded_scope(context, evidence)
+    if unbounded:
+        return None, unbounded
     technical, components = evidence["technical_signals"], evidence["component_references"]
     offer = None
     programme = funding_program(context)
