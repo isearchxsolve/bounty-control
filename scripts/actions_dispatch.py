@@ -1019,9 +1019,15 @@ def parse_lanes(value):
 
 
 def record_outcome(con, identity, outcome):
-    """Latest outcome wins: a refused task that later dispatches is credited as dispatched."""
+    """Latest outcome wins: a refused task that later dispatches is credited as dispatched.
+
+    Commits on every call. Measured on run 41042914871: the outcome hooks sat after the last
+    commit in their branches, so task_outcome was empty despite hundreds of refusals. An outcome
+    the planner cannot read back is not an outcome.
+    """
     con.execute("INSERT OR REPLACE INTO task_outcome VALUES(?,?,?)",
                 (identity, outcome, time.time()))
+    con.commit()
 
 
 def discover(lanes, max_dispatches=2, live=False, queries_per_lane=2, state_dir=None,

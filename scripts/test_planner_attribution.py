@@ -93,5 +93,29 @@ class OutcomeAttribution(unittest.TestCase):
         self.assertEqual(ledger["startup|E1"]["tasks"], 3)
 
 
+class OutcomeIsDurable(unittest.TestCase):
+    """An outcome must be visible to another connection the moment it is recorded.
+
+    Regression for run 41042914871: hooks written after a commit were never committed, so the
+    table stayed empty while hundreds of tasks were refused. A second connection cannot see an
+    uncommitted write, so reading through one is the proof.
+    """
+
+    def test_a_recorded_outcome_is_visible_to_another_connection(self):
+        import tempfile
+        import actions_dispatch as ad
+        with tempfile.TemporaryDirectory() as d:
+            path = Path(d) / "out.sqlite3"
+            writer = sqlite3.connect(path)
+            writer.execute("CREATE TABLE task_outcome(task_id TEXT PRIMARY KEY, outcome TEXT, at REAL)")
+            writer.commit()
+            ad.record_outcome(writer, "task-9", "refused")
+            reader = sqlite3.connect(path)
+            rows = reader.execute("SELECT outcome FROM task_outcome WHERE task_id='task-9'").fetchall()
+            reader.close()
+            writer.close()
+        self.assertEqual(rows, [("refused",)], "the outcome was not committed")
+
+
 if __name__ == "__main__":
     unittest.main()
