@@ -19,6 +19,7 @@ from actions_github import GitHub, GitHubError, StateStore, task_id, utcnow
 from bounty_admission import admit, competition, NON_WORK, repository_intent, FUNDING_PROGRAMS
 from bounty_fx import quote
 from discovery_horizon import Horizon
+from hardness_score import hardness_score
 from liquidity_score import rank_key as liquidity_rank_key
 
 QUERY_CONFIG = json.loads(Path(__file__).with_name("bounty_queries.json").read_text(encoding="utf-8"))
@@ -327,11 +328,19 @@ def velocity_sort_key(item):
 
 
 def candidate_priority_key(candidate: dict) -> int:
-    """Queue priority: programs(0) founder(1) startup(2) normal(3) other(4)."""
+    """Queue priority: founder(0) programs(1) startup(2) normal(3) other(4).
+
+    Founders lead because the paid-programs lane cannot pay what it promises here: its
+    flagship target is ``Expensify/App`` at 3,384,503 KB, which the capacity gate refuses
+    outright (measured on run 40898443331 - six of six qualified candidates were that one
+    repository and ``dispatched`` was empty). Ranking a lane first whose candidates are
+    then discarded starves the queue of everything else. The targeting spec agrees:
+    layer 3-4 is the funded founder, layer 1-2 is the programme and the enterprise.
+    """
     lanes = set((candidate or {}).get("lanes", ()))
-    if "programs" in lanes:
-        return 0
     if "founder" in lanes:
+        return 0
+    if "programs" in lanes:
         return 1
     if "startup" in lanes:
         return 2
@@ -381,8 +390,26 @@ def liquidity_view(candidate):
     return view
 
 
+def hardness_view(candidate):
+    """Map a dispatch candidate onto the fields ``hardness_score`` reads.
+
+    The comment count comes from the issue the search returned, and the body is the
+    document as fetched for admission, so both are measured rather than assumed. Nothing
+    here invents a difficulty label: hardness is the ticket's own vocabulary.
+    """
+    context = candidate.get("context") or {}
+    issue = context.get("issue") or {}
+    view = {"title": context.get("title") or issue.get("title") or "",
+            "body": context.get("body") or issue.get("body") or "",
+            "labels": issue.get("labels") or context.get("labels") or []}
+    count = issue.get("comments")
+    if isinstance(count, int):
+        view["comments_count"] = count
+    return view
+
+
 def candidate_sort_key(item):
-    """Priority band, then the most liquid payer, then the quietest repository.
+    """Priority band, then the most liquid payer, then the hardest problem, then quiet.
 
     The band still dominates: a busy founder issue outranks a quiet normal one. Inside a
     band the payer's ability to pay decides before repository velocity does, because a
@@ -390,9 +417,15 @@ def candidate_sort_key(item):
     dramatic problem -- the insolvent one cannot pay however loud the issue is. Velocity
     stays as the final tiebreak, so ordering is unchanged for any candidate whose
     liquidity is unmeasured.
+
+    Hardness sits between liquidity and velocity. A payer who cannot pay is worthless
+    however terrifying the ticket, so solvency still decides first; but among payers, the
+    moat beats silence, because a quiet repository is only a proxy for competition while
+    the ticket's own vocabulary is evidence of it.
     """
     return (candidate_priority_key(item[1]),
             -liquidity_rank_key(liquidity_view(item[1]))[0],
+            -hardness_score(hardness_view(item[1]))[0],
             velocity_sort_key(item))
 
 

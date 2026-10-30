@@ -71,18 +71,29 @@ class BudgetTests(unittest.TestCase):
 class PriorityTests(unittest.TestCase):
     """Lane priority bands, and the interaction with velocity."""
 
-    def test_the_bands_are_ordered_programs_founder_startup_normal_other(self):
+    def test_the_bands_are_ordered_founder_programs_startup_normal_other(self):
+        """Founder first since 2026-10-30, and the reversal is evidence-driven.
+
+        The programmes lane used to lead. Its flagship target is ``Expensify/App`` at
+        3,384,503 KB, which the capacity gate refuses outright - measured on run
+        40898443331, where six of six qualified candidates were that single repository
+        and ``dispatched`` was empty. A lane that leads and is then discarded starves the
+        queue of the funded founder (layer 3-4 in the targeting spec) behind it.
+        """
         from actions_dispatch import candidate_priority_key
-        self.assertEqual(candidate_priority_key({"lanes": {"programs"}}), 0)
-        self.assertEqual(candidate_priority_key({"lanes": {"founder"}}), 1)
+        self.assertEqual(candidate_priority_key({"lanes": {"founder"}}), 0)
+        self.assertEqual(candidate_priority_key({"lanes": {"programs"}}), 1)
         self.assertEqual(candidate_priority_key({"lanes": {"startup"}}), 2)
         self.assertEqual(candidate_priority_key({"lanes": {"normal"}}), 3)
         self.assertEqual(candidate_priority_key({"lanes": {"mystery"}}), 4)
 
     def test_the_best_matching_lane_wins_when_several_apply(self):
+        """The strongest band present decides, whichever lane matched last."""
         from actions_dispatch import candidate_priority_key
-        self.assertEqual(candidate_priority_key({"lanes": {"normal", "programs"}}), 0)
-        self.assertEqual(candidate_priority_key({"lanes": {"startup", "founder"}}), 1)
+        self.assertEqual(candidate_priority_key({"lanes": {"normal", "founder"}}), 0)
+        self.assertEqual(candidate_priority_key({"lanes": {"normal", "programs"}}), 1)
+        self.assertEqual(candidate_priority_key({"lanes": {"startup", "founder"}}), 0)
+        self.assertEqual(candidate_priority_key({"lanes": {"normal", "startup"}}), 2)
 
     def test_an_empty_or_missing_candidate_is_lowest_priority(self):
         from actions_dispatch import candidate_priority_key
