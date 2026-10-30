@@ -91,6 +91,10 @@
     "label:bug \"fix\" \"$250\" is:issue is:open",
     "label:bug \"fix\" \"$200\" is:issue is:open",
     "label:bug \"fix\" \"$150\" is:issue is:open",
-    "label:bug \"fix\" \"$100\" is:issue is:open"
+    "label:bug \"fix\" \"$100\" is:issue is:open",
+    "in:comments algora-pbc is:issue is:open",
+    "in:comments polar-sh is:issue is:open",
+    "in:comments opire is:issue is:open",
+    "label:bounty label:bug is:issue is:open"
   ]
 }
