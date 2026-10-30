@@ -2,7 +2,7 @@
   "task_id": "a17d1cf2f2f4f9f92a68728e429f67a7",
   "repo": "ProjectWyvern/dao.projectwyvern.com",
   "issue_number": 1,
-  "status": "DISPATCHING",
+  "status": "DISPATCHED",
   "dispatch_id": "6c894cd15d0746d5a257ec2af7aff43e",
   "admission": {
     "funding": {
@@ -46,5 +46,5 @@
   ],
   "dispatched_at": "2026-10-30T17:43:39.385202+00:00",
   "attempt": 0,
-  "updated_at": "2026-10-30T17:43:39.385223+00:00"
+  "updated_at": "2026-10-30T17:43:41.650130+00:00"
 }
