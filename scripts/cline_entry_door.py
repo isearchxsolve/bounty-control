@@ -476,6 +476,10 @@ will do it better than your guess.
      "reward_usd": <number or null>, "scope_quote": "<sentence copied exactly, saying what to build>",
      "why_now": "<one short line: why this is work we can deliver>"}}
 
+CRITICAL INSTRUCTION — WRITE IMMEDIATELY:
+As soon as you verify an issue meets the criteria, append it IMMEDIATELY to `shortlist.jsonl` (using echo '...' >> shortlist.jsonl or python). Do NOT wait until the end of your investigation to write the file.
+Target 2 to 4 verified candidates. Once you have written 2 to 4 verified candidates to `shortlist.jsonl`, finish immediately.
+
 Only record issues you actually opened, audited, and read. Then finish.
 """
 
@@ -483,8 +487,8 @@ Only record issues you actually opened, audited, and read. Then finish.
 TASK_FILE = render_task_file()
 
 
-WORKTREE_PROMPT = ("Read TASK.md in this worktree and carry it out exactly. Write shortlist.jsonl in "
-                   "this directory, then finish.")
+WORKTREE_PROMPT = ("Read TASK.md in this worktree and carry it out exactly. Append each verified "
+                   "issue immediately to shortlist.jsonl. Target 2-4 candidates, then finish.")
 
 
 def scaffold_workspace(root: str) -> str:

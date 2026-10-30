@@ -1266,7 +1266,8 @@ def discover(lanes, max_dispatches=2, live=False, queries_per_lane=2, state_dir=
                     import agent_door
                     door = agent_door.find_issues(
                         root=os.environ.get("BOUNTY_AGENT_WORKSPACE", "/tmp/bounty-agent"),
-                        rounds=int(os.environ.get("BOUNTY_AGENT_ROUNDS", "2")))
+                        rounds=int(os.environ.get("BOUNTY_AGENT_ROUNDS", "1")),
+                        timeout=int(os.environ.get("BOUNTY_AGENT_TIMEOUT", "600")))
                     print(json.dumps({"phase": "AGENT_DOOR", "reason": door.get("reason"),
                                       "rows": len(door.get("rows") or [])}), flush=True)
                     if door.get("rows"):

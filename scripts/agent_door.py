@@ -100,7 +100,7 @@ def ensure_cline(timeout: int = 900) -> Optional[str]:
     return shutil.which("cline")
 
 
-def find_issues(root: Optional[str] = None, rounds: int = 2, timeout: int = 1500,
+def find_issues(root: Optional[str] = None, rounds: int = 1, timeout: int = 600,
                 limit: int = 12) -> Dict[str, object]:
     """Run the agent door and return what survived its gate. Never raises."""
     root = root or os.environ.get("BOUNTY_AGENT_WORKSPACE", "/tmp/bounty-agent")
