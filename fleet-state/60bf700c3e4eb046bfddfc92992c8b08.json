@@ -2,7 +2,7 @@
   "task_id": "60bf700c3e4eb046bfddfc92992c8b08",
   "repo": "StateofScale/State-of-Scale",
   "issue_number": 3,
-  "status": "DISPATCHING",
+  "status": "DISPATCHED",
   "dispatch_id": "4a53e46e3c604e1bbb155972e271fd4e",
   "admission": {
     "funding": {
@@ -34,5 +34,5 @@
   ],
   "dispatched_at": "2026-10-30T17:08:41.134140+00:00",
   "attempt": 0,
-  "updated_at": "2026-10-30T17:08:41.134159+00:00"
+  "updated_at": "2026-10-30T17:08:42.781041+00:00"
 }
