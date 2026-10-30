@@ -2,7 +2,7 @@
   "task_id": "e128998b18a70bb4aa43fe7c4e08d9fb",
   "repo": "nknorg/nBounty",
   "issue_number": 5,
-  "status": "CLAIMED",
+  "status": "REJECTED_PREPARATION",
   "dispatch_id": "50a4706a002f41fdbd84eb65108b065c",
   "admission": {
     "funding": {
@@ -33,7 +33,7 @@
   ],
   "dispatched_at": "2026-10-30T14:40:59.258469+00:00",
   "attempt": 1,
-  "updated_at": "2026-10-30T14:41:14.600623+00:00",
+  "updated_at": "2026-10-30T14:44:34.787685+00:00",
   "owner": "41073789300:1",
   "previous_owner": null,
   "previous_status": "DISPATCHED",
@@ -41,5 +41,37 @@
   "harness_sha": "122af062685a0bd1f1d161d9c42a07300819cc15",
   "claimed_at": "2026-10-30T14:41:14.600564+00:00",
   "lease_expires_at": "2026-10-30T18:46:14.600580+00:00",
-  "preparation_budget_seconds": 14400
+  "preparation_budget_seconds": 14400,
+  "at": "2026-10-30T14:44:20.772390+00:00",
+  "reason": "Cline preparation blocked: Issue #5 ('[Gitcoin GR11] Video Conference App for NKN') is a Gitcoin GR11 bounty/proposal listing, not an engineering defect or feature request against this repository. Its body asks solvers to 'integrate video conference functions to existing NKN clients (d-chat, nMobile). Or build a new app. Or port another video conference app to utilize NKN as the P2P network layer' and lists judging criteria (UI/UX, performance, demo over Zoom). It contains no reproduction steps, no failing test, no stack trace, no referenced source location, and no concrete change to nknorg/nBounty. Moreover the target repository has no code to change: default branch master at 776ec5cd0a191695e2153d38d256624cdb5d857a contains only README.md ('# nBounty / NKN bounty program') and .gitignore (a single commit 'add readme'), with no manifests, lockfiles, source, tests, or CI. This is therefore a grant/proposal request and generic product idea without a repository change, the class the delivery policy requires be blocked rather than converted into a fallback PR. Funding state: the Gitcoin bot already recorded 'Work for 7500.0 USDT has been submitted by' (https://gitcoin.co/issue/nknorg/nBounty/5/100026448) and maintainer yilunzhang replied the bounty was 'converted to long term bounty' (https://nkn.org/community/blog/nkn-gitcoin-gr-11-hackathon-winners-announced/), so no clean live engineering claim exists against this repo. Competition/PR check: the only PRs are #12 'Create blank.yml' (open, unrelated CI file) and #10 (closed, junk); no video-conference implementation PR targets nknorg/nBounty. Checkout left unchanged (no product edits; not checked out onto fix/bounty-5).",
+  "declared_reason": "Issue #5 ('[Gitcoin GR11] Video Conference App for NKN') is a Gitcoin GR11 bounty/proposal listing, not an engineering defect or feature request against this repository. Its body asks solvers to 'integrate video conference functions to existing NKN clients (d-chat, nMobile). Or build a new app. Or port another video conference app to utilize NKN as the P2P network layer' and lists judging criteria (UI/UX, performance, demo over Zoom). It contains no reproduction steps, no failing test, no stack trace, no referenced source location, and no concrete change to nknorg/nBounty. Moreover the target repository has no code to change: default branch master at 776ec5cd0a191695e2153d38d256624cdb5d857a contains only README.md ('# nBounty / NKN bounty program') and .gitignore (a single commit 'add readme'), with no manifests, lockfiles, source, tests, or CI. This is therefore a grant/proposal request and generic product idea without a repository change, the class the delivery policy requires be blocked rather than converted into a fallback PR. Funding state: the Gitcoin bot already recorded 'Work for 7500.0 USDT has been submitted by' (https://gitcoin.co/issue/nknorg/nBounty/5/100026448) and maintainer yilunzhang replied the bounty was 'converted to long term bounty' (https://nkn.org/community/blog/nkn-gitcoin-gr-11-hackathon-winners-announced/), so no clean live engineering claim exists against this repo. Competition/PR check: the only PRs are #12 'Create blank.yml' (open, unrelated CI file) and #10 (closed, junk); no video-conference implementation PR targets nknorg/nBounty. Checkout left unchanged (no product edits; not checked out onto fix/bounty-5).",
+  "evidence": {
+    "action": "blocked",
+    "worktree": "/tmp/bounty-workspaces/repos/nknorg--nBounty--5",
+    "base_sha": "776ec5cd0a191695e2153d38d256624cdb5d857a",
+    "default_branch": "master",
+    "sources": [
+      {
+        "path": "README.md",
+        "sha256": "b89a80187afa4256a1a0893e4b43f4835413dae4b2418220eaee3df94530330b"
+      },
+      {
+        "path": ".gitignore",
+        "sha256": "ee469ba29530d6f9e2af74e89068d5a6bb9b09a7363e221f0e6caf72fae6a916"
+      }
+    ],
+    "run_url": "",
+    "admission": {
+      "amount": "7500",
+      "currency": "USDT",
+      "usd_value": "7500",
+      "quote": {
+        "basis": "USD-denominated stablecoin offer"
+      },
+      "raw": "7,500 USDT",
+      "source_url": "https://github.com/nknorg/nBounty/issues/5",
+      "payer": "yilunzhang"
+    }
+  },
+  "finished_at": "2026-10-30T14:44:34.046356+00:00"
 }
