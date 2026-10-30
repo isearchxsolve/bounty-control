@@ -1,0 +1,37 @@
+{
+  "task_id": "c9b48db6e7d13157d07a743d345f326e",
+  "repo": "harmonylion/ideamarkets",
+  "issue_number": 12,
+  "status": "DISPATCHING",
+  "dispatch_id": "6da030b0a2d943ba94feabd91baf3c4e",
+  "admission": {
+    "funding": {
+      "amount": "1500",
+      "currency": "USD",
+      "usd_value": "1500",
+      "quote": {
+        "basis": "USD face value"
+      },
+      "raw": "$1,500",
+      "source_url": "https://github.com/harmonylion/ideamarkets/issues/12",
+      "payer": "harmonylion"
+    },
+    "technical_signals": [
+      "distributed",
+      "error"
+    ],
+    "component_references": [],
+    "source_locations": [],
+    "engineering_evidence_sources": [
+      "https://github.com/harmonylion/ideamarkets/issues/12"
+    ],
+    "source_issue": "https://github.com/harmonylion/ideamarkets/issues/12",
+    "fetched_at": "2026-10-30T18:17:20.370803+00:00"
+  },
+  "lanes": [
+    "startup"
+  ],
+  "dispatched_at": "2026-10-30T18:17:21.537338+00:00",
+  "attempt": 0,
+  "updated_at": "2026-10-30T18:17:21.537360+00:00"
+}
