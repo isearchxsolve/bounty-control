@@ -656,7 +656,7 @@ def admit(context, quote=None, floor=FLOOR):
             offer = max(candidates, key=lambda row: Decimal(row["usd_value"]))
     if not offer:
         assoc = str(issue.get("author_association") or issue.get("authorAssociation") or "").upper()
-        if assoc == "OWNER" and (context.get("lane") == "founder" or os.environ.get("BOUNTY_LANE") == "founder"):
+        if assoc == "OWNER":
             offer = {"amount": "0", "currency": "FOUNDER", "usd_value": "0",
                      "quote": {"basis": "Repository Owner Request"},
                      "raw": "OWNER", "source_url": issue["html_url"],

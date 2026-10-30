@@ -1372,6 +1372,8 @@ def discover(lanes, max_dispatches=2, live=False, queries_per_lane=2, state_dir=
             item, source_lanes = json.loads(payload), json.loads(lane_json)
             try:
                 for context in context_candidates(api, item):
+                    if "founder" in source_lanes:
+                        context["lane"] = "founder"
                     identity = task_id(context["repo"], context["issue_number"])
                     proof, reason = admit(context, quote=quote)
                     if not proof:

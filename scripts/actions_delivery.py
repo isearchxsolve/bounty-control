@@ -409,7 +409,7 @@ def claim(event_file):
     api, store = GitHub(), StateStore()
     old, _ = store.read(identity)
     context = api.issue_context(repo, number)
-    context["lane"] = payload.get("lane") or os.environ.get("BOUNTY_LANE")
+    context["lane"] = payload.get("lane") or ("founder" if "founder" in payload.get("lanes", []) else None) or os.environ.get("BOUNTY_LANE")
     proof, reason = admit(context, quote=quote)
     if not proof:
         raise ValueError("Admission blocked: " + reason)
@@ -821,7 +821,7 @@ def publish():
     root = Path(tempfile.mkdtemp()) / "objects"
     repo, number, head = validate_bundle(receipt, artifacts() / "release.bundle", root)
     context = api.issue_context(repo, number)
-    context["lane"] = (state.get("admission") or {}).get("lane") or os.environ.get("BOUNTY_LANE")
+    context["lane"] = (state.get("admission") or {}).get("lane") or ("founder" if "founder" in state.get("lanes", []) else None) or os.environ.get("BOUNTY_LANE")
     proof, reason = admit(context, quote=quote)
     if not proof:
         raise ValueError("Release funding/issue state blocked: " + reason)
