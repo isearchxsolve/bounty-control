@@ -2,7 +2,7 @@
   "task_id": "43fc5d7378fb3bb8386008ddf0b3d88a",
   "repo": "Fraud-Detection-and-Defense/opendata-hackathon-GR15",
   "issue_number": 4,
-  "status": "CLAIMED",
+  "status": "REJECTED_PREPARATION",
   "dispatch_id": "cd1e8e97a3224844b0a248f1b8f0df4e",
   "admission": {
     "funding": {
@@ -33,7 +33,7 @@
   ],
   "dispatched_at": "2026-10-30T12:41:14.689118+00:00",
   "attempt": 1,
-  "updated_at": "2026-10-30T12:41:27.505396+00:00",
+  "updated_at": "2026-10-30T12:44:02.430993+00:00",
   "owner": "41057219489:1",
   "previous_owner": null,
   "previous_status": "DISPATCHED",
@@ -41,5 +41,57 @@
   "harness_sha": "122af062685a0bd1f1d161d9c42a07300819cc15",
   "claimed_at": "2026-10-30T12:41:27.505345+00:00",
   "lease_expires_at": "2026-10-30T16:46:27.505359+00:00",
-  "preparation_budget_seconds": 14400
+  "preparation_budget_seconds": 14400,
+  "at": "2026-10-30T12:43:45.259206+00:00",
+  "reason": "Cline preparation blocked: Non-engineering issue. Issue #4 'Discerning Dune Dashboards' (https://github.com/Fraud-Detection-and-Defense/opendata-hackathon-GR15/issues/4) is a Gitcoin GR15 hackathon PRIZE CHALLENGE asking contestants to build external Dune dashboards (https://dune.com) analyzing the GR15 dataset; its body says 'Create a Discerning Dune Dashboard, win prizes' / 'Winners will split $1,500 paid out in ETH' and its submission requirements/judging criteria point entirely off-repo (Gitcoin hackathon site, Discord, Dune). It requests no code change to this repository: no defect, no feature, no file/component reference (admission.component_references=[], source_locations=[]). The repository is a submissions drop with ZERO engineering surface: files are only README.md, LICENSE, and empty placeholder paths 'DuneDetective submissions/example', 'HumanHacker submissions/example', 'SybilSlayer submissions/example', 'ODSworkingfiles/initial drafts', 'ODSworkingfiles/readme'. No source code, no manifest/lockfile, no package.json, no tests, no CI/workflow, no AGENTS.md, no build/lint toolchain exist. Funding is not live: gitcoinbot's pinned comment reports 'Issue Status: ... 3. **Submitted**' and 'Work for 1.1606 ETH (1500.00 USD @ $1573.94/ETH) has been submitted by' 11 named users, and the issue states winners are announced 2022-10-31 (all external Dune dashboard links). No branch other than 'main' exists and there are NO pull requests in any state (pulls?state=all returned empty), so there is also no competing/owned PR. This is a marketing/data-science deliverable + completed hackathon bounty, not a reproducible code defect; per policy action=blocked and the checkout was left unchanged (no worktree created at the requested path).",
+  "declared_reason": "Non-engineering issue. Issue #4 'Discerning Dune Dashboards' (https://github.com/Fraud-Detection-and-Defense/opendata-hackathon-GR15/issues/4) is a Gitcoin GR15 hackathon PRIZE CHALLENGE asking contestants to build external Dune dashboards (https://dune.com) analyzing the GR15 dataset; its body says 'Create a Discerning Dune Dashboard, win prizes' / 'Winners will split $1,500 paid out in ETH' and its submission requirements/judging criteria point entirely off-repo (Gitcoin hackathon site, Discord, Dune). It requests no code change to this repository: no defect, no feature, no file/component reference (admission.component_references=[], source_locations=[]). The repository is a submissions drop with ZERO engineering surface: files are only README.md, LICENSE, and empty placeholder paths 'DuneDetective submissions/example', 'HumanHacker submissions/example', 'SybilSlayer submissions/example', 'ODSworkingfiles/initial drafts', 'ODSworkingfiles/readme'. No source code, no manifest/lockfile, no package.json, no tests, no CI/workflow, no AGENTS.md, no build/lint toolchain exist. Funding is not live: gitcoinbot's pinned comment reports 'Issue Status: ... 3. **Submitted**' and 'Work for 1.1606 ETH (1500.00 USD @ $1573.94/ETH) has been submitted by' 11 named users, and the issue states winners are announced 2022-10-31 (all external Dune dashboard links). No branch other than 'main' exists and there are NO pull requests in any state (pulls?state=all returned empty), so there is also no competing/owned PR. This is a marketing/data-science deliverable + completed hackathon bounty, not a reproducible code defect; per policy action=blocked and the checkout was left unchanged (no worktree created at the requested path).",
+  "evidence": {
+    "action": "blocked",
+    "worktree": null,
+    "base_sha": "41b21ee9703cbf8be73e3d594de84d1d95b3feb5",
+    "default_branch": "main",
+    "sources": [
+      {
+        "path": "README.md",
+        "sha256": "b9e8e01c05af917d365ff903129d1e1d7333093083cc390bed85115c9ae9c5c0"
+      },
+      {
+        "path": "LICENSE",
+        "sha256": "a2010f343487d3f7618affe54f789f5487602331c0a8d03f49e9a7c547cf0499"
+      },
+      {
+        "path": "DuneDetective submissions/example",
+        "sha256": null
+      },
+      {
+        "path": "HumanHacker submissions/example",
+        "sha256": null
+      },
+      {
+        "path": "SybilSlayer submissions/example",
+        "sha256": null
+      },
+      {
+        "path": "ODSworkingfiles/initial drafts",
+        "sha256": null
+      },
+      {
+        "path": "ODSworkingfiles/readme",
+        "sha256": null
+      }
+    ],
+    "run_url": "",
+    "admission": {
+      "amount": "1500",
+      "currency": "USD",
+      "usd_value": "1500",
+      "quote": {
+        "basis": "USD face value"
+      },
+      "raw": "$1,500",
+      "source_url": "https://github.com/Fraud-Detection-and-Defense/opendata-hackathon-GR15/issues/4",
+      "payer": "epowell101"
+    }
+  },
+  "finished_at": "2026-10-30T12:44:01.689658+00:00"
 }
