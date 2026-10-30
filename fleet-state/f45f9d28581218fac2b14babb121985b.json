@@ -2,7 +2,7 @@
   "task_id": "f45f9d28581218fac2b14babb121985b",
   "repo": "saricizmeli/test",
   "issue_number": 8,
-  "status": "DISPATCHED",
+  "status": "CLAIMED",
   "dispatch_id": "5d28a6d28c654e1d8075b7804fc48bb0",
   "admission": {
     "funding": {
@@ -31,6 +31,14 @@
     "programs"
   ],
   "dispatched_at": "2026-10-30T10:13:34.961054+00:00",
-  "attempt": 0,
-  "updated_at": "2026-10-30T10:13:36.549838+00:00"
+  "attempt": 1,
+  "updated_at": "2026-10-30T10:13:49.931401+00:00",
+  "owner": "41039173528:1",
+  "previous_owner": null,
+  "previous_status": "DISPATCHED",
+  "run_url": "https://github.com/isearchxsolve/bounty-control/actions/runs/41039173528",
+  "harness_sha": "debd3252e2fe00a77fd705aa1f5e7e7a5d41780d",
+  "claimed_at": "2026-10-30T10:13:49.931345+00:00",
+  "lease_expires_at": "2026-10-30T14:18:49.931361+00:00",
+  "preparation_budget_seconds": 14400
 }
