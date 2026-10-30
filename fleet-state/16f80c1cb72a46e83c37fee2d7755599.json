@@ -2,7 +2,7 @@
   "task_id": "16f80c1cb72a46e83c37fee2d7755599",
   "repo": "abdul-rahhman-siddiqui/testing-issue-tracker",
   "issue_number": 246,
-  "status": "CLAIMED",
+  "status": "FAILED_DELIVERABLE_MISSING",
   "dispatch_id": "a1cc4ab836f44a8a87ac99b5efe13be8",
   "admission": {
     "funding": {
@@ -34,7 +34,7 @@
   ],
   "dispatched_at": "2026-10-30T13:03:24.495290+00:00",
   "attempt": 2,
-  "updated_at": "2026-10-30T13:03:35.869626+00:00",
+  "updated_at": "2026-10-30T13:06:56.500687+00:00",
   "owner": "41060084777:1",
   "previous_owner": "41057633175:1",
   "previous_status": "DISPATCHED",
@@ -45,10 +45,10 @@
   "preparation_budget_seconds": 14400,
   "kind": "deliverable_invalid",
   "retryable": true,
-  "diagnostic": "Cline deliverable invalid at /tmp/fleet-artifacts/delivery-supervisor/fd8e1ef62c9a4e3a9b6b10419f75f445.preparation.json: invalid base_sha: ''",
-  "path": "/tmp/fleet-artifacts/delivery-supervisor/fd8e1ef62c9a4e3a9b6b10419f75f445.preparation.json",
+  "diagnostic": "Cline deliverable invalid at /tmp/fleet-artifacts/delivery-supervisor/2ca5db3de0eb47f9a26371ab502e5c1c.preparation.json: invalid base_sha: ''",
+  "path": "/tmp/fleet-artifacts/delivery-supervisor/2ca5db3de0eb47f9a26371ab502e5c1c.preparation.json",
   "reason": "invalid base_sha: ''",
-  "at": "2026-10-30T12:47:46.574322+00:00",
+  "at": "2026-10-30T13:06:45.587542+00:00",
   "failures": [
     {
       "run_url": "https://github.com/isearchxsolve/bounty-control/actions/runs/41057633175",
@@ -59,7 +59,17 @@
       "path": "/tmp/fleet-artifacts/delivery-supervisor/fd8e1ef62c9a4e3a9b6b10419f75f445.preparation.json",
       "reason": "invalid base_sha: ''",
       "at": "2026-10-30T12:47:46.574322+00:00"
+    },
+    {
+      "run_url": "https://github.com/isearchxsolve/bounty-control/actions/runs/41060084777",
+      "status": "FAILED_DELIVERABLE_MISSING",
+      "kind": "deliverable_invalid",
+      "retryable": true,
+      "diagnostic": "Cline deliverable invalid at /tmp/fleet-artifacts/delivery-supervisor/2ca5db3de0eb47f9a26371ab502e5c1c.preparation.json: invalid base_sha: ''",
+      "path": "/tmp/fleet-artifacts/delivery-supervisor/2ca5db3de0eb47f9a26371ab502e5c1c.preparation.json",
+      "reason": "invalid base_sha: ''",
+      "at": "2026-10-30T13:06:45.587542+00:00"
     }
   ],
-  "finished_at": "2026-10-30T12:47:57.713747+00:00"
+  "finished_at": "2026-10-30T13:06:55.883790+00:00"
 }
