@@ -1,0 +1,42 @@
+{
+  "task_id": "f8a1e6f6f2d1048ac40fe68e47021337",
+  "repo": "ruohong2018/ruohong2018.github.io",
+  "issue_number": 1125,
+  "status": "DISPATCHING",
+  "dispatch_id": "ebb1c000d59540448f1ce532b5e54039",
+  "admission": {
+    "funding": {
+      "amount": "10000",
+      "currency": "USD",
+      "usd_value": "10000",
+      "quote": {
+        "basis": "USD face value"
+      },
+      "raw": "$10K",
+      "source_url": "https://github.com/ruohong2018/ruohong2018.github.io/issues/1125",
+      "payer": "ruohong2018"
+    },
+    "technical_signals": [
+      "bug",
+      "bugs",
+      "bypass",
+      "cross-tenant",
+      "cryptographic",
+      "protocol",
+      "signature"
+    ],
+    "component_references": [],
+    "source_locations": [],
+    "engineering_evidence_sources": [
+      "https://github.com/ruohong2018/ruohong2018.github.io/issues/1125"
+    ],
+    "source_issue": "https://github.com/ruohong2018/ruohong2018.github.io/issues/1125",
+    "fetched_at": "2026-10-30T17:01:15.360000+00:00"
+  },
+  "lanes": [
+    "founder"
+  ],
+  "dispatched_at": "2026-10-30T17:01:16.679565+00:00",
+  "attempt": 0,
+  "updated_at": "2026-10-30T17:01:16.679585+00:00"
+}
