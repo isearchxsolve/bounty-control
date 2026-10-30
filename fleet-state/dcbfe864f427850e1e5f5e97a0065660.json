@@ -2,7 +2,7 @@
   "task_id": "dcbfe864f427850e1e5f5e97a0065660",
   "repo": "chosencharacters/squidBounties",
   "issue_number": 1,
-  "status": "DISPATCHING",
+  "status": "DISPATCHED",
   "dispatch_id": "898ea33e8be849cb8132bae0ecec0ddc",
   "admission": {
     "funding": {
@@ -36,5 +36,5 @@
   ],
   "dispatched_at": "2026-10-30T18:32:52.931135+00:00",
   "attempt": 0,
-  "updated_at": "2026-10-30T18:32:52.931154+00:00"
+  "updated_at": "2026-10-30T18:32:54.481543+00:00"
 }
