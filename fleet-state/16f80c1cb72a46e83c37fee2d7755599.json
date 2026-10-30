@@ -2,7 +2,7 @@
   "task_id": "16f80c1cb72a46e83c37fee2d7755599",
   "repo": "abdul-rahhman-siddiqui/testing-issue-tracker",
   "issue_number": 246,
-  "status": "DISPATCHING",
+  "status": "DISPATCHED",
   "dispatch_id": "a1cc4ab836f44a8a87ac99b5efe13be8",
   "admission": {
     "funding": {
@@ -34,7 +34,7 @@
   ],
   "dispatched_at": "2026-10-30T13:03:24.495290+00:00",
   "attempt": 1,
-  "updated_at": "2026-10-30T13:03:24.495305+00:00",
+  "updated_at": "2026-10-30T13:03:26.326757+00:00",
   "owner": "41057633175:1",
   "previous_owner": null,
   "previous_status": "DISPATCHED",
