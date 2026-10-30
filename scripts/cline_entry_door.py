@@ -215,20 +215,31 @@ def _preview(command: List[str]) -> str:
     return " ".join(shown)
 
 
+class IssueUnreadable(Exception):
+    """GitHub answered, but not with a verdict on the issue: rate limit, server error, timeout.
+    Measured 2026-10-30: fetch_issue returned None for a 403 and verify_rows stamped a live issue
+    ISSUE_NOT_FOUND. A quota wall is not evidence the issue is gone, so it must refuse the row
+    as unreadable, never call it missing."""
+
+
 def fetch_issue(repo: str, issue: int, gh: str = "gh") -> Optional[dict]:
-    """The real issue, from GitHub. None means we could not prove it exists."""
+    """The real issue, from GitHub. None means 404 (the issue does not exist). Anything GitHub
+    could not answer is an IssueUnreadable, so the caller can refuse honestly instead of lying."""
     try:
         done = subprocess.run([gh, "api", f"repos/{repo}/issues/{issue}"],
                               capture_output=True, text=True, timeout=60,
                               encoding="utf-8", errors="replace")
-    except (OSError, subprocess.TimeoutExpired):
-        return None
+    except (OSError, subprocess.TimeoutExpired) as exc:
+        raise IssueUnreadable(f"transport: {exc}") from exc
     if done.returncode != 0:
-        return None
+        diagnostic = ((done.stderr or "") + " " + (done.stdout or "")).lower()
+        if "not found" in diagnostic:
+            return None  # the only verdict that says the issue does not exist
+        raise IssueUnreadable((done.stderr or done.stdout or "").strip()[:300])
     try:
         document = json.loads(done.stdout)
     except ValueError:
-        return None
+        raise IssueUnreadable("non-JSON response") from None
     return document if isinstance(document, dict) else None
 
 
@@ -252,9 +263,17 @@ def verify_rows(rows: List[dict], fetch: Callable[[str, int], Optional[dict]] = 
     """Admit only rows whose issue exists, is open, and whose reward quote is really there.
 
     The agent chose them; this decides whether the choice survives contact with the source.
+
+    A row whose quote is real but names no money is not a refusal. It is quarantined into
+    ``unpriced``: the intent is genuine and it simply lost the figure in transcription, so
+    sending it back as an error tells the agent to *drop* a real lead. Measured live:
+    ``Rooner-Plugins/bank-value-changes#3`` ("I'm willing to pay for this to be added") and
+    ``boxbilling/boxbilling#889`` ("[WILL PAY FOR CODE]") are real buyers with no number.
+    Those deserve their own queue, not a rejection.
     """
     admitted: List[dict] = []
     refused: List[dict] = []
+    unpriced: List[dict] = []
     seen = set()
     for row in rows[:limit]:
         repo, number = str(row.get("repo") or ""), row.get("issue")
@@ -267,7 +286,12 @@ def verify_rows(rows: List[dict], fetch: Callable[[str, int], Optional[dict]] = 
             continue
         seen.add(key)
 
-        issue = fetch(repo, number)
+        try:
+            issue = fetch(repo, number)
+        except IssueUnreadable as exc:
+            refused.append({"row": row, "reason": "ISSUE_UNREADABLE",
+                            "detail": str(exc)[:200]})
+            continue
         if issue is None:
             refused.append({"row": row, "reason": "ISSUE_NOT_FOUND"})
             continue
@@ -286,14 +310,18 @@ def verify_rows(rows: List[dict], fetch: Callable[[str, int], Optional[dict]] = 
             continue
 
         if not quote_states_an_amount(quote):
-            refused.append({"row": row, "reason": "REWARD_QUOTE_HAS_NO_AMOUNT"})
+            # Real intent, missing figure. Quarantined, never counted as a refusal.
+            unpriced.append({"row": row, "reason": "REWARD_QUOTE_HAS_NO_AMOUNT",
+                             "repo": repo, "issue": number,
+                             "url": row.get("url") or f"https://github.com/{repo}/issues/{number}",
+                             "reward_quote": quote, "why_now": row.get("why_now")})
             continue
 
         admitted.append({"repo": repo, "issue": number, "url": row.get("url") or
                          f"https://github.com/{repo}/issues/{number}",
                          "reward_quote": quote, "reward_usd": row.get("reward_usd"),
                          "scope_quote": row.get("scope_quote"), "why_now": row.get("why_now")})
-    return {"admitted": admitted, "refused": refused}
+    return {"admitted": admitted, "refused": refused, "unpriced": unpriced}
 
 
 FEEDBACK_PROMPT = FRESH_START + """The gates read the shortlist you wrote and refused part of it. Each refusal below is a check made against the source, so it is a fact about the row, not an opinion.
@@ -304,6 +332,10 @@ What each check means, when you need it:
 - REWARD_QUOTE_NOT_IN_ISSUE: that sentence is not in the issue text. Copy it exactly, or drop the row.
 - REWARD_QUOTE_HAS_NO_AMOUNT: the sentence is real but names no money. Find the sentence that does.
 - ISSUE_NOT_FOUND, ISSUE_NOT_OPEN, AGENT_NOT_A_CODE_TASK, MALFORMED_ROW, DUPLICATE_ROW: drop the row.
+- ISSUE_UNREADABLE: GitHub did not answer. The row may be good, so keep it if you can see the
+  issue; it is refused here only because it could not be checked.
+
+Do not exclude a row to be safe: submit anything that plausibly meets these criteria, and the gates will verify it exactly and report the failures. Repairing a refused row is not a reason to submit fewer rows. If you found other candidates while fixing these, add them too.
 
 Row 0 was accepted, so the shape is right. Write shortlist.jsonl again from scratch, with the
 accepted rows kept and the refused ones repaired or replaced. Then finish.
@@ -321,10 +353,58 @@ def fresh_workspace(root: str) -> str:
     return path
 
 
-TASK_FILE = """# Scout task
+DOMAIN = """This pipeline turns GitHub issues into delivered fixes for the money the issue's own
+author promises. A paid task must be: an open issue, on a repository that actually merges outside
+work, that asks for engineering (code, tests, fixes) rather than writing or events or opinions,
+and whose reward is stated in figures inside the issue itself - "I will pay" with no number is not
+a reward, and a figure hidden behind a link is not a figure. The gates below are the acceptance
+criteria; aim every row at them. Do not exclude a row to be safe: submit anything that
+plausibly meets these criteria, and the gates will verify each one exactly and tell you which
+failed. How you find rows is entirely your choice.
+"""
 
-Find work on GitHub that pays for engineering, and record what you find. You are not asked to write
-or change any code here.
+
+# The door's own refusal reasons, in the exact words the gate emits. The brief is rendered from
+# this table (test_cline_entry_door asserts no emitted reason exists outside it), so the agent is
+# told the domain and the constraints, and the table can never drift from the code.
+GATE_CHECKS = [
+    ("MALFORMED_ROW", "the row is not a complete JSON record with repo and issue."),
+    ("DUPLICATE_ROW", "that issue already appears in the shortlist."),
+    ("ISSUE_NOT_FOUND", "repo or issue does not exist on GitHub."),
+    ("ISSUE_UNREADABLE", "GitHub could not answer (rate limit, server error); not a verdict."),
+    ("ISSUE_NOT_OPEN", "the issue is closed or read-only."),
+    ("AGENT_NOT_A_CODE_TASK", "the issue is not engineering work you could submit a fix for."),
+    ("REWARD_QUOTE_NOT_IN_ISSUE", "the quoted sentence is not in the issue text, byte for byte."),
+    ("REWARD_QUOTE_HAS_NO_AMOUNT", "the quoted sentence exists but names no amount."),
+]
+
+# What fires AFTER the agent finishes. The agent cannot see these run, but should know they exist
+# so it aims at work that can survive them. Honest: list, not score.
+DOWNSTREAM_CHECKS = [
+    ("CURRENT_ISSUER_OFFER_MISSING",
+     "no fundable offer for a trusted issuer survives; a real figure in the issue is the only "
+     "way through."),
+    ("REPORTED_BEHAVIOUR_DECLARED_BY_DESIGN", "the issue states the behaviour is by design."),
+    ("REPOSITORY_DOES_NOT_MERGE", "the repository's history shows it does not merge outside work."),
+    ("CLOSED_OR_READ_ONLY", "the issue is closed or the repository is read-only."),
+    ("DUPLICATE_ROW", "someone already has this task open."),
+    ("BOUNTY_FLOOR", "the reward is below the floor this pipeline will work for."),
+]
+
+
+RSN = chr(10)
+
+
+def render_task_file() -> str:
+    checks = RSN.join(f"- {code}: {meaning}" for code, meaning in GATE_CHECKS)
+    downstream = RSN.join(f"- {code}: {meaning}" for code, meaning in DOWNSTREAM_CHECKS)
+    return f"""# Scout task
+
+Find work on GitHub that pays for engineering, and record what you find. You are not asked to write or change any code here.
+
+## The domain
+
+{DOMAIN.strip()}
 
 ## Facts about this workspace
 
@@ -332,19 +412,44 @@ or change any code here.
 - `gh` is installed and authenticated.
 - The shell is Windows PowerShell: one command per tool call, and POSIX-only commands
   (`ls -la`, `cat`, `grep`, `&&`, `2>/dev/null`) fail here.
-- Money and scope must be quoted in an issue's own words; a claim you cannot quote is not evidence.
+
+## The gates your rows must pass
+
+{checks}
+
+## The gates that fire after you submit
+
+{downstream}
+
+## Your job is recall, not precision
+
+Do not exclude a row to be safe: submit anything that plausibly meets these criteria, and the gates will verify it exactly and report the failures.
+
+You are the search half of this system. The checks above are run by code against the source
+after you finish, and they are exact. A row you drop is a lead nobody will ever see again; a
+row you submit that fails is a line in a report that costs nothing.
+
+So: when you are unsure, submit it. "I'm not certain this is a code task" is a reason to
+submit, not to skip. "The amount is unclear" is a reason to submit, not to skip. "This might
+be closed already" is a reason to submit, not to skip. The gates will sort it out, and they
+will do it better than your guess.
 
 ## What to produce
 
 `shortlist.jsonl` in this directory, one JSON object per line:
 
-    {"repo": "owner/name", "issue": 123, "url": "https://github.com/owner/name/issues/123",
+    {{"repo": "owner/name", "issue": 123, "url": "https://github.com/owner/name/issues/123",
      "is_code_task": true, "reward_quote": "<sentence copied exactly from the issue>",
      "reward_usd": <number or null>, "scope_quote": "<sentence copied exactly, saying what to build>",
-     "why_now": "<one short line: why this is work we can deliver>"}
+     "why_now": "<one short line: why this is work we can deliver>"}}
 
-Only record issues you actually opened and read. Then stop.
+Only record issues you actually opened and read. Then stop. Do not stop early because you
+are unsure about a row: an uncertain row that fails a gate is worth more to us than a row
+you never wrote down.
 """
+
+
+TASK_FILE = render_task_file()
 
 
 WORKTREE_PROMPT = ("Read TASK.md in this worktree and carry it out exactly. Write shortlist.jsonl in "
@@ -371,6 +476,44 @@ def scaffold_workspace(root: str) -> str:
     return path
 
 
+def _merge_shortlist(workdir: str, rows: List[dict]) -> None:
+    """Append this round's rows to the shortlist instead of letting a rewrite erase it.
+
+    Measured: round 2 admitted 1 of 9 because the agent rewrote ``shortlist.jsonl`` from
+    scratch, so every row already won in round 1 vanished from the file before the next
+    verification pass. The feedback loop was resetting instead of compounding.
+
+    The file stays the agent's to write; this only guarantees that a row which already
+    survived verification is still on disk when the next round begins. Rows are de-duplicated
+    on ``(repo, issue)`` so a re-submission does not inflate the file.
+    """
+    target = os.path.join(workdir, "shortlist.jsonl")
+    existing: List[dict] = []
+    if os.path.exists(target):
+        with open(target, encoding="utf-8-sig", errors="replace") as handle:
+            for line in handle:
+                line = line.strip()
+                if not line.startswith("{"):
+                    continue
+                try:
+                    existing.append(json.loads(line))
+                except ValueError:
+                    continue
+    known = {(str(r.get("repo") or "").lower(), r.get("issue")) for r in existing}
+    added = []
+    for row in rows:
+        key = (str(row.get("repo") or "").lower(), row.get("issue"))
+        if key in known:
+            continue
+        known.add(key)
+        added.append(row)
+    if not added:
+        return
+    with open(target, "a", encoding="utf-8") as handle:
+        for row in added:
+            handle.write(json.dumps(row, ensure_ascii=False) + "\n")
+
+
 def iterate(workdir: str, rounds: int = 3, run=run_cline_search, verify=verify_rows,
             limit: int = 12, first_prompt: Optional[str] = None,
             **run_kwargs) -> Dict[str, object]:
@@ -379,10 +522,14 @@ def iterate(workdir: str, rounds: int = 3, run=run_cline_search, verify=verify_r
     The agent is not judged once and dismissed: each round's refusals become the next round's
     instructions, which is how a search that finds unpayable rows converges instead of
     submitting them. Bounded rounds, so a stubborn agent cannot loop forever.
+
+    Rows already admitted are preserved across rounds and re-appended to the shortlist, so a
+    round that rewrites the file from scratch cannot discard work an earlier round won.
     """
     admitted: List[dict] = []
     history: List[dict] = []
     refusals: List[dict] = []
+    unpriced: List[dict] = []
     for round_number in range(1, max(1, rounds) + 1):
         if round_number == 1:
             prompt = first_prompt or SEARCH_PROMPT
@@ -402,12 +549,64 @@ def iterate(workdir: str, rounds: int = 3, run=run_cline_search, verify=verify_r
                 admitted.append(row)
                 known.add((row["repo"].lower(), row["issue"]))
         refusals = result["refused"]
+        unpriced = result.get("unpriced", [])
         history.append({"round": round_number, "agent_exit": outcome.get("exit_code"),
                         "rows": len(outcome.get("rows") or []),
-                        "admitted": len(result["admitted"]), "refused": len(refusals)})
+                        "admitted": len(result["admitted"]), "refused": len(refusals),
+                        "unpriced": len(unpriced)})
         if not refusals:
             break
-    return {"admitted": admitted, "refused": refusals, "history": history}
+        # Carry the rows already won into the next round's file before the agent rewrites it.
+        _merge_shortlist(workdir, admitted)
+    # The last round's rewrite must not erase what the loop already won either.
+    _merge_shortlist(workdir, admitted)
+    return {"admitted": admitted, "refused": refusals, "unpriced": unpriced,
+            "history": history}
+
+
+UNPRICED_LEADS = "unpriced-leads.jsonl"
+
+
+def write_unpriced_leads(workdir: str, unpriced: List[dict]) -> str:
+    """Persist the unpriced stream as its own lead file, separate from the shortlist.
+
+    These rows are real buyers who named no figure. They must not enter the bounty
+    shortlist (they would fail the amount gate every cycle) and they must not be fed back
+    as refusals (that tells the agent to drop them). They are leads, so they get their own
+    append-only file that survives the run and can be worked later.
+
+    De-duplicated on ``(repo, issue)`` so repeated rounds do not inflate the stream.
+    """
+    if not unpriced:
+        return ""
+    target = os.path.join(workdir, UNPRICED_LEADS)
+    existing = set()
+    if os.path.exists(target):
+        with open(target, encoding="utf-8-sig", errors="replace") as handle:
+            for line in handle:
+                line = line.strip()
+                if not line.startswith("{"):
+                    continue
+                try:
+                    seen = json.loads(line)
+                except ValueError:
+                    continue
+                existing.add((str(seen.get("repo") or "").lower(), seen.get("issue")))
+    added = []
+    for entry in unpriced:
+        key = (str(entry.get("repo") or "").lower(), entry.get("issue"))
+        if key in existing:
+            continue
+        existing.add(key)
+        added.append({"repo": entry.get("repo"), "issue": entry.get("issue"),
+                      "url": entry.get("url"), "reward_quote": entry.get("reward_quote"),
+                      "why_now": entry.get("why_now"),
+                      "reason": entry.get("reason")})
+    if added:
+        with open(target, "a", encoding="utf-8") as handle:
+            for entry in added:
+                handle.write(json.dumps(entry, ensure_ascii=False) + "\n")
+    return target
 
 
 def main() -> int:
@@ -417,18 +616,25 @@ def main() -> int:
         print("ROUND {round}: exit={agent_exit} rows={rows} admitted={admitted} refused={refused}"
               .format(**step))
     result = {"admitted": outcome["admitted"], "refused": outcome["refused"]}
-    if not outcome["admitted"] and not outcome["refused"]:
+    leads_path = write_unpriced_leads(workdir, outcome.get("unpriced", []))
+    if not outcome["admitted"] and not outcome["refused"] and not outcome.get("unpriced"):
         print("VERDICT: NO_ROWS - the agent found nothing it could prove.")
         return 1
     for row in result["admitted"]:
         print("ADMITTED {repo}#{issue} usd={usd} :: {quote}".format(
             repo=row["repo"], issue=row["issue"], usd=row.get("reward_usd"),
             quote=row["reward_quote"][:90]))
+    for row in outcome.get("unpriced", []):
+        print("UNPRICED {repo}#{issue} :: {quote}".format(
+            repo=row["repo"], issue=row["issue"], quote=str(row.get("reward_quote"))[:90]))
     for row in result["refused"]:
         print("REFUSED  {reason} :: {repo}".format(
             reason=row["reason"], repo=str(row["row"].get("repo"))[:40]))
-    print("TOTALS admitted={a} refused={r}".format(a=len(result["admitted"]),
-                                                   r=len(result["refused"])))
+    print("TOTALS admitted={a} unpriced={u} refused={r}".format(
+        a=len(result["admitted"]), u=len(outcome.get("unpriced", [])),
+        r=len(result["refused"])))
+    if leads_path:
+        print("LEADS {path}".format(path=leads_path))
     return 0
 
 

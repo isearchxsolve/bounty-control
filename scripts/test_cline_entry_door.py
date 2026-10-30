@@ -7,6 +7,7 @@ row that is not real is the false positive this door exists to stop.
 
 import json
 import os
+import re
 import tempfile
 import unittest
 from unittest import mock
@@ -56,6 +57,53 @@ class AdmitsVerifiedRows(unittest.TestCase):
         self.assertEqual(len(result["admitted"]), 1)
         self.assertEqual(result["admitted"][0]["issue"], 7)
         self.assertEqual(result["refused"], [])
+        self.assertEqual(result["unpriced"], [])
+
+
+class UnpricedIntentIsQuarantinedNotRefused(unittest.TestCase):
+    """A real buyer who names no figure is a lead, not an error.
+
+    Measured live: Rooner-Plugins/bank-value-changes#3 ("I'm willing to pay for this to be
+    added") and boxbilling/boxbilling#889 ("[WILL PAY FOR CODE]") are genuine intent with no
+    amount. Sending them back through FEEDBACK_PROMPT told the agent to drop them, and the
+    prompt says so explicitly ("drop the row").
+    """
+
+    WILLING = {**ISSUE,"body": "I'm willing to pay for this to be added."}
+
+    def test_intent_without_a_figure_is_unpriced_and_never_refused(self):
+        result = door.verify_rows(
+            [row(reward_quote="I'm willing to pay for this to be added.")],
+            fetcher(self.WILLING))
+        self.assertEqual(result["refused"], [], "a real buyer must not be refused")
+        self.assertEqual(len(result["unpriced"]), 1)
+        self.assertEqual(result["unpriced"][0]["reason"], "REWARD_QUOTE_HAS_NO_AMOUNT")
+        self.assertEqual(result["unpriced"][0]["issue"], 7)
+
+    def test_unpriced_rows_carry_their_url_and_quote_for_follow_up(self):
+        result = door.verify_rows(
+            [row(reward_quote="I'm willing to pay for this to be added.")],
+            fetcher(self.WILLING))
+        entry = result["unpriced"][0]
+        self.assertEqual(entry["url"], "https://github.com/acme/http/issues/7")
+        self.assertIn("willing to pay", entry["reward_quote"])
+
+    def test_a_fabricated_quote_is_still_refused_not_quarantined(self):
+        """The quarantine must not become a way for invented money to survive."""
+        result = door.verify_rows(
+            [row(reward_quote="We pay a $9000 bounty, guaranteed.")], fetcher())
+        self.assertEqual(result["unpriced"], [])
+        self.assertEqual(result["refused"][0]["reason"], "REWARD_QUOTE_NOT_IN_ISSUE")
+
+    def test_unpriced_rows_survive_a_mixed_shortlist_without_blocking_it(self):
+        documents = {7: ISSUE, 8: self.WILLING}
+        result = door.verify_rows(
+            [row(), row(issue=8, reward_quote="I'm willing to pay for this to be added.")],
+            lambda repo, number: documents.get(number))
+        self.assertEqual(len(result["admitted"]), 1)
+        self.assertEqual(result["admitted"][0]["issue"], 7)
+        self.assertEqual(result["refused"], [])
+        self.assertEqual(len(result["unpriced"]), 1)
 
 
 class RefusesUnprovenRows(unittest.TestCase):
@@ -201,6 +249,90 @@ class PromptShape(unittest.TestCase):
             self.assertNotIn(phrase, door.SEARCH_PROMPT)
 
 
+CALIBRATION = ("Do not exclude a row to be safe: submit anything that plausibly meets "
+               "these criteria, and the gates will verify it exactly and report the "
+               "failures.")
+
+
+class RecallOverPrecision(unittest.TestCase):
+    """The agent owns recall; the gates own precision.
+
+    Measured live: once the agent was given the domain and the exact gate list, it
+    over-calibrated. It self-eliminated candidates to be safe and recall collapsed to a
+    single row. The gates are exact and cheap; a row the agent never writes down is a lead
+    nobody can recover. The brief therefore has to say so explicitly, in both the task file
+    and the correction prompt, or the agent re-learns timidity every round.
+    """
+
+    def test_the_task_file_carries_the_calibration_sentence_verbatim(self):
+        self.assertIn(CALIBRATION, door.TASK_FILE)
+
+    def test_the_feedback_prompt_carries_it_too(self):
+        """A correction round must not quietly teach the agent to submit less."""
+        self.assertIn(CALIBRATION, door.FEEDBACK_PROMPT)
+
+    def test_the_task_file_states_the_division_of_labour(self):
+        self.assertIn("recall", door.TASK_FILE.lower())
+        self.assertIn("gates", door.TASK_FILE.lower())
+
+    def test_uncertainty_is_named_as_a_reason_to_submit(self):
+        text = door.TASK_FILE.lower()
+        self.assertIn("when you are unsure, submit it", text)
+
+    def test_the_gate_list_is_still_present_so_precision_is_not_lost(self):
+        """Recall must not be bought by hiding the gates from the agent."""
+        for code, _meaning in door.GATE_CHECKS:
+            self.assertIn(code, door.TASK_FILE)
+
+    def test_a_code_task_refusal_stays_hard(self):
+        """Recall is widened, not the deliverable: we only take verified code changes."""
+        result = door.verify_rows([row(is_code_task=False)], fetcher())
+        self.assertEqual(result["admitted"], [])
+        self.assertEqual(result["unpriced"], [])
+        self.assertEqual(result["refused"][0]["reason"], "AGENT_NOT_A_CODE_TASK")
+
+
+class UnpricedLeadStream(unittest.TestCase):
+    """The unpriced rows must survive the run as a file, not just a printed line."""
+
+    def _workdir(self):
+        import tempfile
+        workdir = tempfile.mkdtemp()
+        self.addCleanup(lambda: __import__("shutil").rmtree(workdir, ignore_errors=True))
+        return workdir
+
+    def test_leads_are_written_to_their_own_file(self):
+        import json
+        workdir = self._workdir()
+        unpriced = [{"row": {}, "reason": "REWARD_QUOTE_HAS_NO_AMOUNT", "repo": "acme/http",
+                     "issue": 3, "url": "https://github.com/acme/http/issues/3",
+                     "reward_quote": "I'm willing to pay for this to be added."}]
+        path = door.write_unpriced_leads(workdir, unpriced)
+        self.assertTrue(path.endswith(door.UNPRICED_LEADS))
+        written = [json.loads(l) for l in open(path, encoding="utf-8") if l.strip()]
+        self.assertEqual(len(written), 1)
+        self.assertEqual(written[0]["issue"], 3)
+        self.assertEqual(written[0]["repo"], "acme/http")
+
+    def test_the_lead_file_is_separate_from_the_shortlist(self):
+        self.assertNotEqual(door.UNPRICED_LEADS, "shortlist.jsonl")
+
+    def test_repeated_rounds_do_not_duplicate_a_lead(self):
+        import json
+        workdir = self._workdir()
+        entry = {"row": {}, "reason": "REWARD_QUOTE_HAS_NO_AMOUNT", "repo": "acme/http",
+                 "issue": 3, "url": "u", "reward_quote": "willing to pay"}
+        door.write_unpriced_leads(workdir, [entry])
+        path = door.write_unpriced_leads(workdir, [entry])
+        written = [json.loads(l) for l in open(path, encoding="utf-8") if l.strip()]
+        self.assertEqual(len(written), 1, "the stream must not inflate across rounds")
+
+    def test_no_unpriced_rows_writes_nothing(self):
+        workdir = self._workdir()
+        self.assertEqual(door.write_unpriced_leads(workdir, []), "")
+        self.assertFalse(os.path.exists(os.path.join(workdir, door.UNPRICED_LEADS)))
+
+
 if __name__ == "__main__":
     unittest.main(verbosity=2)
 
@@ -276,6 +408,53 @@ class FeedbackLoop(unittest.TestCase):
         result = door.iterate("W", rounds=3, run=run, verify=verify)
         issues = sorted(r["issue"] for r in result["admitted"])
         self.assertEqual(issues, [7, 8], "no duplicate rows after correction")
+
+    def test_a_round_that_rewrites_the_shortlist_cannot_erase_a_row_already_won(self):
+        """Measured: round 2 admitted 1 of 9 because the agent rewrote the file from scratch.
+
+        The agent is told to write shortlist.jsonl again each round, so every row won in
+        round 1 disappeared before round 2 was verified. Feedback was resetting, not
+        compounding. The loop now re-appends admitted rows before the next round runs.
+        """
+        import json
+        import tempfile
+
+        workdir = tempfile.mkdtemp()
+        self.addCleanup(lambda: __import__("shutil").rmtree(workdir, ignore_errors=True))
+        shortlist = os.path.join(workdir, "shortlist.jsonl")
+        calls = []
+
+        def run(workdir, prompt=None, **kwargs):
+            calls.append(prompt)
+            # The agent rewrites the file from scratch every round: round 2 keeps only #8.
+            with open(shortlist, "w", encoding="utf-8") as handle:
+                handle.write(json.dumps(row(issue=8)) + "\n")
+            return {"exit_code": 0, "rows": [row(issue=8)], "tail": "", "wrote_file": True}
+
+        def verify(rows, limit=12):
+            if len(calls) == 1:
+                return {"admitted": [row()], "refused": [{"row": row(issue=8), "reason": "ISSUE_NOT_OPEN"}]}
+            return {"admitted": [row(issue=8)], "refused": []}
+
+        result = door.iterate(workdir, rounds=3, run=run, verify=verify)
+        issues = sorted(r["issue"] for r in result["admitted"])
+        self.assertEqual(issues, [7, 8], "round 1's row must survive round 2's rewrite")
+        on_disk = [json.loads(line) for line in open(shortlist, encoding="utf-8") if line.strip()]
+        self.assertIn(7, [r["issue"] for r in on_disk],
+                      "the won row must still be in the file the next round reads")
+
+    def test_the_merge_does_not_duplicate_a_row_the_agent_resubmits(self):
+        import json
+        import tempfile
+
+        workdir = tempfile.mkdtemp()
+        self.addCleanup(lambda: __import__("shutil").rmtree(workdir, ignore_errors=True))
+        shortlist = os.path.join(workdir, "shortlist.jsonl")
+        with open(shortlist, "w", encoding="utf-8") as handle:
+            handle.write(json.dumps(row()) + "\n")
+        door._merge_shortlist(workdir, [row(), row(issue=9)])
+        on_disk = [json.loads(line) for line in open(shortlist, encoding="utf-8") if line.strip()]
+        self.assertEqual(sorted(r["issue"] for r in on_disk), [7, 9])
 
 
 class StreamingVisibility(unittest.TestCase):
@@ -487,6 +666,31 @@ class ScoutWorktree(unittest.TestCase):
         text = open(os.path.join(self.workdir, "TASK.md"), encoding="utf-8").read()
         self.assertIn("no source code", text)
 
+    def test_the_brief_carries_the_domain(self):
+        """Baba: how will the agent know the gates unless it is told the domain and the
+        constraints. Autonomy is about the method, never about the acceptance criteria."""
+        text = open(os.path.join(self.workdir, "TASK.md"), encoding="utf-8").read()
+        self.assertIn("The domain", text)
+        self.assertIn("engineering", text)
+        self.assertIn("Do not exclude a row to be safe", text)
+
+    def test_every_gate_that_can_fire_is_named_in_the_brief(self):
+        """The brief is rendered from GATE_CHECKS/DOWNSTREAM_CHECKS, so a new refusal cannot be
+        added to the gate without appearing in front of the agent."""
+        text = open(os.path.join(self.workdir, "TASK.md"), encoding="utf-8").read()
+        for code, _ in door.GATE_CHECKS + door.DOWNSTREAM_CHECKS:
+            self.assertIn(code, text, code)
+
+    def test_every_reason_the_gate_emits_is_in_the_table(self):
+        """Anti-drift: scrape the reason strings out of verify_rows and require each to be
+        documented. Catches a reason added to the code but not to the brief."""
+        import inspect
+        source = inspect.getsource(door.verify_rows)
+        emitted = set(re.findall(r'"reason": "([A-Z_]+)"', source))
+        documented = {code for code, _ in door.GATE_CHECKS}
+        self.assertTrue(emitted, "no reason strings found - the scrape is wrong")
+        self.assertEqual(emitted - documented, set())
+
     def test_the_brief_prescribes_no_search_recipe(self):
         """Measured handcuffs, removed on Baba's order: a numbered first step, a list of search
         commands and a taxonomy of what counts as money. Those are judgements."""
@@ -523,3 +727,31 @@ class AmountGuard(unittest.TestCase):
                       # measured live: this real bounty was refused by the first version
                       "[BOUNTY] RCS Support [14999$]", "-> /bounty $700"):
             self.assertTrue(door.quote_states_an_amount(quote), quote)
+
+
+class QuotaIsNotAVerdict(unittest.TestCase):
+    """Measured: a 403 rate limit was stamped ISSUE_NOT_FOUND on a live issue."""
+
+    def _run(self, completed):
+        with mock.patch.object(door.subprocess, "run", return_value=completed):
+            return door.fetch_issue("a/b", 1)
+
+    def test_a_404_is_still_a_missing_issue(self):
+        done = mock.Mock(returncode=1, stderr="gh: Not Found (HTTP 404)", stdout="")
+        self.assertIsNone(self._run(done))
+
+    def test_a_rate_limit_raises_instead_of_claiming_missing(self):
+        done = mock.Mock(returncode=1, stdout="API rate limit exceeded for user ID 1",
+                         stderr="")
+        with self.assertRaises(door.IssueUnreadable):
+            self._run(done)
+
+    def test_an_unreadable_row_is_refused_under_its_own_reason(self):
+        rows = [{"repo": "a/b", "issue": 1, "reward_quote": "$50"}]
+        with mock.patch.object(door, "fetch_issue", side_effect=door.IssueUnreadable("403")):  # noqa: E501
+            result = door.verify_rows(rows)
+        self.assertEqual(result["admitted"], [])
+        self.assertEqual(result["refused"][0]["reason"], "ISSUE_UNREADABLE")
+
+    def test_the_reason_is_documented_in_the_brief(self):
+        self.assertIn("ISSUE_UNREADABLE", door.TASK_FILE)
