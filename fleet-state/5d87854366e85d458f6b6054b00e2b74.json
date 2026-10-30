@@ -1,0 +1,46 @@
+{
+  "task_id": "5d87854366e85d458f6b6054b00e2b74",
+  "repo": "Tyaoo/picker",
+  "issue_number": 1233,
+  "status": "DISPATCHING",
+  "dispatch_id": "2d9eb82668854f91832d0cf6f30ef768",
+  "admission": {
+    "funding": {
+      "amount": "5500",
+      "currency": "USD",
+      "usd_value": "5500",
+      "quote": {
+        "basis": "USD face value"
+      },
+      "raw": "$5,500",
+      "source_url": "https://github.com/Tyaoo/picker/issues/1233",
+      "payer": "Tyaoo"
+    },
+    "technical_signals": [
+      "broken",
+      "bug",
+      "bug_bounty",
+      "bugs",
+      "cryptography",
+      "encryption",
+      "fails",
+      "issue",
+      "latency",
+      "performance",
+      "race condition"
+    ],
+    "component_references": [],
+    "source_locations": [],
+    "engineering_evidence_sources": [
+      "https://github.com/Tyaoo/picker/issues/1233"
+    ],
+    "source_issue": "https://github.com/Tyaoo/picker/issues/1233",
+    "fetched_at": "2026-10-30T13:43:37.459247+00:00"
+  },
+  "lanes": [
+    "founder"
+  ],
+  "dispatched_at": "2026-10-30T13:43:38.883346+00:00",
+  "attempt": 0,
+  "updated_at": "2026-10-30T13:43:38.883367+00:00"
+}
