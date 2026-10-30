@@ -2,7 +2,7 @@
   "task_id": "e746238b7ab5a6a95c330ee4eb671eba",
   "repo": "connext/gitcoin",
   "issue_number": 2,
-  "status": "DISPATCHING",
+  "status": "DISPATCHED",
   "dispatch_id": "6b2107a59a1042df97f173c2497babcb",
   "admission": {
     "funding": {
@@ -33,5 +33,5 @@
   ],
   "dispatched_at": "2026-10-30T12:50:00.396080+00:00",
   "attempt": 0,
-  "updated_at": "2026-10-30T12:50:00.396100+00:00"
+  "updated_at": "2026-10-30T12:50:02.366529+00:00"
 }
