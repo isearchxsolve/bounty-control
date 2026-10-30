@@ -1,0 +1,39 @@
+{
+  "task_id": "04a8938c56010d72a03af66fa790f234",
+  "repo": "lessuselesss/bounty-crawl",
+  "issue_number": 1,
+  "status": "DISPATCHING",
+  "dispatch_id": "28130053ef5545c9bbb11121e847b0af",
+  "admission": {
+    "funding": {
+      "amount": "75000",
+      "currency": "USD",
+      "usd_value": "75000",
+      "quote": {
+        "basis": "USD face value"
+      },
+      "raw": "$75,000",
+      "source_url": "https://github.com/lessuselesss/bounty-crawl/issues/1",
+      "payer": "lessuselesss"
+    },
+    "technical_signals": [
+      "distributed"
+    ],
+    "component_references": [],
+    "source_locations": [],
+    "engineering_evidence_sources": [
+      "https://github.com/lessuselesss/bounty-crawl/issues/1"
+    ],
+    "source_issue": "https://github.com/lessuselesss/bounty-crawl/issues/1",
+    "fetched_at": "2026-10-30T17:09:23.372136+00:00"
+  },
+  "lanes": [
+    "founder",
+    "normal",
+    "programs",
+    "startup"
+  ],
+  "dispatched_at": "2026-10-30T17:09:24.540668+00:00",
+  "attempt": 0,
+  "updated_at": "2026-10-30T17:09:24.540689+00:00"
+}
