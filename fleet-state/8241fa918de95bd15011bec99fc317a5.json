@@ -2,7 +2,7 @@
   "task_id": "8241fa918de95bd15011bec99fc317a5",
   "repo": "bandprotocol/cross-chain-hackthon",
   "issue_number": 2,
-  "status": "DISPATCHED",
+  "status": "CLAIMED",
   "dispatch_id": "ba101cc3225148a28c93cf71930f7572",
   "admission": {
     "funding": {
@@ -33,6 +33,14 @@
     "normal"
   ],
   "dispatched_at": "2026-10-30T13:05:52.138852+00:00",
-  "attempt": 0,
-  "updated_at": "2026-10-30T13:05:54.041090+00:00"
+  "attempt": 1,
+  "updated_at": "2026-10-30T13:06:03.437154+00:00",
+  "owner": "41060416428:1",
+  "previous_owner": null,
+  "previous_status": "DISPATCHED",
+  "run_url": "https://github.com/isearchxsolve/bounty-control/actions/runs/41060416428",
+  "harness_sha": "122af062685a0bd1f1d161d9c42a07300819cc15",
+  "claimed_at": "2026-10-30T13:06:03.437104+00:00",
+  "lease_expires_at": "2026-10-30T17:11:03.437120+00:00",
+  "preparation_budget_seconds": 14400
 }
