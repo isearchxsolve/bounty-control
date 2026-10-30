@@ -1028,6 +1028,11 @@ def record_outcome(con, identity, outcome):
     con.execute("INSERT OR REPLACE INTO task_outcome VALUES(?,?,?)",
                 (identity, outcome, time.time()))
     con.commit()
+    # Receipt per write, so a run shows whether each outcome reached the store. The attribution
+    # step reads this table; without a receipt a missing row looks identical to a missing hook.
+    persisted = con.execute("SELECT outcome FROM task_outcome WHERE task_id=?", (identity,)).fetchone()
+    print(json.dumps({"phase": "OUTCOME", "task_id": identity, "wrote": outcome,
+                      "readback": persisted[0] if persisted else None}), flush=True)
 
 
 def discover(lanes, max_dispatches=2, live=False, queries_per_lane=2, state_dir=None,
