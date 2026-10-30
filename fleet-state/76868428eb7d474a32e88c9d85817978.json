@@ -2,7 +2,7 @@
   "task_id": "76868428eb7d474a32e88c9d85817978",
   "repo": "Yof3ng/picker",
   "issue_number": 125,
-  "status": "CLAIMED",
+  "status": "REJECTED_PREPARATION",
   "dispatch_id": "d5c82a87c16a43ef8b4fedd9e50a3bd3",
   "admission": {
     "funding": {
@@ -38,7 +38,7 @@
   ],
   "dispatched_at": "2026-10-30T16:16:00.271068+00:00",
   "attempt": 1,
-  "updated_at": "2026-10-30T16:16:13.449227+00:00",
+  "updated_at": "2026-10-30T16:20:13.128463+00:00",
   "owner": "41088305573:1",
   "previous_owner": null,
   "previous_status": "DISPATCHING",
@@ -46,5 +46,28 @@
   "harness_sha": "433c7a4bb1b65ef59acd912e931ae740b043ed32",
   "claimed_at": "2026-10-30T16:16:13.449179+00:00",
   "lease_expires_at": "2026-10-30T20:21:13.449193+00:00",
-  "preparation_budget_seconds": 14400
+  "preparation_budget_seconds": 14400,
+  "at": "2026-10-30T16:19:21.148759+00:00",
+  "reason": "Cline preparation blocked: Issue #125 \"[\u6bcf\u65e5\u4fe1\u606f\u6d41] 2023-05-31\" is an auto-generated daily information-feed post, not a concrete code change request. Evidence: (1) title is the daily-feed template '[\u6bcf\u65e5\u4fe1\u606f\u6d41] <date>' and the issue carries the repository's own 'daily' label (id 5343663835); (2) the entire 44219-char body is a markdown task-list of external article links grouped by blog/site (e.g. '- MalwareTips Blog / - [ ] [Remove ...](https://malwaretips.com/...)'), i.e. content produced by the picker tool itself, with no defect description, no reproduction, no feature request, no failing test and no referenced component/source location in the repo; (3) the issue is OPEN with state 'open', comments=0, author_association=OWNER, and pull_request=null (not a PR); (4) the focal repo Yof3ng/picker is a FORK of chainreactors/picker, default_branch=master, last pushed 2023-09-21, and has 0 open pull requests, so there is no competing PR and no engineering target; (5) the admission technical_signals (authorization/bug/bypass/memory/overflow) are generic keyword noise and are not present in the actual issue body. This is the repository's own content/automation output, not a reproducible defect, feature, or code-level maintenance task, so no repository change is warranted.",
+  "declared_reason": "Issue #125 \"[\u6bcf\u65e5\u4fe1\u606f\u6d41] 2023-05-31\" is an auto-generated daily information-feed post, not a concrete code change request. Evidence: (1) title is the daily-feed template '[\u6bcf\u65e5\u4fe1\u606f\u6d41] <date>' and the issue carries the repository's own 'daily' label (id 5343663835); (2) the entire 44219-char body is a markdown task-list of external article links grouped by blog/site (e.g. '- MalwareTips Blog / - [ ] [Remove ...](https://malwaretips.com/...)'), i.e. content produced by the picker tool itself, with no defect description, no reproduction, no feature request, no failing test and no referenced component/source location in the repo; (3) the issue is OPEN with state 'open', comments=0, author_association=OWNER, and pull_request=null (not a PR); (4) the focal repo Yof3ng/picker is a FORK of chainreactors/picker, default_branch=master, last pushed 2023-09-21, and has 0 open pull requests, so there is no competing PR and no engineering target; (5) the admission technical_signals (authorization/bug/bypass/memory/overflow) are generic keyword noise and are not present in the actual issue body. This is the repository's own content/automation output, not a reproducible defect, feature, or code-level maintenance task, so no repository change is warranted.",
+  "evidence": {
+    "action": "blocked",
+    "worktree": "/tmp/bounty-workspaces/repos/Yof3ng--picker--125",
+    "base_sha": "4a268af78ed31982f869725788980a3e2ccd9d5a",
+    "default_branch": "master",
+    "sources": [],
+    "run_url": "",
+    "admission": {
+      "amount": "3500",
+      "currency": "USD",
+      "usd_value": "3500",
+      "quote": {
+        "basis": "USD face value"
+      },
+      "raw": "$3500",
+      "source_url": "https://github.com/Yof3ng/picker/issues/125",
+      "payer": "Yof3ng"
+    }
+  },
+  "finished_at": "2026-10-30T16:20:12.330755+00:00"
 }
