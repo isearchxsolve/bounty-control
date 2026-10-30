@@ -2,7 +2,7 @@
   "task_id": "80678955da9bf0c8b1f0765f16b53585",
   "repo": "TigerVNC/tigervnc",
   "issue_number": 398,
-  "status": "DISPATCHING",
+  "status": "DISPATCHED",
   "dispatch_id": "6ec00632bc614066b2ed760fdc681fec",
   "admission": {
     "funding": {
@@ -40,7 +40,7 @@
   ],
   "dispatched_at": "2026-10-30T13:05:46.561670+00:00",
   "attempt": 1,
-  "updated_at": "2026-10-30T13:05:46.561687+00:00",
+  "updated_at": "2026-10-30T13:05:48.447286+00:00",
   "owner": "41042320457:1",
   "previous_owner": null,
   "previous_status": "DISPATCHED",
