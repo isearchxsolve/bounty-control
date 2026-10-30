@@ -2,7 +2,7 @@
   "task_id": "80678955da9bf0c8b1f0765f16b53585",
   "repo": "TigerVNC/tigervnc",
   "issue_number": 398,
-  "status": "CLAIMED",
+  "status": "FAILED_VERIFIED",
   "dispatch_id": "f752d5b71dce40458ffb0863c34156a2",
   "admission": {
     "funding": {
@@ -40,7 +40,7 @@
   ],
   "dispatched_at": "2026-10-30T13:21:46.179150+00:00",
   "attempt": 3,
-  "updated_at": "2026-10-30T13:21:58.718729+00:00",
+  "updated_at": "2026-10-30T14:02:02.487427+00:00",
   "owner": "41062609458:1",
   "previous_owner": "41060408738:1",
   "previous_status": "DISPATCHED",
@@ -54,7 +54,7 @@
   "diagnostic": "Cline deliverable invalid at /tmp/fleet-artifacts/delivery-supervisor/7d65caae3454480b8cdb4cf7dce50077.preparation.json: Mandatory native plan phase missing: linters",
   "path": "/tmp/fleet-artifacts/delivery-supervisor/7d65caae3454480b8cdb4cf7dce50077.preparation.json",
   "reason": "Mandatory native plan phase missing: linters",
-  "at": "2026-10-30T13:18:07.493323+00:00",
+  "at": "2026-10-30T14:01:23.528257+00:00",
   "failures": [
     {
       "run_url": "https://github.com/isearchxsolve/bounty-control/actions/runs/41042320457",
@@ -75,7 +75,15 @@
       "path": "/tmp/fleet-artifacts/delivery-supervisor/7d65caae3454480b8cdb4cf7dce50077.preparation.json",
       "reason": "Mandatory native plan phase missing: linters",
       "at": "2026-10-30T13:18:07.493323+00:00"
+    },
+    {
+      "run_url": "https://github.com/isearchxsolve/bounty-control/actions/runs/41062609458",
+      "status": "FAILED_VERIFIED",
+      "head_sha": "c6438d8fc909325f966baadd9d397100d6c140c9",
+      "task_id": "80678955da9bf0c8b1f0765f16b53585",
+      "at": "2026-10-30T14:01:23.528257+00:00"
     }
   ],
-  "finished_at": "2026-10-30T13:18:20.082311+00:00"
+  "finished_at": "2026-10-30T14:02:01.821796+00:00",
+  "head_sha": "c6438d8fc909325f966baadd9d397100d6c140c9"
 }
