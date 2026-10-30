@@ -2,7 +2,7 @@
   "task_id": "08fd822a349b7326e93573a025730e3c",
   "repo": "Yof3ng/picker",
   "issue_number": 248,
-  "status": "CLAIMED",
+  "status": "FAILED_RUNNER_SHUTDOWN",
   "dispatch_id": "0d3ba61bcb974369bba9e982a7ae71ed",
   "admission": {
     "funding": {
@@ -41,7 +41,7 @@
   ],
   "dispatched_at": "2026-10-30T15:39:57.283242+00:00",
   "attempt": 1,
-  "updated_at": "2026-10-30T15:40:12.503815+00:00",
+  "updated_at": "2026-10-30T15:42:27.290431+00:00",
   "owner": "41082801745:1",
   "previous_owner": null,
   "previous_status": "DISPATCHED",
@@ -49,5 +49,22 @@
   "harness_sha": "806c4513bded47674edf64dd33ab93dd48e82d8c",
   "claimed_at": "2026-10-30T15:40:12.503742+00:00",
   "lease_expires_at": "2026-10-30T19:45:12.503755+00:00",
-  "preparation_budget_seconds": 14400
+  "preparation_budget_seconds": 14400,
+  "kind": "runner_shutdown",
+  "retryable": true,
+  "inferred": true,
+  "diagnostic": "No engineering result and no failure record: the phase was terminated before it could report (exit 143 / runner shutdown)",
+  "at": "2026-10-30T15:42:26.426509+00:00",
+  "failures": [
+    {
+      "run_url": "https://github.com/isearchxsolve/bounty-control/actions/runs/41082801745",
+      "status": "FAILED_RUNNER_SHUTDOWN",
+      "kind": "runner_shutdown",
+      "retryable": true,
+      "inferred": true,
+      "diagnostic": "No engineering result and no failure record: the phase was terminated before it could report (exit 143 / runner shutdown)",
+      "at": "2026-10-30T15:42:26.426509+00:00"
+    }
+  ],
+  "finished_at": "2026-10-30T15:42:26.426545+00:00"
 }
