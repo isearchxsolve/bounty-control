@@ -2,7 +2,7 @@
   "task_id": "773fcd631b8ff4e0064b61a7d134208e",
   "repo": "ProjectWyvern/frontends",
   "issue_number": 1,
-  "status": "DISPATCHING",
+  "status": "DISPATCHED",
   "dispatch_id": "bdb98040f3ed4e54b711c2b5f3d8675b",
   "admission": {
     "funding": {
@@ -34,5 +34,5 @@
   ],
   "dispatched_at": "2026-10-30T08:58:06.832068+00:00",
   "attempt": 0,
-  "updated_at": "2026-10-30T08:58:06.832086+00:00"
+  "updated_at": "2026-10-30T08:58:08.727948+00:00"
 }
