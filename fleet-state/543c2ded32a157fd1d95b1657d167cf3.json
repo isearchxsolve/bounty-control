@@ -2,7 +2,7 @@
   "task_id": "543c2ded32a157fd1d95b1657d167cf3",
   "repo": "pyodide/pyodide-recipes",
   "issue_number": 187,
-  "status": "DISPATCHING",
+  "status": "DISPATCHED",
   "dispatch_id": "2acd84f1807f48c2a5b126a2f31f1daf",
   "admission": {
     "funding": {
@@ -50,5 +50,5 @@
   ],
   "dispatched_at": "2026-10-30T19:22:08.754374+00:00",
   "attempt": 0,
-  "updated_at": "2026-10-30T19:22:08.754392+00:00"
+  "updated_at": "2026-10-30T19:22:10.780725+00:00"
 }
