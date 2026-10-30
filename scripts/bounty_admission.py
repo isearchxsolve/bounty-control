@@ -5,6 +5,7 @@ from datetime import date, datetime, timezone
 from decimal import Decimal
 import os
 import re
+from urllib.parse import urlencode
 
 # Bounty identity: whichever account the pipeline runs as. An own-PR is recognised by this
 # login, so a mirror to another account must not leave the old one hardcoded here.
@@ -623,15 +624,84 @@ def admit(context, quote=None, floor=FLOOR):
             "source_issue": issue["html_url"], "fetched_at": context["fetched_at"]}, ""
 
 
+MAINTAINER_ASSOCIATIONS = {"MEMBER", "OWNER", "COLLABORATOR"}
+
+
+def competition_evidence(api, repo, pull):
+    """Is this open pull request a real competitor, or just a dropped file?
+
+    Returns ``(real, evidence)``. Fails CLOSED: anything unevaluable counts as real, so a
+    broken probe can never silently admit a contested ticket.
+
+    Why this exists (measured 2026-10-30, ``microg/GmsCore``): the four funded tickets were
+    covered by open PRs 3943, 3944, 3945 and 3949, so the gate refused every one of them.
+    Reading those pull requests showed that between them their three authors had authored
+    five pull requests in that repository and landed NONE, no maintainer had reviewed or
+    commented on any of them, and none carried a successful check run. A hard ticket cannot
+    be crowded by people who are not solving it: producing an unmergeable attempt is now
+    free, so its existence is not evidence that somebody is ahead of us.
+
+    A pull request blocks only on evidence that its author can actually land there: prior
+    merged work in this repository, or a green check run, or maintainer attention.
+    """
+
+    login = (((pull.get("user") or {}).get("login")) or "").lower()
+    number = pull.get("number")
+    evidence = {"pr": pull.get("html_url"), "author": login, "number": number}
+    if not login or not number:
+        return True, {**evidence, "reason": "unknown_author"}
+
+    try:
+        query = urlencode({"q": "repo:" + repo + " type:pr author:" + login + " is:merged",
+                           "per_page": 1})
+        merged = int(api.api("search/issues?" + query).get("total_count") or 0)
+    except Exception:
+        return True, {**evidence, "reason": "author_history_unavailable"}
+    evidence["author_merged_in_repo"] = merged
+    if merged > 0:
+        return True, {**evidence, "reason": "author_has_landed_work_here"}
+
+    try:
+        sha = ((pull.get("head") or {}).get("sha")) or ""
+        runs = api.api("repos/" + repo + "/commits/" + sha + "/check-runs").get("check_runs") or []
+        evidence["check_runs"] = len(runs)
+        if any(run.get("conclusion") == "success" for run in runs):
+            return True, {**evidence, "reason": "green_checks"}
+    except Exception:
+        pass
+
+    try:
+        engaged = 0
+        for review in api.pages("repos/" + repo + "/pulls/" + str(number) + "/reviews"):
+            if review.get("author_association") in MAINTAINER_ASSOCIATIONS:
+                engaged += 1
+        for comment in api.pages("repos/" + repo + "/issues/" + str(number) + "/comments"):
+            if comment.get("author_association") in MAINTAINER_ASSOCIATIONS:
+                engaged += 1
+    except Exception:
+        return True, {**evidence, "reason": "maintainer_attention_unavailable"}
+    evidence["maintainer_engagement"] = engaged
+    if engaged:
+        return True, {**evidence, "reason": "maintainer_is_engaged"}
+    return False, {**evidence, "reason": "nominal_attempt_only"}
+
+
+
 def competition(api, repo, number, own_head=None):
     pattern = re.compile(rf"(?:#\s*|/issues/|\bissue\s+){number}(?!\d)|(?:^|[-_/]){number}(?:$|[-_/])", re.I)
+    nominal = []
     for pr in api.pages(f"repos/{repo}/pulls", state="open"):
         if own_head and pr["head"]["sha"] == own_head and pr["head"]["repo"] and (
                 pr["head"]["repo"]["owner"]["login"] == BOUNTY_ACCOUNT):
             continue
         text = "\n".join([pr.get("title") or "", pr.get("body") or "", pr["head"]["ref"]])
         if pattern.search(text):
-            raise ValueError("Competing open PR: " + pr["html_url"])
+            real, evidence = competition_evidence(api, repo, pr)
+            if real:
+                raise ValueError("Competing open PR: " + pr["html_url"])
+            nominal.append(evidence)
+            print("  nominal competition ignored:", evidence.get("reason"),
+                  pr.get("html_url"))
     for event in api.pages(f"repos/{repo}/issues/{number}/timeline"):
         linked = (event.get("source") or {}).get("issue") or {}
         if not linked.get("pull_request"):
@@ -655,4 +725,4 @@ def competition(api, repo, number, own_head=None):
                 "\n".join((pull.get("title") or "", body)), re.I)
             if section_mentions_issue or direct_fix_reference:
                 raise ValueError("Issue already resolved by merged PR: " + pull["html_url"])
-    return True
+    return {"blocking": False, "nominal": nominal}
