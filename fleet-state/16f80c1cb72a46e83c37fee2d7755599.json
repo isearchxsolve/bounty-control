@@ -2,8 +2,8 @@
   "task_id": "16f80c1cb72a46e83c37fee2d7755599",
   "repo": "abdul-rahhman-siddiqui/testing-issue-tracker",
   "issue_number": 246,
-  "status": "FAILED_DELIVERABLE_MISSING",
-  "dispatch_id": "a1cc4ab836f44a8a87ac99b5efe13be8",
+  "status": "DISPATCHING",
+  "dispatch_id": "62ebe0f17b514164bd3447398acdaac6",
   "admission": {
     "funding": {
       "amount": "500",
@@ -27,14 +27,14 @@
       "https://github.com/abdul-rahhman-siddiqui/testing-issue-tracker/issues/246"
     ],
     "source_issue": "https://github.com/abdul-rahhman-siddiqui/testing-issue-tracker/issues/246",
-    "fetched_at": "2026-10-30T13:03:23.306699+00:00"
+    "fetched_at": "2026-10-30T13:20:51.653390+00:00"
   },
   "lanes": [
     "founder"
   ],
-  "dispatched_at": "2026-10-30T13:03:24.495290+00:00",
+  "dispatched_at": "2026-10-30T13:20:53.203632+00:00",
   "attempt": 2,
-  "updated_at": "2026-10-30T13:06:56.500687+00:00",
+  "updated_at": "2026-10-30T13:20:53.203649+00:00",
   "owner": "41060084777:1",
   "previous_owner": "41057633175:1",
   "previous_status": "DISPATCHED",
