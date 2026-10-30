@@ -1,0 +1,37 @@
+{
+  "task_id": "7620f7cab57405c84d2e908a635a49d8",
+  "repo": "nknorg/nBounty",
+  "issue_number": 2,
+  "status": "DISPATCHING",
+  "dispatch_id": "5bd6ac4e506646aaa6608378ad1f78d7",
+  "admission": {
+    "funding": {
+      "amount": "15000",
+      "currency": "USDT",
+      "usd_value": "15000",
+      "quote": {
+        "basis": "USD-denominated stablecoin offer"
+      },
+      "raw": "15,000 USDT",
+      "source_url": "https://github.com/nknorg/nBounty/issues/2",
+      "payer": "yilunzhang"
+    },
+    "technical_signals": [
+      "performance"
+    ],
+    "component_references": [],
+    "source_locations": [],
+    "engineering_evidence_sources": [
+      "https://github.com/nknorg/nBounty/issues/2"
+    ],
+    "source_issue": "https://github.com/nknorg/nBounty/issues/2",
+    "fetched_at": "2026-10-30T12:49:53.760107+00:00"
+  },
+  "lanes": [
+    "founder",
+    "normal"
+  ],
+  "dispatched_at": "2026-10-30T12:49:55.087901+00:00",
+  "attempt": 0,
+  "updated_at": "2026-10-30T12:49:55.087920+00:00"
+}
