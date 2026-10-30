@@ -2,7 +2,7 @@
   "task_id": "7a117a6caa82c0b73368b06907dd7728",
   "repo": "dAAAb/BBFT",
   "issue_number": 10,
-  "status": "DISPATCHED",
+  "status": "CLAIMED",
   "dispatch_id": "2a2ca3d40df74bf3882745a7870255cb",
   "admission": {
     "funding": {
@@ -34,6 +34,14 @@
     "normal"
   ],
   "dispatched_at": "2026-10-30T11:38:17.775235+00:00",
-  "attempt": 0,
-  "updated_at": "2026-10-30T11:38:19.424396+00:00"
+  "attempt": 1,
+  "updated_at": "2026-10-30T11:38:29.532786+00:00",
+  "owner": "41049509855:1",
+  "previous_owner": null,
+  "previous_status": "DISPATCHED",
+  "run_url": "https://github.com/isearchxsolve/bounty-control/actions/runs/41049509855",
+  "harness_sha": "b47ebb9441241e29e7c161adb45ba97a519b856a",
+  "claimed_at": "2026-10-30T11:38:29.532732+00:00",
+  "lease_expires_at": "2026-10-30T15:43:29.532749+00:00",
+  "preparation_budget_seconds": 14400
 }
