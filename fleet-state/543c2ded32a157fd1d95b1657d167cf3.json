@@ -2,7 +2,7 @@
   "task_id": "543c2ded32a157fd1d95b1657d167cf3",
   "repo": "pyodide/pyodide-recipes",
   "issue_number": 187,
-  "status": "DISPATCHED",
+  "status": "CLAIMED",
   "dispatch_id": "2acd84f1807f48c2a5b126a2f31f1daf",
   "admission": {
     "funding": {
@@ -49,6 +49,14 @@
     "programs"
   ],
   "dispatched_at": "2026-10-30T19:22:08.754374+00:00",
-  "attempt": 0,
-  "updated_at": "2026-10-30T19:22:10.780725+00:00"
+  "attempt": 1,
+  "updated_at": "2026-10-30T19:22:29.161602+00:00",
+  "owner": "41114706314:1",
+  "previous_owner": null,
+  "previous_status": "DISPATCHED",
+  "run_url": "https://github.com/isearchxsolve/bounty-control/actions/runs/41114706314",
+  "harness_sha": "68bec9f147297aaccdac2690477e9735ab13b716",
+  "claimed_at": "2026-10-30T19:22:29.161547+00:00",
+  "lease_expires_at": "2026-10-30T23:27:29.161564+00:00",
+  "preparation_budget_seconds": 14400
 }
