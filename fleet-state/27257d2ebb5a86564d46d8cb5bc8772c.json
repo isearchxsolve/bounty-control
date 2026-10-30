@@ -2,7 +2,7 @@
   "task_id": "27257d2ebb5a86564d46d8cb5bc8772c",
   "repo": "Circadian-agent/agent-economy-data",
   "issue_number": 3,
-  "status": "DISPATCHED",
+  "status": "CLAIMED",
   "dispatch_id": "8c6cf453bd5342a99b4a4e3ac443fae7",
   "admission": {
     "funding": {
@@ -48,6 +48,14 @@
     "founder"
   ],
   "dispatched_at": "2026-10-30T11:00:09.147216+00:00",
-  "attempt": 0,
-  "updated_at": "2026-10-30T11:00:11.847644+00:00"
+  "attempt": 1,
+  "updated_at": "2026-10-30T11:00:21.510833+00:00",
+  "owner": "41044856638:1",
+  "previous_owner": null,
+  "previous_status": "DISPATCHED",
+  "run_url": "https://github.com/isearchxsolve/bounty-control/actions/runs/41044856638",
+  "harness_sha": "b2d3bd952fb9ae8ae5e9b8714a4a28d187c6f77c",
+  "claimed_at": "2026-10-30T11:00:21.510784+00:00",
+  "lease_expires_at": "2026-10-30T15:05:21.510798+00:00",
+  "preparation_budget_seconds": 14400
 }
