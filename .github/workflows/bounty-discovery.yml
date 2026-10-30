@@ -34,9 +34,15 @@ jobs:
     - name: Reconcile actual results and repair owned failing PRs
       run: python3 -u scripts/actions_reconcile.py --repair
     - name: Search all lanes and dispatch qualified originals
-      # NVIDIA_API_KEY is scoped to this one step: only the search planner reads it.
+      # NVIDIA_API_KEY is scoped to this one step: the search planner and the agent door's
+      # local gateway are the only readers. BOUNTY_ENTRY_DOOR=cline puts the agent in front of
+      # the search (law 85); the static lanes above have already run, so a door failure costs
+      # time and nothing else. Wedge the variable to 'off' to disable the door entirely.
       env:
         NVIDIA_API_KEY: ${{ secrets.NVIDIA_API_KEY }}
+        BOUNTY_ENTRY_DOOR: ${{ vars.ENTRY_DOOR || 'cline' }}
+        BOUNTY_AGENT_WORKSPACE: /tmp/bounty-agent
+        BOUNTY_AGENT_ROUNDS: '2'
       run: python3 -u scripts/actions_dispatch.py --live --once --queries-per-lane 3 --max-dispatches 2 --lane ${{ vars.ACTIVE_LANES || 'all' }}
     - uses: actions/cache/save@v4
       if: always()

@@ -1050,6 +1050,85 @@ def record_outcome(con, identity, outcome):
                       "readback": persisted[0] if persisted else None}), flush=True)
 
 
+def store_pending_item(con, item, lane, expression, verdicts, pending_has_seen_at):
+    """Write one search hit into the durable pending queue. One writer for every lane.
+
+    Extracted unchanged from search_and_queue when the agent door was added: agent rows and
+    search rows must land in exactly the same shape, or the rest of the pipeline would need a
+    second code path and the two would drift.
+    """
+    repository = item["repository_url"].split("/repos/")[-1]
+    identity = task_id(repository, item["number"])
+    old = con.execute("SELECT lanes,signature,checked,status,seen_at FROM pending WHERE task_id=?",
+                      (identity,)).fetchone()
+    lanes_seen = set(json.loads(old[0])) if old else set()
+    lanes_seen.add(lane)
+    signature = item.get("updated_at", "")
+    was_query_excluded = bool(old and str(old[3]).startswith("query_excluded_"))
+    pending = (was_query_excluded or not old or old[1] != signature
+               or time.time() - old[2] > 21600)
+    status = "pending" if pending else old[3]
+    excluded_status = query_exclusion_status(item)
+    if excluded_status:
+        status = excluded_status
+    elif verdicts.get(repository) == "REPOSITORY_DOES_NOT_MERGE":
+        status = REPO_INTENT_RETIRED
+    first_seen = (old[4] if old and old[4] else time.time()) if old else time.time()
+    if expression:
+        con.execute("INSERT OR IGNORE INTO task_expression VALUES(?,?,?)",
+                    (identity, lane, expression))
+    if pending_has_seen_at:
+        con.execute("INSERT OR REPLACE INTO pending(task_id,payload,lanes,signature,"
+                    "checked,status,seen_at) VALUES(?,?,?,?,?,?,?)",
+                    (identity, json.dumps(item), json.dumps(sorted(lanes_seen)), signature,
+                     old[2] if old else 0, status, first_seen))
+    else:
+        # Unmigrated direct-call path: keep the durable row, lose only the metric.
+        con.execute("INSERT OR REPLACE INTO pending(task_id,payload,lanes,signature,"
+                    "checked,status) VALUES(?,?,?,?,?,?)",
+                    (identity, json.dumps(item), json.dumps(sorted(lanes_seen)), signature,
+                     old[2] if old else 0, status))
+    return identity
+
+
+AGENT_LANE = "agent"
+AGENT_EXPRESSION = "cline:shortlist"
+
+
+def queue_agent_rows(con, api, rows, verdicts=None, pending_has_seen_at=True):
+    """Queue the issues the agent found, through the same writer every other lane uses.
+
+    The agent is the entry door: it decides what to look at and quotes the money. Nothing it says
+    is trusted here beyond that, because each row is fetched from GitHub first, and a row whose
+    issue cannot be read is dropped rather than queued on the agent's word.
+    """
+    queued, skipped = [], []
+    for row in rows:
+        repo, number = str(row.get("repo") or ""), row.get("issue")
+        if not repo or not isinstance(number, int):
+            skipped.append({"row": row, "reason": "MALFORMED_ROW"})
+            continue
+        try:
+            issue = api.api(f"repos/{repo}/issues/{number}")
+        except Exception as exc:  # transport, 404, 410: none of them may invent a row
+            skipped.append({"row": row, "reason": "ISSUE_UNREADABLE", "detail": str(exc)[:200]})
+            continue
+        if not isinstance(issue, dict) or issue.get("pull_request"):
+            skipped.append({"row": row, "reason": "NOT_AN_ISSUE"})
+            continue
+        item = dict(issue)
+        item["repository_url"] = f"https://api.github.com/repos/{repo}"
+        item["number"] = number
+        identity = store_pending_item(con, item, AGENT_LANE, AGENT_EXPRESSION,
+                                     verdicts or {}, pending_has_seen_at)
+        queued.append(identity)
+    con.commit()
+    print(json.dumps({"phase": "AGENT_QUEUE", "queued": len(queued), "skipped": len(skipped),
+                      "reasons": sorted({entry["reason"] for entry in skipped}),
+                      "ids": queued[:20]}), flush=True)
+    return {"queued": queued, "skipped": skipped}
+
+
 def discover(lanes, max_dispatches=2, live=False, queries_per_lane=2, state_dir=None,
              hydrate_only=False, hydrate_batch=None):
     folder = Path(state_dir or os.environ.get("BOUNTY_STATE_DIR", Path(__file__).resolve().parents[1] / "scratch/actions-discovery"))
@@ -1150,37 +1229,8 @@ def discover(lanes, max_dispatches=2, live=False, queries_per_lane=2, state_dir=
         pending_has_seen_at = any(
             row[1] == "seen_at" for row in con.execute("PRAGMA table_info(pending)"))
         for item in [*recent, *rows]:
-            repository = item["repository_url"].split("/repos/")[-1]
-            identity = task_id(repository, item["number"])
-            old = con.execute("SELECT lanes,signature,checked,status,seen_at FROM pending WHERE task_id=?",
-                              (identity,)).fetchone()
-            lanes_seen = set(json.loads(old[0])) if old else set()
-            lanes_seen.add(lane)
-            signature = item.get("updated_at", "")
-            was_query_excluded = bool(old and str(old[3]).startswith("query_excluded_"))
-            pending = (was_query_excluded or not old or old[1] != signature
-                       or time.time() - old[2] > 21600)
-            status = "pending" if pending else old[3]
-            excluded_status = query_exclusion_status(item)
-            if excluded_status:
-                status = excluded_status
-            elif verdicts.get(repository) == "REPOSITORY_DOES_NOT_MERGE":
-                status = REPO_INTENT_RETIRED
-            first_seen = (old[4] if old and old[4] else time.time()) if old else time.time()
-            if nonlocal_context["expression"]:
-                con.execute("INSERT OR IGNORE INTO task_expression VALUES(?,?,?)",
-                            (identity, nonlocal_context["lane"], nonlocal_context["expression"]))
-            if pending_has_seen_at:
-                con.execute("INSERT OR REPLACE INTO pending(task_id,payload,lanes,signature,"
-                            "checked,status,seen_at) VALUES(?,?,?,?,?,?,?)",
-                            (identity, json.dumps(item), json.dumps(sorted(lanes_seen)), signature,
-                             old[2] if old else 0, status, first_seen))
-            else:
-                # Unmigrated direct-call path: keep the durable row, lose only the metric.
-                con.execute("INSERT OR REPLACE INTO pending(task_id,payload,lanes,signature,"
-                            "checked,status) VALUES(?,?,?,?,?,?)",
-                            (identity, json.dumps(item), json.dumps(sorted(lanes_seen)), signature,
-                             old[2] if old else 0, status))
+            store_pending_item(con, item, lane, nonlocal_context["expression"], verdicts,
+                               pending_has_seen_at)
         # Give every lane's current-cycle results the same bounded hydration priority.
         # Previously only the dedicated program fast lane populated this list, leaving
         # fresh normal/startup/founder hits behind the accumulated historical backlog.
@@ -1232,6 +1282,27 @@ def discover(lanes, max_dispatches=2, live=False, queries_per_lane=2, state_dir=
                         saturated=last_search.get("saturated", False))
                 search_planner.save_ledger(ledger_path, ledger)
                 con.commit()
+            # The agent door (law 85: delegate the judgement, keep the gate). It searches in its
+            # own worktree and writes a shortlist it has read; queue_agent_rows above re-fetches
+            # every row from GitHub and feeds the same pending queue the static lanes use. A door
+            # failure is a named reason, never a stopped cycle, and the static lanes above have
+            # already run, so discovery cannot lose its supply to this experiment.
+            if os.environ.get("BOUNTY_ENTRY_DOOR", "").strip().lower() in ("cline", "agent", "1", "true"):
+                try:
+                    import agent_door
+                    door = agent_door.find_issues(
+                        root=os.environ.get("BOUNTY_AGENT_WORKSPACE", "/tmp/bounty-agent"),
+                        rounds=int(os.environ.get("BOUNTY_AGENT_ROUNDS", "2")))
+                    print(json.dumps({"phase": "AGENT_DOOR", "reason": door.get("reason"),
+                                      "rows": len(door.get("rows") or [])}), flush=True)
+                    if door.get("rows"):
+                        queue_agent_rows(con, api, door["rows"], verdicts={},
+                                         pending_has_seen_at=any(
+                                             row[1] == "seen_at"
+                                             for row in con.execute("PRAGMA table_info(pending)")))
+                except Exception as exc:  # the door never takes discovery down with it
+                    print(json.dumps({"phase": "AGENT_DOOR", "error": type(exc).__name__,
+                                      "detail": str(exc)[:300]}), flush=True)
         if hydrate_only:
             print(json.dumps({"phase": "HYDRATE_ONLY", "queued_total_pending": con.execute(
                 "SELECT count(*) FROM pending WHERE status='pending'").fetchone()[0],
