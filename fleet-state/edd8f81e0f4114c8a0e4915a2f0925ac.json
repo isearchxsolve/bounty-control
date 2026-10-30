@@ -1,0 +1,68 @@
+{
+  "task_id": "edd8f81e0f4114c8a0e4915a2f0925ac",
+  "repo": "1rec3/holobionte-1rec3",
+  "issue_number": 24,
+  "status": "DISPATCHING",
+  "dispatch_id": "e51a1ec57a8449ffb84b7cb61ab51caa",
+  "admission": {
+    "funding": {
+      "amount": "1000",
+      "currency": "EUR",
+      "usd_value": "1117.2000",
+      "quote": {
+        "usd_rate": "1.1172",
+        "source_url": "https://api.frankfurter.dev/v1/latest?base=EUR&symbols=USD",
+        "observed_at": "2026-10-30T15:13:45.230433+00:00",
+        "quote_date": "2026-10-30"
+      },
+      "raw": "1000\u20ac",
+      "source_url": "https://github.com/1rec3/holobionte-1rec3/issues/24#issuecomment-3590922697",
+      "payer": "saul3273"
+    },
+    "technical_signals": [
+      "error",
+      "errores",
+      "issue",
+      "latency",
+      "problema",
+      "protocol"
+    ],
+    "component_references": [
+      "ECOSISTEMA",
+      "EMBER",
+      "EMERGENTE",
+      "EMERGENTES",
+      "ENCONTRADAS",
+      "ENLACES",
+      "ENORME",
+      "ENTRE",
+      "ESENCIALES",
+      "ESPACIOS",
+      "ESPECIFICOS",
+      "ESTABILIZA",
+      "ESTADO",
+      "EVA_C57",
+      "EVOLUCIONA",
+      "add_expert_from_device()",
+      "demo_holobionte_1rec3()",
+      "docs/grants/NGI-Zero-Dante.md"
+    ],
+    "source_locations": [],
+    "engineering_evidence_sources": [
+      "https://github.com/1rec3/holobionte-1rec3/issues/24",
+      "https://github.com/1rec3/holobionte-1rec3/issues/24#issuecomment-3587853433",
+      "https://github.com/1rec3/holobionte-1rec3/issues/24#issuecomment-3587856745",
+      "https://github.com/1rec3/holobionte-1rec3/issues/24#issuecomment-3589647117",
+      "https://github.com/1rec3/holobionte-1rec3/issues/24#issuecomment-3589703114",
+      "https://github.com/1rec3/holobionte-1rec3/issues/24#issuecomment-3590922697"
+    ],
+    "source_issue": "https://github.com/1rec3/holobionte-1rec3/issues/24",
+    "fetched_at": "2026-10-30T15:13:44.264822+00:00"
+  },
+  "lanes": [
+    "founder"
+  ],
+  "dispatched_at": "2026-10-30T15:13:46.587152+00:00",
+  "attempt": 0,
+  "updated_at": "2026-10-30T15:13:46.587171+00:00"
+}
