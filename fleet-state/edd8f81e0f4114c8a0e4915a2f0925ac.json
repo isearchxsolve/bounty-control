@@ -2,7 +2,7 @@
   "task_id": "edd8f81e0f4114c8a0e4915a2f0925ac",
   "repo": "1rec3/holobionte-1rec3",
   "issue_number": 24,
-  "status": "DISPATCHED",
+  "status": "CLAIMED",
   "dispatch_id": "e51a1ec57a8449ffb84b7cb61ab51caa",
   "admission": {
     "funding": {
@@ -63,6 +63,14 @@
     "founder"
   ],
   "dispatched_at": "2026-10-30T15:13:46.587152+00:00",
-  "attempt": 0,
-  "updated_at": "2026-10-30T15:13:48.644724+00:00"
+  "attempt": 1,
+  "updated_at": "2026-10-30T15:13:58.406147+00:00",
+  "owner": "41078753871:1",
+  "previous_owner": null,
+  "previous_status": "DISPATCHED",
+  "run_url": "https://github.com/isearchxsolve/bounty-control/actions/runs/41078753871",
+  "harness_sha": "122af062685a0bd1f1d161d9c42a07300819cc15",
+  "claimed_at": "2026-10-30T15:13:58.406093+00:00",
+  "lease_expires_at": "2026-10-30T19:18:58.406110+00:00",
+  "preparation_budget_seconds": 14400
 }
