@@ -15,7 +15,7 @@ jobs:
     timeout-minutes: 45
     env:
       GH_TOKEN: ${{ secrets.GH_PAT }}
-      BOUNTY_STATE_DIR: /tmp/bounty-hydration
+      BOUNTY_STATE_DIR: /tmp/bounty-state
     steps:
     - uses: actions/checkout@v4
       with:
@@ -29,8 +29,8 @@ jobs:
     - uses: actions/cache/restore@v4
       with:
         path: ${{ env.BOUNTY_STATE_DIR }}
-        key: hydration-${{ github.run_id }}-${{ github.run_attempt }}
-        restore-keys: hydration-
+        key: bounty-state-${{ github.run_id }}-${{ github.run_attempt }}
+        restore-keys: bounty-state-
     - name: Drain the durable pending queue on the core API budget
       # Hydration-only lane: no search-API calls (the discovery lane saturates the 30/min
       # search ceiling with its own queries), so the drain draws on the REST/GraphQL core
@@ -42,7 +42,7 @@ jobs:
       if: always()
       with:
         path: ${{ env.BOUNTY_STATE_DIR }}
-        key: hydration-${{ github.run_id }}-${{ github.run_attempt }}
+        key: bounty-state-${{ github.run_id }}-${{ github.run_attempt }}
     - uses: actions/upload-artifact@v4
       if: always()
       with:

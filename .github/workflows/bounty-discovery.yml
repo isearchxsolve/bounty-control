@@ -15,7 +15,7 @@ jobs:
     timeout-minutes: 45
     env:
       GH_TOKEN: ${{ secrets.GH_PAT }}
-      BOUNTY_STATE_DIR: /tmp/bounty-discovery
+      BOUNTY_STATE_DIR: /tmp/bounty-state
     steps:
     - uses: actions/checkout@v4
       with:
@@ -29,8 +29,8 @@ jobs:
     - uses: actions/cache/restore@v4
       with:
         path: ${{ env.BOUNTY_STATE_DIR }}
-        key: discovery-${{ github.run_id }}-${{ github.run_attempt }}
-        restore-keys: discovery-
+        key: bounty-state-${{ github.run_id }}-${{ github.run_attempt }}
+        restore-keys: bounty-state-
     - name: Reconcile actual results and repair owned failing PRs
       run: python3 -u scripts/actions_reconcile.py --repair
     - name: Search all lanes and dispatch qualified originals
@@ -39,7 +39,7 @@ jobs:
       if: always()
       with:
         path: ${{ env.BOUNTY_STATE_DIR }}
-        key: discovery-${{ github.run_id }}-${{ github.run_attempt }}
+        key: bounty-state-${{ github.run_id }}-${{ github.run_attempt }}
     - uses: actions/upload-artifact@v4
       if: always()
       with:
