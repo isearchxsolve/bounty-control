@@ -2,7 +2,7 @@
   "task_id": "4d3172b6b6faf65125b197400c2551a5",
   "repo": "ruohong2018/ruohong2018.github.io",
   "issue_number": 518,
-  "status": "CLAIMED",
+  "status": "REJECTED_PREPARATION",
   "dispatch_id": "b238d942332c46a5a4575fef5d76c829",
   "admission": {
     "funding": {
@@ -38,7 +38,7 @@
   ],
   "dispatched_at": "2026-10-31T05:15:54.742218+00:00",
   "attempt": 1,
-  "updated_at": "2026-10-31T05:16:05.701121+00:00",
+  "updated_at": "2026-10-31T05:19:42.223357+00:00",
   "owner": "41171893073:1",
   "previous_owner": null,
   "previous_status": "DISPATCHED",
@@ -46,5 +46,41 @@
   "harness_sha": "4c3eefe714d35fcbc24e535ceb466466b27c196d",
   "claimed_at": "2026-10-31T05:16:05.701073+00:00",
   "lease_expires_at": "2026-10-31T09:21:05.701089+00:00",
-  "preparation_budget_seconds": 14400
+  "preparation_budget_seconds": 14400,
+  "at": "2026-10-31T05:19:30.944142+00:00",
+  "reason": "Cline preparation blocked: Issue #518 '[\u6bcf\u65e5\u4fe1\u606f\u6d41] 2024-07-12' is not an engineering request. It is an auto-generated daily security-news digest (label 'daily'), produced by .github/workflows/daily.yml via `gh issue create --title \"[\u6bcf\u65e5\u4fe1\u606f\u6d41] `date +'%Y-%m-%d'`\" -F today.md --label \"daily\"`. Its 43262-char body is a flat list of external news links (Der Flounder, Recent Commits to cve:main, Security Boulevard, Twitter @Nicolas Krassas, Packet Storm, Red Hat/RHSA advisories, etc.) for 2024-07-11/12. It contains (a) no reproducible defect, (b) no feature request, (c) no component/file reference, and (d) no code-change instruction. Repository state confirms this is a content artifact: no AGENTS.md, no package.json/test suite (Python RSS-aggregator: bot.py, yarb.py; _config.yml; requirements.txt), and the repo already auto-generates one such issue per day (labels 'daily'/'dailypick'). The extracted '$151K / 151000 USD' funding is spurious: it is scraped from a digest headline in the issue body, 'Google increases bug bounty rewards five times, up to $151K', not a real bounty on this repo. Prior failures: none. No competing PR: the only open PR is unrelated (#1361, fix-issue-1360). Per the delivery-supervisor rule, a bot-generated content/digest deliverable with no repository code change must be classified blocked rather than converted into a fallback PR; checkout left unchanged.",
+  "declared_reason": "Issue #518 '[\u6bcf\u65e5\u4fe1\u606f\u6d41] 2024-07-12' is not an engineering request. It is an auto-generated daily security-news digest (label 'daily'), produced by .github/workflows/daily.yml via `gh issue create --title \"[\u6bcf\u65e5\u4fe1\u606f\u6d41] `date +'%Y-%m-%d'`\" -F today.md --label \"daily\"`. Its 43262-char body is a flat list of external news links (Der Flounder, Recent Commits to cve:main, Security Boulevard, Twitter @Nicolas Krassas, Packet Storm, Red Hat/RHSA advisories, etc.) for 2024-07-11/12. It contains (a) no reproducible defect, (b) no feature request, (c) no component/file reference, and (d) no code-change instruction. Repository state confirms this is a content artifact: no AGENTS.md, no package.json/test suite (Python RSS-aggregator: bot.py, yarb.py; _config.yml; requirements.txt), and the repo already auto-generates one such issue per day (labels 'daily'/'dailypick'). The extracted '$151K / 151000 USD' funding is spurious: it is scraped from a digest headline in the issue body, 'Google increases bug bounty rewards five times, up to $151K', not a real bounty on this repo. Prior failures: none. No competing PR: the only open PR is unrelated (#1361, fix-issue-1360). Per the delivery-supervisor rule, a bot-generated content/digest deliverable with no repository code change must be classified blocked rather than converted into a fallback PR; checkout left unchanged.",
+  "evidence": {
+    "action": "blocked",
+    "worktree": "/tmp/bounty-workspaces/repos/ruohong2018--ruohong2018.github.io--518",
+    "base_sha": "d51bad12e8b4edfcd4196d59dfdb5ac1427ea24c",
+    "default_branch": "master",
+    "sources": [
+      {
+        "path": ".github/workflows/daily.yml",
+        "sha256": "0976c4913dd5741d2acc400154315a64a900e1b506735685d0651326a33f1378"
+      },
+      {
+        "path": "requirements.txt",
+        "sha256": "116c08e02cbb0f92aef8e277a45c1f0628bf517eb332ce52399a41f024c927f0"
+      },
+      {
+        "path": "install.sh",
+        "sha256": "e893c3d8899015f56b8aba0502fe6ba36e4cd8e8fd9fe28cfac7904c07d80e81"
+      }
+    ],
+    "run_url": "",
+    "admission": {
+      "amount": "151000",
+      "currency": "USD",
+      "usd_value": "151000",
+      "quote": {
+        "basis": "USD face value"
+      },
+      "raw": "$151K",
+      "source_url": "https://github.com/ruohong2018/ruohong2018.github.io/issues/518",
+      "payer": "ruohong2018"
+    }
+  },
+  "finished_at": "2026-10-31T05:19:41.729941+00:00"
 }
