@@ -2,7 +2,7 @@
   "task_id": "fc4dd28255e7186b4d9b183dd2048be0",
   "repo": "coollabsio/coolify",
   "issue_number": 6894,
-  "status": "CLAIMED",
+  "status": "REJECTED_PREPARATION",
   "dispatch_id": "f7065995622440fdb53dffedda293efa",
   "admission": {
     "funding": {
@@ -42,7 +42,7 @@
   ],
   "dispatched_at": "2026-10-31T14:34:12.233367+00:00",
   "attempt": 1,
-  "updated_at": "2026-10-31T14:34:27.136223+00:00",
+  "updated_at": "2026-10-31T14:37:11.171816+00:00",
   "owner": "41210745646:1",
   "previous_owner": null,
   "previous_status": "DISPATCHED",
@@ -50,5 +50,28 @@
   "harness_sha": "51eefb86d09469f573aab4b591958fa36f04561b",
   "claimed_at": "2026-10-31T14:34:27.136169+00:00",
   "lease_expires_at": "2026-10-31T18:39:27.136184+00:00",
-  "preparation_budget_seconds": 14400
+  "preparation_budget_seconds": 14400,
+  "at": "2026-10-31T14:36:57.525007+00:00",
+  "reason": "Cline preparation blocked: Issue #6894 requests support for project-specific team members. It does NOT qualify as an actionable engineering change for this repository: (1) Funding is withdrawn - maintainer Cinzya (MEMBER) wrote on 2026-03-22: 'FYI, we stopped the bounty program with Algora. We asked them to remove issues which are still open like this one. Even if you still see a open issue on their site, payouts won't work / happen and we don't accept any bounty claims.' (2) The feature is explicitly refused by maintainers: ShadowArcanist (MEMBER) on 2025-10-17: 'they've decided that it won't be implemented in Coolify v4 ... Please also note that any PRs related to this won't be merged.'; re-affirmed by Cinzya on 2026-03-08: 'This issue is currently on hold ... So new PRs won't be merged until then.' (3) The issue carries the 'Hold' label (id 8802377654) alongside 'Enhancement', remains state=open with locked=true, and ShadowArcanist wrote on 2026-03-22 'I'm locking the conversation temporarily since this issue is on hold'. Per delivery rules this is withdrawn funding plus an explicitly refused, on-hold, non-actionable feature request; no concrete reproducible defect or accepted code change is requested. The checkout was intentionally left unchanged and no worktree was created.",
+  "declared_reason": "Issue #6894 requests support for project-specific team members. It does NOT qualify as an actionable engineering change for this repository: (1) Funding is withdrawn - maintainer Cinzya (MEMBER) wrote on 2026-03-22: 'FYI, we stopped the bounty program with Algora. We asked them to remove issues which are still open like this one. Even if you still see a open issue on their site, payouts won't work / happen and we don't accept any bounty claims.' (2) The feature is explicitly refused by maintainers: ShadowArcanist (MEMBER) on 2025-10-17: 'they've decided that it won't be implemented in Coolify v4 ... Please also note that any PRs related to this won't be merged.'; re-affirmed by Cinzya on 2026-03-08: 'This issue is currently on hold ... So new PRs won't be merged until then.' (3) The issue carries the 'Hold' label (id 8802377654) alongside 'Enhancement', remains state=open with locked=true, and ShadowArcanist wrote on 2026-03-22 'I'm locking the conversation temporarily since this issue is on hold'. Per delivery rules this is withdrawn funding plus an explicitly refused, on-hold, non-actionable feature request; no concrete reproducible defect or accepted code change is requested. The checkout was intentionally left unchanged and no worktree was created.",
+  "evidence": {
+    "action": "blocked",
+    "worktree": "/tmp/bounty-workspaces/repos/coollabsio--coolify--6894",
+    "base_sha": "751ecb91c59fdb35fe076e5bba7076651ea2652c",
+    "default_branch": "main",
+    "sources": [],
+    "run_url": "",
+    "admission": {
+      "amount": "1000",
+      "currency": "USD",
+      "usd_value": "1000",
+      "quote": {
+        "basis": "USD face value"
+      },
+      "raw": "$1,000",
+      "source_url": "https://github.com/coollabsio/coolify/issues/6894#issuecomment-3409095588",
+      "payer": "algora-pbc[bot]"
+    }
+  },
+  "finished_at": "2026-10-31T14:37:10.628259+00:00"
 }
