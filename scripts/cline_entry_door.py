@@ -418,7 +418,9 @@ What each check means, when you need it:
 Do not exclude a row to be safe: submit anything that plausibly meets these criteria, and the gates will verify it exactly and report the failures. Repairing a refused row is not a reason to submit fewer rows. If you found other candidates while fixing these, add them too.
 
 Row 0 was accepted, so the shape is right. Write shortlist.jsonl again from scratch, with the
-accepted rows kept and the refused ones repaired or replaced. Then finish.
+accepted rows kept and the refused ones repaired or replaced - then go back out, because a repair
+round is also a search round and there is no quota: whatever time is left belongs to finding more
+work, not to stopping early.
 """
 
 
@@ -440,9 +442,10 @@ and whose reward is stated in figures inside the issue itself - "I will pay" wit
 a reward, and a figure hidden behind a link is not a figure. In addition to direct bounties,
 critical production outages announced by repository owners (author_association: OWNER) are
 high-priority engineering leads: record them quoting the owner's statement of the breakdown.
-The gates below are the acceptance criteria; aim every row at them. Do not exclude a row to be
-safe: submit anything that plausibly meets these criteria, and the gates will verify each one
-exactly and tell you which failed. How you find rows is entirely your choice.
+The checks below are how a claim is verified, never the goal: the goal is work that is really paid
+and really broken. Do not exclude a row to be safe: submit anything that plausibly meets these
+criteria, and the gates will verify each one exactly and tell you which failed. How you find rows
+is entirely your choice.
 """
 
 
@@ -492,9 +495,16 @@ RSN = chr(10)
 def render_task_file() -> str:
     checks = RSN.join(f"- {code}: {meaning}" for code, meaning in GATE_CHECKS)
     downstream = RSN.join(f"- {code}: {meaning}" for code, meaning in DOWNSTREAM_CHECKS)
-    return f"""# Engineering Entry Gate Auditor Task
+    return f"""# The Search for funded engineering work
 
-Find work on GitHub that qualifies for engineering delivery, and record verified candidates. You are not asked to write or change code in this scratch workspace.
+You are the only searcher in this pipeline. Nobody else goes looking: what you do not find, this
+house never sees. Your work is to go out into the world and come back with paid engineering that
+is really funded and really broken.
+
+This is the real world, not an exercise. Nothing is planted here, there is no test set, no
+benchmark and no grader keeping a score - the reward is a real issue on a real repository, a real
+merge, and real money. A repository that looks synthetic or automated is a signal that it is not a
+buyer; it is never a signal that answers were seeded somewhere for you to find.
 
 ## The domain
 
@@ -513,11 +523,14 @@ There are two streams of genuine work:
   where one command runs per tool call and POSIX-only syntax fails. This search runs on both, so
   never trust the label: read the platform before you write a command.
 
-## The gates your rows must pass
+## How a row is checked before it counts
+
+These are checks, not criteria to design around. Knowing them only means you never spend a row on
+something one command would have disproved.
 
 {checks}
 
-## The gates that fire after you submit
+## How the claim is checked against the source afterwards
 
 {downstream}
 
@@ -551,14 +564,14 @@ market better than your search does.
 
 What is fixed is only the contract: the acceptance criteria above are exact, code reads every row
 you write, and the file you leave behind is the only thing that survives the round. Aim your own
-method at rows that satisfy the criteria, and establish the three facts above on any row you
-intend to bank - everything else the gates will decide for you, and they decide it better than a
-guess.
+method at the work itself, and establish the three facts above on any row you intend to bank -
+everything else the gates will decide for you, and they decide it better than a guess.
 
-## Your job is recall, aimed at rows that actually pass
+## Recall first: a row you never write is a lead nobody can recover
 
-You are the search half of this system, and the checks above are run by code against the source
-after you finish. They are exact, and they are cheap.
+You are the search half of this system. The checks above run afterwards, in code, against the
+source, and they are exact and cheap. Your recall is what this house lives on; the gates exist to
+make recall usable, never to make you cautious.
 
 Do not exclude a row to be safe: submit anything that plausibly meets these criteria, and the gates will verify it exactly and report the failures.
 
@@ -569,9 +582,8 @@ will ever see again.
 
 The three facts above are the single exception, and not because they are risky: they are lookups,
 not judgements. The author of an amount and the presence of an error are each one command away,
-so a row that fails them does not become a lead by being submitted - it only spends a search slot
-that a passing row would have used. Aim every row at money that is really funded and a defect
-that is really proven.
+so a row that fails them does not become a lead by being submitted - it only spends the time a
+passing row would have used.
 
 ## What to produce
 
@@ -582,17 +594,28 @@ that is really proven.
      "reward_usd": <number or null>, "scope_quote": "<sentence copied exactly, saying what to build>",
      "why_now": "<one short line: why this is work we can deliver>"}}
 
-BUDGET — A FACT ABOUT THE HARNESS, NOT A METHOD:
-Each round has a fixed wall-clock budget and it is not extended. The harness reads
-shortlist.jsonl continuously while you work, so every row you append is collected, verified and
-taken into the pipeline the moment it lands - you never have to finish the round for your work to
-count. Get a verified row on disk early and keep searching with the time that remains.
+## There is no quota and no early finish
 
-CRITICAL INSTRUCTION — WRITE IMMEDIATELY:
-As soon as you verify an issue meets the criteria, append it IMMEDIATELY to `shortlist.jsonl` (using echo '...' >> shortlist.jsonl or python). Do NOT wait until the end of your investigation to write the file.
-Target 2 to 4 verified candidates. Once you have written 2 to 4 verified candidates to `shortlist.jsonl`, finish immediately.
+You are not collecting a sample of two or three rows and leaving. Take every row you can prove,
+and keep hunting while time remains. Four rows at the halfway mark is not "enough" - it means you
+should go and find the fifth. The budget is the only thing that ends a round early; your own sense
+that the shortlist looks full never does. A round that ends with time on the clock and issues
+unopened is a search that stopped before the world did.
 
-Only record issues you actually opened, audited, and read. Then finish.
+Search where the money actually is, not where searching is comfortable: a place that publishes
+commitments in writing, by people who can commit them, beats any list of repositories that merely
+mention the word. If a source keeps returning nothing that survives a single command, that source
+is not the market - go somewhere else.
+
+## Writing as you go, not at the end
+
+The harness reads shortlist.jsonl continuously while you work, so every row you append is
+collected, verified and taken into the pipeline the moment it lands - you never have to finish the
+round for your work to count. Append a row the moment you have verified it (echo '...' >>
+shortlist.jsonl, or python), then go back out. Never hold a finishable row in your head while you
+look for another.
+
+Only record issues you actually opened and read.
 """
 
 

@@ -822,3 +822,39 @@ class RowsSurviveTheBudget(unittest.TestCase):
         self.assertTrue(os.path.exists(stream), "a banked row must land in the ingest file")
         with open(stream, encoding="utf-8") as handle:
             self.assertEqual(json.loads(handle.readline())["issue"], 7)
+
+
+class TheSearcherIsSovereign(unittest.TestCase):
+    """Baba 2026-10-31: the entry door agent is the sovereign sole searcher.
+
+    Measured failure: the brief called it an "auditor", named the gates as "acceptance criteria;
+    aim every row at them", and ordered "Target 2 to 4 verified candidates ... finish immediately".
+    The agent obeyed the quota exactly - it wrote 2 then 4 rows, stopped, and never reached the
+    1,999 funding issues GitHub was publishing that week. Scarcity was the brief's, not the
+    world's, so the brief must not be able to say it again.
+    """
+
+    def test_the_brief_never_caps_the_search(self):
+        text = door.TASK_FILE
+        for quota in ("Target 2 to 4", "finish immediately", "Then finish"):
+            self.assertNotIn(quota, text, "a quota turns the searcher into a sampler")
+        self.assertIn("no quota", text.lower())
+
+    def test_the_searcher_is_not_titled_an_auditor(self):
+        self.assertNotIn("Auditor", door.TASK_FILE)
+        self.assertIn("only searcher", door.TASK_FILE)
+
+    def test_the_brief_says_the_world_is_real_and_nothing_is_planted(self):
+        text = door.TASK_FILE.lower()
+        self.assertIn("nothing is planted", text)
+        self.assertIn("no grader", text)
+
+    def test_the_gates_are_checks_not_acceptance_criteria_to_aim_at(self):
+        text = door.TASK_FILE
+        self.assertNotIn("acceptance criteria; aim", text)
+        self.assertIn("how a claim is verified, never the goal", text)
+
+    def test_the_brief_carries_no_mojibake(self):
+        """A broken em dash reached the agent as a replacement char; keep the file ASCII."""
+        bad = sorted({c for c in door.TASK_FILE if ord(c) > 127})
+        self.assertEqual(bad, [], "the task file must be pure ASCII")
