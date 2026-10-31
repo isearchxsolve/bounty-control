@@ -692,6 +692,17 @@ What the road after the door may write, once the work is out in the world:
 Neither list asks you to work differently. A name is the house doing its own half of the job
 exactly; your half is finding real fruit, and that is the only thing worth your attention.
 
+## The gate's own words, for when you want the exact reason
+
+The house re-checks each fruit with these exact reasons. Read them as the gatekeeper's name for
+what you may have misjudged, not as rules to design around.
+
+{checks}
+
+## How the claim is checked against the source afterwards
+
+{downstream}
+
 ## How you work is yours to decide
 
 This is a search, not a procedure. Which queries you run, which sources you sweep, in what order,
