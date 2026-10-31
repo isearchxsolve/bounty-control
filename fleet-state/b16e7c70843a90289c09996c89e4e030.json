@@ -2,7 +2,7 @@
   "task_id": "b16e7c70843a90289c09996c89e4e030",
   "repo": "Tyaoo/picker",
   "issue_number": 550,
-  "status": "CLAIMED",
+  "status": "REJECTED_PREPARATION",
   "dispatch_id": "74f605a2b92f4674bbce86fc0f061df5",
   "admission": {
     "funding": {
@@ -41,7 +41,7 @@
   ],
   "dispatched_at": "2026-10-31T05:24:40.861371+00:00",
   "attempt": 1,
-  "updated_at": "2026-10-31T05:24:52.798019+00:00",
+  "updated_at": "2026-10-31T05:28:59.631043+00:00",
   "owner": "41172487677:1",
   "previous_owner": null,
   "previous_status": "DISPATCHED",
@@ -49,5 +49,73 @@
   "harness_sha": "4c3eefe714d35fcbc24e535ceb466466b27c196d",
   "claimed_at": "2026-10-31T05:24:52.797970+00:00",
   "lease_expires_at": "2026-10-31T09:29:52.797982+00:00",
-  "preparation_budget_seconds": 14400
+  "preparation_budget_seconds": 14400,
+  "at": "2026-10-31T05:28:46.526305+00:00",
+  "reason": "Cline preparation blocked: Issue #550 is not a code-change request. It is the repository's own auto-generated daily security-news digest. Title '[\u6bcf\u65e5\u4fe1\u606f\u6d41] 2024-02-09' ('Daily Information Feed 2024-02-09'), label 'daily', opened 2024-02-09T02:21:46Z by the repo owner Tyaoo, 0 comments. The body is 375 lines consisting of exactly one markdown heading plus a nested list of external news links (verified: every non-blank line is a heading '#' or a '- ' list item; no prose, imperative, stack trace, reproduction step, component reference, or source location). This matches verbatim the automated step in .github/workflows/daily.yml: `gh issue create --title \"[\u6bcf\u65e5\u4fe1\u606f\u6d41] `date +'%Y-%m-%d'`\" -F today.md --label \"daily\"`. The repo git history is a chain of the same bot commits ('\u6bcf\u65e5\u5b89\u5168\u8d44\u8baf(YYYY-MM-DD)'). The admission.technical_signals (bug/bug_bounty/bypass/corruption/errors/issue/memory/overflow/protocol/serialization) and the '417$' funding string are keyword false-positives scraped from news headlines in the feed body, not a request (e.g. 'bug' appears 15x, 'serialization' 4x, '417' 6x inside article titles/URLs). No open PR references #550 (GitHub search type:pr in:body total_count=0). The repository is a single Python bot with no test suite, no AGENTS.md, no CONTRIBUTING/setup docs, no lockfile and no CI beyond the bot's own schedules; there is no reproducible defect or engineering deliverable to implement. Per the non-engineering/digest rule, no code change is prepared and the checkout at base is left unmodified.",
+  "declared_reason": "Issue #550 is not a code-change request. It is the repository's own auto-generated daily security-news digest. Title '[\u6bcf\u65e5\u4fe1\u606f\u6d41] 2024-02-09' ('Daily Information Feed 2024-02-09'), label 'daily', opened 2024-02-09T02:21:46Z by the repo owner Tyaoo, 0 comments. The body is 375 lines consisting of exactly one markdown heading plus a nested list of external news links (verified: every non-blank line is a heading '#' or a '- ' list item; no prose, imperative, stack trace, reproduction step, component reference, or source location). This matches verbatim the automated step in .github/workflows/daily.yml: `gh issue create --title \"[\u6bcf\u65e5\u4fe1\u606f\u6d41] `date +'%Y-%m-%d'`\" -F today.md --label \"daily\"`. The repo git history is a chain of the same bot commits ('\u6bcf\u65e5\u5b89\u5168\u8d44\u8baf(YYYY-MM-DD)'). The admission.technical_signals (bug/bug_bounty/bypass/corruption/errors/issue/memory/overflow/protocol/serialization) and the '417$' funding string are keyword false-positives scraped from news headlines in the feed body, not a request (e.g. 'bug' appears 15x, 'serialization' 4x, '417' 6x inside article titles/URLs). No open PR references #550 (GitHub search type:pr in:body total_count=0). The repository is a single Python bot with no test suite, no AGENTS.md, no CONTRIBUTING/setup docs, no lockfile and no CI beyond the bot's own schedules; there is no reproducible defect or engineering deliverable to implement. Per the non-engineering/digest rule, no code change is prepared and the checkout at base is left unmodified.",
+  "evidence": {
+    "action": "blocked",
+    "worktree": "/tmp/bounty-workspaces/repos/Tyaoo--picker--550",
+    "base_sha": "f1d886f585e807e82f84da6123f4858ef365f461",
+    "default_branch": "main",
+    "sources": [
+      {
+        "path": "README.md",
+        "sha256": "1962b4b04aba89281e8c1c3c7c013fc615f1909ec2e657e5afdc3a31d7baa0b7"
+      },
+      {
+        "path": "requirements.txt",
+        "sha256": "0bd080de6e0416d13591bb124ecde53fcd8bed8b91c3cce93caccf2405837639"
+      },
+      {
+        "path": "install.sh",
+        "sha256": "c76bee4563a42e3b9e6ae1b465bb68a300ab2b6a159919d6b859f3327ece34e0"
+      },
+      {
+        "path": "config.yml",
+        "sha256": "970754f21ec94c92c68bb241c94a5c84eeafec2937d0a4da9892be01fb2bc7e0"
+      },
+      {
+        "path": "bot.py",
+        "sha256": "fb85e5c5c09e0d352db2373435334568d286c89f349fcad2996e502d6fd88b07"
+      },
+      {
+        "path": "yarb.py",
+        "sha256": "87a2d7531e8d407bc789446cb7823eeb09843dff40fa21223e222998d9cc1fd0"
+      },
+      {
+        "path": "utils.py",
+        "sha256": "5c08284c9f885f91d7de59493feaf7be0c5020af96e236c02a44db8f5a884e2a"
+      },
+      {
+        "path": ".github/workflows/daily.yml",
+        "sha256": "60042e008e529bb95dc2c11b487b77e0f2fdf1b7b3a26b6599ce18787089d309"
+      },
+      {
+        "path": ".github/workflows/issue.yml",
+        "sha256": "78cf233cbd70a6775fec30918bbba3cecf71b6a998e30738e7860114544b40ee"
+      },
+      {
+        "path": ".github/workflows/pick.yml",
+        "sha256": "af069fc76c011248c82288abf54867ede1028cd506151e47bbf5829613906d98"
+      },
+      {
+        "path": ".github/workflows/comment.yml",
+        "sha256": "fadb102b39eb540f5b9fc2571ebd48b229dcee2068f3d3a1de6dac49b43e51e0"
+      }
+    ],
+    "run_url": "",
+    "admission": {
+      "amount": "417",
+      "currency": "USD",
+      "usd_value": "417",
+      "quote": {
+        "basis": "USD face value"
+      },
+      "raw": "417$",
+      "source_url": "https://github.com/Tyaoo/picker/issues/550",
+      "payer": "Tyaoo"
+    }
+  },
+  "finished_at": "2026-10-31T05:28:59.152943+00:00"
 }
