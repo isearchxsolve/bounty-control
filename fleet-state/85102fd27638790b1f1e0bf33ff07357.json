@@ -1,0 +1,46 @@
+{
+  "task_id": "85102fd27638790b1f1e0bf33ff07357",
+  "repo": "sriahead/aheed-online-store",
+  "issue_number": 1289,
+  "status": "DISPATCHING",
+  "dispatch_id": "f5826601fceb4f4c91873a986914ac4a",
+  "admission": {
+    "funding": {
+      "payer": "sriahead",
+      "source_url": "https://github.com/sriahead/aheed-online-store/issues/1289",
+      "authority_quote": "`https://aheedfoodcentre.nocaped.com/api/health` and `https://srimart.nocaped.com/api/health` return **503 degraded** at commit `2ffcb41`.",
+      "amount": "0",
+      "currency": "FOUNDER",
+      "usd_value": "0",
+      "quote": {
+        "basis": "Unpriced repository-owner request"
+      },
+      "raw": "`https://aheedfoodcentre.nocaped.com/api/health` and `https://srimart.nocaped.com/api/health` return **503 degraded** at commit `2ffcb41`."
+    },
+    "agent_reason": "Unpriced repository-owner incident: the issue is authored by the repo owner (author_association OWNER, login sriahead) and announces a real production outage (db error, 503/500 on production hosts while staging is healthy). The bounded code path is the production health endpoint app/api/health/route.ts, which performs the Prisma/Neon round-trip whose failure produces the degraded status.",
+    "scope_quote": "The storefront home page returns **500**.",
+    "code_evidence": {
+      "path": "app/api/health/route.ts",
+      "sha": "4c4f91aa86d2c616852f22d7961413707389597f",
+      "quote": "export async function GET() {",
+      "is_product_code": true
+    },
+    "source_issue": "https://github.com/sriahead/aheed-online-store/issues/1289",
+    "funding_status": "UNPRICED_OWNER_REQUEST",
+    "lane": "founder",
+    "task_id": "85102fd27638790b1f1e0bf33ff07357",
+    "source_revision": "84ccfff9d1d5043acfaed66d5ac6c716a2dbf67c03bc6d3a81f8463931fde284"
+  },
+  "dispatch_attempt": 1,
+  "sovereign_admission": true,
+  "competition": {
+    "blocking": false,
+    "nominal": []
+  },
+  "lanes": [
+    "founder"
+  ],
+  "dispatched_at": "2026-10-31T23:37:45.492930+00:00",
+  "attempt": 0,
+  "updated_at": "2026-10-31T23:37:45.492945+00:00"
+}
