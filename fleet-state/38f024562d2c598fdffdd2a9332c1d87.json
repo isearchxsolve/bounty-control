@@ -1,0 +1,41 @@
+{
+  "task_id": "38f024562d2c598fdffdd2a9332c1d87",
+  "repo": "Tyaoo/picker",
+  "issue_number": 1071,
+  "status": "DISPATCHING",
+  "dispatch_id": "ecd467a2279149fd838b77f36e914b36",
+  "admission": {
+    "funding": {
+      "amount": "5000",
+      "currency": "USD",
+      "usd_value": "5000",
+      "quote": {
+        "basis": "USD face value"
+      },
+      "raw": "$5,000",
+      "source_url": "https://github.com/Tyaoo/picker/issues/1071",
+      "payer": "Tyaoo"
+    },
+    "technical_signals": [
+      "broken",
+      "bug",
+      "bug_bounty",
+      "bypass"
+    ],
+    "component_references": [
+      "A0/2025/07/16/local-llm-with-openSUSE.html"
+    ],
+    "source_locations": [],
+    "engineering_evidence_sources": [
+      "https://github.com/Tyaoo/picker/issues/1071"
+    ],
+    "source_issue": "https://github.com/Tyaoo/picker/issues/1071",
+    "fetched_at": "2026-10-31T03:06:11.426475+00:00"
+  },
+  "lanes": [
+    "founder"
+  ],
+  "dispatched_at": "2026-10-31T03:06:12.713088+00:00",
+  "attempt": 0,
+  "updated_at": "2026-10-31T03:06:12.713106+00:00"
+}
