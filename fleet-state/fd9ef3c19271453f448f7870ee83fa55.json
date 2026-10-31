@@ -2,7 +2,7 @@
   "task_id": "fd9ef3c19271453f448f7870ee83fa55",
   "repo": "gyroflow/gyroflow",
   "issue_number": 742,
-  "status": "DISPATCHED",
+  "status": "CLAIMED",
   "dispatch_id": "d106f858fbbc45b3a9003bec8aafcb00",
   "admission": {
     "funding": {
@@ -37,6 +37,14 @@
     "bounty"
   ],
   "dispatched_at": "2026-10-31T13:54:12.541922+00:00",
-  "attempt": 0,
-  "updated_at": "2026-10-31T13:54:14.182192+00:00"
+  "attempt": 1,
+  "updated_at": "2026-10-31T14:05:55.623766+00:00",
+  "owner": "41207653569:1",
+  "previous_owner": null,
+  "previous_status": "DISPATCHED",
+  "run_url": "https://github.com/isearchxsolve/bounty-control/actions/runs/41207653569",
+  "harness_sha": "ff874d7bcbdaa3418e09c0bad448226ddbbf48cb",
+  "claimed_at": "2026-10-31T14:05:55.623713+00:00",
+  "lease_expires_at": "2026-10-31T18:10:55.623730+00:00",
+  "preparation_budget_seconds": 14400
 }
