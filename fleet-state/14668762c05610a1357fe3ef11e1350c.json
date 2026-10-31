@@ -1,0 +1,44 @@
+{
+  "task_id": "14668762c05610a1357fe3ef11e1350c",
+  "repo": "ruohong2018/ruohong2018.github.io",
+  "issue_number": 416,
+  "status": "DISPATCHING",
+  "dispatch_id": "5f92174f80a1451b8677eb5709030761",
+  "admission": {
+    "funding": {
+      "amount": "2500",
+      "currency": "EUR",
+      "usd_value": "2793.0000",
+      "quote": {
+        "usd_rate": "1.1172",
+        "source_url": "https://api.frankfurter.dev/v1/latest?base=EUR&symbols=USD",
+        "observed_at": "2026-10-31T05:37:18.647381+00:00",
+        "quote_date": "2026-10-30"
+      },
+      "raw": "2500 \u20ac",
+      "source_url": "https://github.com/ruohong2018/ruohong2018.github.io/issues/416",
+      "payer": "ruohong2018"
+    },
+    "technical_signals": [
+      "broken",
+      "bug",
+      "bug_bounty",
+      "bugfixes",
+      "distributed",
+      "failures"
+    ],
+    "component_references": [],
+    "source_locations": [],
+    "engineering_evidence_sources": [
+      "https://github.com/ruohong2018/ruohong2018.github.io/issues/416"
+    ],
+    "source_issue": "https://github.com/ruohong2018/ruohong2018.github.io/issues/416",
+    "fetched_at": "2026-10-31T05:38:09.581729+00:00"
+  },
+  "lanes": [
+    "founder"
+  ],
+  "dispatched_at": "2026-10-31T05:38:10.760217+00:00",
+  "attempt": 0,
+  "updated_at": "2026-10-31T05:38:10.760236+00:00"
+}
