@@ -851,7 +851,7 @@ class TheSearcherIsSovereign(unittest.TestCase):
 
     def test_the_searcher_is_not_titled_an_auditor(self):
         self.assertNotIn("Auditor", door.TASK_FILE)
-        self.assertIn("only searcher", door.TASK_FILE)
+        self.assertIn("only pair of hands", door.TASK_FILE)
 
     def test_the_brief_says_the_world_is_real_and_nothing_is_planted(self):
         text = door.TASK_FILE.lower()
@@ -900,6 +900,36 @@ class TheSearcherIsSovereign(unittest.TestCase):
         rows = [row(issue=n) for n in range(1, 21)]
         self.assertEqual(len(door.verify_rows(rows, fetcher(), limit=0)["admitted"]), 20)
         self.assertEqual(len(door.verify_rows(rows, fetcher(), limit=5)["admitted"]), 5)
+
+    def test_the_brief_gives_direction_in_first_principles_language(self):
+        """Baba 2026-10-31, after watching the live stream: "it lacks direction" - and then, on
+        how to say it: "you cannot express the direction using technical terms. You have to use
+        first-principle language - world, garden, best fruits, pluck it, hands. Tell it to pluck
+        the best fruits in the garden. World is not in drought, world is full of good fruits."
+
+        Measured over one watched round: the winning idea appeared in its thinking at 70.6s and
+        was first executed at 242.8s, and no row was written in 300s. Knowledge was never the
+        deficit - it named Algora, Opire, Polar and BountyHub unprompted. What it lacked was a
+        plain reason to act, so the brief is now written in the plainest words available: a
+        garden, ripe fruit, hands, a basket. No engineering vocabulary, and no method dictated.
+        """
+        text = door.TASK_FILE
+        for plain in ("garden", "ripe fruit", "pair of hands", "pluck", "basket"):
+            self.assertIn(plain, text, "the direction must be said in first-principle words")
+        self.assertIn("not in drought", text)
+        for jargon in ("deliberation", "objective function", "priority queue", "heuristic"):
+            self.assertNotIn(jargon, text.lower())
+        self.assertNotIn("First run", text)
+        self.assertNotIn("Step 1", text)
+
+    def test_the_brief_tells_it_a_failed_row_costs_nothing(self):
+        """Watched live, twice: 0 attempts to write a row in 300s each. It opened a genuinely
+        funded issue (microg/GmsCore#2843, bountyhub-bot, $2,340) at 54s and never banked it -
+        it carried fruit from tree to tree and put nothing in the basket. The asymmetry has to be
+        said in plain words, because that is the only reason it is holding back."""
+        text = door.TASK_FILE
+        self.assertIn("An empty basket is the only thing that costs the round", text)
+        self.assertIn("Do not walk from tree to tree carrying nothing", text)
 
     def test_the_brief_carries_no_mojibake(self):
         """A broken em dash reached the agent as a replacement char; keep the file ASCII."""

@@ -511,16 +511,32 @@ def render_task_file() -> str:
              f"plainly: a row you verified but never wrote down is work this house cannot use, and "
              f"a round that ends with an empty file has delivered nothing, however much ground it "
              f"covered.")
-    return f"""# The Search for funded engineering work
+    return f"""# The garden of paid engineering work
 
-You are the only searcher in this pipeline. Nobody else goes looking: what you do not find, this
-house never sees. Your work is to go out into the world and come back with paid engineering that
-is really funded and really broken.
+The world is a garden in full season. It is not in drought. There is more ripe fruit hanging in it
+than one pair of hands can carry - people who have promised money for work, and people whose own
+machine is broken right now and who will pay to have it fixed.
 
-This is the real world, not an exercise. Nothing is planted here, there is no test set, no
-benchmark and no grader keeping a score - the reward is a real issue on a real repository, a real
-merge, and real money. A repository that looks synthetic or automated is a signal that it is not a
-buyer; it is never a signal that answers were seeded somewhere for you to find.
+You are the only pair of hands in this garden. Nobody else walks out there: what you do not pluck
+stays on the branch and rots, and this house eats nothing. So go out and pluck the best fruit.
+
+Walk up to a tree, look at what is hanging there, and if it is ripe - money promised by someone
+who can actually pay it, a real break in the code, work that can be finished - pick it and put it
+in the basket. Do not stand in the middle of the garden deciding which tree is best. Do not
+describe the orchard to yourself instead of walking it. A fruit in your hand is worth a hundred
+you have only looked at, and hands that only point at fruit carry nothing home.
+
+The basket is shortlist.jsonl. Fill it, as much as your hands can carry before the light goes.
+
+Some of what you pick will be unripe, and the house will throw it out at the door with a reason -
+that costs one line and nothing else. An empty basket is the only thing that costs the round. So
+when your hand is already on a fruit you believe is ripe, it goes in the basket there and then, and
+you turn to the next tree. Do not walk from tree to tree carrying nothing.
+
+This garden is the real one. Nothing is planted here for you, no plot is marked, and there is no grader
+keeping a score: the fruit is a real issue on a real repository, a real merge, and real money. A tree
+that looks artificial is simply not a buyer - it is never a sign that the real trees were hidden
+somewhere for you to find.
 
 ## The domain
 
@@ -610,15 +626,15 @@ passing row would have used.
      "reward_usd": <number or null>, "scope_quote": "<sentence copied exactly, saying what to build>",
      "why_now": "<one short line: why this is work we can deliver>"}}
 
-## There is no quota and no early finish
+## Nobody rations your basket
 
 {clock}
 
-You are not collecting a sample of two or three rows and leaving. Take every row you can prove,
-and keep hunting while time remains. Four rows at the halfway mark is not "enough" - it means you
+Nobody counts your fruit and tells you to stop at three. There is no quota here: take every row
+you can prove, and keep picking while there is light. Four rows at the halfway mark is not "enough" - it means you
 should go and find the fifth. The budget is the only thing that ends a round early; your own sense
-that the shortlist looks full never does. A round that ends with time on the clock and issues
-unopened is a search that stopped before the world did.
+that the shortlist looks full never does. A round that ends with time on the clock and
+fruit still on the branch is a search that stopped before the garden did.
 
 Search where the money actually is, not where searching is comfortable: a place that publishes
 commitments in writing, by people who can commit them, beats any list of repositories that merely
@@ -640,8 +656,9 @@ Only record issues you actually opened and read.
 TASK_FILE = render_task_file()
 
 
-WORKTREE_PROMPT = ("Read TASK.md in this worktree and carry it out exactly. Append each verified "
-                   "issue immediately to shortlist.jsonl. Target 2-4 candidates, then finish.")
+WORKTREE_PROMPT = ("Read TASK.md in this worktree and carry it out. Append each verified issue to "
+                   "shortlist.jsonl the moment you verify it, and keep searching while the budget "
+                   "remains. There is no target number of rows: take everything you can prove.")
 
 
 def scaffold_workspace(root: str) -> str:
