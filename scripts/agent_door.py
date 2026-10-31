@@ -127,11 +127,13 @@ def find_issues(root: Optional[str] = None, rounds: int = 1, timeout: int = 600,
         return {"rows": [], "reason": "GATEWAY_UNAVAILABLE"}
     try:
         workdir = cline_entry_door.scaffold_workspace(root)
+        from actions_github import GitHub  # noqa: E402
         outcome = cline_entry_door.iterate(
             workdir, rounds=rounds, data_dir=os.path.join(workdir, ".cline"),
             limit=limit, timeout=timeout, cline=cline,
             model=os.environ.get("BOUNTY_ENTRY_MODEL", "deepseek-v4.1-flash:free"),
-            first_prompt=cline_entry_door.WORKTREE_PROMPT)
+            first_prompt=cline_entry_door.WORKTREE_PROMPT,
+            admission_client=GitHub())
     except Exception as exc:  # a broken door must not stop discovery
         print(json.dumps({"phase": "ENTRY_DOOR", "error": type(exc).__name__,
                           "detail": str(exc)[:300]}), flush=True)

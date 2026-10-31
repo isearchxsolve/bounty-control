@@ -389,8 +389,49 @@ def quote_states_an_amount(quote: str) -> bool:
     return bool(AMOUNT_RE.search(quote or ""))
 
 
+
+# Propagation (Baba 2026-10-31): the entry door must refuse what admission would refuse, so a row
+# reaches the basket only if it can survive the dispatcher. The door builds the same context the
+# dispatcher builds (repository, issue, complete comments) and calls the same admit() - one
+# contract, two callers, no second copy of the rules to drift.
+ADMISSION_GATE = os.environ.get("BOUNTY_DOOR_ADMISSION", "1") != "0"
+
+
+def _default_context_builder(repo, number):
+    """The same context the dispatcher builds: repository, issue, complete comments.
+
+    Imported lazily so the door can run without the dispatcher modules present, and so the
+    admission path is a library call, not a copy of its rules.
+    """
+    from actions_github import GitHub  # noqa: E402
+    return GitHub().issue_context(repo, number)
+
+
+def admission_refusal(repo, number, quote=None, client=None, context_builder=None):
+    """Return (None, None) when admit() accepts the row, else (reason, None).
+
+    Fails closed: if the context cannot be built, the row is refused as ISSUE_UNREADABLE.
+    """
+    try:
+        from bounty_admission import admit  # noqa: E402
+        from bounty_fx import quote as fx_quote  # noqa: E402
+    except Exception as exc:  # pragma: no cover - import failure is a loud refusal
+        return "ADMISSION_UNAVAILABLE", str(exc)[:200]
+    if context_builder is None:
+        context_builder = _default_context_builder
+    try:
+        context = context_builder(repo, number)
+    except Exception as exc:
+        return "ISSUE_UNREADABLE", str(exc)[:200]
+    oracle = quote if quote is not None else fx_quote
+    proof, reason = admit(context, quote=oracle)
+    if proof:
+        return None, None
+    return reason or "REFUSED_BY_ADMISSION", None
+
+
 def verify_rows(rows: List[dict], fetch: Optional[Callable[[str, int], Optional[dict]]] = None,
-                limit: int = 12) -> Dict[str, List[dict]]:
+                limit: int = 12, admission_client=None, context_builder=None) -> Dict[str, List[dict]]:
     """Admit only rows whose issue exists, is open, and whose reward quote is really there.
 
     The agent chose them; this decides whether the choice survives contact with the source.
@@ -469,6 +510,13 @@ def verify_rows(rows: List[dict], fetch: Optional[Callable[[str, int], Optional[
                              "url": row.get("url") or f"https://github.com/{repo}/issues/{number}",
                              "reward_quote": quote, "why_now": row.get("why_now")})
             continue
+
+        if ADMISSION_GATE and admission_client is not None:
+            reason, detail = admission_refusal(repo, number, quote=None, client=admission_client,
+                                          context_builder=context_builder)
+            if reason:
+                refused.append({"row": row, "reason": reason, **({"detail": detail} if detail else {})})
+                continue
 
         admitted.append({"repo": repo, "issue": number, "url": row.get("url") or
                          f"https://github.com/{repo}/issues/{number}",
@@ -836,7 +884,7 @@ def _merge_shortlist(workdir: str, rows: List[dict]) -> None:
 
 
 def iterate(workdir: str, rounds: int = 3, run=run_cline_search, verify=verify_rows,
-            limit: int = 0, first_prompt: Optional[str] = None,
+            limit: int = 0, first_prompt: Optional[str] = None, admission_client=None,
             **run_kwargs) -> Dict[str, object]:
     """Search, verify, and feed the refusals back so the agent corrects itself.
 
@@ -868,7 +916,7 @@ def iterate(workdir: str, rounds: int = 3, run=run_cline_search, verify=verify_r
         if key in banked_keys:
             return
         try:
-            one = verify([row], limit=limit)
+            one = verify([row], limit=limit, admission_client=admission_client)
         except Exception:  # a single-row failure must never abort the search
             return
         banked_keys.add(key)  # only after a verdict, so a failed verify can still be retried
@@ -924,7 +972,7 @@ def iterate(workdir: str, rounds: int = 3, run=run_cline_search, verify=verify_r
                 streamed.add((str(row_seen.get("repo") or "").lower(), row_seen.get("issue")))
         remaining = [row for row in (outcome.get("rows") or [])
                      if row_key(row) not in streamed and row_key(row) not in banked_keys]
-        result = verify(remaining, limit=limit)
+        result = verify(remaining, limit=limit, admission_client=admission_client)
         for entry in (result["refused"] or []) + (result.get("unpriced") or []):
             subject = entry.get("row") or {}
             print(json.dumps({"phase": "ENTRY_DECISION", "repo": subject.get("repo"),

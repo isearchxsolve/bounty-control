@@ -340,9 +340,9 @@ if __name__ == "__main__":
     unittest.main(verbosity=2)
 
 
-def offline_verify(rows, limit=12):
+def offline_verify(rows, limit=12, admission_client=None):
     """Verify against a fixture issue, never the network: a unit test must not call GitHub."""
-    return door.verify_rows(rows, fetch=fetcher(), limit=limit)
+    return door.verify_rows(rows, fetch=fetcher(), limit=limit, admission_client=admission_client)
 
 
 class FeedbackLoop(unittest.TestCase):
@@ -415,7 +415,7 @@ class FeedbackLoop(unittest.TestCase):
 
         seen = {"n": 0}
 
-        def verify(rows, limit=12):
+        def verify(rows, limit=12, admission_client=None):
             seen["n"] += 1
             if seen["n"] == 1:
                 return {"admitted": [rounds[0]["rows"][0]], "refused": [{"row": row(issue=8), "reason": "ISSUE_NOT_OPEN"}]}
@@ -446,7 +446,7 @@ class FeedbackLoop(unittest.TestCase):
                 handle.write(json.dumps(row(issue=8)) + "\n")
             return {"exit_code": 0, "rows": [row(issue=8)], "tail": "", "wrote_file": True}
 
-        def verify(rows, limit=12):
+        def verify(rows, limit=12, admission_client=None):
             if len(calls) == 1:
                 return {"admitted": [row()], "refused": [{"row": row(issue=8), "reason": "ISSUE_NOT_OPEN"}]}
             return {"admitted": [row(issue=8)], "refused": []}
@@ -773,9 +773,9 @@ class QuotaIsNotAVerdict(unittest.TestCase):
         self.assertIn("ISSUE_UNREADABLE", door.TASK_FILE)
 
 
-def fetcher_verify(rows, limit=12):
+def fetcher_verify(rows, limit=12, admission_client=None):
     """verify_rows bound to the fixed ISSUE, so iterate() can be driven without a network."""
-    return door.verify_rows(rows, fetcher(), limit=limit)
+    return door.verify_rows(rows, fetcher(), limit=limit, admission_client=admission_client)
 
 
 class RowsSurviveTheBudget(unittest.TestCase):
@@ -936,19 +936,53 @@ class TheSearcherIsSovereign(unittest.TestCase):
         verdict = door.verify_rows([row], lambda repo, num: alive)
         self.assertEqual(len(verdict["admitted"]), 1, "an active issue still passes")
 
-    def test_a_reward_stated_in_a_comment_counts(self):
-        """Run 41184570516, the agent's own diagnosis - and it was right. The entry door built its
-        haystack from title and body only, while the task file said "stated in the issue text or
-        comments" the whole time. Rows whose amount sat in a bounty platform bot's comment were
-        refused as REWARD_QUOTE_NOT_IN_ISSUE: a gate narrower than its own contract, blaming the
-        searcher for obeying it."""
-        issue = {"state": "open", "title": "Wear OS support", "body": "No amount here.",
-                 "__comments__": "bountyhub-bot: Bounty of $2340 has been added by a funder."}
-        row = {"repo": "microg/GmsCore", "issue": 2843, "is_code_task": True,
-               "reward_quote": "Bounty of $2340 has been added by a funder.",
-               "reward_usd": 2340, "scope_quote": "Wear OS support", "why_now": "funded"}
-        verdict = door.verify_rows([row], lambda repo, num: issue)
-        self.assertEqual([r["repo"] for r in verdict["admitted"]], ["microg/GmsCore"])
+    def test_the_door_refuses_what_admission_would_refuse(self):
+        """Propagation (Baba 2026-10-31): a row reaches the basket only if it can survive the
+        dispatcher. The door now calls the same admit() the dispatcher calls, on the same context.
+        An injected context builder keeps this offline.
+
+        A real bug with a traceback, whose amount was written by a stranger, is refused by
+        admission as CURRENT_ISSUER_OFFER_MISSING - and that reason must reach the door. The same
+        issue with the owner writing the amount and evidence passes both the quote check and
+        admission.
+        """
+        def context(repo, number, **over):
+            issue = {"state": "open",
+                     "title": "HTTP client retry regression",
+                     "body": "Traceback (most recent call last): retry.py line 42, retry_count "
+                             "NoneType. We pay a $250 bounty for the fix.",
+                     "user": {"login": "stranger"}, "author_association": "NONE",
+                     "html_url": f"https://github.com/{repo}/issues/{number}",
+                     "labels": [], "created_at": "2026-10-01T00:00:00Z",
+                     "updated_at": "2026-10-30T00:00:00Z", "comments": 0, **over}
+            return {"repo": repo, "issue_number": number, "issue": issue,
+                    "repository": {"name": repo.split("/")[-1], "full_name": repo,
+                                   "owner": {"login": repo.split("/")[0]},
+                                   "archived": False, "disabled": False,
+                                   "default_branch": "main"},
+                    "comments": [], "author_comments": [],
+                    "fetched_at": datetime.utcnow().isoformat() + "Z",
+                    "complete_comments": True}
+
+        row_nofund = {"repo": "acme/http", "issue": 5, "is_code_task": True,
+                      "reward_quote": "We pay a $250 bounty for the fix.", "reward_usd": 250,
+                      "scope_quote": "retry.py line 42", "why_now": "x"}
+        verdict = door.verify_rows([row_nofund],
+                                   lambda r, n: context(r, n)["issue"],
+                                   admission_client=object(),
+                                   context_builder=lambda r, n: context(r, n))
+        self.assertEqual(verdict["admitted"], [])
+        self.assertTrue(verdict["refused"], "admission's refusal must reach the door")
+        self.assertEqual(verdict["refused"][0]["reason"], "CURRENT_ISSUER_OFFER_MISSING")
+
+        funded = context("acme/http", 5, user={"login": "owner"},
+                         author_association="OWNER")
+        row_funded = {**row_nofund, "reward_quote": "We pay a $250 bounty for the fix.",
+                      "reward_usd": 250}
+        verdict = door.verify_rows([row_funded], lambda r, n: funded["issue"],
+                                   admission_client=object(),
+                                   context_builder=lambda r, n: funded)
+        self.assertTrue(verdict["admitted"], "a funded row must survive admission")
 
     def test_a_big_harvest_is_not_silently_truncated(self):
         """The door's own default verified only the first 12 rows per round. A sovereign
