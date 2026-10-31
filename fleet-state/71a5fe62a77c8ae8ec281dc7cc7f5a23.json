@@ -2,7 +2,7 @@
   "task_id": "71a5fe62a77c8ae8ec281dc7cc7f5a23",
   "repo": "eleectrum/eleectrum.github.io",
   "issue_number": 1,
-  "status": "DISPATCHED",
+  "status": "CLAIMED",
   "dispatch_id": "bd91358efad84b0fb13bfb8aeb49cc2e",
   "admission": {
     "funding": {
@@ -31,6 +31,14 @@
     "founder"
   ],
   "dispatched_at": "2026-10-31T06:22:14.746487+00:00",
-  "attempt": 0,
-  "updated_at": "2026-10-31T06:22:16.513112+00:00"
+  "attempt": 1,
+  "updated_at": "2026-10-31T06:22:30.418326+00:00",
+  "owner": "41176324922:1",
+  "previous_owner": null,
+  "previous_status": "DISPATCHED",
+  "run_url": "https://github.com/isearchxsolve/bounty-control/actions/runs/41176324922",
+  "harness_sha": "3ad39cd922ddf4ebeb970248782413315d04b653",
+  "claimed_at": "2026-10-31T06:22:30.418274+00:00",
+  "lease_expires_at": "2026-10-31T10:27:30.418289+00:00",
+  "preparation_budget_seconds": 14400
 }
