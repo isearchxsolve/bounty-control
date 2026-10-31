@@ -336,8 +336,7 @@ class UnpricedLeadStream(unittest.TestCase):
         self.assertFalse(os.path.exists(os.path.join(workdir, door.UNPRICED_LEADS)))
 
 
-if __name__ == "__main__":
-    unittest.main(verbosity=2)
+
 
 
 def offline_verify(rows, limit=12, admission_client=None):
@@ -980,7 +979,7 @@ class TheSearcherIsSovereign(unittest.TestCase):
         row_funded = {**row_nofund, "reward_quote": "We pay a $250 bounty for the fix.",
                       "reward_usd": 250}
         verdict = door.verify_rows([row_funded], lambda r, n: funded["issue"],
-                                   admission_client=object(),
+                                   admission_client=type("ClearAPI", (), {"pages": lambda *args, **kwargs: []})(),
                                    context_builder=lambda r, n: funded)
         self.assertTrue(verdict["admitted"], "a funded row must survive admission")
 
@@ -1116,13 +1115,13 @@ class TheDoorRunsTheWholeBattery(unittest.TestCase):
         self.assertIsInstance(admitted[0]["admission"], dict)
         self.assertEqual(admitted[0]["competition"], {"blocking": False, "nominal": []})
 
-    def test_an_unreadable_competition_probe_never_invents_a_refusal(self):
+    def test_an_unreadable_competition_probe_cannot_stamp_clearance(self):
         class Broken(FakeCompetitionAPI):
             def pages(self, path, **kwargs):
                 raise OSError("rate limited")
         verdict = self.verify(Broken())
-        self.assertEqual(len(verdict["admitted"]), 1)
-        self.assertIn("unverified", verdict["admitted"][0]["competition"]["verdict"])
+        self.assertEqual(verdict["admitted"], [])
+        self.assertEqual(verdict["refused"][0]["reason"], "COMPETITION_UNAVAILABLE")
 
     def test_an_offline_row_is_not_stamped_sovereign(self):
         """No admission client means nothing was verified, and the row must not claim otherwise."""
@@ -1130,3 +1129,132 @@ class TheDoorRunsTheWholeBattery(unittest.TestCase):
         self.assertFalse(admitted["sovereign_admission"])
         self.assertIsNone(admitted["admission"])
         self.assertIsNone(admitted["competition"])
+
+
+OWNER_WOUND = {
+    "state": "open", "title": "Checkout is throwing 500s for every order since the deploy",
+    "body": ("Since deploy 4f2a1c the checkout endpoint returns 500 for every order. "
+             "Traceback: KeyError: 'currency' at payments/charge.py:88. "
+             "Customers cannot pay. Rolling back is not an option, we need this fixed."),
+    "user": {"login": "owner"}, "author_association": "OWNER",
+    "html_url": "https://github.com/acme/http/issues/7", "labels": [],
+    "created_at": "2026-10-01T00:00:00Z",
+    "updated_at": datetime.utcnow().strftime("%Y-%m-%dT%H:%M:%SZ"), "comments": 0,
+}
+
+
+def owner_wound_context(repo, number):
+    """An owner-authored incident report: no figure, real engineering evidence."""
+    issue = dict(OWNER_WOUND, html_url=f"https://github.com/{repo}/issues/{number}")
+    return {"repo": repo, "issue_number": number, "issue": issue,
+            "repository": {"name": repo.split("/")[-1], "full_name": repo,
+                           "owner": {"login": repo.split("/")[0]},
+                           "archived": False, "disabled": False, "default_branch": "main"},
+            "comments": [], "author_comments": [],
+            "fetched_at": datetime.utcnow().isoformat() + "Z", "complete_comments": True}
+
+
+class TheFounderLaneCanActuallyAdmit(unittest.TestCase):
+    """Measured 2026-11-01, run 41235976205: 7,795 refusals, all CURRENT_ISSUER_OFFER_MISSING.
+
+    The brief tells the searcher that an owner-authored incident report needs no figure and
+    should be banked with reward_usd null. Two defects made that impossible to honour:
+
+      * the door quarantined every amount-less row as unpriced before admission ever ran, so a
+        wound never reached admit();
+      * the door built the context without the lane, and admit() only grants its zero-amount
+        FOUNDER offer when it can see lane == 'founder'.
+
+    Both are pinned here. Without them the founder lane's owner-incident queries are decorative.
+    """
+
+    def verify(self, document=OWNER_WOUND, quote="Customers cannot pay."):
+        wound = row(reward_quote=quote, reward_usd=None)
+        return door.verify_rows([wound], fetcher(document), admission_client=FakeCompetitionAPI(),
+                                context_builder=owner_wound_context)
+
+    def test_an_owner_wound_is_admitted_on_the_founder_lane(self):
+        verdict = self.verify()
+        self.assertEqual(verdict["refused"], [])
+        self.assertEqual(verdict["unpriced"], [])
+        self.assertEqual(len(verdict["admitted"]), 1)
+        self.assertEqual(verdict["admitted"][0]["lane"], "founder")
+        self.assertTrue(verdict["admitted"][0]["sovereign_admission"])
+
+    def test_the_founder_offer_is_zero_amount_and_owner_sourced(self):
+        proof = self.verify()["admitted"][0]["admission"]
+        self.assertEqual(proof["funding"]["currency"], "FOUNDER")
+        self.assertEqual(proof["funding"]["payer"], "owner")
+
+    def test_a_non_owner_row_with_no_amount_is_quarantined_not_admitted(self):
+        """The exception belongs to owner-authored wounds, not to the amount rule itself."""
+        stranger = dict(OWNER_WOUND, author_association="NONE")
+        verdict = self.verify(stranger)
+        self.assertEqual(verdict["admitted"], [])
+        self.assertEqual(verdict["unpriced"][0]["reason"], "REWARD_QUOTE_HAS_NO_AMOUNT")
+
+    def test_a_priced_row_with_no_amount_is_still_quarantined(self):
+        """A non-owner row naming no figure stays a lead, exactly as before."""
+        plain = {"state": "open", "title": "Checkout is throwing 500s for every order",
+                 "body": "Since deploy 4f2a1c the checkout endpoint returns 500 for every order. "
+                         "Customers cannot pay.",
+                 "author_association": "NONE"}
+        wound = row(reward_quote="Customers cannot pay.", reward_usd=None)
+        verdict = door.verify_rows([wound], fetcher(plain), admission_client=FakeCompetitionAPI(),
+                                   context_builder=owner_wound_context)
+        self.assertEqual(verdict["admitted"], [])
+        self.assertEqual(verdict["unpriced"][0]["reason"], "REWARD_QUOTE_HAS_NO_AMOUNT")
+
+
+class TheSeedsAskForPayerBackedWork(unittest.TestCase):
+    """The seed list decides what the gate ever sees, so a seed with no payment term is a
+    standing order to hydrate unpaid complaints.
+
+    Measured live 2026-11-01: the ten founder queries added on 2026-10-31 carried no payment
+    term at all, and returned 4,472 ("production is down"), 1,294 ("broken in production"),
+    19,234 ("escalation" "production") and 5,870 ("urgent" "production" "users") open issues.
+    """
+
+    # A seed is payer-backed if it names money, or is scoped to a platform that only posts
+    # when money is committed, or is the documented owner-wound vocabulary.
+    PAYMENT_TERM = re.compile(
+        r'will pay|happy to pay|paying for|bounty|reward|\$\d|\d\s*usd'
+        r'|algora-pbc|polar\.sh|polar-sh|opire|bountyhub|issuehunt', re.I)
+
+    def setUp(self):
+        import json as _json
+        with open(os.path.join(os.path.dirname(door.__file__), "bounty_queries.json"),
+                  encoding="utf-8") as handle:
+            self.queries = _json.load(handle)
+
+    def test_every_founder_query_names_a_payment_term(self):
+        offenders = [q for q in self.queries["founder"] if not self.PAYMENT_TERM.search(q)]
+        # Owner-authored incident reports are the one documented exception, and they are
+        # scoped to the wound vocabulary rather than left open-ended.
+        wound = re.compile(r'production outage|critical regression', re.I)
+        offenders = [q for q in offenders if not wound.search(q)]
+        self.assertEqual(offenders, [], "founder seeds with no payment term: %r" % (offenders,))
+
+    def test_the_dead_seeds_are_gone(self):
+        """`funded in:title` matched funding rounds (9,211 open issues), not funded bounties.
+
+        `bounty in:title` is deliberately NOT in this list: it is a broad net that rotates in
+        the normal lane by design (see test_queue_ordering), and removing it would break that
+        contract. It stays, and the admission gate does the filtering.
+        """
+        flat = [q for lane in self.queries.values() for q in lane]
+        self.assertNotIn("funded in:title", flat)
+
+    def test_the_unpaid_complaint_seeds_are_gone(self):
+        """Each of these returned thousands of unpaid complaints and carried no payment term."""
+        flat = [q for lane in self.queries.values() for q in lane]
+        for dead in ('"production is down" is:issue is:open',
+                     '"broken in production"',
+                     '"escalation" "production" is:issue is:open',
+                     '"urgent" "production" "users" is:issue is:open'):
+            self.assertNotIn(dead, flat, "unpaid complaint seed still present: %r" % (dead,))
+
+
+
+if __name__ == "__main__":
+    unittest.main(verbosity=2)

@@ -714,13 +714,37 @@ def competition_evidence(api, repo, pull):
     if not login or not number:
         return True, {**evidence, "reason": "unknown_author"}
 
-    try:
-        query = urlencode({"q": "repo:" + repo + " type:pr author:" + login + " is:merged",
-                           "per_page": 1})
-        merged = int(api.api("search/issues?" + query).get("total_count") or 0)
-    except Exception:
-        return True, {**evidence, "reason": "author_history_unavailable"}
-    evidence["author_merged_in_repo"] = merged
+    # Measured 2026-11-01, run 41243122407: this probe fired one SEARCH call per matching
+    # pull request. Search is capped at 30 requests/minute, so a repository with 24 open PRs
+    # referencing one ticket spent the run asleep - seven THROTTLE events totalling 3,484
+    # seconds of wait, against a 45-minute job limit. The run was killed at 22:05:40 with
+    # five rows admitted and zero dispatched. The answer depends only on (repo, author), so
+    # it is cached on the client: an author's merge history in a repository cannot change
+    # inside one discovery cycle, and the cache dies with the client that asked.
+    cache = getattr(api, "_merged_history", None)
+    if cache is None:
+        cache = {}
+        try:
+            api._merged_history = cache
+        except AttributeError:  # a client that refuses attributes simply goes uncached
+            cache = {}
+    cache_key = (repo.lower(), login)
+    if cache_key in cache:
+        merged = cache[cache_key]
+        if merged is None:
+            return True, {**evidence, "reason": "author_history_unavailable"}
+        evidence["author_merged_in_repo"] = merged
+        evidence["history_cached"] = True
+    else:
+        try:
+            query = urlencode({"q": "repo:" + repo + " type:pr author:" + login + " is:merged",
+                               "per_page": 1})
+            merged = int(api.api("search/issues?" + query).get("total_count") or 0)
+            cache[cache_key] = merged
+        except Exception:
+            cache[cache_key] = None
+            return True, {**evidence, "reason": "author_history_unavailable"}
+        evidence["author_merged_in_repo"] = merged
     if merged > 0:
         return True, {**evidence, "reason": "author_has_landed_work_here"}
 

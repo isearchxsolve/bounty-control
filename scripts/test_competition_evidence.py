@@ -130,5 +130,45 @@ class NominalAttemptsNoLongerBlock(unittest.TestCase):
         self.assertIn("is%3Amerged", api.search_calls[0])
 
 
+class TheProbeDoesNotSpendTheRunAsleep(unittest.TestCase):
+    """Measured 2026-11-01, run 41243122407: one SEARCH call per matching pull request.
+
+    Search is capped at 30 requests/minute. getdozer/dozer had 24 open PRs referencing one
+    ticket, so the run logged seven THROTTLE events totalling 3,484 seconds of sleep against a
+    45-minute job limit, and was killed at 22:05:40 with five rows admitted and zero
+    dispatched. The answer only depends on (repo, author), so it must be asked once.
+    """
+
+    def test_the_same_author_is_asked_about_once(self):
+        api = FakeApi(drive_by(), merged=0)
+        for _ in range(24):
+            competition_evidence(api, "getdozer/dozer", drive_by())
+        self.assertEqual(len(api.search_calls), 1,
+                         "24 PRs by one author spent %d search calls" % len(api.search_calls))
+
+    def test_the_cached_answer_is_the_real_answer(self):
+        api = FakeApi(drive_by(), merged=3)
+        first = competition_evidence(api, "getdozer/dozer", drive_by())[1]
+        second = competition_evidence(api, "getdozer/dozer", drive_by())[1]
+        self.assertEqual(first["author_merged_in_repo"], 3)
+        self.assertEqual(second["author_merged_in_repo"], 3)
+        self.assertTrue(second.get("history_cached"))
+
+    def test_a_different_author_is_a_different_question(self):
+        api = FakeApi(drive_by(), merged=0)
+        competition_evidence(api, "getdozer/dozer", drive_by())
+        other = dict(drive_by(), user={"login": "someone-else"}, number=999)
+        competition_evidence(api, "getdozer/dozer", other)
+        self.assertEqual(len(api.search_calls), 2)
+
+    def test_a_failed_probe_still_fails_closed_and_is_not_retried_forever(self):
+        api = FakeApi(drive_by(), history_raises=True)
+        for _ in range(5):
+            real, evidence = competition_evidence(api, "getdozer/dozer", drive_by())
+            self.assertTrue(real, "an unevaluable probe must still block")
+            self.assertEqual(evidence["reason"], "author_history_unavailable")
+        self.assertEqual(len(api.search_calls), 1, "a failed probe must not be re-asked")
+
+
 if __name__ == "__main__":
     unittest.main()

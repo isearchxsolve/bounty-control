@@ -16,12 +16,15 @@ So the search is agent judgement, and admission stays a receipt.
 from __future__ import annotations
 
 import inspect
+import hashlib
 import json
 import os
 import re
+import signal
 import subprocess
 import sys
 import threading
+import time
 from datetime import datetime
 from typing import Callable, Dict, List, Optional
 
@@ -113,6 +116,8 @@ def new_rows(path: str, offset: int = 0):
     """
     try:
         with open(path, "rb") as handle:
+            if os.fstat(handle.fileno()).st_size < offset:
+                offset = 0
             handle.seek(offset)
             chunk = handle.read()
     except OSError:
@@ -134,16 +139,34 @@ def new_rows(path: str, offset: int = 0):
     return rows, offset
 
 
+class ShortlistStream:
+    """A byte cursor that also detects truncate/rewrite, including a longer replacement."""
+    def __init__(self, path):
+        self.path, self.offset, self.prefix = path, 0, None
+
+    def read(self):
+        try:
+            with open(self.path, "rb") as handle:
+                previous = handle.read(self.offset)
+            if self.prefix is not None and hashlib.sha256(previous).digest() != self.prefix:
+                self.offset = 0
+        except OSError:
+            return []
+        rows, self.offset = new_rows(self.path, self.offset)
+        with open(self.path, "rb") as handle:
+            self.prefix = hashlib.sha256(handle.read(self.offset)).digest()
+        return rows
+
+
 def _tail_shortlist(path: str, on_row, stop: threading.Event, poll: float = 1.0) -> None:
     """Hand every row to ``on_row`` the moment it lands, and keep going while the agent runs."""
-    offset = 0
+    stream = ShortlistStream(path)
     seen = set()
 
     def drain() -> None:
-        nonlocal offset
-        rows, offset = new_rows(path, offset)
+        rows = stream.read()
         for row in rows:
-            key = (str(row.get("repo") or "").lower(), row.get("issue"))
+            key = json.dumps(row, sort_keys=True, separators=(",", ":"))
             if key in seen:
                 continue
             seen.add(key)
@@ -218,7 +241,8 @@ def run_cline_search(workdir: str, prompt: str = SEARCH_PROMPT, timeout: int = 1
     try:
         process = subprocess.Popen(command, cwd=workdir, stdin=subprocess.DEVNULL, stdout=subprocess.PIPE,
                                    stderr=subprocess.PIPE, text=True, encoding="utf-8",
-                                   errors="replace", bufsize=1, env=env)
+                                   errors="replace", bufsize=1, env=env,
+                                   start_new_session=os.name != "nt")
     except OSError as exc:
         return {"exit_code": -2, "rows": [], "wrote_file": False,
                 "tail": f"agent could not start: {exc}",
@@ -236,23 +260,49 @@ def run_cline_search(workdir: str, prompt: str = SEARCH_PROMPT, timeout: int = 1
         thread.start()
         readers.append(thread)
 
-    tail_stop = threading.Event()
-    tailer = None
-    if on_row is not None:
-        tailer = threading.Thread(target=_tail_shortlist, args=(target, on_row, tail_stop),
-                                  daemon=True)
-        tailer.start()
+    # Verify and ingest on the calling thread: no detached verifier may outlive a round.
+    stream = ShortlistStream(target)
+    deadline = time.monotonic() + timeout
 
+    def stop_process():
+        pid = getattr(process, "pid", None)
+        if isinstance(pid, int) and os.name != "nt":
+            try:
+                os.killpg(pid, signal.SIGKILL)
+            except ProcessLookupError:
+                pass
+        elif isinstance(pid, int):
+            subprocess.run(["taskkill", "/PID", str(pid), "/T", "/F"],
+                           capture_output=True, timeout=15)
+        else:
+            process.kill()
+
+    def ingest_rows(incoming):
+        try:
+            for row in incoming:
+                on_row(row)
+        except BaseException:
+            stop_process()
+            raise
     timed_out = False
-    try:
-        exit_code = process.wait(timeout=timeout)
-    except subprocess.TimeoutExpired:
-        timed_out = True
-        process.kill()
-        exit_code = -1
-    tail_stop.set()
-    if tailer is not None:
-        tailer.join(timeout=10)
+    while True:
+        if on_row is not None:
+            incoming = stream.read()
+            ingest_rows(incoming)
+        remaining = deadline - time.monotonic()
+        if remaining <= 0:
+            timed_out = True
+            stop_process()
+            exit_code = -1
+            break
+        try:
+            exit_code = process.wait(timeout=min(1.0, remaining))
+            break
+        except subprocess.TimeoutExpired:
+            continue
+    if on_row is not None:
+        incoming = stream.read()
+        ingest_rows(incoming)
     for thread in readers:
         thread.join(timeout=5)
 
@@ -415,7 +465,7 @@ def _default_context_builder(repo, number):
     return GitHub().issue_context(repo, number)
 
 
-def admission_refusal(repo, number, quote=None, context_builder=None):
+def admission_refusal(repo, number, quote=None, context_builder=None, lane=None):
     """Return (None, None, proof) when admit() accepts the row, else (reason, None, None).
 
     Fails closed: if the context cannot be built, the row is refused as ISSUE_UNREADABLE.
@@ -425,6 +475,13 @@ def admission_refusal(repo, number, quote=None, context_builder=None):
     There is no ``client`` parameter. One used to sit here and was never read: the context
     is built by ``context_builder``, which constructs its own client. A parameter that looks
     like it controls the gate but does not is worse than none, so it is gone (2026-10-31).
+
+    ``lane`` is the lane the row was found in, and it must reach ``admit()``. Measured
+    2026-11-01: it did not. ``admit()`` grants an owner-authored incident report a zero-amount
+    FOUNDER offer, but only when it can see ``lane == 'founder'``; this door built the context
+    without it, so every owner-authored wound was refused CURRENT_ISSUER_OFFER_MISSING. The
+    census from run 41235976205 shows 7,795 of 7,795 refusals carrying that single reason, and
+    the founder lane's ten owner-incident queries could not produce one admissible row.
     """
     try:
         from bounty_admission import admit  # noqa: E402
@@ -437,9 +494,15 @@ def admission_refusal(repo, number, quote=None, context_builder=None):
         context = context_builder(repo, number)
     except Exception as exc:
         return "ISSUE_UNREADABLE", str(exc)[:200], None
+    if lane:
+        # The dispatcher's context already carries the lane; the door's did not. Set it here
+        # rather than in the builder so a custom builder cannot silently drop it again.
+        context["lane"] = lane
     oracle = quote if quote is not None else fx_quote
     proof, reason = admit(context, quote=oracle)
     if proof:
+        from pipeline_evidence import bind_proof
+        proof = bind_proof(proof, context)
         return None, None, proof
     return reason or "REFUSED_BY_ADMISSION", None, None
 
@@ -461,7 +524,7 @@ def competition_refusal(repo, number, client=None):
     try:
         from bounty_admission import competition  # noqa: E402
     except Exception as exc:  # pragma: no cover - import failure is not a verdict
-        return None, None, {"blocking": False, "verdict": "unverified: " + str(exc)[:160]}
+        return "COMPETITION_UNAVAILABLE", str(exc)[:160], None
     try:
         verdict = competition(client, repo, number)
     except ValueError as exc:
@@ -472,12 +535,88 @@ def competition_refusal(repo, number, client=None):
     except Exception as exc:
         print(json.dumps({"phase": "ENTRY_COMPETITION_UNVERIFIED", "repo": repo,
                           "issue": number, "detail": str(exc)[:200]}), flush=True)
-        return None, None, {"blocking": False, "verdict": "unverified: " + str(exc)[:160]}
+        return "COMPETITION_UNAVAILABLE", str(exc)[:160], None
     return None, None, verdict
 
 
+def model_admission_refusal(row, context_builder, source_reader=None):
+    """Verify the model's cited decision; do not classify the work a second time."""
+    from decimal import Decimal
+    from bounty_admission import amounts, FLOOR
+    from bounty_fx import quote as fx_quote
+    from issue_scout import quote_is_present
+    from pipeline_evidence import bind_proof
+    from actions_github import GitHubError
+    try:
+        context = context_builder(row['repo'], row['issue'])
+        if not context.get('complete_comments'):
+            return 'INCOMPLETE_COMMENTS', None, None
+        documents = [context['issue'], *context['comments']]
+        funding = row.get('funding') or {}
+        source = next((d for d in documents if d.get('html_url') == funding.get('source_url')), None)
+        if source is None:
+            return 'FUNDING_SOURCE_MISSING', None, None
+        text = (source.get('title', '') + '\n' + (source.get('body') or ''))
+        quote = row.get('reward_quote') or ''
+        if not quote_is_present(quote, text):
+            return 'REWARD_QUOTE_NOT_IN_SOURCE', None, None
+        if funding.get('payer') != (source.get('user') or {}).get('login'):
+            return 'PAYER_SOURCE_MISMATCH', None, None
+        if not str(row.get('admission_reason') or '').strip():
+            return 'AGENT_DECISION_MISSING', None, None
+        authority = funding.get('authority_quote') or ''
+        if not authority or not quote_is_present(authority, text):
+            return 'AUTHORITY_QUOTE_NOT_IN_SOURCE', None, None
+        amount, currency = Decimal(str(funding['amount'])), funding['currency'].upper()
+        if not any(a == amount and c == currency for a, c, _ in amounts(quote)):
+            return 'QUOTED_AMOUNT_MISMATCH', None, None
+        rate = {'basis': 'USD face value', 'usd_rate': '1'} if currency in ('USD','USDC','USDT') else fx_quote(currency)
+        usd = amount * Decimal(str(rate['usd_rate']))
+        if usd < FLOOR:
+            return 'BOUNTY_FLOOR', None, None
+        scope = row.get('scope_quote') or ''
+        if not scope or not any(quote_is_present(scope, d.get('title','')+'\n'+(d.get('body') or '')) for d in documents):
+            return 'SCOPE_QUOTE_NOT_IN_SOURCE', None, None
+        code = row.get('code_evidence') or {}
+        if code.get('is_product_code') is not True or not code.get('path') or not code.get('quote'):
+            return 'PRODUCT_SOURCE_EVIDENCE_MISSING', None, None
+        from pathlib import PurePosixPath
+        path = PurePosixPath(code['path'])
+        if path.is_absolute() or '..' in path.parts or '\\' in code['path']:
+            return 'PRODUCT_SOURCE_PATH_INVALID', None, None
+        if source_reader is None:
+            from actions_github import GitHub
+            from urllib.parse import quote as url_quote
+            source_reader = lambda repo, name: GitHub().api(
+                f"repos/{repo}/contents/{url_quote(name, safe='/')}")
+        import base64
+        product = source_reader(row['repo'], code['path'])
+        if (not isinstance(product, dict) or product.get('type') != 'file'
+                or product.get('sha') != code.get('sha') or product.get('encoding') != 'base64'):
+            return 'PRODUCT_SOURCE_REVISION_MISMATCH', None, None
+        actual = base64.b64decode(product['content']).decode('utf-8', errors='replace')
+        if not quote_is_present(code['quote'], actual):
+            return 'PRODUCT_SOURCE_QUOTE_MISMATCH', None, None
+        proof = {'funding': {**funding, 'usd_value': str(usd), 'quote': rate, 'raw': quote},
+                 'agent_reason': row['admission_reason'], 'scope_quote': scope,
+                 'code_evidence': code,
+                 'source_issue': context['issue'].get('html_url'), 'lane': row.get('lane', 'bounty')}
+        if row.get('reconsideration'):
+            proof['reconsideration'] = row['reconsideration']
+        return None, None, bind_proof(proof, context)
+    except (GitHubError, OSError) as exc:
+        return 'ISSUE_UNREADABLE', str(exc), None
+    except (ValueError, KeyError, TypeError) as exc:
+        return 'DECISION_EVIDENCE_INVALID', str(exc), None
+
+
+def verify_model_rows(rows, **kwargs):
+    return verify_rows(rows, decision_verifier=model_admission_refusal, **kwargs)
+
+
 def verify_rows(rows: List[dict], fetch: Optional[Callable[[str, int], Optional[dict]]] = None,
-                limit: int = 12, admission_client=None, context_builder=None) -> Dict[str, List[dict]]:
+                limit: int = 12, admission_client=None, context_builder=None,
+                decision_verifier=None) -> Dict[str, List[dict]]:
     """Admit only rows whose issue exists, is open, and whose reward quote is really there.
 
     The agent chose them; this decides whether the choice survives contact with the source.
@@ -522,12 +661,12 @@ def verify_rows(rows: List[dict], fetch: Optional[Callable[[str, int], Optional[
             refused.append({"row": row, "reason": "AGENT_NOT_A_CODE_TASK"})
             continue
 
-        if FUNDING_WITHDRAWN_RE.search(issue_haystack(issue)):
+        if decision_verifier is None and FUNDING_WITHDRAWN_RE.search(issue_haystack(issue)):
             refused.append({"row": row, "reason": "FUNDING_WITHDRAWN"})
             continue
 
         stale_days = issue_age_days(issue)
-        if stale_days is not None and stale_days > ISSUE_STALE_DAYS:
+        if decision_verifier is None and stale_days is not None and stale_days > ISSUE_STALE_DAYS:
             # Measured on the first run that reached dispatch: two rows were admitted and both
             # died in the delivery engine as dead offers - one had last moved 2.8 years earlier
             # (funding long withdrawn), the other 7 years earlier. The engineer run is the most
@@ -547,8 +686,12 @@ def verify_rows(rows: List[dict], fetch: Optional[Callable[[str, int], Optional[
         is_founder = (author_assoc == "OWNER") or bool(row.get("is_founder_wound"))
         lane = "founder" if is_founder else "bounty"
 
-        if not quote_states_an_amount(quote):
+        if not quote_states_an_amount(quote) and not is_founder:
             # Real intent, missing figure. Quarantined, never counted as a refusal.
+            # An owner-authored incident report is the documented exception: the brief tells the
+            # agent to bank it with reward_usd null and the owner's own words as the quote, and
+            # admit() grants it a zero-amount FOUNDER offer. Quarantining it here on the amount
+            # rule meant the founder lane could never admit anything it was told to collect.
             unpriced.append({"row": row, "reason": "REWARD_QUOTE_HAS_NO_AMOUNT",
                              "repo": repo, "issue": number,
                              "lane": lane,
@@ -559,8 +702,14 @@ def verify_rows(rows: List[dict], fetch: Optional[Callable[[str, int], Optional[
 
         proof, competition_verdict = None, None
         if ADMISSION_GATE and admission_client is not None:
-            reason, detail, proof = admission_refusal(repo, number, quote=None,
-                                          context_builder=context_builder)
+            if decision_verifier is not None:
+                reason, detail, proof = decision_verifier(row, context_builder or _default_context_builder)
+            else:
+                # ``lane`` is passed, not inferred: admit() needs it to grant an owner-authored
+                # incident report its zero-amount FOUNDER offer, and without it every wound is
+                # refused CURRENT_ISSUER_OFFER_MISSING (measured 2026-11-01, run 41235976205).
+                reason, detail, proof = admission_refusal(repo, number, quote=None,
+                                              context_builder=context_builder, lane=lane)
             if reason:
                 refused.append({"row": row, "reason": reason, **({"detail": detail} if detail else {})})
                 continue
@@ -577,6 +726,7 @@ def verify_rows(rows: List[dict], fetch: Optional[Callable[[str, int], Optional[
         admitted.append({"repo": repo, "issue": number, "url": row.get("url") or
                          f"https://github.com/{repo}/issues/{number}",
                          "lane": lane,
+                         "source_lane": row.get("source_lane") or ("founder" if is_founder else "normal"),
                          "author_association": author_assoc,
                          "reward_quote": quote, "reward_usd": row.get("reward_usd"),
                          "scope_quote": row.get("scope_quote"), "why_now": row.get("why_now"),
@@ -945,7 +1095,7 @@ def _merge_shortlist(workdir: str, rows: List[dict]) -> None:
 
 def iterate(workdir: str, rounds: int = 3, run=run_cline_search, verify=verify_rows,
             limit: int = 0, first_prompt: Optional[str] = None, admission_client=None,
-            **run_kwargs) -> Dict[str, object]:
+            on_admitted=None, **run_kwargs) -> Dict[str, object]:
     """Search, verify, and feed the refusals back so the agent corrects itself.
 
     The agent is not judged once and dismissed: each round's refusals become the next round's
@@ -962,6 +1112,20 @@ def iterate(workdir: str, rounds: int = 3, run=run_cline_search, verify=verify_r
     stream_path = os.path.join(workdir, "admitted-stream.jsonl")
     live: Dict[str, List[dict]] = {"admitted": [], "refused": [], "unpriced": []}
     banked_keys = set()
+    decisions = {}
+
+    def submission_key(row):
+        return json.dumps(row, sort_keys=True, separators=(",", ":"))
+
+    def remember(one):
+        for slot in ("admitted", "refused", "unpriced"):
+            for entry in one.get(slot) or []:
+                subject = entry.get("row", entry)
+                decisions[row_key(subject)] = (slot, entry)
+                with open(os.path.join(workdir, "decisions.jsonl"), "a", encoding="utf-8") as handle:
+                    handle.write(json.dumps({"decision": slot, "entry": entry}) + "\n")
+                if slot == "admitted" and on_admitted is not None:
+                    on_admitted(entry)
 
     def row_key(row: dict):
         return (str(row.get("repo") or "").lower(), row.get("issue"))
@@ -972,7 +1136,7 @@ def iterate(workdir: str, rounds: int = 3, run=run_cline_search, verify=verify_r
         This is the reason the round's work survives: a row admitted at second 40 is already in
         the pipeline when the wall-clock budget kills the agent at second 800.
         """
-        key = row_key(row)
+        key = submission_key(row)
         if key in banked_keys:
             return
         try:
@@ -980,18 +1144,18 @@ def iterate(workdir: str, rounds: int = 3, run=run_cline_search, verify=verify_r
         except Exception:  # a single-row failure must never abort the search
             return
         banked_keys.add(key)  # only after a verdict, so a failed verify can still be retried
+        remember(one)
         for slot in ("admitted", "refused", "unpriced"):
             live[slot].extend(one.get(slot) or [])
         fresh = one.get("admitted") or []
-        if not fresh:
-            return
-        with open(stream_path, "a", encoding="utf-8") as handle:
-            for banked in fresh:
-                handle.write(json.dumps(banked, ensure_ascii=False) + "\n")
-        top = fresh[0]
-        print(json.dumps({"phase": "ENTRY_ROW", "repo": top.get("repo"),
-                          "issue": top.get("issue"), "reward_usd": top.get("reward_usd"),
-                          "live": True}), flush=True)
+        if fresh:
+            with open(stream_path, "a", encoding="utf-8") as handle:
+                for banked in fresh:
+                    handle.write(json.dumps(banked, ensure_ascii=False) + "\n")
+            top = fresh[0]
+            print(json.dumps({"phase": "ENTRY_ROW", "repo": top.get("repo"),
+                              "issue": top.get("issue"), "reward_usd": top.get("reward_usd"),
+                              "live": True}), flush=True)
         for entry in (one.get("refused") or []) + (one.get("unpriced") or []):
             subject = entry.get("row") or {}
             print(json.dumps({"phase": "ENTRY_DECISION", "repo": subject.get("repo"),
@@ -1031,8 +1195,10 @@ def iterate(workdir: str, rounds: int = 3, run=run_cline_search, verify=verify_r
                 row_seen = entry.get("row") if isinstance(entry, dict) and "row" in entry else entry
                 streamed.add((str(row_seen.get("repo") or "").lower(), row_seen.get("issue")))
         remaining = [row for row in (outcome.get("rows") or [])
-                     if row_key(row) not in streamed and row_key(row) not in banked_keys]
+                     if submission_key(row) not in banked_keys]
         result = verify(remaining, limit=limit, admission_client=admission_client)
+        banked_keys.update(submission_key(row) for row in remaining)
+        remember(result)
         for entry in (result["refused"] or []) + (result.get("unpriced") or []):
             subject = entry.get("row") or {}
             print(json.dumps({"phase": "ENTRY_DECISION", "repo": subject.get("repo"),
@@ -1046,8 +1212,9 @@ def iterate(workdir: str, rounds: int = 3, run=run_cline_search, verify=verify_r
             if (row["repo"].lower(), row["issue"]) not in known:
                 admitted.append(row)
                 known.add((row["repo"].lower(), row["issue"]))
-        refusals = list(live["refused"]) + list(result["refused"])
-        unpriced = list(live["unpriced"]) + list(result.get("unpriced", []))
+        admitted = [entry for slot, entry in decisions.values() if slot == "admitted"]
+        refusals = [entry for slot, entry in decisions.values() if slot == "refused"]
+        unpriced = [entry for slot, entry in decisions.values() if slot == "unpriced"]
         history.append({"round": round_number, "agent_exit": outcome.get("exit_code"),
                         "rows": len(outcome.get("rows") or []),
                         "admitted": len(result["admitted"]), "refused": len(refusals),

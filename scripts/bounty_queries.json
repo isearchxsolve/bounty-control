@@ -21,7 +21,8 @@
     "bounty in:title",
     "\"will pay\"",
     "label:bounty",
-    "funded in:title"
+    "\"will pay\" \"outage\" is:issue is:open",
+    "\"will pay\" \"data loss\" is:issue is:open"
   ],
   "startup": [
     "\"/bounty $\" is:issue is:open",
@@ -68,16 +69,18 @@
     "opire.dev mcp is:issue is:open",
     "bountyhub agent is:issue is:open",
     "bountyhub-bot agent is:issue is:open",
-    "\"production is down\" is:issue is:open",
-    "\"production down\" \"customers\" is:issue is:open",
-    "\"paying customers\" \"broken\" is:issue is:open",
-    "\"losing customers\" is:issue is:open",
-    "\"revenue\" \"outage\" is:issue is:open",
-    "\"downtime\" \"customers\" is:issue is:open",
-    "\"we are losing\" \"orders\" is:issue is:open",
-    "\"escalation\" \"production\" is:issue is:open",
-    "\"SLA\" \"breach\" is:issue is:open",
-    "\"urgent\" \"production\" \"users\" is:issue is:open"
+    "\"will pay\" \"outage\" is:issue is:open",
+    "\"will pay\" \"downtime\" is:issue is:open",
+    "\"will pay\" \"data loss\" is:issue is:open",
+    "\"will pay\" \"regression\" is:issue is:open",
+    "\"will pay\" \"crash\" is:issue is:open",
+    "\"will pay\" \"broken\" is:issue is:open",
+    "\"will pay\" \"security\" is:issue is:open",
+    "\"happy to pay\" \"fix\" is:issue is:open",
+    "\"I will pay\" \"bug\" is:issue is:open",
+    "\"paying for\" \"fix\" \"production\" is:issue is:open",
+    "\"production outage\" is:issue is:open",
+    "\"critical regression\" is:issue is:open"
   ],
   "programs": [
     "in:comments bountyhub-bot is:issue is:open",
