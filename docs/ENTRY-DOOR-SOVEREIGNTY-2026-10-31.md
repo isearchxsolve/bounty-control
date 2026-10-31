@@ -166,3 +166,51 @@ python /tmp/streamproof/prove2.py
 7. **One row, one receipt.** A double-counted row is a lie in the numbers even when every
    individual claim is true (`rows 4` reported as `unpriced 8`).
 8. **A correct refusal is not a failure, and an honest zero is not a verdict on the world.**
+
+## 10. Appended live - the quota-free run, and the sixth defect
+
+Run **41183429400** (first quota-free brief, `b9861d1`) completed:
+
+```
+"round": 1, "agent_exit": 0, "rows": 4, "admitted": 0, "refused": 0, "unpriced": 4
+"phase": "AGENT_DOOR", "reason": "NO_ROWS", "rows": 0
+```
+
+Two facts, both worth the run:
+
+1. **The doubling bug is gone.** Four rows, four receipts. Before the fix the same four rows
+   reported as `unpriced 8`.
+2. **The second round never ran, and that was a sixth ceiling.** `agent_exit 0` means the agent
+   finished with budget still on the clock, and `refused 0` means the loop's only reason to
+   continue was absent - `iterate()` ran the extra round **as a repair round only**
+   (`if not refusals: break`). The quota I deleted from the text survived as a control-flow
+   condition.
+
+Fixed in `324ce11`:
+
+- **`CONTINUE_PROMPT`** - "the previous round ended with time still on the clock, and this door has
+  no quota... go back out and find more. The world is larger than the part of it you have already
+  seen." It names what an early-finishing agent tends not to try: other sources, other phrasings,
+  other platforms, a second offer written later in the same thread.
+- **`iterate()` picks the prompt by state**: first round -> search, refusals -> repair, otherwise
+  -> continue; and **every configured round now runs**.
+- **Cross-round dedupe**: a row that already has a verdict is never re-verified or re-admitted
+  (only a row whose verification *failed* can be retried), so a continuing round cannot inflate
+  the count.
+
+Two tests pinned the retired policy - `test_the_loop_stops_as_soon_as_nothing_is_refused` - and
+were **rewritten, not loosened**: rounds stay bounded, a repeated row is still admitted exactly
+once, and the new test asserts a clean round continues (`no quota` in the next prompt).
+**115 tests pass** across door / agent-door / admission / velocity.
+
+### The pattern, now visible three times
+
+| layer | the ceiling | where it hid | fix |
+| --- | --- | --- | --- |
+| text | "Target 2 to 4 ... finish immediately" | TASK.md | `5c6a777` |
+| code | `verify_rows(limit=12)` | the door's own default | `d748749` |
+| control flow | `if not refusals: break` | `iterate()` | `324ce11` |
+
+One instruction from Baba - *the searcher is sovereign, no quota* - had to be enforced at three
+layers before the searcher was actually free. Stopping after the first would have left the
+drought in place and the report claiming it was cured.
