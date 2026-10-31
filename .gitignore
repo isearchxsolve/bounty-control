@@ -7,3 +7,6 @@ __pycache__/
 scratch/
 door-runs/
 __pycache__/
+
+# live thinking probes (agent scratch worktrees)
+_probe/
