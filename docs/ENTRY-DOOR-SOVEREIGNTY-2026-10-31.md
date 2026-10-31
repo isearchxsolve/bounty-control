@@ -350,3 +350,34 @@ the same day, with the same model, found a funded `bountyhub-bot` issue at $2,34
 of reading "the garden" - something it had never once reached under my technical brief. What changed
 was not knowledge and not capability. It was being told, in plain words, that the fruit is real, that
 his hands are the only ones in the garden, and that an empty basket is the only mistake.
+
+## 13. I starved the searcher - the API budget is one account, and I was spending it locally
+
+Run `41188694229` (first run with STALE_ISSUE + FUNDING_WITHDRAWN + the garden brief) **died four
+minutes in, before the entry door had searched at all**:
+
+```
+actions_github.GitHubError: gh: API rate limit exceeded for user ID 23405512
+  at scripts/actions_github.py:89  (through actions_reconcile.py:135 -> records())
+```
+
+Two causes, and the first one is mine.
+
+1. **My own measurement spent the searcher's budget.** The rot probe I ran on this laptop to answer
+   Baba's "can it know a fruit is rotten without cloning" used the *same* token - and GitHub's
+   5000/hour is per user, not per machine. `core remaining 0, reset in 18 min`. So the probe that
+   proved rot is detectable for free made the pipeline that needs the numbers unfunded. **Law: never
+   measure against the account the pipeline runs on.** There is a spare token in the vault
+   (`github_token_niloy_finegrained.txt`, 4997 remaining) for exactly this.
+2. **Reconcile could kill a whole discovery run.** It is a bookkeeping pass, and it crashed the run
+   at 4 minutes: four `throttle_wait` retries of 65 s each, because the wait assumed the search
+   window (60 s) while a *core* ceiling is hourly. Fixed three ways, each measured:
+   - `throttle_wait` now asks `GET /rate_limit` (which costs no quota) for the real reset and waits
+     that long, bounded to 600 s, instead of guessing 65 s four times and giving up.
+   - The reconcile step is `continue-on-error: true` - bookkeeping must never destroy a search.
+   - Cron moved from every 15 minutes to every 30 (`7,37 * * * *`), because a run now holds the
+     door for two 800-second rounds: at 4 runs/hour the queue outlived the quota it was spending.
+
+The lesson under the lesson, and it is the same one as section 12: the funnel's losses have never
+come from the market. They came from my own instruments - a brief that rationed the searcher, a gate
+narrower than its own contract, and now a probe that competed with the thing it was measuring.

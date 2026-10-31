@@ -65,7 +65,30 @@ class GitHub:
         match = re.search(r"retry.after[:= ]+(\d+)", message, re.I)
         if match:
             return min(int(match.group(1)), 120)
+        # A *core* ceiling is hourly, not the 60-second search window: measured on run
+        # 41188694229, four 65-second waits burned the whole headroom and the run died 4 minutes
+        # in, before the door had searched at all. Ask GitHub when the window actually resets
+        # (the rate_limit endpoint does not consume quota) and wait that long, bounded.
+        remaining = ActionsGitHub.core_reset_seconds()
+        if remaining is not None:
+            return max(5, min(remaining + 5, 600))
         return 65
+
+    @staticmethod
+    def core_reset_seconds():
+        """Seconds until the core window resets, or None when GitHub will not say."""
+        try:
+            done = subprocess.run(["gh", "api", "rate_limit"], capture_output=True, timeout=30,
+                                  env={**os.environ})
+            if done.returncode:
+                return None
+            document = json.loads(done.stdout.decode("utf-8", errors="replace") or "{}")
+            reset = (document.get("resources") or {}).get("core", {}).get("reset")
+            if not reset:
+                return None
+            return max(0, int(reset - time.time()))
+        except (OSError, subprocess.TimeoutExpired, ValueError, TypeError):
+            return None
 
     def api(self, endpoint, method="GET", data=None, paginate=False):
         command = ["gh", "api", endpoint, "--method", method]

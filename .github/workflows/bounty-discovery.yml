@@ -1,7 +1,7 @@
 name: Bounty discovery and reconciliation
 'on':
   schedule:
-  - cron: '7,22,37,52 * * * *'
+  - cron: '7,37 * * * *'
   workflow_dispatch: {}
 concurrency:
   group: bounty-discovery
@@ -31,7 +31,11 @@ jobs:
         path: ${{ env.BOUNTY_STATE_DIR }}
         key: bounty-state-${{ github.run_id }}-${{ github.run_attempt }}
         restore-keys: bounty-state-
+    # Measured on run 41188694229: a core-API rate limit inside reconcile killed the whole
+    # discovery run ~4 minutes in, before the entry door had spent a single second searching.
+    # Reconciliation is a bookkeeping pass, so it must never be able to destroy a search run.
     - name: Reconcile actual results and repair owned failing PRs
+      continue-on-error: true
       run: python3 -u scripts/actions_reconcile.py --repair
     - name: Search all lanes and dispatch qualified originals
       # NVIDIA_API_KEY is scoped to this one step: the search planner and the agent door's
