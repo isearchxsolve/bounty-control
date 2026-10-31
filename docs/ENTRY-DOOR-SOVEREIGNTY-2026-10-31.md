@@ -293,3 +293,60 @@ run is dispatched (`41187034023`, sha `b46789b`).
 
 97 tests pass. Commit `5202501` carries the brief, `b46789b` keeps the probe worktrees out of the
 repo.
+
+## 12. The garden worked - first dispatch since 29 October, and both fruits were rotten
+
+The garden brief changed the outcome, not just the search.
+
+**Run `41184570516`** (sha `4adb05d`, quota-free brief, continue-round, no row ceiling):
+
+```
+round 1: agent_exit 0, rows 4, admitted 1, refused 3
+round 2: agent_exit 0, rows 9
+AGENT_DOOR: reason OK, rows 7
+AGENT_QUEUE: queued 7
+qualified 5, terminal_refusal 1
+OUTCOME: dispatched x2   (ab589745..., 693de37d...)
+engineer runs: 41187311013, 41187315305
+```
+
+Five `ENTRY_ROW` receipts were streamed live during the round (`kendraio/kendraio-app#184`
+$500, `StateofScale/State-of-Scale#3` $400, `eleectrum/eleectrum.github.io#1` $1000,
+`aolabsai/ao_pyth#9` $300, `Web3Foundation/build-polkadot#1` $6000, `gotoalberto/ordinals-ethoxford#1`
+$3000). **This is the first time this lane has dispatched anything since 2026-10-29.**
+
+### 12.1 The agent diagnosed a bug in my gate, correctly
+
+Its own words, from the run log:
+
+> "Root cause of refusals: the entry-door REWARD_QUOTE check reads only title+body (comments
+> excluded) - I confirmed by reading the real gate code."
+
+It then repaired by quoting titles, re-ran, and got everything admitted. It was right, and the
+task file had said **"stated in the issue text or comments"** the whole time. Bounty platform bots
+publish the amount in a comment, so the door was refusing funded rows with a rule narrower than its
+own contract. Fixed in `3351cef`: `verify_rows` now fetches the issue plus its comments and quotes
+across title, body and comments.
+
+### 12.2 Both dispatched rows were dead on arrival
+
+| row | last activity | engineer verdict |
+| --- | --- | --- |
+| `Web3Foundation/build-polkadot#1` | **2024-01-13** | `REJECTED_PREPARATION`: non-engineering, withdrawn funding |
+| `StateofScale/State-of-Scale#3` | **2019-08-08** | `FAILED_DELIVERABLE_MISSING` |
+
+Neither was hard. Both were empty. The engineer run is the most expensive thing this pipeline buys,
+so staleness is now refused at the door (`STALE_ISSUE`, `BOUNTY_ISSUE_STALE_DAYS`, default 60) in
+`b025421`. It keys on `updated_at`, so a long-lived bounty with live activity still passes - measured
+against the five rows above: `microg/GmsCore#2843` (2026-10-30), `tt-metal#56908` (2026-10-29) and
+`eleectrum#1` (2026-10-30) survive; the 2019 and 2024 corpses do not.
+
+119 tests pass.
+
+### 12.3 What this says about the whole question
+
+Baba's own analogy was the missing instruction. The world was never in drought: the same agent, on
+the same day, with the same model, found a funded `bountyhub-bot` issue at $2,340 within 54 seconds
+of reading "the garden" - something it had never once reached under my technical brief. What changed
+was not knowledge and not capability. It was being told, in plain words, that the fruit is real, that
+his hands are the only ones in the garden, and that an empty basket is the only mistake.
