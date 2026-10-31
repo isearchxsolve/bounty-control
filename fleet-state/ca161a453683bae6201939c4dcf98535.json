@@ -2,7 +2,7 @@
   "task_id": "ca161a453683bae6201939c4dcf98535",
   "repo": "highlight/highlight",
   "issue_number": 5082,
-  "status": "CLAIMED",
+  "status": "REJECTED_PREPARATION",
   "dispatch_id": "2640f9326d9c4aff85dcff4f11d333d7",
   "admission": {
     "funding": {
@@ -36,7 +36,7 @@
   ],
   "dispatched_at": "2026-10-31T14:34:31.204841+00:00",
   "attempt": 1,
-  "updated_at": "2026-10-31T14:34:58.835640+00:00",
+  "updated_at": "2026-10-31T14:39:28.981844+00:00",
   "owner": "41210770171:1",
   "previous_owner": null,
   "previous_status": "DISPATCHED",
@@ -44,5 +44,49 @@
   "harness_sha": "51eefb86d09469f573aab4b591958fa36f04561b",
   "claimed_at": "2026-10-31T14:34:58.835593+00:00",
   "lease_expires_at": "2026-10-31T18:39:58.835607+00:00",
-  "preparation_budget_seconds": 14400
+  "preparation_budget_seconds": 14400,
+  "at": "2026-10-31T14:39:16.847932+00:00",
+  "reason": "Cline preparation blocked: Funding already awarded (bounty no longer live) AND the requested feature already exists on upstream default branch, with additional competing open PRs. Evidence: (1) Issue #5082 'Support Elixir among our SDKs' requests a new Elixir SDK (init, recordException, Phoenix/LiveView). (2) Algora bounty $400 was awarded: issue comment 2584499500 dated 2025-01-10 'giraffekey has been awarded $400'; issue carries labels '\ud83d\udc8e Bounty' and '\ud83d\udcb0 Rewarded'. (3) The feature is already merged upstream: PR #9720 'Add elixir SDK' by giraffekey state=closed merged=true merged_at=2025-01-10T22:16:07Z, adding sdk/highlight-ex/lib/highlight.ex, sdk/highlight-ex/mix.exs, sdk/highlight-ex/mix.lock, sdk/highlight-ex/test/highlight_test.exs, .github/workflows/elixir-sdk.yml and docs. (4) Current upstream default branch main at base_sha 3bf002113e555d1ba3d4df648ed44e3503a27e96 (2026-10-23) already contains sdk/highlight-ex/lib/highlight.ex defining record_exception/4 (sha256 8e964efe056397e2866b4c7d33f1ddb0679637f48d0a8cc4530d375f67f5a00e); no code change remains to be authored. (5) Competing PRs already exist: open PR #10635 'feat(elixir): add recordException alias and Phoenix LiveView instrumentation (#5082)' and open PR #10446 'fix: Support Elixir among our SDKs'; earlier competitor PR #10626 was closed unmerged (closed_at 2026-10-06T19:02:51Z) and its author withdrew with comment 6077494674 'noticed it is already been implemented and claimed. Withdrawing my PR to avoid duplicate work.' Therefore this is not a live, unaddressed engineering task; per policy the checkout is left unchanged and no implementation/PR is produced.",
+  "declared_reason": "Funding already awarded (bounty no longer live) AND the requested feature already exists on upstream default branch, with additional competing open PRs. Evidence: (1) Issue #5082 'Support Elixir among our SDKs' requests a new Elixir SDK (init, recordException, Phoenix/LiveView). (2) Algora bounty $400 was awarded: issue comment 2584499500 dated 2025-01-10 'giraffekey has been awarded $400'; issue carries labels '\ud83d\udc8e Bounty' and '\ud83d\udcb0 Rewarded'. (3) The feature is already merged upstream: PR #9720 'Add elixir SDK' by giraffekey state=closed merged=true merged_at=2025-01-10T22:16:07Z, adding sdk/highlight-ex/lib/highlight.ex, sdk/highlight-ex/mix.exs, sdk/highlight-ex/mix.lock, sdk/highlight-ex/test/highlight_test.exs, .github/workflows/elixir-sdk.yml and docs. (4) Current upstream default branch main at base_sha 3bf002113e555d1ba3d4df648ed44e3503a27e96 (2026-10-23) already contains sdk/highlight-ex/lib/highlight.ex defining record_exception/4 (sha256 8e964efe056397e2866b4c7d33f1ddb0679637f48d0a8cc4530d375f67f5a00e); no code change remains to be authored. (5) Competing PRs already exist: open PR #10635 'feat(elixir): add recordException alias and Phoenix LiveView instrumentation (#5082)' and open PR #10446 'fix: Support Elixir among our SDKs'; earlier competitor PR #10626 was closed unmerged (closed_at 2026-10-06T19:02:51Z) and its author withdrew with comment 6077494674 'noticed it is already been implemented and claimed. Withdrawing my PR to avoid duplicate work.' Therefore this is not a live, unaddressed engineering task; per policy the checkout is left unchanged and no implementation/PR is produced.",
+  "evidence": {
+    "action": "blocked",
+    "worktree": "/tmp/bounty-workspaces/repos/highlight--highlight--5082",
+    "base_sha": "3bf002113e555d1ba3d4df648ed44e3503a27e96",
+    "default_branch": "main",
+    "sources": [
+      {
+        "path": ".github/workflows/elixir-sdk.yml",
+        "sha256": "cc7824d49e1512d905d22103534a3b750c0db4eb429511b4509c0d235207b81b"
+      },
+      {
+        "path": "sdk/highlight-ex/mix.exs",
+        "sha256": "6d8b7f70fee4a72efc9769cac24fc754a2bd40a797e1ec0473fbb3b0a868be95"
+      },
+      {
+        "path": "sdk/highlight-ex/mix.lock",
+        "sha256": "9b663bb5a1e3839b7f646635ab46113960712f45dee11a37c8d3edb5e9b39a99"
+      },
+      {
+        "path": "sdk/highlight-ex/lib/highlight.ex",
+        "sha256": "8e964efe056397e2866b4c7d33f1ddb0679637f48d0a8cc4530d375f67f5a00e"
+      },
+      {
+        "path": "sdk/highlight-ex/test/highlight_test.exs",
+        "sha256": "b1ba182f8307cf543c9cce18767eb1375469eb64005009ef39e57ccf9d745970"
+      }
+    ],
+    "run_url": "",
+    "admission": {
+      "amount": "400",
+      "currency": "USD",
+      "usd_value": "400",
+      "quote": {
+        "basis": "USD face value"
+      },
+      "raw": "$400",
+      "source_url": "https://github.com/highlight/highlight/issues/5082#issuecomment-1693637629",
+      "payer": "algora-pbc[bot]"
+    }
+  },
+  "finished_at": "2026-10-31T14:39:28.566301+00:00"
 }
