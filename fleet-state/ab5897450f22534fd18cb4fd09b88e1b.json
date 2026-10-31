@@ -2,7 +2,7 @@
   "task_id": "ab5897450f22534fd18cb4fd09b88e1b",
   "repo": "Web3Foundation/build-polkadot",
   "issue_number": 1,
-  "status": "CLAIMED",
+  "status": "REJECTED_PREPARATION",
   "dispatch_id": "861121dc9a114d3e9dcd9f43bcc21427",
   "admission": {
     "funding": {
@@ -39,7 +39,7 @@
   ],
   "dispatched_at": "2026-10-31T09:06:28.058405+00:00",
   "attempt": 1,
-  "updated_at": "2026-10-31T09:06:39.456519+00:00",
+  "updated_at": "2026-10-31T09:09:31.072961+00:00",
   "owner": "41187311013:1",
   "previous_owner": null,
   "previous_status": "DISPATCHED",
@@ -47,5 +47,33 @@
   "harness_sha": "c0273b2f4181dacb6b1823a4921160fe05c45b5e",
   "claimed_at": "2026-10-31T09:06:39.456473+00:00",
   "lease_expires_at": "2026-10-31T13:11:39.456487+00:00",
-  "preparation_budget_seconds": 14400
+  "preparation_budget_seconds": 14400,
+  "at": "2026-10-31T09:09:18.086134+00:00",
+  "reason": "Cline preparation blocked: Non-engineering creative/market bounty with withdrawn funding. Issue #1 (\"[$6000 DAI] Build Polkadot: Network Launch Bounty Challenges\") is a Gitcoin prize challenge soliciting open-ended community submissions (visualization / tools / 'surprise us'), not a concrete reproducible defect, specific feature, or code-level maintenance request against this repository. The attached 6000 DAI funding was formally CANCELLED by the bounty submitter: gitcoinbot comment id 646517896 (2020-06-19T08:45:14Z) states 'The funding of 6000.0 DAI (6000.0 USD @ $1.0/DAI) attached to this issue has been cancelled by the bounty submitter'. Prizes were already disbursed as individual tips (1000 DAI to dvc94ch, 1000 DAI to milonite, 600 DAI x2 to yangwao, 600 DAI to ltfschoen, 400 DAI to branciard/nicolasochem/mariopino). The repository Web3Foundation/build-polkadot is effectively empty: a single commit ('Initial commit', 640031bad087746236e08f35341385ff471042a5) containing only a 79-byte README.md; there is no source code, manifest, lockfile, CI workflow, AGENTS.md or setup doc, so no code surface exists to modify. GitHub reports zero open or closed pull requests and only the 'master' branch, so there is no competing PR. Per classification rules (withdrawn funding + generic creative idea with no repository change), the issue is BLOCKED and the checkout is left unchanged.",
+  "declared_reason": "Non-engineering creative/market bounty with withdrawn funding. Issue #1 (\"[$6000 DAI] Build Polkadot: Network Launch Bounty Challenges\") is a Gitcoin prize challenge soliciting open-ended community submissions (visualization / tools / 'surprise us'), not a concrete reproducible defect, specific feature, or code-level maintenance request against this repository. The attached 6000 DAI funding was formally CANCELLED by the bounty submitter: gitcoinbot comment id 646517896 (2020-06-19T08:45:14Z) states 'The funding of 6000.0 DAI (6000.0 USD @ $1.0/DAI) attached to this issue has been cancelled by the bounty submitter'. Prizes were already disbursed as individual tips (1000 DAI to dvc94ch, 1000 DAI to milonite, 600 DAI x2 to yangwao, 600 DAI to ltfschoen, 400 DAI to branciard/nicolasochem/mariopino). The repository Web3Foundation/build-polkadot is effectively empty: a single commit ('Initial commit', 640031bad087746236e08f35341385ff471042a5) containing only a 79-byte README.md; there is no source code, manifest, lockfile, CI workflow, AGENTS.md or setup doc, so no code surface exists to modify. GitHub reports zero open or closed pull requests and only the 'master' branch, so there is no competing PR. Per classification rules (withdrawn funding + generic creative idea with no repository change), the issue is BLOCKED and the checkout is left unchanged.",
+  "evidence": {
+    "action": "blocked",
+    "worktree": "/tmp/bounty-workspaces/repos/Web3Foundation--build-polkadot--1",
+    "base_sha": "640031bad087746236e08f35341385ff471042a5",
+    "default_branch": "master",
+    "sources": [
+      {
+        "path": "README.md",
+        "sha256": "43bc7cd0fcd67bd50fa79c26c05a2841236036d37fe82df829fd0bf256882463"
+      }
+    ],
+    "run_url": "",
+    "admission": {
+      "amount": "6000",
+      "currency": "USD",
+      "usd_value": "6000",
+      "quote": {
+        "basis": "USD face value"
+      },
+      "raw": "$6000",
+      "source_url": "https://github.com/Web3Foundation/build-polkadot/issues/1",
+      "payer": "Web3Foundation"
+    }
+  },
+  "finished_at": "2026-10-31T09:09:30.385148+00:00"
 }
