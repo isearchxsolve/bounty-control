@@ -2,7 +2,7 @@
   "task_id": "1a36317b4a3aa01207e277e173ee087c",
   "repo": "ldc-developers/ldc",
   "issue_number": 2153,
-  "status": "CLAIMED",
+  "status": "REJECTED_PREPARATION",
   "dispatch_id": "ec0ae9471a9146b6b6601686ed9adfa2",
   "admission": {
     "funding": {
@@ -79,7 +79,7 @@
   ],
   "dispatched_at": "2026-10-31T02:25:33.914614+00:00",
   "attempt": 1,
-  "updated_at": "2026-10-31T02:25:53.475381+00:00",
+  "updated_at": "2026-10-31T02:29:02.917412+00:00",
   "owner": "41159950730:1",
   "previous_owner": null,
   "previous_status": "DISPATCHED",
@@ -87,5 +87,28 @@
   "harness_sha": "4c3eefe714d35fcbc24e535ceb466466b27c196d",
   "claimed_at": "2026-10-31T02:25:53.475328+00:00",
   "lease_expires_at": "2026-10-31T06:30:53.475343+00:00",
-  "preparation_budget_seconds": 14400
+  "preparation_budget_seconds": 14400,
+  "at": "2026-10-31T02:28:52.391423+00:00",
+  "reason": "Cline preparation blocked: Issue #2153 is a meta/umbrella tracker, not a request for a concrete code change to this repository, and its only attached funding is a stale Bountysource bounty that the participants themselves describe as no longer applicable. (1) Title is literally '[tracker] AArch64 progress' and the body is an open-ended checklist/milestone list ('Open items: C varargs ... std.numeric.CustomFloat ... remaining quadruple-precision constants ... -NaN asserts') plus 'Upstream PRs to integrate into ltsmaster' spanning ldc, druntime (dlang/druntime#2257, #1267), phobos (dlang/phobos#3598/#5442/#5443/#5444/#5445/#5458/#5459/#5947) and dmd (dlang/dmd#6857/#6858) - a multi-year, multi-repository effort with no single reproducible defect, no target symbol/file in this repo, and no acceptance test. (2) The funding recorded in admission ($2000, payer 'dnadlinger', source https://github.com/ldc-developers/ldc/issues/2153#issuecomment-579253239) is a Bountysource bounty (issue comment 581655910 links https://www.bountysource.com/issues/45907409-tracker-aarch64-progress) that the parties consider dead: issue comment 1174267378 (kinke, 2022-07-04) 'the bounty less so in the sense of the few remaining parts IMO definitely not justifying the full bounty', and comment 1177252534 (dnadlinger, 2022-07-07) 'I thought they were bought out by some ... weird entity at some point ... if no, maybe we should just call it quits; if yes, maybe those of us having done major amounts of work so far can push through to full support and then split the bounty up', referencing closed https://github.com/bountysource/core/issues/1539 ('What is wrong with your support and cash out process?'). (3) The remainder is AArch64-native work: reproducing requires native aarch64-unknown-linux-gnu hardware/CI (varargs core.stdc.stdarg.AAPCS64, C++ ABI, quad-precision real tests, '-NaN' assert in std.math/std.algorithm.sorting), which is unavailable on this x86_64 runner; the reported symptoms are library/ABI behaviors that, per the issue, occur 'only when natively compiling on AArch64'. (4) Live verification on 2026-10-31: issue still open, label B-aarch64, 66 comments, unchanged since 2022-07-29; no open PR referencing issue 2153 (GitHub search total_count=0). Per instructions, do not convert this tracker/withdrawn-funding issue into a fallback proposal or PR: action=blocked and the checkout is left unchanged (no worktree created, no edits, no fork).",
+  "declared_reason": "Issue #2153 is a meta/umbrella tracker, not a request for a concrete code change to this repository, and its only attached funding is a stale Bountysource bounty that the participants themselves describe as no longer applicable. (1) Title is literally '[tracker] AArch64 progress' and the body is an open-ended checklist/milestone list ('Open items: C varargs ... std.numeric.CustomFloat ... remaining quadruple-precision constants ... -NaN asserts') plus 'Upstream PRs to integrate into ltsmaster' spanning ldc, druntime (dlang/druntime#2257, #1267), phobos (dlang/phobos#3598/#5442/#5443/#5444/#5445/#5458/#5459/#5947) and dmd (dlang/dmd#6857/#6858) - a multi-year, multi-repository effort with no single reproducible defect, no target symbol/file in this repo, and no acceptance test. (2) The funding recorded in admission ($2000, payer 'dnadlinger', source https://github.com/ldc-developers/ldc/issues/2153#issuecomment-579253239) is a Bountysource bounty (issue comment 581655910 links https://www.bountysource.com/issues/45907409-tracker-aarch64-progress) that the parties consider dead: issue comment 1174267378 (kinke, 2022-07-04) 'the bounty less so in the sense of the few remaining parts IMO definitely not justifying the full bounty', and comment 1177252534 (dnadlinger, 2022-07-07) 'I thought they were bought out by some ... weird entity at some point ... if no, maybe we should just call it quits; if yes, maybe those of us having done major amounts of work so far can push through to full support and then split the bounty up', referencing closed https://github.com/bountysource/core/issues/1539 ('What is wrong with your support and cash out process?'). (3) The remainder is AArch64-native work: reproducing requires native aarch64-unknown-linux-gnu hardware/CI (varargs core.stdc.stdarg.AAPCS64, C++ ABI, quad-precision real tests, '-NaN' assert in std.math/std.algorithm.sorting), which is unavailable on this x86_64 runner; the reported symptoms are library/ABI behaviors that, per the issue, occur 'only when natively compiling on AArch64'. (4) Live verification on 2026-10-31: issue still open, label B-aarch64, 66 comments, unchanged since 2022-07-29; no open PR referencing issue 2153 (GitHub search total_count=0). Per instructions, do not convert this tracker/withdrawn-funding issue into a fallback proposal or PR: action=blocked and the checkout is left unchanged (no worktree created, no edits, no fork).",
+  "evidence": {
+    "action": "blocked",
+    "worktree": "/tmp/bounty-workspaces/repos/ldc-developers--ldc--2153",
+    "base_sha": "df98a635a7ba665d8907c7cfd7cbd0f2f1aa7810",
+    "default_branch": "master",
+    "sources": [],
+    "run_url": "",
+    "admission": {
+      "amount": "2000",
+      "currency": "USD",
+      "usd_value": "2000",
+      "quote": {
+        "basis": "USD face value"
+      },
+      "raw": "$2000",
+      "source_url": "https://github.com/ldc-developers/ldc/issues/2153#issuecomment-579253239",
+      "payer": "dnadlinger"
+    }
+  },
+  "finished_at": "2026-10-31T02:29:02.527081+00:00"
 }
