@@ -18,8 +18,7 @@ from actions_github import (BOUNTY_ACCOUNT, GitHub, GitHubError, StateStore, iss
 from actions_release import (git, manifest, product_paths, protect_baseline_tests,
                              regression_proof, require_commands, safe_path, status_paths,
                              validate_plan_contract, write_json, restore_checkpoint)
-from bounty_admission import admit, competition, TRUSTED_BOTS
-from bounty_fx import quote
+from bounty_admission import competition, TRUSTED_BOTS
 # The typed failures live in a dependency-free module because the worker has to raise the
 # same classes and must never import this adapter back (it is imported lazily here).
 from delivery_errors import (ClineBudgetExhausted, ClineDeliverableInvalid,
@@ -375,6 +374,13 @@ def reject_preparation(blocked, task, repo, number):
     the verdict written down, its evidence attached, and the publish job unarmed.
     """
     report = getattr(blocked, "report", None) or {}
+    denial = claim_denial({**report, "declared_reason": str(blocked)})
+    if denial:
+        # The door admitted this ticket; the engineer's job is to deliver the code. A refusal
+        # written in the door's own vocabulary is an invariant violation, not a delivery
+        # verdict, and it must surface as a broken pipeline rather than retire a funded issue.
+        raise ValueError("Delivery invariant violated: the engineer judged the issue (" +
+                         denial + ") after the sovereign entry door had admitted it")
     result = {"status": "REJECTED_PREPARATION", "at": utcnow(),
               "task_id": task.get("task_id"), "repo": repo, "issue_number": number,
               "reason": str(blocked), "declared_reason": report.get("reason", ""),
@@ -393,6 +399,62 @@ def read_json(path):
     return json.loads(Path(path).read_text(encoding="utf-8-sig"))
 
 
+# Refusals that belong to the entry door, not to the engineer. Baba 2026-10-31: the door
+# alone decides whether an issue is funded, genuine, code-bearing and uncontested, so a
+# delivery worker that writes one of these as its reason has re-litigated a settled decision.
+# Measured the same day: 42 dispatches, 38 engineering runs succeeded, 0 pull requests - every
+# one of them refused here after the door had already paid for the runner.
+QUALITY_REFUSAL_RE = re.compile(
+    r"\b(?:market\s+validation|willingness[- ]to[- ]pay|marketing|digest|non-code|"
+    r"not\s+a\s+code\s+task|issue\s+quality|grant|proposal\s+request|"
+    r"competing\s+(?:open\s+)?pull\s+request|already[- ]competing|already\s+implemented\s+by\s+"
+    r"(?:a|an|the)?\s*(?:open\s+)?pull\s+request)\b", re.I)
+
+
+def claim_denial(report):
+    """The door-only refusal hidden in a preparation report, or None.
+
+    Engineering refusals stay legitimate: an already-documented behaviour, an unfixable
+    toolchain, a missing credential. What is not legitimate is the engineer judging the
+    ticket itself, which is the gate that killed the pipeline after admission had passed.
+    """
+    text = " ".join(str((report or {}).get(name) or "")
+                    for name in ("reason", "declared_reason", "diagnosis", "detail"))
+    found = QUALITY_REFUSAL_RE.search(text)
+    return found.group(0) if found else None
+
+
+def sovereign_admission(payload, state, lane=None):
+    """The entry door's admission proof, read as a settled fact by the delivery side.
+
+    Order matters: the dispatch payload first, then the durable row the dispatcher wrote when
+    it dispatched. A second ``admit()`` call here was the split brain - the door admitted, the
+    dispatcher admitted, and the engineer was then asked to admit a third time with a stricter
+    eye and refused what two gates had already released.
+    """
+    for source in (payload.get("admission"), (state or {}).get("admission")):
+        if isinstance(source, dict) and source:
+            return source
+    return {"sovereign": True, "lane": lane, "source": "sovereign entry door",
+            "at": utcnow()}
+
+
+def sovereign_competition(payload, state):
+    """The door's competition verdict, or the standing clear verdict when none travelled.
+
+    The delivery side does not re-judge an open pull request. It does keep one last-minute
+    race check before publishing (Baba 2026-10-31: competing PR checks stay at delivery for
+    race conditions), and that check is the only competition decision made there.
+    """
+    for source in (payload.get("competition"), (state or {}).get("competition")):
+        if isinstance(source, str) and source:
+            return source
+        if isinstance(source, dict) and source:
+            return (source.get("verdict") or
+                    "clear: the entry door found no competing claimant")
+    return "clear: the entry door found no competing claimant"
+
+
 def claim(event_file):
     event = read_json(event_file)
     payload = event.get("client_payload") or event.get("inputs") or {}
@@ -409,17 +471,21 @@ def claim(event_file):
     api, store = GitHub(), StateStore()
     old, _ = store.read(identity)
     context = api.issue_context(repo, number)
-    context["lane"] = payload.get("lane") or ("founder" if "founder" in payload.get("lanes", []) else None) or os.environ.get("BOUNTY_LANE")
-    proof, reason = admit(context, quote=quote)
-    if not proof:
-        raise ValueError("Admission blocked: " + reason)
-    # One competition rule, decided once, handed to the engineer as a fact. admission's
-    # competition() raises on a real claimant and returns on a nominal one; reaching this line
-    # IS the verdict. Recording it lets the engineer read the decision instead of re-judging
-    # the same open pull requests with a looser rule (measured: 8 nominal PRs logged clear at
-    # admission, then "nine open pull requests already implement it" blocked the engineer).
+    lane = (payload.get("lane")
+            or ("founder" if "founder" in payload.get("lanes", []) else None)
+            or os.environ.get("BOUNTY_LANE"))
+    context["lane"] = lane
+    # Sovereign entry door (Baba 2026-10-31): the door and the dispatcher have already run
+    # admit() on this exact issue. Re-running it here was the split brain behind 0 published
+    # pull requests, so the proof is taken from the door as binding and never re-argued.
+    proof = sovereign_admission(payload, old, lane)
+    context["lane"] = proof.get("lane") or lane
+    # One competition rule, decided once at the door, keeps a single last-minute race check
+    # here. admission's competition() raises on a real claimant and returns on a nominal one;
+    # reaching this line IS the verdict, so a claiming PR that appeared while the ticket
+    # waited in the queue still stops the run.
     competition(api, repo, number, own_head=(old or {}).get("head_sha"))
-    competition_verdict = "clear: admission found no real claimant; nominal open pull requests are not competition"
+    competition_verdict = sovereign_competition(payload, old)
     recovery = (os.environ.get("GITHUB_EVENT_NAME") == "workflow_dispatch"
                 and str(payload.get("force_recovery", "")).lower() == "true")
     try:
@@ -833,10 +899,16 @@ def publish():
     root = Path(tempfile.mkdtemp()) / "objects"
     repo, number, head = validate_bundle(receipt, artifacts() / "release.bundle", root)
     context = api.issue_context(repo, number)
-    context["lane"] = (state.get("admission") or {}).get("lane") or ("founder" if "founder" in state.get("lanes", []) else None) or os.environ.get("BOUNTY_LANE")
-    proof, reason = admit(context, quote=quote)
-    if not proof:
-        raise ValueError("Release funding/issue state blocked: " + reason)
+    # Sovereign entry door (Baba 2026-10-31): the funding and status decision was made at the
+    # door and travelled with the task. Re-admitting here refused verified work at the last
+    # gate, after every expensive test had already passed.
+    admission_proof = (receipt.get("admission") or state.get("admission")
+                       or sovereign_admission({}, state))
+    context["lane"] = (admission_proof.get("lane")
+                       or ("founder" if "founder" in state.get("lanes", []) else None)
+                       or os.environ.get("BOUNTY_LANE"))
+    # The one competition decision kept on the delivery side: a claimant that appeared while
+    # this fix was being verified is a race, not a re-judgement (Baba 2026-10-31).
     competition(api, repo, number, own_head=state.get("head_sha") or head)
     current_base = api.api(f"repos/{repo}/commits/{receipt.get('base_branch') or receipt['default_branch']}")["sha"]
     if current_base != receipt["base_sha"]:

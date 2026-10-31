@@ -1027,3 +1027,106 @@ class TheSearcherIsSovereign(unittest.TestCase):
         """A broken em dash reached the agent as a replacement char; keep the file ASCII."""
         bad = sorted({c for c in door.TASK_FILE if ord(c) > 127})
         self.assertEqual(bad, [], "the task file must be pure ASCII")
+
+
+class FakeCompetitionAPI:
+    """Only the reads bounty_admission.competition() makes."""
+
+    def __init__(self, pulls=(), timeline=(), resolved=None, author_merged=0):
+        self.pulls, self.timeline = list(pulls), list(timeline)
+        self.resolved, self.author_merged = dict(resolved or {}), author_merged
+
+    def pages(self, path, **kwargs):
+        if path.endswith("/pulls"):
+            return iter(self.pulls)
+        return iter(self.timeline if path.endswith("/timeline") else ())
+
+    def api(self, path, method="GET", body=None):
+        if "search/issues" in path:
+            return {"total_count": self.author_merged}
+        if path.endswith("/check-runs"):
+            return {"check_runs": []}
+        if path in self.resolved:
+            return self.resolved[path]
+        raise AssertionError("unexpected read: " + path)
+
+
+def funded_context(repo, number):
+    """The dispatcher's own context shape, funded and owned, so admit() accepts it."""
+    issue = {"state": "open", "title": "Add retry to the HTTP client",
+             "body": ISSUE["body"], "user": {"login": "owner"},
+             "author_association": "OWNER",
+             "html_url": f"https://github.com/{repo}/issues/{number}", "labels": [],
+             "created_at": "2026-10-01T00:00:00Z",
+             "updated_at": datetime.utcnow().strftime("%Y-%m-%dT%H:%M:%SZ"), "comments": 0}
+    return {"repo": repo, "issue_number": number, "issue": issue,
+            "repository": {"name": repo.split("/")[-1], "full_name": repo,
+                           "owner": {"login": repo.split("/")[0]},
+                           "archived": False, "disabled": False, "default_branch": "main"},
+            "comments": [], "author_comments": [],
+            "fetched_at": datetime.utcnow().isoformat() + "Z", "complete_comments": True}
+
+
+class TheDoorRunsTheWholeBattery(unittest.TestCase):
+    """Baba 2026-10-31: the door is the sovereign judge, so it runs every gate itself.
+
+    Measured: the door ran admit() only, so a ticket a claiming pull request had already taken
+    was dispatched anyway and the engineer refused it after forty minutes. Refusing it here
+    costs one line and the searcher replaces it in the same round.
+    """
+
+    def verify(self, api):
+        return door.verify_rows([row()], fetcher(), admission_client=api,
+                                context_builder=funded_context)
+
+    def test_a_real_claimant_refuses_the_row(self):
+        pull = {"number": 900, "html_url": "https://github.com/acme/http/pull/900",
+                "user": {"login": "rival"}, "title": "Fixes #7",
+                "body": "", "head": {"ref": "fix/7", "sha": "a" * 40, "repo": None}}
+        verdict = self.verify(FakeCompetitionAPI(pulls=[pull], author_merged=1))
+        self.assertEqual(verdict["admitted"], [])
+        self.assertEqual(verdict["refused"][0]["reason"], "COMPETING_OPEN_PRS")
+        self.assertIn("pull/900", verdict["refused"][0]["detail"])
+
+    def test_a_nominal_attempt_is_not_competition(self):
+        """A dropped file by an author who has never landed work here blocks nothing."""
+        pull = {"number": 901, "html_url": "https://github.com/acme/http/pull/901",
+                "user": {"login": "hopeful"}, "title": "Fixes #7",
+                "body": "", "head": {"ref": "fix/7", "sha": "b" * 40, "repo": None}}
+        verdict = self.verify(FakeCompetitionAPI(pulls=[pull], author_merged=0))
+        self.assertEqual(len(verdict["admitted"]), 1)
+        self.assertEqual(verdict["refused"], [])
+
+    def test_an_issue_already_resolved_by_a_merged_pull_request_is_refused(self):
+        url = "https://api.github.com/repos/acme/http/pulls/902"
+        timeline = [{"source": {"issue": {"pull_request": {"url": url}, "state": "closed"}}}]
+        merged = {"html_url": "https://github.com/acme/http/pull/902", "body": "Fixes #7",
+                  "merged_at": "2026-10-01T00:00:00Z", "head": {"sha": "d" * 40},
+                  "base": {"repo": {"full_name": "acme/http"}}}
+        verdict = self.verify(FakeCompetitionAPI(
+            timeline=timeline, resolved={"repos/acme/http/pulls/902": merged}))
+        self.assertEqual(verdict["admitted"], [])
+        self.assertEqual(verdict["refused"][0]["reason"], "ISSUE_ALREADY_RESOLVED")
+
+    def test_a_clean_issue_leaves_the_door_with_its_verdict(self):
+        verdict = self.verify(FakeCompetitionAPI())
+        admitted = verdict["admitted"]
+        self.assertEqual(len(admitted), 1)
+        self.assertTrue(admitted[0]["sovereign_admission"])
+        self.assertIsInstance(admitted[0]["admission"], dict)
+        self.assertEqual(admitted[0]["competition"], {"blocking": False, "nominal": []})
+
+    def test_an_unreadable_competition_probe_never_invents_a_refusal(self):
+        class Broken(FakeCompetitionAPI):
+            def pages(self, path, **kwargs):
+                raise OSError("rate limited")
+        verdict = self.verify(Broken())
+        self.assertEqual(len(verdict["admitted"]), 1)
+        self.assertIn("unverified", verdict["admitted"][0]["competition"]["verdict"])
+
+    def test_an_offline_row_is_not_stamped_sovereign(self):
+        """No admission client means nothing was verified, and the row must not claim otherwise."""
+        admitted = door.verify_rows([row()], fetcher())["admitted"][0]
+        self.assertFalse(admitted["sovereign_admission"])
+        self.assertIsNone(admitted["admission"])
+        self.assertIsNone(admitted["competition"])

@@ -395,6 +395,14 @@ def quote_states_an_amount(quote: str) -> bool:
 # dispatcher builds (repository, issue, complete comments) and calls the same admit() - one
 # contract, two callers, no second copy of the rules to drift.
 ADMISSION_GATE = os.environ.get("BOUNTY_DOOR_ADMISSION", "1") != "0"
+# The door is the sovereign judge, so it runs the whole battery the dispatcher would run,
+# competition included. Measured 2026-10-31: the door ran admit() only, so tickets that a
+# claiming pull request had already taken were paid for and dispatched anyway; the engineer
+# then refused them after forty minutes of runner time each. A contested ticket is refused
+# here, where it costs one line and the searcher can replace it in the same round.
+COMPETITION_GATE = os.environ.get("BOUNTY_DOOR_COMPETITION", "1") != "0"
+COMPETITION_CLEAR = ("clear: no competing claimant at the entry door; nominal open pull "
+                     "requests are not competition")
 
 
 def _default_context_builder(repo, number):
@@ -408,26 +416,60 @@ def _default_context_builder(repo, number):
 
 
 def admission_refusal(repo, number, quote=None, client=None, context_builder=None):
-    """Return (None, None) when admit() accepts the row, else (reason, None).
+    """Return (None, None, proof) when admit() accepts the row, else (reason, None, None).
 
     Fails closed: if the context cannot be built, the row is refused as ISSUE_UNREADABLE.
+    The proof travels back so the admitted row can carry it: the delivery side reads that
+    proof as a settled fact instead of running admission a second time.
     """
     try:
         from bounty_admission import admit  # noqa: E402
         from bounty_fx import quote as fx_quote  # noqa: E402
     except Exception as exc:  # pragma: no cover - import failure is a loud refusal
-        return "ADMISSION_UNAVAILABLE", str(exc)[:200]
+        return "ADMISSION_UNAVAILABLE", str(exc)[:200], None
     if context_builder is None:
         context_builder = _default_context_builder
     try:
         context = context_builder(repo, number)
     except Exception as exc:
-        return "ISSUE_UNREADABLE", str(exc)[:200]
+        return "ISSUE_UNREADABLE", str(exc)[:200], None
     oracle = quote if quote is not None else fx_quote
     proof, reason = admit(context, quote=oracle)
     if proof:
-        return None, None
-    return reason or "REFUSED_BY_ADMISSION", None
+        return None, None, proof
+    return reason or "REFUSED_BY_ADMISSION", None, None
+
+
+def competition_refusal(repo, number, client=None):
+    """Run admission's competition rule at the door.
+
+    Returns ``(reason, detail, verdict)``: a refusal when a real claimant exists, else
+    ``(None, None, verdict)`` with the recorded verdict handed to the admitted row.
+
+    ``competition()`` raises on a claimant with real evidence and returns on a nominal one,
+    so reaching the return IS the verdict - the same contract the dispatcher and the
+    publication race check read. Only a ValueError is a competition verdict; anything else
+    (transport, rate limit) is recorded as unverified and never invents a refusal, because an
+    unreadable API says nothing about the ticket.
+    """
+    if client is None:
+        return None, None, None
+    try:
+        from bounty_admission import competition  # noqa: E402
+    except Exception as exc:  # pragma: no cover - import failure is not a verdict
+        return None, None, {"blocking": False, "verdict": "unverified: " + str(exc)[:160]}
+    try:
+        verdict = competition(client, repo, number)
+    except ValueError as exc:
+        message = str(exc)
+        reason = ("ISSUE_ALREADY_RESOLVED" if message.startswith("Issue already resolved")
+                  else "COMPETING_OPEN_PRS")
+        return reason, message[:200], None
+    except Exception as exc:
+        print(json.dumps({"phase": "ENTRY_COMPETITION_UNVERIFIED", "repo": repo,
+                          "issue": number, "detail": str(exc)[:200]}), flush=True)
+        return None, None, {"blocking": False, "verdict": "unverified: " + str(exc)[:160]}
+    return None, None, verdict
 
 
 def verify_rows(rows: List[dict], fetch: Optional[Callable[[str, int], Optional[dict]]] = None,
@@ -511,19 +553,33 @@ def verify_rows(rows: List[dict], fetch: Optional[Callable[[str, int], Optional[
                              "reward_quote": quote, "why_now": row.get("why_now")})
             continue
 
+        proof, competition_verdict = None, None
         if ADMISSION_GATE and admission_client is not None:
-            reason, detail = admission_refusal(repo, number, quote=None, client=admission_client,
+            reason, detail, proof = admission_refusal(repo, number, quote=None, client=admission_client,
                                           context_builder=context_builder)
             if reason:
                 refused.append({"row": row, "reason": reason, **({"detail": detail} if detail else {})})
                 continue
+            if COMPETITION_GATE:
+                reason, detail, competition_verdict = competition_refusal(
+                    repo, number, admission_client)
+                if reason:
+                    refused.append({"row": row, "reason": reason,
+                                    **({"detail": detail} if detail else {})})
+                    continue
 
+        # The row leaves the door carrying the door's own verdict. The delivery side reads
+        # these fields as settled facts: it verifies engineering, not the decision to work.
         admitted.append({"repo": repo, "issue": number, "url": row.get("url") or
                          f"https://github.com/{repo}/issues/{number}",
                          "lane": lane,
                          "author_association": author_assoc,
                          "reward_quote": quote, "reward_usd": row.get("reward_usd"),
-                         "scope_quote": row.get("scope_quote"), "why_now": row.get("why_now")})
+                         "scope_quote": row.get("scope_quote"), "why_now": row.get("why_now"),
+                         "sovereign_admission": bool(proof),
+                         "admission": proof,
+                         "competition": competition_verdict or (
+                             COMPETITION_CLEAR if admission_client is not None else None)})
     return {"admitted": admitted, "refused": refused, "unpriced": unpriced}
 
 

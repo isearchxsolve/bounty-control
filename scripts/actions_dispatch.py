@@ -1119,6 +1119,12 @@ def queue_agent_rows(con, api, rows, verdicts=None, pending_has_seen_at=True):
         item = dict(issue)
         item["repository_url"] = f"https://api.github.com/repos/{repo}"
         item["number"] = number
+        # The door's verdict travels with the queued row. These three fields are what makes
+        # the entry door sovereign: the delivery side reads its admission proof and its
+        # competition verdict instead of reaching a second, different decision.
+        for stamp in ("sovereign_admission", "admission", "competition"):
+            if row.get(stamp) is not None:
+                item[stamp] = row[stamp]
         lane = row.get("lane") or AGENT_LANE
         expression = row.get("expression") or AGENT_EXPRESSION
         identity = store_pending_item(con, item, lane, expression,

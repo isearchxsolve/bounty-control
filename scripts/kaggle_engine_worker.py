@@ -2881,23 +2881,37 @@ def run_cline_claim_intake(task, lease):
 Read the ENTIRE issue and prior failure context from {context_path}; do not truncate or summarize away requirements.
 Repository: {repo}. Issue: #{number}. Your active fleet run: {lease.run_id}.
 
-Before preparing tools or a test plan, classify the issue from its complete text and repository state.
-Proceed only when it requests a concrete code change to this repository (a reproducible defect,
-specific engineering feature, or focused code-level maintenance) and the funding/claim is still live.
-If it is market validation, willingness-to-pay research, a grant/proposal request, a generic product
-idea without a repository change, a documentation/marketing deliverable, withdrawn funding, or an
-already-competing pull request, write action=blocked with the exact evidence and leave the checkout
-unchanged. Do not turn a rejected/non-engineering issue into a fallback proposal or pull request.
+SUPREME MANDATE: ZERO JUDGMENT OF ISSUE QUALITY - PURE ENGINEERING EXECUTION ONLY.
+
+You are the Delivery Engine. You do NOT judge issue quality, you do NOT question requirements,
+and you do NOT evaluate whether this issue "deserves" a pull request.
+
+The Sovereign Entry Door has ALREADY inspected, verified, and admitted this issue:
+- Its funding authority is verified as real.
+- Its competition is checked: no competing claimant exists; any nominal PR is dismissed.
+- Its status is verified: the issue is open, live, and sovereignly approved for work.
+These are SETTLED, BINDING FACTS recorded in your context. Take them as absolute truth.
+
+YOUR SOLE MANDATE IS TO DELIVER FLAWLESS, PRODUCTION-GRADE ENGINEERING:
+1. Inspect the codebase, manifests, and setup documentation.
+2. Establish the untouched upstream baseline (baseline_tests MUST pass on clean base).
+3. Construct a precise reproduction command (regression_plan.command) that exercises the reported defect and fails on the untouched base.
+4. Implement the clean, robust architectural fix.
+5. Verify locally that 100% of existing tests pass, linters pass with zero warnings, and boundary tests pass.
+6. Verify the fix builds cleanly and prepare the pull request with action="retry".
+
+You are strictly forbidden from writing action="blocked" based on issue quality, wording, marketing/digest classification, or open PRs.
+The Entry Door has spoken. You follow the order and deliver the code.
 
 You have full freedom to inspect the repository and provision the required tools, pinned versions,
 dependencies, environment and configuration. Read its AGENTS.md, manifests, lockfiles, CI and setup docs.
 Choose the actual native commands yourself. Diagnose and repair installation/configuration failures;
 do not wait for a separate installer or assume npm, a language, a version, or a testing framework.
-Check current funding before work. Competition is already decided for you: the admission gate read every
-open pull request for this issue and recorded its verdict in the task context as the field "competition".
-Take that verdict as settled fact. Do not re-judge open pull requests with your own standard, and do not
-block on a pull request the verdict has already classed as nominal. Stop on withdrawn funding, or if the
-verdict in the context says a real claimant exists.
+Funding, status and competition were decided by the sovereign entry door and are recorded in the task
+context as the fields "admission" and "competition". Take them as settled fact: do not re-check funding,
+do not re-judge open pull requests with your own standard, and never stop for a reason the door already
+ruled on. A claimant that appears while you work is caught by the host's publication race check, not
+by you.
 Preserve existing completed edits and diagnostics before any destructive checkout operation.
 {checkout_instruction}
 Use repository-declared pins and build permissions. Never bypass integrity checks or approval policies.
@@ -2947,6 +2961,9 @@ Write the preparation decision to {report_path}:
 "linters":[["actual","lint"]],"format_checks":[]}},
 "regression_plan":{{"component":"actual repository path","command":["actual","regression","test"],
 "expected_failure":"specific defect assertion that fails on the unchanged base"}}}}
+"blocked" is only for a genuinely unbuildable environment - a missing toolchain, credential or hardware
+that no amount of engineering can supply. It is never an answer about the ticket itself: the door has
+already decided that, and re-deciding it is a contract violation, not a delivery outcome.
 Do not claim delivery. Save the real plan and receipts, then finish this preparation phase."""
     _command_log(f'CLINE_FIRST_AFTER_CLAIM repo={repo} issue={number} context={context_path}')
     result = run_command_safe(cline_worktree_command(SANDBOX_DIR, prompt), cwd=SANDBOX_DIR,

@@ -83,9 +83,16 @@ class DeliveryOwnershipTests(unittest.TestCase):
                  redirect_stdout(io.StringIO()):
                 report = worker.run_cline_claim_intake(task, SimpleNamespace(run_id='isolated-unit-run'))
             self.assertEqual(calls[0], 'cline')
-            self.assertIn('concrete code change', prompts[0])
-            self.assertIn('willingness-to-pay research', prompts[0])
-            self.assertIn('Do not turn a rejected/non-engineering issue into a fallback proposal', prompts[0])
+            # Baba 2026-10-31 (sovereign entry door): these three assertions used to pin the
+            # intake classification gate - "proceed only when it requests a concrete code
+            # change", "willingness-to-pay research", "do not turn a rejected issue into a
+            # proposal". That gate was the delivery-side twin of the door's decision and it
+            # refused 42 of 42 admitted tickets. The prompt now carries the opposite law.
+            self.assertIn('SUPREME MANDATE: ZERO JUDGMENT OF ISSUE QUALITY', prompts[0])
+            self.assertIn('strictly forbidden from writing action="blocked"', prompts[0])
+            self.assertIn('Sovereign Entry Door has ALREADY inspected', prompts[0])
+            self.assertNotIn('willingness-to-pay research', prompts[0])
+            self.assertNotIn('classify the issue', prompts[0])
             self.assertIn('Manage runner resources', prompts[0])
             # This used to pin 'separate serial commands', which was the loophole: it invited
             # the agent to run a monorepo's component checks during preparation. Two runs
