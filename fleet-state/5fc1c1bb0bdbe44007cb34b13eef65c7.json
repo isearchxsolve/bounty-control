@@ -2,7 +2,7 @@
   "task_id": "5fc1c1bb0bdbe44007cb34b13eef65c7",
   "repo": "ruohong2018/ruohong2018.github.io",
   "issue_number": 856,
-  "status": "CLAIMED",
+  "status": "REJECTED_PREPARATION",
   "dispatch_id": "81966037873c45d69ecf23f169d83786",
   "admission": {
     "funding": {
@@ -41,7 +41,7 @@
   ],
   "dispatched_at": "2026-10-31T03:23:30.797135+00:00",
   "attempt": 1,
-  "updated_at": "2026-10-31T03:23:43.083177+00:00",
+  "updated_at": "2026-10-31T03:26:41.646747+00:00",
   "owner": "41164178098:1",
   "previous_owner": null,
   "previous_status": "DISPATCHED",
@@ -49,5 +49,49 @@
   "harness_sha": "4c3eefe714d35fcbc24e535ceb466466b27c196d",
   "claimed_at": "2026-10-31T03:23:43.083125+00:00",
   "lease_expires_at": "2026-10-31T07:28:43.083139+00:00",
-  "preparation_budget_seconds": 14400
+  "preparation_budget_seconds": 14400,
+  "at": "2026-10-31T03:26:18.740678+00:00",
+  "reason": "Cline preparation blocked: Issue #856 is an auto-generated daily news-feed post, not a code change request. Title '[\u6bcf\u65e5\u4fe1\u606f\u6d41] 2025-06-16' ('Daily information feed 2025-06-16'), single label 'daily', author_association OWNER, state open, 0 comments, and a body consisting entirely of a 11878-char enumerated list of external security-news article links (Security Boulevard, SecWiki, CXSecurity, InfoSec Write-ups, Exploit-DB, reddit, etc.). It is produced verbatim by the scheduled workflow .github/workflows/daily.yml (step 'Issue': gh issue create --title \"[\u6bcf\u65e5\u4fe1\u606f\u6d41] `date +'%Y-%m-%d'`\" -F today.md --label \"daily\"), whose README documents '\u6bcf\u65e5\u4fe1\u606f\u6d41\uff0c\u9ed8\u8ba4\u4e3a\u6bcf\u5929\u65e9\u4e0a9\u70b930\u5206\u63a8\u9001\u6628\u5929\u65b0\u589e\u6587\u7ae0\u5217\u8868'. There is no reproducible defect, no specific engineering feature, and no code-level maintenance requested; the repository is a Python RSS crawler/blog (yarb.py, bot.py) and the issue asks for nothing in it. The admission funding of $10,000 is a false positive: the string '10,000' appears only inside the feed link title '$10,000 Authentication Bypass at Uber' (https://infosecwriteups.com/10-000-authentication-bypass-at-uber-c091c7733662), i.e. an external bug-bounty write-up, not a funding commitment (payer field is just the issue author 'ruohong2018'; source_url is the issue itself). Likewise the technical_signals 'bug','bug_bounty','bypass','panic','overflow','protocol' are keyword-harvested from article titles/URLs within the feed, not from any engineering request. Per policy this is a documentation/marketing/content deliverable with no repository change; the checkout is left unchanged. No branch 'fix/bounty-856' was created, no edits, no PR.",
+  "declared_reason": "Issue #856 is an auto-generated daily news-feed post, not a code change request. Title '[\u6bcf\u65e5\u4fe1\u606f\u6d41] 2025-06-16' ('Daily information feed 2025-06-16'), single label 'daily', author_association OWNER, state open, 0 comments, and a body consisting entirely of a 11878-char enumerated list of external security-news article links (Security Boulevard, SecWiki, CXSecurity, InfoSec Write-ups, Exploit-DB, reddit, etc.). It is produced verbatim by the scheduled workflow .github/workflows/daily.yml (step 'Issue': gh issue create --title \"[\u6bcf\u65e5\u4fe1\u606f\u6d41] `date +'%Y-%m-%d'`\" -F today.md --label \"daily\"), whose README documents '\u6bcf\u65e5\u4fe1\u606f\u6d41\uff0c\u9ed8\u8ba4\u4e3a\u6bcf\u5929\u65e9\u4e0a9\u70b930\u5206\u63a8\u9001\u6628\u5929\u65b0\u589e\u6587\u7ae0\u5217\u8868'. There is no reproducible defect, no specific engineering feature, and no code-level maintenance requested; the repository is a Python RSS crawler/blog (yarb.py, bot.py) and the issue asks for nothing in it. The admission funding of $10,000 is a false positive: the string '10,000' appears only inside the feed link title '$10,000 Authentication Bypass at Uber' (https://infosecwriteups.com/10-000-authentication-bypass-at-uber-c091c7733662), i.e. an external bug-bounty write-up, not a funding commitment (payer field is just the issue author 'ruohong2018'; source_url is the issue itself). Likewise the technical_signals 'bug','bug_bounty','bypass','panic','overflow','protocol' are keyword-harvested from article titles/URLs within the feed, not from any engineering request. Per policy this is a documentation/marketing/content deliverable with no repository change; the checkout is left unchanged. No branch 'fix/bounty-856' was created, no edits, no PR.",
+  "evidence": {
+    "action": "blocked",
+    "worktree": "/tmp/bounty-workspaces/repos/ruohong2018--ruohong2018.github.io--856",
+    "base_sha": "d51bad12e8b4edfcd4196d59dfdb5ac1427ea24c",
+    "default_branch": "master",
+    "sources": [
+      {
+        "path": ".github/workflows/daily.yml",
+        "sha256": "0976c4913dd5741d2acc400154315a64a900e1b506735685d0651326a33f1378"
+      },
+      {
+        "path": "requirements.txt",
+        "sha256": "116c08e02cbb0f92aef8e277a45c1f0628bf517eb332ce52399a41f024c927f0"
+      },
+      {
+        "path": "install.sh",
+        "sha256": "e893c3d8899015f56b8aba0502fe6ba36e4cd8e8fd9fe28cfac7904c07d80e81"
+      },
+      {
+        "path": "bot.py",
+        "sha256": "7732c374bb35b4f4c08f7c219a4a74a8b222e1ca6866944649b40852b521409e"
+      },
+      {
+        "path": "yarb.py",
+        "sha256": "12c21e259507749a745bac6de491f46d6c76abba160a59e2a639150d7235bf3a"
+      }
+    ],
+    "run_url": "",
+    "admission": {
+      "amount": "10000",
+      "currency": "USD",
+      "usd_value": "10000",
+      "quote": {
+        "basis": "USD face value"
+      },
+      "raw": "$10,000",
+      "source_url": "https://github.com/ruohong2018/ruohong2018.github.io/issues/856",
+      "payer": "ruohong2018"
+    }
+  },
+  "finished_at": "2026-10-31T03:26:40.986918+00:00"
 }
