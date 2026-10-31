@@ -2,7 +2,7 @@
   "task_id": "b169323e82d8ca6445264c6f880ce4ed",
   "repo": "ruohong2018/ruohong2018.github.io",
   "issue_number": 747,
-  "status": "CLAIMED",
+  "status": "REJECTED_PREPARATION",
   "dispatch_id": "3c150b76c88b4d68994f7c94dcaf30d9",
   "admission": {
     "funding": {
@@ -41,7 +41,7 @@
   ],
   "dispatched_at": "2026-10-31T03:51:31.918230+00:00",
   "attempt": 1,
-  "updated_at": "2026-10-31T03:51:42.234060+00:00",
+  "updated_at": "2026-10-31T03:54:34.264299+00:00",
   "owner": "41166148247:1",
   "previous_owner": null,
   "previous_status": "DISPATCHED",
@@ -49,5 +49,49 @@
   "harness_sha": "4c3eefe714d35fcbc24e535ceb466466b27c196d",
   "claimed_at": "2026-10-31T03:51:42.234010+00:00",
   "lease_expires_at": "2026-10-31T07:56:42.234023+00:00",
-  "preparation_budget_seconds": 14400
+  "preparation_budget_seconds": 14400,
+  "at": "2026-10-31T03:54:21.849947+00:00",
+  "reason": "Cline preparation blocked: Issue #747 is titled '[\u6bcf\u65e5\u4fe1\u606f\u6d41] 2025-02-28' (Daily Information Feed 2025-02-28) and carries only the 'daily' label. Its body is a 39,795-character, machine-generated bullet list of external security-news RSS links (Trustwave, seebug, cxsecurity, 4hou, Security Boulevard, WeChat posts, ...). It was auto-created by repository automation in .github/workflows/daily.yml: `gh issue create --title \"[\u6bcf\u65e5\u4fe1\u606f\u6d41] `date +'%Y-%m-%d'`\" -F today.md --label \"daily\"`. The single comment is 'thank u'. The issue requests no concrete code change: it contains no reproducible defect, no specific engineering feature, and no focused code-level maintenance request for this repository. The admission 'technical_signals' (bug, bug_bounty, crashed, encryption, protocol, signature, ...) are generic keyword false-positives extracted from the linked article titles/text, not statements of a defect. This is an auto-generated content/documentation deliverable, not an engineering task, so per classification rules the checkout is left unchanged. Related context: repository is an active GitHub Pages site (default_branch master, 1357 open issues, most of the same auto-generated 'daily'/'dailypick'/'pick' feed kind); the single open PR is #1361 'fix: update wechatRSS OPML feed URL ... (Fixes #1360)', which addresses an unrelated issue, not #747.",
+  "declared_reason": "Issue #747 is titled '[\u6bcf\u65e5\u4fe1\u606f\u6d41] 2025-02-28' (Daily Information Feed 2025-02-28) and carries only the 'daily' label. Its body is a 39,795-character, machine-generated bullet list of external security-news RSS links (Trustwave, seebug, cxsecurity, 4hou, Security Boulevard, WeChat posts, ...). It was auto-created by repository automation in .github/workflows/daily.yml: `gh issue create --title \"[\u6bcf\u65e5\u4fe1\u606f\u6d41] `date +'%Y-%m-%d'`\" -F today.md --label \"daily\"`. The single comment is 'thank u'. The issue requests no concrete code change: it contains no reproducible defect, no specific engineering feature, and no focused code-level maintenance request for this repository. The admission 'technical_signals' (bug, bug_bounty, crashed, encryption, protocol, signature, ...) are generic keyword false-positives extracted from the linked article titles/text, not statements of a defect. This is an auto-generated content/documentation deliverable, not an engineering task, so per classification rules the checkout is left unchanged. Related context: repository is an active GitHub Pages site (default_branch master, 1357 open issues, most of the same auto-generated 'daily'/'dailypick'/'pick' feed kind); the single open PR is #1361 'fix: update wechatRSS OPML feed URL ... (Fixes #1360)', which addresses an unrelated issue, not #747.",
+  "evidence": {
+    "action": "blocked",
+    "worktree": "/tmp/bounty-workspaces/repos/ruohong2018--ruohong2018.github.io--747",
+    "base_sha": "d51bad12e8b4edfcd4196d59dfdb5ac1427ea24c",
+    "default_branch": "master",
+    "sources": [
+      {
+        "path": "README.md",
+        "sha256": "8b1f7c31b11fb439fe3ad0310726758c805049f6727029b83845c29b25ce1b0e"
+      },
+      {
+        "path": "requirements.txt",
+        "sha256": "116c08e02cbb0f92aef8e277a45c1f0628bf517eb332ce52399a41f024c927f0"
+      },
+      {
+        "path": "config.json",
+        "sha256": "5c8d99974aebae28e535fcef799a7b631c8387b8e26ba85844a4334dca52ed78"
+      },
+      {
+        "path": ".github/workflows/daily.yml",
+        "sha256": "0976c4913dd5741d2acc400154315a64a900e1b506735685d0651326a33f1378"
+      },
+      {
+        "path": "bot.py",
+        "sha256": "7732c374bb35b4f4c08f7c219a4a74a8b222e1ca6866944649b40852b521409e"
+      }
+    ],
+    "run_url": "",
+    "admission": {
+      "amount": "500",
+      "currency": "USD",
+      "usd_value": "500",
+      "quote": {
+        "basis": "USD face value"
+      },
+      "raw": "$ 500",
+      "source_url": "https://github.com/ruohong2018/ruohong2018.github.io/issues/747",
+      "payer": "ruohong2018"
+    }
+  },
+  "finished_at": "2026-10-31T03:54:33.611188+00:00"
 }
