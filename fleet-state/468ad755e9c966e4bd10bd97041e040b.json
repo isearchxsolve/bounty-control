@@ -2,7 +2,7 @@
   "task_id": "468ad755e9c966e4bd10bd97041e040b",
   "repo": "Tyaoo/picker",
   "issue_number": 960,
-  "status": "CLAIMED",
+  "status": "REJECTED_PREPARATION",
   "dispatch_id": "d372e10448134bf4b11b89658c14e2cd",
   "admission": {
     "funding": {
@@ -38,7 +38,7 @@
   ],
   "dispatched_at": "2026-10-31T01:38:30.989254+00:00",
   "attempt": 1,
-  "updated_at": "2026-10-31T01:38:41.429091+00:00",
+  "updated_at": "2026-10-31T01:42:12.180796+00:00",
   "owner": "41156320199:1",
   "previous_owner": null,
   "previous_status": "DISPATCHED",
@@ -46,5 +46,57 @@
   "harness_sha": "4c3eefe714d35fcbc24e535ceb466466b27c196d",
   "claimed_at": "2026-10-31T01:38:41.429033+00:00",
   "lease_expires_at": "2026-10-31T05:43:41.429048+00:00",
-  "preparation_budget_seconds": 14400
+  "preparation_budget_seconds": 14400,
+  "at": "2026-10-31T01:41:57.093325+00:00",
+  "reason": "Cline preparation blocked: Issue #960 is an auto-generated daily content-feed post, not an engineering request. Title '[\u6bcf\u65e5\u4fe1\u606f\u6d41] 2025-03-28'; label 'daily'; body is a 42,429-character plain list of external security-news hyperlinks (\u5947\u5b89\u4fe1\u653b\u9632\u793e\u533a, Doonsec's feed, WeChat mp articles) with unchecked checkboxes - no defect, no reproduction, no feature, no component reference, no source location, and no requested repository change. It is produced by the repository's own scheduled workflow .github/workflows/daily.yml, which runs `gh issue create --title \"[\u6bcf\u65e5\u4fe1\u606f\u6d41] $(date)\" -F today.md --label daily`; the repo currently holds ~1537 open issues of this identical kind. The 'technical_signals' (atomic/bug/bypass/error/performance...) are keyword extractions from the news article titles, not engineering evidence. The declared funding is not a live engineering bounty: admission.funding.source_url is the issue itself (https://github.com/Tyaoo/picker/issues/960), payer is the repository owner Tyaoo, and there is no external sponsor, escrow or funding artifact. Issue state=open, comments=0, timeline events only labeled/mentioned/subscribed, and no linked or competing pull request for #960 (open PRs are #1518/#1500/#1295, targeting other issues). This is a documentation/content deliverable with no repository change, so per policy the checkout is left unchanged and no fallback proposal or PR is fabricated.",
+  "declared_reason": "Issue #960 is an auto-generated daily content-feed post, not an engineering request. Title '[\u6bcf\u65e5\u4fe1\u606f\u6d41] 2025-03-28'; label 'daily'; body is a 42,429-character plain list of external security-news hyperlinks (\u5947\u5b89\u4fe1\u653b\u9632\u793e\u533a, Doonsec's feed, WeChat mp articles) with unchecked checkboxes - no defect, no reproduction, no feature, no component reference, no source location, and no requested repository change. It is produced by the repository's own scheduled workflow .github/workflows/daily.yml, which runs `gh issue create --title \"[\u6bcf\u65e5\u4fe1\u606f\u6d41] $(date)\" -F today.md --label daily`; the repo currently holds ~1537 open issues of this identical kind. The 'technical_signals' (atomic/bug/bypass/error/performance...) are keyword extractions from the news article titles, not engineering evidence. The declared funding is not a live engineering bounty: admission.funding.source_url is the issue itself (https://github.com/Tyaoo/picker/issues/960), payer is the repository owner Tyaoo, and there is no external sponsor, escrow or funding artifact. Issue state=open, comments=0, timeline events only labeled/mentioned/subscribed, and no linked or competing pull request for #960 (open PRs are #1518/#1500/#1295, targeting other issues). This is a documentation/content deliverable with no repository change, so per policy the checkout is left unchanged and no fallback proposal or PR is fabricated.",
+  "evidence": {
+    "action": "blocked",
+    "worktree": "/tmp/bounty-workspaces/repos/Tyaoo--picker--960",
+    "base_sha": "f1d886f585e807e82f84da6123f4858ef365f461",
+    "default_branch": "main",
+    "sources": [
+      {
+        "path": "requirements.txt",
+        "sha256": "0bd080de6e0416d13591bb124ecde53fcd8bed8b91c3cce93caccf2405837639"
+      },
+      {
+        "path": ".github/workflows/daily.yml",
+        "sha256": "60042e008e529bb95dc2c11b487b77e0f2fdf1b7b3a26b6599ce18787089d309"
+      },
+      {
+        "path": "install.sh",
+        "sha256": "c76bee4563a42e3b9e6ae1b465bb68a300ab2b6a159919d6b859f3327ece34e0"
+      },
+      {
+        "path": "config.yml",
+        "sha256": "970754f21ec94c92c68bb241c94a5c84eeafec2937d0a4da9892be01fb2bc7e0"
+      },
+      {
+        "path": "bot.py",
+        "sha256": "fb85e5c5c09e0d352db2373435334568d286c89f349fcad2996e502d6fd88b07"
+      },
+      {
+        "path": "yarb.py",
+        "sha256": "87a2d7531e8d407bc789446cb7823eeb09843dff40fa21223e222998d9cc1fd0"
+      },
+      {
+        "path": "utils.py",
+        "sha256": "5c08284c9f885f91d7de59493feaf7be0c5020af96e236c02a44db8f5a884e2a"
+      }
+    ],
+    "run_url": "",
+    "admission": {
+      "amount": "100000",
+      "currency": "USD",
+      "usd_value": "100000",
+      "quote": {
+        "basis": "USD face value"
+      },
+      "raw": "$100K",
+      "source_url": "https://github.com/Tyaoo/picker/issues/960",
+      "payer": "Tyaoo"
+    }
+  },
+  "finished_at": "2026-10-31T01:42:11.677975+00:00"
 }
