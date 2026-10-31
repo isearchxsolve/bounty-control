@@ -1,0 +1,44 @@
+{
+  "task_id": "c579774f2339d000a85f2eed7aea18b4",
+  "repo": "ruohong2018/ruohong2018.github.io",
+  "issue_number": 790,
+  "status": "DISPATCHING",
+  "dispatch_id": "b2ea8da8a5c84b8ba9bdb9e7d8425ea7",
+  "admission": {
+    "funding": {
+      "amount": "5382",
+      "currency": "USD",
+      "usd_value": "5382",
+      "quote": {
+        "basis": "USD face value"
+      },
+      "raw": "$5,382",
+      "source_url": "https://github.com/ruohong2018/ruohong2018.github.io/issues/790",
+      "payer": "ruohong2018"
+    },
+    "technical_signals": [
+      "atomic",
+      "broken",
+      "bug",
+      "bug_bounty",
+      "bugs",
+      "crashes",
+      "encryption"
+    ],
+    "component_references": [
+      "ELFDICOM"
+    ],
+    "source_locations": [],
+    "engineering_evidence_sources": [
+      "https://github.com/ruohong2018/ruohong2018.github.io/issues/790"
+    ],
+    "source_issue": "https://github.com/ruohong2018/ruohong2018.github.io/issues/790",
+    "fetched_at": "2026-10-31T01:14:56.726570+00:00"
+  },
+  "lanes": [
+    "founder"
+  ],
+  "dispatched_at": "2026-10-31T01:14:57.874262+00:00",
+  "attempt": 0,
+  "updated_at": "2026-10-31T01:14:57.874276+00:00"
+}
