@@ -2,7 +2,7 @@
   "task_id": "85102fd27638790b1f1e0bf33ff07357",
   "repo": "sriahead/aheed-online-store",
   "issue_number": 1289,
-  "status": "DISPATCHING",
+  "status": "DISPATCHED",
   "dispatch_id": "f5826601fceb4f4c91873a986914ac4a",
   "admission": {
     "funding": {
@@ -42,5 +42,5 @@
   ],
   "dispatched_at": "2026-10-31T23:37:45.492930+00:00",
   "attempt": 0,
-  "updated_at": "2026-10-31T23:37:45.492945+00:00"
+  "updated_at": "2026-10-31T23:37:47.332795+00:00"
 }
