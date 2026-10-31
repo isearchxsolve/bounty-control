@@ -2,7 +2,7 @@
   "task_id": "693de37d19eee2c1ea5b5df96db33898",
   "repo": "gotoalberto/ordinals-ethoxford",
   "issue_number": 1,
-  "status": "DISPATCHING",
+  "status": "DISPATCHED",
   "dispatch_id": "82caca3f91994905b57828011e2d97ae",
   "admission": {
     "funding": {
@@ -35,5 +35,5 @@
   ],
   "dispatched_at": "2026-10-31T09:06:32.288015+00:00",
   "attempt": 0,
-  "updated_at": "2026-10-31T09:06:32.288030+00:00"
+  "updated_at": "2026-10-31T09:06:33.698094+00:00"
 }
