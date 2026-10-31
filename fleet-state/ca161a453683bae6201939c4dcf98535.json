@@ -2,7 +2,7 @@
   "task_id": "ca161a453683bae6201939c4dcf98535",
   "repo": "highlight/highlight",
   "issue_number": 5082,
-  "status": "DISPATCHING",
+  "status": "DISPATCHED",
   "dispatch_id": "2640f9326d9c4aff85dcff4f11d333d7",
   "admission": {
     "funding": {
@@ -36,5 +36,5 @@
   ],
   "dispatched_at": "2026-10-31T14:34:31.204841+00:00",
   "attempt": 0,
-  "updated_at": "2026-10-31T14:34:31.204878+00:00"
+  "updated_at": "2026-10-31T14:34:32.910307+00:00"
 }
