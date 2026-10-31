@@ -2,7 +2,7 @@
   "task_id": "efe9b9b42e559d60d4938778e6991e51",
   "repo": "Tyaoo/picker",
   "issue_number": 892,
-  "status": "CLAIMED",
+  "status": "REJECTED_PREPARATION",
   "dispatch_id": "61c9576af78a40c9b0302926dc273966",
   "admission": {
     "funding": {
@@ -37,7 +37,7 @@
   ],
   "dispatched_at": "2026-10-31T01:46:41.371737+00:00",
   "attempt": 1,
-  "updated_at": "2026-10-31T01:46:52.570010+00:00",
+  "updated_at": "2026-10-31T01:50:39.969109+00:00",
   "owner": "41156958820:1",
   "previous_owner": null,
   "previous_status": "DISPATCHED",
@@ -45,5 +45,57 @@
   "harness_sha": "4c3eefe714d35fcbc24e535ceb466466b27c196d",
   "claimed_at": "2026-10-31T01:46:52.569962+00:00",
   "lease_expires_at": "2026-10-31T05:51:52.569976+00:00",
-  "preparation_budget_seconds": 14400
+  "preparation_budget_seconds": 14400,
+  "at": "2026-10-31T01:50:25.616166+00:00",
+  "reason": "Cline preparation blocked: Issue #892 ('[\u6bcf\u65e5\u4fe1\u606f\u6d41] 2025-01-19') is an auto-generated daily security-news digest, not a code change request. Evidence: (1) GitHub label is exactly ['daily']; (2) the entire 36402-char body is a markdown bullet list of news article links with empty checkboxes (e.g. '- SecWiki News\\n  - [ ] [SecWiki News 2025-01-18 Review](http://www.sec-wiki.com/?2025-01-18)'), with no defect description, no feature request, no component/function reference, and no expected-vs-actual behavior; (3) the repository generates this exact issue automatically: .github/workflows/daily.yml line 40 runs `gh issue create --title \"[\u6bcf\u65e5\u4fe1\u606f\u6d41] `date +'%Y-%m-%d'`\" -F today.md --label \"daily\"`, and the newest commit on main is itself '\u6bcf\u65e5\u5b89\u5168\u8d44\u8baf(2026-10-30)'; (4) issue events show only 'labeled daily' + 'mentioned' + 'subscribed' at creation, with 0 comments and no reporter follow-up. The admission 'technical_signals' (bug/bug_bounty/bugcrowd/protocol/race condition) and the 'funding' $4,134 are extraction artifacts from article headlines embedded in the feed (e.g. an infosecwriteups.com URL 'building-your-own-bug-bounty-lab-a-hands-on-guide-with-metasploit-and-more-9595a71fc4c6'); the body contains no funding/proposal/grant text ('funding'=0, 'sponsor'=0, 'grant'=0). No reproducible defect, engineering feature, or maintenance task is requested. Checkout left unchanged (git status clean, no product edits).",
+  "declared_reason": "Issue #892 ('[\u6bcf\u65e5\u4fe1\u606f\u6d41] 2025-01-19') is an auto-generated daily security-news digest, not a code change request. Evidence: (1) GitHub label is exactly ['daily']; (2) the entire 36402-char body is a markdown bullet list of news article links with empty checkboxes (e.g. '- SecWiki News\\n  - [ ] [SecWiki News 2025-01-18 Review](http://www.sec-wiki.com/?2025-01-18)'), with no defect description, no feature request, no component/function reference, and no expected-vs-actual behavior; (3) the repository generates this exact issue automatically: .github/workflows/daily.yml line 40 runs `gh issue create --title \"[\u6bcf\u65e5\u4fe1\u606f\u6d41] `date +'%Y-%m-%d'`\" -F today.md --label \"daily\"`, and the newest commit on main is itself '\u6bcf\u65e5\u5b89\u5168\u8d44\u8baf(2026-10-30)'; (4) issue events show only 'labeled daily' + 'mentioned' + 'subscribed' at creation, with 0 comments and no reporter follow-up. The admission 'technical_signals' (bug/bug_bounty/bugcrowd/protocol/race condition) and the 'funding' $4,134 are extraction artifacts from article headlines embedded in the feed (e.g. an infosecwriteups.com URL 'building-your-own-bug-bounty-lab-a-hands-on-guide-with-metasploit-and-more-9595a71fc4c6'); the body contains no funding/proposal/grant text ('funding'=0, 'sponsor'=0, 'grant'=0). No reproducible defect, engineering feature, or maintenance task is requested. Checkout left unchanged (git status clean, no product edits).",
+  "evidence": {
+    "action": "blocked",
+    "worktree": "/tmp/bounty-workspaces/repos/Tyaoo--picker--892",
+    "base_sha": "f1d886f585e807e82f84da6123f4858ef365f461",
+    "default_branch": "main",
+    "sources": [
+      {
+        "path": "README.md",
+        "sha256": "1962b4b04aba89281e8c1c3c7c013fc615f1909ec2e657e5afdc3a31d7baa0b7"
+      },
+      {
+        "path": "bot.py",
+        "sha256": "fb85e5c5c09e0d352db2373435334568d286c89f349fcad2996e502d6fd88b07"
+      },
+      {
+        "path": "yarb.py",
+        "sha256": "87a2d7531e8d407bc789446cb7823eeb09843dff40fa21223e222998d9cc1fd0"
+      },
+      {
+        "path": "requirements.txt",
+        "sha256": "0bd080de6e0416d13591bb124ecde53fcd8bed8b91c3cce93caccf2405837639"
+      },
+      {
+        "path": "config.yml",
+        "sha256": "970754f21ec94c92c68bb241c94a5c84eeafec2937d0a4da9892be01fb2bc7e0"
+      },
+      {
+        "path": ".github/workflows/daily.yml",
+        "sha256": "60042e008e529bb95dc2c11b487b77e0f2fdf1b7b3a26b6599ce18787089d309"
+      },
+      {
+        "path": ".github/workflows/issue.yml",
+        "sha256": "78cf233cbd70a6775fec30918bbba3cecf71b6a998e30738e7860114544b40ee"
+      }
+    ],
+    "run_url": "",
+    "admission": {
+      "amount": "4134",
+      "currency": "USD",
+      "usd_value": "4134",
+      "quote": {
+        "basis": "USD face value"
+      },
+      "raw": "$4,134",
+      "source_url": "https://github.com/Tyaoo/picker/issues/892",
+      "payer": "Tyaoo"
+    }
+  },
+  "finished_at": "2026-10-31T01:50:39.390720+00:00"
 }
