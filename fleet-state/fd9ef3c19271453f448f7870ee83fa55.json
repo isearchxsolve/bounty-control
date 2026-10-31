@@ -2,7 +2,7 @@
   "task_id": "fd9ef3c19271453f448f7870ee83fa55",
   "repo": "gyroflow/gyroflow",
   "issue_number": 742,
-  "status": "DISPATCHING",
+  "status": "DISPATCHED",
   "dispatch_id": "e623b66c15084e768fa638399d827c14",
   "admission": {
     "funding": {
@@ -38,5 +38,5 @@
   ],
   "dispatched_at": "2026-10-31T13:15:43.594817+00:00",
   "attempt": 0,
-  "updated_at": "2026-10-31T13:15:43.594834+00:00"
+  "updated_at": "2026-10-31T13:15:45.060987+00:00"
 }
