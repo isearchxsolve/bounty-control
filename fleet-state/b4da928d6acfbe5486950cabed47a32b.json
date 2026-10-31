@@ -2,7 +2,7 @@
   "task_id": "b4da928d6acfbe5486950cabed47a32b",
   "repo": "Tyaoo/picker",
   "issue_number": 999,
-  "status": "CLAIMED",
+  "status": "REJECTED_PREPARATION",
   "dispatch_id": "bcc539247ea349b48de11fd866c558b4",
   "admission": {
     "funding": {
@@ -37,7 +37,7 @@
   ],
   "dispatched_at": "2026-10-31T03:32:51.744800+00:00",
   "attempt": 1,
-  "updated_at": "2026-10-31T03:33:04.443739+00:00",
+  "updated_at": "2026-10-31T03:35:50.379675+00:00",
   "owner": "41164844120:1",
   "previous_owner": null,
   "previous_status": "DISPATCHED",
@@ -45,5 +45,57 @@
   "harness_sha": "4c3eefe714d35fcbc24e535ceb466466b27c196d",
   "claimed_at": "2026-10-31T03:33:04.443691+00:00",
   "lease_expires_at": "2026-10-31T07:38:04.443704+00:00",
-  "preparation_budget_seconds": 14400
+  "preparation_budget_seconds": 14400,
+  "at": "2026-10-31T03:35:39.043673+00:00",
+  "reason": "Cline preparation blocked: Issue #999 is NOT an engineering request. It is an auto-generated daily content digest titled '[\u6bcf\u65e5\u4fe1\u606f\u6d41] 2025-05-06' (Daily Information Feed), the only label is 'daily', author_association=OWNER, 0 comments, 0 reactions. Its 26,735-char body is a bulleted list of security-news links produced by the repo's own GitHub Action (.github/workflows/daily.yml; README: '\u6bcf\u65e5\u4fe1\u606f\u6d41...\u6bcf\u5929\u65e9\u4e0a9\u70b930\u5206\u63a8\u9001\u6628\u5929\u65b0\u589e\u6587\u7ae0\u5217\u8868'). There is no reproducible defect, no feature specification, no component reference, and no source location in the issue. The repo search confirms this is a recurring automated artifact: 1,299 open issues match the '[\u6bcf\u65e5\u4fe1\u606f\u6d41]' title pattern (e.g. #1557 2026-10-30 ... down to #999). The advisory 'funding' of $750 USD is a keyword-extraction false positive: the body only matches 'bounty'/'$750' inside a linked article title '$750 Bounty: Sensitive Data Exposure' (infosecwriteups.com) and the phrase 'VC Funding is Shifting...' (hackernoon.com); there is no funding/bounty offer, payer commitment, or payment evidence in the issue text, and complete_comments=true with comment_count_evidence reporting 0 REST-visible comments. No open PR references #999 (GitHub search type:pr -> total_count 0). Per the classification rule (auto-generated content / documentation-like deliverable with no repository change) this is NOT a concrete code change to this repository, so the correct action is blocked and the checkout is left unchanged. No fallback proposal or PR is created.",
+  "declared_reason": "Issue #999 is NOT an engineering request. It is an auto-generated daily content digest titled '[\u6bcf\u65e5\u4fe1\u606f\u6d41] 2025-05-06' (Daily Information Feed), the only label is 'daily', author_association=OWNER, 0 comments, 0 reactions. Its 26,735-char body is a bulleted list of security-news links produced by the repo's own GitHub Action (.github/workflows/daily.yml; README: '\u6bcf\u65e5\u4fe1\u606f\u6d41...\u6bcf\u5929\u65e9\u4e0a9\u70b930\u5206\u63a8\u9001\u6628\u5929\u65b0\u589e\u6587\u7ae0\u5217\u8868'). There is no reproducible defect, no feature specification, no component reference, and no source location in the issue. The repo search confirms this is a recurring automated artifact: 1,299 open issues match the '[\u6bcf\u65e5\u4fe1\u606f\u6d41]' title pattern (e.g. #1557 2026-10-30 ... down to #999). The advisory 'funding' of $750 USD is a keyword-extraction false positive: the body only matches 'bounty'/'$750' inside a linked article title '$750 Bounty: Sensitive Data Exposure' (infosecwriteups.com) and the phrase 'VC Funding is Shifting...' (hackernoon.com); there is no funding/bounty offer, payer commitment, or payment evidence in the issue text, and complete_comments=true with comment_count_evidence reporting 0 REST-visible comments. No open PR references #999 (GitHub search type:pr -> total_count 0). Per the classification rule (auto-generated content / documentation-like deliverable with no repository change) this is NOT a concrete code change to this repository, so the correct action is blocked and the checkout is left unchanged. No fallback proposal or PR is created.",
+  "evidence": {
+    "action": "blocked",
+    "worktree": "/tmp/bounty-workspaces/repos/Tyaoo--picker--999",
+    "base_sha": "f1d886f585e807e82f84da6123f4858ef365f461",
+    "default_branch": "main",
+    "sources": [
+      {
+        "path": "README.md",
+        "sha256": "1962b4b04aba89281e8c1c3c7c013fc615f1909ec2e657e5afdc3a31d7baa0b7"
+      },
+      {
+        "path": "requirements.txt",
+        "sha256": "0bd080de6e0416d13591bb124ecde53fcd8bed8b91c3cce93caccf2405837639"
+      },
+      {
+        "path": ".github/workflows/daily.yml",
+        "sha256": "60042e008e529bb95dc2c11b487b77e0f2fdf1b7b3a26b6599ce18787089d309"
+      },
+      {
+        "path": ".github/workflows/pick.yml",
+        "sha256": "af069fc76c011248c82288abf54867ede1028cd506151e47bbf5829613906d98"
+      },
+      {
+        "path": ".github/workflows/issue.yml",
+        "sha256": "78cf233cbd70a6775fec30918bbba3cecf71b6a998e30738e7860114544b40ee"
+      },
+      {
+        "path": ".github/workflows/comment.yml",
+        "sha256": "fadb102b39eb540f5b9fc2571ebd48b229dcee2068f3d3a1de6dac49b43e51e0"
+      },
+      {
+        "path": "bot.py",
+        "sha256": "fb85e5c5c09e0d352db2373435334568d286c89f349fcad2996e502d6fd88b07"
+      }
+    ],
+    "run_url": "",
+    "admission": {
+      "amount": "750",
+      "currency": "USD",
+      "usd_value": "750",
+      "quote": {
+        "basis": "USD face value"
+      },
+      "raw": "$750",
+      "source_url": "https://github.com/Tyaoo/picker/issues/999",
+      "payer": "Tyaoo"
+    }
+  },
+  "finished_at": "2026-10-31T03:35:49.810964+00:00"
 }
