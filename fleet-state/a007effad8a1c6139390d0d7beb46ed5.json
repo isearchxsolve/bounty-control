@@ -2,7 +2,7 @@
   "task_id": "a007effad8a1c6139390d0d7beb46ed5",
   "repo": "BruceFeIix/picker",
   "issue_number": 1427,
-  "status": "CLAIMED",
+  "status": "REJECTED_PREPARATION",
   "dispatch_id": "6282b779b1de45dc87adc15adda70c0c",
   "admission": {
     "funding": {
@@ -35,7 +35,7 @@
   ],
   "dispatched_at": "2026-10-31T02:00:16.318186+00:00",
   "attempt": 1,
-  "updated_at": "2026-10-31T02:00:27.579780+00:00",
+  "updated_at": "2026-10-31T02:04:13.564408+00:00",
   "owner": "41157963331:1",
   "previous_owner": null,
   "previous_status": "DISPATCHED",
@@ -43,5 +43,57 @@
   "harness_sha": "4c3eefe714d35fcbc24e535ceb466466b27c196d",
   "claimed_at": "2026-10-31T02:00:27.579729+00:00",
   "lease_expires_at": "2026-10-31T06:05:27.579745+00:00",
-  "preparation_budget_seconds": 14400
+  "preparation_budget_seconds": 14400,
+  "at": "2026-10-31T02:03:57.875445+00:00",
+  "reason": "Cline preparation blocked: Issue #1427 '[\u6bcf\u65e5\u4fe1\u606f\u6d41] 2024-12-26' (label: daily) is an auto-generated daily security-news digest, not a code-change request. Evidence: (1) .github/workflows/daily.yml creates it verbatim via `gh issue create --title \"[\u6bcf\u65e5\u4fe1\u606f\u6d41] $(date)\" -F today.md --label \"daily\"`; the body is 38,451 chars of plain markdown link list ([ ] [title](url)), 0 code fences, ends cleanly, contains no defect description, feature request, reproduction, or component reference; (2) it has 0 comments and only the 'daily' label; the sole events are auto-labeling and a subscription; (3) the generated artifact it mirrors already exists in-tree: archive/daily/2024/2024-12-26.md (306 lines), i.e. it is normal automation output; (4) searches show no PR/commit referencing #1427; the only open PRs are #2617 (resolves #2616) and #2335 (closes #2333), neither competing for #1427; (5) the admitted '$2,000 USD' funding is a heuristic 'USD face value' taken from the issue's own source_url with no bounty statement on the issue (0 comments), so there is no live funded engineering claim. Classification: content/documentation automation digest, outside the 'reproducible defect / specific engineering feature / focused code-level maintenance' gate. Per instructions, a rejected/non-engineering issue must not be converted into a fallback proposal or PR. Checkout left unchanged (no product edits; git status clean on fix/bounty-1427 at base SHA).",
+  "declared_reason": "Issue #1427 '[\u6bcf\u65e5\u4fe1\u606f\u6d41] 2024-12-26' (label: daily) is an auto-generated daily security-news digest, not a code-change request. Evidence: (1) .github/workflows/daily.yml creates it verbatim via `gh issue create --title \"[\u6bcf\u65e5\u4fe1\u606f\u6d41] $(date)\" -F today.md --label \"daily\"`; the body is 38,451 chars of plain markdown link list ([ ] [title](url)), 0 code fences, ends cleanly, contains no defect description, feature request, reproduction, or component reference; (2) it has 0 comments and only the 'daily' label; the sole events are auto-labeling and a subscription; (3) the generated artifact it mirrors already exists in-tree: archive/daily/2024/2024-12-26.md (306 lines), i.e. it is normal automation output; (4) searches show no PR/commit referencing #1427; the only open PRs are #2617 (resolves #2616) and #2335 (closes #2333), neither competing for #1427; (5) the admitted '$2,000 USD' funding is a heuristic 'USD face value' taken from the issue's own source_url with no bounty statement on the issue (0 comments), so there is no live funded engineering claim. Classification: content/documentation automation digest, outside the 'reproducible defect / specific engineering feature / focused code-level maintenance' gate. Per instructions, a rejected/non-engineering issue must not be converted into a fallback proposal or PR. Checkout left unchanged (no product edits; git status clean on fix/bounty-1427 at base SHA).",
+  "evidence": {
+    "action": "blocked",
+    "worktree": "/tmp/bounty-workspaces/repos/BruceFeIix--picker--1427",
+    "base_sha": "cabf4e9212e8fc7c8974b10bf1f735ce145b3b06",
+    "default_branch": "master",
+    "sources": [
+      {
+        "path": ".github/workflows/daily.yml",
+        "sha256": "2c135adeb99235f4558f29cfaafcccdc1ddd16dc01b5e62087a1e1ac9a11d555"
+      },
+      {
+        "path": ".github/workflows/issue.yml",
+        "sha256": "78cf233cbd70a6775fec30918bbba3cecf71b6a998e30738e7860114544b40ee"
+      },
+      {
+        "path": "yarb.py",
+        "sha256": "fbdcaa067f17d4a2e328d70d21f2543f44f6445c4ae15a367d5e00b8dbca1ed0"
+      },
+      {
+        "path": "README.md",
+        "sha256": "9f84c7652f20a8f79e03d1220cdba4d86cd22162320c81701191ca87d6afdc9f"
+      },
+      {
+        "path": "requirements.txt",
+        "sha256": "9b18ebb479dfafdd2369e0705fbf890ce9c2e48bbcf24b1d117af1b07e50ee80"
+      },
+      {
+        "path": "install.sh",
+        "sha256": "083bab9e9054241c2386e1abeaab8efd473e49b9ef872799d24b1742e86f2bdb"
+      },
+      {
+        "path": "archive/daily/2024/2024-12-26.md",
+        "sha256": "present-in-tree"
+      }
+    ],
+    "run_url": "",
+    "admission": {
+      "amount": "2000",
+      "currency": "USD",
+      "usd_value": "2000",
+      "quote": {
+        "basis": "USD face value"
+      },
+      "raw": "$2,000",
+      "source_url": "https://github.com/BruceFeIix/picker/issues/1427",
+      "payer": "BruceFeIix"
+    }
+  },
+  "finished_at": "2026-10-31T02:04:12.969741+00:00"
 }
