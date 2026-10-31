@@ -350,6 +350,16 @@ def issue_haystack(issue: dict) -> str:
 
 ISSUE_STALE_DAYS = int(os.environ.get("BOUNTY_ISSUE_STALE_DAYS", "60"))
 
+# Measured on the two rows the engineer refused after dispatch (41184570516): both carried a Gitcoin
+# bounty-app comment saying, verbatim, "Issue Status: 1. Open 2. **Cancelled**" and "The funding of
+# 6000.0 DAI ... has been **cancelled**". A keyword sweep cannot do this job - the same corpus holds
+# "what we've ended up creating" and "Comment withdrawn", which are innocent - so the pattern
+# anchors on the funding status line itself.
+FUNDING_WITHDRAWN_RE = re.compile(
+    r"issue status\s*:[^\n]{0,120}?\*\*\s*cancel+ed\s*\*\*"
+    r"|funding of[^\n]{0,160}?has been\s*\*\*\s*cancel+ed",
+    re.I)
+
 
 def issue_age_days(issue: dict, now: Optional[float] = None) -> Optional[int]:
     """How long since anything moved on this issue, or None when GitHub did not say."""
@@ -423,6 +433,10 @@ def verify_rows(rows: List[dict], fetch: Optional[Callable[[str, int], Optional[
             continue
         if row.get("is_code_task") is not True:
             refused.append({"row": row, "reason": "AGENT_NOT_A_CODE_TASK"})
+            continue
+
+        if FUNDING_WITHDRAWN_RE.search(issue_haystack(issue)):
+            refused.append({"row": row, "reason": "FUNDING_WITHDRAWN"})
             continue
 
         stale_days = issue_age_days(issue)
@@ -528,6 +542,7 @@ GATE_CHECKS = [
     ("ISSUE_NOT_OPEN", "the issue is closed or read-only."),
     ("AGENT_NOT_A_CODE_TASK", "the issue is not engineering work you could submit a fix for."),
     ("STALE_ISSUE", "nothing has moved on that issue for two months; the money is long gone."),
+    ("FUNDING_WITHDRAWN", "the funding attached to that issue is marked cancelled; there is no money."),
     ("REWARD_QUOTE_NOT_IN_ISSUE", "the quoted sentence is not in the issue text, byte for byte."),
     ("REWARD_QUOTE_HAS_NO_AMOUNT", "the quoted sentence exists but names no amount."),
 ]

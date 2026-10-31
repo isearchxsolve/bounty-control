@@ -893,6 +893,29 @@ class TheSearcherIsSovereign(unittest.TestCase):
         self.assertNotIn("{clock}", text)
         self.assertIn("an empty file has delivered nothing", text)
 
+    def test_a_withdrawn_bounty_is_read_from_the_funding_status_line(self):
+        """The exact fingerprint from the two rows the engineer refused after dispatch: a Gitcoin
+        bounty-app comment reading "Issue Status: 1. Open 2. **Cancelled**". And the exact
+        near-misses that make a keyword sweep wrong: "what we've ended up creating", "Comment
+        withdrawn" - both innocent, both present in the same corpus."""
+        for text in ("Issue Status: 1. Open 2. **Cancelled**",
+                     "The funding of 6000.0 DAI attached to this issue has been **cancelled**"):
+            self.assertTrue(door.FUNDING_WITHDRAWN_RE.search(text), text)
+        for innocent in ("But what we've ended up creating is a generic data browser",
+                         "Thanks for the guidance. Comment withdrawn.",
+                         "the bounty is open, 500 USD available"):
+            self.assertFalse(door.FUNDING_WITHDRAWN_RE.search(innocent), innocent)
+
+        issue = {"state": "open", "title": "[$6000 DAI] Build Polkadot", "body": "Welcome, $6000 DAI.",
+                 "updated_at": datetime.utcnow().strftime("%Y-%m-%dT%H:%M:%SZ"),
+                 "__comments__": "Issue Status: 1. Open 2. **Cancelled**"}
+        row = {"repo": "Web3Foundation/build-polkadot", "issue": 1, "is_code_task": True,
+               "reward_quote": "Welcome, $6000 DAI.", "reward_usd": 6000,
+               "scope_quote": "Build Polkadot", "why_now": "x"}
+        verdict = door.verify_rows([row], lambda repo, num: issue)
+        self.assertEqual(verdict["admitted"], [])
+        self.assertEqual(verdict["refused"][0]["reason"], "FUNDING_WITHDRAWN")
+
     def test_a_dead_offer_is_refused_before_it_buys_an_engineer_run(self):
         """The first run to reach dispatch (41184570516) sent two rows out and both died in the
         delivery engine: Web3Foundation/build-polkadot#1 last moved 2024-01-13 (withdrawn funding)
