@@ -2,7 +2,7 @@
   "task_id": "fc4dd28255e7186b4d9b183dd2048be0",
   "repo": "coollabsio/coolify",
   "issue_number": 6894,
-  "status": "DISPATCHED",
+  "status": "CLAIMED",
   "dispatch_id": "f7065995622440fdb53dffedda293efa",
   "admission": {
     "funding": {
@@ -41,6 +41,14 @@
     "bounty"
   ],
   "dispatched_at": "2026-10-31T14:34:12.233367+00:00",
-  "attempt": 0,
-  "updated_at": "2026-10-31T14:34:13.976584+00:00"
+  "attempt": 1,
+  "updated_at": "2026-10-31T14:34:27.136223+00:00",
+  "owner": "41210745646:1",
+  "previous_owner": null,
+  "previous_status": "DISPATCHED",
+  "run_url": "https://github.com/isearchxsolve/bounty-control/actions/runs/41210745646",
+  "harness_sha": "51eefb86d09469f573aab4b591958fa36f04561b",
+  "claimed_at": "2026-10-31T14:34:27.136169+00:00",
+  "lease_expires_at": "2026-10-31T18:39:27.136184+00:00",
+  "preparation_budget_seconds": 14400
 }
