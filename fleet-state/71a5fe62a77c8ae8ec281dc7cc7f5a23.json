@@ -1,0 +1,36 @@
+{
+  "task_id": "71a5fe62a77c8ae8ec281dc7cc7f5a23",
+  "repo": "eleectrum/eleectrum.github.io",
+  "issue_number": 1,
+  "status": "DISPATCHING",
+  "dispatch_id": "bd91358efad84b0fb13bfb8aeb49cc2e",
+  "admission": {
+    "funding": {
+      "amount": "1000",
+      "currency": "USD",
+      "usd_value": "1000",
+      "quote": {
+        "basis": "USD face value"
+      },
+      "raw": "$1000",
+      "source_url": "https://github.com/eleectrum/eleectrum.github.io/issues/1",
+      "payer": "eleectrum"
+    },
+    "technical_signals": [
+      "bugs"
+    ],
+    "component_references": [],
+    "source_locations": [],
+    "engineering_evidence_sources": [
+      "https://github.com/eleectrum/eleectrum.github.io/issues/1"
+    ],
+    "source_issue": "https://github.com/eleectrum/eleectrum.github.io/issues/1",
+    "fetched_at": "2026-10-31T06:22:13.524803+00:00"
+  },
+  "lanes": [
+    "founder"
+  ],
+  "dispatched_at": "2026-10-31T06:22:14.746487+00:00",
+  "attempt": 0,
+  "updated_at": "2026-10-31T06:22:14.746503+00:00"
+}
