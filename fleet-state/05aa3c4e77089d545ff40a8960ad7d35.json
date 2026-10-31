@@ -2,7 +2,7 @@
   "task_id": "05aa3c4e77089d545ff40a8960ad7d35",
   "repo": "aolabsai/ao_pyth",
   "issue_number": 9,
-  "status": "DISPATCHING",
+  "status": "DISPATCHED",
   "dispatch_id": "e7c5bb417bff423dadf71113a66aaa2b",
   "admission": {
     "funding": {
@@ -33,5 +33,5 @@
   ],
   "dispatched_at": "2026-10-31T09:29:11.582987+00:00",
   "attempt": 0,
-  "updated_at": "2026-10-31T09:29:11.582999+00:00"
+  "updated_at": "2026-10-31T09:29:13.872512+00:00"
 }
