@@ -495,6 +495,15 @@ RSN = chr(10)
 def render_task_file() -> str:
     checks = RSN.join(f"- {code}: {meaning}" for code, meaning in GATE_CHECKS)
     downstream = RSN.join(f"- {code}: {meaning}" for code, meaning in DOWNSTREAM_CHECKS)
+    try:
+        budget = int(os.environ.get("BOUNTY_AGENT_TIMEOUT", "1800"))
+    except ValueError:
+        budget = 1800
+    clock = (f"Each round is {budget} seconds of wall clock and it is not extended. That clock is "
+             f"the only limit on how much of the world you can reach, so it is worth knowing "
+             f"plainly: a row you verified but never wrote down is work this house cannot use, and "
+             f"a round that ends with an empty file has delivered nothing, however much ground it "
+             f"covered.")
     return f"""# The Search for funded engineering work
 
 You are the only searcher in this pipeline. Nobody else goes looking: what you do not find, this
@@ -595,6 +604,8 @@ passing row would have used.
      "why_now": "<one short line: why this is work we can deliver>"}}
 
 ## There is no quota and no early finish
+
+{clock}
 
 You are not collecting a sample of two or three rows and leaving. Take every row you can prove,
 and keep hunting while time remains. Four rows at the halfway mark is not "enough" - it means you

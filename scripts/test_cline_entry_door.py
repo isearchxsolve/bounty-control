@@ -873,6 +873,16 @@ class TheSearcherIsSovereign(unittest.TestCase):
         self.assertEqual(len(result["unpriced"]), 1, "one row, one receipt")
         self.assertEqual(result["history"][0]["unpriced"], 1)
 
+    def test_the_brief_states_the_real_budget_it_is_given(self):
+        """Run 41182050385 spent the whole 800s and wrote nothing: the agent was never told its
+        own budget, so it had no way to know it was out of time. The number is a fact about the
+        harness, so the brief must carry the real one instead of a vague 'fixed budget'."""
+        with mock.patch.dict(os.environ, {"BOUNTY_AGENT_TIMEOUT": "800"}):
+            text = door.render_task_file()
+        self.assertIn("800 seconds of wall clock", text)
+        self.assertNotIn("{clock}", text)
+        self.assertIn("an empty file has delivered nothing", text)
+
     def test_the_brief_carries_no_mojibake(self):
         """A broken em dash reached the agent as a replacement char; keep the file ASCII."""
         bad = sorted({c for c in door.TASK_FILE if ord(c) > 127})
