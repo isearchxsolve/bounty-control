@@ -441,8 +441,10 @@ There are two streams of genuine work:
 
 - There is no source code in it, and nothing to fix. It is a scratch worktree.
 - `gh` is installed and authenticated.
-- The shell is Windows PowerShell: one command per tool call, and POSIX-only commands
-  (`ls -la`, `cat`, `grep`, `&&`, `2>/dev/null`) fail here.
+- The shell is whatever this machine runs, so check it once with `uname`. On Linux you have a
+  POSIX shell and `&&`, `cat`, `grep`, `2>/dev/null` all work. On Windows it is PowerShell,
+  where one command runs per tool call and POSIX-only syntax fails. This search runs on both, so
+  never trust the label: read the platform before you write a command.
 
 ## The gates your rows must pass
 
@@ -516,6 +518,12 @@ that is really proven.
      "is_code_task": true, "reward_quote": "<sentence copied exactly from the issue>",
      "reward_usd": <number or null>, "scope_quote": "<sentence copied exactly, saying what to build>",
      "why_now": "<one short line: why this is work we can deliver>"}}
+
+BUDGET — THIS IS THE RULE THAT DECIDES WHETHER YOUR WORK COUNTS:
+Write your first candidate as soon as it passes the pre-screen, and aim to do it within the
+first four minutes. Do not survey more than three candidates before writing the best of them to
+shortlist.jsonl. A round that ends with an empty file has produced nothing, however thorough the
+reading looked, and the next round starts from zero.
 
 CRITICAL INSTRUCTION — WRITE IMMEDIATELY:
 As soon as you verify an issue meets the criteria, append it IMMEDIATELY to `shortlist.jsonl` (using echo '...' >> shortlist.jsonl or python). Do NOT wait until the end of your investigation to write the file.
