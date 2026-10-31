@@ -2,7 +2,7 @@
   "task_id": "ab5897450f22534fd18cb4fd09b88e1b",
   "repo": "Web3Foundation/build-polkadot",
   "issue_number": 1,
-  "status": "DISPATCHING",
+  "status": "DISPATCHED",
   "dispatch_id": "861121dc9a114d3e9dcd9f43bcc21427",
   "admission": {
     "funding": {
@@ -39,5 +39,5 @@
   ],
   "dispatched_at": "2026-10-31T09:06:28.058405+00:00",
   "attempt": 0,
-  "updated_at": "2026-10-31T09:06:28.058423+00:00"
+  "updated_at": "2026-10-31T09:06:29.474219+00:00"
 }
