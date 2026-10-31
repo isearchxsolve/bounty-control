@@ -39,10 +39,12 @@ jobs:
       # the search (law 85); the static lanes above have already run, so a door failure costs
       # time and nothing else. Wedge the variable to 'off' to disable the door entirely.
       env:
+        TOKENHARBOR_KEYS_JSON: ${{ secrets.TOKENHARBOR_KEYS_JSON }}
         NVIDIA_API_KEY: ${{ secrets.NVIDIA_API_KEY }}
         BOUNTY_ENTRY_DOOR: ${{ vars.ENTRY_DOOR || 'cline' }}
-        BOUNTY_ENTRY_MODEL: ${{ vars.ENTRY_MODEL || 'deepseek-ai/deepseek-v4.1-flash' }}
-        NVIDIA_MODEL: ${{ vars.NVIDIA_MODEL || 'deepseek-ai/deepseek-v4.1-flash' }}
+        BOUNTY_ENTRY_MODEL: ${{ vars.ENTRY_MODEL || 'deepseek-v4.1-flash:free' }}
+        TOKENHARBOR_MODEL: 'deepseek-v4.1-flash:free'
+        NVIDIA_MODEL: ${{ vars.NVIDIA_MODEL || 'deepseek-v4.1-flash:free' }}
         BOUNTY_AGENT_WORKSPACE: /tmp/bounty-agent
         BOUNTY_AGENT_ROUNDS: '1'
         BOUNTY_AGENT_TIMEOUT: '600'

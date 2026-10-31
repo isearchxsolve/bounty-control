@@ -24,20 +24,20 @@ from typing import Dict, List, Optional
 
 import cline_entry_door
 
-PROXY_PORT = int(os.environ.get("NVIDIA_PROXY_PORT", "8099"))
+PROXY_PORT = int(os.environ.get("TOKENHARBOR_PROXY_PORT", os.environ.get("NVIDIA_PROXY_PORT", "8080")))
 CLINE_PACKAGE = os.environ.get("CLINE_PACKAGE", "cline@3.0.74")
 
 
 def _keys_available() -> bool:
-    return bool(os.environ.get("NVIDIA_KEYS_JSON") or os.environ.get("NVIDIA_API_KEY")
-                or os.environ.get("NVIDIA_KEYS_FILE"))
+    return bool(os.environ.get("TOKENHARBOR_KEYS_JSON") or os.environ.get("TOKENHARBOR_KEY_FILE")
+                or os.path.exists(r"D:\anonym\vault\tokenharbor_keys.json")
+                or os.environ.get("NVIDIA_KEYS_JSON") or os.environ.get("NVIDIA_API_KEY"))
 
 
 def start_gateway(timeout: float = 20.0) -> bool:
-    """Bring up the local OpenAI-compatible gateway Cline talks to. False means no gateway.
+    """Bring up the local OpenAI-compatible TokenHarbor gateway Cline talks to. False means no gateway.
 
-    Cline is never pointed straight at NVIDIA: one door keeps the key rotation, the retirement
-    rules and the receipts in one place, which is what verify_cline_provider_wire() trusts.
+    Cline is never pointed straight at the provider: proxy handles key rotation and failover.
     """
     import urllib.error
     import urllib.request
@@ -55,13 +55,26 @@ def start_gateway(timeout: float = 20.0) -> bool:
         return True
     if not _keys_available():
         print(json.dumps({"phase": "ENTRY_DOOR", "gateway": "NO_KEYS",
-                          "detail": "set NVIDIA_API_KEY or NVIDIA_KEYS_JSON"}), flush=True)
+                          "detail": "set TOKENHARBOR_KEYS_JSON"}), flush=True)
         return False
 
-    import nvidia_openai_proxy
+    try:
+        import kaggle_engine_worker as worker
+        ok, diag = worker.ensure_cline_proxy_running()
+        if ok and alive():
+            print(json.dumps({"phase": "ENTRY_DOOR", "gateway": "UP",
+                              "url": f"http://127.0.0.1:{PROXY_PORT}/v1"}), flush=True)
+            return True
+        thread = threading.Thread(target=worker.run_cline_proxy_server, daemon=True)
+        thread.start()
+    except Exception as exc:
+        try:
+            import nvidia_openai_proxy
+            thread = threading.Thread(target=nvidia_openai_proxy.main, daemon=True)
+            thread.start()
+        except Exception:
+            return False
 
-    thread = threading.Thread(target=nvidia_openai_proxy.main, daemon=True)
-    thread.start()
     import time
     deadline = time.time() + timeout
     while time.time() < deadline:
@@ -117,7 +130,7 @@ def find_issues(root: Optional[str] = None, rounds: int = 1, timeout: int = 600,
         outcome = cline_entry_door.iterate(
             workdir, rounds=rounds, data_dir=os.path.join(workdir, ".cline"),
             limit=limit, timeout=timeout, cline=cline,
-            model=os.environ.get("BOUNTY_ENTRY_MODEL", "deepseek-ai/deepseek-v4.1-flash"),
+            model=os.environ.get("BOUNTY_ENTRY_MODEL", "deepseek-v4.1-flash:free"),
             first_prompt=cline_entry_door.WORKTREE_PROMPT)
     except Exception as exc:  # a broken door must not stop discovery
         print(json.dumps({"phase": "ENTRY_DOOR", "error": type(exc).__name__,

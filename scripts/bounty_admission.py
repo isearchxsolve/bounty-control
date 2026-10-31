@@ -440,6 +440,14 @@ def amounts(text, positions=False):
         after = text[match.end():match.end() + 35]
         if re.match(r"\s*(?:[$\\^_]|(?:pool|TVL|ARR|MRR|valuation|treasury|budget|/month)\b)", after, re.I):
             continue
+        # Ignore amounts inside markdown link text: e.g. [Article Title - $8500 P1 Bug Bounty](https://...)
+        prefix = text[max(0, match.start() - 250):match.start()]
+        suffix = text[match.end():min(len(text), match.end() + 250)]
+        if "[" in prefix and "](" in suffix:
+            last_bracket = prefix.rfind("[")
+            next_close = suffix.find("](")
+            if next_close != -1 and "]" not in prefix[last_bracket:]:
+                continue
         amount = Decimal((match["a1"] or match["a2"]).replace(",", ""))
         if match["m1"] or match["m2"]:
             amount *= 1000
@@ -581,6 +589,14 @@ def admit(context, quote=None, floor=FLOOR):
     # A "live room" is a chat thread, not a deliverable: measured 2026-10-30 on
     # jain-Igtm/CashGPT#1, whose owner-written $79,200 amount passed the issuer gate
     # while the issue asked for no engineering at all.
+    repo_name = (metadata.get("name") or "").lower()
+    repo_full = (metadata.get("full_name") or context.get("repo") or "").lower()
+    if re.search(r"\b(?:picker|reading[-_]list|weekly|digest|awesome[-_]|bookmarks|news[-_]feed|arxiv)\b", repo_name) or \
+       re.search(r"\b(?:picker|reading[-_]list|weekly|digest|awesome[-_]|bookmarks|news[-_]feed|arxiv)\b", repo_full):
+        return None, "REFUSED_NOT_A_CODE_CHANGE: aggregator/digest repo"
+    if re.search(r"每日信息流|每日安全资讯|每日资讯|\b(?:daily|weekly)\s+digest\b", title, re.I) or \
+       re.search(r"每日信息流|每日安全资讯|每日资讯", body):
+        return None, "REFUSED_NOT_A_CODE_CHANGE: daily news digest"
     if re.search(r"\blive room\b|\bchat ?room\b|\bcommunity (?:review|thread)\b", title, re.I):
         return None, "MIRROR_OR_NON_ENGINEERING"
     if NON_WORK.search(title) or re.search(r"automated\s+(?:superteam\s+)?digest|mirrored from|status:\s*done", body, re.I):

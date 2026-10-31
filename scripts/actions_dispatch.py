@@ -1325,7 +1325,22 @@ def discover(lanes, max_dispatches=2, live=False, queries_per_lane=2, state_dir=
             print(json.dumps({"phase": "HYDRATE_ONLY", "queued_total_pending": con.execute(
                 "SELECT count(*) FROM pending WHERE status='pending'").fetchone()[0],
                 "hydrate_batch": batch_size}), flush=True)
-        queued = queue_window(con, priority_ids=priority_ids)
+        is_agent_door_mode = os.environ.get("BOUNTY_ENTRY_DOOR", "").strip().lower() in ("cline", "agent", "1", "true")
+        if is_agent_door_mode:
+            if not priority_ids:
+                print(json.dumps({
+                    "phase": "ENTRY_DOOR_NO_DISPATCH",
+                    "reason": "Entry door returned no admitted candidates; zero fallback per Baba Supreme Edict",
+                    "dispatched": []
+                }), flush=True)
+                return {
+                    "qualified": 0, "dispatched": [],
+                    "pending_hydration": con.execute("SELECT count(*) FROM pending WHERE status='pending'").fetchone()[0]
+                }
+            # Baba Supreme Edict: Never fall back to stale backlog; dispatch exclusively entry-door admitted items
+            queued = [row for row in queue_window(con, priority_ids=priority_ids) if row[0] in priority_ids]
+        else:
+            queued = queue_window(con, priority_ids=priority_ids)
         if not whole_queues:
             queued = [row for row in queued
                       if set(json.loads(row[2])) & active_lanes]

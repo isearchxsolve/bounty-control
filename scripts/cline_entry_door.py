@@ -63,7 +63,7 @@ def resolve_cline(cline: Optional[str] = None) -> List[str]:
     return ["cline"]
 
 
-DEFAULT_ENTRY_MODEL = os.environ.get("BOUNTY_ENTRY_MODEL", "deepseek-ai/deepseek-v4.1-flash")
+DEFAULT_ENTRY_MODEL = os.environ.get("BOUNTY_ENTRY_MODEL", "deepseek-v4.1-flash:free")
 
 
 def prepare_profile(data_dir: str, model: str = DEFAULT_ENTRY_MODEL,
@@ -74,11 +74,11 @@ def prepare_profile(data_dir: str, model: str = DEFAULT_ENTRY_MODEL,
     saved file back and require model, base URL and key to be persisted. Measured: a hand-written
     providers.json lost its baseUrl when Cline re-saved it, so the file is never trusted unread.
     """
-    base = base_url or os.environ.get("NVIDIA_PROXY_BASE_URL", "http://127.0.0.1:8099/v1")
+    base = base_url or os.environ.get("TOKENHARBOR_PROXY_BASE_URL", os.environ.get("NVIDIA_PROXY_BASE_URL", "http://127.0.0.1:8080/v1"))
     provider_file = os.path.join(data_dir, "settings", "providers.json")
     os.makedirs(data_dir, exist_ok=True)
     command = [*resolve_cline(cline), "--data-dir", data_dir, "auth", "--data-dir", data_dir,
-               "--provider", "openai-compatible", "--apikey", "nvidia-pool",
+               "--provider", "openai-compatible", "--apikey", "tokenharbor-local-proxy",
                "--modelid", model, "--baseurl", base]
     try:
         done = subprocess.run(command, capture_output=True, text=True, timeout=timeout,
@@ -94,7 +94,7 @@ def prepare_profile(data_dir: str, model: str = DEFAULT_ENTRY_MODEL,
         return False
     return (settings.get("model") == model
             and str(settings.get("baseUrl", "")).rstrip("/") == base.rstrip("/")
-            and settings.get("apiKey") == "nvidia-pool")
+            and settings.get("apiKey") in ("tokenharbor-local-proxy", "nvidia-pool"))
 
 
 REAL_PREPARE_PROFILE = prepare_profile
@@ -125,7 +125,7 @@ def run_cline_search(workdir: str, prompt: str = SEARCH_PROMPT, timeout: int = 1
     command = [*resolve_cline(cline), "--data-dir", data_dir,
                "--provider", "openai-compatible",
                "--model", model or DEFAULT_ENTRY_MODEL,
-               "--key", "nvidia-pool", "-y", "--retries", "2",
+               "--key", "tokenharbor-local-proxy", "-y", "--retries", "2",
                "-t", str(max(60, int(timeout))), "-c", workdir]
     if system_prompt:
         # Cline's default role is a coding agent in a worktree, so it goes looking for the repo and
