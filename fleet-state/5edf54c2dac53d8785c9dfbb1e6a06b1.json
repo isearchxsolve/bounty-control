@@ -1,0 +1,42 @@
+{
+  "task_id": "5edf54c2dac53d8785c9dfbb1e6a06b1",
+  "repo": "BruceFeIix/picker",
+  "issue_number": 1833,
+  "status": "DISPATCHING",
+  "dispatch_id": "4a97a65692de4cfcb24d6df73d5a0e6d",
+  "admission": {
+    "funding": {
+      "amount": "5000",
+      "currency": "USD",
+      "usd_value": "5000",
+      "quote": {
+        "basis": "USD face value"
+      },
+      "raw": "$5,000",
+      "source_url": "https://github.com/BruceFeIix/picker/issues/1833",
+      "payer": "BruceFeIix"
+    },
+    "technical_signals": [
+      "authorization",
+      "bug",
+      "bug_bounty",
+      "bypass",
+      "encryption",
+      "issue",
+      "performance"
+    ],
+    "component_references": [],
+    "source_locations": [],
+    "engineering_evidence_sources": [
+      "https://github.com/BruceFeIix/picker/issues/1833"
+    ],
+    "source_issue": "https://github.com/BruceFeIix/picker/issues/1833",
+    "fetched_at": "2026-10-31T00:55:54.347744+00:00"
+  },
+  "lanes": [
+    "founder"
+  ],
+  "dispatched_at": "2026-10-31T00:55:55.488891+00:00",
+  "attempt": 0,
+  "updated_at": "2026-10-31T00:55:55.488911+00:00"
+}
