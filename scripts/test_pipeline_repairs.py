@@ -108,6 +108,30 @@ class DispatchOwnershipTests(unittest.TestCase):
 
 
 class EvidenceAndHandoffTests(unittest.TestCase):
+    def test_model_path_preserves_unpriced_owner_incidents_without_inventing_payment(self):
+        ctx=context()
+        statement='Production retry is failing; fix src/retry.py.'
+        ctx['issue'].update(body=statement,html_url='https://github.com/acme/http/issues/7',
+                            author_association='OWNER',user={'login':'owner'})
+        candidate={'repo':'acme/http','issue':7,'is_code_task':True,'is_founder_wound':True,
+            'reward_quote':statement,'scope_quote':'fix src/retry.py.',
+            'admission_reason':'Owner reports the current failure and requests a bounded source fix',
+            'funding':{'source_url':ctx['issue']['html_url'],'payer':'owner','authority_quote':statement},
+            'code_evidence':{'path':'src/retry.py','sha':'a'*40,'quote':'def retry():','is_product_code':True}}
+        blob={'type':'file','sha':'a'*40,'encoding':'base64','content':base64.b64encode(b'def retry():\n    pass\n').decode()}
+        api=SimpleNamespace(pages=lambda *a,**k:[])
+        with patch.object(GitHub,'api',return_value=blob):
+            result=door.verify_model_rows([candidate],fetch=lambda *a:ctx['issue'],
+                                         context_builder=lambda *a:ctx,admission_client=api)
+        self.assertEqual(len(result['admitted']),1)
+        proof=result['admitted'][0]['admission']
+        self.assertEqual(proof['funding_status'],'UNPRICED_OWNER_REQUEST')
+        self.assertEqual(proof['funding']['currency'],'FOUNDER')
+        require_evidence(result['admitted'][0],ctx)
+        ctx['issue']['author_association']='NONE'
+        reason,_,_=door.model_admission_refusal(candidate,lambda *a:ctx)
+        self.assertEqual(reason,'FOUNDER_OWNERSHIP_UNVERIFIED')
+
     def test_production_door_checks_model_citations_without_regex_readmission(self):
         ctx = context()
         ctx['issue'].update(html_url='https://github.com/acme/http/issues/7', user={'login':'payer'})

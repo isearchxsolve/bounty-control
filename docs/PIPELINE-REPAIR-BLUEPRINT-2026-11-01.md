@@ -150,6 +150,29 @@ after implementation. This document is created before application source edits.
 
 ## Implemented changes and final source excerpts
 
+Deployment follow-up: the complete package was pushed in `767b274`. Its new import gate passed
+on GitHub; the expanded door tests exposed deprecated naive UTC fixtures on the runner's Python
+3.12. The follow-up uses timezone-aware UTC and closes fixture file readers. It also preserves
+the existing founder-lane contract in model admission: an explicitly selected owner incident
+may be unpriced, provided its author is OWNER, its quote is in that owner's issue, and scope,
+source code and identity are verified. The proof records `UNPRICED_OWNER_REQUEST`, not paid funding.
+Focused follow-up verification: **175 passed in 16.57 seconds**.
+
+Exact follow-up gate at `scripts/cline_entry_door.py:570`:
+
+```python
+        owner_request = row.get('is_founder_wound') is True and not quote_states_an_amount(quote)
+        if owner_request:
+            if (context['issue'].get('author_association') != 'OWNER'
+                    or source is not context['issue']):
+                return 'FOUNDER_OWNERSHIP_UNVERIFIED', None, None
+            funding = {**funding, 'amount': '0', 'currency': 'FOUNDER'}
+            usd, rate = Decimal('0'), {'basis': 'Unpriced repository-owner request'}
+```
+
+The source excerpts and fingerprints below capture the package before this compatibility
+follow-up; use the follow-up gate above and its test for the updated owner-request behavior.
+
 These are exact excerpts of the final local working tree, generated from AST line locations.
 Baseline references above remain historical; use the locations below for review. Files are
 not committed or pushed by this repair. Excerpts are truncated only at the stated line boundary.

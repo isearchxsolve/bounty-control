@@ -11,7 +11,8 @@ import re
 import shutil
 import tempfile
 import unittest
-from datetime import datetime
+from datetime import datetime, timezone
+from pathlib import Path
 from unittest import mock
 
 import cline_entry_door as door
@@ -312,7 +313,7 @@ class UnpricedLeadStream(unittest.TestCase):
                      "reward_quote": "I'm willing to pay for this to be added."}]
         path = door.write_unpriced_leads(workdir, unpriced)
         self.assertTrue(path.endswith(door.UNPRICED_LEADS))
-        written = [json.loads(l) for l in open(path, encoding="utf-8") if l.strip()]
+        written = [json.loads(l) for l in Path(path).read_text(encoding="utf-8").splitlines() if l.strip()]
         self.assertEqual(len(written), 1)
         self.assertEqual(written[0]["issue"], 3)
         self.assertEqual(written[0]["repo"], "acme/http")
@@ -327,7 +328,7 @@ class UnpricedLeadStream(unittest.TestCase):
                  "issue": 3, "url": "u", "reward_quote": "willing to pay"}
         door.write_unpriced_leads(workdir, [entry])
         path = door.write_unpriced_leads(workdir, [entry])
-        written = [json.loads(l) for l in open(path, encoding="utf-8") if l.strip()]
+        written = [json.loads(l) for l in Path(path).read_text(encoding="utf-8").splitlines() if l.strip()]
         self.assertEqual(len(written), 1, "the stream must not inflate across rounds")
 
     def test_no_unpriced_rows_writes_nothing(self):
@@ -453,7 +454,7 @@ class FeedbackLoop(unittest.TestCase):
         result = door.iterate(workdir, rounds=3, run=run, verify=verify)
         issues = sorted(r["issue"] for r in result["admitted"])
         self.assertEqual(issues, [7, 8], "round 1's row must survive round 2's rewrite")
-        on_disk = [json.loads(line) for line in open(shortlist, encoding="utf-8") if line.strip()]
+        on_disk = [json.loads(line) for line in Path(shortlist).read_text(encoding="utf-8").splitlines() if line.strip()]
         self.assertIn(7, [r["issue"] for r in on_disk],
                       "the won row must still be in the file the next round reads")
 
@@ -466,7 +467,7 @@ class FeedbackLoop(unittest.TestCase):
         with open(shortlist, "w", encoding="utf-8") as handle:
             handle.write(json.dumps(row()) + "\n")
         door._merge_shortlist(workdir, [row(), row(issue=9)])
-        on_disk = [json.loads(line) for line in open(shortlist, encoding="utf-8") if line.strip()]
+        on_disk = [json.loads(line) for line in Path(shortlist).read_text(encoding="utf-8").splitlines() if line.strip()]
         self.assertEqual(sorted(r["issue"] for r in on_disk), [7, 9])
 
 
@@ -673,18 +674,18 @@ class ScoutWorktree(unittest.TestCase):
         self.assertTrue(os.path.isfile(task))
 
     def test_the_brief_names_the_output_contract(self):
-        text = open(os.path.join(self.workdir, "TASK.md"), encoding="utf-8").read()
+        text = (Path(self.workdir) / "TASK.md").read_text(encoding="utf-8")
         for field in ("shortlist.jsonl", "reward_quote", "reward_usd", "repo", "issue"):
             self.assertIn(field, text)
 
     def test_the_brief_states_the_workspace_has_no_code(self):
-        text = open(os.path.join(self.workdir, "TASK.md"), encoding="utf-8").read()
+        text = (Path(self.workdir) / "TASK.md").read_text(encoding="utf-8")
         self.assertIn("no source code", text)
 
     def test_the_brief_carries_the_domain(self):
         """Baba: how will the agent know the gates unless it is told the domain and the
         constraints. Autonomy is about the method, never about the acceptance criteria."""
-        text = open(os.path.join(self.workdir, "TASK.md"), encoding="utf-8").read()
+        text = (Path(self.workdir) / "TASK.md").read_text(encoding="utf-8")
         self.assertIn("The domain", text)
         self.assertIn("engineering", text)
         self.assertIn("Do not exclude a row to be safe", text)
@@ -692,7 +693,7 @@ class ScoutWorktree(unittest.TestCase):
     def test_every_gate_that_can_fire_is_named_in_the_brief(self):
         """The brief is rendered from GATE_CHECKS/DOWNSTREAM_CHECKS, so a new refusal cannot be
         added to the gate without appearing in front of the agent."""
-        text = open(os.path.join(self.workdir, "TASK.md"), encoding="utf-8").read()
+        text = (Path(self.workdir) / "TASK.md").read_text(encoding="utf-8")
         for code, _ in door.GATE_CHECKS + door.DOWNSTREAM_CHECKS:
             self.assertIn(code, text, code)
 
@@ -709,7 +710,7 @@ class ScoutWorktree(unittest.TestCase):
     def test_the_brief_prescribes_no_search_recipe(self):
         """Measured handcuffs, removed on Baba's order: a numbered first step, a list of search
         commands and a taxonomy of what counts as money. Those are judgements."""
-        text = open(os.path.join(self.workdir, "TASK.md"), encoding="utf-8").read()
+        text = (Path(self.workdir) / "TASK.md").read_text(encoding="utf-8")
         self.assertNotIn("STEP 1", text)
         self.assertNotIn("--label bounty", text)
         self.assertNotIn("gh search issues", text)
@@ -906,7 +907,7 @@ class TheSearcherIsSovereign(unittest.TestCase):
             self.assertFalse(door.FUNDING_WITHDRAWN_RE.search(innocent), innocent)
 
         issue = {"state": "open", "title": "[$6000 DAI] Build Polkadot", "body": "Welcome, $6000 DAI.",
-                 "updated_at": datetime.utcnow().strftime("%Y-%m-%dT%H:%M:%SZ"),
+                 "updated_at": datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ"),
                  "__comments__": "Issue Status: 1. Open 2. **Cancelled**"}
         row = {"repo": "Web3Foundation/build-polkadot", "issue": 1, "is_code_task": True,
                "reward_quote": "Welcome, $6000 DAI.", "reward_usd": 6000,
@@ -931,7 +932,7 @@ class TheSearcherIsSovereign(unittest.TestCase):
         self.assertEqual(verdict["admitted"], [])
         self.assertEqual(verdict["refused"][0]["reason"], "STALE_ISSUE")
 
-        alive = dict(dead, updated_at=datetime.utcnow().strftime("%Y-%m-%dT%H:%M:%SZ"))
+        alive = dict(dead, updated_at=datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ"))
         verdict = door.verify_rows([row], lambda repo, num: alive)
         self.assertEqual(len(verdict["admitted"]), 1, "an active issue still passes")
 
@@ -960,7 +961,7 @@ class TheSearcherIsSovereign(unittest.TestCase):
                                    "archived": False, "disabled": False,
                                    "default_branch": "main"},
                     "comments": [], "author_comments": [],
-                    "fetched_at": datetime.utcnow().isoformat() + "Z",
+                    "fetched_at": datetime.now(timezone.utc).isoformat(),
                     "complete_comments": True}
 
         row_nofund = {"repo": "acme/http", "issue": 5, "is_code_task": True,
@@ -1057,13 +1058,13 @@ def funded_context(repo, number):
              "author_association": "OWNER",
              "html_url": f"https://github.com/{repo}/issues/{number}", "labels": [],
              "created_at": "2026-10-01T00:00:00Z",
-             "updated_at": datetime.utcnow().strftime("%Y-%m-%dT%H:%M:%SZ"), "comments": 0}
+             "updated_at": datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ"), "comments": 0}
     return {"repo": repo, "issue_number": number, "issue": issue,
             "repository": {"name": repo.split("/")[-1], "full_name": repo,
                            "owner": {"login": repo.split("/")[0]},
                            "archived": False, "disabled": False, "default_branch": "main"},
             "comments": [], "author_comments": [],
-            "fetched_at": datetime.utcnow().isoformat() + "Z", "complete_comments": True}
+            "fetched_at": datetime.now(timezone.utc).isoformat(), "complete_comments": True}
 
 
 class TheDoorRunsTheWholeBattery(unittest.TestCase):
@@ -1139,7 +1140,7 @@ OWNER_WOUND = {
     "user": {"login": "owner"}, "author_association": "OWNER",
     "html_url": "https://github.com/acme/http/issues/7", "labels": [],
     "created_at": "2026-10-01T00:00:00Z",
-    "updated_at": datetime.utcnow().strftime("%Y-%m-%dT%H:%M:%SZ"), "comments": 0,
+    "updated_at": datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ"), "comments": 0,
 }
 
 
@@ -1151,7 +1152,7 @@ def owner_wound_context(repo, number):
                            "owner": {"login": repo.split("/")[0]},
                            "archived": False, "disabled": False, "default_branch": "main"},
             "comments": [], "author_comments": [],
-            "fetched_at": datetime.utcnow().isoformat() + "Z", "complete_comments": True}
+            "fetched_at": datetime.now(timezone.utc).isoformat(), "complete_comments": True}
 
 
 class TheFounderLaneCanActuallyAdmit(unittest.TestCase):

@@ -567,13 +567,21 @@ def model_admission_refusal(row, context_builder, source_reader=None):
         authority = funding.get('authority_quote') or ''
         if not authority or not quote_is_present(authority, text):
             return 'AUTHORITY_QUOTE_NOT_IN_SOURCE', None, None
-        amount, currency = Decimal(str(funding['amount'])), funding['currency'].upper()
-        if not any(a == amount and c == currency for a, c, _ in amounts(quote)):
-            return 'QUOTED_AMOUNT_MISMATCH', None, None
-        rate = {'basis': 'USD face value', 'usd_rate': '1'} if currency in ('USD','USDC','USDT') else fx_quote(currency)
-        usd = amount * Decimal(str(rate['usd_rate']))
-        if usd < FLOOR:
-            return 'BOUNTY_FLOOR', None, None
+        owner_request = row.get('is_founder_wound') is True and not quote_states_an_amount(quote)
+        if owner_request:
+            if (context['issue'].get('author_association') != 'OWNER'
+                    or source is not context['issue']):
+                return 'FOUNDER_OWNERSHIP_UNVERIFIED', None, None
+            funding = {**funding, 'amount': '0', 'currency': 'FOUNDER'}
+            usd, rate = Decimal('0'), {'basis': 'Unpriced repository-owner request'}
+        else:
+            amount, currency = Decimal(str(funding['amount'])), funding['currency'].upper()
+            if not any(a == amount and c == currency for a, c, _ in amounts(quote)):
+                return 'QUOTED_AMOUNT_MISMATCH', None, None
+            rate = {'basis': 'USD face value', 'usd_rate': '1'} if currency in ('USD','USDC','USDT') else fx_quote(currency)
+            usd = amount * Decimal(str(rate['usd_rate']))
+            if usd < FLOOR:
+                return 'BOUNTY_FLOOR', None, None
         scope = row.get('scope_quote') or ''
         if not scope or not any(quote_is_present(scope, d.get('title','')+'\n'+(d.get('body') or '')) for d in documents):
             return 'SCOPE_QUOTE_NOT_IN_SOURCE', None, None
@@ -600,7 +608,9 @@ def model_admission_refusal(row, context_builder, source_reader=None):
         proof = {'funding': {**funding, 'usd_value': str(usd), 'quote': rate, 'raw': quote},
                  'agent_reason': row['admission_reason'], 'scope_quote': scope,
                  'code_evidence': code,
-                 'source_issue': context['issue'].get('html_url'), 'lane': row.get('lane', 'bounty')}
+                 'source_issue': context['issue'].get('html_url'),
+                 'funding_status': 'UNPRICED_OWNER_REQUEST' if owner_request else 'PRICED_OFFER',
+                 'lane': 'founder' if owner_request else row.get('lane', 'bounty')}
         if row.get('reconsideration'):
             proof['reconsideration'] = row['reconsideration']
         return None, None, bind_proof(proof, context)

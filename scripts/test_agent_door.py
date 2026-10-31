@@ -2,6 +2,7 @@
 
 import os
 import unittest
+from pathlib import Path
 from unittest import mock
 
 import agent_door
@@ -68,7 +69,7 @@ class DoorReturnsWhatTheGateAdmitted(unittest.TestCase):
 
 class TheAgentIsNeverPointedStraightAtTheProvider(unittest.TestCase):
     def test_the_door_uses_the_local_gateway(self):
-        source = open(agent_door.__file__, encoding="utf-8").read()
+        source = Path(agent_door.__file__).read_text(encoding="utf-8")
         self.assertIn("127.0.0.1", source)
         self.assertNotIn("integrate.api.nvidia.com", source)
 

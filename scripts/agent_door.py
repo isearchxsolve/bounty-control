@@ -148,6 +148,10 @@ that the exact blob and quoted source exist. A repository with no actual product
 Read the whole conversation, including later withdrawals and awards. Do not mistake budget mentions,
 copied third-party offers, already-paid rewards or symbolic bounties for a current committed offer.
 Never invent a payer, authority, quote, amount or source. Code checks the chosen source and amount.
+For an unpriced repository-owner incident, set is_founder_wound true and cite the OWNER-authored issue
+in funding.source_url, funding.payer and funding.authority_quote; omit amount and currency.
+Still supply the scope quote, actual product-code evidence and your admission_reason.
+The host records this as an unpriced owner request, without asserting a monetary promise.
 '''
         if prior_refusals:
             with open(os.path.join(workdir, "prior-refusals.json"), "w", encoding="utf-8") as handle:
