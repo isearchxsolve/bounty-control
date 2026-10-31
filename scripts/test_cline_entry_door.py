@@ -360,15 +360,23 @@ class FeedbackLoop(unittest.TestCase):
 
         def run(workdir, prompt=None, **kwargs):
             prompts.append(prompt)
-            return rounds[len(prompts) - 1]
+            return rounds[min(len(prompts), len(rounds)) - 1]
 
         result = door.iterate(self.workdir, rounds=3, run=run, verify=offline_verify)
-        self.assertEqual(len(prompts), 2, "one correction round")
+        self.assertEqual(len(prompts), 3, "every configured round runs; refusals still reach the next")
         self.assertIn("REWARD_QUOTE_NOT_IN_ISSUE", prompts[1])
         self.assertIn("acme/http#7", prompts[1])
         self.assertEqual(len(result["admitted"]), 1)
 
-    def test_the_loop_stops_as_soon_as_nothing_is_refused(self):
+    def test_a_clean_round_continues_searching_instead_of_ending_the_round(self):
+        """Baba 2026-10-31: no quota, no early finish.
+
+        Measured on run 41183429400 (first quota-free brief): the agent returned four rows,
+        nothing was refused, and the second configured round never ran - the extra round was
+        wired as a repair round only. Time left on the clock is time to search, so a clean round
+        now continues the search. The old policy is deliberately retired here, not loosened:
+        rounds stay bounded and a repeated row is never admitted twice.
+        """
         calls = []
 
         def run(workdir, prompt=None, **kwargs):
@@ -376,8 +384,9 @@ class FeedbackLoop(unittest.TestCase):
             return {"exit_code": 0, "rows": [row()], "tail": "", "wrote_file": True}
 
         result = door.iterate(self.workdir, rounds=5, run=run, verify=offline_verify)
-        self.assertEqual(len(calls), 1, "a clean round needs no correction")
-        self.assertEqual(len(result["admitted"]), 1)
+        self.assertEqual(len(calls), 5, "a clean round is a reason to search more, not to stop")
+        self.assertIn("no quota", calls[1].lower())
+        self.assertEqual(len(result["admitted"]), 1, "the same row is never admitted twice")
 
     def test_rounds_are_bounded_even_if_the_agent_never_fixes_anything(self):
         calls = []

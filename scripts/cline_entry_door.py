@@ -424,6 +424,13 @@ work, not to stopping early.
 """
 
 
+CONTINUE_PROMPT = FRESH_START + """The previous round ended with time still on the clock, and this door has no quota. Its rows are kept - everything you already wrote has been collected and checked, and you do not need to write it again.
+
+Go back out and find more. The world is larger than the part of it you have already seen: other sources, other phrasings, other platforms, other kinds of buyers, and the same issues read for a second offer written later in the thread. Append new rows to shortlist.jsonl as you verify them, and keep hunting for as long as the budget allows.
+
+No row you have already submitted needs to be repeated, and nothing you find is too small to write down."""
+
+
 def fresh_workspace(root: str) -> str:
     """A new, empty directory per run. Measured: the agent ignored its instructions and read old
     files (INITIAL_PROMPT.txt, comment.json, earlier scout logs) sitting next to its workdir under
@@ -713,6 +720,10 @@ def iterate(workdir: str, rounds: int = 3, run=run_cline_search, verify=verify_r
     unpriced: List[dict] = []
     stream_path = os.path.join(workdir, "admitted-stream.jsonl")
     live: Dict[str, List[dict]] = {"admitted": [], "refused": [], "unpriced": []}
+    banked_keys = set()
+
+    def row_key(row: dict):
+        return (str(row.get("repo") or "").lower(), row.get("issue"))
 
     def bank(row: dict) -> None:
         """Verify a row the instant the agent writes it, and keep it whatever happens next.
@@ -720,10 +731,14 @@ def iterate(workdir: str, rounds: int = 3, run=run_cline_search, verify=verify_r
         This is the reason the round's work survives: a row admitted at second 40 is already in
         the pipeline when the wall-clock budget kills the agent at second 800.
         """
+        key = row_key(row)
+        if key in banked_keys:
+            return
         try:
             one = verify([row], limit=limit)
         except Exception:  # a single-row failure must never abort the search
             return
+        banked_keys.add(key)  # only after a verdict, so a failed verify can still be retried
         for slot in ("admitted", "refused", "unpriced"):
             live[slot].extend(one.get(slot) or [])
         fresh = one.get("admitted") or []
@@ -749,6 +764,12 @@ def iterate(workdir: str, rounds: int = 3, run=run_cline_search, verify=verify_r
             live[slot].clear()
         if round_number == 1:
             prompt = first_prompt or SEARCH_PROMPT
+        elif not refusals:
+            # Measured 2026-10-31 (run 41183429400): with a quota-free brief the agent returned
+            # four rows, nothing was refused, and the configured second round never ran - the
+            # extra round was wired as a repair round only. Time left on the clock is time to
+            # search, so a clean round continues the search instead of ending it.
+            prompt = CONTINUE_PROMPT
         else:
             listed = "\n".join(
                 "- {repo}#{issue}: {reason}".format(
@@ -769,7 +790,7 @@ def iterate(workdir: str, rounds: int = 3, run=run_cline_search, verify=verify_r
                 row_seen = entry.get("row") if isinstance(entry, dict) and "row" in entry else entry
                 streamed.add((str(row_seen.get("repo") or "").lower(), row_seen.get("issue")))
         remaining = [row for row in (outcome.get("rows") or [])
-                     if (str(row.get("repo") or "").lower(), row.get("issue")) not in streamed]
+                     if row_key(row) not in streamed and row_key(row) not in banked_keys]
         result = verify(remaining, limit=limit)
         for entry in (result["refused"] or []) + (result.get("unpriced") or []):
             subject = entry.get("row") or {}
@@ -790,7 +811,7 @@ def iterate(workdir: str, rounds: int = 3, run=run_cline_search, verify=verify_r
                         "rows": len(outcome.get("rows") or []),
                         "admitted": len(result["admitted"]), "refused": len(refusals),
                         "unpriced": len(unpriced)})
-        if not refusals:
+        if round_number >= max(1, rounds):
             break
         # Carry the rows already won into the next round's file before the agent rewrites it.
         _merge_shortlist(workdir, admitted)
