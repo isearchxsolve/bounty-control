@@ -2,7 +2,7 @@
   "task_id": "409c0a243aa9beeb0f6c9d8d973f48bf",
   "repo": "ruohong2018/ruohong2018.github.io",
   "issue_number": 801,
-  "status": "DISPATCHING",
+  "status": "DISPATCHED",
   "dispatch_id": "c4d27400d68e499fbfc762d7b58d05e7",
   "admission": {
     "funding": {
@@ -42,5 +42,5 @@
   ],
   "dispatched_at": "2026-10-31T01:08:59.372923+00:00",
   "attempt": 0,
-  "updated_at": "2026-10-31T01:08:59.372941+00:00"
+  "updated_at": "2026-10-31T01:09:01.088173+00:00"
 }
