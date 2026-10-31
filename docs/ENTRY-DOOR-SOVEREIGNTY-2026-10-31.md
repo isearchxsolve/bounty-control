@@ -824,3 +824,28 @@ the workflow YAML parse, and the commit that proves CI - each gets its own entry
   issues) is still not written before dispatch, and the lost job logs on the five mid-step-kill runs
   are still unrecoverable. Both remain open, and both are named here so that a later reader does not
   have to discover them the hard way.
+
+## 14. One rule for the picker and the engineer (commit fdbf81c)
+
+**The ask, from day one:** the picker and the engineer read the same gates, so there is no
+conflict and no new churn of pull requests.
+
+**What was wrong.** Admission decided competition once, and the engineer decided it again on
+its own. Admission said a nominal open pull request was not a competitor and let the row
+through. The engineer then read the same pull requests with a looser standard and blocked
+("nine open pull requests already implement it"). Same evidence, opposite verdicts.
+
+**What changed.**
+- `actions_delivery.py`: the admission verdict is recorded in the task context as the field
+  `competition`. Reaching the line after `competition()` returns is the verdict; it raises on a
+  real claimant.
+- `kaggle_engine_worker.py`: the engineer prompt now states that verdict as settled fact and
+  forbids re-judging open pull requests with its own standard.
+
+**Measured.** 144 tests pass across the picker, admission, dispatch and engineer suites.
+
+**Not yet measured.** No delivery run has been read since this commit. The next run decides
+whether the conflict is gone and whether any pull request is opened.
+
+**Honest status.** The rule is now single and shared in code. Whether it produces pull
+requests is still unknown until a run finishes and its log is read.
