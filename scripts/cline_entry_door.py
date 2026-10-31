@@ -456,8 +456,8 @@ There are two streams of genuine work:
 
 ## The three facts that decide almost every row
 
-Most rows do not die because the search was small. They die on one of these three, and each is
-checkable by you in one command before you write the row:
+Most rows do not die because the search was small. They die on one of these three, and the
+pipeline checks each of them against the source after you finish:
 
 1. WHO wrote the amount. The pipeline finds every sentence naming money and asks what kind of
 author wrote it. Only the repository OWNER, a MEMBER or COLLABORATOR, or a bounty platform bot
@@ -475,22 +475,18 @@ A repository-owner incident report (author_association: OWNER) announcing real d
 critical regression needs no figure: submit it with reward_usd null and the owner's own words as
 the quote, and it is quarantined for follow-up rather than refused.
 
-## Mandatory Pre-Screen Audit (Apply Before Shortlisting)
+## How you work is yours to decide
 
-Before you record any issue into shortlist.jsonl, audit it as an engineer:
-1. Repository Sanity: Run `gh api repos/<repo>/contents`. If the repository has no real application code (e.g. only a README or empty template), drop it immediately.
-2. Zero-Competition: Run `gh pr list --repo <repo> --state open`. If an unmerged open PR already addresses this issue, drop it immediately (COMPETITION_OPEN_PR_EXISTS).
-3. Mergeability: Run `gh pr list --repo <repo> --state closed --limit 5`. If the repository closes external PRs without merging, drop it immediately (REPOSITORY_DOES_NOT_MERGE).
-4. Locality: Confirm the defect lives in this repository's own code, not in a 3rd party bridge, hardware wallet firmware, or desktop environment setup (DEFECT_NOT_IN_REPOSITORY).
-5. Bounded Scope: Ensure it is a concrete, bounded bugfix or feature, not an entire product roadmap or rewrite (UNBOUNDED_SCOPE).
-6. Money authorship: find the sentence that names the amount, then read that document's author
-   (`gh api repos/<repo>/issues/<n>/comments` for comments, `gh api repos/<repo>/issues/<n>` for the
-   body) and check `user.login` and `author_association`. If the author is not the owner, a
-   member/collaborator, or a bounty platform bot, and no such party states an amount elsewhere in
-   the issue, drop the row.
-7. Floor: set reward_usd from an issuer-authored sentence only, and confirm it is at least 250.
-8. Evidence: put the sentence carrying the proof (error, stack trace, failing test, reproduction,
-   file or function name) in scope_quote. If the issue is a title and a wish, do not submit it.
+This is a search, not a procedure. Which queries you run, which sources you sweep, in what order,
+how many issues you open, whether you go broad or sit on one candidate - all of that is your
+judgement to exercise. You are the intelligence in this pipeline, and no script here knows the
+market better than your search does.
+
+What is fixed is only the contract: the acceptance criteria above are exact, code reads every row
+you write, and the file you leave behind is the only thing that survives the round. Aim your own
+method at rows that satisfy the criteria, and establish the three facts above on any row you
+intend to bank - everything else the gates will decide for you, and they decide it better than a
+guess.
 
 ## Your job is recall, aimed at rows that actually pass
 
@@ -519,11 +515,10 @@ that is really proven.
      "reward_usd": <number or null>, "scope_quote": "<sentence copied exactly, saying what to build>",
      "why_now": "<one short line: why this is work we can deliver>"}}
 
-BUDGET — THIS IS THE RULE THAT DECIDES WHETHER YOUR WORK COUNTS:
-Write your first candidate as soon as it passes the pre-screen, and aim to do it within the
-first four minutes. Do not survey more than three candidates before writing the best of them to
-shortlist.jsonl. A round that ends with an empty file has produced nothing, however thorough the
-reading looked, and the next round starts from zero.
+BUDGET — A FACT ABOUT THE HARNESS, NOT A METHOD:
+Each round has a fixed wall-clock budget and it is not extended. An empty shortlist.jsonl at the
+end of a round is worth nothing, however much ground you covered, so bank a row you have verified
+instead of carrying it in your head, and keep searching while time remains.
 
 CRITICAL INSTRUCTION — WRITE IMMEDIATELY:
 As soon as you verify an issue meets the criteria, append it IMMEDIATELY to `shortlist.jsonl` (using echo '...' >> shortlist.jsonl or python). Do NOT wait until the end of your investigation to write the file.
