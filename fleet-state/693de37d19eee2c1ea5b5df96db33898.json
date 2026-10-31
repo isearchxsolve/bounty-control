@@ -2,7 +2,7 @@
   "task_id": "693de37d19eee2c1ea5b5df96db33898",
   "repo": "gotoalberto/ordinals-ethoxford",
   "issue_number": 1,
-  "status": "DISPATCHED",
+  "status": "CLAIMED",
   "dispatch_id": "82caca3f91994905b57828011e2d97ae",
   "admission": {
     "funding": {
@@ -34,6 +34,14 @@
     "programs"
   ],
   "dispatched_at": "2026-10-31T09:06:32.288015+00:00",
-  "attempt": 0,
-  "updated_at": "2026-10-31T09:06:33.698094+00:00"
+  "attempt": 1,
+  "updated_at": "2026-10-31T09:06:43.311789+00:00",
+  "owner": "41187315305:1",
+  "previous_owner": null,
+  "previous_status": "DISPATCHED",
+  "run_url": "https://github.com/isearchxsolve/bounty-control/actions/runs/41187315305",
+  "harness_sha": "c0273b2f4181dacb6b1823a4921160fe05c45b5e",
+  "claimed_at": "2026-10-31T09:06:43.311736+00:00",
+  "lease_expires_at": "2026-10-31T13:11:43.311751+00:00",
+  "preparation_budget_seconds": 14400
 }
