@@ -783,7 +783,32 @@ the workflow YAML parse, and the commit that proves CI - each gets its own entry
   the document.** One code-shaped token in the document does not appear verbatim in the source,
   `FAILED_BLOCKED_ON_CAPABILITY`, and it is not invented - `actions_delivery.py:948` composes it as
   `"FAILED_" + status`, so a written `BLOCKED_ON_CAPABILITY` becomes exactly that name. It is quoted
-  here only because it is a literal line of the CI log below.
+  here only because it is a literal line of the CI log above.
+
+### 2026-10-31 - the edited step ran for real, and the local replay is retired
+
+- Commit `22db3ba` (2 files, +92/-1) pushed `56cb849..22db3ba`. Run **`41198378817`** came back
+  **success** in 17 s.
+- This entry exists because the record above was honest about its own limit: the stop-on-failure proof
+  was measured on this laptop, and the run it was compared against, `41195441099`, was taken *before*
+  the edit. That was a projection. This run is the edited file actually executing on the runner.
+- The log shows the change took effect, in the runner's own words. Both multi-command steps open with
+  `##[group]Run set -euo pipefail`, then `set -euo pipefail` as the first line, then the commands.
+  Step 4 can only ever fail on the lint, and step 5 echoed exactly **44 distinct test commands** -
+  the same 44, byte for byte, that ran before the edit. Nothing was changed except the first line.
+- Counted rather than trusted, from the pulled log: **43 `Ran N tests in X s` lines summing 511 tests
+  in 2.124 s**, **45 `OK`**, **2 `OK self-test: 13/13`**, **0 `ERROR`**, **0 `Traceback`**.
+- The **1.624 s** above and the **2.124 s** here are two different runs of the same 511 tests, not a
+  contradiction. The test count is identical; only the shared runner's wall clock moved. Said plainly
+  so a later reader does not find two numbers and assume one is wrong.
+- The **4 `FAILED` matches reconcile to exactly 2 printed lines**: each JSON line carries the token
+  twice, once as `status` and once inside `failures[].status`. Both lines are the pipeline's own
+  terminal values being asserted by `test_preparation_terminal.py`, which is what the entry above
+  claims and what the log shows.
+- What this proves and what it does not: the contracts job is green **with** the guard in place, and
+  the guard is visible in the executed command block. It still does not prove the guard would abort a
+  real failure in CI, because no run has yet had that step fail - the failure path is proven here on
+  this machine and not from run history, and that limit stands unchanged.
 
 ### 2026-10-31 - what this entry does not claim
 
