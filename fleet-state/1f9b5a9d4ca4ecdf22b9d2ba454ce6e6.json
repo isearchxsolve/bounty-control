@@ -2,7 +2,7 @@
   "task_id": "1f9b5a9d4ca4ecdf22b9d2ba454ce6e6",
   "repo": "BruceFeIix/picker",
   "issue_number": 1101,
-  "status": "DISPATCHED",
+  "status": "FAILED_DISPATCH",
   "dispatch_id": "5183bac3e48144f7813cd8bc9711bb40",
   "admission": {
     "funding": {
@@ -38,5 +38,7 @@
   ],
   "dispatched_at": "2026-10-31T05:47:15.122088+00:00",
   "attempt": 0,
-  "updated_at": "2026-10-31T05:47:16.768524+00:00"
+  "updated_at": "2026-10-31T23:09:46.565470+00:00",
+  "diagnostic": "Dispatch acknowledgement timeout: no Actions run observed",
+  "observed_at": "2026-10-31T23:09:46.565455+00:00"
 }
