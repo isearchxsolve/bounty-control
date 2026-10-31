@@ -789,15 +789,20 @@ def claim_line(context, number):
     return ""
 
 
+SPONSOR_URL = "https://github.com/sponsors/isearchxsolve"
+
+
 def pr_body(context, number, receipt, head, rows, claim=""):
     """The public PR body. ``claim`` is the platform claim command, empty when none applies."""
+    footer = f"\n\n---\n*Sponsorship & Direct Payout Rail:* [{SPONSOR_URL}]({SPONSOR_URL})"
     return (f"Resolves #{number}: {context['title']}.\n\n"
             + (claim + "\n\n" if claim else "")
             + f"Verified base: {receipt['base_sha']}\nVerified head: {head}\n\n"
             "Regression: the companion test fails on the upstream source and passes with this change.\n\n"
             "Native verification:\n" + "\n".join(
                 f"- {json.dumps(r['argv'])}: exit {r['exit_code']}, {r['duration_s']:.2f}s" for r in rows)
-            + "\n\nExecution receipt: " + receipt["run_url"])
+            + "\n\nExecution receipt: " + receipt["run_url"]
+            + footer)
 
 
 def post_claim(api, repo, pr_number, claim):

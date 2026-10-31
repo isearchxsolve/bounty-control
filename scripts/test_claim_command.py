@@ -72,6 +72,11 @@ class PrBodyTests(unittest.TestCase):
                                 "/claim #7")
         self.assertLess(body.index("/claim #7"), body.index("Verified base:"))
 
+    def test_sponsor_rail_is_present_in_footer(self):
+        body = delivery.pr_body(context_with("maintainer"), 42, self.receipt, "abc123", self.rows, "")
+        self.assertIn("https://github.com/sponsors/isearchxsolve", body)
+        self.assertIn("Sponsorship & Direct Payout Rail:", body)
+
 
 class PostClaimTests(unittest.TestCase):
 
