@@ -717,9 +717,37 @@ def context_candidates(api, item, visited=None):
     yield context
 
 
-def dispatch(api, store, context, proof, lanes, remote_repair=False, preparation_budget=None):
+def _sovereign_stamps(proof, sovereign_admission=None, competition=None):
+    """The three fields the delivery side reads as settled fact, never omitted.
+
+    A stamp is either carried from the door or derived here, so the payload and the durable
+    row always agree and neither can be missing. ``sovereign_admission`` is true only when a
+    real admission proof exists: deriving it from nothing would manufacture the very
+    provenance this function exists to protect.
+    """
+    has_proof = isinstance(proof, dict) and bool(proof)
+    stamp_admission = sovereign_admission if sovereign_admission is not None else has_proof
+    if competition is None:
+        competition = {"blocking": False,
+                       "verdict": "clear: no competing claimant recorded at dispatch"}
+    return {"sovereign_admission": bool(stamp_admission),
+            "admission": proof if has_proof else None,
+            "competition": competition}
+
+
+def dispatch(api, store, context, proof, lanes, remote_repair=False, preparation_budget=None,
+             sovereign_admission=None, competition=None):
+    """Dispatch one admitted task, carrying the entry door's verdicts with it.
+
+    ``proof`` is the admission proof. ``sovereign_admission`` and ``competition`` are the
+    door's own stamps; when a caller does not supply them they are derived from ``proof``
+    rather than omitted, because a stamp that silently disappears in transit is worse than
+    no stamp at all: the delivery side reads a missing verdict as a default and reports a
+    door ruling that never travelled (measured 2026-10-31, see docs/SOVEREIGN-STAMP-AUDIT).
+    """
     repo, number = context["repo"], context["issue_number"]
     identity, dispatch_id = task_id(repo, number), uuid.uuid4().hex
+    stamps = _sovereign_stamps(proof, sovereign_admission, competition)
     def reserve(old):
         if old:
             status = old.get("status", "")
@@ -728,12 +756,13 @@ def dispatch(api, store, context, proof, lanes, remote_repair=False, preparation
                 raise ValueError("Existing durable task state: " + status)
         return {**(old or {}), "task_id": identity, "repo": repo, "issue_number": number,
                 "status": "DISPATCHING", "dispatch_id": dispatch_id, "admission": proof,
+                **stamps,
                 "lanes": sorted(set(lanes)), "dispatched_at": utcnow(), "attempt": (old or {}).get("attempt", 0)}
     store.mutate(identity, reserve)
     budget = preparation_budget if isinstance(preparation_budget, int) else FULL_PREPARATION_BUDGET_SECONDS
     payload = {"event_type": "bounty_task_dispatch", "client_payload": {
         "repo": repo, "issue_number": number, "task_id": identity, "lanes": sorted(set(lanes)),
-        "mode": "deliver", "preparation_budget_seconds": budget}}
+        "mode": "deliver", "preparation_budget_seconds": budget, **stamps}}
     api.api(f"repos/{store.repo}/dispatches", "POST", payload)
     def acknowledge(old):
         if old and old.get("dispatch_id") == dispatch_id and old["status"] == "DISPATCHING":
@@ -1093,6 +1122,9 @@ def store_pending_item(con, item, lane, expression, verdicts, pending_has_seen_a
 
 AGENT_LANE = "agent"
 AGENT_EXPRESSION = "cline:shortlist"
+# The three fields the entry door stamps on an admitted row and the delivery side reads as
+# settled fact. Declared once so the queue, the dispatcher and their tests cannot drift.
+SOVEREIGN_STAMPS = ("sovereign_admission", "admission", "competition")
 
 
 def queue_agent_rows(con, api, rows, verdicts=None, pending_has_seen_at=True):
@@ -1122,9 +1154,18 @@ def queue_agent_rows(con, api, rows, verdicts=None, pending_has_seen_at=True):
         # The door's verdict travels with the queued row. These three fields are what makes
         # the entry door sovereign: the delivery side reads its admission proof and its
         # competition verdict instead of reaching a second, different decision.
-        for stamp in ("sovereign_admission", "admission", "competition"):
-            if row.get(stamp) is not None:
-                item[stamp] = row[stamp]
+        #
+        # A missing stamp is a loud skip, never a silent omission. The old `if row.get(stamp)
+        # is not None` guard dropped an absent verdict without a word, so a row could reach
+        # the queue carrying no provenance at all and the delivery side would substitute its
+        # own default. A row that cannot prove where it came from is not queued.
+        missing = [stamp for stamp in SOVEREIGN_STAMPS if row.get(stamp) is None]
+        if missing:
+            skipped.append({"row": row, "reason": "SOVEREIGN_STAMP_MISSING",
+                            "detail": ",".join(missing)})
+            continue
+        for stamp in SOVEREIGN_STAMPS:
+            item[stamp] = row[stamp]
         lane = row.get("lane") or AGENT_LANE
         expression = row.get("expression") or AGENT_EXPRESSION
         identity = store_pending_item(con, item, lane, expression,

@@ -415,12 +415,16 @@ def _default_context_builder(repo, number):
     return GitHub().issue_context(repo, number)
 
 
-def admission_refusal(repo, number, quote=None, client=None, context_builder=None):
+def admission_refusal(repo, number, quote=None, context_builder=None):
     """Return (None, None, proof) when admit() accepts the row, else (reason, None, None).
 
     Fails closed: if the context cannot be built, the row is refused as ISSUE_UNREADABLE.
     The proof travels back so the admitted row can carry it: the delivery side reads that
     proof as a settled fact instead of running admission a second time.
+
+    There is no ``client`` parameter. One used to sit here and was never read: the context
+    is built by ``context_builder``, which constructs its own client. A parameter that looks
+    like it controls the gate but does not is worse than none, so it is gone (2026-10-31).
     """
     try:
         from bounty_admission import admit  # noqa: E402
@@ -555,7 +559,7 @@ def verify_rows(rows: List[dict], fetch: Optional[Callable[[str, int], Optional[
 
         proof, competition_verdict = None, None
         if ADMISSION_GATE and admission_client is not None:
-            reason, detail, proof = admission_refusal(repo, number, quote=None, client=admission_client,
+            reason, detail, proof = admission_refusal(repo, number, quote=None,
                                           context_builder=context_builder)
             if reason:
                 refused.append({"row": row, "reason": reason, **({"detail": detail} if detail else {})})
@@ -1147,9 +1151,33 @@ def write_unpriced_leads(workdir: str, unpriced: List[dict]) -> str:
     return target
 
 
+def sovereign_client():
+    """The client the sovereign gates need, or None when it cannot be built.
+
+    ``verify_rows`` only runs the admission and competition gates when it is given a client,
+    so a caller that forgets one gets a door that looks like it worked and checked nothing.
+    This exists so every entry point asks for the client the same way.
+    """
+    try:
+        from actions_github import GitHub  # noqa: E402
+        return GitHub()
+    except Exception:
+        return None
+
+
 def main() -> int:
     workdir = sys.argv[1] if len(sys.argv) > 1 else "D:/tmp/entry-door"
-    outcome = iterate(workdir)
+    # B (2026-10-31): this entry point used to call iterate(workdir) with no admission
+    # client, which silently disabled the sovereign gates: rows were admitted with
+    # sovereign_admission=False and no funding or competition check at all, and nothing
+    # said so. The door now refuses to run rather than admit unchecked rows.
+    client = sovereign_client()
+    if client is None:
+        print("VERDICT: NO_SOVEREIGN_CLIENT - the admission gate cannot run, so the door "
+              "will not admit anything. Check that actions_github is importable and "
+              "GH_TOKEN is set.")
+        return 2
+    outcome = iterate(workdir, admission_client=client)
     for step in outcome["history"]:
         print("ROUND {round}: exit={agent_exit} rows={rows} admitted={admitted} refused={refused}"
               .format(**step))

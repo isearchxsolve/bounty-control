@@ -37,12 +37,26 @@ def issue(number, updated="2026-10-30T00:00:00Z"):
             "body": "## Budget: $900"}
 
 
+def stamped(**overrides):
+    """A row as the entry door emits it: carrying its own provenance.
+
+    queue_agent_rows() refuses a row that cannot say where it came from (2026-10-31), so
+    these fixtures carry the three stamps the door writes. The refusal itself is pinned in
+    test_sovereign_stamps.
+    """
+    row = {"repo": "a/b", "issue": 7,
+           "sovereign_admission": True,
+           "admission": {"funding": {"amount": "900", "usd_value": "900"}},
+           "competition": {"blocking": False, "verdict": "clear: no competing claimant"}}
+    row.update(overrides)
+    return row
+
+
 class AgentRowsAreReFetched(unittest.TestCase):
     def test_a_readable_issue_is_queued_and_stored(self):
         con = database()
         api = FakeApi({"a/b#7": issue(7)})
-        result = actions_dispatch.queue_agent_rows(
-            con, api, [{"repo": "a/b", "issue": 7}])
+        result = actions_dispatch.queue_agent_rows(con, api, [stamped()])
         self.assertEqual(len(result["queued"]), 1)
         row = con.execute("SELECT payload,lanes,status FROM pending").fetchone()
         self.assertEqual(json.loads(row[1]), ["agent"])
@@ -77,7 +91,7 @@ class AgentRowsAreReFetched(unittest.TestCase):
     def test_the_agent_lane_is_recorded_with_its_expression(self):
         con = database()
         api = FakeApi({"a/b#7": issue(7)})
-        actions_dispatch.queue_agent_rows(con, api, [{"repo": "a/b", "issue": 7}])
+        actions_dispatch.queue_agent_rows(con, api, [stamped()])
         lane, expression = con.execute(
             "SELECT lane,expression FROM task_expression").fetchone()
         self.assertEqual((lane, expression),
@@ -86,7 +100,7 @@ class AgentRowsAreReFetched(unittest.TestCase):
     def test_founder_lane_is_recorded_when_provided(self):
         con = database()
         api = FakeApi({"a/b#7": issue(7)})
-        result = actions_dispatch.queue_agent_rows(con, api, [{"repo": "a/b", "issue": 7, "lane": "founder"}])
+        result = actions_dispatch.queue_agent_rows(con, api, [stamped(lane="founder")])
         self.assertEqual(len(result["queued"]), 1)
         row = con.execute("SELECT lanes FROM pending").fetchone()
         self.assertEqual(json.loads(row[0]), ["founder"])
