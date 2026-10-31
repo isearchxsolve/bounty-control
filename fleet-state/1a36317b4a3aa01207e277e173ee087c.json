@@ -1,0 +1,83 @@
+{
+  "task_id": "1a36317b4a3aa01207e277e173ee087c",
+  "repo": "ldc-developers/ldc",
+  "issue_number": 2153,
+  "status": "DISPATCHING",
+  "dispatch_id": "ec0ae9471a9146b6b6601686ed9adfa2",
+  "admission": {
+    "funding": {
+      "amount": "2000",
+      "currency": "USD",
+      "usd_value": "2000",
+      "quote": {
+        "basis": "USD face value"
+      },
+      "raw": "$2000",
+      "source_url": "https://github.com/ldc-developers/ldc/issues/2153#issuecomment-579253239",
+      "payer": "dnadlinger"
+    },
+    "technical_signals": [
+      "abi",
+      "algorithm",
+      "broken",
+      "bug",
+      "bugs",
+      "compiler",
+      "concurrency",
+      "fail",
+      "failing",
+      "fails",
+      "failure",
+      "failures",
+      "issue",
+      "issuecomment",
+      "issues",
+      "parser",
+      "precision",
+      "problem"
+    ],
+    "component_references": [
+      "Parser()",
+      "createTargetMachine()",
+      "dynamiccompile/asm_output.d",
+      "dynamiccompile/bind_bool.d",
+      "dynamiccompile/bind_func_opt.d",
+      "dynamiccompile/bind_nested_opt.d",
+      "main()",
+      "parseModule()",
+      "runnable/variadic.d",
+      "sanitizers/asan_noerror.d",
+      "sanitizers/fuzz_asan.d",
+      "sanitizers/fuzz_basic.d",
+      "std/algorithm/mutation.d"
+    ],
+    "source_locations": [],
+    "engineering_evidence_sources": [
+      "https://github.com/ldc-developers/ldc/issues/2153",
+      "https://github.com/ldc-developers/ldc/issues/2153#issuecomment-326266603",
+      "https://github.com/ldc-developers/ldc/issues/2153#issuecomment-326304092",
+      "https://github.com/ldc-developers/ldc/issues/2153#issuecomment-379952075",
+      "https://github.com/ldc-developers/ldc/issues/2153#issuecomment-401535854",
+      "https://github.com/ldc-developers/ldc/issues/2153#issuecomment-401549209",
+      "https://github.com/ldc-developers/ldc/issues/2153#issuecomment-401551656",
+      "https://github.com/ldc-developers/ldc/issues/2153#issuecomment-412581239",
+      "https://github.com/ldc-developers/ldc/issues/2153#issuecomment-437675006",
+      "https://github.com/ldc-developers/ldc/issues/2153#issuecomment-438006073",
+      "https://github.com/ldc-developers/ldc/issues/2153#issuecomment-579451494",
+      "https://github.com/ldc-developers/ldc/issues/2153#issuecomment-586760051",
+      "https://github.com/ldc-developers/ldc/issues/2153#issuecomment-622949539",
+      "https://github.com/ldc-developers/ldc/issues/2153#issuecomment-626028446",
+      "https://github.com/ldc-developers/ldc/issues/2153#issuecomment-637102284",
+      "https://github.com/ldc-developers/ldc/issues/2153#issuecomment-1174267378",
+      "https://github.com/ldc-developers/ldc/issues/2153#issuecomment-1177252534"
+    ],
+    "source_issue": "https://github.com/ldc-developers/ldc/issues/2153",
+    "fetched_at": "2026-10-31T02:25:26.589047+00:00"
+  },
+  "lanes": [
+    "normal"
+  ],
+  "dispatched_at": "2026-10-31T02:25:33.914614+00:00",
+  "attempt": 0,
+  "updated_at": "2026-10-31T02:25:33.914626+00:00"
+}
