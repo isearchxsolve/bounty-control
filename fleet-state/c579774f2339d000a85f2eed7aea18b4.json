@@ -2,7 +2,7 @@
   "task_id": "c579774f2339d000a85f2eed7aea18b4",
   "repo": "ruohong2018/ruohong2018.github.io",
   "issue_number": 790,
-  "status": "CLAIMED",
+  "status": "REJECTED_PREPARATION",
   "dispatch_id": "b2ea8da8a5c84b8ba9bdb9e7d8425ea7",
   "admission": {
     "funding": {
@@ -40,7 +40,7 @@
   ],
   "dispatched_at": "2026-10-31T01:14:57.874262+00:00",
   "attempt": 1,
-  "updated_at": "2026-10-31T01:15:10.140004+00:00",
+  "updated_at": "2026-10-31T01:18:44.743423+00:00",
   "owner": "41154407044:1",
   "previous_owner": null,
   "previous_status": "DISPATCHED",
@@ -48,5 +48,28 @@
   "harness_sha": "4c3eefe714d35fcbc24e535ceb466466b27c196d",
   "claimed_at": "2026-10-31T01:15:10.139955+00:00",
   "lease_expires_at": "2026-10-31T05:20:10.139969+00:00",
-  "preparation_budget_seconds": 14400
+  "preparation_budget_seconds": 14400,
+  "at": "2026-10-31T01:18:33.368656+00:00",
+  "reason": "Cline preparation blocked: Issue #790 '[\u6bcf\u65e5\u4fe1\u606f\u6d41] 2025-04-12' is an auto-generated DAILY security-news digest post, not a code-change request. Evidence: (1) title prefix '[\u6bcf\u65e5\u4fe1\u606f\u6d41]' = '[Daily Information Feed]'; (2) the only label is 'daily'; (3) the body is a markdown list of external news/link headlines with no described defect, no failing behavior, no target file, no acceptance criteria and no command; (4) it was created by the repo's own bot (bot.py) on 2025-04-12T02:59:52Z with 0 comments and remains open; the repository has 1357 open issues, overwhelmingly identical 'daily' digest posts (#1356..1360 all '[\u6bcf\u65e5\u4fe1\u606f\u6d41] YYYY-MM-DD'). The admission 'funding' of $5,382 USD, 'technical_signals' (atomic/broken/bug/crashes/encryption) and component_references ('ELFDICOM') are keyword-extraction false positives taken from third-party article titles inside the body (e.g. 'ELFDICOM: PoC Malware Polyglot...'), not an actual bounty or engineering change. There is no reproducible defect to build a regression_plan around and no specific feature/maintenance task. This is an automatically produced content/marketing deliverable, which is explicitly excluded from action=retry. Checkout left unchanged. Only 1 open PR exists (#1361) and it does not target this issue; no competing PR relevant to #790.",
+  "declared_reason": "Issue #790 '[\u6bcf\u65e5\u4fe1\u606f\u6d41] 2025-04-12' is an auto-generated DAILY security-news digest post, not a code-change request. Evidence: (1) title prefix '[\u6bcf\u65e5\u4fe1\u606f\u6d41]' = '[Daily Information Feed]'; (2) the only label is 'daily'; (3) the body is a markdown list of external news/link headlines with no described defect, no failing behavior, no target file, no acceptance criteria and no command; (4) it was created by the repo's own bot (bot.py) on 2025-04-12T02:59:52Z with 0 comments and remains open; the repository has 1357 open issues, overwhelmingly identical 'daily' digest posts (#1356..1360 all '[\u6bcf\u65e5\u4fe1\u606f\u6d41] YYYY-MM-DD'). The admission 'funding' of $5,382 USD, 'technical_signals' (atomic/broken/bug/crashes/encryption) and component_references ('ELFDICOM') are keyword-extraction false positives taken from third-party article titles inside the body (e.g. 'ELFDICOM: PoC Malware Polyglot...'), not an actual bounty or engineering change. There is no reproducible defect to build a regression_plan around and no specific feature/maintenance task. This is an automatically produced content/marketing deliverable, which is explicitly excluded from action=retry. Checkout left unchanged. Only 1 open PR exists (#1361) and it does not target this issue; no competing PR relevant to #790.",
+  "evidence": {
+    "action": "blocked",
+    "worktree": "/tmp/bounty-workspaces/repos/ruohong2018--ruohong2018.github.io--790",
+    "base_sha": "d51bad12e8b4edfcd4196d59dfdb5ac1427ea24c",
+    "default_branch": "master",
+    "sources": [],
+    "run_url": "",
+    "admission": {
+      "amount": "5382",
+      "currency": "USD",
+      "usd_value": "5382",
+      "quote": {
+        "basis": "USD face value"
+      },
+      "raw": "$5,382",
+      "source_url": "https://github.com/ruohong2018/ruohong2018.github.io/issues/790",
+      "payer": "ruohong2018"
+    }
+  },
+  "finished_at": "2026-10-31T01:18:44.259810+00:00"
 }
