@@ -2,7 +2,7 @@
   "task_id": "38f024562d2c598fdffdd2a9332c1d87",
   "repo": "Tyaoo/picker",
   "issue_number": 1071,
-  "status": "DISPATCHING",
+  "status": "DISPATCHED",
   "dispatch_id": "ecd467a2279149fd838b77f36e914b36",
   "admission": {
     "funding": {
@@ -37,5 +37,5 @@
   ],
   "dispatched_at": "2026-10-31T03:06:12.713088+00:00",
   "attempt": 0,
-  "updated_at": "2026-10-31T03:06:12.713106+00:00"
+  "updated_at": "2026-10-31T03:06:14.518803+00:00"
 }
