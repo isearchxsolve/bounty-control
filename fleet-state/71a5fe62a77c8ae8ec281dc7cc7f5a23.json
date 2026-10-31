@@ -2,7 +2,7 @@
   "task_id": "71a5fe62a77c8ae8ec281dc7cc7f5a23",
   "repo": "eleectrum/eleectrum.github.io",
   "issue_number": 1,
-  "status": "DISPATCHING",
+  "status": "DISPATCHED",
   "dispatch_id": "bd91358efad84b0fb13bfb8aeb49cc2e",
   "admission": {
     "funding": {
@@ -32,5 +32,5 @@
   ],
   "dispatched_at": "2026-10-31T06:22:14.746487+00:00",
   "attempt": 0,
-  "updated_at": "2026-10-31T06:22:14.746503+00:00"
+  "updated_at": "2026-10-31T06:22:16.513112+00:00"
 }
