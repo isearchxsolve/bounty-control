@@ -2,7 +2,7 @@
   "task_id": "8b8a118e60d945ead01a145a48c59632",
   "repo": "BruceFeIix/picker",
   "issue_number": 1771,
-  "status": "DISPATCHED",
+  "status": "CLAIMED",
   "dispatch_id": "d2dba2e0a42b4710ab2a91a744cca58c",
   "admission": {
     "funding": {
@@ -39,6 +39,14 @@
     "founder"
   ],
   "dispatched_at": "2026-10-31T03:42:19.869395+00:00",
-  "attempt": 0,
-  "updated_at": "2026-10-31T03:42:21.392523+00:00"
+  "attempt": 1,
+  "updated_at": "2026-10-31T03:42:31.479720+00:00",
+  "owner": "41165514103:1",
+  "previous_owner": null,
+  "previous_status": "DISPATCHED",
+  "run_url": "https://github.com/isearchxsolve/bounty-control/actions/runs/41165514103",
+  "harness_sha": "4c3eefe714d35fcbc24e535ceb466466b27c196d",
+  "claimed_at": "2026-10-31T03:42:31.479656+00:00",
+  "lease_expires_at": "2026-10-31T07:47:31.479685+00:00",
+  "preparation_budget_seconds": 14400
 }
