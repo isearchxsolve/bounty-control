@@ -413,7 +413,13 @@ def claim(event_file):
     proof, reason = admit(context, quote=quote)
     if not proof:
         raise ValueError("Admission blocked: " + reason)
+    # One competition rule, decided once, handed to the engineer as a fact. admission's
+    # competition() raises on a real claimant and returns on a nominal one; reaching this line
+    # IS the verdict. Recording it lets the engineer read the decision instead of re-judging
+    # the same open pull requests with a looser rule (measured: 8 nominal PRs logged clear at
+    # admission, then "nine open pull requests already implement it" blocked the engineer).
     competition(api, repo, number, own_head=(old or {}).get("head_sha"))
+    competition_verdict = "clear: admission found no real claimant; nominal open pull requests are not competition"
     recovery = (os.environ.get("GITHUB_EVENT_NAME") == "workflow_dispatch"
                 and str(payload.get("force_recovery", "")).lower() == "true")
     try:
@@ -423,7 +429,8 @@ def claim(event_file):
     state = store.claim(repo, number, owner(),
                         f"https://github.com/{store.repo}/actions/runs/{os.environ['GITHUB_RUN_ID']}",
                         os.environ["GITHUB_SHA"], recovery, budget_seconds=budget_seconds)
-    context.update(task_id=identity, admission=proof, prior_failures=state.get("failures", []),
+    context.update(task_id=identity, admission=proof, competition=competition_verdict,
+                   prior_failures=state.get("failures", []),
                    owned_pr=state.get("pr_url"), owned_head=state.get("head_sha"),
                    owned_pr_number=state.get("pr_number"))
     write_json(artifacts() / "claim.json", {"mode": "deliver", "context": context, "state": state})

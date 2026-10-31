@@ -2893,7 +2893,11 @@ You have full freedom to inspect the repository and provision the required tools
 dependencies, environment and configuration. Read its AGENTS.md, manifests, lockfiles, CI and setup docs.
 Choose the actual native commands yourself. Diagnose and repair installation/configuration failures;
 do not wait for a separate installer or assume npm, a language, a version, or a testing framework.
-Check current funding and all relevant open PRs before work. Stop on withdrawn funding or competition.
+Check current funding before work. Competition is already decided for you: the admission gate read every
+open pull request for this issue and recorded its verdict in the task context as the field "competition".
+Take that verdict as settled fact. Do not re-judge open pull requests with your own standard, and do not
+block on a pull request the verdict has already classed as nominal. Stop on withdrawn funding, or if the
+verdict in the context says a real claimant exists.
 Preserve existing completed edits and diagnostics before any destructive checkout operation.
 {checkout_instruction}
 Use repository-declared pins and build permissions. Never bypass integrity checks or approval policies.

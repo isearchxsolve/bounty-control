@@ -1,0 +1,43 @@
+Audit done, measured from today's own artifacts. Here it is.
+
+## What the machine did today
+
+| Stage | Count |
+|---|---|
+| Raw candidates harvested | 85,493 (30 Sep→31 Oct cycles) |
+| Passed admission | 537 (0.63%) |
+| Tasks dispatched | 42 |
+| Delivery runs started | 42 |
+| Engineering runs that **succeeded** | **38** |
+| Publish step that ran | **0 of 42** |
+| **PRs created** | **0** |
+
+## Where it dies — five leaks, each measured
+
+**1. The publish step never fired. Not once, 42 out of 42.**
+`engine2.yml:166` arms publish only when `needs.engineer.outputs.verdict == 'verified'`. The engineer writes `verdict="verified"` at `actions_delivery.py:656` — but only on the happy path. On every refusal it writes `rejected_preparation` at `:388`. Today it wrote `verified` **zero times**. So publish was skipped by the gate chain, not by an error. 38 runs did full engineering work and the door to publishing never opened.
+
+**2. The gate and the engineer apply opposite rules — and the engineer wins.**
+`getdozer/dozer #1653`: the claim step logged **eight** competing PRs as `nominal_attempt_only … ignored`, because `competition_evidence()` (`bounty_admission.py:749`) only counts a competitor as real if their author has already landed work there, has green checks, or has maintainer attention. Then Cline looked at **the same eight PRs** and blocked: *"nine open pull requests already implement it … action=blocked"*.
+Admission said GO. Engineer said STOP. Same links, same minute, opposite verdicts. We paid a full runner to discover the disagreement.
+
+**3. The engineer is re-doing admission's job — at 40 minutes a time.**
+Of the refusals I read: non-engineering/market bounty, generic bug-bounty solicitation, "not a code-change request", a Chinese digest post. Admission already has codes for exactly these (`REFUSED_NOT_A_CODE_CHANGE` 252, `MIRROR_OR_NON_ENGINEERING` 24, `ADVERT_OR_ESCROW_SPAM` 34). They are being caught **after** the runner is spent instead of before it.
+
+**4. Hydration is switched off.** `bounty-hydration.yml` has its schedule **deleted** — comment: *"Retired schedule to preserve 100% of API quota."* It only runs when a human clicks it. Last run **Oct 30, 19:29** — 18 hours ago. **16,765 candidates sit unfetched.** That is why `qualified_fresh` is 0 in most cycles: the supply that could become work never gets its issue bodies read.
+
+**5. A run that produces nothing reports "success".**
+36 of 42 delivery runs are green. Green means "the refusal machinery worked", not "a PR exists". That is the same false-DONE you called out this morning, still baked into the conclusion logic — `reconcile` sets `status=success` when `ENGINEERING_JOB_RESULT=success`, even with `PUBLICATION_JOB_RESULT: skipped`.
+
+## The one-line answer
+
+**No PR is generated because the engineer refuses everything, and the gate was never taught to refuse it first.** 38 successful engineering runs, 0 verdicts of `verified`.
+
+## What I would change, in this order
+
+1. **Teach admission the engineer's standard.** Any issue whose competing PRs the engineer would block on, or which is a non-code/creative/advert request, must die at admission in seconds — not after 40 minutes of runner.
+2. **Settle the competition rule once.** Either the gate's rule ("a nominal attempt is not a claimant") governs the engineer too, or the engineer's governs the gate. Right now both run and they cancel each other out.
+3. **Turn hydration back on** (at least a narrow interval) so the 16,765 queue starts moving and `qualified_fresh` stops being 0.
+4. **Make a no-PR run report what it is** — not success.
+
+Say which one you want first and I'll do only that. My recommendation is **1 and 2 together**, because they are the same defect and 1 alone would still leave the engineer free to disagree.
