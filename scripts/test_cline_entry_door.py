@@ -883,6 +883,15 @@ class TheSearcherIsSovereign(unittest.TestCase):
         self.assertNotIn("{clock}", text)
         self.assertIn("an empty file has delivered nothing", text)
 
+    def test_a_big_harvest_is_not_silently_truncated(self):
+        """The door's own default verified only the first 12 rows per round. A sovereign
+        searcher that brought back 20 verified rows lost 8 of them without a word - the same
+        upside-down bucket as the quota, one layer down. limit=0 now means no ceiling; an
+        explicit positive limit still truncates (the row-limit test above pins that)."""
+        rows = [row(issue=n) for n in range(1, 21)]
+        self.assertEqual(len(door.verify_rows(rows, fetcher(), limit=0)["admitted"]), 20)
+        self.assertEqual(len(door.verify_rows(rows, fetcher(), limit=5)["admitted"]), 5)
+
     def test_the_brief_carries_no_mojibake(self):
         """A broken em dash reached the agent as a replacement char; keep the file ASCII."""
         bad = sorted({c for c in door.TASK_FILE if ord(c) > 127})

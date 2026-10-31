@@ -347,7 +347,7 @@ def verify_rows(rows: List[dict], fetch: Optional[Callable[[str, int], Optional[
     refused: List[dict] = []
     unpriced: List[dict] = []
     seen = set()
-    for row in rows[:limit]:
+    for row in (rows if limit <= 0 else rows[:limit]):
         repo, number = str(row.get("repo") or ""), row.get("issue")
         if not repo or not isinstance(number, int):
             refused.append({"row": row, "reason": "MALFORMED_ROW"})
@@ -696,7 +696,7 @@ def _merge_shortlist(workdir: str, rows: List[dict]) -> None:
 
 
 def iterate(workdir: str, rounds: int = 3, run=run_cline_search, verify=verify_rows,
-            limit: int = 12, first_prompt: Optional[str] = None,
+            limit: int = 0, first_prompt: Optional[str] = None,
             **run_kwargs) -> Dict[str, object]:
     """Search, verify, and feed the refusals back so the agent corrects itself.
 
