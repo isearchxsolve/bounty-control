@@ -2,7 +2,7 @@
   "task_id": "85102fd27638790b1f1e0bf33ff07357",
   "repo": "sriahead/aheed-online-store",
   "issue_number": 1289,
-  "status": "DISPATCHED",
+  "status": "CLAIMED",
   "dispatch_id": "f5826601fceb4f4c91873a986914ac4a",
   "admission": {
     "funding": {
@@ -41,6 +41,14 @@
     "founder"
   ],
   "dispatched_at": "2026-10-31T23:37:45.492930+00:00",
-  "attempt": 0,
-  "updated_at": "2026-10-31T23:37:47.332795+00:00"
+  "attempt": 1,
+  "updated_at": "2026-10-31T23:37:58.357792+00:00",
+  "owner": "41253330076:1",
+  "previous_owner": null,
+  "previous_status": "DISPATCHED",
+  "run_url": "https://github.com/isearchxsolve/bounty-control/actions/runs/41253330076",
+  "harness_sha": "ab12fba08924085e98d063686f70e4b52f037ac9",
+  "claimed_at": "2026-10-31T23:37:58.357745+00:00",
+  "lease_expires_at": "2026-11-01T03:42:58.357759+00:00",
+  "preparation_budget_seconds": 14400
 }
