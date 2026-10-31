@@ -2,7 +2,7 @@
   "task_id": "0a9c783c3721e151080810d4829a7114",
   "repo": "getdozer/dozer",
   "issue_number": 1653,
-  "status": "DISPATCHED",
+  "status": "CLAIMED",
   "dispatch_id": "99c2c25c5e814380a88097ced9832883",
   "admission": {
     "funding": {
@@ -34,6 +34,14 @@
     "bounty"
   ],
   "dispatched_at": "2026-10-31T13:26:13.823453+00:00",
-  "attempt": 0,
-  "updated_at": "2026-10-31T13:26:15.228393+00:00"
+  "attempt": 1,
+  "updated_at": "2026-10-31T13:37:02.195119+00:00",
+  "owner": "41205556525:1",
+  "previous_owner": null,
+  "previous_status": "DISPATCHED",
+  "run_url": "https://github.com/isearchxsolve/bounty-control/actions/runs/41205556525",
+  "harness_sha": "63cdf88a4168eca3c8740e50fbfe15a825016428",
+  "claimed_at": "2026-10-31T13:37:02.195065+00:00",
+  "lease_expires_at": "2026-10-31T17:42:02.195081+00:00",
+  "preparation_budget_seconds": 14400
 }
