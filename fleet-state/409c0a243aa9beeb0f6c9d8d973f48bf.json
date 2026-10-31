@@ -2,7 +2,7 @@
   "task_id": "409c0a243aa9beeb0f6c9d8d973f48bf",
   "repo": "ruohong2018/ruohong2018.github.io",
   "issue_number": 801,
-  "status": "CLAIMED",
+  "status": "REJECTED_PREPARATION",
   "dispatch_id": "c4d27400d68e499fbfc762d7b58d05e7",
   "admission": {
     "funding": {
@@ -42,7 +42,7 @@
   ],
   "dispatched_at": "2026-10-31T01:08:59.372923+00:00",
   "attempt": 1,
-  "updated_at": "2026-10-31T01:09:11.221176+00:00",
+  "updated_at": "2026-10-31T01:13:06.191195+00:00",
   "owner": "41153897543:1",
   "previous_owner": null,
   "previous_status": "DISPATCHED",
@@ -50,5 +50,37 @@
   "harness_sha": "4c3eefe714d35fcbc24e535ceb466466b27c196d",
   "claimed_at": "2026-10-31T01:09:11.221126+00:00",
   "lease_expires_at": "2026-10-31T05:14:11.221141+00:00",
-  "preparation_budget_seconds": 14400
+  "preparation_budget_seconds": 14400,
+  "at": "2026-10-31T01:12:37.124900+00:00",
+  "reason": "Cline preparation blocked: Issue #801 '[\u6bcf\u65e5\u4fe1\u606f\u6d41] 2025-04-23' is an auto-generated daily security-news digest, not a concrete code change request. It carries the repository's own 'daily' label and is created mechanically by the repo's Daily Push workflow (daily.yml step 'Issue': gh issue create --title \"[\u6bcf\u65e5\u4fe1\u606f\u6d41] `date +'%Y-%m-%d'`\" -F today.md --label \"daily\"). Its 33,534-char body is a list of external RSS/security-news hyperlinks; it describes no reproducible defect, feature request, or code-level maintenance. The admission.technical_signals (bug, bypass, corrupt, corruption, overflow, memory, race condition) are keywords harvested from the news headlines (e.g. 'TP-Link ... Buffer Overflow Memory Corruption', 'SQLi Bypass Authentication', 'Remote Code Execution'), not descriptions of a defect in this repository. There is no engineering_evidence source other than the issue URL itself; component_references and source_locations are empty. The admission funding (\"$64k USD\", payer ruohong2018, source_url = this issue) is a misparse of the digest body: the issue requests no funding and is a documentation/content deliverable with zero required repository change. Per the delivery rules this is a documentation/marketing-style content issue, so the correct action is blocked with the checkout left unchanged (git status clean; no edits, no branch, no push).",
+  "declared_reason": "Issue #801 '[\u6bcf\u65e5\u4fe1\u606f\u6d41] 2025-04-23' is an auto-generated daily security-news digest, not a concrete code change request. It carries the repository's own 'daily' label and is created mechanically by the repo's Daily Push workflow (daily.yml step 'Issue': gh issue create --title \"[\u6bcf\u65e5\u4fe1\u606f\u6d41] `date +'%Y-%m-%d'`\" -F today.md --label \"daily\"). Its 33,534-char body is a list of external RSS/security-news hyperlinks; it describes no reproducible defect, feature request, or code-level maintenance. The admission.technical_signals (bug, bypass, corrupt, corruption, overflow, memory, race condition) are keywords harvested from the news headlines (e.g. 'TP-Link ... Buffer Overflow Memory Corruption', 'SQLi Bypass Authentication', 'Remote Code Execution'), not descriptions of a defect in this repository. There is no engineering_evidence source other than the issue URL itself; component_references and source_locations are empty. The admission funding (\"$64k USD\", payer ruohong2018, source_url = this issue) is a misparse of the digest body: the issue requests no funding and is a documentation/content deliverable with zero required repository change. Per the delivery rules this is a documentation/marketing-style content issue, so the correct action is blocked with the checkout left unchanged (git status clean; no edits, no branch, no push).",
+  "evidence": {
+    "action": "blocked",
+    "worktree": "/tmp/bounty-workspaces/repos/ruohong2018--ruohong2018.github.io--801",
+    "base_sha": "d51bad12e8b4edfcd4196d59dfdb5ac1427ea24c",
+    "default_branch": "master",
+    "sources": [
+      {
+        "path": ".github/workflows/daily.yml",
+        "sha256": "0976c4913dd5741d2acc400154315a64a900e1b506735685d0651326a33f1378"
+      },
+      {
+        "path": "README.md",
+        "sha256": "8b1f7c31b11fb439fe3ad0310726758c805049f6727029b83845c29b25ce1b0e"
+      }
+    ],
+    "run_url": "",
+    "admission": {
+      "amount": "64000",
+      "currency": "USD",
+      "usd_value": "64000",
+      "quote": {
+        "basis": "USD face value"
+      },
+      "raw": "$64k",
+      "source_url": "https://github.com/ruohong2018/ruohong2018.github.io/issues/801",
+      "payer": "ruohong2018"
+    }
+  },
+  "finished_at": "2026-10-31T01:13:05.698267+00:00"
 }
