@@ -11,6 +11,7 @@ import re
 import shutil
 import tempfile
 import unittest
+from datetime import datetime
 from unittest import mock
 
 import cline_entry_door as door
@@ -891,6 +892,26 @@ class TheSearcherIsSovereign(unittest.TestCase):
         self.assertIn("800 seconds of wall clock", text)
         self.assertNotIn("{clock}", text)
         self.assertIn("an empty file has delivered nothing", text)
+
+    def test_a_dead_offer_is_refused_before_it_buys_an_engineer_run(self):
+        """The first run to reach dispatch (41184570516) sent two rows out and both died in the
+        delivery engine: Web3Foundation/build-polkadot#1 last moved 2024-01-13 (withdrawn funding)
+        and StateofScale/State-of-Scale#3 last moved 2019-08-08 (deliverable missing). A stale
+        tree is not a hard tree, it is an empty one, and an engineer run is the most expensive
+        thing this pipeline buys."""
+        dead = {"state": "open", "title": "$6000 DAI] Build Polkadot bounty challenges",
+                "body": "Welcome to the Build Polkadot bounty challenges, $6000 DAI.",
+                "updated_at": "2024-01-13T00:00:00Z"}
+        row = {"repo": "Web3Foundation/build-polkadot", "issue": 1, "is_code_task": True,
+               "reward_quote": "Welcome to the Build Polkadot bounty challenges, $6000 DAI.",
+               "reward_usd": 6000, "scope_quote": "Build Polkadot", "why_now": "x"}
+        verdict = door.verify_rows([row], lambda repo, num: dead)
+        self.assertEqual(verdict["admitted"], [])
+        self.assertEqual(verdict["refused"][0]["reason"], "STALE_ISSUE")
+
+        alive = dict(dead, updated_at=datetime.utcnow().strftime("%Y-%m-%dT%H:%M:%SZ"))
+        verdict = door.verify_rows([row], lambda repo, num: alive)
+        self.assertEqual(len(verdict["admitted"]), 1, "an active issue still passes")
 
     def test_a_reward_stated_in_a_comment_counts(self):
         """Run 41184570516, the agent's own diagnosis - and it was right. The entry door built its

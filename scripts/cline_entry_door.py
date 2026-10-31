@@ -22,6 +22,7 @@ import re
 import subprocess
 import sys
 import threading
+from datetime import datetime
 from typing import Callable, Dict, List, Optional
 
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
@@ -347,6 +348,22 @@ def issue_haystack(issue: dict) -> str:
     return "\n\n".join(parts)
 
 
+ISSUE_STALE_DAYS = int(os.environ.get("BOUNTY_ISSUE_STALE_DAYS", "60"))
+
+
+def issue_age_days(issue: dict, now: Optional[float] = None) -> Optional[int]:
+    """How long since anything moved on this issue, or None when GitHub did not say."""
+    stamp = str(issue.get("updated_at") or issue.get("updatedAt") or "")
+    if not stamp:
+        return None
+    try:
+        moment = datetime.strptime(stamp[:19].replace("Z", ""), "%Y-%m-%dT%H:%M:%S")
+    except ValueError:
+        return None
+    today = datetime.utcfromtimestamp(now) if now is not None else datetime.utcnow()
+    return max(0, (today - moment).days)
+
+
 AMOUNT_RE = re.compile(
     r"(?:[$€£₹]\s?\d"          # $250, Rs 250
     r"|\d[\d,.]*\s*(?:[$€£₹]|k|usd|usdc|usdt|dai|eth|btc|sol|inr|eur|gbp|rs))",
@@ -406,6 +423,16 @@ def verify_rows(rows: List[dict], fetch: Optional[Callable[[str, int], Optional[
             continue
         if row.get("is_code_task") is not True:
             refused.append({"row": row, "reason": "AGENT_NOT_A_CODE_TASK"})
+            continue
+
+        stale_days = issue_age_days(issue)
+        if stale_days is not None and stale_days > ISSUE_STALE_DAYS:
+            # Measured on the first run that reached dispatch: two rows were admitted and both
+            # died in the delivery engine as dead offers - one had last moved 2.8 years earlier
+            # (funding long withdrawn), the other 7 years earlier. The engineer run is the most
+            # expensive thing this pipeline buys, so a tree nothing has touched in months is
+            # refused here, where it costs one line.
+            refused.append({"row": row, "reason": "STALE_ISSUE", "age_days": stale_days})
             continue
 
         text = issue_haystack(issue)
@@ -500,6 +527,7 @@ GATE_CHECKS = [
     ("ISSUE_UNREADABLE", "GitHub could not answer (rate limit, server error); not a verdict."),
     ("ISSUE_NOT_OPEN", "the issue is closed or read-only."),
     ("AGENT_NOT_A_CODE_TASK", "the issue is not engineering work you could submit a fix for."),
+    ("STALE_ISSUE", "nothing has moved on that issue for two months; the money is long gone."),
     ("REWARD_QUOTE_NOT_IN_ISSUE", "the quoted sentence is not in the issue text, byte for byte."),
     ("REWARD_QUOTE_HAS_NO_AMOUNT", "the quoted sentence exists but names no amount."),
 ]
