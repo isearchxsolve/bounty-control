@@ -2,7 +2,7 @@
   "task_id": "8b8a118e60d945ead01a145a48c59632",
   "repo": "BruceFeIix/picker",
   "issue_number": 1771,
-  "status": "CLAIMED",
+  "status": "REJECTED_PREPARATION",
   "dispatch_id": "d2dba2e0a42b4710ab2a91a744cca58c",
   "admission": {
     "funding": {
@@ -40,7 +40,7 @@
   ],
   "dispatched_at": "2026-10-31T03:42:19.869395+00:00",
   "attempt": 1,
-  "updated_at": "2026-10-31T03:42:31.479720+00:00",
+  "updated_at": "2026-10-31T03:46:38.731682+00:00",
   "owner": "41165514103:1",
   "previous_owner": null,
   "previous_status": "DISPATCHED",
@@ -48,5 +48,57 @@
   "harness_sha": "4c3eefe714d35fcbc24e535ceb466466b27c196d",
   "claimed_at": "2026-10-31T03:42:31.479656+00:00",
   "lease_expires_at": "2026-10-31T07:47:31.479685+00:00",
-  "preparation_budget_seconds": 14400
+  "preparation_budget_seconds": 14400,
+  "at": "2026-10-31T03:46:25.554403+00:00",
+  "reason": "Cline preparation blocked: Issue #1771 is an auto-generated daily content digest, not a code-change request. Repository BruceFeIix/picker is a Python RSS aggregation bot; .github/workflows/daily.yml runs `gh issue create --title \"[\u6bcf\u65e5\u4fe1\u606f\u6d41] `date +'%Y-%m-%d'`\" -F today.md --label \"daily\"`, i.e. the bot itself publishes these issues. Issue title '[\u6bcf\u65e5\u4fe1\u606f\u6d41] 2025-06-16' carries only label 'daily', has 0 comments (no maintainer code request), and its body is a link-only list of security-news articles aggregated from RSS feeds (matches README: '\u6bcf\u65e5\u4f1a\u5728issue\u4e2d\u751f\u6210\u6628\u65e5\u4fe1\u606f\u6d41'). There is no reproducible defect, specific engineering feature, or code-level maintenance ask. The admission 'funding' of $10,000 is a false-positive scrape: the exact string '$10,000 Authentication Bypass at Uber' is a news article link inside the issue body (verified by python substring check -> contains '$10,000 Authentication Bypass at Uber': True). The technical_signals 'bug_bounty/bypass/panic/protocol/overflow' and component_reference 'EDITION' are likewise scraped from article titles/body ('...INTERNATIONAL EDITION' present) and are not engineering requirements. No live, concrete funding or code task exists. Open PRs are unrelated (2617 fixes a different daily issue; 2335 adds auto-closing of previous-day dailies). Per instructions, a non-engineering/deliverable issue must be blocked with evidence and the checkout left unchanged. No product edits were made; worktree is at the unchanged upstream master baseline (git status --porcelain empty).",
+  "declared_reason": "Issue #1771 is an auto-generated daily content digest, not a code-change request. Repository BruceFeIix/picker is a Python RSS aggregation bot; .github/workflows/daily.yml runs `gh issue create --title \"[\u6bcf\u65e5\u4fe1\u606f\u6d41] `date +'%Y-%m-%d'`\" -F today.md --label \"daily\"`, i.e. the bot itself publishes these issues. Issue title '[\u6bcf\u65e5\u4fe1\u606f\u6d41] 2025-06-16' carries only label 'daily', has 0 comments (no maintainer code request), and its body is a link-only list of security-news articles aggregated from RSS feeds (matches README: '\u6bcf\u65e5\u4f1a\u5728issue\u4e2d\u751f\u6210\u6628\u65e5\u4fe1\u606f\u6d41'). There is no reproducible defect, specific engineering feature, or code-level maintenance ask. The admission 'funding' of $10,000 is a false-positive scrape: the exact string '$10,000 Authentication Bypass at Uber' is a news article link inside the issue body (verified by python substring check -> contains '$10,000 Authentication Bypass at Uber': True). The technical_signals 'bug_bounty/bypass/panic/protocol/overflow' and component_reference 'EDITION' are likewise scraped from article titles/body ('...INTERNATIONAL EDITION' present) and are not engineering requirements. No live, concrete funding or code task exists. Open PRs are unrelated (2617 fixes a different daily issue; 2335 adds auto-closing of previous-day dailies). Per instructions, a non-engineering/deliverable issue must be blocked with evidence and the checkout left unchanged. No product edits were made; worktree is at the unchanged upstream master baseline (git status --porcelain empty).",
+  "evidence": {
+    "action": "blocked",
+    "worktree": "/tmp/bounty-workspaces/repos/BruceFeIix--picker--1771",
+    "base_sha": "cabf4e9212e8fc7c8974b10bf1f735ce145b3b06",
+    "default_branch": "master",
+    "sources": [
+      {
+        "path": "requirements.txt",
+        "sha256": "9b18ebb479dfafdd2369e0705fbf890ce9c2e48bbcf24b1d117af1b07e50ee80"
+      },
+      {
+        "path": "config.yml",
+        "sha256": "8614ba3755bf97b35549f14d5104a7eaf9936a6ba5c1073bc342cec68e19f7ba"
+      },
+      {
+        "path": "README.md",
+        "sha256": "9f84c7652f20a8f79e03d1220cdba4d86cd22162320c81701191ca87d6afdc9f"
+      },
+      {
+        "path": "bot.py",
+        "sha256": "cb2c2a85cc762b016838748e7b1551aa7c84257b8f20d73c8c316843e5d576e9"
+      },
+      {
+        "path": "yarb.py",
+        "sha256": "fbdcaa067f17d4a2e328d70d21f2543f44f6445c4ae15a367d5e00b8dbca1ed0"
+      },
+      {
+        "path": "utils.py",
+        "sha256": "056b729c58bc6306d1e910ec7576028cd328dd2cbb43f06856e84f73718aff25"
+      },
+      {
+        "path": ".github/workflows/daily.yml",
+        "sha256": "2c135adeb99235f4558f29cfaafcccdc1ddd16dc01b5e62087a1e1ac9a11d555"
+      }
+    ],
+    "run_url": "",
+    "admission": {
+      "amount": "10000",
+      "currency": "USD",
+      "usd_value": "10000",
+      "quote": {
+        "basis": "USD face value"
+      },
+      "raw": "$10,000",
+      "source_url": "https://github.com/BruceFeIix/picker/issues/1771",
+      "payer": "BruceFeIix"
+    }
+  },
+  "finished_at": "2026-10-31T03:46:38.206482+00:00"
 }
