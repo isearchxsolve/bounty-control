@@ -211,6 +211,11 @@ class EvidenceAndHandoffTests(unittest.TestCase):
 
 
 class SearchRepairTests(unittest.TestCase):
+    def test_issue_age_uses_utc_and_honors_source_timezone_offset(self):
+        now=datetime(2026,1,3,tzinfo=timezone.utc).timestamp()
+        self.assertEqual(door.issue_age_days({'updated_at':'2026-01-02T05:30:00+05:30'},now),1)
+        self.assertEqual(door.issue_age_days({'updated_at':'2026-01-02T00:00:00Z'},now),1)
+
     def test_stream_rewrite_longer_than_old_file_is_read_from_start(self):
         with tempfile.TemporaryDirectory() as tmp:
             path=Path(tmp)/'shortlist.jsonl'
@@ -239,6 +244,26 @@ class SearchRepairTests(unittest.TestCase):
 
 
 class RecoveryTests(unittest.TestCase):
+    def test_search_throttle_does_not_wait_for_an_unrelated_core_reset(self):
+        limits={'resources':{'search':{'remaining':1,'reset':100},'core':{'remaining':0,'reset':1000}}}
+        done=subprocess.CompletedProcess([],0,json.dumps(limits).encode(),b'')
+        environment={'GH_TOKEN':'unit-transport-token'}
+        with patch('actions_github.subprocess.run',return_value=done) as run:
+            self.assertEqual(GitHub.rate_limit_wait('search/issues?q=x','rate limit exceeded',environment),65)
+        self.assertEqual(run.call_args.kwargs['env'],environment)
+
+    def test_throttle_cannot_sleep_past_observation_deadline(self):
+        denied=subprocess.CompletedProcess([],1,b'',b'API rate limit exceeded')
+        limits=subprocess.CompletedProcess([],0,json.dumps({'resources':{
+            'core':{'remaining':0,'reset':1000}}}).encode(),b'')
+        api=GitHub(deadline=20)
+        with patch('actions_github.subprocess.run',side_effect=[denied,limits]), \
+             patch('actions_github.time.monotonic',return_value=0), \
+             patch('actions_github.time.time',return_value=0), patch('actions_github.time.sleep') as sleep:
+            with self.assertRaisesRegex(GitHubError,'remaining observation budget'):
+                api.api('repos/unit/control')
+        sleep.assert_not_called()
+
     def test_cached_capacity_fact_is_applied_without_another_probe(self):
         payload=json.dumps({'repository_url':'https://api.github.com/repos/acme/http'})
         cache={}

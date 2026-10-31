@@ -22,6 +22,15 @@ one FAILED_VERIFIED) must be investigated separately from those refusals. F02 is
 mechanism defect, but the evidence does not make it the cause of the historical zero-delivery count.
 Supply quality is a first-priority repair lane alongside the ownership and evidence-integrity gates.
 
+**Run-specific correction, verified from run 41243122407:** the picker did produce admitted rows.
+Its log contains ENTRY_ROW receipts for gyroflow#742, getdozer#1659, highlight#5082,
+getdozer#1653 and getdozer#1690, together with seven THROTTLE receipts requesting waits
+of 600, 600, 600, 408, 76, 600 and 600 seconds. Those requested waits total 3,484 seconds;
+they can overlap and must not be described as 3,484 seconds of serial elapsed time within
+a 45-minute job. This run's downstream throttling/timeout evidence supersedes the broad
+"wrong seeds" explanation for why that particular run produced no delivery. ENTRY_ROW proves
+admission occurred; it does not independently prove the cited offers were still payable.
+
 The live `bounty-control` branch contains **113 task records**:
 
 | Recorded state | Tasks |

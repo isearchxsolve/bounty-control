@@ -25,7 +25,7 @@ import subprocess
 import sys
 import threading
 import time
-from datetime import datetime
+from datetime import datetime, timezone
 from typing import Callable, Dict, List, Optional
 
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
@@ -417,10 +417,12 @@ def issue_age_days(issue: dict, now: Optional[float] = None) -> Optional[int]:
     if not stamp:
         return None
     try:
-        moment = datetime.strptime(stamp[:19].replace("Z", ""), "%Y-%m-%dT%H:%M:%S")
+        moment = datetime.fromisoformat(stamp.replace("Z", "+00:00"))
+        if moment.tzinfo is None:
+            moment = moment.replace(tzinfo=timezone.utc)
     except ValueError:
         return None
-    today = datetime.utcfromtimestamp(now) if now is not None else datetime.utcnow()
+    today = datetime.fromtimestamp(now, timezone.utc) if now is not None else datetime.now(timezone.utc)
     return max(0, (today - moment).days)
 
 
