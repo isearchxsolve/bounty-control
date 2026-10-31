@@ -1,0 +1,42 @@
+{
+  "task_id": "fd9ef3c19271453f448f7870ee83fa55",
+  "repo": "gyroflow/gyroflow",
+  "issue_number": 742,
+  "status": "DISPATCHING",
+  "dispatch_id": "e623b66c15084e768fa638399d827c14",
+  "admission": {
+    "funding": {
+      "amount": "500",
+      "currency": "USD",
+      "usd_value": "500",
+      "quote": {
+        "basis": "USD face value"
+      },
+      "raw": "$500",
+      "source_url": "https://github.com/gyroflow/gyroflow/issues/742#issuecomment-1759650522",
+      "payer": "algora-pbc[bot]"
+    },
+    "technical_signals": [
+      "issue",
+      "issues"
+    ],
+    "component_references": [],
+    "source_locations": [],
+    "engineering_evidence_sources": [
+      "https://github.com/gyroflow/gyroflow/issues/742#issuecomment-1773013030",
+      "https://github.com/gyroflow/gyroflow/issues/742#issuecomment-1773016687",
+      "https://github.com/gyroflow/gyroflow/issues/742#issuecomment-1773031337",
+      "https://github.com/gyroflow/gyroflow/issues/742#issuecomment-3696309674",
+      "https://github.com/gyroflow/gyroflow/issues/742#issuecomment-3697999621",
+      "https://github.com/gyroflow/gyroflow/issues/742#issuecomment-6103714841"
+    ],
+    "source_issue": "https://github.com/gyroflow/gyroflow/issues/742",
+    "fetched_at": "2026-10-31T13:04:38.137168+00:00"
+  },
+  "lanes": [
+    "bounty"
+  ],
+  "dispatched_at": "2026-10-31T13:15:43.594817+00:00",
+  "attempt": 0,
+  "updated_at": "2026-10-31T13:15:43.594834+00:00"
+}
