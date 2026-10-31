@@ -2,7 +2,7 @@
   "task_id": "eb832e1a5a8ec79dfe1f7e95aa49ec87",
   "repo": "Tyaoo/picker",
   "issue_number": 560,
-  "status": "CLAIMED",
+  "status": "REJECTED_PREPARATION",
   "dispatch_id": "bba84546d30c4f768c9baf2af71acd15",
   "admission": {
     "funding": {
@@ -38,7 +38,7 @@
   ],
   "dispatched_at": "2026-10-31T05:24:49.070638+00:00",
   "attempt": 1,
-  "updated_at": "2026-10-31T05:24:59.555259+00:00",
+  "updated_at": "2026-10-31T05:28:19.876384+00:00",
   "owner": "41172496586:1",
   "previous_owner": null,
   "previous_status": "DISPATCHED",
@@ -46,5 +46,33 @@
   "harness_sha": "4c3eefe714d35fcbc24e535ceb466466b27c196d",
   "claimed_at": "2026-10-31T05:24:59.555201+00:00",
   "lease_expires_at": "2026-10-31T09:29:59.555219+00:00",
-  "preparation_budget_seconds": 14400
+  "preparation_budget_seconds": 14400,
+  "at": "2026-10-31T05:28:10.174405+00:00",
+  "reason": "Cline preparation blocked: Issue #560 '[\u6bcf\u65e5\u4fe1\u606f\u6d41] 2024-02-19' is an auto-generated daily news digest, not a code-change request. Evidence: (1) label is only 'daily'; 0 comments; no milestone; no state_reason. (2) The repository itself auto-creates this exact issue family: .github/workflows/daily.yml line 40 runs `gh issue create --title \"[\u6bcf\u65e5\u4fe1\u606f\u6d41] \\`date +'%Y-%m-%d'\\`\" -F today.md --label \"daily\"` on a daily cron. (3) Sibling issues #1553-#1557 are the identical '[\u6bcf\u65e5\u4fe1\u606f\u6d41] YYYY-MM-DD' auto-posts (2026-10-26..30). (4) Issue body is 33861 chars of 242 markdown checkbox link entries (242 https links, all lines are headings/bullets/links; zero defect description, zero reproduction, zero expected-vs-actual, zero requested feature). (5) The admission technical_signals (algorithm/bug/bypass/bug_bounty) and component reference 'Trojan.Win32/Powessere.G' are keyword-extraction false positives from linked article titles (e.g. 'Median-of-Medians Selection Algorithm', a malware-name mention in the feed). (6) No open PR references 560 (0 matches). Per the task's non-engineering exclusion (documentation/marketing/content deliverable; generic content without a repository change), this is not a reproducible defect, specific engineering feature, or focused code-level maintenance. No concrete code change can be derived from a news link list, so the checkout was intentionally left untouched.",
+  "declared_reason": "Issue #560 '[\u6bcf\u65e5\u4fe1\u606f\u6d41] 2024-02-19' is an auto-generated daily news digest, not a code-change request. Evidence: (1) label is only 'daily'; 0 comments; no milestone; no state_reason. (2) The repository itself auto-creates this exact issue family: .github/workflows/daily.yml line 40 runs `gh issue create --title \"[\u6bcf\u65e5\u4fe1\u606f\u6d41] \\`date +'%Y-%m-%d'\\`\" -F today.md --label \"daily\"` on a daily cron. (3) Sibling issues #1553-#1557 are the identical '[\u6bcf\u65e5\u4fe1\u606f\u6d41] YYYY-MM-DD' auto-posts (2026-10-26..30). (4) Issue body is 33861 chars of 242 markdown checkbox link entries (242 https links, all lines are headings/bullets/links; zero defect description, zero reproduction, zero expected-vs-actual, zero requested feature). (5) The admission technical_signals (algorithm/bug/bypass/bug_bounty) and component reference 'Trojan.Win32/Powessere.G' are keyword-extraction false positives from linked article titles (e.g. 'Median-of-Medians Selection Algorithm', a malware-name mention in the feed). (6) No open PR references 560 (0 matches). Per the task's non-engineering exclusion (documentation/marketing/content deliverable; generic content without a repository change), this is not a reproducible defect, specific engineering feature, or focused code-level maintenance. No concrete code change can be derived from a news link list, so the checkout was intentionally left untouched.",
+  "evidence": {
+    "action": "blocked",
+    "worktree": "/tmp/bounty-workspaces/repos/Tyaoo--picker--560",
+    "base_sha": "f1d886f585e807e82f84da6123f4858ef365f461",
+    "default_branch": "main",
+    "sources": [
+      {
+        "path": ".github/workflows/daily.yml",
+        "sha256": "60042e008e529bb95dc2c11b487b77e0f2fdf1b7b3a26b6599ce18787089d309"
+      }
+    ],
+    "run_url": "",
+    "admission": {
+      "amount": "750",
+      "currency": "USD",
+      "usd_value": "750",
+      "quote": {
+        "basis": "USD face value"
+      },
+      "raw": "750$",
+      "source_url": "https://github.com/Tyaoo/picker/issues/560",
+      "payer": "Tyaoo"
+    }
+  },
+  "finished_at": "2026-10-31T05:28:19.476936+00:00"
 }
