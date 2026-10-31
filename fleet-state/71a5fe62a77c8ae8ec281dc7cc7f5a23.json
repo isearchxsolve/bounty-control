@@ -2,7 +2,7 @@
   "task_id": "71a5fe62a77c8ae8ec281dc7cc7f5a23",
   "repo": "eleectrum/eleectrum.github.io",
   "issue_number": 1,
-  "status": "CLAIMED",
+  "status": "REJECTED_PREPARATION",
   "dispatch_id": "bd91358efad84b0fb13bfb8aeb49cc2e",
   "admission": {
     "funding": {
@@ -32,7 +32,7 @@
   ],
   "dispatched_at": "2026-10-31T06:22:14.746487+00:00",
   "attempt": 1,
-  "updated_at": "2026-10-31T06:22:30.418326+00:00",
+  "updated_at": "2026-10-31T06:26:28.865674+00:00",
   "owner": "41176324922:1",
   "previous_owner": null,
   "previous_status": "DISPATCHED",
@@ -40,5 +40,45 @@
   "harness_sha": "3ad39cd922ddf4ebeb970248782413315d04b653",
   "claimed_at": "2026-10-31T06:22:30.418274+00:00",
   "lease_expires_at": "2026-10-31T10:27:30.418289+00:00",
-  "preparation_budget_seconds": 14400
+  "preparation_budget_seconds": 14400,
+  "at": "2026-10-31T06:26:13.369623+00:00",
+  "reason": "Cline preparation blocked: Issue #1 is a generic bug-bounty solicitation ('$1000 Bounty' / body: 'If you find some bugs on my website, I will pay $1000 bounty'). It does NOT request a concrete code change: no reproducible defect, no specific engineering feature, and no code-level maintenance target are identified. Labels are empty, the admission carries technical_signals=['bugs'] with empty component_references/source_locations, and the only comment (from non-owner 'recondemon') is an unanswered request for the site revision/scope/payment terms. The repository is an unchanged 4-file static GitHub Pages landing page (README.md, index.html, script.js, style.css) with no package.json, no CI workflows, no tests, no AGENTS.md, and no open PRs. This falls under the 'generic product idea without a repository change' / bounty-solicitation category, so per instructions it is reported blocked and the checkout is left unchanged rather than converted into a fallback proposal or PR.",
+  "declared_reason": "Issue #1 is a generic bug-bounty solicitation ('$1000 Bounty' / body: 'If you find some bugs on my website, I will pay $1000 bounty'). It does NOT request a concrete code change: no reproducible defect, no specific engineering feature, and no code-level maintenance target are identified. Labels are empty, the admission carries technical_signals=['bugs'] with empty component_references/source_locations, and the only comment (from non-owner 'recondemon') is an unanswered request for the site revision/scope/payment terms. The repository is an unchanged 4-file static GitHub Pages landing page (README.md, index.html, script.js, style.css) with no package.json, no CI workflows, no tests, no AGENTS.md, and no open PRs. This falls under the 'generic product idea without a repository change' / bounty-solicitation category, so per instructions it is reported blocked and the checkout is left unchanged rather than converted into a fallback proposal or PR.",
+  "evidence": {
+    "action": "blocked",
+    "worktree": "/tmp/bounty-workspaces/repos/eleectrum--eleectrum.github.io--1",
+    "base_sha": "d89feedd0d7f98313e0684f34ded68ab48b29f2b",
+    "default_branch": "main",
+    "sources": [
+      {
+        "path": "README.md",
+        "sha256": "b0cfbce0449ae3fb608e3dd8fa7a5fe210994c9da1d6739ac26f0cd4e3701cf6"
+      },
+      {
+        "path": "index.html",
+        "sha256": "0bdc33d016d27d23a6a93af03e0c6cb633f5337d5594ddfce934434a5d94c290"
+      },
+      {
+        "path": "script.js",
+        "sha256": "c25e92e5dea8d77dcb4f5e694d7c55280834e15c9a8fa13527daa1960a56145c"
+      },
+      {
+        "path": "style.css",
+        "sha256": "0af4f111ecef83e87a96d3537299401d11226780e54911961170ff41b09998eb"
+      }
+    ],
+    "run_url": "",
+    "admission": {
+      "amount": "1000",
+      "currency": "USD",
+      "usd_value": "1000",
+      "quote": {
+        "basis": "USD face value"
+      },
+      "raw": "$1000",
+      "source_url": "https://github.com/eleectrum/eleectrum.github.io/issues/1",
+      "payer": "eleectrum"
+    }
+  },
+  "finished_at": "2026-10-31T06:26:28.366325+00:00"
 }
