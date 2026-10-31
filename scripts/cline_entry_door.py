@@ -752,8 +752,11 @@ def iterate(workdir: str, rounds: int = 3, run=run_cline_search, verify=verify_r
             kwargs.setdefault("on_row", bank)
         outcome = run(workdir, prompt=prompt, **kwargs)
 
-        streamed = {(str(row.get("repo") or "").lower(), row.get("issue"))
-                    for row in live["admitted"]}
+        streamed = set()
+        for slot in ("admitted", "refused", "unpriced"):
+            for entry in live[slot]:
+                row_seen = entry.get("row") if isinstance(entry, dict) and "row" in entry else entry
+                streamed.add((str(row_seen.get("repo") or "").lower(), row_seen.get("issue")))
         remaining = [row for row in (outcome.get("rows") or [])
                      if (str(row.get("repo") or "").lower(), row.get("issue")) not in streamed]
         result = verify(remaining, limit=limit)

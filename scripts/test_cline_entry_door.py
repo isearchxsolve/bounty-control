@@ -854,6 +854,25 @@ class TheSearcherIsSovereign(unittest.TestCase):
         self.assertNotIn("acceptance criteria; aim", text)
         self.assertIn("how a claim is verified, never the goal", text)
 
+    def test_a_live_unpriced_row_is_not_counted_twice(self):
+        """Measured on run 41181814578: 4 rows reported as unpriced: 8, because the merge only
+        skipped rows the stream had ADMITTED, so every live-unpriced row was verified again."""
+        workdir = tempfile.mkdtemp(prefix="door-dedupe-")
+        self.addCleanup(shutil.rmtree, workdir, True)
+        bare = {"repo": "acme/http", "issue": 9, "is_code_task": True,
+                "reward_quote": "Requests fail permanently on a transient 503.",
+                "reward_usd": None, "scope_quote": "Requests fail on a transient 503.",
+                "why_now": "owner report"}
+
+        def run(workdir, prompt=None, on_row=None, **kwargs):
+            if on_row is not None:
+                on_row(bare)
+            return {"exit_code": 0, "rows": [bare], "timed_out": False}
+
+        result = door.iterate(workdir, rounds=1, run=run, verify=fetcher_verify)
+        self.assertEqual(len(result["unpriced"]), 1, "one row, one receipt")
+        self.assertEqual(result["history"][0]["unpriced"], 1)
+
     def test_the_brief_carries_no_mojibake(self):
         """A broken em dash reached the agent as a replacement char; keep the file ASCII."""
         bad = sorted({c for c in door.TASK_FILE if ord(c) > 127})
