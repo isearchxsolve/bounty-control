@@ -1,0 +1,46 @@
+{
+  "task_id": "9372a6ec7d2480159d5f642f0c61c271",
+  "repo": "sonevalleyinfra/buildcity-web",
+  "issue_number": 50,
+  "status": "DISPATCHING",
+  "dispatch_id": "26c070e84e42453ebffd2b0c95eb957f",
+  "admission": {
+    "funding": {
+      "payer": "sonevalleyinfra",
+      "source_url": "https://github.com/sonevalleyinfra/buildcity-web/issues/50",
+      "authority_quote": "https://www.buildcity.in failed 2 consecutive checks: TimeoutError: The read operation timed out (uptime watchdog, 2026-10-27T08:21:35+00:00).",
+      "amount": "0",
+      "currency": "FOUNDER",
+      "usd_value": "0",
+      "quote": {
+        "basis": "Unpriced repository-owner request"
+      },
+      "raw": "https://www.buildcity.in failed 2 consecutive checks: TimeoutError: The read operation timed out (uptime watchdog, 2026-10-27T08:21:35+00:00)."
+    },
+    "agent_reason": "Unpriced repository-owner incident: the issue is authored by the repo owner (author_association OWNER, login sonevalleyinfra) announcing production downtime for www.buildcity.in. The bounded change is diagnosing/restoring the deployed site; api/sms.js is product code in the same deployment (a serverless handler that routes production-only traffic and performs outbound network calls), the surface whose TLS/network behaviour the incident asks to evidence.",
+    "scope_quote": "Restore https://www.buildcity.in and write a short incident note.",
+    "code_evidence": {
+      "path": "api/sms.js",
+      "sha": "9623cce543c4994fccff47e2d94bcafc6e74a529",
+      "quote": "export default async function handler(req, res) {",
+      "is_product_code": true
+    },
+    "source_issue": "https://github.com/sonevalleyinfra/buildcity-web/issues/50",
+    "funding_status": "UNPRICED_OWNER_REQUEST",
+    "lane": "founder",
+    "task_id": "9372a6ec7d2480159d5f642f0c61c271",
+    "source_revision": "c510c29bb6d7eccaffb4617f8eecd30d979c08578ff2cf3af3723f86cfbad156"
+  },
+  "dispatch_attempt": 1,
+  "sovereign_admission": true,
+  "competition": {
+    "blocking": false,
+    "nominal": []
+  },
+  "lanes": [
+    "founder"
+  ],
+  "dispatched_at": "2026-10-31T23:37:26.934163+00:00",
+  "attempt": 0,
+  "updated_at": "2026-10-31T23:37:26.934178+00:00"
+}
