@@ -2,7 +2,7 @@
   "task_id": "0a9c783c3721e151080810d4829a7114",
   "repo": "getdozer/dozer",
   "issue_number": 1653,
-  "status": "DISPATCHING",
+  "status": "DISPATCHED",
   "dispatch_id": "99c2c25c5e814380a88097ced9832883",
   "admission": {
     "funding": {
@@ -35,5 +35,5 @@
   ],
   "dispatched_at": "2026-10-31T13:26:13.823453+00:00",
   "attempt": 0,
-  "updated_at": "2026-10-31T13:26:13.823470+00:00"
+  "updated_at": "2026-10-31T13:26:15.228393+00:00"
 }
