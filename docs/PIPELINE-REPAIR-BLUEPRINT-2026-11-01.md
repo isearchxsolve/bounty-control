@@ -1014,3 +1014,23 @@ def scan(root):
 | scripts/test_pipeline_repairs.py | `cbefb1b56c896e1a3e7cde3f9b3e87804bb0ed6a36d364482fecca79fa153106` |
 | scripts/test_sovereign_delivery.py | `61a88c759092eaf3e9ac40adba5d071f6bca76f15e80d80115f6c17815aeded0` |
 | scripts/test_sovereign_stamps.py | `66f8a3af55782d12183d17b6e60dc7428b730686c431b6b17cf0118c0387eccd` |
+
+## Follow-up: remove the post-claim plan approval barrier (2026-11-01)
+
+This correction supersedes the independent native-plan approval implementation
+shown in historical excerpts above. Delivery run 41252194005 stopped before
+implementation when a separate reviewer rejected a planned regression test path
+because it did not yet exist. An approval opinion had become a second gate after
+the sovereign entry door, contrary to the user's architecture instruction.
+
+Removed `review_native_plan` and `validate_plan_review`, their calls before baseline
+execution and after baseline repair, and the publication requirement for a
+`plan_review` stamp. Cline continues directly from preparation to native execution
+and implementation. Actual command failures feed the existing Cline repair loop.
+Ownership, source provenance, bundle identity and actual execution receipts remain
+checked. No admission judgment was moved into publication.
+
+Validation: 28 forensic regression tests pass, including publication without a
+second approval stamp and rejection of an actual failed native command receipt.
+Already-running workflows retain their original checkout; this change applies
+to subsequent deliveries using the new commit.

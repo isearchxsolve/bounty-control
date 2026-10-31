@@ -18,7 +18,6 @@ import actions_dispatch as dispatch
 from actions_github import GitHub, GitHubError, StateStore, task_id
 from actions_reconcile import reconcile, sweep_stale_runs
 import cline_entry_door as door
-from delivery_supervisor import validate_plan_review
 from kaggle_engine_worker import VerificationPlan
 from pipeline_evidence import bind_proof, digest, require_evidence
 from sovereign_discovery import discover
@@ -341,14 +340,40 @@ class RecoveryTests(unittest.TestCase):
         self.assertTrue(any(r.get('phase')=='RECONCILE_DEFERRED' for r in receipts))
         self.assertEqual(store.rows['good']['status'], 'FAILED_MISSING_TERMINAL_RECEIPT')
 
-    def test_native_plan_requires_exact_independent_review(self):
-        plan = VerificationPlan(builds=[['sh','-c','exit 0']],baseline_tests=[['sh','-c','exit 0']],final_tests=[['sh','-c','exit 0']])
-        with self.assertRaises(ValueError): validate_plan_review(None,plan,[])
-        sources = [{'path':'package.json','sha256':'abc'}]
-        review = {'approved':True,'reason':'Native manifest inspected','plan_sha256':digest(asdict(plan)),'sources':sources}
-        validate_plan_review(review,plan,sources)
-        plan.builds.append(['different'])
-        with self.assertRaisesRegex(ValueError,'digest mismatch'): validate_plan_review(review,plan,sources)
+    def test_bundle_uses_execution_receipts_without_second_model_approval(self):
+        """A new regression target needs no pre-implementation approval stamp."""
+        plan = VerificationPlan(builds=[['mix','compile']],
+            baseline_tests=[['mix','test','existing_test.exs']],
+            final_tests=[['mix','test','new_regression_test.exs']])
+        commands = plan.builds + plan.baseline_tests + plan.final_tests
+        receipt = {'status':'VERIFIED', 'harness_sha':'harness',
+            'repo':'acme/http', 'issue_number':7, 'task_id':task_id('acme/http',7),
+            'head_sha':'head', 'base_sha':'base', 'tree_sha':'tree',
+            'files':{'src/retry.py':{'sha256':digest('unused')}},
+            'sources':[], 'plan':asdict(plan),
+            'baseline':[{'argv':plan.baseline_tests[0], 'exit_code':0, 'stdout':'1 test passed'}],
+            'verification':[{'argv':c, 'exit_code':0, 'stdout':'1 test passed'} for c in commands],
+            'regression':{'red_exit':1, 'green_exit':0}}
+        import hashlib
+        receipt['files']['src/retry.py']['sha256'] = hashlib.sha256(b'fixed').hexdigest()
+        def git_result(root, *args, **kwargs):
+            values = {('rev-parse','FETCH_HEAD'):b'head',
+                ('rev-list','--count','base..head'):b'1',
+                ('show','-s','--format=%P','head'):b'base',
+                ('rev-parse','head^{tree}'):b'tree',
+                ('diff','--name-only','-z','base','head'):b'src/retry.py\0',
+                ('show','head:src/retry.py'):b'fixed',
+                ('ls-tree','head','--','src/retry.py'):b'100644 blob content'}
+            return SimpleNamespace(stdout=values.get(args,b''),returncode=0)
+        with patch.dict(os.environ,{'GITHUB_SHA':'harness'}), \
+                patch.object(delivery.subprocess,'run'), \
+                patch.object(delivery,'git',side_effect=git_result), \
+                patch.object(delivery,'protect_baseline_tests'):
+            self.assertEqual(delivery.validate_bundle(receipt,'bundle',Path('checkout')),
+                             ('acme/http',7,'head'))
+            receipt['verification'][-1]['exit_code'] = 1
+            with self.assertRaisesRegex(ValueError,'native command failed'):
+                delivery.validate_bundle(receipt,'bundle',Path('checkout'))
 
     def test_workflow_run_pagination_is_complete(self):
         api = GitHub()

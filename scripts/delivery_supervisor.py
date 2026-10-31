@@ -5,55 +5,7 @@ from pathlib import Path
 import re
 import subprocess
 import uuid
-from dataclasses import asdict, is_dataclass
 
-
-def validate_plan_review(review, plan, sources):
-    """Check the review's exact claim; interpretation belongs to the reviewer model."""
-    from pipeline_evidence import digest
-    if (not isinstance(review, dict) or review.get('approved') is not True
-            or not str(review.get('reason') or '').strip()):
-        raise ValueError('Independent native-plan review did not approve: ' + str(review))
-    if review.get('plan_sha256') != digest(asdict(plan) if is_dataclass(plan) else vars(plan)):
-        raise ValueError('Native-plan review digest mismatch')
-    if review.get('sources') != sources or not sources:
-        raise ValueError('Native-plan review source citations mismatch')
-    return review
-
-
-def review_native_plan(worktree, plan, sources, artifact_dir, command_builder, execute):
-    """Ask a separate model turn to read the native source and review the exact plan."""
-    from pipeline_evidence import digest
-    root = Path(worktree).resolve()
-    for source in sources:
-        path = (root / source['path']).resolve()
-        if (not path.is_relative_to(root) or not path.is_file()
-                or hashlib.sha256(path.read_bytes()).hexdigest() != source['sha256']):
-            raise ValueError('Native-plan review source is missing or changed')
-    folder = Path(artifact_dir) / 'plan-reviews'
-    folder.mkdir(parents=True, exist_ok=True)
-    request = folder / (uuid.uuid4().hex + '.request.json')
-    response = request.with_suffix('.review.json')
-    before = source_snapshot(worktree)
-    document = {'plan': asdict(plan), 'plan_sha256': digest(asdict(plan)), 'sources': sources}
-    request.write_text(json.dumps(document, indent=2), encoding='utf-8')
-    prompt = f'''Independently review the native verification plan in {request}.
-Read the actual cited repository manifests, scripts and CI files, following their references.
-Determine whether these commands really build and exercise this repository, and whether the
-tests, lint and format coverage match its native requirements. Shell exits or printed success
-are not test evidence. Read commands and targets; do not infer coverage from their names alone.
-Do not edit repository files, install anything, run the plan, commit, push or send messages.
-Your only deliverable is {response}, JSON with approved (boolean), reason (your evidence-backed
-interpretation), plan_sha256 (the exact request digest), and sources (the exact cited list).
-Reject synthetic success, missing coverage or commands unsupported by the cited native sources.
-The host verifies all hashes and executes independently; your approval is not a test receipt.'''
-    result = execute(command_builder(worktree, prompt), cwd=worktree, timeout=1800)
-    if source_snapshot(worktree) != before:
-        raise ValueError('Native-plan reviewer changed source or HEAD')
-    if result.exit_code:
-        raise ValueError('Native-plan reviewer failed: ' + str(result.stderr or result.stdout))
-    review = json.loads(response.read_text(encoding='utf-8'))
-    return validate_plan_review(review, plan, sources)
 
 # F3/F4: the typed delivery failures are RuntimeError subclasses, so the blanket
 # ``except ValueError`` below never caught them and one could escape this boundary as an

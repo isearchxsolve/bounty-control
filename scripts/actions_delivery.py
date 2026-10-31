@@ -581,9 +581,9 @@ def engineer():
             raise ValueError("Unexpected upstream remote")
         plan = prepared["plan"]
         validate_plan_contract(plan, prepared.get("report_path"))
-        from delivery_supervisor import review_native_plan
-        plan_review = review_native_plan(root, plan, prepared["sources"], artifacts(),
-                                        worker.cline_worktree_command, worker.run_command_safe)
+        # Admission judgment belongs to the entry door. Execute Cline's native
+        # plan and return actual command failures to Cline for repair; a second
+        # model's plan approval must not prevent implementation from starting.
         component = prepared.get("regression_plan", {}).get("component")
         if not component or not isinstance(component, str):
             raise ValueError("Cline must identify the defect component")
@@ -594,8 +594,6 @@ def engineer():
             if not repaired:
                 raise RuntimeError("BLOCKED_BASELINE: " + repair_error)
             validate_plan_contract(plan, prepared.get("report_path"))
-            plan_review = review_native_plan(root, plan, prepared["sources"], artifacts(),
-                                            worker.cline_worktree_command, worker.run_command_safe)
             baseline_ok, diagnostic, baseline = worker.verify_baseline(root, plan)
         if not baseline_ok:
             raise RuntimeError("BLOCKED_BASELINE: " + diagnostic)
@@ -730,7 +728,7 @@ def engineer():
                    "tree_sha": git(root, "rev-parse", "HEAD^{tree}").stdout.decode().strip(),
                    "default_branch": prepared["default_branch"],
                    "base_branch": base_branch, "files": before,
-                   "plan": asdict(plan), "sources": prepared["sources"], "plan_review": plan_review,
+                   "plan": asdict(plan), "sources": prepared["sources"],
                    "regression": regression,
                    "baseline": [asdict(r) for r in baseline], "verification": results,
                    "admission": task["admission"], "run_url": state["run_url"], "at": utcnow()}
@@ -786,9 +784,6 @@ def validate_bundle(receipt, bundle, root):
             raise ValueError("Native-plan source citation mismatch")
     plan = SimpleNamespace(**receipt["plan"])
     validate_plan_contract(plan, bundle)
-    from delivery_supervisor import validate_plan_review
-    # SimpleNamespace is used for transport; review validation hashes the same JSON.
-    validate_plan_review(receipt.get("plan_review"), plan, receipt["sources"])
     require_commands(plan.baseline_tests, receipt["baseline"])
     commands = plan.builds + plan.baseline_tests + plan.targeted_tests + plan.final_tests + plan.linters + plan.format_checks
     require_commands(commands, receipt["verification"])
