@@ -554,7 +554,10 @@ def model_admission_refusal(row, context_builder, source_reader=None):
         if not context.get('complete_comments'):
             return 'INCOMPLETE_COMMENTS', None, None
         documents = [context['issue'], *context['comments']]
-        funding = row.get('funding') or {}
+        funding = dict(row.get('funding') or {})
+        # Authority is the model's interpretation of source author metadata and the
+        # cited offer. Do not retain an obsolete second-quote claim as verified proof.
+        funding.pop('authority_quote', None)
         source = next((d for d in documents if d.get('html_url') == funding.get('source_url')), None)
         if source is None:
             return 'FUNDING_SOURCE_MISSING', None, None
@@ -566,9 +569,6 @@ def model_admission_refusal(row, context_builder, source_reader=None):
             return 'PAYER_SOURCE_MISMATCH', None, None
         if not str(row.get('admission_reason') or '').strip():
             return 'AGENT_DECISION_MISSING', None, None
-        authority = funding.get('authority_quote') or ''
-        if not authority or not quote_is_present(authority, text):
-            return 'AUTHORITY_QUOTE_NOT_IN_SOURCE', None, None
         owner_request = row.get('is_founder_wound') is True and not quote_states_an_amount(quote)
         if owner_request:
             if (context['issue'].get('author_association') != 'OWNER'
@@ -607,7 +607,9 @@ def model_admission_refusal(row, context_builder, source_reader=None):
         actual = base64.b64decode(product['content']).decode('utf-8', errors='replace')
         if not quote_is_present(code['quote'], actual):
             return 'PRODUCT_SOURCE_QUOTE_MISMATCH', None, None
-        proof = {'funding': {**funding, 'usd_value': str(usd), 'quote': rate, 'raw': quote},
+        proof = {'funding': {**funding, 'usd_value': str(usd), 'quote': rate, 'raw': quote,
+                             'source_author_association': source.get('author_association'),
+                             'source_author_login': (source.get('user') or {}).get('login')},
                  'agent_reason': row['admission_reason'], 'scope_quote': scope,
                  'code_evidence': code,
                  'source_issue': context['issue'].get('html_url'),

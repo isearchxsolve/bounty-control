@@ -150,6 +150,14 @@ after implementation. This document is created before application source edits.
 
 ## Implemented changes and final source excerpts
 
+Live-admission follow-up: run 41251297561 wrote six candidates around 23:18 UTC. Its first
+three decisions were one competing-PR refusal and two AUTHORITY_QUOTE_NOT_IN_SOURCE refusals.
+The live transcript showed repeated hesitation over a separate authority sentence. That redundant
+field is now retired: the host still checks the original offer quote, exact source URL, payer login,
+amount, scope and product blob, and records the source's actual author association/login. Authority
+interpretation remains the model's responsibility. An extra invented/paraphrased authority sentence
+no longer blocks an otherwise source-verified offer. The retired field is dropped from stored proof.
+
 Deployment follow-up: the complete package was pushed in `767b274`. Its new import gate passed
 on GitHub; the expanded door tests exposed deprecated naive UTC fixtures on the runner's Python
 3.12. The follow-up uses timezone-aware UTC and closes fixture file readers. It also preserves

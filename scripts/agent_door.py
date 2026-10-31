@@ -137,7 +137,7 @@ def find_issues(root: Optional[str] = None, rounds: int = 1, timeout: int = 600,
         prompt += '''
 You decide admission by reading the actual source; the host checks literal evidence, not keywords.
 For every priced row include funding: {amount: "250", currency: "USD", payer: "exact source author login",
-source_url: "exact issue/comment permalink", authority_quote: "literal source sentence supporting authority"},
+source_url: "exact issue/comment permalink"},
 admission_reason: your interpretation of current funding, authority, bounded code scope and repository intent,
 scope_quote: a literal issue/comment sentence describing the change, and reward_quote: the literal priced offer.
 Inspect the actual repository code before selecting it. Include code_evidence: {path: "repository-relative
@@ -149,7 +149,7 @@ Read the whole conversation, including later withdrawals and awards. Do not mist
 copied third-party offers, already-paid rewards or symbolic bounties for a current committed offer.
 Never invent a payer, authority, quote, amount or source. Code checks the chosen source and amount.
 For an unpriced repository-owner incident, set is_founder_wound true and cite the OWNER-authored issue
-in funding.source_url, funding.payer and funding.authority_quote; omit amount and currency.
+in funding.source_url and funding.payer; omit amount and currency.
 Still supply the scope quote, actual product-code evidence and your admission_reason.
 The host records this as an unpriced owner request, without asserting a monetary promise.
 '''

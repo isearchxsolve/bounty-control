@@ -108,6 +108,23 @@ class DispatchOwnershipTests(unittest.TestCase):
 
 
 class EvidenceAndHandoffTests(unittest.TestCase):
+    def test_real_offer_and_source_author_do_not_require_a_second_authority_quote(self):
+        ctx=context()
+        ctx['issue'].update(html_url='url',user={'login':'maintainer'},author_association='COLLABORATOR')
+        candidate={'repo':'acme/http','issue':7,'reward_quote':'Bounty $250.',
+            'scope_quote':'Fix src/retry.py','admission_reason':'Maintainer offers payment for the described change',
+            'funding':{'amount':'250','currency':'USD','payer':'maintainer','source_url':'url'},
+            'code_evidence':{'path':'src/retry.py','sha':'a'*40,'quote':'def retry():','is_product_code':True}}
+        blob={'type':'file','sha':'a'*40,'encoding':'base64','content':base64.b64encode(b'def retry():\n    pass\n').decode()}
+        reason,_,proof=door.model_admission_refusal(candidate,lambda *a:ctx,source_reader=lambda *a:blob)
+        self.assertIsNone(reason)
+        self.assertEqual(proof['funding']['source_author_association'],'COLLABORATOR')
+        self.assertEqual(proof['funding']['source_author_login'],'maintainer')
+        candidate['funding']['payer']='someone-else'
+        reason,_,proof=door.model_admission_refusal(candidate,lambda *a:ctx,source_reader=lambda *a:blob)
+        self.assertEqual(reason,'PAYER_SOURCE_MISMATCH')
+        self.assertIsNone(proof)
+
     def test_model_path_preserves_unpriced_owner_incidents_without_inventing_payment(self):
         ctx=context()
         statement='Production retry is failing; fix src/retry.py.'
