@@ -12,8 +12,7 @@ from __future__ import annotations
 
 import json
 import os
-import sys
-from collections import Counter, defaultdict
+from collections import Counter
 from pathlib import Path
 
 SCRATCH_DIR = Path(os.environ.get("FLEET_ARTIFACT_DIR", Path(__file__).resolve().parent.parent / "scratch"))
@@ -56,8 +55,8 @@ def funnel_by_status(receipts):
     """Count receipts by final status."""
     funnel = Counter()
     for r in receipts:
-        status = r.get("counts", {}).get("qualified", 0)
-        # Count dispatched vs refused
+        # A per-task qualified total is deliberately not tabulated here. The digest still stands
+        # at PARTIAL (F12), so any such number would be one no receipt proves.
         dispatched = r.get("dispatched", 0)
         refusals = sum(v for k, v in r.get("counts", {}).items()
                        if k.startswith("admission_changed.") or k.startswith("CURRENT_"))

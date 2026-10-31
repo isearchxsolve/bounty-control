@@ -1422,7 +1422,7 @@ def discover(lanes, max_dispatches=2, live=False, queries_per_lane=2, state_dir=
                                           "reported_comments": context["issue"].get("comments"),
                                           "visible_comments": len(context["comments"])}), flush=True)
                         continue
-                    issue_labels = [l.get("name", "") if isinstance(l, dict) else str(l) for l in context["issue"].get("labels", [])]
+                    issue_labels = [label.get("name", "") if isinstance(label, dict) else str(label) for label in context["issue"].get("labels", [])]
                     is_code, code_reason = is_code_change_request(
                         context["issue"].get("title", ""),
                         context["issue"].get("body", "") or "",
@@ -1560,7 +1560,7 @@ def discover(lanes, max_dispatches=2, live=False, queries_per_lane=2, state_dir=
                         counts["admission_changed." + reason] += 1
                         record_outcome(con, identity, "refused")
                         continue
-                    current_labels = [l.get("name", "") if isinstance(l, dict) else str(l) for l in current["issue"].get("labels", [])]
+                    current_labels = [label.get("name", "") if isinstance(label, dict) else str(label) for label in current["issue"].get("labels", [])]
                     is_code, code_reason = is_code_change_request(
                         current["issue"].get("title", ""),
                         current["issue"].get("body", "") or "",
@@ -1733,7 +1733,7 @@ def _body_matches_any(body: str, patterns: tuple) -> bool:
 
 
 def _label_set(labels: list) -> frozenset:
-    return frozenset(str(l).lower() for l in (labels or []))
+    return frozenset(str(label).lower() for label in (labels or []))
 
 
 def _has_code_reference(text: str) -> bool:

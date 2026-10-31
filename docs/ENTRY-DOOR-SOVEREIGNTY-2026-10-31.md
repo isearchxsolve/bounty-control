@@ -381,3 +381,333 @@ Two causes, and the first one is mine.
 The lesson under the lesson, and it is the same one as section 12: the funnel's losses have never
 come from the market. They came from my own instruments - a brief that rationed the searcher, a gate
 narrower than its own contract, and now a probe that competed with the thing it was measuring.
+
+## 14. The whole house, in the garden's words - every gate, from every room
+
+Sections 1 to 13 wrote the gates down one at a time, as each one bit me. This section is different,
+and Baba was explicit about the difference: the agent at the door must receive the knowledge of the
+**whole house**, not only the door's own rulebook, and it must arrive as *knowledge* - what the
+people in the house look at, and why - never as a list of hoops.
+
+So read what follows as the gardener's own experience, handed over across the fence. Not one line is
+a test for you to pass. Every line is something **we** look at, on the fruit, after you have handed
+it over. Your job stays exactly what section 11 says it is: find real, ripe, unclaimed, wanted fruit,
+and put it in the basket with the words that prove it. Do only that, and these notes simply agree
+with you.
+
+Two things must be said before any gate, because they are the ones that most often read as
+handcuffs when they are in fact kindnesses:
+
+- **Fruit with no price written on it is not refused here.** It is set aside in its own basket
+  (`unpriced`) and a human looks at it. Sending it back to you as an error would tell you to *drop*
+  a real buyer, and that is the one thing we never want you to learn.
+- **A refusal from us is information, not a verdict on your effort.** It is the house saying "we
+  already looked at this one, here is what we saw". The next paragraph tells you what each note
+  means, so that a note you receive is knowledge you now own rather than a wall.
+
+### 14.1 Is it fruit at all? (admission: `bounty_admission.admit`, `bounty_admission.py:579`)
+
+The house checks the fruit in a fixed order and stops at the first thing that is true, because the
+first true thing is the most useful explanation. This runs when the fruit arrives, and again every
+time the queue is about to spend money on it.
+
+1. **The conversation had not finished arriving** (`INCOMPLETE_COMMENTS`). We read the thread and
+   every comment. If the fetch did not complete, we do not judge it at all. We would rather say
+   nothing than guess about a wharf we have not walked.
+2. **The tree no longer takes fruit** (`CLOSED_OR_READ_ONLY`). The issue is closed, or the
+   repository is archived or disabled. Nothing can land there.
+3. **The offer expired** (`EXPIRED_OFFER`). The window closed while it sat in the basket.
+4. **It is a list, not a job** (`REFUSED_NOT_A_CODE_CHANGE`). Aggregators, digests, "awesome"
+   collections and reading lists. Measured on `jain-Igtm/CashGPT#1`, whose owner-written title
+   carried `$79,200` and whose text asked for no engineering at all - the largest number in the
+   garden can sit on the least real fruit.
+5. **It is a mirror or a page that is not engineering** (`MIRROR_OR_NON_ENGINEERING`). A copy of
+   someone else's work, or a repository whose issues are not about code.
+6. **It is marketing or an experiment** (`MARKETING_OR_EXPERIMENT`). A launch post, a survey, a
+   "what do you think" - nothing to build.
+7. **Someone wants something other than code** (`NON_PAYMENT_OR_INSTRUCTION_EXFILTRATION`). The
+   moment an offer asks for credentials, access, or an action outside the repository, the payment
+   is not the point of the request, and we walk away without arguing.
+8. **It is an advert or escrow spam** (`ADVERT_OR_ESCROW_SPAM`). A signpost to a job board, or
+   someone selling a service in the reply thread.
+9. **The owner already said the behaviour is intended** (`REPORTED_BEHAVIOUR_DECLARED_BY_DESIGN`).
+   The maintainers themselves have written that this is by design, expected, invalid or not a bug.
+   Building here produces a refusal and never a pull request, so the house declines before buying
+   the engineer run.
+10. **The words are there but the work is not** (`HARD_ISSUE_EVIDENCE_MISSING`). A complaint with
+    no reproducible evidence of a real defect. Not because we doubt the reporter, but because an
+    engineer sent to a place with no evidence returns with a paragraph instead of a patch.
+11. **The work has no edges** (`UNBOUNDED_SCOPE`). "Rewrite the app", "make it fast" - nothing that
+    can be finished, so nothing that can be proven, so nothing that can be paid.
+12. **Nobody in the room is actually the payer** (`CURRENT_ISSUER_OFFER_MISSING`). Untrusted text
+    never becomes an offer. The payer is the programme's own attested login when the amount is the
+    programme's, otherwise the person who wrote the document; a `WITHDRAWN` sentence takes a
+    previous offer away. A stranger commenting "$500" on someone else's ticket is not funding.
+
+Three more notes belong to this same room, and you will see them in the queue rather than at the
+door:
+
+- `OFFER_BELOW_FLOOR` - real, but below the amount that makes a run worth its cost.
+- `NO_TRUSTED_OFFER` - the text promises money and no trusted party is behind it.
+- `REPOSITORY_DOES_NOT_MERGE` - the tree takes pull requests and merges none (`total_prs >= 10`
+  and `merged == 0`). It has demonstrated, with its own history, that it does not pay. When the
+  evidence is absent we are permissive: unknown is not guilt.
+
+### 14.2 What the door itself checks when you hand the basket over (`verify_rows`, `cline_entry_door.py:392`)
+
+These are the door's questions about *your* basket, not about the world. Each one exists because it
+once cost us a run.
+
+- **The row arrived whole** (`MALFORMED_ROW`) and **the basket has no twins** (`DUPLICATE_ROW`).
+- **The fruit is still on the tree and readable** - `ISSUE_UNREADABLE`, `ISSUE_NOT_FOUND`,
+  `ISSUE_NOT_OPEN`. A row that cannot be read is not an accusation against you; it is us refusing
+  to build on something we cannot see.
+- **It is a code task at all** (`AGENT_NOT_A_CODE_TASK`). Questions, feature requests with no
+  defect, and general chatter live elsewhere.
+- **Nobody pulled it back** (`FUNDING_WITHDRAWN`). The offer was taken off the table after you
+  found it.
+- **It is not rotten on the branch** (`STALE_ISSUE`). Default 60 days
+  (`BOUNTY_ISSUE_STALE_DAYS`), keyed on `updated_at`, so a long-lived bounty with live activity
+  passes and a 2019 corpse does not. Measured on the five rows of run `41184570516`:
+  `microg/GmsCore#2843`, `tt-metal#56908` and `eleectrum#1` survive; `StateofScale/State-of-Scale#3`
+  (2019) and `Web3Foundation/build-polkadot#1` (2024) do not. Both of those were dispatched and both
+  were empty, and the engineer run is the most expensive thing this pipeline buys.
+- **The words you quoted are really there** (`REWARD_QUOTE_NOT_IN_ISSUE`) and **that quote really
+  carries a number** (`REWARD_QUOTE_HAS_NO_AMOUNT`, which sets the row aside as `unpriced` rather
+  than refusing it).
+
+Quotes are matched across title, body **and comments** since `3351cef`, because the bounty-platform
+bots publish the amount in a comment. Before that fix the door was narrower than its own contract,
+and the agent diagnosed it correctly from the source before I did (section 12.1).
+
+### 14.3 What the queue looks at before it pays for a run (`actions_dispatch.py`)
+
+The queue's job is to not spend an engineer run on something we already know the answer to.
+
+- **Exclusions the world itself declares** (`QUERY_EXCLUDED_ASSIGNED`, `QUERY_EXCLUDED_EXPERIMENT`,
+  `QUERY_EXCLUDED_VIDEO_DEMO`, `QUERY_EXCLUDED_NOT_A_DEFECT`). An assigned issue is still open to a
+  contributor unless the tree labels it otherwise - assignment is triage, not a "do not touch" sign.
+  These are re-applied to the **live** issue before dispatch (`refreshed_query_exclusion`), because
+  a search row can be assigned or labelled while it waits in the queue, and a stale snapshot is not
+  enough to start delivery.
+- **Repositories that never merge** (`REPOSITORY_DOES_NOT_MERGE`, `precheck_repository_intent`).
+  Probed once per repository, remembered for a week, and the rows of a rejected repository are
+  retired permanently instead of being re-hydrated every cycle. On the 2026-10-27 backlog, 885 of
+  3,311 queued rows sat in such repositories.
+- **Too heavy to carry** (`CAPACITY_EXCLUDED`). Expensify/App is 3.3 GB and its own `npm run lint`
+  reached about 14 GB on a runner with 7 GiB plus 8 GiB of swap, ending two runs at exit 143 before
+  the preparation phase was ever written. A task we cannot prepare is not a task we may claim, so a
+  repository over `BOUNTY_MAX_REPOSITORY_KB` (750000 KB) is declined visibly. **Unknown is never
+  excluded**: a probe failure must not silently drop a valid target.
+- **Admission again, on the live issue** - the same twelve checks as 14.1, plus the payer and floor
+  checks, because a ticket can change while it waits.
+- **Only a real fault may be retried** (`retry_eligible`). `FAILED_*`, `DISPATCHED` and
+  `DISPATCHING` are retryable. A `REJECTED_*` is terminal knowledge: the engineering phase ran, the
+  contract verified the answer, and the answer was "this is not a warranted change". Re-admitting it
+  spends a whole run to relearn something already written down - measured on `Expensify/App#105153`,
+  refused as by-design at 17:57 and re-dispatched at 18:44.
+- **Someone else may have picked it** (competition). Checked before dispatch and again before
+  publish.
+- **One pair of hands at a time** (`DISPATCHING`, `DISPATCHED`, lease ownership). Dispatch is
+  absorbing; everything else is latest-wins.
+- **Order of the queue** is founders first, then programmes, then startups, then the rest - because
+  the biggest programme repository is precisely the one the capacity gate refuses, and ranking a
+  lane whose candidates are then discarded starves everything else in the basket.
+
+### 14.4 What the kitchen demands before it cooks (preparation and engineering, `actions_delivery.py`)
+
+- **The recipe must come from the same kitchen that is cooking** - status `VERIFIED` and
+  `harness_sha` equal to the running `GITHUB_SHA`. Proof cannot be inherited.
+- **The branch you declared must exist** (`resolve_base_branch`): a genuine 404 on the declared
+  `base_branch` is a refusal, while a throttle or a transient API failure stays a *failure*, so a
+  slow API is never recorded as a bad declaration.
+- **The base must sit on that branch's line of history** (`BASELINE_ADMITTED = ("identical",
+  "ahead")`). `diverged` - a base on some other line of history - is the librepods artefact
+  (`android/rewrite` HEAD declared as `main`) and is the refusal that must never be weakened.
+  `behind` means commits the branch does not have are baked in, and re-preparing is the only safe
+  answer. **Anything unrecognised is refused closed**: an unproven relationship is never treated as
+  a safe one.
+- **The patch must not touch what upstream already moved** (`baseline_overlap`, then
+  `PreparationRace`). A compare payload with no file list cannot prove disjointness, so that case
+  refuses closed too - a missing key is never evidence that nothing changed.
+- **The plan must be the repository's own** (`validate_plan_contract`, mandatory native phases
+  including `builds`, `require_commands` over baseline, targeted and final tests, linters and
+  format checks).
+- **Red before, green after** (`red_exit != 0` and `green_exit == 0`). A test that never failed
+  proves nothing about the fix.
+- **The seeds that came with the tree are not ours to edit** (`protect_baseline_tests`). An existing
+  test file cannot be modified; an existing `pytest.ini`, `conftest.py`, `.coveragerc`,
+  `vitest`/`jest`/`eslint`/`ruff`/`mypy`/coverage config cannot be modified; and in an existing
+  `package.json`, any `test`/`build`/`lint`/`check`/`format`/`type` script cannot change. This is the
+  librepods baseline refusal, and it is never relaxed by any fix.
+- **A clean "not warranted" is not a failure** (`REJECTED_PREPARATION`): terminal, exit 0, no pull
+  request, and it never consumes the recovery budget. It is the house declining to pretend.
+- **Real faults get distinct names**, so one is never confused with another:
+  `FAILED_BUDGET_EXHAUSTED`, `FAILED_INFRASTRUCTURE`, `FAILED_PREPARATION_RACE`,
+  `FAILED_DELIVERABLE_MISSING` (with `kind=deliverable_invalid` for a bundle that fails validation),
+  `FAILED_PUBLICATION_MISSING`, `FAILED_MISSING_RECEIPT`, `FAILED_RUNNER_SHUTDOWN`.
+
+### 14.5 What the release checks on the finished dish (`validate_bundle`, `actions_delivery.py:662`)
+
+This is the most suspicious room in the house, and deliberately so. It runs no target code; it
+demands the artifact itself.
+
+- **Exactly one commit**, whose parent is exactly the verified upstream base (`rev-list --count == 1`
+  and the parent list equals `[base]`).
+- **The tree hash is the one the receipt claims**, and **every changed file's `sha256` matches**,
+  deletions included.
+- **No symlinks and no submodules** in a release; those require separate review.
+- **Every native-plan source citation matches the base's own bytes**.
+- **The plan's command lists were really run**, including the baseline tests.
+- **Red-to-green proof is present**, and `git diff --check` is clean.
+- **The change must be real work** (`product_paths`): a release consisting only of tests, docs,
+  `.github/` changes or lockfiles is not a fix.
+- **The baseline tests survived the dish** - the same protection as 14.4, applied to the artifact
+  rather than the plan.
+
+### 14.6 What publishing demands (`publish`, `actions_delivery.py:814`)
+
+- **The lease is still yours** - the state's owner and the receipt's owner must both still be this
+  run.
+- **The fruit is still ripe and still unclaimed**: `admit()` is re-run on the live issue, and
+  `competition()` is re-run before a pull request is created.
+- **Upstream has not moved under the verified work**: if the base branch head differs from the
+  `base_sha` that was verified, we rebase and reverify rather than publish a proof about a tree that
+  no longer exists.
+- **The fork must really be a fork of this tree** (`Fork parent mismatch`), unless we own the
+  repository outright.
+- **The claim goes on the pull request, never on the issue.** Opire accepts the command in a comment
+  on the PR and in the PR description, not on the issue.
+- **A failed engagement comment never kills a live pull request**, but it is recorded loudly
+  (`ENGAGEMENT_COMMENT_FAILED`), because the payer is notified only through the claim.
+- **More than one matching pull request is a reconciliation, not a guess** (`Multiple matching PRs
+  need reconciliation`).
+- And the last one, which is Baba's law rather than a code path: `PUBLISHED_PENDING_CHECKS` is not a
+  merge. **Done is one solid pull request.** The merge belongs to the maintainer, and it is not part
+  of the goal.
+
+### 14.7 The record - what it does, and what it honestly does not (F12, partial)
+
+`failure_digest.py` exists, is wired into CI, and its five tests pass. It reports takings by status
+(`funnel_by_status`) and refusal reasons (`refusal_reasons`).
+
+It is **partial, and this document will not pretend otherwise**. It does not produce a per-task
+cause, it does not build a terminal-cause table, and it does not list the runs whose logs are
+unrecoverable. It does not read the Actions API, it does not use the F4 taxonomy, and it is not
+invoked at the end of a failing delivery run. Five runs ended by a mid-step kill have no recoverable
+job log at all (`BlobNotFound`), so no reader of logs can explain them; that is a fact about the
+record, not a gap in someone's effort.
+
+### 14.8 What to carry across the fence
+
+If you remember nothing else from this section, remember the five questions the house is really
+asking, in the garden's own order:
+
+1. **Is it real?** Evidence of a defect, not just a sentence about one.
+2. **Is it ripe?** Open, recent, still offered, and not already declared intended by its owner.
+3. **Is it unclaimed?** Nobody else has it, and the basket has no twin of it.
+4. **Does it pay?** A trusted party, an amount worth a run, and no request for anything but code.
+5. **Can we carry it?** Small enough to prepare, bounded enough to finish, and provable by the
+   repository's own commands.
+
+Every note in sections 14.1 to 14.6 is simply the house's name for the case where the answer to one
+of those five turned out to be no. They are our eyes, not your instructions. **An empty basket
+remains the only mistake** - and a refusal you receive is knowledge you did not have before, which
+is exactly what a garden hand is for.
+
+## 15. Running record - updated as the work happens
+
+This section is a log, not an argument. Each entry is appended when the work it describes is
+finished, with the measurement that proves it.
+
+### 2026-10-31 16:00 IST - section 14 written and verified
+
+- Written from live source, not from memory. Gate order in `admit()` was preserved exactly, because
+  the first true check is the most useful explanation and reordering it would change what the
+  searcher is told.
+- Measurements on the document itself, taken at the moment section 14 was finished and before this
+  log was appended: **39,218 bytes / 617 lines, no BOM, 0 non-ASCII characters.**
+- **62 upper-case gate codes appear in the document and every one of them exists in the pipeline
+  source** (`bounty_admission.py`, `cline_entry_door.py`, `actions_dispatch.py`,
+  `actions_delivery.py`, `actions_release.py`). Zero invented codes, zero codes omitted that the
+  door, the queue, delivery or release can actually return.
+- Framing held to Baba's decree (section 11): no acceptance-criteria list, no rubric language, and
+  every gate phrased as something the house looks at **on the fruit after it is handed over**.
+- Two kindnesses stated explicitly at the top of 14, because both read as handcuffs otherwise:
+  unpriced fruit is quarantined and never refused, and a refusal is knowledge rather than a verdict
+  on the searcher's effort.
+- F12 is described as **PARTIAL** with its exact missing outputs (14.7), so nothing in this record
+  overstates the pipeline.
+
+Still open at this entry, and next: the six Ruff findings in the pipeline, the six targeted suites,
+the workflow YAML parse, and the commit that proves CI - each gets its own entry when it is measured.
+
+### 2026-10-31 - the pipeline's own lint and compile are clean
+
+- Ruff on the ten core pipeline files: **14 findings before, EXIT=0 now.** Each was fixed where it
+  came from rather than silenced: two unused names dropped from an import in `actions_delivery.py`,
+  one redundant local import trimmed in `actions_github.py`, one dead exception binding in
+  `agent_door.py`, two unused imports and one dead store in `failure_digest.py`, one unused import in
+  `kaggle_engine_worker.py`, and three ambiguous one-letter names in `actions_dispatch.py` renamed to
+  `label`.
+- The dead store in `failure_digest.py` was a read of a "qualified" count that the function never
+  used. It is replaced by a comment stating that a per-task qualified total is deliberately not
+  tabulated while the digest stands at F12 partial - so no later reader invents a number no receipt
+  proves. Behaviour is unchanged and its five tests still pass.
+- `py_compile` on the same ten files: **EXIT=0.**
+
+### 2026-10-31 - a live regression found while linting, and closed
+
+- The uncommitted rewrite of the brief had dropped the per-gate name list from the rendered task, and
+  **3 tests failed**: the gate-list test, the "every gate that can fire is named" test, and the
+  quota-is-not-a-verdict test, each on a code that was no longer present (`MALFORMED_ROW`,
+  `ISSUE_UNREADABLE`).
+- Fixed by putting the names back into the brief as garden prose - a new section, "The names a
+  returned fruit comes back with", interpolating `GATE_CHECKS` and `DOWNSTREAM_CHECKS`. No gate was
+  deleted to quiet a warning, and the brief stays recipe-free: the names are given as what the house
+  writes on the fruit, followed by one line saying neither list asks the searcher to work differently.
+- Result after the fix: `test_cline_entry_door.py` green inside a 124-test run of the four suites that
+  read the brief.
+
+### 2026-10-31 - a crash path fixed that lint cannot see
+
+- `actions_github.py` called `ActionsGitHub.core_reset_seconds()` where the class is named `GitHub`.
+  That is a `NameError` on the rate-limit path - it would fire exactly when the door is being
+  throttled. Corrected to `GitHub.core_reset_seconds()`. CI's `F821` check cannot catch it because the
+  name resolves; only reading the call protects it.
+
+### 2026-10-31 - CI parity measured on the laptop, not assumed
+
+- `actions-contracts.yml` was read first, then its commands run here in its own words:
+  - `python -W error -m py_compile` on the 13 modules it compiles: **EXIT=0.**
+  - `ruff check --select F821` on the same 13: **EXIT=0.**
+  - **all 44 test files in its list, each as its own `-W error` process: 44 of 44 passed, 527 tests,
+    0 failures.**
+- All five workflow files parse - `actions-contracts`, `bounty-discovery`, `bounty-hydration`,
+  `discovery-heartbeat`, `engine2`: **8 jobs, 35 steps, 0 parse failures.**
+- What was **not** run, and why. `test_worker_process_streaming.py` (9 setup errors, needs
+  `FLEET_RECOVERY_SNAPSHOT`) and `test_dispatch_transport_live_receipts.py` (5 setup errors, needs
+  `DISPATCH_REGRESSION_FIXTURES`) are gated on fixture files that are not in the tree; the 30-October
+  funnel record already names both as pre-existing env-gated suites. They error at setup, before a
+  single assertion, so they prove nothing either way and are not counted as passes.
+- `test_fleet_retry_policy.py` fails 9 tests with `module 'kaggle_engine_worker' has no attribute
+  'task_retry_decision'`. **Pre-existing, and deliberately not touched:** `git show
+  HEAD:scripts/kaggle_engine_worker.py` contains zero occurrences of that name, and this work's change
+  to that file is one import line. Repairing it means either writing the missing function or retiring
+  the test - a decision, not a lint fix - and writing the function merely to turn the count green
+  would be manufacturing.
+
+### 2026-10-31 - what this entry does not claim
+
+- **No money has been collected and no pull request has been merged.** The best live candidate
+  remains an open pull request with `mergeStateStatus: BLOCKED`, `reviewDecision: REVIEW_REQUIRED`
+  and an empty status rollup. Takings stay at zero, and the record stays at zero until a bank line
+  says otherwise.
+- **A post-fix delivery run that produces its own pull request has not happened yet.** Everything
+  above proves the pipeline compiles, lints and passes its own contracts; it does not prove a bounty
+  was delivered. That distinction is the whole point of the fence, so it is written down rather than
+  implied.
+- The issue-farm signature check (a repository publishing hundreds of description-less, digest-titled
+  issues) is still not written before dispatch, and the lost job logs on the five mid-step-kill runs
+  are still unrecoverable. Both remain open, and both are named here so that a later reader does not
+  have to discover them the hard way.

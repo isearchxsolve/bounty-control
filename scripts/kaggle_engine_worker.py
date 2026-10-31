@@ -31,7 +31,7 @@ from datetime import datetime, timezone
 from dataclasses import dataclass, field
 from typing import List, Dict, Tuple, Optional, Any, Callable
 from delivery_supervisor import supervise as supervise_delivery, validate_plan as validate_delivery_plan
-from delivery_errors import (ClineBudgetExhausted, ClineDeliverableInvalid, ClineDeliverableMissing,
+from delivery_errors import (ClineDeliverableInvalid, ClineDeliverableMissing,
                              PreparationContractViolation, validate_preparation)
 from fleet_recovery_policy import (
     CLAIM_LEASE_SECONDS, CLAIM_HEARTBEAT_SECONDS, FLEET_LEASE_CHANNEL, RECOVERY_RELEASE, current_claim, event_run,

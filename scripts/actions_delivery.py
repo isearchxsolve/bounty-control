@@ -22,7 +22,7 @@ from bounty_admission import admit, competition, TRUSTED_BOTS
 from bounty_fx import quote
 # The typed failures live in a dependency-free module because the worker has to raise the
 # same classes and must never import this adapter back (it is imported lazily here).
-from delivery_errors import (PREPARATION_ACTIONS, ClineBudgetExhausted, ClineDeliverableInvalid,
+from delivery_errors import (ClineBudgetExhausted, ClineDeliverableInvalid,
                              ClineDeliverableMissing, InfrastructureFault, PreparationRace,
                              RunnerShutdown, validate_preparation)
 
@@ -730,7 +730,7 @@ def engagement_comment(receipt, context, pr_url, head):
     proof and refuses any body carrying payment coordinates (Silo Guide 3.3 / Startup
     Guide 4: rails belong in a private channel after the founder replies).
     """
-    from outreach_report import build_report, MissingEvidence
+    from outreach_report import build_report
     repo = context["repo"]
     number = context["issue_number"]
     rows = receipt.get("verification") or []

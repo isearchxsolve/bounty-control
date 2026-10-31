@@ -69,7 +69,7 @@ class GitHub:
         # 41188694229, four 65-second waits burned the whole headroom and the run died 4 minutes
         # in, before the door had searched at all. Ask GitHub when the window actually resets
         # (the rate_limit endpoint does not consume quota) and wait that long, bounded.
-        remaining = ActionsGitHub.core_reset_seconds()
+        remaining = GitHub.core_reset_seconds()
         if remaining is not None:
             return max(5, min(remaining + 5, 600))
         return 65
@@ -191,7 +191,7 @@ def lease_seconds() -> int:
 
 def _lease_expires_at(claimed_at: str) -> str:
     """Compute lease expiry timestamp from claimed_at."""
-    from datetime import datetime, timezone, timedelta
+    from datetime import datetime, timedelta
     claimed = datetime.fromisoformat(claimed_at.replace("Z", "+00:00"))
     return (claimed + timedelta(seconds=lease_seconds())).isoformat()
 

@@ -67,7 +67,7 @@ def start_gateway(timeout: float = 20.0) -> bool:
             return True
         thread = threading.Thread(target=worker.run_cline_proxy_server, daemon=True)
         thread.start()
-    except Exception as exc:
+    except Exception:
         try:
             import nvidia_openai_proxy
             thread = threading.Thread(target=nvidia_openai_proxy.main, daemon=True)
