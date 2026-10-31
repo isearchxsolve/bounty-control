@@ -2,7 +2,7 @@
   "task_id": "1a36317b4a3aa01207e277e173ee087c",
   "repo": "ldc-developers/ldc",
   "issue_number": 2153,
-  "status": "DISPATCHED",
+  "status": "CLAIMED",
   "dispatch_id": "ec0ae9471a9146b6b6601686ed9adfa2",
   "admission": {
     "funding": {
@@ -78,6 +78,14 @@
     "normal"
   ],
   "dispatched_at": "2026-10-31T02:25:33.914614+00:00",
-  "attempt": 0,
-  "updated_at": "2026-10-31T02:25:35.631929+00:00"
+  "attempt": 1,
+  "updated_at": "2026-10-31T02:25:53.475381+00:00",
+  "owner": "41159950730:1",
+  "previous_owner": null,
+  "previous_status": "DISPATCHED",
+  "run_url": "https://github.com/isearchxsolve/bounty-control/actions/runs/41159950730",
+  "harness_sha": "4c3eefe714d35fcbc24e535ceb466466b27c196d",
+  "claimed_at": "2026-10-31T02:25:53.475328+00:00",
+  "lease_expires_at": "2026-10-31T06:30:53.475343+00:00",
+  "preparation_budget_seconds": 14400
 }
