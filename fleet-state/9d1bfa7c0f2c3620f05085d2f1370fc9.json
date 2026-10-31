@@ -1,0 +1,45 @@
+{
+  "task_id": "9d1bfa7c0f2c3620f05085d2f1370fc9",
+  "repo": "Tyaoo/picker",
+  "issue_number": 567,
+  "status": "DISPATCHING",
+  "dispatch_id": "cd38a5bf56f541c09674dcd764c73e27",
+  "admission": {
+    "funding": {
+      "amount": "500",
+      "currency": "USD",
+      "usd_value": "500",
+      "quote": {
+        "basis": "USD face value"
+      },
+      "raw": "500$",
+      "source_url": "https://github.com/Tyaoo/picker/issues/567",
+      "payer": "Tyaoo"
+    },
+    "technical_signals": [
+      "algorithm",
+      "bug",
+      "bug_bounty",
+      "bypass",
+      "issue",
+      "memory",
+      "performance",
+      "scheduler"
+    ],
+    "component_references": [
+      "ECMWF"
+    ],
+    "source_locations": [],
+    "engineering_evidence_sources": [
+      "https://github.com/Tyaoo/picker/issues/567"
+    ],
+    "source_issue": "https://github.com/Tyaoo/picker/issues/567",
+    "fetched_at": "2026-10-31T05:16:01.648879+00:00"
+  },
+  "lanes": [
+    "founder"
+  ],
+  "dispatched_at": "2026-10-31T05:16:02.690224+00:00",
+  "attempt": 0,
+  "updated_at": "2026-10-31T05:16:02.690237+00:00"
+}
