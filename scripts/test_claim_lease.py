@@ -37,6 +37,10 @@ class FakeAPI:
         self.calls.append((method, path))
         if self.fail:
             raise GitHubError("503 upstream unavailable")
+        if path.endswith('/cancel'):
+            run_id = path.split('/')[-2]
+            self.runs[run_id] = {**self.runs.get(run_id, {}), 'status': 'completed'}
+            return {}
         run_id = path.rstrip("/").rsplit("/", 1)[-1]
         return self.runs.get(run_id, {"status": "in_progress", "created_at": stamp(-60)})
 

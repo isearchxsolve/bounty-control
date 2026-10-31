@@ -10,7 +10,7 @@ from datetime import datetime
 sys.stdout.reconfigure(encoding="utf-8", line_buffering=True)
 
 DOOR = os.environ.get("FLEET_DOOR", "https://omniroute-relay.omniroute-fleet-kd.workers.dev")
-TOKEN = os.environ.get("FLEET_DOOR_TOKEN", "GOLD24")
+TOKEN = os.environ.get("FLEET_DOOR_TOKEN", "")
 FLEET_QUEUE_CHANNEL = "BOUNTY_FLEET_QUEUE_V2"
 FLEET_CLAIM_CHANNEL = "BOUNTY_FLEET_CLAIM"
 FLEET_RESULT_CHANNEL = "BOUNTY_FLEET_RESULT"

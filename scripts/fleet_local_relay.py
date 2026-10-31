@@ -16,7 +16,7 @@ from urllib.parse import parse_qs, urlsplit
 
 HOST = "127.0.0.1"
 PORT = int(os.environ.get("FLEET_RELAY_PORT", "8779"))
-TOKEN = os.environ.get("FLEET_RELAY_TOKEN", "GOLD24")
+TOKEN = os.environ.get("FLEET_RELAY_TOKEN", "")
 DB_PATH = Path(os.environ.get("FLEET_RELAY_DB", r"D:\anonym\war-log\fleet-ledger.sqlite3"))
 ADMIN_TOKEN_FILE = Path(os.environ.get("FLEET_RELAY_ADMIN_TOKEN_FILE", r"D:\anonym\vault\fleet_relay_admin_token.txt"))
 try:
@@ -122,7 +122,7 @@ class Handler(BaseHTTPRequestHandler):
         parsed = urlsplit(self.path)
         values = parse_qs(parsed.query, keep_blank_values=True)
         token = values.get("token", [""])[0]
-        if token != TOKEN:
+        if not TOKEN or not hmac.compare_digest(token, TOKEN):
             self.reply(401, {"ok": False, "err": "unauthorized"})
             return values, ""
         return values, parsed.path

@@ -435,8 +435,7 @@ def sovereign_admission(payload, state, lane=None):
     for source in (payload.get("admission"), (state or {}).get("admission")):
         if isinstance(source, dict) and source:
             return source
-    return {"sovereign": True, "lane": lane, "source": "sovereign entry door",
-            "at": utcnow()}
+    raise ValueError("Admission proof missing; entry door reconsideration required")
 
 
 def sovereign_competition(payload, state):
@@ -450,9 +449,8 @@ def sovereign_competition(payload, state):
         if isinstance(source, str) and source:
             return source
         if isinstance(source, dict) and source:
-            return (source.get("verdict") or
-                    "clear: the entry door found no competing claimant")
-    return "clear: the entry door found no competing claimant"
+            return source.get("verdict") or json.dumps(source, sort_keys=True)
+    raise ValueError("Competition evidence missing; entry door reconsideration required")
 
 
 def claim(event_file):
@@ -478,7 +476,14 @@ def claim(event_file):
     # Sovereign entry door (Baba 2026-10-31): the door and the dispatcher have already run
     # admit() on this exact issue. Re-running it here was the split brain behind 0 published
     # pull requests, so the proof is taken from the door as binding and never re-argued.
-    proof = sovereign_admission(payload, old, lane)
+    from pipeline_evidence import require_evidence
+    if not old or not payload.get("dispatch_id") or old.get("dispatch_id") != payload["dispatch_id"]:
+        raise ValueError("Matching admitted dispatch generation required")
+    proof, _ = require_evidence(old, context)
+    manual = os.environ.get("GITHUB_EVENT_NAME") == "workflow_dispatch"
+    if (payload.get("admission") != proof
+            and not (manual and payload.get("admission") is None)):
+        raise ValueError("Dispatch payload proof differs from durable evidence")
     context["lane"] = proof.get("lane") or lane
     # One competition rule, decided once at the door, keeps a single last-minute race check
     # here. admission's competition() raises on a real claimant and returns on a nominal one;
@@ -494,7 +499,8 @@ def claim(event_file):
         budget_seconds = None
     state = store.claim(repo, number, owner(),
                         f"https://github.com/{store.repo}/actions/runs/{os.environ['GITHUB_RUN_ID']}",
-                        os.environ["GITHUB_SHA"], recovery, budget_seconds=budget_seconds)
+                        os.environ["GITHUB_SHA"], recovery, budget_seconds=budget_seconds,
+                        dispatch_id=payload["dispatch_id"])
     context.update(task_id=identity, admission=proof, competition=competition_verdict,
                    prior_failures=state.get("failures", []),
                    owned_pr=state.get("pr_url"), owned_head=state.get("head_sha"),
@@ -575,6 +581,9 @@ def engineer():
             raise ValueError("Unexpected upstream remote")
         plan = prepared["plan"]
         validate_plan_contract(plan, prepared.get("report_path"))
+        from delivery_supervisor import review_native_plan
+        plan_review = review_native_plan(root, plan, prepared["sources"], artifacts(),
+                                        worker.cline_worktree_command, worker.run_command_safe)
         component = prepared.get("regression_plan", {}).get("component")
         if not component or not isinstance(component, str):
             raise ValueError("Cline must identify the defect component")
@@ -585,6 +594,8 @@ def engineer():
             if not repaired:
                 raise RuntimeError("BLOCKED_BASELINE: " + repair_error)
             validate_plan_contract(plan, prepared.get("report_path"))
+            plan_review = review_native_plan(root, plan, prepared["sources"], artifacts(),
+                                            worker.cline_worktree_command, worker.run_command_safe)
             baseline_ok, diagnostic, baseline = worker.verify_baseline(root, plan)
         if not baseline_ok:
             raise RuntimeError("BLOCKED_BASELINE: " + diagnostic)
@@ -719,7 +730,8 @@ def engineer():
                    "tree_sha": git(root, "rev-parse", "HEAD^{tree}").stdout.decode().strip(),
                    "default_branch": prepared["default_branch"],
                    "base_branch": base_branch, "files": before,
-                   "plan": asdict(plan), "sources": prepared["sources"], "regression": regression,
+                   "plan": asdict(plan), "sources": prepared["sources"], "plan_review": plan_review,
+                   "regression": regression,
                    "baseline": [asdict(r) for r in baseline], "verification": results,
                    "admission": task["admission"], "run_url": state["run_url"], "at": utcnow()}
         write_json(artifacts() / "release.json", receipt)
@@ -774,6 +786,9 @@ def validate_bundle(receipt, bundle, root):
             raise ValueError("Native-plan source citation mismatch")
     plan = SimpleNamespace(**receipt["plan"])
     validate_plan_contract(plan, bundle)
+    from delivery_supervisor import validate_plan_review
+    # SimpleNamespace is used for transport; review validation hashes the same JSON.
+    validate_plan_review(receipt.get("plan_review"), plan, receipt["sources"])
     require_commands(plan.baseline_tests, receipt["baseline"])
     commands = plan.builds + plan.baseline_tests + plan.targeted_tests + plan.final_tests + plan.linters + plan.format_checks
     require_commands(commands, receipt["verification"])
@@ -894,7 +909,8 @@ def publish():
     api, store = GitHub(), StateStore()
     identity, run_owner = receipt["task_id"], owner()
     state, _ = store.read(identity)
-    if not state or state.get("owner") != run_owner or receipt["owner"] != run_owner:
+    if (not state or state.get("owner") != run_owner or receipt["owner"] != run_owner
+            or state.get("owner_revoked") == run_owner):
         raise ValueError("Publication lease ownership lost")
     root = Path(tempfile.mkdtemp()) / "objects"
     repo, number, head = validate_bundle(receipt, artifacts() / "release.bundle", root)
@@ -902,8 +918,10 @@ def publish():
     # Sovereign entry door (Baba 2026-10-31): the funding and status decision was made at the
     # door and travelled with the task. Re-admitting here refused verified work at the last
     # gate, after every expensive test had already passed.
-    admission_proof = (receipt.get("admission") or state.get("admission")
-                       or sovereign_admission({}, state))
+    from pipeline_evidence import require_evidence
+    admission_proof, _ = require_evidence(state, context)
+    if receipt.get("admission") != admission_proof:
+        raise ValueError("Release admission differs from claimed evidence")
     context["lane"] = (admission_proof.get("lane")
                        or ("founder" if "founder" in state.get("lanes", []) else None)
                        or os.environ.get("BOUNTY_LANE"))
@@ -912,7 +930,7 @@ def publish():
     competition(api, repo, number, own_head=state.get("head_sha") or head)
     current_base = api.api(f"repos/{repo}/commits/{receipt.get('base_branch') or receipt['default_branch']}")["sha"]
     if current_base != receipt["base_sha"]:
-        raise ValueError("Upstream base changed after native verification; rebase and reverify before publication")
+        raise PreparationRace(receipt["base_sha"], current_base, [], unknown=True)
     account = api.api("user")["login"]
     name = repo.split("/")[1]
     if not is_self_owned(account, repo):
@@ -932,6 +950,7 @@ def publish():
                        proposed_branch=branch, verified_run=receipt["run_url"])
     subprocess.run(["gh", "auth", "setup-git"], check=True, timeout=30)
     lease = [f"--force-with-lease=refs/heads/{branch}:{prior_head}"] if state.get("pr_number") else []
+    store.assert_owner(identity, run_owner)
     git(root, "push", *lease, f"https://github.com/{account}/{name}.git", head + ":refs/heads/" + branch)
     # Recover a server-acknowledged PR after an earlier client timeout.
     existing = [p for p in api.pages(f"repos/{repo}/pulls", state="open")
@@ -942,22 +961,32 @@ def publish():
     rows = receipt["verification"]
     claim = claim_line(context, number)
     body = pr_body(context, number, receipt, head, rows, claim)
+    claim_status = "NOT_APPLICABLE" if not claim else "SUBMISSION_PENDING"
     if existing:
         pr = api.api(f"repos/{repo}/pulls/{existing[0]['number']}", "PATCH", {"body": body})
         if claim:
             # An edited body is not a new creation, so an already-open PR is claimed by comment.
-            post_claim(api, repo, pr["number"], claim)
+            claim_status = ("SUBMITTED_UNCONFIRMED" if post_claim(api, repo, pr["number"], claim)
+                            else "SUBMISSION_FAILED")
     else:
         competition(api, repo, number)
+        store.assert_owner(identity, run_owner)
         pr = api.api(f"repos/{repo}/pulls", "POST",
                      {"head": account + ":" + branch,
                       "base": receipt.get("base_branch") or context["repository"]["default_branch"],
                       "title": f"fix: #{number} - {context['title']}", "body": body})
+        if claim:
+            claim_status = "SUBMITTED_UNCONFIRMED"
     store.owned_update(identity, run_owner, status="PUBLISHED_PENDING_CHECKS", pr_url=pr["html_url"],
                        pr_number=pr["number"], head_sha=head, branch=branch,
+                       claim_status=claim_status, claim_command=claim,
+                       claim_retry_required=claim_status == "SUBMISSION_FAILED",
+                       payment_status="UNVERIFIED",
                        release_digest=hashlib.sha256((artifacts() / "release.json").read_bytes()).hexdigest())
     write_json(artifacts() / "publication.json", {"status": "PUBLISHED_PENDING_CHECKS", "pr_url": pr["html_url"],
-                                               "head_sha": head, "at": utcnow()})
+                                               "head_sha": head, "claim_status": claim_status,
+                                               "claim_retry_required": claim_status == "SUBMISSION_FAILED",
+                                               "payment_status": "UNVERIFIED", "at": utcnow()})
     try:
         engagement_comment(receipt, context, pr["html_url"], head)
     except (GitHubError, OSError, ValueError) as exc:
@@ -988,12 +1017,12 @@ def terminal_result(folder, job_status):
     """
     folder = Path(folder)
     result_file = folder / "engineering-result.json"
-    if result_file.exists():
-        return read_json(result_file)
-    for phase in ("engineer", "publish"):
+    for phase in ("publish", "engineer"):
         failure = folder / (phase + "-failure.json")
         if failure.exists():
             return read_json(failure)
+    if result_file.exists():
+        return read_json(result_file)
     if job_status != "success":
         return {"status": "FAILED_RUNNER_SHUTDOWN", "kind": "runner_shutdown",
                 "retryable": True, "inferred": True,

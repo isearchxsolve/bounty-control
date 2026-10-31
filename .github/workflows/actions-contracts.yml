@@ -1,5 +1,9 @@
 name: Actions migration contracts
 'on':
+  pull_request:
+    paths:
+    - scripts/**
+    - .github/workflows/**
   push:
     paths:
     - scripts/**
@@ -21,10 +25,19 @@ jobs:
 
           /.gitmodules'
         sparse-checkout-cone-mode: false
+    - name: Import the deployed pipeline package and its dependencies
+      env:
+        FLEET_SANDBOX_DIR: ${{ runner.temp }}/bounty-import-sandbox
+        FLEET_ARTIFACT_DIR: ${{ runner.temp }}/bounty-import-artifacts
+      run: |
+        python3 -c "import sys; sys.path.insert(0, 'scripts'); import actions_dispatch, actions_delivery, actions_reconcile, agent_door, cline_entry_door, sovereign_discovery, pipeline_evidence, check_tracked_secrets"
     - name: Compile platform adapters
       run: python3 -W error -m py_compile scripts/actions_github.py scripts/actions_dispatch.py scripts/actions_delivery.py scripts/actions_reconcile.py
         scripts/actions_release.py scripts/bounty_admission.py scripts/bounty_fx.py scripts/kaggle_engine_worker.py scripts/delivery_supervisor.py
         scripts/discovery_heartbeat.py scripts/delivery_errors.py scripts/f11_refusal_census.py scripts/failure_digest.py
+        scripts/agent_door.py scripts/cline_entry_door.py scripts/pipeline_evidence.py scripts/sovereign_discovery.py
+    - name: Refuse credential literals without exposing their values
+      run: python3 scripts/check_tracked_secrets.py
     - name: Refuse undefined names on the scheduled pipeline modules
       # F821 is the lint class that reaches production as a crash: run 40876500657 died with
       # "name 'report_path' is not defined" the first time any run reached that line. Scoped to
@@ -37,7 +50,8 @@ jobs:
           scripts/actions_reconcile.py scripts/actions_release.py scripts/bounty_admission.py \
           scripts/bounty_fx.py scripts/kaggle_engine_worker.py scripts/delivery_supervisor.py \
           scripts/delivery_errors.py scripts/discovery_heartbeat.py scripts/failure_digest.py \
-          scripts/f11_refusal_census.py
+          scripts/f11_refusal_census.py scripts/agent_door.py scripts/cline_entry_door.py \
+          scripts/pipeline_evidence.py scripts/sovereign_discovery.py
     - name: Test migration contracts and unchanged master suites
       env:
         PYTHONIOENCODING: utf-8
@@ -132,3 +146,10 @@ jobs:
         python3 -W error scripts/test_search_planner.py
 
         python3 -W error scripts/test_planner_attribution.py'
+
+    - name: Sovereign handoff and forensic incident regressions
+      run: |
+        set -euo pipefail
+        for suite in test_agent_door.py test_agent_queue.py test_cline_entry_door.py test_sovereign_stamps.py test_sovereign_delivery.py test_pipeline_repairs.py; do
+          python3 -W error -m unittest discover -s scripts -p "$suite"
+        done

@@ -50,7 +50,7 @@ os.makedirs(PACKET_DIR, exist_ok=True)
 os.makedirs(SANDBOX_DIR, exist_ok=True)
 
 FLEET_DOOR = os.environ.get("FLEET_DOOR", "https://omniroute-relay.omniroute-fleet-kd.workers.dev")
-FLEET_DOOR_TOKEN = os.environ.get("FLEET_DOOR_TOKEN", "GOLD24")
+FLEET_DOOR_TOKEN = os.environ.get("FLEET_DOOR_TOKEN", "")
 FLEET_QUEUE_CHANNEL = "BOUNTY_FLEET_QUEUE_V2"
 # The laptop owns search and dispatch. Repository execution runs in the Kaggle worker.
 REMOTE_FLEET_MODE = True

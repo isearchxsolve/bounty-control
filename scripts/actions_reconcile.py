@@ -2,6 +2,8 @@
 import argparse
 from datetime import datetime, timezone
 import json
+import os
+from pathlib import Path
 import time
 
 from actions_github import BOUNTY_ACCOUNT, GitHub, GitHubError, StateStore, utcnow
@@ -23,6 +25,7 @@ def _release(store, record, status, diagnostic, **fields):
         if not old or old.get("updated_at") != expected:
             raise ValueError("Concurrent state change; sweep deferred")
         return {**old, **fields, "status": status, "diagnostic": diagnostic,
+                "owner_revoked": record.get("owner"),
                 "observed_at": utcnow()}
 
     state = store.mutate(identity, update)
@@ -30,7 +33,7 @@ def _release(store, record, status, diagnostic, **fields):
             "swept": bool(fields.get("swept")), "at": utcnow()}
 
 
-def sweep_stale_runs(api, store, job_timeout_seconds=None, cancel_wait_seconds=5):
+def sweep_stale_runs(api, store, job_timeout_seconds=None, cancel_wait_seconds=5, records=None):
     """F5: release tasks whose owning run has outlived its own job window.
 
     A record is swept only on proof, never on absence of life:
@@ -49,50 +52,66 @@ def sweep_stale_runs(api, store, job_timeout_seconds=None, cancel_wait_seconds=5
     timeout = DEFAULT_JOB_TIMEOUT_SECONDS if job_timeout_seconds is None else int(job_timeout_seconds)
     limit = timeout + SWEEP_GRACE_SECONDS
     receipts = []
-    for record in store.records() or ():
-        if record.get("status") not in ACTIVE_STATUSES:
-            continue
-        run_id = str(record.get("owner") or "").split(":")[0]
-        if not run_id.isdigit():
-            receipts.append(_release(
-                store, record, "FAILED_MISSING_TERMINAL_RECEIPT",
-                "Claim owner is missing or malformed; refusing to guess a run", swept=False))
-            continue
+    for record in (store.records() if records is None else records) or ():
         try:
-            run = api.api(f"repos/{store.repo}/actions/runs/{run_id}")
-        except GitHubError:
-            continue  # unknown is never proof of death
-        if run.get("status") == "completed":
-            continue  # the existing completed-run branch owns this case
-        started = run.get("created_at") or run.get("run_started_at")
-        if not started:
-            started = record.get("claimed_at")
-        if not started:
-            continue  # no clock to measure: refuse to guess an age
-        try:
-            age = (datetime.now(timezone.utc)
-                   - datetime.fromisoformat(str(started).replace("Z", "+00:00"))).total_seconds()
-        except ValueError:
-            continue
-        if age <= limit:
-            continue
-        try:
-            api.api(f"repos/{store.repo}/actions/runs/{run_id}/cancel", "POST", {})
-        except GitHubError:
-            pass  # the release below is still correct: the run is past its budget
-        deadline = time.time() + max(0.0, float(cancel_wait_seconds))
-        while time.time() < deadline:
-            time.sleep(min(1.0, max(0.0, deadline - time.time())))
+            if record.get("status") not in ACTIVE_STATUSES:
+                continue
+            run_id = str(record.get("owner") or "").split(":")[0]
+            if not run_id.isdigit():
+                receipts.append(_release(
+                    store, record, "FAILED_MISSING_TERMINAL_RECEIPT",
+                    "Claim owner is missing or malformed; refusing to guess a run", swept=False))
+                continue
             try:
-                if api.api(f"repos/{store.repo}/actions/runs/{run_id}").get("status") == "completed":
-                    break
+                run = api.api(f"repos/{store.repo}/actions/runs/{run_id}")
             except GitHubError:
-                break
-        receipts.append(_release(
-            store, record, "FAILED_RUNNER_SHUTDOWN",
-            f"Run {run_id} outlived the {timeout}s job timeout (age {int(age)}s); cancelled and released",
-            swept=True, swept_run=run_id, job_timeout_seconds=timeout,
-            takeover_reason="stale run exceeded job timeout and grace"))
+                continue  # unknown is never proof of death
+            if run.get("status") == "completed":
+                continue  # the existing completed-run branch owns this case
+            started = record.get("claimed_at") or run.get("run_started_at")
+            if not started:
+                started = record.get("claimed_at")
+            if not started:
+                continue  # no clock to measure: refuse to guess an age
+            try:
+                age = (datetime.now(timezone.utc)
+                       - datetime.fromisoformat(str(started).replace("Z", "+00:00"))).total_seconds()
+            except ValueError:
+                continue
+            if age <= limit:
+                continue
+            try:
+                api.api(f"repos/{store.repo}/actions/runs/{run_id}/cancel", "POST", {})
+            except GitHubError:
+                print(json.dumps({"phase": "CANCELLATION_UNCONFIRMED", "task_id": record["task_id"]}), flush=True)
+                continue
+            confirmed_dead = False
+            try:
+                confirmed_dead = api.api(f"repos/{store.repo}/actions/runs/{run_id}").get("status") == "completed"
+            except GitHubError:
+                pass
+            deadline = time.time() + max(0.0, float(cancel_wait_seconds))
+            while not confirmed_dead and time.time() < deadline:
+                time.sleep(min(1.0, max(0.0, deadline - time.time())))
+                try:
+                    if api.api(f"repos/{store.repo}/actions/runs/{run_id}").get("status") == "completed":
+                        confirmed_dead = True
+                        break
+                except GitHubError:
+                    break
+            if not confirmed_dead:
+                print(json.dumps({"phase": "CANCELLATION_UNCONFIRMED", "task_id": record["task_id"]}), flush=True)
+                continue
+            receipts.append(_release(
+                store, record, "FAILED_RUNNER_SHUTDOWN",
+                f"Run {run_id} outlived the {timeout}s job timeout (age {int(age)}s); cancelled and released",
+                swept=True, swept_run=run_id, job_timeout_seconds=timeout,
+                takeover_reason="stale run exceeded job timeout and grace"))
+        except (GitHubError, ValueError, KeyError, TypeError, OSError) as exc:
+            receipt = {"task_id": record.get("task_id"), "phase": "RECONCILE_DEFERRED",
+                       "diagnostic": str(exc), "at": utcnow()}
+            receipts.append(receipt)
+            print(json.dumps(receipt), flush=True)
     return receipts
 
 
@@ -131,70 +150,107 @@ def reconcile(repair=False, api=None, store=None):
     api, store = api or GitHub(), store or StateStore()
     # F5: the sweeper runs before the existing branches, so a run that outlived its own job
     # window is released rather than left pinned in CLAIMED forever.
-    receipts = list(sweep_stale_runs(api, store))
-    for record in store.records() or ():
-        status = record["status"]
-        fields = {}
-        if status in ("DISPATCHING", "DISPATCHED"):
-            age = (datetime.now(timezone.utc) - datetime.fromisoformat(record["dispatched_at"])).total_seconds()
-            if age > 1800:
-                runs = api.api(f"repos/{store.repo}/actions/runs?per_page=100")["workflow_runs"]
-                matching = [r for r in runs if record["task_id"] in r.get("display_title", "")]
-                if not matching:
-                    fields = {"status": "FAILED_DISPATCH", "diagnostic": "Dispatch acknowledgement timeout: no Actions run observed"}
-        elif status in ("CLAIMED", "ENGINEERING", "VERIFIED", "PUBLISHING"):
-            run = api.api(f"repos/{store.repo}/actions/runs/{record['owner'].split(':')[0]}")
-            if run["status"] == "completed":
-                fields = {"status": "FAILED_MISSING_TERMINAL_RECEIPT", "diagnostic":
-                          f"Actions run completed ({run['conclusion']}) without terminal callback; artifacts retained",
-                          "run_url": run["html_url"]}
-        # Reconcile a server-acknowledged PR after a transport/callback failure.
-        if (status.startswith("FAILED") or status == "PUBLISHING") and record.get("proposed_head"):
-            matches = [p for p in api.pages(f"repos/{record['repo']}/pulls", state="open")
-                       if p["head"]["sha"] == record["proposed_head"]
-                       and p["head"]["repo"] and p["head"]["repo"]["owner"]["login"] == BOUNTY_ACCOUNT]
-            if len(matches) == 1:
-                fields = {"status": "PUBLISHED_PENDING_CHECKS", "head_sha": record["proposed_head"],
-                          "pr_number": matches[0]["number"], "pr_url": matches[0]["html_url"],
-                          "branch": matches[0]["head"]["ref"], "publication_recovered": True}
-        if status in ("PUBLISHED_PENDING_CHECKS", "AWAITING_REVIEW", "FAILED_REMOTE_CHECKS"):
-            pr = api.api(f"repos/{record['repo']}/pulls/{record['pr_number']}")
-            if pr["head"]["sha"] != record["head_sha"]:
-                fields = {"status": "BLOCKED_HEAD_CHANGED", "diagnostic": "Owned PR head differs from verified receipt"}
-            elif pr.get("merged"):
-                fields = {"status": "DELIVERED", "merged_at": pr["merged_at"], "pr_url": pr["html_url"]}
-            elif pr["state"] == "closed":
-                fields = {"status": "CLOSED_UNMERGED", "pr_url": pr["html_url"]}
-            else:
-                proof = classify_checks(api, record["repo"], record["head_sha"])
-                fields = {"status": "FAILED_REMOTE_CHECKS" if proof["failures"] else
-                          "PUBLISHED_PENDING_CHECKS" if proof["state"] == "PENDING" else "AWAITING_REVIEW",
-                          "remote_verification": proof}
-                if proof["failures"]:
-                    fields["failures"] = [*record.get("failures", []), proof]
-        if not fields:
-            continue
-        identity = record["task_id"]
-        def update(old):
-            if not old or old.get("updated_at") != record.get("updated_at"):
-                raise ValueError("Concurrent state change; reconciliation deferred")
-            return {**old, **fields, "observed_at": utcnow()}
-        state = store.mutate(identity, update)
-        receipt = {"task_id": identity, "previous": status, "status": state["status"], "at": utcnow()}
-        if repair and state["status"] == "FAILED_REMOTE_CHECKS" and int(state.get("attempt", 0)) < 3:
-            from actions_dispatch import dispatch
-            from bounty_admission import admit, competition
-            from bounty_fx import quote
-            context = api.issue_context(state["repo"], state["issue_number"])
-            proof, reason = admit(context, quote=quote)
-            if proof:
-                competition(api, state["repo"], state["issue_number"], own_head=state["head_sha"])
-                dispatch(api, store, context, proof, state.get("lanes", []), remote_repair=True)
-                receipt["repair"] = "DISPATCHED"
-            else:
-                receipt["repair_blocked"] = reason
-        receipts.append(receipt)
-        print(json.dumps(receipt), flush=True)
+    records = list(store.records() or ())
+    receipts = list(sweep_stale_runs(api, store, records=records))
+    swept_ids = {r["task_id"] for r in receipts if r.get("swept")}
+    observed = {r.get("task_id"): dict(r) for r in records}
+    for record in records:
+        try:
+            if record.get("task_id") in swept_ids:
+                continue
+            status = record["status"]
+            fields = {}
+            if status in ("DISPATCHING", "DISPATCHED"):
+                age = (datetime.now(timezone.utc) - datetime.fromisoformat(record["dispatched_at"])).total_seconds()
+                if age > 1800:
+                    runs = api.workflow_runs(store.repo)
+                    generation = record.get("dispatch_id")
+                    matching = [r for r in runs if generation and generation in r.get("display_title", "")]
+                    if not matching:
+                        fields = {"status": "FAILED_DISPATCH", "diagnostic": "Dispatch acknowledgement timeout: no Actions run observed"}
+                    elif all(r.get("status") == "completed" for r in matching):
+                        fields = {"status": "FAILED_DISPATCH", "diagnostic":
+                                  "Dispatch run completed without acquiring ownership", "owner_revoked": record.get("owner")}
+            elif status in ("CLAIMED", "ENGINEERING", "VERIFIED", "PUBLISHING"):
+                run = api.api(f"repos/{store.repo}/actions/runs/{record['owner'].split(':')[0]}")
+                if run["status"] == "completed":
+                    fields = {"status": "FAILED_MISSING_TERMINAL_RECEIPT", "diagnostic":
+                              f"Actions run completed ({run['conclusion']}) without terminal callback; artifacts retained",
+                              "run_url": run["html_url"]}
+            # Reconcile a server-acknowledged PR after a transport/callback failure.
+            if (status.startswith("FAILED") or status == "PUBLISHING") and record.get("proposed_head"):
+                matches = [p for p in api.pages(f"repos/{record['repo']}/pulls", state="open")
+                           if p["head"]["sha"] == record["proposed_head"]
+                           and p["head"]["repo"] and p["head"]["repo"]["owner"]["login"] == BOUNTY_ACCOUNT]
+                if len(matches) == 1:
+                    fields = {"status": "PUBLISHED_PENDING_CHECKS", "head_sha": record["proposed_head"],
+                              "pr_number": matches[0]["number"], "pr_url": matches[0]["html_url"],
+                              "branch": matches[0]["head"]["ref"], "publication_recovered": True}
+            if status in ("PUBLISHED_PENDING_CHECKS", "AWAITING_REVIEW", "FAILED_REMOTE_CHECKS"):
+                pr = api.api(f"repos/{record['repo']}/pulls/{record['pr_number']}")
+                if pr["head"]["sha"] != record["head_sha"]:
+                    fields = {"status": "BLOCKED_HEAD_CHANGED", "diagnostic": "Owned PR head differs from verified receipt"}
+                elif pr.get("merged"):
+                    fields = {"status": "DELIVERED", "merged_at": pr["merged_at"], "pr_url": pr["html_url"],
+                              "payment_status": record.get("payment_status", "UNVERIFIED"),
+                              "claim_status": record.get("claim_status", "UNVERIFIED")}
+                elif pr["state"] == "closed":
+                    fields = {"status": "CLOSED_UNMERGED", "pr_url": pr["html_url"]}
+                else:
+                    proof = classify_checks(api, record["repo"], record["head_sha"])
+                    fields = {"status": "FAILED_REMOTE_CHECKS" if proof["failures"] else
+                              "PUBLISHED_PENDING_CHECKS" if proof["state"] == "PENDING" else "AWAITING_REVIEW",
+                              "remote_verification": proof}
+                    if proof["failures"]:
+                        fields["failures"] = [*record.get("failures", []), proof]
+            if not fields:
+                continue
+            identity = record["task_id"]
+            def update(old):
+                if not old or old.get("updated_at") != record.get("updated_at"):
+                    raise ValueError("Concurrent state change; reconciliation deferred")
+                return {**old, **fields, "observed_at": utcnow()}
+            state = store.mutate(identity, update)
+            observed[identity] = state
+            receipt = {"task_id": identity, "previous": status, "status": state["status"], "at": utcnow()}
+            if repair and state["status"] == "FAILED_REMOTE_CHECKS" and int(state.get("attempt", 0)) < 3:
+                from actions_dispatch import dispatch
+                from bounty_admission import competition
+                from pipeline_evidence import require_evidence
+                context = api.issue_context(state["repo"], state["issue_number"])
+                try:
+                    proof, verdict = require_evidence(state, context)
+                    competition(api, state["repo"], state["issue_number"], own_head=state["head_sha"])
+                    dispatch(api, store, context, proof, state.get("lanes", []), remote_repair=True,
+                             sovereign_admission=True, competition=verdict)
+                    receipt["repair"] = "DISPATCHED"
+                except ValueError as exc:
+                    receipt["repair_blocked"] = str(exc)
+
+            receipts.append(receipt)
+            print(json.dumps(receipt), flush=True)
+        except (GitHubError, ValueError, KeyError, TypeError, OSError) as exc:
+            receipt = {"task_id": record.get("task_id"), "phase": "RECONCILE_DEFERRED",
+                       "diagnostic": str(exc), "at": utcnow()}
+            receipts.append(receipt)
+            print(json.dumps(receipt), flush=True)
+    for receipt in receipts:
+        if receipt.get("status") and receipt.get("task_id") in observed:
+            observed[receipt["task_id"]]["status"] = receipt["status"]
+    followups = [{"task_id": r.get("task_id"), "pr_url": r.get("pr_url"),
+                  "claim_status": r.get("claim_status", "UNVERIFIED"),
+                  "claim_retry_required": r.get("claim_retry_required", False),
+                  "payment_status": r.get("payment_status", "UNVERIFIED")}
+                 for r in observed.values() if r.get("pr_url")]
+    report = {"at": utcnow(), "receipts": receipts, "followup_obligations": followups,
+              "recorded_prs": len(followups),
+              "recorded_merges": sum(r.get("status") == "DELIVERED" for r in observed.values()),
+              "observation_errors": sum(r.get("phase") == "RECONCILE_DEFERRED" for r in receipts)}
+    if os.environ.get("BOUNTY_STATE_DIR"):
+        folder = Path(os.environ["BOUNTY_STATE_DIR"])
+        folder.mkdir(parents=True, exist_ok=True)
+        (folder / "reconciliation.json").write_text(json.dumps(report, indent=2), encoding="utf-8")
+    print(json.dumps({"phase": "RECONCILIATION_SUMMARY", **report}), flush=True)
     return receipts
 
 

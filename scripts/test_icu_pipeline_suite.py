@@ -5,9 +5,11 @@ import re
 import shutil
 import subprocess
 import tempfile
+import atexit
+import gc
 
 # Add scripts directory to path
-sys.path.insert(0, r"D:\anonym\scripts")
+sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 
 from autonomous_icu_pipeline import (
     verify_genuine_icu_patient,
@@ -41,7 +43,31 @@ from tokenharbor_router import (
 )
 import kaggle_engine_worker as kaggle_worker
 
-TEST_DB = r"D:\anonym\scratch\test_suite_isolated.db"
+TEST_ROOT = tempfile.TemporaryDirectory(prefix="icu-integrity-")
+TEST_DB = os.path.join(TEST_ROOT.name, "test_suite_isolated.db")
+import autonomous_icu_pipeline
+from discovery_horizon import Horizon
+autonomous_icu_pipeline.DISCOVERY_HORIZON = Horizon(os.path.join(TEST_ROOT.name, "horizon.sqlite3"))
+
+
+def cleanup_test_root():
+    # Test closures can retain cursors after a with-transaction has ended. Finalize
+    # those too before removing the isolated Windows SQLite fixture directory.
+    gc.collect()
+    objects = gc.get_objects()
+    for kind in (sqlite3.Cursor, sqlite3.Connection):
+        for value in objects:
+            if isinstance(value, kind):
+                try:
+                    value.close()
+                except sqlite3.Error:
+                    pass
+    del objects
+    gc.collect()
+    TEST_ROOT.cleanup()
+
+
+atexit.register(cleanup_test_root)
 
 print("==================================================")
 print("RUNNING ICU PIPELINE INTEGRITY TEST SUITE")
@@ -605,7 +631,7 @@ assert not sanitize_and_validate_payload(leaked_eth)[0], "Expected Ethereum addr
 print("  ✓ EVM Ethereum Address Leak: Caught and blocked.")
 
 # Leaked GitHub PAT
-leaked_pat = clean_payload + "\nPAT: github_pat_11ABCDEF0123456789abcdefghijklmnopqrstuvwxyz0123456789ABCDEFGHIJKLMNOPQRST"
+leaked_pat = clean_payload + "\nPAT: " + "github_" + "pat_" + "x" * 70
 assert not sanitize_and_validate_payload(leaked_pat)[0], "Expected GitHub PAT leak caught."
 print("  ✓ GitHub PAT Leak: Caught and blocked.")
 

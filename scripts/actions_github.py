@@ -49,8 +49,9 @@ def utcnow():
 
 
 class GitHub:
-    def __init__(self, token=None):
+    def __init__(self, token=None, deadline=None):
         self.token = token or os.environ.get("GH_TOKEN") or os.environ.get("GITHUB_TOKEN")
+        self.deadline = deadline
 
     THROTTLE = re.compile(r"rate limit exceeded|secondary rate limit|abuse detection", re.I)
     THROTTLE_TRIES = 4
@@ -102,15 +103,25 @@ class GitHub:
         if self.token:
             environment["GH_TOKEN"] = self.token
         message = ""
+        deadline = min(self.deadline or float("inf"), time.monotonic() + 180)
         for attempt in range(self.THROTTLE_TRIES):
-            result = subprocess.run(command, input=encoded, capture_output=True, timeout=90, env=environment)
+            remaining = deadline - time.monotonic()
+            if remaining <= 0:
+                raise GitHubError("GitHub observation deadline exhausted: " + endpoint[:160])
+            try:
+                result = subprocess.run(command, input=encoded, capture_output=True,
+                                        timeout=min(90, remaining), env=environment)
+            except (OSError, subprocess.TimeoutExpired) as exc:
+                raise GitHubError("GitHub transport failed: " + str(exc)) from exc
             if not result.returncode:
                 return json.loads(result.stdout) if result.stdout.strip() else None
             # gh itself masks authentication; do not include body/environment.
             message = result.stderr.decode("utf-8", errors="replace")[-1500:]
             if not self.THROTTLE.search(message) or attempt + 1 >= self.THROTTLE_TRIES:
                 raise GitHubError(message)
-            wait = self.throttle_wait(message)
+            wait = self.rate_limit_wait(endpoint, message, environment)
+            if wait >= deadline - time.monotonic():
+                raise GitHubError("GitHub throttle exceeds remaining observation budget: " + message)
             # A transient ceiling is not a failure of the lane: wait it out and
             # retry, and say so on the wire so a slow run is never mistaken for a
             # hung one.
@@ -118,6 +129,23 @@ class GitHub:
                               "attempt": attempt + 1, "wait_s": wait}), flush=True)
             time.sleep(wait)
         raise GitHubError(message)
+
+    @staticmethod
+    def rate_limit_wait(endpoint, message, environment):
+        explicit = re.search(r"retry.after[:= ]+(\d+)", message, re.I)
+        if explicit:
+            return max(1, int(explicit.group(1)))
+        resource = "search" if endpoint.startswith("search/") else "graphql" if endpoint == "graphql" else "core"
+        try:
+            done = subprocess.run(["gh", "api", "rate_limit"], capture_output=True,
+                                  timeout=10, env=environment)
+            if done.returncode == 0:
+                observed = json.loads(done.stdout)["resources"][resource]
+                if observed["remaining"] == 0:
+                    return max(1, int(observed["reset"] - time.time()) + 1)
+        except (OSError, subprocess.TimeoutExpired, ValueError, KeyError, TypeError):
+            pass
+        return 65
 
     def pages(self, endpoint, **params):
         """Require complete pagination; a failed page never means empty supply."""
@@ -127,6 +155,20 @@ class GitHub:
             if not isinstance(rows, list):
                 raise GitHubError("Expected paginated GitHub array")
             yield from rows
+
+    def workflow_runs(self, repo, status=None):
+        """Complete delivery-workflow run observations, not a mixed 100-run window."""
+        rows, page = [], 1
+        while True:
+            params = {"per_page": 100, "page": page}
+            if status:
+                params["status"] = status
+            result = self.api(f"repos/{repository(repo)}/actions/workflows/engine2.yml/runs?" + urlencode(params))
+            batch = result["workflow_runs"]
+            rows.extend(batch)
+            if len(batch) < 100:
+                return rows
+            page += 1
 
     def issue_context(self, repo, number):
         repo, number = repository(repo), issue_number(number)
@@ -280,10 +322,19 @@ class StateStore:
                 time.sleep(min(attempt + 1, 4))
         raise GitHubError("State compare-and-swap exhausted")
 
-    def claim(self, repo, number, owner, run_url, harness_sha, recovery=False, budget_seconds=None):
+    def claim(self, repo, number, owner, run_url, harness_sha, recovery=False, budget_seconds=None,
+              dispatch_id=None):
         identity = task_id(repo, number)
         def reserve(old):
             old = old or {"task_id": identity, "repo": repo, "issue_number": number, "attempt": 0}
+            if dispatch_id is not None and old.get("dispatch_id") != dispatch_id:
+                raise ValueError("Dispatch generation mismatch")
+            if (dispatch_id is not None and old.get("status") not in ("DISPATCHING", "DISPATCHED")
+                    and not (old.get("status") == "CLAIMED" and old.get("owner") == owner)
+                    and not recovery):
+                raise ValueError("Dispatch generation is not claimable")
+            if old.get("owner_revoked") == owner:
+                raise ValueError("Task ownership revoked")
             if old.get("status") == "DELIVERED":
                 raise ValueError("Task already delivered")
             if old.get("status") in ("PUBLISHED_PENDING_CHECKS", "AWAITING_REVIEW"):
@@ -330,10 +381,17 @@ class StateStore:
 
     def owned_update(self, identity, owner, **fields):
         def update(old):
-            if not old or old.get("owner") != owner:
+            if not old or old.get("owner") != owner or old.get("owner_revoked") == owner:
                 raise ValueError("Task ownership lost")
             return {**old, **fields}
         return self.mutate(identity, update)
+
+    def assert_owner(self, identity, owner):
+        record, _ = self.read(identity)
+        if (not record or record.get("owner") != owner
+                or record.get("owner_revoked") == owner):
+            raise ValueError("Task ownership lost")
+        return record
 
     def records(self):
         try:
@@ -350,5 +408,10 @@ class StateStore:
             raise GitHubError("Durable state tree truncated; reconciliation must be partitioned")
         for entry in tree["tree"]:
             if re.fullmatch(r"[a-f0-9]{32}\.json", entry["path"]):
-                record, _ = self.read(entry["path"][:-5])
-                yield record
+                try:
+                    record, _ = self.read(entry["path"][:-5])
+                    if record:
+                        yield record
+                except (GitHubError, ValueError, KeyError, TypeError, OSError) as exc:
+                    print(json.dumps({"phase": "STATE_OBSERVATION_ERROR", "task_id": entry["path"][:-5],
+                                      "diagnostic": str(exc)}), flush=True)

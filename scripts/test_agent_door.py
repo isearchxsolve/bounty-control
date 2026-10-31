@@ -50,7 +50,8 @@ class DoorFailsClosed(unittest.TestCase):
 
 
 class DoorReturnsWhatTheGateAdmitted(unittest.TestCase):
-    def test_rows_come_from_admitted_only(self):
+    @mock.patch.object(agent_door.cline_entry_door, "ingest_founder_watch_leads", return_value=[])
+    def test_rows_come_from_admitted_only(self, _leads):
         admitted = [{"repo": "a/b", "issue": 1}]
         outcome = {"admitted": admitted, "refused": [{"reason": "X"}], "history": [{"round": 1}]}
         with mock.patch.dict(os.environ, {"BOUNTY_ENTRY_DOOR": "cline"}, clear=False):

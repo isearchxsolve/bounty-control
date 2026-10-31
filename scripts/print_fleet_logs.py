@@ -7,7 +7,7 @@ from datetime import datetime
 sys.stdout.reconfigure(encoding="utf-8", line_buffering=True)
 
 door = "https://omniroute-relay.omniroute-fleet-kd.workers.dev"
-token = "GOLD24"
+token = os.environ.get("FLEET_DOOR_TOKEN", "")
 
 def fetch(body, limit=10):
     try:

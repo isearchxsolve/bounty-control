@@ -38,10 +38,8 @@ jobs:
       continue-on-error: true
       run: python3 -u scripts/actions_reconcile.py --repair
     - name: Search all lanes and dispatch qualified originals
-      # NVIDIA_API_KEY is scoped to this one step: the search planner and the agent door's
-      # local gateway are the only readers. BOUNTY_ENTRY_DOOR=cline puts the agent in front of
-      # the search (law 85); the static lanes above have already run, so a door failure costs
-      # time and nothing else. Wedge the variable to 'off' to disable the door entirely.
+      # The production entry door chooses sources and supplies cited decisions. The
+      # host verifies their evidence and streams them to generation-fenced dispatch.
       env:
         TOKENHARBOR_KEYS_JSON: ${{ secrets.TOKENHARBOR_KEYS_JSON }}
         NVIDIA_API_KEY: ${{ secrets.NVIDIA_API_KEY }}
@@ -49,10 +47,22 @@ jobs:
         BOUNTY_ENTRY_MODEL: ${{ vars.ENTRY_MODEL || 'deepseek-v4.1-flash:free' }}
         TOKENHARBOR_MODEL: 'deepseek-v4.1-flash:free'
         NVIDIA_MODEL: ${{ vars.NVIDIA_MODEL || 'deepseek-v4.1-flash:free' }}
-        BOUNTY_AGENT_WORKSPACE: /tmp/bounty-agent
         BOUNTY_AGENT_ROUNDS: '2'
         BOUNTY_AGENT_TIMEOUT: '800'
       run: python3 -u scripts/actions_dispatch.py --live --once --queries-per-lane 3 --max-dispatches 2 --lane ${{ vars.ACTIVE_LANES || 'all' }}
+    - name: Observe published PR review and conversion receipts
+      continue-on-error: true
+      timeout-minutes: 3
+      env:
+        BOUNTY_ACCOUNT: ${{ github.repository_owner }}
+      run: |
+        status=0
+        python3 -u scripts/pr_conversion_watch.py --author "$BOUNTY_ACCOUNT" --limit 20 --out "$BOUNTY_STATE_DIR/pr-conversion" || status=$?
+        if [ "$status" -eq 2 ]; then
+          echo "Published PRs have follow-up obligations; receipts retained."
+        else
+          exit "$status"
+        fi
     - uses: actions/cache/save@v4
       if: always()
       with:

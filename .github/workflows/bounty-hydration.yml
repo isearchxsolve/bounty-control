@@ -3,7 +3,7 @@ name: Bounty hydration drain
   # Retired schedule to preserve 100% of API quota for sovereign discovery & delivery
   workflow_dispatch: {}
 concurrency:
-  group: bounty-hydration
+  group: bounty-discovery
   cancel-in-progress: false
 permissions:
   contents: write

@@ -21,6 +21,7 @@ import unittest
 from unittest import mock
 
 import actions_delivery as delivery
+from pipeline_evidence import bind_proof
 
 
 class FakeGitHub:
@@ -43,7 +44,7 @@ class FakeStore:
     def read(self, identity):
         return self.previous, None
 
-    def claim(self, repo, number, owner, run_url, sha, recovery, budget_seconds=None):
+    def claim(self, repo, number, owner, run_url, sha, recovery, budget_seconds=None, dispatch_id=None):
         self.claimed = {"repo": repo, "number": number, "owner": owner}
         return {"owner": owner, "attempt": 0, "status": "CLAIMED"}
 
@@ -51,6 +52,7 @@ class FakeStore:
 ISSUE_CONTEXT = {
     "repo": "acme/http", "issue_number": 5, "title": "Retry drops the last attempt",
     "body": "The client gives up after one attempt.", "comments": [],
+    "issue": {"state": "open", "body": "Bounty $250"}, "complete_comments": True,
     "repository": {"full_name": "acme/http", "default_branch": "main"},
 }
 
@@ -76,36 +78,38 @@ class ClaimTakesTheDoorVerdictAsFact(unittest.TestCase):
         event.write_text(json.dumps({"client_payload": {
             "repo": "acme/http", "issue_number": 5, "mode": "deliver", **payload}}),
             encoding="utf-8")
-        store = store or FakeStore()
+        store = store or FakeStore({"admission": payload.get("admission"),
+            "competition": payload.get("competition"), "dispatch_id": payload.get("dispatch_id"),
+            "sovereign_admission": True})
         with mock.patch.object(delivery, "GitHub", return_value=FakeGitHub(ISSUE_CONTEXT)), \
                 mock.patch.object(delivery, "StateStore", return_value=store), \
                 mock.patch.object(delivery, "competition") as competing:
             delivery.claim(event)
         return json.loads((self.root / "claim.json").read_text(encoding="utf-8")), competing
 
-    def test_an_unfunded_issue_is_not_a_delivery_refusal(self):
-        """Claim used to raise ``Admission blocked`` and kill a run the door had already paid for."""
-        document, _ = self._claim({})
-        self.assertEqual(document["mode"], "deliver")
-        self.assertTrue(document["context"]["admission"]["sovereign"])
-        self.assertEqual(document["context"]["admission"]["source"], "sovereign entry door")
+    def test_a_missing_door_decision_is_never_manufactured(self):
+        with self.assertRaisesRegex(ValueError, "dispatch generation required"):
+            self._claim({})
+        self.assertFalse((self.root / "claim.json").exists())
 
     def test_the_door_proof_travels_into_the_claim(self):
-        proof = {"funding": {"amount": "250", "currency": "USD"}, "lane": "founder"}
+        proof = bind_proof({"funding": {"amount": "250", "currency": "USD"}, "lane": "founder"}, ISSUE_CONTEXT)
         document, _ = self._claim({"admission": proof,
-                                   "competition": "clear: door verdict"})
+                                   "dispatch_id": "generation-1",
+                                   "competition": {"blocking": False, "verdict": "clear: door verdict"}})
         self.assertEqual(document["context"]["admission"], proof)
         self.assertEqual(document["context"]["lane"], "founder")
         self.assertEqual(document["context"]["competition"], "clear: door verdict")
 
-    def test_the_dispatcher_row_is_a_valid_source_of_proof(self):
-        proof = {"funding": {"amount": "250"}, "lane": "bounty"}
-        document, _ = self._claim({}, store=FakeStore({"admission": proof}))
-        self.assertEqual(document["context"]["admission"], proof)
+    def test_a_partial_dispatcher_row_cannot_authorize_an_event(self):
+        with self.assertRaisesRegex(ValueError, "dispatch generation required"):
+            self._claim({}, store=FakeStore({"admission": {"funding": {"amount": "250"}}}))
 
     def test_the_last_minute_race_check_still_runs(self):
         """Baba 2026-10-31: competing PR checks stay at delivery for race conditions."""
-        _, competing = self._claim({})
+        proof = bind_proof({"funding": {"amount": "250"}}, ISSUE_CONTEXT)
+        _, competing = self._claim({"admission": proof, "dispatch_id": "generation-1",
+                                    "competition": {"blocking": False}})
         competing.assert_called_once()
 
 

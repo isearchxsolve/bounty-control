@@ -85,7 +85,7 @@ def main() -> int:
     remote_base = args.door.rstrip("/")
     local_base = args.local.rstrip("/")
     api_token = urllib.parse.quote(token, safe="")
-    local_token = urllib.parse.quote(os.environ.get("FLEET_RELAY_TOKEN", "GOLD24"), safe="")
+    local_token = urllib.parse.quote(os.environ.get("FLEET_RELAY_TOKEN", ""), safe="")
     admin_headers = {"X-Fleet-Admin-Token": admin_token, "Content-Type": "application/json"}
     summaries = []
 

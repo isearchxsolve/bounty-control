@@ -725,14 +725,11 @@ def _sovereign_stamps(proof, sovereign_admission=None, competition=None):
     real admission proof exists: deriving it from nothing would manufacture the very
     provenance this function exists to protect.
     """
-    has_proof = isinstance(proof, dict) and bool(proof)
-    stamp_admission = sovereign_admission if sovereign_admission is not None else has_proof
-    if competition is None:
-        competition = {"blocking": False,
-                       "verdict": "clear: no competing claimant recorded at dispatch"}
-    return {"sovereign_admission": bool(stamp_admission),
-            "admission": proof if has_proof else None,
-            "competition": competition}
+    from pipeline_evidence import require_evidence
+    stamps = {"sovereign_admission": sovereign_admission if sovereign_admission is not None else bool(proof),
+              "admission": proof, "competition": competition}
+    require_evidence(stamps)
+    return stamps
 
 
 def dispatch(api, store, context, proof, lanes, remote_repair=False, preparation_budget=None,
@@ -747,22 +744,44 @@ def dispatch(api, store, context, proof, lanes, remote_repair=False, preparation
     """
     repo, number = context["repo"], context["issue_number"]
     identity, dispatch_id = task_id(repo, number), uuid.uuid4().hex
+    if isinstance(proof, dict) and "source_revision" not in proof and "issue" in context:
+        from pipeline_evidence import bind_proof
+        proof = bind_proof(proof, context)
     stamps = _sovereign_stamps(proof, sovereign_admission, competition)
     def reserve(old):
+        dispatch_attempt = int((old or {}).get("dispatch_attempt", 0)) + 1
+        if dispatch_attempt > 3:
+            raise ValueError("Bounded dispatch attempts exhausted")
         if old:
             status = old.get("status", "")
             retryable = retry_eligible(old) and int(old.get("attempt", 0)) < 3
+            previous_revision = (old.get("admission") or {}).get("source_revision")
+            reconsideration = proof.get("reconsideration") or {}
+            explicitly_reviewed = (old.get("updated_at")
+                                   and reconsideration.get("previous_updated_at") == old["updated_at"]
+                                   and str(reconsideration.get("reason") or "").strip())
+            changed_refusal = (status.startswith("REJECTED_")
+                               and proof.get("source_revision")
+                               and ((previous_revision and proof["source_revision"] != previous_revision)
+                                    or explicitly_reviewed)
+                               and int(old.get("attempt", 0)) < 3)
+            if changed_refusal:
+                old = {**old, "refusal_history": [*old.get("refusal_history", []),
+                       {"status": status, "reason": old.get("reason"),
+                        "admission": old.get("admission"), "at": old.get("updated_at")} ]}
+                retryable = True
             if not retryable:
                 raise ValueError("Existing durable task state: " + status)
         return {**(old or {}), "task_id": identity, "repo": repo, "issue_number": number,
                 "status": "DISPATCHING", "dispatch_id": dispatch_id, "admission": proof,
+                "dispatch_attempt": dispatch_attempt,
                 **stamps,
                 "lanes": sorted(set(lanes)), "dispatched_at": utcnow(), "attempt": (old or {}).get("attempt", 0)}
     store.mutate(identity, reserve)
     budget = preparation_budget if isinstance(preparation_budget, int) else FULL_PREPARATION_BUDGET_SECONDS
     payload = {"event_type": "bounty_task_dispatch", "client_payload": {
         "repo": repo, "issue_number": number, "task_id": identity, "lanes": sorted(set(lanes)),
-        "mode": "deliver", "preparation_budget_seconds": budget, **stamps}}
+        "mode": "deliver", "dispatch_id": dispatch_id, "preparation_budget_seconds": budget, **stamps}}
     api.api(f"repos/{store.repo}/dispatches", "POST", payload)
     def acknowledge(old):
         if old and old.get("dispatch_id") == dispatch_id and old["status"] == "DISPATCHING":
@@ -868,6 +887,7 @@ def capacity_exclusions(api, rows, cache, known=None, limit=CAPACITY_PROBE_MAX):
             continue
         remembered = known.get(repository)
         if remembered and (remembered[1] or 0) >= stale:
+            cache[repository] = remembered[0]
             continue
         if probed >= limit:
             break
@@ -1020,7 +1040,7 @@ def retry_eligible(state):
     if not state:
         return True
     status = str(state.get("status", ""))
-    return status.startswith("FAILED") or status in ("DISPATCHED", "DISPATCHING")
+    return status.startswith("FAILED")
 
 
 def parse_lanes(value):
@@ -1094,7 +1114,7 @@ def store_pending_item(con, item, lane, expression, verdicts, pending_has_seen_a
     lanes_seen.add(lane)
     signature = item.get("updated_at", "")
     was_query_excluded = bool(old and str(old[3]).startswith("query_excluded_"))
-    pending = (was_query_excluded or not old or old[1] != signature
+    pending = (item.get("sovereign_admission") is True or was_query_excluded or not old or old[1] != signature
                or time.time() - old[2] > 21600)
     status = "pending" if pending else old[3]
     excluded_status = query_exclusion_status(item)
@@ -1180,6 +1200,9 @@ def queue_agent_rows(con, api, rows, verdicts=None, pending_has_seen_at=True):
 
 def discover(lanes, max_dispatches=2, live=False, queries_per_lane=2, state_dir=None,
              hydrate_only=False, hydrate_batch=None):
+    if os.environ.get("BOUNTY_ENTRY_DOOR", "").strip().lower() in ("cline", "agent", "1", "true"):
+        from sovereign_discovery import discover as discover_sovereign
+        return discover_sovereign(lanes, max_dispatches, live, state_dir, hydrate_only)
     folder = Path(state_dir or os.environ.get("BOUNTY_STATE_DIR", Path(__file__).resolve().parents[1] / "scratch/actions-discovery"))
     folder.mkdir(parents=True, exist_ok=True)
     api, store = GitHub(), StateStore()
@@ -1619,9 +1642,10 @@ def discover(lanes, max_dispatches=2, live=False, queries_per_lane=2, state_dir=
                         counts["admission_changed." + code_reason] += 1
                         record_outcome(con, identity, "refused")
                         continue
-                    competition(api, current["repo"], current["issue_number"], own_head=(state or {}).get("head_sha"))
+                    competition_verdict = competition(api, current["repo"], current["issue_number"], own_head=(state or {}).get("head_sha"))
                     dispatched.append(dispatch(api, store, current, proof, candidate["lanes"],
-                                              preparation_budget=candidate.get("preparation_budget_seconds")))
+                                              preparation_budget=candidate.get("preparation_budget_seconds"),
+                                              competition=competition_verdict))
                     record_outcome(con, identity, "dispatched")
                 except (ValueError, GitHubError) as exc:
                     counts["dispatch_deferred"] += 1

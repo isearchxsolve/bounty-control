@@ -1,5 +1,6 @@
 ﻿"""Set the Worker origin to a live, receipt-verified local fleet ledger tunnel."""
 import argparse
+import os
 import email.parser
 import email.policy
 import hashlib
@@ -14,7 +15,7 @@ import uuid
 ROOT = Path(__file__).resolve().parent.parent
 ACCOUNT = "c95d86ef4985346cae29bcd4dbfc67af"
 BASE = f"https://api.cloudflare.com/client/v4/accounts/{ACCOUNT}/workers/scripts/omniroute-relay"
-RELAY_TOKEN = "GOLD24"
+RELAY_TOKEN = os.environ.get("FLEET_DOOR_TOKEN", "")
 
 
 def api_headers():

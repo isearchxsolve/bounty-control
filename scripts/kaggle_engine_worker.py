@@ -43,7 +43,7 @@ from fleet_recovery_policy import (
 sys.stdout.reconfigure(encoding="utf-8", line_buffering=True)
 
 DOOR = os.environ.get("FLEET_DOOR", "https://omniroute-relay.omniroute-fleet-kd.workers.dev")
-DOOR_TOKEN = os.environ.get("FLEET_DOOR_TOKEN", "GOLD24")
+DOOR_TOKEN = os.environ.get("FLEET_DOOR_TOKEN", "")
 FLEET_QUEUE_CHANNEL = "BOUNTY_FLEET_QUEUE_V2"
 FLEET_CLAIM_CHANNEL = "BOUNTY_FLEET_CLAIM"
 FLEET_RESULT_CHANNEL = "BOUNTY_FLEET_RESULT"
@@ -1778,6 +1778,12 @@ def run_streamed_process(argv, cwd=None, timeout=120, input=None, stdin=None, st
 
 def run_command_safe(argv: List[str], cwd: str, timeout: int = 120, input: Optional[str] = None) -> CommandResult:
     start = time.time()
+    if _CLINE_EXECUTION_DEADLINE is not None:
+        remaining = cline_turn_timeout_seconds()
+        if remaining <= 0:
+            from delivery_errors import ClineBudgetExhausted
+            raise ClineBudgetExhausted(0)
+        timeout = min(timeout, remaining)
     try:
         resolved_argv = list(argv)
         if resolved_argv and sys.platform == "win32":
@@ -2896,9 +2902,10 @@ YOUR SOLE MANDATE IS TO DELIVER FLAWLESS, PRODUCTION-GRADE ENGINEERING:
 1. Inspect the codebase, manifests, and setup documentation.
 2. Establish the untouched upstream baseline (baseline_tests MUST pass on clean base).
 3. Construct a precise reproduction command (regression_plan.command) that exercises the reported defect and fails on the untouched base.
-4. Implement the clean, robust architectural fix.
-5. Verify locally that 100% of existing tests pass, linters pass with zero warnings, and boundary tests pass.
-6. Verify the fix builds cleanly and prepare the pull request with action="retry".
+4. Describe the implementation approach without changing product source in this phase.
+5. Return the native build/test/lint plan and source citations for the host.
+6. Finish preparation with action="retry" on a clean, unchanged baseline.
+The subsequent engineering turn implements the fix and independently verifies it.
 
 You are strictly forbidden from writing action="blocked" based on issue quality, wording, marketing/digest classification, or open PRs.
 The Entry Door has spoken. You follow the order and deliver the code.

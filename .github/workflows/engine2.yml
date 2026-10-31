@@ -1,5 +1,5 @@
 name: Bounty delivery
-run-name: 'bounty ${{ github.event.client_payload.task_id || inputs.mode }} ${{ github.event.client_payload.repo || inputs.target_repo }} #${{ github.event.client_payload.issue_number
+run-name: 'bounty ${{ github.event.client_payload.task_id || inputs.mode }} ${{ github.event.client_payload.dispatch_id }} ${{ github.event.client_payload.repo || inputs.target_repo }} #${{ github.event.client_payload.issue_number
   || inputs.issue_number }}'
 'on':
   repository_dispatch:
@@ -18,6 +18,9 @@ run-name: 'bounty ${{ github.event.client_payload.task_id || inputs.mode }} ${{ 
         required: false
       issue_number:
         description: Original issue number (delivery only)
+        required: false
+      dispatch_id:
+        description: Existing admitted dispatch generation (required for manual delivery)
         required: false
       force_recovery:
         description: Authorize one bounded fourth recovery attempt

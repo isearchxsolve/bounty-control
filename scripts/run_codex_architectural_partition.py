@@ -42,7 +42,7 @@ Part A - Laptop Dispatcher (`scripts/autonomous_icu_pipeline.py`):
   * Zero-Competition pre-screening (`has_existing_open_pr`).
 - In `post_grounded_proposal`, when `--remote-fleet` is active:
   * Instead of running `attempt_automated_pull_request` locally on the laptop, serialize the task payload (with `gh_token` from vault or `gh auth token`).
-  * Post task to Cloudflare relay door (`https://omniroute-relay.omniroute-fleet-kd.workers.dev/say?token=GOLD24`) with `body=BOUNTY_TASK`.
+  * Post task to Cloudflare relay door (`https://omniroute-relay.omniroute-fleet-kd.workers.dev/say?token=<FLEET_DOOR_TOKEN>`) with `body=BOUNTY_TASK`.
   * Update SQLite status to `DISPATCHED_TO_KAGGLE`.
   * Laptop CPU usage remains at ~0%.
 

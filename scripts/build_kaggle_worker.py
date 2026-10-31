@@ -49,7 +49,7 @@ from typing import List, Dict, Tuple, Optional, Any
 sys.stdout.reconfigure(encoding="utf-8", line_buffering=True)
 
 DOOR = "https://omniroute-relay.omniroute-fleet-kd.workers.dev"
-DOOR_TOKEN = "GOLD24"
+DOOR_TOKEN = os.environ.get("FLEET_DOOR_TOKEN", "")
 ENGINE_ID = os.environ.get("ENGINE_ID", "kaggle-engine-unknown")
 
 # Cloud sandbox and paths

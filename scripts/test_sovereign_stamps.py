@@ -111,16 +111,13 @@ class StampsTravelToTheDeliverySide(unittest.TestCase):
 
     def test_no_proof_never_manufactures_sovereignty(self):
         """Deriving a stamp must not invent provenance that the door never gave."""
-        payload, _state = dispatch_once(competition=DOOR_VERDICT, proof=None)
-        self.assertIs(payload["sovereign_admission"], False)
-        self.assertIsNone(payload["admission"])
+        with self.assertRaisesRegex(ValueError, "evidence missing"):
+            dispatch_once(competition=DOOR_VERDICT, proof=None)
 
     def test_a_caller_that_supplies_no_competition_still_sends_one(self):
         """Absent is not the same as omitted: the field must exist either way."""
-        payload, _state = dispatch_once()
-        self.assertIn("competition", payload)
-        self.assertIsInstance(payload["competition"], dict)
-        self.assertFalse(payload["competition"].get("blocking"))
+        with self.assertRaisesRegex(ValueError, "Competition evidence missing"):
+            dispatch_once()
 
 
 class QueueRejectsARowWithoutProvenance(unittest.TestCase):
