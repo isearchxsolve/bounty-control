@@ -2,7 +2,7 @@
   "task_id": "693de37d19eee2c1ea5b5df96db33898",
   "repo": "gotoalberto/ordinals-ethoxford",
   "issue_number": 1,
-  "status": "CLAIMED",
+  "status": "FAILED_MISSING_TERMINAL_RECEIPT",
   "dispatch_id": "47660e597b6c4bc6a6e62563640518ce",
   "admission": {
     "funding": {
@@ -35,7 +35,7 @@
   ],
   "dispatched_at": "2026-10-31T09:28:58.692833+00:00",
   "attempt": 2,
-  "updated_at": "2026-10-31T09:29:10.422756+00:00",
+  "updated_at": "2026-10-31T10:00:13.003856+00:00",
   "owner": "41188865258:1",
   "previous_owner": "41187315305:1",
   "previous_status": "DISPATCHED",
@@ -46,7 +46,7 @@
   "preparation_budget_seconds": 14400,
   "kind": "deliverable_invalid",
   "retryable": true,
-  "diagnostic": "Cline deliverable invalid at /tmp/fleet-artifacts/delivery-supervisor/a6e1d6c37c8f47fbae1cca34c19c5611.preparation.json: invalid base_sha: ''",
+  "diagnostic": "Actions run completed (failure) without terminal callback; artifacts retained",
   "path": "/tmp/fleet-artifacts/delivery-supervisor/a6e1d6c37c8f47fbae1cca34c19c5611.preparation.json",
   "reason": "invalid base_sha: ''",
   "at": "2026-10-31T09:10:25.058810+00:00",
@@ -62,5 +62,6 @@
       "at": "2026-10-31T09:10:25.058810+00:00"
     }
   ],
-  "finished_at": "2026-10-31T09:10:36.665855+00:00"
+  "finished_at": "2026-10-31T09:10:36.665855+00:00",
+  "observed_at": "2026-10-31T10:00:13.003841+00:00"
 }
