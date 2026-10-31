@@ -214,3 +214,82 @@ once, and the new test asserts a clean round continues (`no quota` in the next p
 One instruction from Baba - *the searcher is sovereign, no quota* - had to be enforced at three
 layers before the searcher was actually free. Stopping after the first would have left the
 drought in place and the report claiming it was cured.
+
+## 11. Baba's correction: say it in first-principle words, not technical terms
+
+Baba, after reading the section I had written:
+
+> "In prompt engineering, you cannot sometimes express the direction using technical terms. You
+> have to use first-principle language like world, garden, best fruits, pluck it, hands,
+> everything. Just tell it, give it that analogy. Tell it to pluck the best fruits in the garden.
+> World is not in drought, world is full of good fruits. Tell it to pluck the best fruit. That's
+> it. Literally tell it."
+
+My section was titled **"Direction: a plan you have not run is worth nothing"** and spoke of
+*deliberation*, *value rules*, and *comparing approaches*. Every word of that was written for an
+engineer reading a spec, not for a searcher standing in front of the world. Baba was right, and the
+whole brief was rewritten in his register: **the garden, ripe fruit, a pair of hands, a basket,
+light going.**
+
+### 11.1 Why he is right, in the numbers
+
+I watched the agent think, live, on this laptop - the same model, the same gateway, the same
+TASK.md - by streaming its stdout the moment each line arrived (`scripts/watch_thinking.py`).
+
+**Run A, technical brief, 300 s:**
+
+| measurement | value |
+| --- | --- |
+| the winning idea (*search comment bodies for platform bot strings*) first spoken in its thinking | **70.6 s** |
+| that same idea first executed as a command | **242.8 s** |
+| gap between knowing and doing | **172 s** |
+| commands run | 34 |
+| rows written | **0** |
+
+It was not short of knowledge. Unprompted it named Algora, Opire, Polar, BountyHub, the exact
+`bountyhub-bot` comment format, and `in:comments`. It knew where the money was and spent nearly
+three minutes of an eight-hundred-second budget deciding to go there.
+
+**Run B, garden brief, 300 s:**
+
+| measurement | value |
+| --- | --- |
+| commands run | **22** (down from 34) |
+| a genuinely funded issue opened | **`microg/GmsCore#2843`, `bountyhub-bot`, $2,340, at 54 s** |
+| platform deliberation | gone - it walked instead of describing the orchard |
+| attempts to write a row | **0** |
+
+So the analogy changed the **direction** and it did not change the **harvest**. It found real
+ripe fruit four times faster than before and carried it from tree to tree without putting any in
+the basket. Three watched rounds, zero attempts to write a row in any of them.
+
+### 11.2 What went into the brief, in his words
+
+- Title: **"The garden of paid engineering work"**.
+- *"The world is a garden in full season. It is not in drought. There is more ripe fruit hanging in
+  it than one pair of hands can carry."*
+- *"You are the only pair of hands in this garden. Nobody else walks out there: what you do not
+  pluck stays on the branch and rots, and this house eats nothing."*
+- *"Do not stand in the middle of the garden deciding which tree is best. Do not describe the
+  orchard to yourself instead of walking it."*
+- *"The basket is shortlist.jsonl. Fill it, as much as your hands can carry before the light
+  goes."*
+- And, because the watched runs showed it holding back: *"Some of what you pick will be unripe,
+  and the house will throw it out at the door with a reason - that costs one line and nothing else.
+  An empty basket is the only thing that costs the round... Do not walk from tree to tree carrying
+  nothing."*
+
+No jargon survives: `deliberation`, `objective function`, `heuristic`, `priority queue` are absent,
+and a test asserts both the presence of the plain words and the absence of those. Also removed the
+fourth copy of the quota, found in `WORKTREE_PROMPT` itself: *"Target 2-4 candidates, then finish"* -
+the first sentence the agent ever reads, still rationing it.
+
+### 11.3 The honest caveat
+
+The watched rounds ran on a **300 s** budget; CI gives **800 s**, and the CI runs do produce rows
+(4 per round). So "zero rows" here measures *direction under a short clock*, not harvest capacity.
+The garden brief's harvest must be read from a CI run at the full clock, not from this probe. That
+run is dispatched (`41187034023`, sha `b46789b`).
+
+97 tests pass. Commit `5202501` carries the brief, `b46789b` keeps the probe worktrees out of the
+repo.
