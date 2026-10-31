@@ -2,7 +2,7 @@
   "task_id": "63ae2588d6ba85ad8bedbedf0263fb4a",
   "repo": "BruceFeIix/picker",
   "issue_number": 1716,
-  "status": "CLAIMED",
+  "status": "REJECTED_PREPARATION",
   "dispatch_id": "ae45509939ba442a82bf65c46cc2886c",
   "admission": {
     "funding": {
@@ -42,7 +42,7 @@
   ],
   "dispatched_at": "2026-10-31T01:24:56.244639+00:00",
   "attempt": 1,
-  "updated_at": "2026-10-31T01:25:09.219425+00:00",
+  "updated_at": "2026-10-31T01:27:38.624033+00:00",
   "owner": "41155242920:1",
   "previous_owner": null,
   "previous_status": "DISPATCHED",
@@ -50,5 +50,53 @@
   "harness_sha": "4c3eefe714d35fcbc24e535ceb466466b27c196d",
   "claimed_at": "2026-10-31T01:25:09.219377+00:00",
   "lease_expires_at": "2026-10-31T05:30:09.219391+00:00",
-  "preparation_budget_seconds": 14400
+  "preparation_budget_seconds": 14400,
+  "at": "2026-10-31T01:27:26.576999+00:00",
+  "reason": "Cline preparation blocked: Issue #1716 titled '[\u6bcf\u65e5\u4fe1\u606f\u6d41] 2025-05-20' is an auto-generated daily news-feed artifact, not a request for a code change. Evidence: (1) The issue carries only the label 'daily'; its body is a curated list of external security-news article links (The DFIR Report, \u5947\u5b89\u4fe1\u653b\u9632\u793e\u533a, \u5b89\u5168\u5ba2, Security Boulevard, etc.) with no defect, feature spec, reproduction, file/component target, or code request. (2) The repository README and .github/workflows/daily.yml document this: the workflow runs 'gh issue create --title \"[\u6bcf\u65e5\u4fe1\u606f\u6d41] $(date)\" -F today.md --label \"daily\"' \u2014 every such issue is bot-generated content, not an engineering task. (3) Git history of the default branch is exclusively these auto-commits ('\u6bcf\u65e5\u5b89\u5168\u8d44\u8baf(YYYY-MM-DD)', '\u6bcf\u65e5\u7cbe\u9009\u6c47\u603b(YYYY-MM-DD)'), confirming the daily issues are data output of the crawler, not engineering issues. (4) The admission.technical_signals (bug/bug_bounty/bypass/error/failures/overflow) and component_references (ELPACO/ESP32) are keyword artifacts harvested from article titles/URLs inside the news feed, e.g. 'Another Confluence Bites the Dust: Falling to ELPACO-team Ransomware' and infosecwriteups.com 'bug_bounty' tags \u2014 they are not engineering evidence about this repository. (5) The admission.funding of $20,000 USD is unverifiable: the issue body, title and its 0 comments contain no funding/grant/bounty amount, and a repo-wide search for '20000'/'funding'/'bounty' matches only external article titles in archived feeds. There is no live funding tied to a code deliverable, and no competing open PR references this issue (search of open PRs for '1716' returns 0; only unrelated open PRs #2617 and #2335 exist). This is a documentation/content deliverable of the product (the daily feed) rather than a reproducible defect or focused engineering feature. No checkout changes were made.",
+  "declared_reason": "Issue #1716 titled '[\u6bcf\u65e5\u4fe1\u606f\u6d41] 2025-05-20' is an auto-generated daily news-feed artifact, not a request for a code change. Evidence: (1) The issue carries only the label 'daily'; its body is a curated list of external security-news article links (The DFIR Report, \u5947\u5b89\u4fe1\u653b\u9632\u793e\u533a, \u5b89\u5168\u5ba2, Security Boulevard, etc.) with no defect, feature spec, reproduction, file/component target, or code request. (2) The repository README and .github/workflows/daily.yml document this: the workflow runs 'gh issue create --title \"[\u6bcf\u65e5\u4fe1\u606f\u6d41] $(date)\" -F today.md --label \"daily\"' \u2014 every such issue is bot-generated content, not an engineering task. (3) Git history of the default branch is exclusively these auto-commits ('\u6bcf\u65e5\u5b89\u5168\u8d44\u8baf(YYYY-MM-DD)', '\u6bcf\u65e5\u7cbe\u9009\u6c47\u603b(YYYY-MM-DD)'), confirming the daily issues are data output of the crawler, not engineering issues. (4) The admission.technical_signals (bug/bug_bounty/bypass/error/failures/overflow) and component_references (ELPACO/ESP32) are keyword artifacts harvested from article titles/URLs inside the news feed, e.g. 'Another Confluence Bites the Dust: Falling to ELPACO-team Ransomware' and infosecwriteups.com 'bug_bounty' tags \u2014 they are not engineering evidence about this repository. (5) The admission.funding of $20,000 USD is unverifiable: the issue body, title and its 0 comments contain no funding/grant/bounty amount, and a repo-wide search for '20000'/'funding'/'bounty' matches only external article titles in archived feeds. There is no live funding tied to a code deliverable, and no competing open PR references this issue (search of open PRs for '1716' returns 0; only unrelated open PRs #2617 and #2335 exist). This is a documentation/content deliverable of the product (the daily feed) rather than a reproducible defect or focused engineering feature. No checkout changes were made.",
+  "evidence": {
+    "action": "blocked",
+    "worktree": "/tmp/bounty-workspaces/repos/BruceFeIix--picker--1716",
+    "base_sha": "cabf4e9212e8fc7c8974b10bf1f735ce145b3b06",
+    "default_branch": "master",
+    "sources": [
+      {
+        "path": "requirements.txt",
+        "sha256": "9b18ebb479dfafdd2369e0705fbf890ce9c2e48bbcf24b1d117af1b07e50ee80"
+      },
+      {
+        "path": "config.yml",
+        "sha256": "8614ba3755bf97b35549f14d5104a7eaf9936a6ba5c1073bc342cec68e19f7ba"
+      },
+      {
+        "path": "install.sh",
+        "sha256": "083bab9e9054241c2386e1abeaab8efd473e49b9ef872799d24b1742e86f2bdb"
+      },
+      {
+        "path": ".github/workflows/daily.yml",
+        "sha256": "2c135adeb99235f4558f29cfaafcccdc1ddd16dc01b5e62087a1e1ac9a11d555"
+      },
+      {
+        "path": "README.md",
+        "sha256": "9f84c7652f20a8f79e03d1220cdba4d86cd22162320c81701191ca87d6afdc9f"
+      },
+      {
+        "path": "today_pick.md",
+        "sha256": "fada450d646ef1b977de215f3d288f4f0edb75e5c3ba7ad295515504741746e3"
+      }
+    ],
+    "run_url": "",
+    "admission": {
+      "amount": "20000",
+      "currency": "USD",
+      "usd_value": "20000",
+      "quote": {
+        "basis": "USD face value"
+      },
+      "raw": "$20,000",
+      "source_url": "https://github.com/BruceFeIix/picker/issues/1716",
+      "payer": "BruceFeIix"
+    }
+  },
+  "finished_at": "2026-10-31T01:27:38.188466+00:00"
 }
