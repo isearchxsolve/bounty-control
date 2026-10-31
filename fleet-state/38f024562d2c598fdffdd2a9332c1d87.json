@@ -2,7 +2,7 @@
   "task_id": "38f024562d2c598fdffdd2a9332c1d87",
   "repo": "Tyaoo/picker",
   "issue_number": 1071,
-  "status": "CLAIMED",
+  "status": "REJECTED_PREPARATION",
   "dispatch_id": "ecd467a2279149fd838b77f36e914b36",
   "admission": {
     "funding": {
@@ -37,7 +37,7 @@
   ],
   "dispatched_at": "2026-10-31T03:06:12.713088+00:00",
   "attempt": 1,
-  "updated_at": "2026-10-31T03:06:23.652808+00:00",
+  "updated_at": "2026-10-31T03:09:42.158053+00:00",
   "owner": "41162890007:1",
   "previous_owner": null,
   "previous_status": "DISPATCHED",
@@ -45,5 +45,28 @@
   "harness_sha": "4c3eefe714d35fcbc24e535ceb466466b27c196d",
   "claimed_at": "2026-10-31T03:06:23.652754+00:00",
   "lease_expires_at": "2026-10-31T07:11:23.652771+00:00",
-  "preparation_budget_seconds": 14400
+  "preparation_budget_seconds": 14400,
+  "at": "2026-10-31T03:09:28.823396+00:00",
+  "reason": "Cline preparation blocked: Issue #1071 '[\u6bcf\u65e5\u4fe1\u606f\u6d41] 2025-07-17' (English: 'Daily Information Flow 2025-07-17') is an automated daily security-news DIGEST, i.e. a documentation/content deliverable, not a concrete code change. Exact evidence from the full issue text and repository state: (1) Title is the daily-digest pattern and the issue carries the single label 'daily' (color 1682F1). (2) The entire body is a markdown list of ~40 EXTERNAL hyperlinks (SecWiki News; Doonsec's feed; mp.weixin.qq.com articles) each prefixed with an empty task checkbox '[ ]'; there is no stack trace, no reproduction steps, no failing command, no desired behavior, and no reference to any repository file/function/component to change. (3) Author is 'Tyaoo' (author_association OWNER, repo owner login Tyaoo id 39017274), created 2025-07-17T03:29:38Z by automation, updated_at == created_at, 0 comments, 0 reactions, state open, milestone null. (4) The admission funding '$5,000 USD' is a false positive: funding.source_url is the issue itself, payer 'Tyaoo', quote basis 'USD face value', raw '$5,000' \u2014 there is no external bounty/grant platform, no fundable deliverable, and the 'daily' digest is not a paid engineering artifact. (5) The technical_signals 'broken/bug/bug_bounty/bypass' are keyword collisions scraped from linked ARTICLE TITLES (e.g. '\u6c49\u738be\u8138\u901a\u7efc\u5408\u7ba1\u7406\u5e73\u53f0\u5b58\u5728SQL\u6ce8\u5165\u6f0f\u6d1e \u9644POC', '2025hw\u9493\u9c7c\u7bc7') and NOT from any engineering content of the issue itself. (6) component_references 'A0/2025/07/16/local-llm-with-openSUSE.html' is a file path embedded inside a linked external article URL, not a repository path. Because none of the admitted categories (reproducible defect, specific feature, focused code maintenance, live funding) is satisfied and the issue is a content/digest deliverable, the correct disposition is blocked; no fallback proposal or PR will be manufactured. Checkout left unchanged: /tmp/bounty-workspaces/repos/Tyaoo--picker--1071 was NOT created and no repository files were modified. gh is present but unauthenticated ('You are not logged into any GitHub hosts'), so no competing-PR write inspection was possible; this does not affect the classification. Default branch confirmed via read-only git ls-remote = main, HEAD/main = f1d886f585e807e82f84da6123f4858ef365f461.",
+  "declared_reason": "Issue #1071 '[\u6bcf\u65e5\u4fe1\u606f\u6d41] 2025-07-17' (English: 'Daily Information Flow 2025-07-17') is an automated daily security-news DIGEST, i.e. a documentation/content deliverable, not a concrete code change. Exact evidence from the full issue text and repository state: (1) Title is the daily-digest pattern and the issue carries the single label 'daily' (color 1682F1). (2) The entire body is a markdown list of ~40 EXTERNAL hyperlinks (SecWiki News; Doonsec's feed; mp.weixin.qq.com articles) each prefixed with an empty task checkbox '[ ]'; there is no stack trace, no reproduction steps, no failing command, no desired behavior, and no reference to any repository file/function/component to change. (3) Author is 'Tyaoo' (author_association OWNER, repo owner login Tyaoo id 39017274), created 2025-07-17T03:29:38Z by automation, updated_at == created_at, 0 comments, 0 reactions, state open, milestone null. (4) The admission funding '$5,000 USD' is a false positive: funding.source_url is the issue itself, payer 'Tyaoo', quote basis 'USD face value', raw '$5,000' \u2014 there is no external bounty/grant platform, no fundable deliverable, and the 'daily' digest is not a paid engineering artifact. (5) The technical_signals 'broken/bug/bug_bounty/bypass' are keyword collisions scraped from linked ARTICLE TITLES (e.g. '\u6c49\u738be\u8138\u901a\u7efc\u5408\u7ba1\u7406\u5e73\u53f0\u5b58\u5728SQL\u6ce8\u5165\u6f0f\u6d1e \u9644POC', '2025hw\u9493\u9c7c\u7bc7') and NOT from any engineering content of the issue itself. (6) component_references 'A0/2025/07/16/local-llm-with-openSUSE.html' is a file path embedded inside a linked external article URL, not a repository path. Because none of the admitted categories (reproducible defect, specific feature, focused code maintenance, live funding) is satisfied and the issue is a content/digest deliverable, the correct disposition is blocked; no fallback proposal or PR will be manufactured. Checkout left unchanged: /tmp/bounty-workspaces/repos/Tyaoo--picker--1071 was NOT created and no repository files were modified. gh is present but unauthenticated ('You are not logged into any GitHub hosts'), so no competing-PR write inspection was possible; this does not affect the classification. Default branch confirmed via read-only git ls-remote = main, HEAD/main = f1d886f585e807e82f84da6123f4858ef365f461.",
+  "evidence": {
+    "action": "blocked",
+    "worktree": "/tmp/bounty-workspaces/repos/Tyaoo--picker--1071",
+    "base_sha": "f1d886f585e807e82f84da6123f4858ef365f461",
+    "default_branch": "main",
+    "sources": [],
+    "run_url": "",
+    "admission": {
+      "amount": "5000",
+      "currency": "USD",
+      "usd_value": "5000",
+      "quote": {
+        "basis": "USD face value"
+      },
+      "raw": "$5,000",
+      "source_url": "https://github.com/Tyaoo/picker/issues/1071",
+      "payer": "Tyaoo"
+    }
+  },
+  "finished_at": "2026-10-31T03:09:41.661339+00:00"
 }
