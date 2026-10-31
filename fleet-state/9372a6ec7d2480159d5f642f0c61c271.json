@@ -2,7 +2,7 @@
   "task_id": "9372a6ec7d2480159d5f642f0c61c271",
   "repo": "sonevalleyinfra/buildcity-web",
   "issue_number": 50,
-  "status": "DISPATCHED",
+  "status": "CLAIMED",
   "dispatch_id": "26c070e84e42453ebffd2b0c95eb957f",
   "admission": {
     "funding": {
@@ -41,6 +41,14 @@
     "founder"
   ],
   "dispatched_at": "2026-10-31T23:37:26.934163+00:00",
-  "attempt": 0,
-  "updated_at": "2026-10-31T23:37:28.694157+00:00"
+  "attempt": 1,
+  "updated_at": "2026-10-31T23:37:36.589196+00:00",
+  "owner": "41253310793:1",
+  "previous_owner": null,
+  "previous_status": "DISPATCHED",
+  "run_url": "https://github.com/isearchxsolve/bounty-control/actions/runs/41253310793",
+  "harness_sha": "ab12fba08924085e98d063686f70e4b52f037ac9",
+  "claimed_at": "2026-10-31T23:37:36.589148+00:00",
+  "lease_expires_at": "2026-11-01T03:42:36.589160+00:00",
+  "preparation_budget_seconds": 14400
 }
