@@ -761,3 +761,64 @@ class QuotaIsNotAVerdict(unittest.TestCase):
 
     def test_the_reason_is_documented_in_the_brief(self):
         self.assertIn("ISSUE_UNREADABLE", door.TASK_FILE)
+
+
+def fetcher_verify(rows, limit=12):
+    """verify_rows bound to the fixed ISSUE, so iterate() can be driven without a network."""
+    return door.verify_rows(rows, fetcher(), limit=limit)
+
+
+class RowsSurviveTheBudget(unittest.TestCase):
+    """Baba 2026-10-31: do not wait for the agent to finish, ingest what it writes on the go.
+
+    Measured on run 41178595784: the agent had verified candidates inside its narration and the
+    round was killed at the wall-clock budget, so `rows=0` and a whole search was thrown away.
+    A shortlist read only after `process.wait()` turns every timeout into a total loss.
+    """
+
+    def setUp(self):
+        self.workdir = tempfile.mkdtemp(prefix="door-stream-")
+        self.path = os.path.join(self.workdir, "shortlist.jsonl")
+
+    def tearDown(self):
+        shutil.rmtree(self.workdir, ignore_errors=True)
+
+    def test_a_half_written_line_is_not_parsed_and_waits_for_its_newline(self):
+        with open(self.path, "w", encoding="utf-8") as handle:
+            handle.write('{"repo": "acme/http", "issue": 7}\n{"repo": "acme/http", "iss')
+        rows, offset = door.new_rows(self.path)
+        self.assertEqual(len(rows), 1, "the complete line must be read, the partial one held")
+        self.assertEqual(rows[0]["issue"], 7)
+        with open(self.path, "a", encoding="utf-8") as handle:
+            handle.write('ue": 8}\n')
+        rows, offset = door.new_rows(self.path, offset)
+        self.assertEqual(len(rows), 1)
+        self.assertEqual(rows[0]["issue"], 8, "the completed line is read exactly once")
+
+    def test_nothing_is_read_twice_when_the_agent_keeps_appending(self):
+        with open(self.path, "w", encoding="utf-8") as handle:
+            handle.write('{"repo": "a/one", "issue": 1}\n')
+        first, offset = door.new_rows(self.path)
+        second, offset = door.new_rows(self.path, offset)
+        self.assertEqual(len(first), 1)
+        self.assertEqual(second, [], "an unchanged file must yield nothing new")
+
+    def test_a_row_banked_mid_round_is_kept_when_the_agent_is_killed(self):
+        """The exact failure: the run ends -1 with rows=[] because the file was never re-read."""
+        written = {"repo": "acme/http", "issue": 7, "reward_usd": 250,
+                   "reward_quote": ISSUE["body"], "is_code_task": True}
+
+        def killed_run(workdir, prompt=None, on_row=None, **kwargs):
+            with open(os.path.join(workdir, "shortlist.jsonl"), "a", encoding="utf-8") as handle:
+                handle.write(json.dumps(written) + "\n")
+            if on_row is not None:
+                on_row(written)          # what the tailer does while the agent is still alive
+            return {"exit_code": -1, "rows": [], "timed_out": True}
+
+        result = door.iterate(self.workdir, rounds=1, run=killed_run, verify=fetcher_verify)
+        self.assertEqual([row["issue"] for row in result["admitted"]], [7])
+        self.assertEqual(result["history"][0]["agent_exit"], -1)
+        stream = os.path.join(self.workdir, "admitted-stream.jsonl")
+        self.assertTrue(os.path.exists(stream), "a banked row must land in the ingest file")
+        with open(stream, encoding="utf-8") as handle:
+            self.assertEqual(json.loads(handle.readline())["issue"], 7)

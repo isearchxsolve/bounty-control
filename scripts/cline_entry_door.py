@@ -15,6 +15,7 @@ So the search is agent judgement, and admission stays a receipt.
 
 from __future__ import annotations
 
+import inspect
 import json
 import os
 import re
@@ -100,11 +101,67 @@ def prepare_profile(data_dir: str, model: str = DEFAULT_ENTRY_MODEL,
 REAL_PREPARE_PROFILE = prepare_profile
 
 
+def new_rows(path: str, offset: int = 0):
+    """Rows appended to the shortlist since ``offset``, plus the offset to resume from.
+
+    The agent writes while it searches, so the pipeline must read while it writes. Measured
+    2026-10-31: a round that reached its wall-clock budget was killed with rows=0 although the
+    agent had already verified candidates in its narration, because the file was only opened
+    after ``process.wait()``. A half-written line is never parsed: the offset stops at the last
+    newline, so a partial object waits for its terminator instead of being dropped.
+    """
+    try:
+        with open(path, "rb") as handle:
+            handle.seek(offset)
+            chunk = handle.read()
+    except OSError:
+        return [], offset
+    end = chunk.rfind(b"\n")
+    if end == -1:
+        return [], offset
+    complete = chunk[:end + 1]
+    offset += end + 1
+    rows: List[dict] = []
+    for line in complete.decode("utf-8", "replace").splitlines():
+        line = line.strip()
+        if not line.startswith("{"):
+            continue
+        try:
+            rows.append(json.loads(line))
+        except ValueError:
+            continue
+    return rows, offset
+
+
+def _tail_shortlist(path: str, on_row, stop: threading.Event, poll: float = 1.0) -> None:
+    """Hand every row to ``on_row`` the moment it lands, and keep going while the agent runs."""
+    offset = 0
+    seen = set()
+
+    def drain() -> None:
+        nonlocal offset
+        rows, offset = new_rows(path, offset)
+        for row in rows:
+            key = (str(row.get("repo") or "").lower(), row.get("issue"))
+            if key in seen:
+                continue
+            seen.add(key)
+            try:
+                on_row(row)
+            except Exception:  # a banking failure must never kill the search
+                pass
+
+    while not stop.wait(poll):
+        drain()
+    drain()
+
+
 def run_cline_search(workdir: str, prompt: str = SEARCH_PROMPT, timeout: int = 1800,
                      data_dir: Optional[str] = None, model: Optional[str] = None,
                      cline: Optional[str] = None, thinking: Optional[str] = None,
                      machine_json: bool = False,
-                     system_prompt: Optional[str] = None) -> Dict[str, object]:
+                     system_prompt: Optional[str] = None,
+                     on_row=None) -> Dict[str, object]:
     """Engine parity: the flag set below is exactly kaggle_engine_worker.cline_worktree_command.
 
     Measured today, each addition broke the run: --system made Cline demand a TTY, --json with
@@ -178,6 +235,13 @@ def run_cline_search(workdir: str, prompt: str = SEARCH_PROMPT, timeout: int = 1
         thread.start()
         readers.append(thread)
 
+    tail_stop = threading.Event()
+    tailer = None
+    if on_row is not None:
+        tailer = threading.Thread(target=_tail_shortlist, args=(target, on_row, tail_stop),
+                                  daemon=True)
+        tailer.start()
+
     timed_out = False
     try:
         exit_code = process.wait(timeout=timeout)
@@ -185,6 +249,9 @@ def run_cline_search(workdir: str, prompt: str = SEARCH_PROMPT, timeout: int = 1
         timed_out = True
         process.kill()
         exit_code = -1
+    tail_stop.set()
+    if tailer is not None:
+        tailer.join(timeout=10)
     for thread in readers:
         thread.join(timeout=5)
 
@@ -516,9 +583,10 @@ that is really proven.
      "why_now": "<one short line: why this is work we can deliver>"}}
 
 BUDGET — A FACT ABOUT THE HARNESS, NOT A METHOD:
-Each round has a fixed wall-clock budget and it is not extended. An empty shortlist.jsonl at the
-end of a round is worth nothing, however much ground you covered, so bank a row you have verified
-instead of carrying it in your head, and keep searching while time remains.
+Each round has a fixed wall-clock budget and it is not extended. The harness reads
+shortlist.jsonl continuously while you work, so every row you append is collected, verified and
+taken into the pipeline the moment it lands - you never have to finish the round for your work to
+count. Get a verified row on disk early and keep searching with the time that remains.
 
 CRITICAL INSTRUCTION — WRITE IMMEDIATELY:
 As soon as you verify an issue meets the criteria, append it IMMEDIATELY to `shortlist.jsonl` (using echo '...' >> shortlist.jsonl or python). Do NOT wait until the end of your investigation to write the file.
@@ -609,7 +677,35 @@ def iterate(workdir: str, rounds: int = 3, run=run_cline_search, verify=verify_r
     history: List[dict] = []
     refusals: List[dict] = []
     unpriced: List[dict] = []
+    stream_path = os.path.join(workdir, "admitted-stream.jsonl")
+    live: Dict[str, List[dict]] = {"admitted": [], "refused": [], "unpriced": []}
+
+    def bank(row: dict) -> None:
+        """Verify a row the instant the agent writes it, and keep it whatever happens next.
+
+        This is the reason the round's work survives: a row admitted at second 40 is already in
+        the pipeline when the wall-clock budget kills the agent at second 800.
+        """
+        try:
+            one = verify([row], limit=limit)
+        except Exception:  # a single-row failure must never abort the search
+            return
+        for slot in ("admitted", "refused", "unpriced"):
+            live[slot].extend(one.get(slot) or [])
+        fresh = one.get("admitted") or []
+        if not fresh:
+            return
+        with open(stream_path, "a", encoding="utf-8") as handle:
+            for banked in fresh:
+                handle.write(json.dumps(banked, ensure_ascii=False) + "\n")
+        top = fresh[0]
+        print(json.dumps({"phase": "ENTRY_ROW", "repo": top.get("repo"),
+                          "issue": top.get("issue"), "reward_usd": top.get("reward_usd"),
+                          "live": True}), flush=True)
+
     for round_number in range(1, max(1, rounds) + 1):
+        for slot in ("admitted", "refused", "unpriced"):
+            live[slot].clear()
         if round_number == 1:
             prompt = first_prompt or SEARCH_PROMPT
         else:
@@ -619,16 +715,26 @@ def iterate(workdir: str, rounds: int = 3, run=run_cline_search, verify=verify_r
                     reason=entry["reason"])
                 for entry in refusals)
             prompt = FEEDBACK_PROMPT.format(refusals=listed or "(none)")
-        outcome = run(workdir, prompt=prompt, **run_kwargs)
-        result = verify(outcome.get("rows") or [], limit=limit)
+        kwargs = dict(run_kwargs)
+        parameters = inspect.signature(run).parameters
+        if "on_row" in parameters or any(
+                item.kind is inspect.Parameter.VAR_KEYWORD for item in parameters.values()):
+            kwargs.setdefault("on_row", bank)
+        outcome = run(workdir, prompt=prompt, **kwargs)
+
+        streamed = {(str(row.get("repo") or "").lower(), row.get("issue"))
+                    for row in live["admitted"]}
+        remaining = [row for row in (outcome.get("rows") or [])
+                     if (str(row.get("repo") or "").lower(), row.get("issue")) not in streamed]
+        result = verify(remaining, limit=limit)
 
         known = {(row["repo"].lower(), row["issue"]) for row in admitted}
-        for row in result["admitted"]:
+        for row in list(live["admitted"]) + list(result["admitted"]):
             if (row["repo"].lower(), row["issue"]) not in known:
                 admitted.append(row)
                 known.add((row["repo"].lower(), row["issue"]))
-        refusals = result["refused"]
-        unpriced = result.get("unpriced", [])
+        refusals = list(live["refused"]) + list(result["refused"])
+        unpriced = list(live["unpriced"]) + list(result.get("unpriced", []))
         history.append({"round": round_number, "agent_exit": outcome.get("exit_code"),
                         "rows": len(outcome.get("rows") or []),
                         "admitted": len(result["admitted"]), "refused": len(refusals),
