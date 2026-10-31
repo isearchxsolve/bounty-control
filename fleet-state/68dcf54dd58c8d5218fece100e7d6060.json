@@ -2,7 +2,7 @@
   "task_id": "68dcf54dd58c8d5218fece100e7d6060",
   "repo": "Tyaoo/picker",
   "issue_number": 600,
-  "status": "CLAIMED",
+  "status": "REJECTED_PREPARATION",
   "dispatch_id": "5d72bb11f71a4db2af9d521368c70fda",
   "admission": {
     "funding": {
@@ -42,7 +42,7 @@
   ],
   "dispatched_at": "2026-10-31T02:00:11.400333+00:00",
   "attempt": 1,
-  "updated_at": "2026-10-31T02:00:22.490252+00:00",
+  "updated_at": "2026-10-31T02:04:14.276865+00:00",
   "owner": "41157956605:1",
   "previous_owner": null,
   "previous_status": "DISPATCHED",
@@ -50,5 +50,64 @@
   "harness_sha": "4c3eefe714d35fcbc24e535ceb466466b27c196d",
   "claimed_at": "2026-10-31T02:00:22.490199+00:00",
   "lease_expires_at": "2026-10-31T06:05:22.490214+00:00",
-  "preparation_budget_seconds": 14400
+  "preparation_budget_seconds": 14400,
+  "at": "2026-10-31T02:04:00.461323+00:00",
+  "reason": "Cline preparation blocked: Issue #600 '[\u6bcf\u65e5\u4fe1\u606f\u6d41] 2024-03-30' is a machine-generated daily information-feed digest, not a request for a concrete code change to this repository. Provenance: .github/workflows/daily.yml auto-creates these issues (`gh issue create --title \"[\u6bcf\u65e5\u4fe1\u606f\u6d41] `date +'%Y-%m-%d'`\" -F today.md --label \"daily\"`), and yarb.py::update_today() writes the exact body format `# \u6bcf\u65e5\u5b89\u5168\u8d44\u8baf(<date>)` followed by `- <feed>` and `  - [ ] [<title>](<url>)` lines. The issue has label 'daily', author_association OWNER (Tyaoo), 0 comments, state open, and a 60,169-character body that is only a bulleted list of external Chinese security-news links with unchecked task boxes (e.g. SecWiki News, Doonsec's feed, WeChat mp.weixin.qq.com links). It contains no reproducible defect, no specific engineering feature, and no focused code-level maintenance request. The admission technical_signals (algorithm, broken, bug, bug_bounty, bypass, distributed, issue, memory) are keyword false-positives matched from linked article titles (e.g. '\u7f51\u7edc\u5a01\u80c1\u6307\u6807\u663e\u793a24 \u5e74\u7684\u60c5\u51b5\u6bd42023\u5e74\u66f4\u7cdf', '\u6076\u610f\u8f6f\u4ef6\u4e0a\u4f20\u653b\u51fb\u653b\u51fb PyPI \u5b58\u50a8\u5e93'), not descriptions of any defect in this repository. Funding is nominally live (2500 EUR, payer Tyaoo) but the deliverable is generated content, i.e. a documentation/marketing artifact rather than a code change, so per the classification rules this issue is BLOCKED. Competitor evidence: open PRs already target this same daily-feed issue class, all non-engineering auto-generated attempts - #1500 'Fix #1499: [\u6bcf\u65e5\u4fe1\u606f\u6d41] 2026-09-05' (head auto-fix-1499-2710a1, body 'Submitted by alien visitor'), #1295 'Fix #1006: [\u6bcf\u65e5\u4fe1\u606f\u6d41] 2025-05-13' (head autonomy-fix-1006, claims typo fixes in archive JSON, modified 642 files), and #1518 'AI Agent Fix for Issue #1514'. No PR references #600 directly (search repo:Tyaoo/picker 600 in:title type:pr => 0 results; /pulls/600 => Not Found). Checkout left untouched (clean working tree on main); no fix branch created, no edits, no push, no PR.",
+  "declared_reason": "Issue #600 '[\u6bcf\u65e5\u4fe1\u606f\u6d41] 2024-03-30' is a machine-generated daily information-feed digest, not a request for a concrete code change to this repository. Provenance: .github/workflows/daily.yml auto-creates these issues (`gh issue create --title \"[\u6bcf\u65e5\u4fe1\u606f\u6d41] `date +'%Y-%m-%d'`\" -F today.md --label \"daily\"`), and yarb.py::update_today() writes the exact body format `# \u6bcf\u65e5\u5b89\u5168\u8d44\u8baf(<date>)` followed by `- <feed>` and `  - [ ] [<title>](<url>)` lines. The issue has label 'daily', author_association OWNER (Tyaoo), 0 comments, state open, and a 60,169-character body that is only a bulleted list of external Chinese security-news links with unchecked task boxes (e.g. SecWiki News, Doonsec's feed, WeChat mp.weixin.qq.com links). It contains no reproducible defect, no specific engineering feature, and no focused code-level maintenance request. The admission technical_signals (algorithm, broken, bug, bug_bounty, bypass, distributed, issue, memory) are keyword false-positives matched from linked article titles (e.g. '\u7f51\u7edc\u5a01\u80c1\u6307\u6807\u663e\u793a24 \u5e74\u7684\u60c5\u51b5\u6bd42023\u5e74\u66f4\u7cdf', '\u6076\u610f\u8f6f\u4ef6\u4e0a\u4f20\u653b\u51fb\u653b\u51fb PyPI \u5b58\u50a8\u5e93'), not descriptions of any defect in this repository. Funding is nominally live (2500 EUR, payer Tyaoo) but the deliverable is generated content, i.e. a documentation/marketing artifact rather than a code change, so per the classification rules this issue is BLOCKED. Competitor evidence: open PRs already target this same daily-feed issue class, all non-engineering auto-generated attempts - #1500 'Fix #1499: [\u6bcf\u65e5\u4fe1\u606f\u6d41] 2026-09-05' (head auto-fix-1499-2710a1, body 'Submitted by alien visitor'), #1295 'Fix #1006: [\u6bcf\u65e5\u4fe1\u606f\u6d41] 2025-05-13' (head autonomy-fix-1006, claims typo fixes in archive JSON, modified 642 files), and #1518 'AI Agent Fix for Issue #1514'. No PR references #600 directly (search repo:Tyaoo/picker 600 in:title type:pr => 0 results; /pulls/600 => Not Found). Checkout left untouched (clean working tree on main); no fix branch created, no edits, no push, no PR.",
+  "evidence": {
+    "action": "blocked",
+    "worktree": "/tmp/bounty-workspaces/repos/Tyaoo--picker--600",
+    "base_sha": "f1d886f585e807e82f84da6123f4858ef365f461",
+    "default_branch": "main",
+    "sources": [
+      {
+        "path": ".github/workflows/daily.yml",
+        "sha256": "60042e008e529bb95dc2c11b487b77e0f2fdf1b7b3a26b6599ce18787089d309"
+      },
+      {
+        "path": ".github/workflows/issue.yml",
+        "sha256": "78cf233cbd70a6775fec30918bbba3cecf71b6a998e30738e7860114544b40ee"
+      },
+      {
+        "path": "requirements.txt",
+        "sha256": "0bd080de6e0416d13591bb124ecde53fcd8bed8b91c3cce93caccf2405837639"
+      },
+      {
+        "path": "config.yml",
+        "sha256": "970754f21ec94c92c68bb241c94a5c84eeafec2937d0a4da9892be01fb2bc7e0"
+      },
+      {
+        "path": "yarb.py",
+        "sha256": "87a2d7531e8d407bc789446cb7823eeb09843dff40fa21223e222998d9cc1fd0"
+      },
+      {
+        "path": "bot.py",
+        "sha256": "fb85e5c5c09e0d352db2373435334568d286c89f349fcad2996e502d6fd88b07"
+      },
+      {
+        "path": "README.md",
+        "sha256": "1962b4b04aba89281e8c1c3c7c013fc615f1909ec2e657e5afdc3a31d7baa0b7"
+      },
+      {
+        "path": "install.sh",
+        "sha256": "c76bee4563a42e3b9e6ae1b465bb68a300ab2b6a159919d6b859f3327ece34e0"
+      }
+    ],
+    "run_url": "",
+    "admission": {
+      "amount": "2500",
+      "currency": "EUR",
+      "usd_value": "2793.0000",
+      "quote": {
+        "usd_rate": "1.1172",
+        "source_url": "https://api.frankfurter.dev/v1/latest?base=EUR&symbols=USD",
+        "observed_at": "2026-10-31T02:00:21.563948+00:00",
+        "quote_date": "2026-10-30"
+      },
+      "raw": "2500 \u20ac",
+      "source_url": "https://github.com/Tyaoo/picker/issues/600",
+      "payer": "Tyaoo"
+    }
+  },
+  "finished_at": "2026-10-31T02:04:13.633650+00:00"
 }
