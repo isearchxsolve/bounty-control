@@ -1,0 +1,42 @@
+{
+  "task_id": "a4ba5b94f9284248cff8d1bcd0bf3d6f",
+  "repo": "Tyaoo/picker",
+  "issue_number": 467,
+  "status": "DISPATCHING",
+  "dispatch_id": "202416161642441eb682523a43c61042",
+  "admission": {
+    "funding": {
+      "amount": "1000",
+      "currency": "USD",
+      "usd_value": "1000",
+      "quote": {
+        "basis": "USD face value"
+      },
+      "raw": "1000$",
+      "source_url": "https://github.com/Tyaoo/picker/issues/467",
+      "payer": "Tyaoo"
+    },
+    "technical_signals": [
+      "bug",
+      "bug_bounty",
+      "bypass",
+      "fail2ban",
+      "serialization"
+    ],
+    "component_references": [
+      "EARLY"
+    ],
+    "source_locations": [],
+    "engineering_evidence_sources": [
+      "https://github.com/Tyaoo/picker/issues/467"
+    ],
+    "source_issue": "https://github.com/Tyaoo/picker/issues/467",
+    "fetched_at": "2026-10-31T05:47:21.248193+00:00"
+  },
+  "lanes": [
+    "founder"
+  ],
+  "dispatched_at": "2026-10-31T05:47:22.601985+00:00",
+  "attempt": 0,
+  "updated_at": "2026-10-31T05:47:22.602002+00:00"
+}
