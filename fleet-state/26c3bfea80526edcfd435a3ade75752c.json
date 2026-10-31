@@ -2,7 +2,7 @@
   "task_id": "26c3bfea80526edcfd435a3ade75752c",
   "repo": "BruceFeIix/picker",
   "issue_number": 1555,
-  "status": "CLAIMED",
+  "status": "REJECTED_PREPARATION",
   "dispatch_id": "3065595f3ed847d6b0fd8c112fef8145",
   "admission": {
     "funding": {
@@ -40,7 +40,7 @@
   ],
   "dispatched_at": "2026-10-31T04:27:43.591758+00:00",
   "attempt": 1,
-  "updated_at": "2026-10-31T04:27:53.974683+00:00",
+  "updated_at": "2026-10-31T04:31:54.820704+00:00",
   "owner": "41168661788:1",
   "previous_owner": null,
   "previous_status": "DISPATCHED",
@@ -48,5 +48,53 @@
   "harness_sha": "4c3eefe714d35fcbc24e535ceb466466b27c196d",
   "claimed_at": "2026-10-31T04:27:53.974645+00:00",
   "lease_expires_at": "2026-10-31T08:32:53.974656+00:00",
-  "preparation_budget_seconds": 14400
+  "preparation_budget_seconds": 14400,
+  "at": "2026-10-31T04:31:40.247062+00:00",
+  "reason": "Cline preparation blocked: Issue #1555 ('[\u6bcf\u65e5\u4fe1\u606f\u6d41] 2025-02-28' / '[Daily Information Feed] 2025-02-28') is an auto-generated daily news digest, not a request for a concrete code change. The entire 56194-char body consists of exactly one header line ('# \u6bcf\u65e5\u5b89\u5168\u8d44\u8baf(2025-02-28)') plus checkbox news-link bullets across RSS feeds (SecWiki, The Hacker News, Krebs, BleepingComputer, Reddit, etc.); it contains no reproducible defect, no engineering feature, no expected behavior, no acceptance criteria and no code reference. It has zero comments (comments=[], author_comments=[], complete_comments=true, comment_count_evidence={rest_reported:0,rest_visible:0}) and was created once by the bot and never discussed. The repository is BruceFeIix/picker, a Python RSS-aggregator/pusher whose GitHub Action .github/workflows/daily.yml runs `gh issue create --title \"[\u6bcf\u65e5\u4fe1\u606f\u6d41] $(date +'%Y-%m-%d')\" -F today.md --label \"daily\"`, which is exactly the title/format/label of #1555 (label 'daily', markdown feed format identical to today.md). The repo has ~2772 open issues, almost all of these auto-generated digests (#2778, #2776, ... all titled '[\u6bcf\u65e5\u4fe1\u606f\u6d41] <date>'). The admission 'technical_signals' (broken, bug, bug_bounty, crashed, encryption, issue, issued, protocol, signature) are false positives harvested from the news-article headlines in the digest (e.g. 'SQL Injection', 'Bug Bounty', 'Safe{Wallet}', 'CVE', 'signature'), not from a repository defect. The '$500' funding is a bounty-pipeline artifact: no PR references #1555 (search is:pr+1555 => total_count 0) and no fix/bounty-1555 branch exists; the only related open PRs are auto-generated bounty PRs against other daily issues (#2617 'Fix: [\u6bcf\u65e5\u4fe1\u606f\u6d41] 2026-08-11' resolving #2616, whose body literally ends 'Bounty reward: $undefined', and #2335). Per the classification rules this is a non-engineering/auto-generated content issue (no concrete code change requested), so no fix, branch, PR or fallback proposal is produced and the checkout is left unchanged.",
+  "declared_reason": "Issue #1555 ('[\u6bcf\u65e5\u4fe1\u606f\u6d41] 2025-02-28' / '[Daily Information Feed] 2025-02-28') is an auto-generated daily news digest, not a request for a concrete code change. The entire 56194-char body consists of exactly one header line ('# \u6bcf\u65e5\u5b89\u5168\u8d44\u8baf(2025-02-28)') plus checkbox news-link bullets across RSS feeds (SecWiki, The Hacker News, Krebs, BleepingComputer, Reddit, etc.); it contains no reproducible defect, no engineering feature, no expected behavior, no acceptance criteria and no code reference. It has zero comments (comments=[], author_comments=[], complete_comments=true, comment_count_evidence={rest_reported:0,rest_visible:0}) and was created once by the bot and never discussed. The repository is BruceFeIix/picker, a Python RSS-aggregator/pusher whose GitHub Action .github/workflows/daily.yml runs `gh issue create --title \"[\u6bcf\u65e5\u4fe1\u606f\u6d41] $(date +'%Y-%m-%d')\" -F today.md --label \"daily\"`, which is exactly the title/format/label of #1555 (label 'daily', markdown feed format identical to today.md). The repo has ~2772 open issues, almost all of these auto-generated digests (#2778, #2776, ... all titled '[\u6bcf\u65e5\u4fe1\u606f\u6d41] <date>'). The admission 'technical_signals' (broken, bug, bug_bounty, crashed, encryption, issue, issued, protocol, signature) are false positives harvested from the news-article headlines in the digest (e.g. 'SQL Injection', 'Bug Bounty', 'Safe{Wallet}', 'CVE', 'signature'), not from a repository defect. The '$500' funding is a bounty-pipeline artifact: no PR references #1555 (search is:pr+1555 => total_count 0) and no fix/bounty-1555 branch exists; the only related open PRs are auto-generated bounty PRs against other daily issues (#2617 'Fix: [\u6bcf\u65e5\u4fe1\u606f\u6d41] 2026-08-11' resolving #2616, whose body literally ends 'Bounty reward: $undefined', and #2335). Per the classification rules this is a non-engineering/auto-generated content issue (no concrete code change requested), so no fix, branch, PR or fallback proposal is produced and the checkout is left unchanged.",
+  "evidence": {
+    "action": "blocked",
+    "worktree": "/tmp/bounty-workspaces/repos/BruceFeIix--picker--1555",
+    "base_sha": "cabf4e9212e8fc7c8974b10bf1f735ce145b3b06",
+    "default_branch": "master",
+    "sources": [
+      {
+        "path": ".github/workflows/daily.yml",
+        "sha256": "2c135adeb99235f4558f29cfaafcccdc1ddd16dc01b5e62087a1e1ac9a11d555"
+      },
+      {
+        "path": "requirements.txt",
+        "sha256": "9b18ebb479dfafdd2369e0705fbf890ce9c2e48bbcf24b1d117af1b07e50ee80"
+      },
+      {
+        "path": "bot.py",
+        "sha256": "cb2c2a85cc762b016838748e7b1551aa7c84257b8f20d73c8c316843e5d576e9"
+      },
+      {
+        "path": "yarb.py",
+        "sha256": "fbdcaa067f17d4a2e328d70d21f2543f44f6445c4ae15a367d5e00b8dbca1ed0"
+      },
+      {
+        "path": "today.md",
+        "sha256": "d8e36443e35dda3a2a5b64952ec324dc112e54ebb8fac1dc605489bcd5896cd4"
+      },
+      {
+        "path": "config.yml",
+        "sha256": "8614ba3755bf97b35549f14d5104a7eaf9936a6ba5c1073bc342cec68e19f7ba"
+      }
+    ],
+    "run_url": "",
+    "admission": {
+      "amount": "500",
+      "currency": "USD",
+      "usd_value": "500",
+      "quote": {
+        "basis": "USD face value"
+      },
+      "raw": "$ 500",
+      "source_url": "https://github.com/BruceFeIix/picker/issues/1555",
+      "payer": "BruceFeIix"
+    }
+  },
+  "finished_at": "2026-10-31T04:31:54.266714+00:00"
 }
