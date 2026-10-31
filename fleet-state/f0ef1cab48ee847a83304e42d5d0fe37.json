@@ -2,7 +2,7 @@
   "task_id": "f0ef1cab48ee847a83304e42d5d0fe37",
   "repo": "ruohong2018/ruohong2018.github.io",
   "issue_number": 828,
-  "status": "CLAIMED",
+  "status": "REJECTED_PREPARATION",
   "dispatch_id": "b297772a206e4be9ac0fccb9fe114d53",
   "admission": {
     "funding": {
@@ -41,7 +41,7 @@
   ],
   "dispatched_at": "2026-10-31T01:08:53.515985+00:00",
   "attempt": 1,
-  "updated_at": "2026-10-31T01:09:04.197041+00:00",
+  "updated_at": "2026-10-31T01:12:23.598131+00:00",
   "owner": "41153888830:1",
   "previous_owner": null,
   "previous_status": "DISPATCHED",
@@ -49,5 +49,65 @@
   "harness_sha": "4c3eefe714d35fcbc24e535ceb466466b27c196d",
   "claimed_at": "2026-10-31T01:09:04.196991+00:00",
   "lease_expires_at": "2026-10-31T05:14:04.197005+00:00",
-  "preparation_budget_seconds": 14400
+  "preparation_budget_seconds": 14400,
+  "at": "2026-10-31T01:12:07.610449+00:00",
+  "reason": "Cline preparation blocked: Issue #828 '[\u6bcf\u65e5\u4fe1\u606f\u6d41] 2025-05-20' is NOT a concrete code change request. It is an auto-generated daily security-news content digest produced by this repository's own workflow. Evidence: (1) .github/workflows/daily.yml runs `gh issue create --title \"[\u6bcf\u65e5\u4fe1\u606f\u6d41] `date +'%Y-%m-%d'`\" -F today.md --label \"daily\"`, which matches exactly the title/label of #828. (2) The GitHub API shows issue #828 has labels ['daily'], 0 comments, no pull_request, author=ruohong2018 (the bot owner), created 2025-05-20T03:13:37Z, state open. (3) The issue body is 35,654 chars of aggregated external security-news links (Twitter/Reddit/WeChat/blog RSS titles+URLs), with no defect report, no reproduction steps, no feature request and no engineering instruction. (4) The 'funding' $20,000 is self-declared only inside the issue body (source_url == the issue URL); it is not a real funded bounty. (5) The harvested 'technical_signals' (race condition, overflow, bypass, error) are merely keywords inside the news headlines, and 'ELPACO' is a news keyword that appears only in archived digest markdown (archive/2025/2025-05-20.md etc.), not a repository component. (6) The only open PR is #1361 ('fix: update wechatRSS OPML feed URL in config.json ... Fixes #1360'), unrelated to and not competing for #828. This is a documentation/content/marketing-style deliverable with no repository code change, so it is out of scope per policy; the checkout was left unchanged (git status clean).",
+  "declared_reason": "Issue #828 '[\u6bcf\u65e5\u4fe1\u606f\u6d41] 2025-05-20' is NOT a concrete code change request. It is an auto-generated daily security-news content digest produced by this repository's own workflow. Evidence: (1) .github/workflows/daily.yml runs `gh issue create --title \"[\u6bcf\u65e5\u4fe1\u606f\u6d41] `date +'%Y-%m-%d'`\" -F today.md --label \"daily\"`, which matches exactly the title/label of #828. (2) The GitHub API shows issue #828 has labels ['daily'], 0 comments, no pull_request, author=ruohong2018 (the bot owner), created 2025-05-20T03:13:37Z, state open. (3) The issue body is 35,654 chars of aggregated external security-news links (Twitter/Reddit/WeChat/blog RSS titles+URLs), with no defect report, no reproduction steps, no feature request and no engineering instruction. (4) The 'funding' $20,000 is self-declared only inside the issue body (source_url == the issue URL); it is not a real funded bounty. (5) The harvested 'technical_signals' (race condition, overflow, bypass, error) are merely keywords inside the news headlines, and 'ELPACO' is a news keyword that appears only in archived digest markdown (archive/2025/2025-05-20.md etc.), not a repository component. (6) The only open PR is #1361 ('fix: update wechatRSS OPML feed URL in config.json ... Fixes #1360'), unrelated to and not competing for #828. This is a documentation/content/marketing-style deliverable with no repository code change, so it is out of scope per policy; the checkout was left unchanged (git status clean).",
+  "evidence": {
+    "action": "blocked",
+    "worktree": "/tmp/bounty-workspaces/repos/ruohong2018--ruohong2018.github.io--828",
+    "base_sha": "d51bad12e8b4edfcd4196d59dfdb5ac1427ea24c",
+    "default_branch": "master",
+    "sources": [
+      {
+        "path": "requirements.txt",
+        "sha256": "116c08e02cbb0f92aef8e277a45c1f0628bf517eb332ce52399a41f024c927f0"
+      },
+      {
+        "path": "config.json",
+        "sha256": "5c8d99974aebae28e535fcef799a7b631c8387b8e26ba85844a4334dca52ed78"
+      },
+      {
+        "path": "config.yml",
+        "sha256": "86f59dcd8a0a89e2eb0ef0fb35711ce139c5d8cbbc9ba730a7705405e48c415f"
+      },
+      {
+        "path": "install.sh",
+        "sha256": "e893c3d8899015f56b8aba0502fe6ba36e4cd8e8fd9fe28cfac7904c07d80e81"
+      },
+      {
+        "path": "bot.py",
+        "sha256": "7732c374bb35b4f4c08f7c219a4a74a8b222e1ca6866944649b40852b521409e"
+      },
+      {
+        "path": "yarb.py",
+        "sha256": "12c21e259507749a745bac6de491f46d6c76abba160a59e2a639150d7235bf3a"
+      },
+      {
+        "path": "utils.py",
+        "sha256": "0798dba38f573564aaf35fabe8d6998f80d72b926aab35cee8afb09b5fa516ee"
+      },
+      {
+        "path": ".github/workflows/daily.yml",
+        "sha256": "0976c4913dd5741d2acc400154315a64a900e1b506735685d0651326a33f1378"
+      },
+      {
+        "path": ".github/workflows/issue.yml",
+        "sha256": "78cf233cbd70a6775fec30918bbba3cecf71b6a998e30738e7860114544b40ee"
+      }
+    ],
+    "run_url": "",
+    "admission": {
+      "amount": "20000",
+      "currency": "USD",
+      "usd_value": "20000",
+      "quote": {
+        "basis": "USD face value"
+      },
+      "raw": "$20,000",
+      "source_url": "https://github.com/ruohong2018/ruohong2018.github.io/issues/828",
+      "payer": "ruohong2018"
+    }
+  },
+  "finished_at": "2026-10-31T01:12:23.167878+00:00"
 }
