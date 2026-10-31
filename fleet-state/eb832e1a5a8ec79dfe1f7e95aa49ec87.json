@@ -1,0 +1,42 @@
+{
+  "task_id": "eb832e1a5a8ec79dfe1f7e95aa49ec87",
+  "repo": "Tyaoo/picker",
+  "issue_number": 560,
+  "status": "DISPATCHING",
+  "dispatch_id": "bba84546d30c4f768c9baf2af71acd15",
+  "admission": {
+    "funding": {
+      "amount": "750",
+      "currency": "USD",
+      "usd_value": "750",
+      "quote": {
+        "basis": "USD face value"
+      },
+      "raw": "750$",
+      "source_url": "https://github.com/Tyaoo/picker/issues/560",
+      "payer": "Tyaoo"
+    },
+    "technical_signals": [
+      "algorithm",
+      "bug",
+      "bug_bounty",
+      "bypass",
+      "issue"
+    ],
+    "component_references": [
+      "Trojan.Win32/Powessere.G"
+    ],
+    "source_locations": [],
+    "engineering_evidence_sources": [
+      "https://github.com/Tyaoo/picker/issues/560"
+    ],
+    "source_issue": "https://github.com/Tyaoo/picker/issues/560",
+    "fetched_at": "2026-10-31T05:24:47.926999+00:00"
+  },
+  "lanes": [
+    "founder"
+  ],
+  "dispatched_at": "2026-10-31T05:24:49.070638+00:00",
+  "attempt": 0,
+  "updated_at": "2026-10-31T05:24:49.070656+00:00"
+}
