@@ -1,0 +1,43 @@
+{
+  "task_id": "fc04fb5cd107aab87819fed91f6cfd41",
+  "repo": "Tyaoo/picker",
+  "issue_number": 997,
+  "status": "DISPATCHING",
+  "dispatch_id": "c0bb714b53ee47fa9575d9aa593b6a82",
+  "admission": {
+    "funding": {
+      "amount": "9000",
+      "currency": "USD",
+      "usd_value": "9000",
+      "quote": {
+        "basis": "USD face value"
+      },
+      "raw": "$9000",
+      "source_url": "https://github.com/Tyaoo/picker/issues/997",
+      "payer": "Tyaoo"
+    },
+    "technical_signals": [
+      "broken",
+      "bug",
+      "bug_bounty",
+      "issue",
+      "issues"
+    ],
+    "component_references": [
+      "8A/2025/05/03/monty-update.html",
+      "EX1063763"
+    ],
+    "source_locations": [],
+    "engineering_evidence_sources": [
+      "https://github.com/Tyaoo/picker/issues/997"
+    ],
+    "source_issue": "https://github.com/Tyaoo/picker/issues/997",
+    "fetched_at": "2026-10-31T03:42:13.859533+00:00"
+  },
+  "lanes": [
+    "founder"
+  ],
+  "dispatched_at": "2026-10-31T03:42:14.812497+00:00",
+  "attempt": 0,
+  "updated_at": "2026-10-31T03:42:14.812507+00:00"
+}
