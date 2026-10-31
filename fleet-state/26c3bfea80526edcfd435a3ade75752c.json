@@ -2,7 +2,7 @@
   "task_id": "26c3bfea80526edcfd435a3ade75752c",
   "repo": "BruceFeIix/picker",
   "issue_number": 1555,
-  "status": "DISPATCHING",
+  "status": "DISPATCHED",
   "dispatch_id": "3065595f3ed847d6b0fd8c112fef8145",
   "admission": {
     "funding": {
@@ -40,5 +40,5 @@
   ],
   "dispatched_at": "2026-10-31T04:27:43.591758+00:00",
   "attempt": 0,
-  "updated_at": "2026-10-31T04:27:43.591773+00:00"
+  "updated_at": "2026-10-31T04:27:45.254919+00:00"
 }
