@@ -1,0 +1,47 @@
+{
+  "task_id": "34f66344151e7c0410be7cd7a396d51f",
+  "repo": "BruceFeIix/picker",
+  "issue_number": 1662,
+  "status": "DISPATCHING",
+  "dispatch_id": "3f799bc330694e3eb44474dff865a77d",
+  "admission": {
+    "funding": {
+      "amount": "64000",
+      "currency": "USD",
+      "usd_value": "64000",
+      "quote": {
+        "basis": "USD face value"
+      },
+      "raw": "$64k",
+      "source_url": "https://github.com/BruceFeIix/picker/issues/1662",
+      "payer": "BruceFeIix"
+    },
+    "technical_signals": [
+      "bug",
+      "bypass",
+      "corrupt",
+      "corruption",
+      "encryption",
+      "error\u63a5\u53e3\u5b58\u5728\u8fdc\u7a0b\u547d\u4ee4\u6267\u884c\u6f0f\u6d1e",
+      "fail",
+      "issue",
+      "memory",
+      "overflow",
+      "problem",
+      "race condition"
+    ],
+    "component_references": [],
+    "source_locations": [],
+    "engineering_evidence_sources": [
+      "https://github.com/BruceFeIix/picker/issues/1662"
+    ],
+    "source_issue": "https://github.com/BruceFeIix/picker/issues/1662",
+    "fetched_at": "2026-10-31T01:14:51.221582+00:00"
+  },
+  "lanes": [
+    "founder"
+  ],
+  "dispatched_at": "2026-10-31T01:14:52.328889+00:00",
+  "attempt": 0,
+  "updated_at": "2026-10-31T01:14:52.328904+00:00"
+}
