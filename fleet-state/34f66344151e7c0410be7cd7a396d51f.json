@@ -2,7 +2,7 @@
   "task_id": "34f66344151e7c0410be7cd7a396d51f",
   "repo": "BruceFeIix/picker",
   "issue_number": 1662,
-  "status": "CLAIMED",
+  "status": "REJECTED_PREPARATION",
   "dispatch_id": "3f799bc330694e3eb44474dff865a77d",
   "admission": {
     "funding": {
@@ -43,7 +43,7 @@
   ],
   "dispatched_at": "2026-10-31T01:14:52.328889+00:00",
   "attempt": 1,
-  "updated_at": "2026-10-31T01:15:02.382588+00:00",
+  "updated_at": "2026-10-31T01:18:37.093400+00:00",
   "owner": "41154398563:1",
   "previous_owner": null,
   "previous_status": "DISPATCHED",
@@ -51,5 +51,49 @@
   "harness_sha": "4c3eefe714d35fcbc24e535ceb466466b27c196d",
   "claimed_at": "2026-10-31T01:15:02.382542+00:00",
   "lease_expires_at": "2026-10-31T05:20:02.382555+00:00",
-  "preparation_budget_seconds": 14400
+  "preparation_budget_seconds": 14400,
+  "at": "2026-10-31T01:18:24.367385+00:00",
+  "reason": "Cline preparation blocked: Issue #1662 is titled '[\u6bcf\u65e5\u4fe1\u606f\u6d41] 2025-04-23' (Daily Information Flow 2025-04-23), carries only the 'daily' label, was authored by the repo owner account, and its entire 45209-char body is a machine-generated digest of third-party security-news links (SecWiki, CXSecurity, anquanke, 4hou, Reddit, Sucuri, etc.). It requests no code change: there is no reproducible defect, no feature specification, no component path, and no acceptance criteria. Evidence that it is automation output, not an engineering request: .github/workflows/daily.yml (name 'Daily Push', cron '55 1 * * *') ends with `gh issue create --title \"[\u6bcf\u65e5\u4fe1\u606f\u6d41] `date +'%Y-%m-%d'`\" -F today.md --label \"daily\"`, i.e. this exact issue class is created daily by the project's own scheduled workflow; .github/workflows/issue.yml rebuilds/relabels unlabeled issues via `python3 yarb.py --push-issue`. The repo is a Python news-aggregator (bot.py, yarb.py, rss/, cqhttp/, config.yml) and currently has 1354 open issues of the same auto-generated '[\u6bcf\u65e5\u4fe1\u606f\u6d41] <date>' form, so this is a recurring content artifact, not a one-off bug. The admission 'funding' of $64000 is a false-positive string match on a news headline inside the feed body ('How I made $64k from deleted files \u2014 a bug bounty story'), and every 'technical_signal' (bug, bypass, corrupt, overflow, race condition, RCE, etc.) is a keyword extracted from CVE headlines in the same feed, not from repository code or a repo owner request. No pull request references #1662 (GitHub search total_count=0), and master is the only branch, so there is no competing implementation and no funding to honor. This is a non-engineering, auto-generated content issue, so per policy the checkout was left unchanged (no clone/checkout at /tmp/bounty-workspaces/repos/BruceFeIix--picker--1662 was created) and no code-change fallback was manufactured. Funding/competition check performed against the live GitHub API on 2026-10-31: repo public, not archived, default_branch=master at cabf4e9212e8fc7c8974b10bf1f735ce145b3b06; PR search for '1662' in BruceFeIix/picker returned 0 results.",
+  "declared_reason": "Issue #1662 is titled '[\u6bcf\u65e5\u4fe1\u606f\u6d41] 2025-04-23' (Daily Information Flow 2025-04-23), carries only the 'daily' label, was authored by the repo owner account, and its entire 45209-char body is a machine-generated digest of third-party security-news links (SecWiki, CXSecurity, anquanke, 4hou, Reddit, Sucuri, etc.). It requests no code change: there is no reproducible defect, no feature specification, no component path, and no acceptance criteria. Evidence that it is automation output, not an engineering request: .github/workflows/daily.yml (name 'Daily Push', cron '55 1 * * *') ends with `gh issue create --title \"[\u6bcf\u65e5\u4fe1\u606f\u6d41] `date +'%Y-%m-%d'`\" -F today.md --label \"daily\"`, i.e. this exact issue class is created daily by the project's own scheduled workflow; .github/workflows/issue.yml rebuilds/relabels unlabeled issues via `python3 yarb.py --push-issue`. The repo is a Python news-aggregator (bot.py, yarb.py, rss/, cqhttp/, config.yml) and currently has 1354 open issues of the same auto-generated '[\u6bcf\u65e5\u4fe1\u606f\u6d41] <date>' form, so this is a recurring content artifact, not a one-off bug. The admission 'funding' of $64000 is a false-positive string match on a news headline inside the feed body ('How I made $64k from deleted files \u2014 a bug bounty story'), and every 'technical_signal' (bug, bypass, corrupt, overflow, race condition, RCE, etc.) is a keyword extracted from CVE headlines in the same feed, not from repository code or a repo owner request. No pull request references #1662 (GitHub search total_count=0), and master is the only branch, so there is no competing implementation and no funding to honor. This is a non-engineering, auto-generated content issue, so per policy the checkout was left unchanged (no clone/checkout at /tmp/bounty-workspaces/repos/BruceFeIix--picker--1662 was created) and no code-change fallback was manufactured. Funding/competition check performed against the live GitHub API on 2026-10-31: repo public, not archived, default_branch=master at cabf4e9212e8fc7c8974b10bf1f735ce145b3b06; PR search for '1662' in BruceFeIix/picker returned 0 results.",
+  "evidence": {
+    "action": "blocked",
+    "worktree": "/tmp/bounty-workspaces/repos/BruceFeIix--picker--1662",
+    "base_sha": "cabf4e9212e8fc7c8974b10bf1f735ce145b3b06",
+    "default_branch": "master",
+    "sources": [
+      {
+        "path": ".github/workflows/daily.yml",
+        "sha256": "2c135adeb99235f4558f29cfaafcccdc1ddd16dc01b5e62087a1e1ac9a11d555"
+      },
+      {
+        "path": ".github/workflows/issue.yml",
+        "sha256": "78cf233cbd70a6775fec30918bbba3cecf71b6a998e30738e7860114544b40ee"
+      },
+      {
+        "path": "README.md",
+        "sha256": "9f84c7652f20a8f79e03d1220cdba4d86cd22162320c81701191ca87d6afdc9f"
+      },
+      {
+        "path": "bot.py",
+        "sha256": "cb2c2a85cc762b016838748e7b1551aa7c84257b8f20d73c8c316843e5d576e9"
+      },
+      {
+        "path": "requirements.txt",
+        "sha256": "9b18ebb479dfafdd2369e0705fbf890ce9c2e48bbcf24b1d117af1b07e50ee80"
+      }
+    ],
+    "run_url": "",
+    "admission": {
+      "amount": "64000",
+      "currency": "USD",
+      "usd_value": "64000",
+      "quote": {
+        "basis": "USD face value"
+      },
+      "raw": "$64k",
+      "source_url": "https://github.com/BruceFeIix/picker/issues/1662",
+      "payer": "BruceFeIix"
+    }
+  },
+  "finished_at": "2026-10-31T01:18:36.381570+00:00"
 }
