@@ -2,7 +2,7 @@
   "task_id": "1921bbe9dc560ce3d9791c1896917660",
   "repo": "ruohong2018/ruohong2018.github.io",
   "issue_number": 793,
-  "status": "CLAIMED",
+  "status": "REJECTED_PREPARATION",
   "dispatch_id": "4efa41a267b34e16a92bdc4621b2aed4",
   "admission": {
     "funding": {
@@ -38,7 +38,7 @@
   ],
   "dispatched_at": "2026-10-31T01:25:01.558188+00:00",
   "attempt": 1,
-  "updated_at": "2026-10-31T01:25:11.966284+00:00",
+  "updated_at": "2026-10-31T01:28:45.573394+00:00",
   "owner": "41155249212:1",
   "previous_owner": null,
   "previous_status": "DISPATCHED",
@@ -46,5 +46,49 @@
   "harness_sha": "4c3eefe714d35fcbc24e535ceb466466b27c196d",
   "claimed_at": "2026-10-31T01:25:11.966230+00:00",
   "lease_expires_at": "2026-10-31T05:30:11.966248+00:00",
-  "preparation_budget_seconds": 14400
+  "preparation_budget_seconds": 14400,
+  "at": "2026-10-31T01:28:31.408776+00:00",
+  "reason": "Cline preparation blocked: Issue #793 is a bot-generated content deliverable, not a code change. Title '[\u6bcf\u65e5\u4fe1\u606f\u6d41] 2025-04-15' (Daily Information Flow) with label 'daily'; its entire body is an auto-generated markdown list of infosec news links (0 non-heading/non-list lines). It requests no reproducible defect, no engineering feature, and no code-level maintenance. Provenance: repository workflow .github/workflows/daily.yml runs `gh issue create --title \"[\u6bcf\u65e5\u4fe1\u606f\u6d41] $(date +'%Y-%m-%d')\" -F today.md --label \"daily\"` on a daily cron, so this issue is program output, not a task. README.md documents '\u6bcf\u65e5\u4fe1\u606f\u6d41' as an automated push of yesterday's articles. No comments, no author comments, no prior failures (prior_failures=[]), and 0 open PRs reference #793 (only PR #1361 targets issue #1360). The admission '$10,000' funding is self-referential (source_url is the issue itself, payer=ruohong2018) and rests only on keyword signals, not an actionable engineering claim. Per classification rules this is a documentation/content/marketing deliverable -> blocked; checkout left unchanged.",
+  "declared_reason": "Issue #793 is a bot-generated content deliverable, not a code change. Title '[\u6bcf\u65e5\u4fe1\u606f\u6d41] 2025-04-15' (Daily Information Flow) with label 'daily'; its entire body is an auto-generated markdown list of infosec news links (0 non-heading/non-list lines). It requests no reproducible defect, no engineering feature, and no code-level maintenance. Provenance: repository workflow .github/workflows/daily.yml runs `gh issue create --title \"[\u6bcf\u65e5\u4fe1\u606f\u6d41] $(date +'%Y-%m-%d')\" -F today.md --label \"daily\"` on a daily cron, so this issue is program output, not a task. README.md documents '\u6bcf\u65e5\u4fe1\u606f\u6d41' as an automated push of yesterday's articles. No comments, no author comments, no prior failures (prior_failures=[]), and 0 open PRs reference #793 (only PR #1361 targets issue #1360). The admission '$10,000' funding is self-referential (source_url is the issue itself, payer=ruohong2018) and rests only on keyword signals, not an actionable engineering claim. Per classification rules this is a documentation/content/marketing deliverable -> blocked; checkout left unchanged.",
+  "evidence": {
+    "action": "blocked",
+    "worktree": "/tmp/bounty-workspaces/repos/ruohong2018--ruohong2018.github.io--793",
+    "base_sha": "d51bad12e8b4edfcd4196d59dfdb5ac1427ea24c",
+    "default_branch": "master",
+    "sources": [
+      {
+        "path": ".github/workflows/daily.yml",
+        "sha256": "0976c4913dd5741d2acc400154315a64a900e1b506735685d0651326a33f1378"
+      },
+      {
+        "path": "README.md",
+        "sha256": "8b1f7c31b11fb439fe3ad0310726758c805049f6727029b83845c29b25ce1b0e"
+      },
+      {
+        "path": "requirements.txt",
+        "sha256": "116c08e02cbb0f92aef8e277a45c1f0628bf517eb332ce52399a41f024c927f0"
+      },
+      {
+        "path": "config.json",
+        "sha256": "5c8d99974aebae28e535fcef799a7b631c8387b8e26ba85844a4334dca52ed78"
+      },
+      {
+        "path": "yarb.py",
+        "sha256": "12c21e259507749a745bac6de491f46d6c76abba160a59e2a639150d7235bf3a"
+      }
+    ],
+    "run_url": "",
+    "admission": {
+      "amount": "10000",
+      "currency": "USD",
+      "usd_value": "10000",
+      "quote": {
+        "basis": "USD face value"
+      },
+      "raw": "$10,000",
+      "source_url": "https://github.com/ruohong2018/ruohong2018.github.io/issues/793",
+      "payer": "ruohong2018"
+    }
+  },
+  "finished_at": "2026-10-31T01:28:45.212053+00:00"
 }
