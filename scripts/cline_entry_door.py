@@ -313,6 +313,40 @@ def fetch_issue(repo: str, issue: int, gh: str = "gh") -> Optional[dict]:
     return document if isinstance(document, dict) else None
 
 
+def fetch_issue_with_comments(repo: str, issue: int, gh: str = "gh",
+                              fetcher=None) -> Optional[dict]:
+    """The issue plus the text of its comments, because the domain counts both.
+
+    Measured on run 41184570516: the agent found rows whose reward was stated in a comment -
+    bounty platform bots and owners both publish there - and the entry door refused them as
+    REWARD_QUOTE_NOT_IN_ISSUE, because the haystack was built from title and body only. The task
+    file had said "stated in the issue text or comments" the whole time, so the gate was narrower
+    than its own contract, and the agent was right about it rather than wrong.
+    """
+    document = (fetcher or fetch_issue)(repo, issue)
+    if not document:
+        return document
+    try:
+        done = subprocess.run([gh, "api", f"repos/{repo}/issues/{issue}/comments",
+                               "--paginate", "--jq", ".[].body"],
+                              capture_output=True, text=True, timeout=60,
+                              encoding="utf-8", errors="replace")
+    except (OSError, subprocess.TimeoutExpired):
+        return document
+    if done.returncode != 0:
+        return document
+    enriched = dict(document)
+    enriched["__comments__"] = done.stdout or ""
+    return enriched
+
+
+def issue_haystack(issue: dict) -> str:
+    """Everything a reward may legitimately be quoted from: title, body, and comments."""
+    parts = [str(issue.get("title") or ""), str(issue.get("body") or ""),
+             str(issue.get("__comments__") or "")]
+    return "\n\n".join(parts)
+
+
 AMOUNT_RE = re.compile(
     r"(?:[$€£₹]\s?\d"          # $250, Rs 250
     r"|\d[\d,.]*\s*(?:[$€£₹]|k|usd|usdc|usdt|dai|eth|btc|sol|inr|eur|gbp|rs))",
@@ -342,7 +376,7 @@ def verify_rows(rows: List[dict], fetch: Optional[Callable[[str, int], Optional[
     Those deserve their own queue, not a rejection.
     """
     if fetch is None:
-        fetch = fetch_issue
+        fetch = fetch_issue_with_comments
     admitted: List[dict] = []
     refused: List[dict] = []
     unpriced: List[dict] = []
@@ -374,7 +408,7 @@ def verify_rows(rows: List[dict], fetch: Optional[Callable[[str, int], Optional[
             refused.append({"row": row, "reason": "AGENT_NOT_A_CODE_TASK"})
             continue
 
-        text = "{title}\n\n{body}".format(title=issue.get("title") or "", body=issue.get("body") or "")
+        text = issue_haystack(issue)
         quote = str(row.get("reward_quote") or "")
         if not quote_is_present(quote, text):
             # The agent may only be quoting the title or paraphrasing; either way it is unproven.

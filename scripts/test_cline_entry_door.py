@@ -892,6 +892,20 @@ class TheSearcherIsSovereign(unittest.TestCase):
         self.assertNotIn("{clock}", text)
         self.assertIn("an empty file has delivered nothing", text)
 
+    def test_a_reward_stated_in_a_comment_counts(self):
+        """Run 41184570516, the agent's own diagnosis - and it was right. The entry door built its
+        haystack from title and body only, while the task file said "stated in the issue text or
+        comments" the whole time. Rows whose amount sat in a bounty platform bot's comment were
+        refused as REWARD_QUOTE_NOT_IN_ISSUE: a gate narrower than its own contract, blaming the
+        searcher for obeying it."""
+        issue = {"state": "open", "title": "Wear OS support", "body": "No amount here.",
+                 "__comments__": "bountyhub-bot: Bounty of $2340 has been added by a funder."}
+        row = {"repo": "microg/GmsCore", "issue": 2843, "is_code_task": True,
+               "reward_quote": "Bounty of $2340 has been added by a funder.",
+               "reward_usd": 2340, "scope_quote": "Wear OS support", "why_now": "funded"}
+        verdict = door.verify_rows([row], lambda repo, num: issue)
+        self.assertEqual([r["repo"] for r in verdict["admitted"]], ["microg/GmsCore"])
+
     def test_a_big_harvest_is_not_silently_truncated(self):
         """The door's own default verified only the first 12 rows per round. A sovereign
         searcher that brought back 20 verified rows lost 8 of them without a word - the same
