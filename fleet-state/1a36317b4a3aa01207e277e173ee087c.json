@@ -2,7 +2,7 @@
   "task_id": "1a36317b4a3aa01207e277e173ee087c",
   "repo": "ldc-developers/ldc",
   "issue_number": 2153,
-  "status": "DISPATCHING",
+  "status": "DISPATCHED",
   "dispatch_id": "ec0ae9471a9146b6b6601686ed9adfa2",
   "admission": {
     "funding": {
@@ -79,5 +79,5 @@
   ],
   "dispatched_at": "2026-10-31T02:25:33.914614+00:00",
   "attempt": 0,
-  "updated_at": "2026-10-31T02:25:33.914626+00:00"
+  "updated_at": "2026-10-31T02:25:35.631929+00:00"
 }
