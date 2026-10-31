@@ -2,7 +2,7 @@
   "task_id": "fcbd7ebd9be94bedfa6fb8216707a744",
   "repo": "Tyaoo/picker",
   "issue_number": 975,
-  "status": "CLAIMED",
+  "status": "REJECTED_PREPARATION",
   "dispatch_id": "c0f6b55766ea421b8ea40ad1e333ff82",
   "admission": {
     "funding": {
@@ -39,7 +39,7 @@
   ],
   "dispatched_at": "2026-10-31T00:56:03.626788+00:00",
   "attempt": 1,
-  "updated_at": "2026-10-31T00:56:18.095277+00:00",
+  "updated_at": "2026-10-31T00:58:52.725659+00:00",
   "owner": "41152808982:1",
   "previous_owner": null,
   "previous_status": "DISPATCHED",
@@ -47,5 +47,53 @@
   "harness_sha": "4c3eefe714d35fcbc24e535ceb466466b27c196d",
   "claimed_at": "2026-10-31T00:56:18.095229+00:00",
   "lease_expires_at": "2026-10-31T05:01:18.095241+00:00",
-  "preparation_budget_seconds": 14400
+  "preparation_budget_seconds": 14400,
+  "at": "2026-10-31T00:58:41.930313+00:00",
+  "reason": "Cline preparation blocked: Non-engineering auto-generated content issue, not a code change request. Issue #975 title '[\u6bcf\u65e5\u4fe1\u606f\u6d41] 2025-04-12' is a 'daily' feed item produced by the repository's own automation (.github/workflows/daily.yml runs `gh issue create --title \"[\u6bcf\u65e5\u4fe1\u606f\u6d41] `date +'%Y-%m-%d'`\" -F today.md --label \"daily\"`). The entire 56563-char body is a bot-generated digest of hyperlinks to third-party security-news articles (e.g. Doonsec's feed); it contains no reproducible defect, no traceback, no failing behavior, no specific engineering feature, and no focused code-level maintenance request. Label set is exactly ['daily']; no comments, no milestone, no assignees, state open. The admission 'funding' of $5,382 is a parser false positive: the literal string '5,382' occurs only twice, both times as part of the linked article title 'I Made $5,382 in 30 Days Hunting Bugs' (https://infosecwriteups.com/...), i.e. editorial content, not a funding/willingness-to-pay request (no '$5,382' with a currency marker exists in the body). Per the classification rule this is a content/documentation deliverable with no repository change, so the checkout is left unchanged and no fallback feature proposal or PR is created.",
+  "declared_reason": "Non-engineering auto-generated content issue, not a code change request. Issue #975 title '[\u6bcf\u65e5\u4fe1\u606f\u6d41] 2025-04-12' is a 'daily' feed item produced by the repository's own automation (.github/workflows/daily.yml runs `gh issue create --title \"[\u6bcf\u65e5\u4fe1\u606f\u6d41] `date +'%Y-%m-%d'`\" -F today.md --label \"daily\"`). The entire 56563-char body is a bot-generated digest of hyperlinks to third-party security-news articles (e.g. Doonsec's feed); it contains no reproducible defect, no traceback, no failing behavior, no specific engineering feature, and no focused code-level maintenance request. Label set is exactly ['daily']; no comments, no milestone, no assignees, state open. The admission 'funding' of $5,382 is a parser false positive: the literal string '5,382' occurs only twice, both times as part of the linked article title 'I Made $5,382 in 30 Days Hunting Bugs' (https://infosecwriteups.com/...), i.e. editorial content, not a funding/willingness-to-pay request (no '$5,382' with a currency marker exists in the body). Per the classification rule this is a content/documentation deliverable with no repository change, so the checkout is left unchanged and no fallback feature proposal or PR is created.",
+  "evidence": {
+    "action": "blocked",
+    "worktree": "/tmp/bounty-workspaces/repos/Tyaoo--picker--975",
+    "base_sha": "f1d886f585e807e82f84da6123f4858ef365f461",
+    "default_branch": "main",
+    "sources": [
+      {
+        "path": "requirements.txt",
+        "sha256": "0bd080de6e0416d13591bb124ecde53fcd8bed8b91c3cce93caccf2405837639"
+      },
+      {
+        "path": "install.sh",
+        "sha256": "c76bee4563a42e3b9e6ae1b465bb68a300ab2b6a159919d6b859f3327ece34e0"
+      },
+      {
+        "path": ".github/workflows/daily.yml",
+        "sha256": "60042e008e529bb95dc2c11b487b77e0f2fdf1b7b3a26b6599ce18787089d309"
+      },
+      {
+        "path": "README.md",
+        "sha256": "1962b4b04aba89281e8c1c3c7c013fc615f1909ec2e657e5afdc3a31d7baa0b7"
+      },
+      {
+        "path": "bot.py",
+        "sha256": "fb85e5c5c09e0d352db2373435334568d286c89f349fcad2996e502d6fd88b07"
+      },
+      {
+        "path": "yarb.py",
+        "sha256": "87a2d7531e8d407bc789446cb7823eeb09843dff40fa21223e222998d9cc1fd0"
+      }
+    ],
+    "run_url": "",
+    "admission": {
+      "amount": "5382",
+      "currency": "USD",
+      "usd_value": "5382",
+      "quote": {
+        "basis": "USD face value"
+      },
+      "raw": "$5,382",
+      "source_url": "https://github.com/Tyaoo/picker/issues/975",
+      "payer": "Tyaoo"
+    }
+  },
+  "finished_at": "2026-10-31T00:58:52.325462+00:00"
 }
