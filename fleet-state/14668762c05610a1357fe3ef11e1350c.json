@@ -2,7 +2,7 @@
   "task_id": "14668762c05610a1357fe3ef11e1350c",
   "repo": "ruohong2018/ruohong2018.github.io",
   "issue_number": 416,
-  "status": "CLAIMED",
+  "status": "REJECTED_PREPARATION",
   "dispatch_id": "5f92174f80a1451b8677eb5709030761",
   "admission": {
     "funding": {
@@ -40,7 +40,7 @@
   ],
   "dispatched_at": "2026-10-31T05:38:10.760217+00:00",
   "attempt": 1,
-  "updated_at": "2026-10-31T05:38:22.395151+00:00",
+  "updated_at": "2026-10-31T05:41:20.231734+00:00",
   "owner": "41173390563:1",
   "previous_owner": null,
   "previous_status": "DISPATCHED",
@@ -48,5 +48,52 @@
   "harness_sha": "4c3eefe714d35fcbc24e535ceb466466b27c196d",
   "claimed_at": "2026-10-31T05:38:22.395104+00:00",
   "lease_expires_at": "2026-10-31T09:43:22.395117+00:00",
-  "preparation_budget_seconds": 14400
+  "preparation_budget_seconds": 14400,
+  "at": "2026-10-31T05:41:09.191978+00:00",
+  "reason": "Cline preparation blocked: Issue #416 '[\u6bcf\u65e5\u4fe1\u606f\u6d41] 2024-03-30' is an auto-generated daily news digest, not a code-change request. Its entire 39993-char body is a categorized list of external security-news links (Packet Storm, Reddit, blogs, etc.) with no defect, no feature request, and no reference to any repository file/symbol. Repository state proves the issue is machine-produced content: .github/workflows/daily.yml runs `gh issue create --title \"[\u6bcf\u65e5\u4fe1\u606f\u6d41] `date +'%Y-%m-%d'`\" -F today.md --label \"daily\"`, and #416 carries exactly the 'daily' label with 0 comments. The admission 'funding' of 2500 EUR is a false positive scraped verbatim from a link TITLE inside the digest: '[[Account Take Over] through reset password token leaked in response, 2500 \u20ac Reward](https://infosecwriteups.com/...)', not a real pledge. Likewise the technical_signals broken/bug/bug_bounty/bugfixes/distributed/failures all come from news headlines and URL slugs ('Bug Bounty in InfoSec Write-ups', 'source=rss----7b722bfd1b8d--bug_bounty', '10,000 bugfixes in 10,000 days', 'Easterbug trickery'), not from this codebase. Classified as a documentation/content (marketing feed) deliverable with no concrete engineering change; blocked per the non-engineering rule. No product or branch edits were made; checkout left at upstream master.",
+  "declared_reason": "Issue #416 '[\u6bcf\u65e5\u4fe1\u606f\u6d41] 2024-03-30' is an auto-generated daily news digest, not a code-change request. Its entire 39993-char body is a categorized list of external security-news links (Packet Storm, Reddit, blogs, etc.) with no defect, no feature request, and no reference to any repository file/symbol. Repository state proves the issue is machine-produced content: .github/workflows/daily.yml runs `gh issue create --title \"[\u6bcf\u65e5\u4fe1\u606f\u6d41] `date +'%Y-%m-%d'`\" -F today.md --label \"daily\"`, and #416 carries exactly the 'daily' label with 0 comments. The admission 'funding' of 2500 EUR is a false positive scraped verbatim from a link TITLE inside the digest: '[[Account Take Over] through reset password token leaked in response, 2500 \u20ac Reward](https://infosecwriteups.com/...)', not a real pledge. Likewise the technical_signals broken/bug/bug_bounty/bugfixes/distributed/failures all come from news headlines and URL slugs ('Bug Bounty in InfoSec Write-ups', 'source=rss----7b722bfd1b8d--bug_bounty', '10,000 bugfixes in 10,000 days', 'Easterbug trickery'), not from this codebase. Classified as a documentation/content (marketing feed) deliverable with no concrete engineering change; blocked per the non-engineering rule. No product or branch edits were made; checkout left at upstream master.",
+  "evidence": {
+    "action": "blocked",
+    "worktree": "/tmp/bounty-workspaces/repos/ruohong2018--ruohong2018.github.io--416",
+    "base_sha": "d51bad12e8b4edfcd4196d59dfdb5ac1427ea24c",
+    "default_branch": "master",
+    "sources": [
+      {
+        "path": "requirements.txt",
+        "sha256": "116c08e02cbb0f92aef8e277a45c1f0628bf517eb332ce52399a41f024c927f0"
+      },
+      {
+        "path": ".github/workflows/daily.yml",
+        "sha256": "0976c4913dd5741d2acc400154315a64a900e1b506735685d0651326a33f1378"
+      },
+      {
+        "path": "_config.yml",
+        "sha256": "e4aaaffc6245c7b7c067648548cab09df53b23626f58a44f275974d3e3492b2b"
+      },
+      {
+        "path": "config.json",
+        "sha256": "5c8d99974aebae28e535fcef799a7b631c8387b8e26ba85844a4334dca52ed78"
+      },
+      {
+        "path": "README.md",
+        "sha256": "8b1f7c31b11fb439fe3ad0310726758c805049f6727029b83845c29b25ce1b0e"
+      }
+    ],
+    "run_url": "",
+    "admission": {
+      "amount": "2500",
+      "currency": "EUR",
+      "usd_value": "2793.0000",
+      "quote": {
+        "usd_rate": "1.1172",
+        "source_url": "https://api.frankfurter.dev/v1/latest?base=EUR&symbols=USD",
+        "observed_at": "2026-10-31T05:38:21.190182+00:00",
+        "quote_date": "2026-10-30"
+      },
+      "raw": "2500 \u20ac",
+      "source_url": "https://github.com/ruohong2018/ruohong2018.github.io/issues/416",
+      "payer": "ruohong2018"
+    }
+  },
+  "finished_at": "2026-10-31T05:41:19.706823+00:00"
 }
