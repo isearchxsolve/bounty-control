@@ -448,7 +448,16 @@ Three more notes belong to this same room, and you will see them in the queue ra
 door:
 
 - `OFFER_BELOW_FLOOR` - real, but below the amount that makes a run worth its cost.
+- `BOUNTY_FLOOR` - the same line in the sand under its later name: the reward is below the floor
+  this pipeline will work for. Two names for one threshold, said here so a number is never mistaken
+  for permission to start.
 - `NO_TRUSTED_OFFER` - the text promises money and no trusted party is behind it.
+- `COMPETITION_OPEN_PR_EXISTS` - someone else already has an unmerged pull request open on this
+  issue. We do not compete on a ticket that is spoken for: the fruit is already in another hand, and
+  a second basket there spends a run to prove nothing.
+- `DEFECT_NOT_IN_REPOSITORY` - the fault lives in an external bridge, wallet, service or desktop
+  environment rather than this repository's own code. A good patch written for a place we cannot
+  reach is honest work delivered nowhere.
 - `REPOSITORY_DOES_NOT_MERGE` - the tree takes pull requests and merges none (`total_prs >= 10`
   and `merged == 0`). It has demonstrated, with its own history, that it does not pay. When the
   evidence is absent we are permissive: unknown is not guilt.
@@ -696,6 +705,85 @@ the workflow YAML parse, and the commit that proves CI - each gets its own entry
   to that file is one import line. Repairing it means either writing the missing function or retiring
   the test - a decision, not a lint fix - and writing the function merely to turn the count green
   would be manufacturing.
+
+### 2026-10-31 - CI ran, and its log was counted rather than trusted
+
+- Committed `56cb849` (8 files, +393/-36) with a message written BOM-free, then pushed
+  `488376e..56cb849`. Run **`41195441099`** came back **success**, and job **`124520554136`** shows
+  every step successful.
+- The job log was pulled to disk and counted line by line instead of trusting the green mark:
+  **43 `Ran N tests in X s` lines, summing 511 tests in 1.624 s of measured test time.** Four
+  wall-clock seconds for the whole step is therefore real execution, not a block that stopped early.
+- **44 test commands, 43 `Ran` lines.** The one file that does not print a unittest verdict is
+  `test_icu_pipeline_suite.py`, which prints sixteen `[Test N]` blocks of its own instead. Nothing is
+  missing from the run; one suite simply speaks a different format.
+- **45 `OK` lines against 43 `Ran` lines** looked wrong until it was attributed. Two of the 43 suites
+  also run an embedded self-test and print a second line, `OK self-test: 13/13`. The 43 unittest
+  verdicts and the 2 self-test verdicts are separate lines from separate mechanisms, and both were
+  read individually rather than inferred from a total.
+- **4 `FAILED` matches in the log are not failures.** They sit inside 2 printed lines of JSON:
+  `FAILED_BLOCKED_ON_CAPABILITY` and `FAILED_PUBLICATION_MISSING` are the pipeline's own terminal
+  status values - what a genuine engineering failure, and what a verified-but-unpublished run, are
+  each recorded as - and `test_preparation_terminal.py` prints them as the evidence that both land
+  where they should. That is the house's vocabulary being demonstrated, not a verdict on the run.
+  The log holds zero `ERROR`, zero `Traceback` and zero `ModuleNotFoundError` in all 159,819 bytes.
+- The laptop's own rendering of the same 44 commands matches this profile exactly - 43 `Ran`, 45 `OK`,
+  2 self-tests, 0 failures - so the receipt is two independent measurements agreeing, not one machine
+  quoting itself.
+
+### 2026-10-31 - a green step over a dead suite, found and closed
+
+- The 44-command test step was a single multi-line `run:` block. Its stop-on-first-failure rested
+  entirely on the runner's documented Linux default shell and on nothing in the file itself. That is
+  the same weakness as a lock nobody can see: it holds right up until a default changes.
+- Measured on this machine (bash 5.3.15) instead of argued from documentation. A three-command block
+  with the middle command failing:
+  - **plain `bash`, no errexit: exit 0**, printing `one` then `three`. The failure vanishes and the
+    step goes green.
+  - **the same block opening with `set -euo pipefail`: exit 1**, stopping after `one`.
+- Then applied to the real thing, not a toy. Command 3 of the 44 was replaced with `false`:
+  - without the new first line, under plain `bash`: **exit 0 with 42 tests run** - a green step over
+    a suite that died at the third file.
+  - with the new first line: **exit 1 with 2 tests run** - it stops exactly where it should.
+- Both multi-command steps of the `contracts` job now open with `set -euo pipefail`: the `ruff F821`
+  step and the 44-command test step. Strengthening only - not one command was altered, added or
+  removed. After the edit the workflow still parses to 4 steps, step 4 renders 8 lines, and step 5
+  renders 45 non-blank lines: 1 errexit line plus **44 distinct test commands**, no stray quoting.
+  Re-run under `bash -e` it still exits 0 with 43 `Ran` and 45 `OK`, identical to CI `41195441099`.
+- Honest limit of the proof: no past run had its test step fail, so this cannot be demonstrated from
+  the run history. It is demonstrated here instead, and the mechanism is now written in the file
+  where a future reader can see it.
+
+### 2026-10-31 - the same weakness in the money engine, named and deliberately left alone
+
+- The audit found the identical pattern in `engine2.yml`, step "Install the executable actually used
+  by the worker": `npm install --global --no-audit --no-fund cline@3.0.74` followed by
+  `cline --version`, in one block with no errexit and with no comparison of the printed version to
+  `3.0.74`. If the install failed while an older `cline` was already on the runner, the version line
+  would still succeed and the step would go green around an unverified binary.
+- **Not changed in this session.** That file is the live money engine, and editing its install step
+  without a run to prove the edit is precisely the unmeasured change this record exists to prevent.
+  It stays named here so the next hand does not rediscover it, and the gap stays visible instead of
+  being quietly patched.
+
+### 2026-10-31 - the completeness claim re-audited the other way, and three codes restored
+
+- Section 14 had only been checked in one direction: every gate code written in the document must
+  exist in the source. That passed with zero invented codes. The reverse - every code in
+  `GATE_CHECKS` and `DOWNSTREAM_CHECKS` must appear in the document - had not been run, and it
+  found **3 missing**: `COMPETITION_OPEN_PR_EXISTS`, `DEFECT_NOT_IN_REPOSITORY` and `BOUNTY_FLOOR`.
+- All three are real downstream checks in `cline_entry_door.py` (`DOWNSTREAM_CHECKS`, lines 562, 564
+  and 572). A record that claims "every gate" while omitting three of them is precisely the quiet
+  incompleteness this document exists to prevent, so it is corrected rather than argued away.
+- Restored inside 14.1 among the checks belonging to the same room, with nothing in `admit()`
+  reordered: the ticket already having an open pull request against it, the defect living outside
+  this repository, and the floor under its later name beside `OFFER_BELOW_FLOOR` so the two read as
+  one threshold rather than two amounts.
+- Re-audited after the edit, both directions: **19 distinct codes across the two lists, 0 absent from
+  the document.** One code-shaped token in the document does not appear verbatim in the source,
+  `FAILED_BLOCKED_ON_CAPABILITY`, and it is not invented - `actions_delivery.py:948` composes it as
+  `"FAILED_" + status`, so a written `BLOCKED_ON_CAPABILITY` becomes exactly that name. It is quoted
+  here only because it is a literal line of the CI log below.
 
 ### 2026-10-31 - what this entry does not claim
 

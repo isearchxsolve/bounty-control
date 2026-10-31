@@ -30,6 +30,7 @@ jobs:
       # "name 'report_path' is not defined" the first time any run reached that line. Scoped to
       # the modules the workflows actually execute, so legacy scratch seeds cannot fail the gate.
       run: |
+        set -euo pipefail
         python3 -m pip install --quiet ruff
         python3 -m ruff check --select F821 \
           scripts/actions_github.py scripts/actions_dispatch.py scripts/actions_delivery.py \
@@ -40,7 +41,9 @@ jobs:
     - name: Test migration contracts and unchanged master suites
       env:
         PYTHONIOENCODING: utf-8
-      run: 'python3 -W error scripts/test_actions_migration.py
+      run: 'set -euo pipefail
+
+        python3 -W error scripts/test_actions_migration.py
 
         python3 -W error scripts/test_partition_regressions.py
 
