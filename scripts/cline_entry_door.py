@@ -702,6 +702,13 @@ def iterate(workdir: str, rounds: int = 3, run=run_cline_search, verify=verify_r
         print(json.dumps({"phase": "ENTRY_ROW", "repo": top.get("repo"),
                           "issue": top.get("issue"), "reward_usd": top.get("reward_usd"),
                           "live": True}), flush=True)
+        for entry in (one.get("refused") or []) + (one.get("unpriced") or []):
+            subject = entry.get("row") or {}
+            print(json.dumps({"phase": "ENTRY_DECISION", "repo": subject.get("repo"),
+                              "issue": subject.get("issue"),
+                              "reason": entry.get("reason"),
+                              "reward_usd": subject.get("reward_usd"),
+                              "live": True}), flush=True)
 
     for round_number in range(1, max(1, rounds) + 1):
         for slot in ("admitted", "refused", "unpriced"):
@@ -727,6 +734,13 @@ def iterate(workdir: str, rounds: int = 3, run=run_cline_search, verify=verify_r
         remaining = [row for row in (outcome.get("rows") or [])
                      if (str(row.get("repo") or "").lower(), row.get("issue")) not in streamed]
         result = verify(remaining, limit=limit)
+        for entry in (result["refused"] or []) + (result.get("unpriced") or []):
+            subject = entry.get("row") or {}
+            print(json.dumps({"phase": "ENTRY_DECISION", "repo": subject.get("repo"),
+                              "issue": subject.get("issue"),
+                              "reason": entry.get("reason"),
+                              "reward_usd": subject.get("reward_usd"),
+                              "live": False}), flush=True)
 
         known = {(row["repo"].lower(), row["issue"]) for row in admitted}
         for row in list(live["admitted"]) + list(result["admitted"]):
