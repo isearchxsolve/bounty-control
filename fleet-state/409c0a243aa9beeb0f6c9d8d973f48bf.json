@@ -1,0 +1,46 @@
+{
+  "task_id": "409c0a243aa9beeb0f6c9d8d973f48bf",
+  "repo": "ruohong2018/ruohong2018.github.io",
+  "issue_number": 801,
+  "status": "DISPATCHING",
+  "dispatch_id": "c4d27400d68e499fbfc762d7b58d05e7",
+  "admission": {
+    "funding": {
+      "amount": "64000",
+      "currency": "USD",
+      "usd_value": "64000",
+      "quote": {
+        "basis": "USD face value"
+      },
+      "raw": "$64k",
+      "source_url": "https://github.com/ruohong2018/ruohong2018.github.io/issues/801",
+      "payer": "ruohong2018"
+    },
+    "technical_signals": [
+      "bug",
+      "bypass",
+      "corrupt",
+      "corruption",
+      "encryption",
+      "fail",
+      "issue",
+      "memory",
+      "overflow",
+      "problem",
+      "race condition"
+    ],
+    "component_references": [],
+    "source_locations": [],
+    "engineering_evidence_sources": [
+      "https://github.com/ruohong2018/ruohong2018.github.io/issues/801"
+    ],
+    "source_issue": "https://github.com/ruohong2018/ruohong2018.github.io/issues/801",
+    "fetched_at": "2026-10-31T01:08:58.430819+00:00"
+  },
+  "lanes": [
+    "founder"
+  ],
+  "dispatched_at": "2026-10-31T01:08:59.372923+00:00",
+  "attempt": 0,
+  "updated_at": "2026-10-31T01:08:59.372941+00:00"
+}
