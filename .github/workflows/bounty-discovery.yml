@@ -46,7 +46,7 @@ jobs:
         TOKENHARBOR_MODEL: 'deepseek-v4.1-flash:free'
         NVIDIA_MODEL: ${{ vars.NVIDIA_MODEL || 'deepseek-v4.1-flash:free' }}
         BOUNTY_AGENT_WORKSPACE: /tmp/bounty-agent
-        BOUNTY_AGENT_ROUNDS: '1'
+        BOUNTY_AGENT_ROUNDS: '2'
         BOUNTY_AGENT_TIMEOUT: '600'
       run: python3 -u scripts/actions_dispatch.py --live --once --queries-per-lane 3 --max-dispatches 2 --lane ${{ vars.ACTIVE_LANES || 'all' }}
     - uses: actions/cache/save@v4

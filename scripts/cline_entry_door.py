@@ -397,8 +397,14 @@ GATE_CHECKS = [
 # so it aims at work that can survive them. Honest: list, not score.
 DOWNSTREAM_CHECKS = [
     ("CURRENT_ISSUER_OFFER_MISSING",
-     "no fundable offer for a trusted issuer survives; a real figure in the issue is the only "
-     "way through."),
+     "no offer survives from a party that can commit the project's money. Only the repository "
+     "OWNER, a MEMBER or COLLABORATOR, or a bounty platform bot (algora-pbc, polar-sh, opire, "
+     "bountyhub) can fund a row. An amount written by any other commenter - a reader, a fan, a "
+     "copied aggregator blurb - is not an offer, however real the number looks."),
+    ("HARD_ISSUE_EVIDENCE_MISSING",
+     "the issue states no concrete engineering evidence: no error text, stack trace, failing "
+     "test, reproduction steps, file or function names. A title and a wish is not evidence that "
+     "a defect exists."),
     ("COMPETITION_OPEN_PR_EXISTS",
      "an unmerged open pull request already exists for this issue; never compete on pre-empted work."),
     ("DEFECT_NOT_IN_REPOSITORY",
@@ -446,6 +452,27 @@ There are two streams of genuine work:
 
 {downstream}
 
+## The three facts that decide almost every row
+
+Most rows do not die because the search was small. They die on one of these three, and each is
+checkable by you in one command before you write the row:
+
+1. WHO wrote the amount. The pipeline finds every sentence naming money and asks what kind of
+author wrote it. Only the repository OWNER, a MEMBER or COLLABORATOR, or a bounty platform bot
+(algora-pbc, polar-sh, opire, bountyhub) can fund a row. An amount in a reader's comment, a fan's
+reply, or a copied aggregator blurb is refused as CURRENT_ISSUER_OFFER_MISSING no matter how
+real the number looks. If the only figure you can find was written by somebody outside that set,
+the row is already dead.
+2. WHETHER it clears the floor. The floor is USD 250. A genuine $200 offer is refused as below
+floor, and it is not a lead we can work.
+3. WHETHER the issue proves anything is broken. The row needs error text, a stack trace, a failing
+test, reproduction steps, or file and function names. A title plus a wish is refused as
+HARD_ISSUE_EVIDENCE_MISSING.
+
+A repository-owner incident report (author_association: OWNER) announcing real downtime or a
+critical regression needs no figure: submit it with reward_usd null and the owner's own words as
+the quote, and it is quarantined for follow-up rather than refused.
+
 ## Mandatory Pre-Screen Audit (Apply Before Shortlisting)
 
 Before you record any issue into shortlist.jsonl, audit it as an engineer:
@@ -454,18 +481,32 @@ Before you record any issue into shortlist.jsonl, audit it as an engineer:
 3. Mergeability: Run `gh pr list --repo <repo> --state closed --limit 5`. If the repository closes external PRs without merging, drop it immediately (REPOSITORY_DOES_NOT_MERGE).
 4. Locality: Confirm the defect lives in this repository's own code, not in a 3rd party bridge, hardware wallet firmware, or desktop environment setup (DEFECT_NOT_IN_REPOSITORY).
 5. Bounded Scope: Ensure it is a concrete, bounded bugfix or feature, not an entire product roadmap or rewrite (UNBOUNDED_SCOPE).
+6. Money authorship: find the sentence that names the amount, then read that document's author
+   (`gh api repos/<repo>/issues/<n>/comments` for comments, `gh api repos/<repo>/issues/<n>` for the
+   body) and check `user.login` and `author_association`. If the author is not the owner, a
+   member/collaborator, or a bounty platform bot, and no such party states an amount elsewhere in
+   the issue, drop the row.
+7. Floor: set reward_usd from an issuer-authored sentence only, and confirm it is at least 250.
+8. Evidence: put the sentence carrying the proof (error, stack trace, failing test, reproduction,
+   file or function name) in scope_quote. If the issue is a title and a wish, do not submit it.
 
-## Your job is recall, not precision
+## Your job is recall, aimed at rows that actually pass
+
+You are the search half of this system, and the checks above are run by code against the source
+after you finish. They are exact, and they are cheap.
 
 Do not exclude a row to be safe: submit anything that plausibly meets these criteria, and the gates will verify it exactly and report the failures.
-You are the search half of this system. The checks above are run by code against the source
-after you finish, and they are exact. A row you drop is a lead nobody will ever see again; a
-row you submit that fails is a line in a report that costs nothing.
 
-So: when you are unsure, submit it. "I'm not certain this is a code task" is a reason to
-submit, not to skip. "The amount is unclear" is a reason to submit, not to skip. "This might
-be closed already" is a reason to submit, not to skip. The gates will sort it out, and they
-will do it better than your guess.
+When you are unsure, submit it. Unsure whether the issue is closed, whether it is really a code
+task, whether the scope is bounded, whether somebody already opened a pull request - the gates
+decide those exactly, and they will do it better than your guess. A row you drop is a lead nobody
+will ever see again.
+
+The three facts above are the single exception, and not because they are risky: they are lookups,
+not judgements. The author of an amount and the presence of an error are each one command away,
+so a row that fails them does not become a lead by being submitted - it only spends a search slot
+that a passing row would have used. Aim every row at money that is really funded and a defect
+that is really proven.
 
 ## What to produce
 
