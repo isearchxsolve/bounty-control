@@ -1,0 +1,45 @@
+{
+  "task_id": "f0ef1cab48ee847a83304e42d5d0fe37",
+  "repo": "ruohong2018/ruohong2018.github.io",
+  "issue_number": 828,
+  "status": "DISPATCHING",
+  "dispatch_id": "b297772a206e4be9ac0fccb9fe114d53",
+  "admission": {
+    "funding": {
+      "amount": "20000",
+      "currency": "USD",
+      "usd_value": "20000",
+      "quote": {
+        "basis": "USD face value"
+      },
+      "raw": "$20,000",
+      "source_url": "https://github.com/ruohong2018/ruohong2018.github.io/issues/828",
+      "payer": "ruohong2018"
+    },
+    "technical_signals": [
+      "bug",
+      "bug_bounty",
+      "bypass",
+      "error",
+      "issue",
+      "issues",
+      "overflow",
+      "race condition"
+    ],
+    "component_references": [
+      "ELPACO"
+    ],
+    "source_locations": [],
+    "engineering_evidence_sources": [
+      "https://github.com/ruohong2018/ruohong2018.github.io/issues/828"
+    ],
+    "source_issue": "https://github.com/ruohong2018/ruohong2018.github.io/issues/828",
+    "fetched_at": "2026-10-31T01:08:52.418014+00:00"
+  },
+  "lanes": [
+    "founder"
+  ],
+  "dispatched_at": "2026-10-31T01:08:53.515985+00:00",
+  "attempt": 0,
+  "updated_at": "2026-10-31T01:08:53.516002+00:00"
+}
