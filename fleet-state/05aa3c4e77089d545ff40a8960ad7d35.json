@@ -1,0 +1,37 @@
+{
+  "task_id": "05aa3c4e77089d545ff40a8960ad7d35",
+  "repo": "aolabsai/ao_pyth",
+  "issue_number": 9,
+  "status": "DISPATCHING",
+  "dispatch_id": "e7c5bb417bff423dadf71113a66aaa2b",
+  "admission": {
+    "funding": {
+      "amount": "300",
+      "currency": "USD",
+      "usd_value": "300",
+      "quote": {
+        "basis": "USD face value"
+      },
+      "raw": "$300",
+      "source_url": "https://github.com/aolabsai/ao_pyth/issues/9",
+      "payer": "mi3law"
+    },
+    "technical_signals": [
+      "issue"
+    ],
+    "component_references": [],
+    "source_locations": [],
+    "engineering_evidence_sources": [
+      "https://github.com/aolabsai/ao_pyth/issues/9"
+    ],
+    "source_issue": "https://github.com/aolabsai/ao_pyth/issues/9",
+    "fetched_at": "2026-10-31T09:29:03.348699+00:00"
+  },
+  "lanes": [
+    "bounty",
+    "programs"
+  ],
+  "dispatched_at": "2026-10-31T09:29:11.582987+00:00",
+  "attempt": 0,
+  "updated_at": "2026-10-31T09:29:11.582999+00:00"
+}
