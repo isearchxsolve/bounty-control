@@ -1,0 +1,40 @@
+{
+  "task_id": "ca161a453683bae6201939c4dcf98535",
+  "repo": "highlight/highlight",
+  "issue_number": 5082,
+  "status": "DISPATCHING",
+  "dispatch_id": "2640f9326d9c4aff85dcff4f11d333d7",
+  "admission": {
+    "funding": {
+      "amount": "400",
+      "currency": "USD",
+      "usd_value": "400",
+      "quote": {
+        "basis": "USD face value"
+      },
+      "raw": "$400",
+      "source_url": "https://github.com/highlight/highlight/issues/5082#issuecomment-1693637629",
+      "payer": "algora-pbc[bot]"
+    },
+    "technical_signals": [
+      "error",
+      "errors",
+      "issue"
+    ],
+    "component_references": [],
+    "source_locations": [],
+    "engineering_evidence_sources": [
+      "https://github.com/highlight/highlight/issues/5082",
+      "https://github.com/highlight/highlight/issues/5082#issuecomment-1693637629",
+      "https://github.com/highlight/highlight/issues/5082#issuecomment-1740334027"
+    ],
+    "source_issue": "https://github.com/highlight/highlight/issues/5082",
+    "fetched_at": "2026-10-31T14:34:15.971950+00:00"
+  },
+  "lanes": [
+    "bounty"
+  ],
+  "dispatched_at": "2026-10-31T14:34:31.204841+00:00",
+  "attempt": 0,
+  "updated_at": "2026-10-31T14:34:31.204878+00:00"
+}
