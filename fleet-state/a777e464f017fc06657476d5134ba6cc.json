@@ -1,0 +1,44 @@
+{
+  "task_id": "a777e464f017fc06657476d5134ba6cc",
+  "repo": "Tyaoo/picker",
+  "issue_number": 624,
+  "status": "DISPATCHING",
+  "dispatch_id": "a5c56c3bcea641ba877259bd9b06c8ff",
+  "admission": {
+    "funding": {
+      "amount": "500",
+      "currency": "EUR",
+      "usd_value": "558.6000",
+      "quote": {
+        "usd_rate": "1.1172",
+        "source_url": "https://api.frankfurter.dev/v1/latest?base=EUR&symbols=USD",
+        "observed_at": "2026-10-31T02:10:38.771043+00:00",
+        "quote_date": "2026-10-30"
+      },
+      "raw": "500\u20ac",
+      "source_url": "https://github.com/Tyaoo/picker/issues/624",
+      "payer": "Tyaoo"
+    },
+    "technical_signals": [
+      "broken",
+      "bug",
+      "bug_bounty",
+      "bypass",
+      "performance",
+      "race condition"
+    ],
+    "component_references": [],
+    "source_locations": [],
+    "engineering_evidence_sources": [
+      "https://github.com/Tyaoo/picker/issues/624"
+    ],
+    "source_issue": "https://github.com/Tyaoo/picker/issues/624",
+    "fetched_at": "2026-10-31T02:10:38.560169+00:00"
+  },
+  "lanes": [
+    "founder"
+  ],
+  "dispatched_at": "2026-10-31T02:10:39.691581+00:00",
+  "attempt": 0,
+  "updated_at": "2026-10-31T02:10:39.691602+00:00"
+}
