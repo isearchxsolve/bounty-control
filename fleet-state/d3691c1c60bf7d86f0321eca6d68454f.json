@@ -2,7 +2,7 @@
   "task_id": "d3691c1c60bf7d86f0321eca6d68454f",
   "repo": "getdozer/dozer",
   "issue_number": 1659,
-  "status": "CLAIMED",
+  "status": "FAILED_DELIVERABLE_MISSING",
   "dispatch_id": "0669ddfd06104782883b08698d159940",
   "admission": {
     "funding": {
@@ -406,7 +406,7 @@
   ],
   "dispatched_at": "2026-11-01T12:49:16.653196+00:00",
   "attempt": 3,
-  "updated_at": "2026-11-01T12:50:23.418453+00:00",
+  "updated_at": "2026-11-01T13:04:09.165262+00:00",
   "owner": "41308296241:1",
   "previous_owner": "41306450179:1",
   "previous_status": "DISPATCHED",
@@ -417,8 +417,8 @@
   "preparation_budget_seconds": 14400,
   "kind": "deliverable_invalid",
   "retryable": true,
-  "diagnostic": "Cline deliverable invalid at /tmp/fleet-artifacts/delivery-supervisor/6a942852e46a4fe89e64a6225bc110e7.preparation.json: Cline preparation must leave a clean, unchanged upstream baseline (dirty: dozer-sql/src/expression/tests/mod.rs, dozer-sql/src/expression/tests/in_subquery.rs)",
-  "at": "2026-11-01T12:37:49.558129+00:00",
+  "diagnostic": "Cline deliverable invalid at /tmp/fleet-artifacts/delivery-supervisor/1d78a3c7b81144abb3a4aa5297f220e6.preparation.json: Cline preparation must leave a clean, unchanged upstream baseline (dirty: dozer-sql/src/expression/tests/mod.rs, dozer-sql/src/expression/tests/regression_in_nested_select.rs)",
+  "at": "2026-11-01T13:03:59.028570+00:00",
   "failures": [
     {
       "run_url": "https://github.com/isearchxsolve/bounty-control/actions/runs/41266230781",
@@ -437,9 +437,19 @@
       "path": "/tmp/fleet-artifacts/delivery-supervisor/6a942852e46a4fe89e64a6225bc110e7.preparation.json",
       "reason": "Cline preparation must leave a clean, unchanged upstream baseline (dirty: dozer-sql/src/expression/tests/mod.rs, dozer-sql/src/expression/tests/in_subquery.rs)",
       "at": "2026-11-01T12:37:49.558129+00:00"
+    },
+    {
+      "run_url": "https://github.com/isearchxsolve/bounty-control/actions/runs/41308296241",
+      "status": "FAILED_DELIVERABLE_MISSING",
+      "kind": "deliverable_invalid",
+      "retryable": true,
+      "diagnostic": "Cline deliverable invalid at /tmp/fleet-artifacts/delivery-supervisor/1d78a3c7b81144abb3a4aa5297f220e6.preparation.json: Cline preparation must leave a clean, unchanged upstream baseline (dirty: dozer-sql/src/expression/tests/mod.rs, dozer-sql/src/expression/tests/regression_in_nested_select.rs)",
+      "path": "/tmp/fleet-artifacts/delivery-supervisor/1d78a3c7b81144abb3a4aa5297f220e6.preparation.json",
+      "reason": "Cline preparation must leave a clean, unchanged upstream baseline (dirty: dozer-sql/src/expression/tests/mod.rs, dozer-sql/src/expression/tests/regression_in_nested_select.rs)",
+      "at": "2026-11-01T13:03:59.028570+00:00"
     }
   ],
-  "finished_at": "2026-11-01T12:38:00.654043+00:00",
-  "path": "/tmp/fleet-artifacts/delivery-supervisor/6a942852e46a4fe89e64a6225bc110e7.preparation.json",
-  "reason": "Cline preparation must leave a clean, unchanged upstream baseline (dirty: dozer-sql/src/expression/tests/mod.rs, dozer-sql/src/expression/tests/in_subquery.rs)"
+  "finished_at": "2026-11-01T13:04:08.730760+00:00",
+  "path": "/tmp/fleet-artifacts/delivery-supervisor/1d78a3c7b81144abb3a4aa5297f220e6.preparation.json",
+  "reason": "Cline preparation must leave a clean, unchanged upstream baseline (dirty: dozer-sql/src/expression/tests/mod.rs, dozer-sql/src/expression/tests/regression_in_nested_select.rs)"
 }
