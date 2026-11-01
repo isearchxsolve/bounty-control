@@ -2,7 +2,7 @@
   "task_id": "ff54a0ed7bd60b9e13979b4b15577b4e",
   "repo": "Spectral-Finance/lux",
   "issue_number": 99,
-  "status": "CLAIMED",
+  "status": "FAILED_ENGINEER",
   "dispatch_id": "d4e4b0141be9453a9796844711fce6e4",
   "admission": {
     "funding": {
@@ -568,7 +568,7 @@
   ],
   "dispatched_at": "2026-10-31T23:20:50.875745+00:00",
   "attempt": 1,
-  "updated_at": "2026-10-31T23:22:11.679676+00:00",
+  "updated_at": "2026-11-01T00:15:06.480765+00:00",
   "owner": "41252150256:1",
   "previous_owner": null,
   "previous_status": "DISPATCHED",
@@ -576,5 +576,20 @@
   "harness_sha": "145cb614266335b4c84884c39bd506c6b0eb9c00",
   "claimed_at": "2026-10-31T23:22:11.679631+00:00",
   "lease_expires_at": "2026-11-01T03:27:11.679642+00:00",
-  "preparation_budget_seconds": 14400
+  "preparation_budget_seconds": 14400,
+  "kind": "engineer",
+  "retryable": true,
+  "diagnostic": "Bounded Cline delivery repair exhausted: Iteration exhausted after 1 turns without green.",
+  "at": "2026-11-01T00:14:55.428296+00:00",
+  "failures": [
+    {
+      "run_url": "https://github.com/isearchxsolve/bounty-control/actions/runs/41252150256",
+      "status": "FAILED_ENGINEER",
+      "kind": "engineer",
+      "retryable": true,
+      "diagnostic": "Bounded Cline delivery repair exhausted: Iteration exhausted after 1 turns without green.",
+      "at": "2026-11-01T00:14:55.428296+00:00"
+    }
+  ],
+  "finished_at": "2026-11-01T00:15:05.871372+00:00"
 }
