@@ -2,7 +2,7 @@
   "task_id": "85102fd27638790b1f1e0bf33ff07357",
   "repo": "sriahead/aheed-online-store",
   "issue_number": 1289,
-  "status": "PUBLISHING",
+  "status": "PUBLISHED_PENDING_CHECKS",
   "dispatch_id": "f5826601fceb4f4c91873a986914ac4a",
   "admission": {
     "funding": {
@@ -42,7 +42,7 @@
   ],
   "dispatched_at": "2026-10-31T23:37:45.492930+00:00",
   "attempt": 1,
-  "updated_at": "2026-11-01T00:31:18.957175+00:00",
+  "updated_at": "2026-11-01T00:31:27.047060+00:00",
   "owner": "41253330076:1",
   "previous_owner": null,
   "previous_status": "DISPATCHED",
@@ -53,5 +53,14 @@
   "preparation_budget_seconds": 14400,
   "proposed_head": "47845732cc9039fc912a7e47e589792a628df1d1",
   "proposed_branch": "fix/bounty-1289-85102f-1",
-  "verified_run": "https://github.com/isearchxsolve/bounty-control/actions/runs/41253330076"
+  "verified_run": "https://github.com/isearchxsolve/bounty-control/actions/runs/41253330076",
+  "pr_url": "https://github.com/sriahead/aheed-online-store/pull/1382",
+  "pr_number": 1382,
+  "head_sha": "47845732cc9039fc912a7e47e589792a628df1d1",
+  "branch": "fix/bounty-1289-85102f-1",
+  "claim_status": "NOT_APPLICABLE",
+  "claim_command": "",
+  "claim_retry_required": false,
+  "payment_status": "UNVERIFIED",
+  "release_digest": "6a020a2d841c5f277e7d56c52e708bbf632a0ecf03e06cce4d0d3b118db842ce"
 }
