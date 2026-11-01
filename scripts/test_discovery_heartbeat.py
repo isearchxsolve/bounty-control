@@ -22,6 +22,7 @@ from pathlib import Path
 import sys
 import tempfile
 import unittest
+from types import SimpleNamespace
 from unittest import mock
 
 HERE = Path(__file__).resolve().parent
@@ -88,6 +89,32 @@ class DecisionTests(unittest.TestCase):
     def test_the_cooldown_does_not_override_a_live_run(self):
         self.assertEqual(self.decide([run(1, status="queued")], last_fire=None),
                          (False, "already_running"))
+
+
+class RefResolutionTests(unittest.TestCase):
+    """The ref must be read, not guessed.
+
+    Measured 2026-11-01 (run 41256276495): a compiled-in ref of ``master`` was dispatched
+    against a repository whose default branch is ``main``, so every dispatch was answered
+    "HTTP 422: No ref found for: master" and the heartbeat -- the fallback for a discovery
+    cron that does not fire -- was itself dark. An unreadable answer must hold, because a
+    guessed ref is a refusal that looks like a healthy beat.
+    """
+
+    def resolve(self, returncode=0, stdout="main\n", stderr=""):
+        with mock.patch.object(heartbeat.subprocess, "run",
+                               return_value=SimpleNamespace(returncode=returncode,
+                                                            stdout=stdout, stderr=stderr)):
+            return heartbeat.resolve_ref("isearchxsolve/bounty-control")
+
+    def test_the_default_branch_is_read_from_the_repository(self):
+        self.assertEqual(self.resolve(), "main")
+
+    def test_an_unreadable_repository_returns_none_rather_than_a_guess(self):
+        self.assertIsNone(self.resolve(returncode=1, stdout="", stderr="gh: not found"))
+
+    def test_an_empty_answer_is_not_a_ref(self):
+        self.assertIsNone(self.resolve(returncode=0, stdout="  \n"))
 
 
 class EvaluateTests(unittest.TestCase):
@@ -159,6 +186,46 @@ class EvaluateTests(unittest.TestCase):
         receipt = json.loads(self.state.read_text(encoding="utf-8").strip())
         self.assertFalse(receipt["fired"])
         self.assertEqual(receipt["decision"], "dispatch_failed")
+
+    def test_a_ref_from_the_repository_is_dispatched_not_the_compiled_in_guess(self):
+        args = argparse.Namespace(
+            repo="isearchxsolve/bounty-control", workflow="bounty-discovery.yml",
+            ref=None, max_age_minutes=20, cooldown_minutes=20, state=str(self.state))
+        buffer = io.StringIO()
+        with mock.patch.object(heartbeat, "probe", return_value=[run(90)]), \
+                mock.patch.object(heartbeat, "resolve_ref", return_value="main"), \
+                mock.patch.object(heartbeat, "dispatch",
+                                  return_value=(True, "dispatched")) as fired, \
+                redirect_stdout(buffer):
+            status = heartbeat.evaluate(args, False)
+        self.assertEqual(status, 0)
+        fired.assert_called_once_with(args.repo, args.workflow, "main")
+        receipt = json.loads(self.state.read_text(encoding="utf-8").strip())
+        self.assertTrue(receipt["fired"])
+        self.assertEqual(receipt["ref"], "main")
+        self.assertIn("VERDICT: FIRED", buffer.getvalue())
+
+    def test_an_unresolvable_ref_holds_instead_of_dispatching_a_guess(self):
+        args = argparse.Namespace(
+            repo="isearchxsolve/bounty-control", workflow="bounty-discovery.yml",
+            ref=None, max_age_minutes=20, cooldown_minutes=20, state=str(self.state))
+        buffer = io.StringIO()
+        with mock.patch.object(heartbeat, "probe", return_value=[run(90)]), \
+                mock.patch.object(heartbeat, "resolve_ref", return_value=None), \
+                mock.patch.object(heartbeat, "dispatch") as fired, \
+                redirect_stdout(buffer):
+            status = heartbeat.evaluate(args, False)
+        self.assertEqual(status, 2)
+        fired.assert_not_called()
+        receipt = json.loads(self.state.read_text(encoding="utf-8").strip())
+        self.assertFalse(receipt["fired"])
+        self.assertEqual(receipt["decision"], "ref_unresolved")
+        # A failed ref must never be mistaken for a healthy hold on a fresh pipeline.
+        self.assertIn("ref_unresolved", buffer.getvalue())
+
+    def test_an_explicit_ref_is_still_honored(self):
+        status, fired, out = self.evaluate([run(90)])
+        fired.assert_called_once_with(self.args.repo, self.args.workflow, "master")
 
 
 class LockTests(unittest.TestCase):

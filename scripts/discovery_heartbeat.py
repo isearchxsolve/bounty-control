@@ -37,7 +37,13 @@ import time
 DEFAULT_REPO = (os.environ.get("BOUNTY_REPOSITORY") or os.environ.get("GITHUB_REPOSITORY")
                 or "isearchxsolve/anonym-family-archive")
 DEFAULT_WORKFLOW = "bounty-discovery.yml"
-DEFAULT_REF = "main"
+# None means: ask GitHub which branch this repository actually dispatches on. A compiled-in
+# branch name is a guess, and a guess is a refusal: measured 2026-11-01 (run 41256276495),
+# the ref "master" was dispatched against a repository whose default branch is "main", so
+# every dispatch was answered "HTTP 422: No ref found for: master" and the fallback that
+# exists to restart a stalled discovery cron was itself dark. Hardcoding "main" makes the
+# same assumption in the other spelling; the branch name is a fact GitHub will tell us.
+DEFAULT_REF = None
 
 # States in which GitHub already has (or is about to have) a run. Dispatching now would either
 # duplicate the pass or sit in a concurrency queue behind it.
@@ -116,6 +122,21 @@ def dispatch(repo, workflow, ref):
     return result.returncode == 0, detail
 
 
+def resolve_ref(repo):
+    """Read the repository's real default branch, or ``None`` if it cannot be read.
+
+    ``gh workflow run`` needs a ref that exists on that repository. Reading it is one
+    authenticated GET; guessing it is a 422 that silently disables the fallback (measured
+    2026-11-01, run 41256276495, ref "master" against default branch "main"). An unreadable
+    answer must stay unreadable rather than become a guess.
+    """
+    result = subprocess.run(["gh", "api", f"repos/{repo}", "--jq", ".default_branch"],
+                            capture_output=True, text=True, timeout=60)
+    if result.returncode != 0:
+        return None
+    return (result.stdout or "").strip() or None
+
+
 def last_fire(state_path):
     """Timestamp of the most recent receipt that actually fired, or ``None``."""
     path = Path(state_path)
@@ -189,12 +210,20 @@ def evaluate(args, dry_run):
         receipt.update(runs_visible=0, decision=reason, probe_error=str(exc),
                        newest_run=None)
     receipt["fired"] = False
-    if fire and not dry_run:
-        ok, detail = dispatch(args.repo, args.workflow, args.ref)
-        receipt["fired"] = bool(ok)
-        receipt["dispatch_detail"] = detail
-        if not ok:
-            receipt["decision"] = "dispatch_failed"
+    if fire:
+        # An explicit --ref is honored; otherwise the repository's real default branch is
+        # read and recorded. A ref that cannot be read is never guessed.
+        ref = args.ref or resolve_ref(args.repo)
+        if ref is None:
+            receipt["decision"] = "ref_unresolved"
+        else:
+            receipt["ref"] = ref
+            if not dry_run:
+                ok, detail = dispatch(args.repo, args.workflow, ref)
+                receipt["fired"] = bool(ok)
+                receipt["dispatch_detail"] = detail
+                if not ok:
+                    receipt["decision"] = "dispatch_failed"
     receipt["would_fire"] = bool(fire)
     record(args.state, receipt)
     print(json.dumps(receipt, indent=2, sort_keys=True))
@@ -204,6 +233,9 @@ def evaluate(args, dry_run):
         verdict = "FIRED " + args.workflow
     elif receipt["decision"] == "dispatch_failed":
         verdict = "DISPATCH_FAILED " + str(receipt.get("dispatch_detail", ""))[:400]
+    elif receipt["decision"] == "ref_unresolved":
+        verdict = ("HOLD ref_unresolved: cannot read the default branch of " + args.repo +
+                   "; refusing to dispatch a guessed ref")
     else:
         verdict = "HOLD " + reason + (" (dry run)" if dry_run and fire else "")
     print("VERDICT: " + verdict)
