@@ -930,6 +930,106 @@ class GatewayFailoverTests(unittest.TestCase):
             self.assertNotIn("nim-secret-key", line)
         self.assertTrue(any("FAILOVER" in line for line in logged))
 
+    def fake_brain(self, outcomes, cooldown, model=None):
+        """A stand-in router: the 4-tuple chat_completion returns, with a model and a cooldown.
+
+        The real TokenHarborRouter and NvidiaRouter both return that shape, and gateway_failover
+        reads a fallback's ``model`` for its log line. A fake that omits either raises inside
+        the gateway, which swallows the exception and answers None -- measured 2026-11-01 while
+        writing these, which is how the cooldown path went unverified.
+        """
+        case = self
+
+        class Brain:
+            def __init__(self):
+                self.outcomes = iter(outcomes)
+                self.cooldown = cooldown
+                self.model = model if model is not None else case.worker.NVIDIA_DELIVERY_MODEL
+                self.calls = 0
+
+            def chat_completion(self, payload, timeout=None):
+                self.calls += 1
+                try:
+                    return next(self.outcomes)
+                except StopIteration:
+                    return (True, case.nim_completion(), self.model, "")
+
+            def seconds_until_ready_key(self):
+                return self.cooldown
+
+        return Brain()
+
+    def test_both_brains_throttled_waits_for_the_nearest_cooldown(self):
+        """Measured 2026-11-01 (lux#74, run 41343485469): all 17 TokenHarbor keys and all 14
+        NVIDIA keys answered 429 in the same window and the repair turn died in seconds. A
+        429 is a per-account cooldown, so the pool is not dead while one account is still
+        waiting out its window: the gateway waits for the nearest expiry -- bounded -- and
+        then resumes on the primary brain, which is healthy again.
+        """
+        primary = self.fake_brain(
+            [(True, self.nim_completion(), "deepseek-v4.1-flash:free", "")], 25.0,
+            model="deepseek-v4.1-flash:free")
+        fallback = self.fake_brain(
+            [(False, {}, self.worker.NVIDIA_DELIVERY_MODEL, "rate limit")], 25.0)
+        slept = []
+        with patch.object(self.worker, "tokenharbor_shard_ready_slots", return_value=0), \
+                patch.object(self.worker, "time") as clock, \
+                patch.object(self.worker, "_get_default_router", return_value=primary):
+            clock.sleep = lambda seconds: slept.append(seconds)
+            clock.monotonic = lambda: 0.0
+            outcome = self.worker.gateway_failover(self.request(), "TokenHarbor router HTTP 429",
+                                                   router=fallback)
+        self.assertTrue(outcome[0], outcome[3])
+        self.assertEqual(slept, [25.0], "the wait is the nearest cooldown, not the bound and not zero")
+        self.assertEqual(primary.calls, 1, "the primary brain is retried first after the cooldown")
+        self.assertEqual(fallback.calls, 1, "the parachute is not asked again once the primary is healthy")
+        tool_calls = outcome[1]["choices"][0]["message"]["tool_calls"]
+        self.assertEqual(tool_calls[0]["function"]["arguments"], '{"command": "mix test"}')
+
+    def test_a_still_cooling_primary_hands_the_resume_to_the_parachute(self):
+        """Rotating the keys means the whole TokenHarbor pool first and then the NVIDIA pool:
+        a primary still cooling after the wait must not end the turn while a parachute key
+        has come back."""
+        primary = self.fake_brain(
+            [(False, {}, "deepseek-v4.1-flash:free", "still cooling")], 25.0,
+            model="deepseek-v4.1-flash:free")
+        fallback = self.fake_brain(
+            [(False, {}, self.worker.NVIDIA_DELIVERY_MODEL, "rate limit"),
+             (True, self.nim_completion(), self.worker.NVIDIA_DELIVERY_MODEL, "")], 25.0)
+        slept = []
+        with patch.object(self.worker, "tokenharbor_shard_ready_slots", return_value=0), \
+                patch.object(self.worker, "time") as clock, \
+                patch.object(self.worker, "_get_default_router", return_value=primary):
+            clock.sleep = lambda seconds: slept.append(seconds)
+            clock.monotonic = lambda: 0.0
+            outcome = self.worker.gateway_failover(self.request(), "TokenHarbor router HTTP 429",
+                                                   router=fallback)
+        self.assertTrue(outcome[0], outcome[3])
+        self.assertEqual(slept, [25.0])
+        self.assertEqual(outcome[2], self.worker.NVIDIA_DELIVERY_MODEL)
+        self.assertEqual((primary.calls, fallback.calls), (1, 2),
+                         "the primary is retried once, then the parachute takes its turn")
+
+    def test_a_cooldown_beyond_the_bounded_wait_fails_loudly_with_both_reasons(self):
+        """A cooldown outside the bounded wait must not become a hang, and the parachute
+        failing must never erase why the jump was needed."""
+        primary = self.fake_brain([], 900.0)
+        fallback = self.fake_brain(
+            [(False, {}, self.worker.NVIDIA_DELIVERY_MODEL, "rate limit")], 900.0)
+        slept = []
+        with patch.object(self.worker, "tokenharbor_shard_ready_slots", return_value=0), \
+                patch.object(self.worker, "time") as clock, \
+                patch.object(self.worker, "_get_default_router", return_value=primary):
+            clock.sleep = lambda seconds: slept.append(seconds)
+            clock.monotonic = lambda: 0.0
+            outcome = self.worker.gateway_failover(self.request(), "TokenHarbor router HTTP 429",
+                                                   router=fallback)
+        self.assertFalse(outcome[0])
+        self.assertEqual(slept, [], "a cooldown outside the bound is never waited out")
+        self.assertEqual(primary.calls, 0, "the bounded wait is a bound, not a hang")
+        self.assertIn("primary brain throttled", outcome[3])
+        self.assertIn("NVIDIA fallback also failed", outcome[3])
+
     def test_the_fallback_status_is_credential_free(self):
         transport, _ = self.nim()
         fallback = self.worker.NvidiaRouter(

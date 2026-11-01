@@ -139,6 +139,21 @@ class NvidiaRouter:
                 slot.state = READY
 
     # ------------------------------------------------------------------ calling
+    def seconds_until_ready_key(self) -> float:
+        """Seconds until the nearest key leaves cooldown; 0.0 when one is ready now.
+
+        A 429 is a per-account cooldown, not a verdict on the key, so the pool is not
+        exhausted while one account is still waiting out its window. Measured 2026-11-01
+        (lux#74): every one of the delivery engine's NVIDIA keys answered 429 in the same
+        second, and the caller died immediately although the nearest expiry was close.
+        """
+        with self._lock:
+            self._refresh_cooldowns_locked()
+            now = self._clock()
+            live = [slot.cooldown_until - now for slot in self._slots
+                    if slot.state == COOLDOWN and slot.cooldown_until > now]
+            return min(live) if live else 0.0
+
     def chat_completion(self, payload: dict, timeout: int = 600,
                         max_attempts: Optional[int] = None):
         """Return (ok, completion, model, error), rotating keys. No model fallback by design."""

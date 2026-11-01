@@ -119,6 +119,11 @@ DEFAULT_KEY_FILE = r"D:\anonym\vault\tokenharbor_keys.json"
 DEFAULT_TIMEOUT_SECONDS = 120
 # One call to the 120B fallback brain, bounded well inside a Cline turn's own budget.
 FALLBACK_TIMEOUT_SECONDS = 600
+# How long the gateway waits for a cooling key before it gives up. A 429 is a per-account
+# cooldown, and every one of these keys is a separate account, so waiting out the nearest
+# expiry is cheaper than killing a turn -- but a request cannot be held longer than the
+# agent's own patience, and an unbounded wait would trade a loud failure for a hang.
+GATEWAY_COOLDOWN_WAIT_SECONDS = float(os.environ.get("GATEWAY_COOLDOWN_WAIT_SECONDS", "120") or 120.0)
 TOKEN_HARBOR_KEYS_ENV = "TOKENHARBOR_KEYS_JSON"
 READY = "READY"
 LEASED = "LEASED"
@@ -453,6 +458,22 @@ class TokenHarborRouter:
             self._release_ready(slot)
             return False, {}, DEEPSEEK_FLASH_MODEL, self._error_text(response_payload, f"Token Harbor request failed ({status}).")
 
+    def seconds_until_ready_key(self) -> float:
+        """Seconds until the nearest cooling key returns; 0.0 while any key is ready.
+
+        Measured 2026-11-01 (lux#74, run 41343485469): all 17 keys were answering 429 in
+        the same window, the gateway escalated to the NVIDIA parachute, that pool was
+        cooling too, and the turn died in seconds. A 429 is a per-account cooldown, so the
+        pool is not exhausted while one account is still waiting out its window: the
+        nearest expiry is the number the gateway waits for.
+        """
+        with self._lock:
+            self._refresh_cooldowns_locked()
+            now = self._clock()
+            live = [slot.cooldown_until - now for slot in self._slots
+                    if slot.state == COOLDOWN and slot.cooldown_until > now]
+            return min(live) if live else 0.0
+
     def status(self) -> dict:
         with self._lock:
             self._refresh_cooldowns_locked()
@@ -697,12 +718,40 @@ def gateway_failover(payload: dict, error_message: Optional[str], router: Option
         )
         outcome = fallback.chat_completion(payload, timeout=FALLBACK_TIMEOUT_SECONDS)
         ok, _, model_used, diagnostic = outcome
+        if not ok:
+            # Both brains just answered 429. Every key is a different account and a 429 is
+            # that account's cooldown, so the truthful question is how long until the
+            # nearest one comes back -- not whether the pool is dead. Measured 2026-11-01
+            # (lux#74): the turn died in seconds with both pools cooling and a cooldown
+            # that would have expired shortly after. Rotate all 17 TokenHarbor keys, then
+            # all 14 NVIDIA keys, then wait -- bounded -- for the nearest expiry.
+            primary = _get_default_router()
+            wait = min(primary.seconds_until_ready_key(), fallback.seconds_until_ready_key())
+            if 0 < wait <= GATEWAY_COOLDOWN_WAIT_SECONDS:
+                _command_log(f'CLINE_GATEWAY COOLDOWN id={request_id} both brains throttled; '
+                             f'nearest key returns in {wait:.0f}s; resuming after it')
+                time.sleep(wait)
+                resumed = primary.chat_completion(payload, timeout=DEFAULT_TIMEOUT_SECONDS)
+                if not resumed[0]:
+                    resumed = fallback.chat_completion(payload, timeout=FALLBACK_TIMEOUT_SECONDS)
+                outcome = resumed
+                ok, _, model_used, diagnostic = outcome
+                if ok:
+                    _command_log(f'CLINE_GATEWAY COOLDOWN END id={request_id} result=OK model={model_used}')
         elapsed = "" if request_started is None else f' elapsed={time.monotonic() - request_started:.1f}s'
         if ok:
             _command_log(f'CLINE_GATEWAY FAILOVER END id={request_id} result=OK model={model_used}{elapsed}')
         else:
+            # A parachute that does not open must not erase why the jump was needed:
+            # measured 2026-11-01 (lux#74, run 41343485469), the ledger showed only
+            # "Every NVIDIA key failed after 1 attempt(s)" and the fact that all 17
+            # TokenHarbor keys were cooling was lost, so the retry decision read a
+            # failed parachute instead of an exhausted primary brain.
+            combined = (f"primary brain throttled: {str(error_message or 'unknown')[:300]}; "
+                        f"NVIDIA fallback also failed: {str(diagnostic or '')[:300]}")
             _command_log(f'CLINE_GATEWAY FAILOVER END id={request_id} result=FAILED '
-                         f'model={model_used}{elapsed} diagnostic={str(diagnostic)[:120]}')
+                         f'model={model_used}{elapsed} {combined[:400]}')
+            outcome = (False, {}, model_used, combined)
         return outcome
     except Exception:
         # The fallback is an optimisation over a loud failure; it must never be the
