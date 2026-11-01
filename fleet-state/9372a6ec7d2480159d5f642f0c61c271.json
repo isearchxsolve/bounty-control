@@ -2,8 +2,8 @@
   "task_id": "9372a6ec7d2480159d5f642f0c61c271",
   "repo": "sonevalleyinfra/buildcity-web",
   "issue_number": 50,
-  "status": "FAILED_ENGINEER",
-  "dispatch_id": "35ca18706da642a382bf19b70d4def86",
+  "status": "DISPATCHING",
+  "dispatch_id": "eb6bfe34d9634bb0921691593fe384a1",
   "admission": {
     "funding": {
       "payer": "sonevalleyinfra",
@@ -31,7 +31,7 @@
     "task_id": "9372a6ec7d2480159d5f642f0c61c271",
     "source_revision": "c510c29bb6d7eccaffb4617f8eecd30d979c08578ff2cf3af3723f86cfbad156"
   },
-  "dispatch_attempt": 2,
+  "dispatch_attempt": 3,
   "sovereign_admission": true,
   "competition": {
     "blocking": false,
@@ -40,9 +40,9 @@
   "lanes": [
     "founder"
   ],
-  "dispatched_at": "2026-11-01T12:24:37.500368+00:00",
+  "dispatched_at": "2026-11-01T12:47:52.580349+00:00",
   "attempt": 2,
-  "updated_at": "2026-11-01T12:33:39.687757+00:00",
+  "updated_at": "2026-11-01T12:47:52.580364+00:00",
   "owner": "41306358110:1",
   "previous_owner": "41253310793:1",
   "previous_status": "DISPATCHED",
