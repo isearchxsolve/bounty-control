@@ -8,4 +8,3 @@ try:
 except Exception as e:
     print(f'Error: {e}')
     print(result.stdout[:500])
-PYEOF
