@@ -1,0 +1,68 @@
+{
+  "task_id": "7780bd7e1a7be1e5e680e75b47d43dae",
+  "repo": "gqrx-sdr/gqrx",
+  "issue_number": 1336,
+  "status": "DISPATCHING",
+  "dispatch_id": "9d4f5fb64b0c47fa82e410c060214d84",
+  "admission": {
+    "funding": {
+      "amount": "420",
+      "currency": "USD",
+      "payer": "bountyhub-bot",
+      "source_url": "https://github.com/gqrx-sdr/gqrx/issues/1336#issuecomment-6529637385",
+      "usd_value": "420",
+      "quote": {
+        "basis": "USD face value",
+        "usd_rate": "1"
+      },
+      "raw": "**A bounty of** $420.00 **has been created by** [AsciiWolf](https://github.com/AsciiWolf) **on BountyHub** for this issue.",
+      "source_author_association": "NONE",
+      "source_author_login": "bountyhub-bot"
+    },
+    "agent_reason": "Funded bounty: the accepted bounty platform bot bountyhub-bot posted a committed $420 US bounty created by repository contributor AsciiWolf for this issue, so the figure is written by a bounty platform bot enumerated in the domain rules. Scope is bounded to a single deliverable feature (basic TX support: AM/SSB/NFM modulators, a GUI/keyboard transmit trigger, Hamlib rigctl, and TX gain controls). Repository intent: gqrx-sdr/gqrx is the real Gqrx SDR receiver and merges outside work (e.g. argilo's PR #1473 merged 2026-10-27). code_evidence src/applications/gqrx/mainwindow.cpp is the product source file that wires the demodulator/GUI selection and is where the TX button, modulator selection, and TX gain controls would be added; the quoted line connects the demod selector slot in that file.",
+    "scope_quote": "Good start could be adding some basic AM/SSB and NFM modulators. Gqrx is based on GNU Radio and there are already GNU Radio blocks for this. Filters and other things can be shared with the RX part.",
+    "code_evidence": {
+      "path": "src/applications/gqrx/mainwindow.cpp",
+      "sha": "a9023d2b0fcf974edee26dd9967de82c2bc16547",
+      "quote": "connect(uiDockRxOpt, SIGNAL(demodSelected(int)), this, SLOT(selectDemod(int)));",
+      "is_product_code": true
+    },
+    "source_issue": "https://github.com/gqrx-sdr/gqrx/issues/1336",
+    "funding_status": "PRICED_OFFER",
+    "lane": "bounty",
+    "task_id": "7780bd7e1a7be1e5e680e75b47d43dae",
+    "source_revision": "a8de2fb190b5a618d35355f23d2b9b9c1a16dc290fb05b22de87d5fe1ce1b681"
+  },
+  "dispatch_attempt": 1,
+  "sovereign_admission": true,
+  "competition": {
+    "blocking": false,
+    "nominal": [
+      {
+        "pr": "https://github.com/gqrx-sdr/gqrx/pull/1475",
+        "author": "saik2789",
+        "number": 1475,
+        "author_merged_in_repo": 0,
+        "check_runs": 0,
+        "maintainer_engagement": 0,
+        "reason": "nominal_attempt_only"
+      },
+      {
+        "pr": "https://github.com/gqrx-sdr/gqrx/pull/1475",
+        "author": "saik2789",
+        "number": 1475,
+        "author_merged_in_repo": 0,
+        "history_cached": true,
+        "check_runs": 0,
+        "maintainer_engagement": 0,
+        "reason": "nominal_attempt_only"
+      }
+    ]
+  },
+  "lanes": [
+    "programs"
+  ],
+  "dispatched_at": "2026-11-01T02:39:35.746567+00:00",
+  "attempt": 0,
+  "updated_at": "2026-11-01T02:39:35.746586+00:00"
+}
