@@ -2,7 +2,7 @@
   "task_id": "a2f5800d7fce76cc6fc4efb2363e5ffc",
   "repo": "smallbets/userbase",
   "issue_number": 305,
-  "status": "DISPATCHING",
+  "status": "DISPATCHED",
   "dispatch_id": "235c1971bdfe4e349c937676b28998d4",
   "admission": {
     "funding": {
@@ -64,5 +64,5 @@
   ],
   "dispatched_at": "2026-11-01T21:18:48.082040+00:00",
   "attempt": 0,
-  "updated_at": "2026-11-01T21:18:48.082063+00:00"
+  "updated_at": "2026-11-01T21:18:49.772467+00:00"
 }
