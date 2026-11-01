@@ -2,7 +2,7 @@
   "task_id": "685946a5eea19a56b3f871a089b5011f",
   "repo": "qojulia/QuantumOptics.jl",
   "issue_number": 407,
-  "status": "CLAIMED",
+  "status": "FAILED_DELIVERABLE_MISSING",
   "dispatch_id": "a67afc1ccb1a4b14a3df58ba9e2b587b",
   "admission": {
     "funding": {
@@ -44,7 +44,7 @@
   ],
   "dispatched_at": "2026-11-01T12:47:34.357294+00:00",
   "attempt": 3,
-  "updated_at": "2026-11-01T12:47:50.389836+00:00",
+  "updated_at": "2026-11-01T12:52:53.415808+00:00",
   "owner": "41308162988:1",
   "previous_owner": "41306334844:1",
   "previous_status": "DISPATCHED",
@@ -55,10 +55,10 @@
   "preparation_budget_seconds": 14400,
   "kind": "deliverable_invalid",
   "retryable": true,
-  "diagnostic": "Cline deliverable invalid at /tmp/fleet-artifacts/delivery-supervisor/cea5742846fe48cc86d4d9317079e62d.preparation.json: action=incomplete: the preparation skeleton was never replaced, so the agent finished without reporting",
-  "path": "/tmp/fleet-artifacts/delivery-supervisor/cea5742846fe48cc86d4d9317079e62d.preparation.json",
+  "diagnostic": "Cline deliverable invalid at /tmp/fleet-artifacts/delivery-supervisor/e143d0a52e5f4212bf8a8568d416834f.preparation.json: action=incomplete: the preparation skeleton was never replaced, so the agent finished without reporting",
+  "path": "/tmp/fleet-artifacts/delivery-supervisor/e143d0a52e5f4212bf8a8568d416834f.preparation.json",
   "reason": "action=incomplete: the preparation skeleton was never replaced, so the agent finished without reporting",
-  "at": "2026-11-01T12:30:32.547909+00:00",
+  "at": "2026-11-01T12:52:41.764056+00:00",
   "failures": [
     {
       "run_url": "https://github.com/isearchxsolve/bounty-control/actions/runs/41294829504",
@@ -79,7 +79,17 @@
       "path": "/tmp/fleet-artifacts/delivery-supervisor/cea5742846fe48cc86d4d9317079e62d.preparation.json",
       "reason": "action=incomplete: the preparation skeleton was never replaced, so the agent finished without reporting",
       "at": "2026-11-01T12:30:32.547909+00:00"
+    },
+    {
+      "run_url": "https://github.com/isearchxsolve/bounty-control/actions/runs/41308162988",
+      "status": "FAILED_DELIVERABLE_MISSING",
+      "kind": "deliverable_invalid",
+      "retryable": true,
+      "diagnostic": "Cline deliverable invalid at /tmp/fleet-artifacts/delivery-supervisor/e143d0a52e5f4212bf8a8568d416834f.preparation.json: action=incomplete: the preparation skeleton was never replaced, so the agent finished without reporting",
+      "path": "/tmp/fleet-artifacts/delivery-supervisor/e143d0a52e5f4212bf8a8568d416834f.preparation.json",
+      "reason": "action=incomplete: the preparation skeleton was never replaced, so the agent finished without reporting",
+      "at": "2026-11-01T12:52:41.764056+00:00"
     }
   ],
-  "finished_at": "2026-11-01T12:30:45.594527+00:00"
+  "finished_at": "2026-11-01T12:52:52.904337+00:00"
 }
