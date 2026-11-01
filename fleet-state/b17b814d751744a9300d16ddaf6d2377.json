@@ -2,7 +2,7 @@
   "task_id": "b17b814d751744a9300d16ddaf6d2377",
   "repo": "Manthan-cpp/GramRaksha-AI",
   "issue_number": 2,
-  "status": "CLAIMED",
+  "status": "FAILED_DELIVERABLE_MISSING",
   "dispatch_id": "aaa1032a0b1e40dc9ad9ff7617017935",
   "admission": {
     "funding": {
@@ -63,7 +63,7 @@
   ],
   "dispatched_at": "2026-11-01T12:24:44.355170+00:00",
   "attempt": 2,
-  "updated_at": "2026-11-01T12:24:56.001855+00:00",
+  "updated_at": "2026-11-01T12:30:11.216472+00:00",
   "owner": "41306367205:1",
   "previous_owner": "41287221293:1",
   "previous_status": "DISPATCHED",
@@ -72,10 +72,10 @@
   "claimed_at": "2026-11-01T12:24:56.001801+00:00",
   "lease_expires_at": "2026-11-01T16:29:56.001815+00:00",
   "preparation_budget_seconds": 14400,
-  "kind": "engineer",
+  "kind": "deliverable_invalid",
   "retryable": true,
-  "diagnostic": "Bounded Cline delivery repair exhausted: Cline failed closed on turn 1: Cline execution failed (exit 1): \u001b[31merror:\u001b[0m No Token Harbor key is currently ready.",
-  "at": "2026-11-01T08:12:08.364353+00:00",
+  "diagnostic": "Cline deliverable invalid at /tmp/fleet-artifacts/delivery-supervisor/c2762c2d2a0e4131a1987789772fc1ae.preparation.json: Cline preparation must leave a clean, unchanged upstream baseline (dirty: package-lock.json, package.json)",
+  "at": "2026-11-01T12:30:01.252771+00:00",
   "failures": [
     {
       "run_url": "https://github.com/isearchxsolve/bounty-control/actions/runs/41287221293",
@@ -84,7 +84,19 @@
       "retryable": true,
       "diagnostic": "Bounded Cline delivery repair exhausted: Cline failed closed on turn 1: Cline execution failed (exit 1): \u001b[31merror:\u001b[0m No Token Harbor key is currently ready.",
       "at": "2026-11-01T08:12:08.364353+00:00"
+    },
+    {
+      "run_url": "https://github.com/isearchxsolve/bounty-control/actions/runs/41306367205",
+      "status": "FAILED_DELIVERABLE_MISSING",
+      "kind": "deliverable_invalid",
+      "retryable": true,
+      "diagnostic": "Cline deliverable invalid at /tmp/fleet-artifacts/delivery-supervisor/c2762c2d2a0e4131a1987789772fc1ae.preparation.json: Cline preparation must leave a clean, unchanged upstream baseline (dirty: package-lock.json, package.json)",
+      "path": "/tmp/fleet-artifacts/delivery-supervisor/c2762c2d2a0e4131a1987789772fc1ae.preparation.json",
+      "reason": "Cline preparation must leave a clean, unchanged upstream baseline (dirty: package-lock.json, package.json)",
+      "at": "2026-11-01T12:30:01.252771+00:00"
     }
   ],
-  "finished_at": "2026-11-01T08:12:19.445402+00:00"
+  "finished_at": "2026-11-01T12:30:10.803065+00:00",
+  "path": "/tmp/fleet-artifacts/delivery-supervisor/c2762c2d2a0e4131a1987789772fc1ae.preparation.json",
+  "reason": "Cline preparation must leave a clean, unchanged upstream baseline (dirty: package-lock.json, package.json)"
 }
