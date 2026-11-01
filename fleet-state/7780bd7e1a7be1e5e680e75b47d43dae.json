@@ -2,7 +2,7 @@
   "task_id": "7780bd7e1a7be1e5e680e75b47d43dae",
   "repo": "gqrx-sdr/gqrx",
   "issue_number": 1336,
-  "status": "CLAIMED",
+  "status": "FAILED_ENGINEER",
   "dispatch_id": "33a1b067ab12449f9be424009e06117a",
   "admission": {
     "funding": {
@@ -64,7 +64,7 @@
   ],
   "dispatched_at": "2026-11-01T12:24:29.282605+00:00",
   "attempt": 2,
-  "updated_at": "2026-11-01T12:24:46.483384+00:00",
+  "updated_at": "2026-11-01T13:05:14.377912+00:00",
   "owner": "41306347143:1",
   "previous_owner": "41266106201:1",
   "previous_status": "DISPATCHED",
@@ -75,8 +75,8 @@
   "preparation_budget_seconds": 14400,
   "kind": "engineer",
   "retryable": true,
-  "diagnostic": "",
-  "at": "2026-11-01T03:08:38.723786+00:00",
+  "diagnostic": "Bounded Cline delivery repair exhausted: Independent release verification failed: Specific regression test files/command/failure assertion are mandatory\nRead complete native receipts at /tmp/fleet-artifacts. Repair the actual failure, preserving completed edits and master tests.",
+  "at": "2026-11-01T13:05:03.137778+00:00",
   "failures": [
     {
       "run_url": "https://github.com/isearchxsolve/bounty-control/actions/runs/41266106201",
@@ -85,7 +85,15 @@
       "retryable": true,
       "diagnostic": "",
       "at": "2026-11-01T03:08:38.723786+00:00"
+    },
+    {
+      "run_url": "https://github.com/isearchxsolve/bounty-control/actions/runs/41306347143",
+      "status": "FAILED_ENGINEER",
+      "kind": "engineer",
+      "retryable": true,
+      "diagnostic": "Bounded Cline delivery repair exhausted: Independent release verification failed: Specific regression test files/command/failure assertion are mandatory\nRead complete native receipts at /tmp/fleet-artifacts. Repair the actual failure, preserving completed edits and master tests.",
+      "at": "2026-11-01T13:05:03.137778+00:00"
     }
   ],
-  "finished_at": "2026-11-01T03:08:50.530655+00:00"
+  "finished_at": "2026-11-01T13:05:13.993838+00:00"
 }
