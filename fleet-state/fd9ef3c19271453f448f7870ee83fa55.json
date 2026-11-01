@@ -2,8 +2,8 @@
   "task_id": "fd9ef3c19271453f448f7870ee83fa55",
   "repo": "gyroflow/gyroflow",
   "issue_number": 742,
-  "status": "FAILED_DELIVERABLE_MISSING",
-  "dispatch_id": "7be649b6472b4303b64698f54a51e6c4",
+  "status": "DISPATCHING",
+  "dispatch_id": "fa230b25ab8e44b0a237370f8f737d38",
   "admission": {
     "funding": {
       "amount": "500",
@@ -40,9 +40,9 @@
   "lanes": [
     "programs"
   ],
-  "dispatched_at": "2026-11-01T08:03:05.945730+00:00",
+  "dispatched_at": "2026-11-01T12:27:44.845646+00:00",
   "attempt": 2,
-  "updated_at": "2026-11-01T08:12:22.356848+00:00",
+  "updated_at": "2026-11-01T12:27:44.845659+00:00",
   "owner": "41287204451:1",
   "previous_owner": "41207653569:1",
   "previous_status": "DISPATCHED",
@@ -127,7 +127,7 @@
       "at": "2026-10-31T14:09:52.436320+00:00"
     }
   ],
-  "dispatch_attempt": 1,
+  "dispatch_attempt": 2,
   "sovereign_admission": true,
   "competition": {
     "blocking": false,
