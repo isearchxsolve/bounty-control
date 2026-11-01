@@ -45,6 +45,7 @@ class Transport:
             self.posts.append(data)
             return None
         return {"size": 10}
+    def pages(self, endpoint, **kwargs): return iter([])
     def issue_context(self, repo, number): return context()
     def workflow_runs(self, repo, status=None): return []
 
@@ -972,6 +973,89 @@ class PublishWhitespaceGateTests(unittest.TestCase):
                 delivery.git(root, 'diff', '--check', base)
             # The index-relative gate the loop used to run is blind to it -- the defect.
             delivery.git(root, 'diff', '--check')
+
+
+class RetryObligationTests(unittest.TestCase):
+    """Measured 2026-11-01 (10:24Z, run 41290957550): the delivery engine idled with five
+    retryable tasks frozen -- lux#99 twice and GramRaksha-AI#2 on TokenHarbor 429s,
+    dozer#1659 on the same, gyroflow#742 on a dirty baseline, gqrx#1336 on a staged
+    whitespace line. The only retry gate lived inside the PR-observation branch, which a
+    failed engineering run never reaches, so retries used to arrive only when the door
+    re-admitted the same issue. That round returned NO_ROWS (both agent rounds killed at the
+    round budget before writing a row), the de-facto retry path died, and no run log said so.
+
+    A retry obligation is durable in the ledger, and its depth is measured every pass.
+    """
+
+    def failed_record(self, status, attempt=1, retryable=True):
+        r = row()
+        return {"task_id": task_id('acme/http', 7), "repo": "acme/http", "issue_number": 7,
+                "status": status, "attempt": attempt, "dispatch_attempt": attempt,
+                "retryable": retryable, "lanes": ["normal"],
+                "dispatched_at": "2026-11-01T08:00:00+00:00",
+                "updated_at": "2026-11-01T10:00:00+00:00",
+                "admission": r["admission"], "competition": r["competition"],
+                "sovereign_admission": True}
+
+    def reconcile(self, records, repair=True):
+        store = Store()
+        for rec in records:
+            store.rows[rec["task_id"]] = rec
+        api = Transport()
+        return store, api, reconcile(repair=repair, api=api, store=store)
+
+    def test_a_failed_engineering_run_is_retried_without_a_new_issue(self):
+        rec = self.failed_record("FAILED_ENGINEER")
+        store, api, receipts = self.reconcile([rec])
+        mine = [r for r in receipts if r["task_id"] == rec["task_id"]]
+        self.assertEqual(mine[0]["repair"], "DISPATCHED", receipts)
+        self.assertEqual(len(api.posts), 1)
+        self.assertEqual(store.rows[rec["task_id"]]["status"], "DISPATCHED")
+
+    def test_a_missing_deliverable_is_retried_too(self):
+        rec = self.failed_record("FAILED_DELIVERABLE_MISSING", attempt=2)
+        store, api, receipts = self.reconcile([rec])
+        self.assertEqual([r for r in receipts if r["task_id"] == rec["task_id"]][0]["repair"],
+                         "DISPATCHED")
+        self.assertEqual(len(api.posts), 1)
+
+    def test_the_ledgers_own_retryable_verdict_is_enough(self):
+        # A failure the ledger marked retryable retries even when its status is not one of
+        # the four named states: the verdict travels with the record, not in this file.
+        rec = self.failed_record("FAILED_PUBLISH", attempt=1, retryable=True)
+        _, api, receipts = self.reconcile([rec])
+        self.assertEqual(receipts[0]["repair"], "DISPATCHED")
+        self.assertEqual(len(api.posts), 1)
+
+    def test_the_attempt_cap_is_respected(self):
+        store, api, receipts = self.reconcile([self.failed_record("FAILED_ENGINEER", attempt=3)])
+        self.assertEqual(api.posts, [])
+        self.assertEqual(receipts, [])
+        self.assertEqual(store.rows[task_id('acme/http', 7)]["status"], "FAILED_ENGINEER")
+
+    def test_without_repair_nothing_redispatches(self):
+        rec = self.failed_record("FAILED_ENGINEER")
+        store, api, receipts = self.reconcile([rec], repair=False)
+        self.assertEqual(api.posts, [])
+        self.assertEqual(receipts, [])
+        self.assertEqual(store.rows[rec["task_id"]]["status"], "FAILED_ENGINEER")
+
+    def test_a_non_retryable_record_is_left_alone(self):
+        rec = self.failed_record("REJECTED_PREPARATION", retryable=False)
+        store, api, receipts = self.reconcile([rec])
+        self.assertEqual(api.posts, [])
+        self.assertEqual(receipts, [])
+        self.assertEqual(store.rows[rec["task_id"]]["status"], "REJECTED_PREPARATION")
+
+    def test_the_queue_depth_is_measured(self):
+        from actions_reconcile import repair_obligation, retryable_backlog
+        records = [self.failed_record("FAILED_ENGINEER"),
+                   self.failed_record("FAILED_DELIVERABLE_MISSING", attempt=2),
+                   self.failed_record("FAILED_ENGINEER", attempt=3)]
+        self.assertEqual(retryable_backlog(records), 2)
+        self.assertTrue(repair_obligation(records[0]))
+        self.assertFalse(repair_obligation(records[2]), "an exhausted budget is not an obligation")
+        self.assertTrue(retryable_backlog([]) == 0)
 
 
 if __name__=='__main__': unittest.main()

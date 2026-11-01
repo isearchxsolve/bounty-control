@@ -199,6 +199,44 @@ def review_verdict(api, repo, number):
             "latest_review_at": (latest or {}).get("submitted_at")}
 
 
+# Statuses whose failure the pipeline owns and must re-dispatch itself, plus the general rule:
+# the ledger's own ``retryable`` verdict. Measured 2026-11-01 (10:24Z, run 41290957550): five
+# retryable tasks sat frozen while the delivery engine idled -- lux#99 twice and GramRaksha-AI#2
+# on TokenHarbor 429s, dozer#1659 on the same, gyroflow#742 on a dirty baseline, gqrx#1336 on a
+# staged whitespace line -- because this decision named only the two post-publication states.
+# Every earlier retry of a failed engineering run had come from the door re-admitting the issue;
+# when that round returned NO_ROWS (both agent rounds killed at the round budget before writing
+# a row) the de-facto retry path died and the queue froze silently. A retry obligation must be
+# durable in the ledger, not contingent on a fresh issue appearing.
+REPAIRABLE_STATUSES = ("FAILED_REMOTE_CHECKS", "CHANGES_REQUESTED",
+                       "FAILED_ENGINEER", "FAILED_DELIVERABLE_MISSING")
+REPAIR_ATTEMPT_CAP = 3
+
+
+def repair_obligation(record):
+    """True when this record's failure is the pipeline's to retry, inside its attempt budget."""
+    if not isinstance(record, dict):
+        return False
+    status = str(record.get("status") or "")
+    if not (status in REPAIRABLE_STATUSES or record.get("retryable")):
+        return False
+    try:
+        return int(record.get("attempt", 0) or 0) < REPAIR_ATTEMPT_CAP
+    except (TypeError, ValueError):
+        return False
+
+
+def retryable_backlog(records) -> int:
+    """Count the ledger's own retry queue: retryable failures still inside the attempt budget.
+
+    This is the pipeline's sensory reading of itself. Without it, "the delivery engine is idle
+    with five retryable tasks" is an inference a human makes from a run list; with it, every
+    reconcile prints the number, so a starved engine with pending work is a measured fact
+    rather than a silence nobody notices.
+    """
+    return sum(1 for record in (records or ()) if repair_obligation(record))
+
+
 def retry_claim(api, record):
     """Re-post a claim command that failed to submit.
 
@@ -297,24 +335,37 @@ def reconcile(repair=False, api=None, store=None):
                     if retried:
                         fields.update(retried)
             if not fields:
-                continue
-            identity = record["task_id"]
-            def update(old):
-                if not old or old.get("updated_at") != record.get("updated_at"):
-                    raise ValueError("Concurrent state change; reconciliation deferred")
-                return {**old, **fields, "observed_at": utcnow()}
-            state = store.mutate(identity, update)
-            observed[identity] = state
-            receipt = {"task_id": identity, "previous": status, "status": state["status"], "at": utcnow()}
-            if repair and state["status"] in ("FAILED_REMOTE_CHECKS", "CHANGES_REQUESTED") \
-                    and int(state.get("attempt", 0)) < 3:
+                # A retryable failure has nothing to observe: its obligation is the retry
+                # itself. This branch is why the engine can sit idle while retryable work
+                # waits -- the observation path used to own the only retry gate, so a
+                # failed engineering run never reached it.
+                if not (repair and repair_obligation(record)):
+                    continue
+                state = record
+                identity = record["task_id"]
+                receipt = {"task_id": identity, "previous": status, "status": status,
+                           "at": utcnow()}
+                self_dispatch = True
+            else:
+                identity = record["task_id"]
+                def update(old):
+                    if not old or old.get("updated_at") != record.get("updated_at"):
+                        raise ValueError("Concurrent state change; reconciliation deferred")
+                    return {**old, **fields, "observed_at": utcnow()}
+                state = store.mutate(identity, update)
+                observed[identity] = state
+                receipt = {"task_id": identity, "previous": status,
+                           "status": state.get("status"), "at": utcnow()}
+                self_dispatch = False
+            if repair and (self_dispatch or repair_obligation(state)):
                 from actions_dispatch import dispatch
                 from bounty_admission import competition
                 from pipeline_evidence import require_evidence
-                context = api.issue_context(state["repo"], state["issue_number"])
                 try:
+                    context = api.issue_context(state["repo"], state["issue_number"])
                     proof, verdict = require_evidence(state, context)
-                    competition(api, state["repo"], state["issue_number"], own_head=state["head_sha"])
+                    competition(api, state["repo"], state["issue_number"],
+                                own_head=state.get("head_sha"))
                     dispatch(api, store, context, proof, state.get("lanes", []), remote_repair=True,
                              sovereign_admission=True, competition=verdict)
                     receipt["repair"] = "DISPATCHED"
@@ -339,7 +390,13 @@ def reconcile(repair=False, api=None, store=None):
     report = {"at": utcnow(), "receipts": receipts, "followup_obligations": followups,
               "recorded_prs": len(followups),
               "recorded_merges": sum(r.get("status") == "DELIVERED" for r in observed.values()),
-              "observation_errors": sum(r.get("phase") == "RECONCILE_DEFERRED" for r in receipts)}
+              "observation_errors": sum(r.get("phase") == "RECONCILE_DEFERRED" for r in receipts),
+              # The pipeline reading its own queue: how many retryable failures are waiting,
+              # and how many of them this pass discharged. An idle delivery engine with a
+              # non-zero backlog is a starvation event, and now it says so.
+              "retryable_backlog": retryable_backlog(records),
+              "repair_obligations_discharged": sum(r.get("repair") == "DISPATCHED" for r in receipts),
+              "repair_obligations_blocked": sum(1 for r in receipts if r.get("repair_blocked"))}
     if os.environ.get("BOUNTY_STATE_DIR"):
         folder = Path(os.environ["BOUNTY_STATE_DIR"])
         folder.mkdir(parents=True, exist_ok=True)
