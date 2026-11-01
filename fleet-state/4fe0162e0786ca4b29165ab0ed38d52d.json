@@ -2,7 +2,7 @@
   "task_id": "4fe0162e0786ca4b29165ab0ed38d52d",
   "repo": "OpenOrg-gg/AmphoraProtocol",
   "issue_number": 4,
-  "status": "DISPATCHING",
+  "status": "DISPATCHED",
   "dispatch_id": "2c755a3541b5490a841bd8c477c98a67",
   "admission": {
     "funding": {
@@ -64,5 +64,5 @@
   ],
   "dispatched_at": "2026-11-01T21:18:58.158624+00:00",
   "attempt": 0,
-  "updated_at": "2026-11-01T21:18:58.158644+00:00"
+  "updated_at": "2026-11-01T21:18:59.817970+00:00"
 }
