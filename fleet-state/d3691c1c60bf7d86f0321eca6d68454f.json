@@ -2,7 +2,7 @@
   "task_id": "d3691c1c60bf7d86f0321eca6d68454f",
   "repo": "getdozer/dozer",
   "issue_number": 1659,
-  "status": "CLAIMED",
+  "status": "FAILED_ENGINEER",
   "dispatch_id": "f804ecbca2724afbb5a145c999469151",
   "admission": {
     "funding": {
@@ -406,7 +406,7 @@
   ],
   "dispatched_at": "2026-11-01T02:41:29.401183+00:00",
   "attempt": 1,
-  "updated_at": "2026-11-01T02:42:32.596845+00:00",
+  "updated_at": "2026-11-01T03:22:26.000211+00:00",
   "owner": "41266230781:1",
   "previous_owner": null,
   "previous_status": "DISPATCHED",
@@ -414,5 +414,20 @@
   "harness_sha": "0d1e92c3852a9284dcbae57645fd027ade441c9e",
   "claimed_at": "2026-11-01T02:42:32.596765+00:00",
   "lease_expires_at": "2026-11-01T06:47:32.596779+00:00",
-  "preparation_budget_seconds": 14400
+  "preparation_budget_seconds": 14400,
+  "kind": "engineer",
+  "retryable": true,
+  "diagnostic": "Bounded Cline delivery repair exhausted: Cline failed closed on turn 1: Cline execution failed (exit 1): \u001b[31merror:\u001b[0m TokenHarbor router HTTP 429: deepseek-v4.1-flash is limited for this account for now because recent requests were declined on content-policy grounds, and the shared allowance for such accounts is used up for this minute. Please retry in about 30 seconds. Other models on /v1/models are unaffected.",
+  "at": "2026-11-01T03:22:16.971373+00:00",
+  "failures": [
+    {
+      "run_url": "https://github.com/isearchxsolve/bounty-control/actions/runs/41266230781",
+      "status": "FAILED_ENGINEER",
+      "kind": "engineer",
+      "retryable": true,
+      "diagnostic": "Bounded Cline delivery repair exhausted: Cline failed closed on turn 1: Cline execution failed (exit 1): \u001b[31merror:\u001b[0m TokenHarbor router HTTP 429: deepseek-v4.1-flash is limited for this account for now because recent requests were declined on content-policy grounds, and the shared allowance for such accounts is used up for this minute. Please retry in about 30 seconds. Other models on /v1/models are unaffected.",
+      "at": "2026-11-01T03:22:16.971373+00:00"
+    }
+  ],
+  "finished_at": "2026-11-01T03:22:25.610165+00:00"
 }
