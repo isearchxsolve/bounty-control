@@ -707,6 +707,74 @@ class ScoutWorktree(unittest.TestCase):
         self.assertTrue(emitted, "no reason strings found - the scrape is wrong")
         self.assertEqual(emitted - documented, set())
 
+    def test_every_reason_the_production_verifier_emits_is_in_the_table(self):
+        """The same anti-drift check over the verifier production actually uses.
+
+        Measured 2026-11-01: the scrape above covered verify_rows only, while agent_door passes
+        verify=verify_model_rows, which routes through model_admission_refusal and admit().
+        Twenty-four reasons the live path emitted were documented nowhere, so the agent was
+        refused under names it had never been told about and could not repair.
+        """
+        import inspect
+        documented = {code for code, _ in door.GATE_CHECKS + door.DOWNSTREAM_CHECKS}
+        emitted = set()
+        for function in (door.model_admission_refusal, door.admission_refusal,
+                         door.competition_refusal, door.intent_refusal):
+            emitted |= set(re.findall(r'["\']([A-Z][A-Z0-9_]{4,})["\']',
+                                      inspect.getsource(function)))
+        self.assertTrue(emitted, "no reason strings found - the scrape is wrong")
+        # The scrape also catches field values, lane names and telemetry phase names, which are
+        # not reasons a row comes back with.
+        not_reasons = {"FOUNDER", "OWNER", "PRICED_OFFER", "UNPRICED_OWNER_REQUEST",
+                       "BOUNTY_LANE", "LABEL", "BY_DESIGN", "founder", "bounty",
+                       "ENTRY_COMPETITION_UNVERIFIED", "ENTRY_INTENT_UNVERIFIED"}
+        missing = emitted - documented - not_reasons
+        self.assertEqual(missing, set(),
+                         "reasons the live verifier can emit but the brief never names: "
+                         + ", ".join(sorted(missing)))
+
+    def test_every_reason_admission_can_return_is_in_the_table(self):
+        """admit() and competition() decide the row too, so their vocabulary is the agent's."""
+        import bounty_admission
+        import inspect
+        documented = {code for code, _ in door.GATE_CHECKS + door.DOWNSTREAM_CHECKS}
+        emitted = set()
+        for function in (bounty_admission.admit, bounty_admission.competition):
+            emitted |= set(re.findall(r'["\']([A-Z][A-Z0-9_]{4,})["\']',
+                                      inspect.getsource(function)))
+        not_reasons = {"FOUNDER", "OWNER", "USD", "USDC", "USDT", "ETH", "BTC",
+                       "BOUNTY_LANE"}
+        missing = emitted - documented - not_reasons
+        self.assertEqual(missing, set(),
+                         "reasons admit() can return but the brief never names: "
+                         + ", ".join(sorted(missing)))
+
+    def test_the_feedback_explains_every_reason_that_fired(self):
+        """A label without a cause is not feedback: the agent cannot repair what it cannot read.
+
+        Measured 2026-11-01: the prompt carried a meaning for three reasons while the live
+        verifier emitted twenty-four more, so a row refused QUOTED_AMOUNT_MISMATCH came back as
+        a bare code.
+        """
+        for code, meaning in door.GATE_CHECKS + door.DOWNSTREAM_CHECKS:
+            rendered = door.render_meanings([{"reason": code}])
+            self.assertIn(code, rendered)
+            self.assertIn(meaning[:40], rendered)
+
+    def test_the_feedback_does_not_claim_a_shape_that_was_never_proved(self):
+        """Measured 2026-11-01: "Row 0 was accepted" fired on rounds where nothing was."""
+        self.assertNotIn("Row 0 was accepted", door.FEEDBACK_PROMPT)
+        self.assertIn("No row was accepted", door.render_shape_note([]))
+        self.assertIn("shape is right", door.render_shape_note([{"repo": "a/b"}]))
+
+    def test_a_suffixed_reason_still_finds_its_meaning(self):
+        """admit() returns 'REFUSED_NOT_A_CODE_CHANGE: aggregator/digest repo'."""
+        rendered = door.render_meanings(
+            [{"reason": "REFUSED_NOT_A_CODE_CHANGE: aggregator/digest repo"}])
+        self.assertIn("REFUSED_NOT_A_CODE_CHANGE:", rendered)
+        self.assertIn("digest, aggregator or news feed", rendered)
+        self.assertNotIn("no meaning recorded", rendered)
+
     def test_the_brief_prescribes_no_search_recipe(self):
         """Measured handcuffs, removed on Baba's order: a numbered first step, a list of search
         commands and a taxonomy of what counts as money. Those are judgements."""
@@ -725,8 +793,16 @@ class ScoutWorktree(unittest.TestCase):
         self.assertLess(len(door.SEARCH_PROMPT), 700, "a long prompt is a script in disguise")
 
     def test_the_feedback_reports_checks_not_a_repair_script(self):
+        """The template carries the slots; the meanings are rendered from the gate tables.
+
+        Measured 2026-11-01: this asserted a reason name appeared in the template itself, which
+        only held while the meanings were hardcoded there. They are rendered per round now, so
+        the check moves to the renderer and the template is held to its slots.
+        """
         self.assertIn("{refusals}", door.FEEDBACK_PROMPT)
-        self.assertIn("REWARD_QUOTE_HAS_NO_AMOUNT", door.FEEDBACK_PROMPT)
+        self.assertIn("{meanings}", door.FEEDBACK_PROMPT)
+        self.assertIn("REWARD_QUOTE_HAS_NO_AMOUNT",
+                      door.render_meanings([{"reason": "REWARD_QUOTE_HAS_NO_AMOUNT"}]))
         self.assertNotIn("Do this now:", door.FEEDBACK_PROMPT)
 
 
