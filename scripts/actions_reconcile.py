@@ -177,7 +177,12 @@ def review_verdict(api, repo, number):
     Interpretation stays with the model and the engineer; this reads the verdict GitHub
     recorded and nothing more.
     """
-    reviews = api.pages(f"repos/{repo}/pulls/{number}/reviews")
+    # pages() yields lazily, so it is a generator: indexing or re-reading it fails. Measured
+    # 2026-11-01 (run 41265535120): the published PR sriahead/aheed-online-store#1382 was
+    # answered with RECONCILE_DEFERRED "'generator' object is not subscriptable" -- the exact
+    # line below -- so the one live PR was never observed and never left
+    # PUBLISHED_PENDING_CHECKS. Materialize the page once, and read it as a list.
+    reviews = list(api.pages(f"repos/{repo}/pulls/{number}/reviews"))
     states = [str((r or {}).get("state") or "").upper() for r in reviews]
     states = [s for s in states if s]
     if "CHANGES_REQUESTED" in states:

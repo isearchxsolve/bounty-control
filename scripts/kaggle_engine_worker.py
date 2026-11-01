@@ -2621,6 +2621,12 @@ def build_peer_pr_body(run: EngineeringRun, title: str, number: int, scenarios: 
         body_lines.append("- Verification receipts are unavailable; the pre-PR gate blocks publication.")
     return "\n".join(body_lines)
 
+# How much of one native failure travels with the exhausted verdict. The exact compiler or
+# test error is the fact the next turn needs; unbounded logs are not, so the tail of the
+# evidence is bounded here rather than pasted whole into every prompt and ledger record.
+FAILURE_EVIDENCE_LIMIT = 4000
+
+
 def run_engineering_iteration_loop(
     worktree: str,
     repo: str,
@@ -2703,8 +2709,12 @@ def run_engineering_iteration_loop(
                 break
 
         if not tests_passed:
-            print(f"     ❌ Iteration {turn}: Native tests failed. Routing exact compiler/test errors back to DeepSeek for turn {turn + 1}...")
-            clipped_fail = test_fail_log
+            run.error_summary = test_fail_log
+            if turn < max_iterations:
+                print(f"     ❌ Iteration {turn}: Native tests failed. Routing exact compiler/test errors back for turn {turn + 1}...")
+            else:
+                print(f"     ❌ Iteration {turn}: Native tests failed on the final turn; the exact failure travels to the caller.")
+            clipped_fail = test_fail_log[:FAILURE_EVIDENCE_LIMIT]
             prior_failures = f"Compiler/test failure in turn {turn}:\n{clipped_fail}\nFix these exact failures."
             continue
 
@@ -2723,8 +2733,12 @@ def run_engineering_iteration_loop(
                 break
 
         if not linters_passed:
-            print(f"     ❌ Iteration {turn}: Linter warnings/errors detected. Routing back to DeepSeek for turn {turn + 1}...")
-            clipped_lint = lint_fail_log
+            run.error_summary = lint_fail_log
+            if turn < max_iterations:
+                print(f"     ❌ Iteration {turn}: Linter warnings/errors detected. Routing back for turn {turn + 1}...")
+            else:
+                print(f"     ❌ Iteration {turn}: Linter warnings/errors on the final turn; the exact failure travels to the caller.")
+            clipped_lint = lint_fail_log[:FAILURE_EVIDENCE_LIMIT]
             prior_failures = f"Linter errors in turn {turn}:\n{clipped_lint}\nFix all linter warnings/errors."
             continue
 
@@ -2742,6 +2756,15 @@ def run_engineering_iteration_loop(
 
     run.status = "ITERATION_EXHAUSTED"
     exhausted_message = f"Iteration exhausted after {max_iterations} turns without green."
+    # The exact native failure is the one fact the next actor needs, and it used to be
+    # discarded here: measured 2026-11-01 on Spectral-Finance/lux#99 (run 41252150256), all
+    # three delivery turns received only this exhausted sentence as feedback, so the agent
+    # spent each turn guessing which command had failed while the receipts sat unread in the
+    # log. The caller feeds this string back as the next turn's prior_failures and records it
+    # as the ledger diagnostic, so the failure itself must travel with the verdict.
+    last_failure = str(getattr(run, "error_summary", "") or "").strip()
+    if last_failure:
+        exhausted_message += " Last reported failure:\n" + last_failure[:FAILURE_EVIDENCE_LIMIT]
     record_execution_diagnostic("repair loop", exhausted_message)
     return False, run, exhausted_message
 

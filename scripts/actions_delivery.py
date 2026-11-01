@@ -693,6 +693,14 @@ def engineer():
                 protect_baseline_tests(root, base, paths)
                 if not product_paths(paths):
                     raise ValueError("No issue-linked product change; no-op/docs/lockfile-only release blocked")
+                # The publisher re-checks whitespace between base and head
+                # (validate_bundle: git diff --check base head). The old post-loop
+                # ``git diff --check`` compares the worktree against the index, so it is
+                # blind to anything Cline staged: measured 2026-11-01 on gqrx-sdr/gqrx#1336
+                # (run 41266106201), a staged "new blank line at EOF" passed engineering and
+                # killed the publish job minutes later with no turn left to repair it. Run the
+                # publisher's own gate here, per turn, where the failure becomes feedback.
+                git(root, "diff", "--check", base)
                 regression = regression_proof(
                     root, base, read_json(regression_file),
                     lambda argv: worker.run_command_safe(argv, cwd=root, timeout=3600))
@@ -713,7 +721,9 @@ def engineer():
                 worker.preserve_cline_edits(root)
         else:
             raise RuntimeError("Bounded Cline delivery repair exhausted: " + feedback)
-        git(root, "diff", "--check")
+        # Same gate the publisher runs (validate_bundle), against base rather than the index:
+        # staged and unstaged alike, so nothing slips through to the publish job.
+        git(root, "diff", "--check", base)
         git(root, "config", "user.name", BOUNTY_ACCOUNT)
         git(root, "config", "user.email", "isearch.xsolve@gmail.com")
         git(root, "add", "--", *paths)

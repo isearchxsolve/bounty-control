@@ -422,10 +422,11 @@ class DeliverySideObservationTests(unittest.TestCase):
     def test_changes_requested_becomes_a_durable_obligation(self):
         from actions_reconcile import review_verdict
         api = GitHub()
-        api.pages = lambda endpoint: [
+        # pages() yields lazily in production; a list fixture hides a generator defect.
+        api.pages = lambda endpoint: iter([
             {'state': 'COMMENTED', 'user': {'login': 'first'}, 'submitted_at': '2026-10-27T00:00:00Z'},
             {'state': 'CHANGES_REQUESTED', 'user': {'login': 'reviewer'},
-             'submitted_at': '2026-10-31T19:58:48Z'}]
+             'submitted_at': '2026-10-31T19:58:48Z'}])
         verdict = review_verdict(api, 'unit/control', 182)
         self.assertEqual(verdict['verdict'], 'CHANGES_REQUESTED')
         self.assertEqual(verdict['review_count'], 2)
@@ -434,10 +435,43 @@ class DeliverySideObservationTests(unittest.TestCase):
     def test_no_reviews_is_not_an_approval(self):
         from actions_reconcile import review_verdict
         api = GitHub()
-        api.pages = lambda endpoint: []
+        api.pages = lambda endpoint: iter([])
         verdict = review_verdict(api, 'unit/control', 1)
         self.assertEqual(verdict['verdict'], 'NONE')
         self.assertEqual(verdict['review_count'], 0)
+
+    def test_the_live_pr_is_observed_not_deferred_by_a_generator_defect(self):
+        """Measured 2026-11-01 (run 41265535120): review_verdict indexed api.pages(), which
+        yields lazily, so the one live PR -- sriahead/aheed-online-store#1382 -- was answered
+        RECONCILE_DEFERRED "'generator' object is not subscriptable" and never left
+        PUBLISHED_PENDING_CHECKS. The whole observation path runs here, with a fixture that
+        yields like production, so the crash cannot come back unseen.
+        """
+        from actions_github import BOUNTY_ACCOUNT
+        identity = task_id('acme/http', 7)
+        store = Store()
+        store.rows[identity] = {'task_id': identity, 'repo': 'acme/http', 'issue_number': 7,
+                                'status': 'PUBLISHED_PENDING_CHECKS', 'pr_number': 1382,
+                                'pr_url': 'https://example.invalid/pr/1382',
+                                'head_sha': 'head-sha', 'updated_at': 'seeded'}
+
+        class API:
+            def api(self, endpoint, method="GET", data=None, **kwargs):
+                if 'check-runs' in endpoint:
+                    return {'check_runs': []}
+                return {'head': {'sha': 'head-sha',
+                                 'repo': {'owner': {'login': BOUNTY_ACCOUNT}}},
+                        'merged': False, 'state': 'open',
+                        'html_url': 'https://example.invalid/pr/1382'}
+
+            def pages(self, endpoint, **params):
+                # The real transport is a generator; reviews and statuses are both empty.
+                return iter(())
+
+        receipts = reconcile(api=API(), store=store)
+        self.assertEqual([r for r in receipts if r.get('phase') == 'RECONCILE_DEFERRED'], [])
+        self.assertEqual(store.rows[identity]['status'], 'AWAITING_REVIEW')
+        self.assertTrue(any(r.get('status') == 'AWAITING_REVIEW' for r in receipts))
 
     def test_failed_claim_is_retried(self):
         from actions_reconcile import retry_claim
@@ -606,7 +640,7 @@ class EndToEndFlowTests(unittest.TestCase):
         api.api = lambda endpoint, method=None, payload=None: {
             'head': {'sha': 'b' * 40}, 'merged': False, 'state': 'open',
             'html_url': 'https://example.invalid/pr/2'}
-        api.pages = lambda endpoint, **kw: []
+        api.pages = lambda endpoint, **kw: iter([])
         reconcile(repair=False, api=api, store=store)
         record, _ = store.read(task_id('unit/control', 8))
         # Still observed, still actionable: it must not have been frozen as terminal.
@@ -642,10 +676,13 @@ class FullLifecycleTests(unittest.TestCase):
                                         'conclusion': conclusion, 'app': {'id': 1}}]}
 
             def pages(self, endpoint, **kw):
+                # The real transport yields lazily, so the fixture must too: a list here
+                # passes even when indexing the production generator would crash
+                # (measured 2026-11-01, run 41265535120, sriahead/aheed-online-store#1382).
                 if '/reviews' in endpoint:
-                    return [{'state': s, 'user': {'login': 'r'},
-                             'submitted_at': '2026-11-01T00:00:00Z'} for s in reviews]
-                return []
+                    return iter([{'state': s, 'user': {'login': 'r'},
+                                  'submitted_at': '2026-11-01T00:00:00Z'} for s in reviews])
+                return iter([])
         return Api()
 
     def test_held_ci_then_merge_reaches_delivered(self):
@@ -706,6 +743,95 @@ class FullLifecycleTests(unittest.TestCase):
                 self.assertTrue(
                     status in PR_OBSERVATION_STATUSES or status in ('DELIVERED', 'CLOSED_UNMERGED'),
                     f'conclusion={conclusion} reviews={reviews} produced unobservable {status}')
+
+
+class EngineeringFeedbackTests(unittest.TestCase):
+    """The exhausted verdict must carry the exact native failure.
+
+    Measured 2026-11-01 on Spectral-Finance/lux#99 (run 41252150256): all three delivery
+    turns of the engineer loop were handed only "Iteration exhausted after 1 turns without
+    green." as their prior failures, so the agent spent every turn guessing which command
+    had failed while the receipts sat unread in the log. The next turn and the ledger record
+    both need the failure itself, bounded, next to the verdict.
+    """
+
+    def loop(self, failures, max_iterations, seen=None):
+        import kaggle_engine_worker as worker
+        results = iter(failures)
+
+        def cline_turn(worktree, repo, number, title, body, arch, scenarios, prior_failures):
+            if seen is not None:
+                seen.append(prior_failures)
+            return True, [], [], 'cline completed'
+
+        def failing_command(argv, **kwargs):
+            return next(results)
+
+        with patch.object(worker, 'run_cline_engineering_turn', cline_turn), \
+                patch.object(worker, 'run_command_safe', failing_command), \
+                patch.object(worker, 'verification_test_commands', return_value=[['mix', 'test']]), \
+                patch.object(worker, 'preserve_cline_edits', return_value='receipt'):
+            return worker.run_engineering_iteration_loop(
+                '.', 'acme/lux', 99, 'title', 'body', {},
+                SimpleNamespace(builds=[], format_checks=[], linters=[]),
+                [], 'base', max_iterations=max_iterations)
+
+    def command(self, text):
+        import kaggle_engine_worker as worker
+        return worker.CommandResult(argv=['mix', 'test'], cwd='.', exit_code=1,
+                                    stdout='', stderr=text, duration_s=1.0)
+
+    def test_the_exhausted_verdict_carries_the_exact_native_failure(self):
+        ok, run, message = self.loop(
+            [self.command('** (CompileError) lib/lux/lenses/allora/get_topics.ex:112')], 1)
+        self.assertFalse(ok)
+        self.assertIn('Iteration exhausted after 1 turns without green', message)
+        self.assertIn('CompileError', message)
+
+    def test_the_last_failure_travels_not_the_first(self):
+        ok, run, message = self.loop(
+            [self.command('FIRST-NATIVE-FAILURE'), self.command('SECOND-NATIVE-FAILURE')], 2)
+        self.assertFalse(ok)
+        self.assertIn('SECOND-NATIVE-FAILURE', message)
+        self.assertNotIn('FIRST-NATIVE-FAILURE', message)
+
+    def test_a_failed_turn_feeds_its_exact_failure_to_the_next_turn(self):
+        seen = []
+        self.loop([self.command('FIRST-NATIVE-FAILURE'), self.command('SECOND-NATIVE-FAILURE')],
+                  2, seen=seen)
+        self.assertEqual(len(seen), 2)
+        self.assertIn('FIRST-NATIVE-FAILURE', seen[1])
+
+
+class PublishWhitespaceGateTests(unittest.TestCase):
+    """Measured 2026-11-01 (gqrx-sdr/gqrx#1336, run 41266106201): a staged "new blank line
+    at EOF" passed the engineer loop's ``git diff --check`` -- which compares the worktree
+    against the index -- and killed the publish job minutes later, because
+    ``validate_bundle`` re-checks between base and head and no repair turn remained. The gate
+    the publisher runs must run inside the turn that can still fix it.
+    """
+
+    def test_the_base_anchored_gate_sees_what_the_publisher_sees(self):
+        import actions_delivery as delivery
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory, 'work')
+            root.mkdir()
+            for args in (['init', '-q'], ['config', 'user.email', 'unit@example.invalid'],
+                         ['config', 'user.name', 'Unit fixture']):
+                subprocess.run(['git', '-C', str(root), *args], check=True, capture_output=True)
+            (root / 'app.c').write_text('int main(void)\n{\n    return 0;\n}\n', encoding='utf-8')
+            subprocess.run(['git', '-C', str(root), 'add', 'app.c'], check=True, capture_output=True)
+            subprocess.run(['git', '-C', str(root), 'commit', '-qm', 'initial'],
+                           check=True, capture_output=True)
+            base = subprocess.check_output(['git', '-C', str(root), 'rev-parse', 'HEAD'],
+                                           text=True).strip()
+            # A trailing blank line, staged exactly as an agent that ran git add leaves it.
+            (root / 'app.c').write_text('int main(void)\n{\n    return 0;\n}\n\n', encoding='utf-8')
+            subprocess.run(['git', '-C', str(root), 'add', 'app.c'], check=True, capture_output=True)
+            with self.assertRaises(RuntimeError):
+                delivery.git(root, 'diff', '--check', base)
+            # The index-relative gate the loop used to run is blind to it -- the defect.
+            delivery.git(root, 'diff', '--check')
 
 
 if __name__=='__main__': unittest.main()
