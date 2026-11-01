@@ -2,7 +2,7 @@
   "task_id": "9372a6ec7d2480159d5f642f0c61c271",
   "repo": "sonevalleyinfra/buildcity-web",
   "issue_number": 50,
-  "status": "DISPATCHING",
+  "status": "DISPATCHED",
   "dispatch_id": "eb6bfe34d9634bb0921691593fe384a1",
   "admission": {
     "funding": {
@@ -42,7 +42,7 @@
   ],
   "dispatched_at": "2026-11-01T12:47:52.580349+00:00",
   "attempt": 2,
-  "updated_at": "2026-11-01T12:47:52.580364+00:00",
+  "updated_at": "2026-11-01T12:47:54.540580+00:00",
   "owner": "41306358110:1",
   "previous_owner": "41253310793:1",
   "previous_status": "DISPATCHED",
