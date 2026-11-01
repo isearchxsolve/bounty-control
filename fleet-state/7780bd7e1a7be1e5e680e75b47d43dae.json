@@ -2,7 +2,7 @@
   "task_id": "7780bd7e1a7be1e5e680e75b47d43dae",
   "repo": "gqrx-sdr/gqrx",
   "issue_number": 1336,
-  "status": "DISPATCHING",
+  "status": "DISPATCHED",
   "dispatch_id": "33a1b067ab12449f9be424009e06117a",
   "admission": {
     "funding": {
@@ -64,7 +64,7 @@
   ],
   "dispatched_at": "2026-11-01T12:24:29.282605+00:00",
   "attempt": 1,
-  "updated_at": "2026-11-01T12:24:29.282620+00:00",
+  "updated_at": "2026-11-01T12:24:30.975796+00:00",
   "owner": "41266106201:1",
   "previous_owner": null,
   "previous_status": "DISPATCHED",
