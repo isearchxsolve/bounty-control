@@ -1,0 +1,48 @@
+{
+  "task_id": "685946a5eea19a56b3f871a089b5011f",
+  "repo": "qojulia/QuantumOptics.jl",
+  "issue_number": 407,
+  "status": "DISPATCHING",
+  "dispatch_id": "ba1f055f57764211b304a5535d65007f",
+  "admission": {
+    "funding": {
+      "amount": "400",
+      "currency": "USD",
+      "payer": "Krastanov",
+      "source_url": "https://github.com/qojulia/QuantumOptics.jl/issues/407",
+      "usd_value": "400",
+      "quote": {
+        "basis": "USD face value",
+        "usd_rate": "1"
+      },
+      "raw": "Update the benchmark suite and bring it into the CI runner [$400]",
+      "source_author_association": "MEMBER",
+      "source_author_login": "Krastanov"
+    },
+    "agent_reason": "Funded bounty: the repository MEMBER Krastanov posted a current $400 offer in the issue body (funding from NSF/NumFOCUS, managed by NumFOCUS) for a bounded engineering feature\u2014migrating the bitrotted benchmark suite into CI with per-PR benchmarks. Issue is open, the repo is an active Julia package that merges outside contributions, and no open pull request from a landed contributor is pre-empting this tree (PR #483 is closed). Scope is one deliverable (benchmark-on-CI infrastructure), not a roadmap.",
+    "scope_quote": "Set up a benchmark-on-CI infrastructure (e.g. similar to the one in QuantumClifford.jl) that runs QuantumOptics-specific benchmarks on each pull request",
+    "code_evidence": {
+      "path": "benchmark/benchmarks.jl",
+      "sha": "b44714ef46f27a3e237833e3b576719e4acf821b",
+      "quote": "const SUITE = BenchmarkGroup()",
+      "is_product_code": true
+    },
+    "source_issue": "https://github.com/qojulia/QuantumOptics.jl/issues/407",
+    "funding_status": "PRICED_OFFER",
+    "lane": "bounty",
+    "task_id": "685946a5eea19a56b3f871a089b5011f",
+    "source_revision": "07437312c53d068ad7548c9ccccdcb70c6db24d367fadb68fdeb93551aa92920"
+  },
+  "dispatch_attempt": 1,
+  "sovereign_admission": true,
+  "competition": {
+    "blocking": false,
+    "nominal": []
+  },
+  "lanes": [
+    "normal"
+  ],
+  "dispatched_at": "2026-11-01T09:50:06.164867+00:00",
+  "attempt": 0,
+  "updated_at": "2026-11-01T09:50:06.164882+00:00"
+}
