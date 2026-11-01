@@ -2,8 +2,8 @@
   "task_id": "b17b814d751744a9300d16ddaf6d2377",
   "repo": "Manthan-cpp/GramRaksha-AI",
   "issue_number": 2,
-  "status": "FAILED_DELIVERABLE_MISSING",
-  "dispatch_id": "aaa1032a0b1e40dc9ad9ff7617017935",
+  "status": "DISPATCHING",
+  "dispatch_id": "426d14f0dc664341a4547d1a466dc6cf",
   "admission": {
     "funding": {
       "payer": "Manthan-cpp",
@@ -32,7 +32,7 @@
     "task_id": "b17b814d751744a9300d16ddaf6d2377",
     "source_revision": "5b43f7d6bd7bc9ba404e9cdf09883bf87d5f3cc66319408b50f303037620382b"
   },
-  "dispatch_attempt": 2,
+  "dispatch_attempt": 3,
   "sovereign_admission": true,
   "competition": {
     "blocking": false,
@@ -61,9 +61,9 @@
   "lanes": [
     "founder"
   ],
-  "dispatched_at": "2026-11-01T12:24:44.355170+00:00",
+  "dispatched_at": "2026-11-01T12:48:01.110889+00:00",
   "attempt": 2,
-  "updated_at": "2026-11-01T12:30:11.216472+00:00",
+  "updated_at": "2026-11-01T12:48:01.110904+00:00",
   "owner": "41306367205:1",
   "previous_owner": "41287221293:1",
   "previous_status": "DISPATCHED",
