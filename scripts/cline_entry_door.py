@@ -663,7 +663,12 @@ def model_admission_refusal(row, context_builder, source_reader=None):
         return None, None, bind_proof(proof, context)
     except (GitHubError, OSError) as exc:
         return 'ISSUE_UNREADABLE', str(exc), None
-    except (ValueError, KeyError, TypeError) as exc:
+    except (ValueError, KeyError, TypeError, ArithmeticError) as exc:
+        # The funding amount is the agent's claim, and decimal.InvalidOperation (a malformed
+        # amount such as "2,500" or "1.5k USD") is an ArithmeticError, not a ValueError.
+        # Measured 2026-11-01 (run 41283533591): it escaped this clause, killed the door
+        # mid-search as DOOR_FAILED, and every later row in the round was lost. A bad claim
+        # is a refused row; it must never end the search.
         return 'DECISION_EVIDENCE_INVALID', str(exc), None
 
 

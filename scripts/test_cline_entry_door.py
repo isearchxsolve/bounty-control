@@ -1333,5 +1333,60 @@ class TheSeedsAskForPayerBackedWork(unittest.TestCase):
 
 
 
+class ModelEvidenceRobustnessTests(unittest.TestCase):
+    """A malformed claim from the agent refuses one row; it never ends the search.
+
+    Measured 2026-11-01 (run 41283533591): the door Cline wrote a funding amount of
+    ``"2,500"``. ``Decimal("2,500")`` raises ``decimal.InvalidOperation``, which is an
+    ``ArithmeticError`` -- not the ``ValueError`` the evidence check caught -- so it escaped,
+    the door died mid-search as DOOR_FAILED, and every row later in the round was lost. The
+    agent was doing its job; a claim it cannot parse is a refused row with a named reason.
+    """
+
+    def context(self, repo, number):
+        issue = {"state": "open", "title": "Add retry",
+                 "body": "Requests fail permanently on a transient 503. "
+                         "We pay a $250 bounty for a fix with bounded retries and tests.",
+                 "user": {"login": "owner"}, "author_association": "OWNER",
+                 "html_url": f"https://github.com/{repo}/issues/{number}",
+                 "labels": [], "comments": 0}
+        return {"repo": repo, "issue_number": number, "issue": issue, "comments": [],
+                "complete_comments": True}
+
+    def test_a_malformed_amount_refuses_the_row_instead_of_killing_the_search(self):
+        bad = {"repo": "acme/http", "issue": 7, "is_code_task": True,
+               "reward_quote": "We pay a $250 bounty for a fix with bounded retries and tests.",
+               "admission_reason": "a real offer with a real quote",
+               "funding": {"amount": "2,500", "currency": "USD", "payer": "owner",
+                           "source_url": "https://github.com/acme/http/issues/7"}}
+        reason, detail, proof = door.model_admission_refusal(bad, self.context)
+        self.assertEqual(reason, "DECISION_EVIDENCE_INVALID")
+        self.assertIsNone(proof)
+
+    def test_a_non_numeric_amount_also_refuses_instead_of_raising(self):
+        bad = {"repo": "acme/http", "issue": 7, "is_code_task": True,
+               "reward_quote": "We pay a $250 bounty for a fix with bounded retries and tests.",
+               "admission_reason": "a real offer with a real quote",
+               "funding": {"amount": "1.5k USD", "currency": "USD", "payer": "owner",
+                           "source_url": "https://github.com/acme/http/issues/7"}}
+        reason, detail, proof = door.model_admission_refusal(bad, self.context)
+        self.assertEqual(reason, "DECISION_EVIDENCE_INVALID")
+        self.assertIsNone(proof)
+
+    def test_a_well_formed_amount_is_unaffected(self):
+        good = {"repo": "acme/http", "issue": 7, "is_code_task": True,
+                "reward_quote": "We pay a $250 bounty for a fix with bounded retries and tests.",
+                "admission_reason": "a real offer with a real quote",
+                "funding": {"amount": "250", "currency": "USD", "payer": "owner",
+                            "source_url": "https://github.com/acme/http/issues/7"}}
+        # The parse no longer explodes; the row proceeds to the product-evidence gates.
+        with mock.patch.object(door, "GitHub", create=True):
+            reason, detail, proof = door.model_admission_refusal(
+                good, self.context,
+                source_reader=lambda repo, name: {"type": "file", "sha": "x",
+                                                  "encoding": "base64", "content": ""})
+        self.assertNotEqual(reason, "DECISION_EVIDENCE_INVALID")
+
+
 if __name__ == "__main__":
     unittest.main(verbosity=2)
