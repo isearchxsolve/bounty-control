@@ -205,13 +205,18 @@ def trusted(context, document):
     platform is also referred to plainly as ``algora-pbc``. Matching only one form
     silently discards every real offer a platform publishes on someone else's issue.
     """
-    user = (document.get("user") or {}).get("login", "")
+    user_dict = document.get("user") or {}
+    user = user_dict.get("login", "")
     owner = context["repository"]["owner"]["login"]
     login = user.lower()
+    user_type = str(user_dict.get("type") or "")
+    is_bot = login in TRUSTED_BOTS or login.removesuffix("[bot]") in TRUSTED_BOTS
+    if is_bot:
+        if user_type and user_type.lower() != "bot" and not login.endswith("[bot]"):
+            return False
+        return True
     return (document.get("author_association", "").upper() in ISSUERS
-            or login == owner.lower()
-            or login in TRUSTED_BOTS
-            or login.removesuffix("[bot]") in TRUSTED_BOTS)
+            or login == owner.lower())
 
 
 def offer_expired(context, today=None):

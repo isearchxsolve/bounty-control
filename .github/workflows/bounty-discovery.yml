@@ -63,6 +63,9 @@ jobs:
         else
           exit "$status"
         fi
+    - name: Purge ephemeral scout workspaces from state
+      if: always()
+      run: rm -rf "${{ env.BOUNTY_STATE_DIR }}/agent-workspaces"
     - uses: actions/cache/save@v4
       if: always()
       with:
@@ -70,8 +73,9 @@ jobs:
         key: bounty-state-${{ github.run_id }}-${{ github.run_attempt }}
     - uses: actions/upload-artifact@v4
       if: always()
+      continue-on-error: true
       with:
         name: discovery-${{ github.run_id }}
         path: ${{ env.BOUNTY_STATE_DIR }}
-        if-no-files-found: error
-        retention-days: 14
+        if-no-files-found: warn
+        retention-days: 1

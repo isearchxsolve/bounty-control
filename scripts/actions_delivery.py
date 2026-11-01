@@ -800,7 +800,25 @@ def validate_bundle(receipt, bundle, root):
     if receipt["regression"]["red_exit"] == 0 or receipt["regression"]["green_exit"] != 0:
         raise ValueError("Red-to-green regression proof missing")
     git(root, "diff", "--check", base, head)
+    diff_bytes = git(root, "diff", base, head).stdout
+    scan_diff_secrets(diff_bytes)
     return repo, number, head
+
+
+_SECRET_PATTERNS = [
+    re.compile(r"\bnvapi-[A-Za-z0-9_-]{20,}"),
+    re.compile(r"\bgh[pousr]_[A-Za-z0-9_]{20,}"),
+    re.compile(r"\bgithub_pat_[A-Za-z0-9_]{20,}"),
+    re.compile(r"\bsk-[A-Za-z0-9_-]{20,}"),
+    re.compile(r"\bBearer\s+[A-Za-z0-9._-]{20,}", re.I),
+]
+
+
+def scan_diff_secrets(diff_bytes: bytes) -> None:
+    diff_text = diff_bytes.decode("utf-8", errors="replace")
+    for pat in _SECRET_PATTERNS:
+        if pat.search(diff_text):
+            raise ValueError("Security gate violation: proposed release diff contains prohibited credential pattern")
 
 
 def is_self_owned(account, repo):

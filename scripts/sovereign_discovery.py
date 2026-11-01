@@ -7,6 +7,7 @@ import json
 import os
 from pathlib import Path
 import sqlite3
+import tempfile
 
 from actions_github import GitHub, GitHubError, StateStore, task_id, utcnow
 from pipeline_evidence import digest, require_evidence
@@ -123,7 +124,8 @@ def discover(lanes, max_dispatches=2, live=False, state_dir=None, hydrate_only=F
                 ingest(row)
             door = {"reason": "HYDRATE_ONLY"}
         else:
-            door = (finder or find_issues)(root=str(folder / "agent-workspaces"),
+            agent_workspace_root = os.environ.get("BOUNTY_AGENT_WORKSPACE") or str(Path(tempfile.gettempdir()) / "bounty-agent-workspaces")
+            door = (finder or find_issues)(root=agent_workspace_root,
                 rounds=int(os.environ.get("BOUNTY_AGENT_ROUNDS", "1")),
                 timeout=int(os.environ.get("BOUNTY_AGENT_TIMEOUT", "600")),
                 limit=int(os.environ.get("BOUNTY_AGENT_ROW_LIMIT", "0")),
