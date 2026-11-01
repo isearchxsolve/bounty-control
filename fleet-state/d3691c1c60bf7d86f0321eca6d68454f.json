@@ -2,8 +2,8 @@
   "task_id": "d3691c1c60bf7d86f0321eca6d68454f",
   "repo": "getdozer/dozer",
   "issue_number": 1659,
-  "status": "FAILED_ENGINEER",
-  "dispatch_id": "f804ecbca2724afbb5a145c999469151",
+  "status": "DISPATCHING",
+  "dispatch_id": "630ef0f39684462291e1450ffe58c2bf",
   "admission": {
     "funding": {
       "amount": "600",
@@ -33,7 +33,7 @@
     "task_id": "d3691c1c60bf7d86f0321eca6d68454f",
     "source_revision": "97d04365d65b2095bdf8050fe70e66542ffbd64f04b6cbe1abee96dc578589fe"
   },
-  "dispatch_attempt": 1,
+  "dispatch_attempt": 2,
   "sovereign_admission": true,
   "competition": {
     "blocking": false,
@@ -404,9 +404,9 @@
   "lanes": [
     "programs"
   ],
-  "dispatched_at": "2026-11-01T02:41:29.401183+00:00",
+  "dispatched_at": "2026-11-01T12:25:46.376522+00:00",
   "attempt": 1,
-  "updated_at": "2026-11-01T03:22:26.000211+00:00",
+  "updated_at": "2026-11-01T12:25:46.376536+00:00",
   "owner": "41266230781:1",
   "previous_owner": null,
   "previous_status": "DISPATCHED",
