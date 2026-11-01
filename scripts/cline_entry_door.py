@@ -1137,12 +1137,45 @@ passing row would have used.
 
 ## What to produce
 
-`shortlist.jsonl` in this directory, one JSON object per line:
+`shortlist.jsonl` in this directory, one JSON object per line. This is the whole contract, and
+every field below is something you can hold in your hand from the work you have already done:
 
     {{"repo": "owner/name", "issue": 123, "url": "https://github.com/owner/name/issues/123",
-     "is_code_task": true, "reward_quote": "<sentence copied exactly from the issue>",
-     "reward_usd": <number or null>, "scope_quote": "<sentence copied exactly, saying what to build>",
-     "why_now": "<one short line: why this is work we can deliver>"}}
+     "is_code_task": true,
+     "reward_quote": "<sentence copied exactly from the issue>",
+     "reward_usd": <number or null>,
+     "scope_quote": "<sentence copied exactly, saying what to build>",
+     "why_now": "<one short line: why this is work we can deliver>",
+     "lane": "<startup | founder | normal | programs>",
+     "admission_reason": "<one line: who hung the money, and what is broken>",
+     "funding": {{"amount": "<the figure as a plain number: 2500>",
+                  "currency": "USD",
+                  "payer": "<login of the person or platform who wrote the sentence>",
+                  "source_url": "<url of the exact issue or comment carrying the sentence>"}},
+     "code_evidence": {{"is_product_code": true,
+                        "path": "<repository-relative path of a real file>",
+                        "quote": "<one line copied exactly from that file>",
+                        "sha": "<the file's own blob sha, from the contents response>"}}}}
+
+Where each of these comes from, because every one is a lookup and not a judgement:
+
+- `funding` names the hand that hung the money. The figure is written as a plain number - `2500`,
+  not `2,500` or `$2500` - because that is the number the house's reader produces from the
+  payer's own sentence. The payer is the login of the person or platform that wrote it, and the
+  source_url is the URL of the exact issue or comment where the sentence lives. The gate re-reads
+  that URL and looks for the same sentence on the page.
+- `code_evidence` points at the break in the tree: a real file's repository-relative path, one
+  line copied exactly from it, and the file's own blob sha. GitHub hands you that sha in the same
+  answer as the file: GET /repos/{{owner}}/{{name}}/contents/{{path}} returns the bytes and a
+  `sha` field, and that sha names those exact bytes. The gate reads the same path and compares
+  the sha to what is there now, so record the sha from the response you quoted - never a commit
+  sha from the history, because a commit names a whole tree and a tree sha names every file at
+  once. Only the file's own sha points at the line you are quoting.
+- `lane` is how the fruit was found, chosen from the actual source: a startup's own repository
+  (startup), a repository owner's own outage report (founder), a bounty platform's program
+  (programs), or a plain repository bounty (normal).
+- `admission_reason` is your one-line account of the row: who hung the money and what is broken.
+  The gate keeps it with the evidence so the record says why the row was let in.
 
 ## Nobody rations your basket
 

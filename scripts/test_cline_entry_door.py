@@ -1388,5 +1388,39 @@ class ModelEvidenceRobustnessTests(unittest.TestCase):
         self.assertNotEqual(reason, "DECISION_EVIDENCE_INVALID")
 
 
+class DirectiveShapeTests(unittest.TestCase):
+    """The task file must teach the shape the gates verify, and where each fact comes from.
+
+    Measured 2026-11-01 (run 41306128821): the door completed its round and both candidate rows
+    came back PRODUCT_SOURCE_REVISION_MISMATCH -- the agent had recorded a commit sha for
+    code_evidence.sha, because the directive named the field but never the method: GitHub hands
+    the file's own blob sha in the same answer as the file. A field the agent cannot fill is a
+    row it cannot bank, and a round of them is NO_ROWS with two refusals and nothing delivered.
+    """
+
+    @classmethod
+    def setUpClass(cls):
+        cls.task = door.render_task_file()
+
+    def test_the_row_shape_teaches_every_field_the_gate_verifies(self):
+        for field in ('"funding"', '"code_evidence"', '"admission_reason"', '"lane"'):
+            self.assertIn(field, self.task, "the verified row shape is missing " + field)
+        for nested in ('"amount"', '"payer"', '"source_url"', '"is_product_code"',
+                       '"path"', '"quote"', '"sha"'):
+            self.assertIn(nested, self.task)
+
+    def test_the_blob_sha_method_is_taught_not_just_named(self):
+        self.assertIn("/repos/{owner}/{name}/contents/{path}", self.task)
+        self.assertIn("the file's own blob sha", self.task)
+        self.assertIn("never a commit", self.task,
+                      "the measured confusion: a commit names a tree, not the file")
+
+    def test_the_amount_is_a_plain_number(self):
+        self.assertIn("not `2,500`", self.task)
+
+    def test_the_founder_wound_path_still_stands(self):
+        self.assertIn("reward_usd null", self.task)
+
+
 if __name__ == "__main__":
     unittest.main(verbosity=2)

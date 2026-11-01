@@ -150,6 +150,25 @@ class PreparationPromptTests(unittest.TestCase):
 
     def test_the_prompt_names_the_measured_consequence(self):
         self.assertIn("7 GiB", self.source)
+
+    def test_the_engineering_artifact_carries_no_payment_coordinates(self):
+        """Measured while auditing the directive 2026-11-01: the engineering prompt's fourth
+        section ordered the model to print DOOM/Solana/Base settlement addresses into its
+        answer. The house's own public artifact is built from verified evidence and its guard
+        refuses a body carrying payment coordinates, so the addresses were a directive telling
+        the agent to get its own artifact refused. Settlement is knowledge: the claim command
+        on the PR, in the private exchange after the founder engages.
+        """
+        start = self.source.index("You are Kunal Das")
+        end = self.source.index("STRICT RULES", start)
+        prompt = self.source[start:end]
+        self.assertNotIn("DOOM L1 Address", prompt)
+        self.assertNotIn("2qi849TBq72XMpsp8PjR4YfegDEzc7BRFZaarwQ2tKgL", prompt)
+        self.assertNotIn("Settlement Rails", prompt)
+        self.assertIn("the pipeline posts the claim command", prompt)
+        self.assertIn("settled in that private", prompt)
+        # The rails allowlist itself is untouched: the approved addresses still live there.
+        self.assertIn("VERIFIED_SETTLEMENT_ADDRESSES", self.source)
         self.assertIn("14 GiB", self.source)
         self.assertIn("exit 143", self.source)
 
