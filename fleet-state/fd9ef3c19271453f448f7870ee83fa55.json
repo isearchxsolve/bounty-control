@@ -2,7 +2,7 @@
   "task_id": "fd9ef3c19271453f448f7870ee83fa55",
   "repo": "gyroflow/gyroflow",
   "issue_number": 742,
-  "status": "CLAIMED",
+  "status": "FAILED_DELIVERABLE_MISSING",
   "dispatch_id": "fa230b25ab8e44b0a237370f8f737d38",
   "admission": {
     "funding": {
@@ -42,7 +42,7 @@
   ],
   "dispatched_at": "2026-11-01T12:27:44.845646+00:00",
   "attempt": 3,
-  "updated_at": "2026-11-01T12:29:26.720612+00:00",
+  "updated_at": "2026-11-01T12:34:29.846051+00:00",
   "owner": "41306609971:1",
   "previous_owner": "41287204451:1",
   "previous_status": "DISPATCHED",
@@ -51,8 +51,8 @@
   "claimed_at": "2026-11-01T12:29:26.720560+00:00",
   "lease_expires_at": "2026-11-01T16:34:26.720574+00:00",
   "preparation_budget_seconds": 14400,
-  "at": "2026-11-01T08:12:08.112692+00:00",
-  "reason": "Cline preparation must leave a clean, unchanged upstream baseline (dirty: src/core/tests/lens_profile_review.rs)",
+  "at": "2026-11-01T12:34:20.845550+00:00",
+  "reason": "action=incomplete: the preparation skeleton was never replaced, so the agent finished without reporting",
   "declared_reason": "Issue #742 ('Refactor lens profile handling') is a generic, multi-part enhancement bounty ($500 USD, Algora) for a large feature program (catalog generation + Lensfun ingestion + selector UI + metadata prefill + calibrator validation + review workflow). It is not a reproducible defect or a single focused code change. It is excluded by the already-competing-pull-request criterion: as of 2026-10-31 there are 23 OPEN pull requests whose bodies reference #742 (GitHub search api total_count=23 on 2026-10-31), namely #1118, #1154, #1155, #1156, #1158, #1167, #1168, #1174, #1192, #1195, #1212, #1213, #1214, #1218, #1221, #1244, #1250, #1252, #1258, #1260, #1261, #1265, #1266. The maintainer AdrianEddy explicitly instructed contributors on 2026-10-11: \"please don't submit any more PRs for this issue, there's already way too many of them\" (https://github.com/gyroflow/gyroflow/issues/742#issuecomment-6103714841). The bounty rules also state 'Low quality AI PRs will not receive review and will be closed'. Independent contributors report no maintainer review or bounty movement for months (ProspectOre 2026-10-16 https://github.com/gyroflow/gyroflow/issues/742#issuecomment-6226173711 ; ntoledo319 2026-09-24 https://github.com/gyroflow/gyroflow/issues/742#issuecomment-5807631210). Per the classification gate (already-competing pull request / explicit maintainer stop request) the correct outcome is blocked; no competing PR will be opened and the product checkout is left unchanged.",
   "evidence": {
     "action": "blocked",
@@ -90,7 +90,7 @@
       "payer": "algora-pbc[bot]"
     }
   },
-  "finished_at": "2026-11-01T08:12:19.767505+00:00",
+  "finished_at": "2026-11-01T12:34:29.449972+00:00",
   "refusal_history": [
     {
       "status": "REJECTED_PREPARATION",
@@ -616,8 +616,8 @@
   },
   "kind": "deliverable_invalid",
   "retryable": true,
-  "diagnostic": "Cline deliverable invalid at /tmp/fleet-artifacts/delivery-supervisor/e1b11e7f0b5c4883b3894a712ffb68e9.preparation.json: Cline preparation must leave a clean, unchanged upstream baseline (dirty: src/core/tests/lens_profile_review.rs)",
-  "path": "/tmp/fleet-artifacts/delivery-supervisor/e1b11e7f0b5c4883b3894a712ffb68e9.preparation.json",
+  "diagnostic": "Cline deliverable invalid at /tmp/fleet-artifacts/delivery-supervisor/bb3ecd4bb591464d814ac01dc58c23ae.preparation.json: action=incomplete: the preparation skeleton was never replaced, so the agent finished without reporting",
+  "path": "/tmp/fleet-artifacts/delivery-supervisor/bb3ecd4bb591464d814ac01dc58c23ae.preparation.json",
   "failures": [
     {
       "run_url": "https://github.com/isearchxsolve/bounty-control/actions/runs/41287204451",
@@ -628,6 +628,16 @@
       "path": "/tmp/fleet-artifacts/delivery-supervisor/e1b11e7f0b5c4883b3894a712ffb68e9.preparation.json",
       "reason": "Cline preparation must leave a clean, unchanged upstream baseline (dirty: src/core/tests/lens_profile_review.rs)",
       "at": "2026-11-01T08:12:08.112692+00:00"
+    },
+    {
+      "run_url": "https://github.com/isearchxsolve/bounty-control/actions/runs/41306609971",
+      "status": "FAILED_DELIVERABLE_MISSING",
+      "kind": "deliverable_invalid",
+      "retryable": true,
+      "diagnostic": "Cline deliverable invalid at /tmp/fleet-artifacts/delivery-supervisor/bb3ecd4bb591464d814ac01dc58c23ae.preparation.json: action=incomplete: the preparation skeleton was never replaced, so the agent finished without reporting",
+      "path": "/tmp/fleet-artifacts/delivery-supervisor/bb3ecd4bb591464d814ac01dc58c23ae.preparation.json",
+      "reason": "action=incomplete: the preparation skeleton was never replaced, so the agent finished without reporting",
+      "at": "2026-11-01T12:34:20.845550+00:00"
     }
   ]
 }
