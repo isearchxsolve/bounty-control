@@ -803,6 +803,146 @@ class EngineeringFeedbackTests(unittest.TestCase):
         self.assertIn('FIRST-NATIVE-FAILURE', seen[1])
 
 
+class GatewayFailoverTests(unittest.TestCase):
+    """Measured 2026-11-01 (run 41284310025, Spectral-Finance/lux#99): 15 of the 17
+    TokenHarbor keys answered free_tier_limit_reached (HTTP 429), the Cline gateway
+    had no ready key to lease, and Cline's preparation died on the gateway 502 with
+    the engineering turn budget already spent. The delivery engine had no second
+    brain. These pin the failover and its boundary: a throttle delegates to NVIDIA
+    NIM with the native tool protocol intact, and any other failure still fails
+    loudly on the primary brain rather than hiding behind a swap.
+    """
+
+    TOOLS = [{"type": "function",
+              "function": {"name": "execute_command",
+                           "parameters": {"type": "object",
+                                          "properties": {"command": {"type": "string"},
+                                                         "timeout": {"type": "integer"}}}}}]
+
+    def setUp(self):
+        import kaggle_engine_worker as worker
+        self.worker = worker
+        worker._nvidia_fallback_router = None
+
+    def request(self):
+        return {"model": "deepseek-v4.1-flash:free",
+                "messages": [{"role": "user", "content": "Fix the retry defect in src/retry.py"},
+                             {"role": "tool", "tool_call_id": "call-1",
+                              "content": "{\"exit_code\": 1}"}],
+                "tools": self.TOOLS}
+
+    @staticmethod
+    def nim_completion(tool="execute_command", argument='{"command": "mix test"}'):
+        return {"id": "nim-completion", "object": "chat.completion", "created": 0,
+                "model": "nvidia/nemotron-3.5-super-vl-120b-a12b",
+                "choices": [{"index": 0, "finish_reason": "tool_calls",
+                             "message": {"role": "assistant", "content": None,
+                                         "tool_calls": [{"id": "nim-call-1", "type": "function",
+                                                         "function": {"name": tool,
+                                                                      "arguments": argument}}]}}]}
+
+    def nim(self, first_response=None):
+        """A NIM transport that records the payloads it was asked to forward."""
+        seen = []
+
+        def transport(secret, payload, timeout):
+            seen.append(payload)
+            return first_response if first_response is not None else (200, self.nim_completion())
+
+        return transport, seen
+
+    def failover(self, error_message, ready_slots=0, nim_transport=None, router=None):
+        transport, seen = self.nim(first_response=nim_transport)
+        fallback = router if router is not None else self.worker.NvidiaRouter(
+            keys=["nim-secret-key"], model=self.worker.NVIDIA_DELIVERY_MODEL, transport=transport)
+        with patch.object(self.worker, "tokenharbor_shard_ready_slots", return_value=ready_slots):
+            outcome = self.worker.gateway_failover(self.request(), error_message, router=fallback,
+                                                   request_id="unit-failover")
+        return outcome, seen
+
+    def test_a_429_delegates_to_nvidia_and_returns_valid_tool_calls(self):
+        outcome, seen = self.failover(
+            "TokenHarbor router HTTP 429: free_tier_limit_reached for this key")
+        self.assertIsNotNone(outcome, "a throttled shard must not 502 Cline")
+        ok, completion, model, error = outcome
+        self.assertTrue(ok, error)
+        self.assertEqual(model, self.worker.NVIDIA_DELIVERY_MODEL)
+        tool_calls = completion["choices"][0]["message"]["tool_calls"]
+        self.assertEqual(tool_calls[0]["function"]["name"], "execute_command")
+        self.assertEqual(tool_calls[0]["function"]["arguments"], '{"command": "mix test"}')
+
+    def test_the_native_tool_schema_and_history_cross_the_failover_verbatim(self):
+        request = self.request()
+        transport, seen = self.nim()
+        fallback = self.worker.NvidiaRouter(
+            keys=["nim-secret-key"], model=self.worker.NVIDIA_DELIVERY_MODEL, transport=transport)
+        with patch.object(self.worker, "tokenharbor_shard_ready_slots", return_value=0):
+            self.worker.gateway_failover(request, "TokenHarbor router HTTP 429", router=fallback)
+        forwarded = seen[0]
+        self.assertEqual(forwarded["tools"], self.TOOLS, "the tool schema must cross untouched")
+        self.assertEqual(forwarded["messages"], request["messages"],
+                         "the message history, including tool results, must cross untouched")
+        self.assertEqual(forwarded["model"], self.worker.NVIDIA_DELIVERY_MODEL)
+
+    def test_free_tier_limit_reached_delegates(self):
+        outcome, _ = self.failover(
+            "TokenHarbor router HTTP 429: deepseek-v4.1-flash is limited for this account "
+            "for now because recent requests were declined on content-policy grounds")
+        self.assertTrue(outcome[0], outcome[3])
+
+    def test_no_ready_slot_delegates_even_when_the_message_names_no_throttle(self):
+        outcome, _ = self.failover(
+            "Token Harbor key returned empty or invalid text (empty response)", ready_slots=0)
+        self.assertIsNotNone(outcome)
+        self.assertTrue(outcome[0], outcome[3])
+
+    def test_a_non_throttle_failure_keeps_the_primary_brain(self):
+        # A 500 or a malformed request is not the measured throttle: the primary
+        # brain answers, and the original failure stands without a swap.
+        outcome, seen = self.failover("Token Harbor request failed (500).", ready_slots=3)
+        self.assertIsNone(outcome)
+        self.assertEqual(seen, [])
+
+    def test_an_unreadable_shard_is_not_treated_as_zero_ready_slots(self):
+        with patch.object(self.worker, "tokenharbor_shard_ready_slots", return_value=None):
+            outcome = self.worker.gateway_failover(
+                self.request(), "Token Harbor request failed (500).", router=None)
+        self.assertIsNone(outcome)
+
+    def test_without_an_nvidia_key_the_original_failure_stands(self):
+        with patch.object(self.worker, "get_nvidia_fallback_router", return_value=None), \
+                patch.object(self.worker, "tokenharbor_shard_ready_slots", return_value=0):
+            outcome = self.worker.gateway_failover(self.request(), "TokenHarbor router HTTP 429")
+        self.assertIsNone(outcome)
+
+    def test_the_failover_log_never_contains_a_key(self):
+        logged = []
+        transport, seen = self.nim()
+        fallback = self.worker.NvidiaRouter(
+            keys=["nim-secret-key"], model=self.worker.NVIDIA_DELIVERY_MODEL, transport=transport)
+        with patch.object(self.worker, "_command_log", lambda line: logged.append(str(line))), \
+                patch.object(self.worker, "print", lambda *a, **k: None), \
+                patch.object(self.worker, "tokenharbor_shard_ready_slots", return_value=0):
+            self.worker.gateway_failover(self.request(), "TokenHarbor router HTTP 429", router=fallback)
+        self.assertTrue(logged, "a changed brain must be visible in the engine log")
+        for line in logged:
+            self.assertNotIn("nim-secret-key", line)
+        self.assertTrue(any("FAILOVER" in line for line in logged))
+
+    def test_the_fallback_status_is_credential_free(self):
+        transport, _ = self.nim()
+        fallback = self.worker.NvidiaRouter(
+            keys=["nim-secret-key"], model=self.worker.NVIDIA_DELIVERY_MODEL, transport=transport)
+        with patch.object(self.worker, "get_nvidia_fallback_router", return_value=fallback):
+            status = self.worker.nvidia_fallback_status()
+        self.assertTrue(status["configured"])
+        self.assertEqual(status["model"], self.worker.NVIDIA_DELIVERY_MODEL)
+        self.assertEqual(status["total_keys"], 1)
+        self.assertNotIn("nim-secret-key", json.dumps(status))
+        with patch.object(self.worker, "get_nvidia_fallback_router", return_value=None):
+            self.assertFalse(self.worker.nvidia_fallback_status()["configured"])
+
+
 class PublishWhitespaceGateTests(unittest.TestCase):
     """Measured 2026-11-01 (gqrx-sdr/gqrx#1336, run 41266106201): a staged "new blank line
     at EOF" passed the engineer loop's ``git diff --check`` -- which compares the worktree

@@ -38,6 +38,9 @@ from fleet_recovery_policy import (
     is_nonsoftware_data_task, recovery_decision, task_reference, non_engineering_dispatch_reason,
     is_retryable_failure, matching_events,
 )
+# The delivery engine's second brain. Imported at module scope so the failover is one call
+# away from the gateway; the router itself holds no key until it is constructed.
+from nvidia_router import NvidiaRouter, load_keys as nvidia_load_keys
 
 # Enforce UTF-8 line buffering
 sys.stdout.reconfigure(encoding="utf-8", line_buffering=True)
@@ -114,6 +117,8 @@ TOKEN_HARBOR_URL = "https://tokenharbor.ai/v1/chat/completions"
 DEEPSEEK_FLASH_MODEL = "deepseek-v4.1-flash:free"
 DEFAULT_KEY_FILE = r"D:\anonym\vault\tokenharbor_keys.json"
 DEFAULT_TIMEOUT_SECONDS = 120
+# One call to the 120B fallback brain, bounded well inside a Cline turn's own budget.
+FALLBACK_TIMEOUT_SECONDS = 600
 TOKEN_HARBOR_KEYS_ENV = "TOKENHARBOR_KEYS_JSON"
 READY = "READY"
 LEASED = "LEASED"
@@ -576,6 +581,133 @@ def _get_default_router() -> TokenHarborRouter:
         if _default_router is None:
             _default_router = TokenHarborRouter()
         return _default_router
+
+
+# ---------------------------------------------------------------------------
+# Delivery-engine failover: NVIDIA NIM when the TokenHarbor shard is throttled.
+#
+# Measured 2026-11-01 (run 41284310025, Spectral-Finance/lux#99): 15 of the 17
+# TokenHarbor keys answered free_tier_limit_reached (HTTP 429), the gateway had no
+# ready key to lease, and Cline's preparation died on the gateway 502 -- after the
+# engineering loop had already spent its turn budget on that dead end. The delivery
+# worker had no second brain, while the discovery door has had one since 2026-10-30.
+#
+# The decision is a fact, not a judgement: an HTTP 429, a free-tier limit, or zero
+# ready slots. A changed brain is always visible in the engine log with its request
+# id, because a silent brain swap cannot be measured. No API key is ever logged.
+NVIDIA_DELIVERY_MODEL = "nvidia/nemotron-3.5-super-vl-120b-a12b"
+
+# Credential-free markers of a throttled shard. These strings are produced by this
+# file and by TokenHarbor's own error text; none of them can contain a key.
+_THROTTLE_MARKERS = (
+    "429",
+    "free_tier_limit",
+    "free tier limit",
+    "rate limit",
+    "no token harbor key is currently ready",
+)
+
+_nvidia_fallback_router: Optional[NvidiaRouter] = None
+_nvidia_fallback_lock = threading.Lock()
+
+
+def nvidia_delivery_model() -> str:
+    """The model the failover answers with. Explicit configuration wins."""
+    return (os.environ.get("NVIDIA_ROUTER_MODEL")
+            or os.environ.get("NVIDIA_DELIVERY_MODEL")
+            or NVIDIA_DELIVERY_MODEL).strip() or NVIDIA_DELIVERY_MODEL
+
+
+def get_nvidia_fallback_router() -> Optional[NvidiaRouter]:
+    """The delivery engine's second brain, or None when no NVIDIA key is configured."""
+    global _nvidia_fallback_router
+    with _nvidia_fallback_lock:
+        if _nvidia_fallback_router is None:
+            try:
+                keys = nvidia_load_keys()
+            except (OSError, ValueError):
+                return None
+            if not keys:
+                return None
+            _nvidia_fallback_router = NvidiaRouter(model=nvidia_delivery_model())
+        return _nvidia_fallback_router
+
+
+def tokenharbor_shard_ready_slots() -> Optional[int]:
+    """Ready TokenHarbor keys, or None when the shard itself cannot be read.
+
+    An unreadable shard is not "zero ready keys": that distinction keeps the
+    failover from firing on a misconfigured router, and keeps a genuinely
+    exhausted shard from firing it forever.
+    """
+    status = get_router_status()
+    if status.get("error"):
+        return None
+    states = status.get("states", {})
+    try:
+        return int(states.get(READY, 0))
+    except (TypeError, ValueError):
+        return None
+
+
+def nvidia_fallback_status() -> dict:
+    """Credential-free observability for the second brain: never a key, always a state."""
+    try:
+        router = get_nvidia_fallback_router()
+    except Exception:
+        router = None
+    if router is None:
+        return {"configured": False, "model": nvidia_delivery_model()}
+    return {"configured": True, **router.status()}
+
+
+def tokenharbor_is_throttled(error_message: Optional[str]) -> bool:
+    """True when the primary answer is a throttle, not a verdict on the request."""
+    normalized = (error_message or "").lower()
+    if not normalized:
+        return False
+    return any(marker in normalized for marker in _THROTTLE_MARKERS)
+
+
+def gateway_failover(payload: dict, error_message: Optional[str], router: Optional[NvidiaRouter] = None,
+                     request_id: Optional[str] = None, request_started: Optional[float] = None):
+    """Answer from NVIDIA NIM when TokenHarbor is throttled; return None otherwise.
+
+    The native tool protocol crosses untouched: ``tools``, the message history and
+    the tool-result messages are forwarded verbatim, and the completion returned is
+    the raw NIM body in the same shape TokenHarbor would have returned, so the
+    gateway's streaming and validation code below is shared by both brains.
+
+    On failure the caller's original diagnostic is returned unchanged, so a total
+    outage still fails loudly on the primary brain rather than hiding behind the
+    fallback.
+    """
+    try:
+        ready_slots = tokenharbor_shard_ready_slots()
+        if not (tokenharbor_is_throttled(error_message) or ready_slots == 0):
+            return None
+        fallback = router if router is not None else get_nvidia_fallback_router()
+        if fallback is None:
+            return None
+        _command_log(
+            f'CLINE_GATEWAY FAILOVER START id={request_id} '
+            f'reason={"no_ready_slot" if ready_slots == 0 else "tokenharbor_429"} '
+            f'model={fallback.model} tools={len(payload.get("tools") or [])} '
+            f'primary_diagnostic={str(error_message or "")[:120]}'
+        )
+        outcome = fallback.chat_completion(payload, timeout=FALLBACK_TIMEOUT_SECONDS)
+        ok, _, model_used, diagnostic = outcome
+        elapsed = "" if request_started is None else f' elapsed={time.monotonic() - request_started:.1f}s'
+        if ok:
+            _command_log(f'CLINE_GATEWAY FAILOVER END id={request_id} result=OK model={model_used}{elapsed}')
+        else:
+            _command_log(f'CLINE_GATEWAY FAILOVER END id={request_id} result=FAILED '
+                         f'model={model_used}{elapsed} diagnostic={str(diagnostic)[:120]}')
+        return outcome
+    except Exception:
+        # The fallback is an optimisation over a loud failure; it must never be the
+        # reason a request dies without a diagnostic.
+        return None
 
 
 def call_deepseek_flash(prompt: str, system_prompt: Optional[str] = None, timeout: int = DEFAULT_TIMEOUT_SECONDS) -> Tuple[bool, str, Optional[str]]:
@@ -1863,6 +1995,7 @@ class _ClineProxyHandler(BaseHTTPRequestHandler):
                 self._json(503, {"ok": False, "error": _sanitize_runtime_diagnostic(exc)})
                 return
             self._json(200, {"ok": True, **payload,
+                             "nvidia_fallback": nvidia_fallback_status(),
                              "received_requests": type(self).received_requests,
                              "last_request_path": type(self).last_request_path,
                              "completed_requests": type(self).completed_requests,
@@ -1899,6 +2032,14 @@ class _ClineProxyHandler(BaseHTTPRequestHandler):
             payload,
             timeout=DEFAULT_TIMEOUT_SECONDS,
         )
+        if not success:
+            # TokenHarbor throttled or exhausted: answer from the delivery engine's
+            # second brain rather than 502-ing Cline into a dead end (measured
+            # 2026-11-01, run 41284310025).
+            failover = gateway_failover(payload, error_message, request_id=request_id,
+                                        request_started=request_started)
+            if failover is not None:
+                success, completion, model_used, error_message = failover
         if not success:
             _command_log(
                 f'CLINE_GATEWAY END id={request_id} result=UPSTREAM_ERROR '

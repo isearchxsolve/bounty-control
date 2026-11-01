@@ -136,6 +136,13 @@ jobs:
       env:
         GH_TOKEN: ${{ github.token }}
         TOKENHARBOR_KEYS_JSON: ${{ secrets.TOKENHARBOR_KEYS_JSON }}
+        # The delivery engine's second brain. Measured 2026-11-01 (run 41284310025,
+        # Spectral-Finance/lux#99): 15 of the 17 TokenHarbor keys answered
+        # free_tier_limit_reached (HTTP 429), the Cline gateway had no ready key, and
+        # Cline's preparation died on the 502 with the turn budget already spent. The
+        # gateway now fails over to this model when TokenHarbor is throttled.
+        NVIDIA_API_KEY: ${{ secrets.NVIDIA_API_KEY }}
+        NVIDIA_ROUTER_MODEL: ${{ vars.NVIDIA_DELIVERY_MODEL || 'nvidia/nemotron-3.5-super-vl-120b-a12b' }}
         ENGINE_ID: actions-${{ github.run_id }}
         CLINE_TOTAL_BUDGET_SECONDS: '14400'
         # The dispatch payload still carries a preparation window, and it can only shorten
