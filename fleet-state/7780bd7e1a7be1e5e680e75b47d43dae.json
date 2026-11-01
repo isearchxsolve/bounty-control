@@ -2,7 +2,7 @@
   "task_id": "7780bd7e1a7be1e5e680e75b47d43dae",
   "repo": "gqrx-sdr/gqrx",
   "issue_number": 1336,
-  "status": "CLAIMED",
+  "status": "FAILED_ENGINEER",
   "dispatch_id": "9a20930a3fda46a5bd897bdd4b12e49b",
   "admission": {
     "funding": {
@@ -64,7 +64,7 @@
   ],
   "dispatched_at": "2026-11-01T13:48:34.466439+00:00",
   "attempt": 3,
-  "updated_at": "2026-11-01T13:48:47.877865+00:00",
+  "updated_at": "2026-11-01T14:13:27.006467+00:00",
   "owner": "41313053067:1",
   "previous_owner": "41306347143:1",
   "previous_status": "DISPATCHED",
@@ -75,8 +75,8 @@
   "preparation_budget_seconds": 14400,
   "kind": "engineer",
   "retryable": true,
-  "diagnostic": "Bounded Cline delivery repair exhausted: Independent release verification failed: Specific regression test files/command/failure assertion are mandatory\nRead complete native receipts at /tmp/fleet-artifacts. Repair the actual failure, preserving completed edits and master tests.",
-  "at": "2026-11-01T13:05:03.137778+00:00",
+  "diagnostic": "Bounded Cline delivery repair exhausted: Iteration exhausted after 1 turns without green. Last reported failure:\nTest failure in turn 1: bash -lc eval \"$(conda shell.bash hook)\" && conda activate gqrx-build && cd /tmp/bounty-workspaces/repos/gqrx-sdr--gqrx--1336/build && make -j$(nproc) gqrx && ./gqrx --help\nbash: line 1: ./gqrx: No such file or directory",
+  "at": "2026-11-01T14:13:13.439933+00:00",
   "failures": [
     {
       "run_url": "https://github.com/isearchxsolve/bounty-control/actions/runs/41266106201",
@@ -93,7 +93,15 @@
       "retryable": true,
       "diagnostic": "Bounded Cline delivery repair exhausted: Independent release verification failed: Specific regression test files/command/failure assertion are mandatory\nRead complete native receipts at /tmp/fleet-artifacts. Repair the actual failure, preserving completed edits and master tests.",
       "at": "2026-11-01T13:05:03.137778+00:00"
+    },
+    {
+      "run_url": "https://github.com/isearchxsolve/bounty-control/actions/runs/41313053067",
+      "status": "FAILED_ENGINEER",
+      "kind": "engineer",
+      "retryable": true,
+      "diagnostic": "Bounded Cline delivery repair exhausted: Iteration exhausted after 1 turns without green. Last reported failure:\nTest failure in turn 1: bash -lc eval \"$(conda shell.bash hook)\" && conda activate gqrx-build && cd /tmp/bounty-workspaces/repos/gqrx-sdr--gqrx--1336/build && make -j$(nproc) gqrx && ./gqrx --help\nbash: line 1: ./gqrx: No such file or directory",
+      "at": "2026-11-01T14:13:13.439933+00:00"
     }
   ],
-  "finished_at": "2026-11-01T13:05:13.993838+00:00"
+  "finished_at": "2026-11-01T14:13:26.468362+00:00"
 }
