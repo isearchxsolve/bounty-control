@@ -2,7 +2,7 @@
   "task_id": "ff54a0ed7bd60b9e13979b4b15577b4e",
   "repo": "Spectral-Finance/lux",
   "issue_number": 99,
-  "status": "CLAIMED",
+  "status": "FAILED_ENGINEER",
   "dispatch_id": "bb6239d8c4a04022a5d81b3c04e9afce",
   "admission": {
     "funding": {
@@ -569,7 +569,7 @@
   ],
   "dispatched_at": "2026-11-01T07:19:13.264429+00:00",
   "attempt": 2,
-  "updated_at": "2026-11-01T07:20:32.287016+00:00",
+  "updated_at": "2026-11-01T07:23:12.158450+00:00",
   "owner": "41284310025:1",
   "previous_owner": "41252150256:1",
   "previous_status": "DISPATCHED",
@@ -580,8 +580,8 @@
   "preparation_budget_seconds": 14400,
   "kind": "engineer",
   "retryable": true,
-  "diagnostic": "Bounded Cline delivery repair exhausted: Iteration exhausted after 1 turns without green.",
-  "at": "2026-11-01T00:14:55.428296+00:00",
+  "diagnostic": "Cline preparation failed: error: TokenHarbor router HTTP 429: deepseek-v4.1-flash is limited for this account for now because recent requests were declined on content-policy grounds, and the shared allowance for such accounts is used up for this minute. Please retry in about 30 seconds. Other models on /v1/models are unaffected. |",
+  "at": "2026-11-01T07:23:02.219721+00:00",
   "failures": [
     {
       "run_url": "https://github.com/isearchxsolve/bounty-control/actions/runs/41252150256",
@@ -590,7 +590,15 @@
       "retryable": true,
       "diagnostic": "Bounded Cline delivery repair exhausted: Iteration exhausted after 1 turns without green.",
       "at": "2026-11-01T00:14:55.428296+00:00"
+    },
+    {
+      "run_url": "https://github.com/isearchxsolve/bounty-control/actions/runs/41284310025",
+      "status": "FAILED_ENGINEER",
+      "kind": "engineer",
+      "retryable": true,
+      "diagnostic": "Cline preparation failed: error: TokenHarbor router HTTP 429: deepseek-v4.1-flash is limited for this account for now because recent requests were declined on content-policy grounds, and the shared allowance for such accounts is used up for this minute. Please retry in about 30 seconds. Other models on /v1/models are unaffected. |",
+      "at": "2026-11-01T07:23:02.219721+00:00"
     }
   ],
-  "finished_at": "2026-11-01T00:15:05.871372+00:00"
+  "finished_at": "2026-11-01T07:23:11.566310+00:00"
 }
