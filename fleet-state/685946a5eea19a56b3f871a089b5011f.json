@@ -2,7 +2,7 @@
   "task_id": "685946a5eea19a56b3f871a089b5011f",
   "repo": "qojulia/QuantumOptics.jl",
   "issue_number": 407,
-  "status": "DISPATCHED",
+  "status": "CLAIMED",
   "dispatch_id": "ba1f055f57764211b304a5535d65007f",
   "admission": {
     "funding": {
@@ -43,6 +43,14 @@
     "normal"
   ],
   "dispatched_at": "2026-11-01T09:50:06.164867+00:00",
-  "attempt": 0,
-  "updated_at": "2026-11-01T09:50:07.847525+00:00"
+  "attempt": 1,
+  "updated_at": "2026-11-01T09:50:21.634956+00:00",
+  "owner": "41294829504:1",
+  "previous_owner": null,
+  "previous_status": "DISPATCHED",
+  "run_url": "https://github.com/isearchxsolve/bounty-control/actions/runs/41294829504",
+  "harness_sha": "94cace62e71ce9d1b9c3b02e4cb6bf971d4e671a",
+  "claimed_at": "2026-11-01T09:50:21.634908+00:00",
+  "lease_expires_at": "2026-11-01T13:55:21.634923+00:00",
+  "preparation_budget_seconds": 14400
 }
