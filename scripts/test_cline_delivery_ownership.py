@@ -98,11 +98,18 @@ class DeliveryOwnershipTests(unittest.TestCase):
             # the agent to run a monorepo's component checks during preparation. Two runs
             # died at exit 143 doing exactly that (2026-10-29), so the contract is now the
             # opposite -- preparation is one targeted command, repo-wide checks go in the plan.
-            self.assertIn('HARD RULE for this phase', prompts[0])
+            self.assertIn('HOW THE MEASURING WORKS', prompts[0])
             self.assertIn('ONE targeted command', prompts[0])
-            self.assertIn('Do NOT run repo-wide or workspace-wide', prompts[0])
+            self.assertIn('Repo-wide or workspace-wide lint, typecheck, build or test', prompts[0])
             self.assertIn('Put every repo-wide command the delivery needs in `plan`', prompts[0])
             self.assertNotIn('separate serial commands in the plan', prompts[0])
+            # The baseline rule is knowledge of the world, not a prohibition: measured 2026-11-01,
+            # six retries wrote regression tests into the customer's tree because the directive
+            # asked for a reproduction command without saying the test is authored in the
+            # engineering turn.
+            self.assertIn('HOW THIS DELIVERY IS SHAPED', prompts[0])
+            self.assertIn('the test is authored in the engineering turn', prompts[0])
+            self.assertIn('never the repository tree', prompts[0])
             self.assertEqual(report['plan'].baseline_tests, [['corepack', 'pnpm@9', 'test']])
             self.assertEqual(report['base_sha'], sha)
 

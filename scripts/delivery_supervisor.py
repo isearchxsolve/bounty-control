@@ -110,8 +110,12 @@ Read the complete current native plan at {plan_file}.
 Read AGENTS.md, manifests, lockfiles, CI workflows and repository setup documentation.
 Resolve declared tools, exact package-manager/JVM versions, native dependencies, and configuration dynamically.
 You may install tools and dependencies, configure runtime caches outside the checkout, and run native verification.
-Do not modify, delete, reset, commit, or publish repository files, tests, workflows, or Git HEAD in this phase.
-An upstream product/test defect is BLOCKED_BASELINE; do not fix it to manufacture a green upstream baseline.
+The checkout stays the customer's ground in this turn too, for the same reason it did in preparation:
+the host proves the delivery by watching one command go from failing to passing against a base that
+never moved. You may read, run, install, and measure -- you leave no edit, no new file, no staged
+change, and no commit behind, and the host compares the tree byte for byte before it accepts your
+artifact. An upstream product/test defect is a finding to record as BLOCKED_BASELINE, not something
+to quietly repair: manufacturing a green baseline erases the evidence the delivery exists to produce.
 Never bypass a build approval policy, test, linter, funding/competition check, claim lease, or release guard.
 Do not send messages, push branches, or create a PR yourself. The host performs guarded publication.
 Preserve completed engineering edits and report an external credential/service/hardware blocker honestly.

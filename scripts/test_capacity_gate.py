@@ -115,16 +115,38 @@ class PreparationPromptTests(unittest.TestCase):
         cls.source = (HERE / "kaggle_engine_worker.py").read_text(encoding="utf-8-sig")
 
     def test_the_prompt_forbids_repository_wide_verification_in_preparation(self):
-        self.assertIn("HARD RULE for this phase", self.source)
-        self.assertIn("preparation verifies with ONE targeted command", self.source)
-        self.assertIn("Do NOT run repo-wide or workspace-wide lint, typecheck, build or test here",
-                      self.source)
+        self.assertIn("HOW THE MEASURING WORKS", self.source)
+        self.assertIn("you verify with ONE targeted command", self.source)
+        self.assertIn(
+            "Repo-wide or workspace-wide lint, typecheck, build or test consumes more than this runner has",
+            self.source)
 
     def test_the_old_loophole_is_gone(self):
         # This sentence permitted exactly the failure: "listing its native component checks as
         # separate serial commands in the plan" invited running them during preparation.
         self.assertNotIn("listing its native component checks as separate serial commands in the plan",
                          self.source)
+
+    def test_the_baseline_rule_is_taught_not_decreed(self):
+        """Measured 2026-11-01: six retries died writing regression tests into the customer's tree
+        during preparation, because the directive asked for a reproduction command without ever
+        saying the test behind it is authored in the engineering turn. The constraint has to arrive
+        as knowledge of the world -- why the base is a yardstick, where scratch lives, what the two
+        turns each are -- not as a prohibition, or the agent solves the measured problem a different
+        way and breaks the same gate.
+        """
+        self.assertIn("HOW THIS DELIVERY IS SHAPED", self.source)
+        self.assertIn("surveyor", self.source)
+        self.assertIn("yardstick", self.source)
+        # The missing fact: the reproduction test is authored in the engineering turn, so naming a
+        # test that does not exist yet is correct and expected.
+        self.assertIn("the test is authored in the engineering turn", self.source)
+        self.assertIn("The command may name a test that does not exist yet", self.source)
+        # Where scratch work lives, so an experiment never lands in the repository tree.
+        self.assertIn("never the repository tree", self.source)
+        self.assertIn("the packet directory", self.source)
+        # The old handcuff phrasing is gone from the directive.
+        self.assertNotIn("without changing product source in this phase", self.source)
 
     def test_the_prompt_names_the_measured_consequence(self):
         self.assertIn("7 GiB", self.source)
