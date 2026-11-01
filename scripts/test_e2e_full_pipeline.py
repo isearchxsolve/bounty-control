@@ -31,7 +31,7 @@ import actions_dispatch as dispatch  # noqa: E402
 import cline_entry_door as door  # noqa: E402
 from actions_github import GitHub, StateStore, task_id  # noqa: E402
 from actions_reconcile import reconcile  # noqa: E402
-from pipeline_evidence import bind_proof, require_evidence, source_revision  # noqa: E402
+from pipeline_evidence import require_evidence, source_revision  # noqa: E402
 
 REPO = "acme/http"
 NUMBER = 7
