@@ -2,7 +2,7 @@
   "task_id": "b17b814d751744a9300d16ddaf6d2377",
   "repo": "Manthan-cpp/GramRaksha-AI",
   "issue_number": 2,
-  "status": "DISPATCHING",
+  "status": "DISPATCHED",
   "dispatch_id": "776d9d393f194e31a3a0278b3f64935d",
   "admission": {
     "funding": {
@@ -63,5 +63,5 @@
   ],
   "dispatched_at": "2026-11-01T08:03:20.430653+00:00",
   "attempt": 0,
-  "updated_at": "2026-11-01T08:03:20.430666+00:00"
+  "updated_at": "2026-11-01T08:03:22.314608+00:00"
 }
