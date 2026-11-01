@@ -2,7 +2,7 @@
   "task_id": "b17b814d751744a9300d16ddaf6d2377",
   "repo": "Manthan-cpp/GramRaksha-AI",
   "issue_number": 2,
-  "status": "DISPATCHED",
+  "status": "CLAIMED",
   "dispatch_id": "776d9d393f194e31a3a0278b3f64935d",
   "admission": {
     "funding": {
@@ -62,6 +62,14 @@
     "founder"
   ],
   "dispatched_at": "2026-11-01T08:03:20.430653+00:00",
-  "attempt": 0,
-  "updated_at": "2026-11-01T08:03:22.314608+00:00"
+  "attempt": 1,
+  "updated_at": "2026-11-01T08:03:32.775981+00:00",
+  "owner": "41287221293:1",
+  "previous_owner": null,
+  "previous_status": "DISPATCHED",
+  "run_url": "https://github.com/isearchxsolve/bounty-control/actions/runs/41287221293",
+  "harness_sha": "9a773628e5505660f1ba4a75638d940c0607b809",
+  "claimed_at": "2026-11-01T08:03:32.775928+00:00",
+  "lease_expires_at": "2026-11-01T12:08:32.775942+00:00",
+  "preparation_budget_seconds": 14400
 }
