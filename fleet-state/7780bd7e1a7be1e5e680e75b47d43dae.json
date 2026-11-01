@@ -2,8 +2,8 @@
   "task_id": "7780bd7e1a7be1e5e680e75b47d43dae",
   "repo": "gqrx-sdr/gqrx",
   "issue_number": 1336,
-  "status": "FAILED_PUBLISH",
-  "dispatch_id": "9d4f5fb64b0c47fa82e410c060214d84",
+  "status": "DISPATCHING",
+  "dispatch_id": "33a1b067ab12449f9be424009e06117a",
   "admission": {
     "funding": {
       "amount": "420",
@@ -33,7 +33,7 @@
     "task_id": "7780bd7e1a7be1e5e680e75b47d43dae",
     "source_revision": "a8de2fb190b5a618d35355f23d2b9b9c1a16dc290fb05b22de87d5fe1ce1b681"
   },
-  "dispatch_attempt": 1,
+  "dispatch_attempt": 2,
   "sovereign_admission": true,
   "competition": {
     "blocking": false,
@@ -62,9 +62,9 @@
   "lanes": [
     "programs"
   ],
-  "dispatched_at": "2026-11-01T02:39:35.746567+00:00",
+  "dispatched_at": "2026-11-01T12:24:29.282605+00:00",
   "attempt": 1,
-  "updated_at": "2026-11-01T03:08:51.039935+00:00",
+  "updated_at": "2026-11-01T12:24:29.282620+00:00",
   "owner": "41266106201:1",
   "previous_owner": null,
   "previous_status": "DISPATCHED",
