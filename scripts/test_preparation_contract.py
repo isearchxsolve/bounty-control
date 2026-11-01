@@ -140,7 +140,11 @@ class GateUnchangedTests(unittest.TestCase):
         delivery = (HERE / "actions_delivery.py").read_text(encoding="utf-8-sig")
         self.assertIn('raise RuntimeError("BLOCKED_BASELINE: " + diagnostic)', delivery)
         supervisor = (HERE / "delivery_supervisor.py").read_text(encoding="utf-8-sig")
-        self.assertIn("do not fix it to manufacture a green upstream baseline", supervisor)
+        # The sentence is taught as knowledge now (2026-11-01 directive audit): an upstream
+        # defect is a finding to record, because manufacturing a green baseline erases the
+        # evidence the delivery exists to produce.
+        self.assertIn("manufacturing a green baseline erases", supervisor)
+        self.assertIn("BLOCKED_BASELINE", supervisor)
 
 
 if __name__ == "__main__":
