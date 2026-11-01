@@ -2,7 +2,7 @@
   "task_id": "897ecdd9ae86e3e08abbe8209dcc51e3",
   "repo": "Spectral-Finance/lux",
   "issue_number": 80,
-  "status": "CLAIMED",
+  "status": "FAILED_ENGINEER",
   "dispatch_id": "58e576265d374e948f5529867d064e83",
   "admission": {
     "funding": {
@@ -273,7 +273,7 @@
   ],
   "dispatched_at": "2026-11-01T21:10:20.497339+00:00",
   "attempt": 2,
-  "updated_at": "2026-11-01T21:11:05.876435+00:00",
+  "updated_at": "2026-11-01T21:13:32.393303+00:00",
   "owner": "41350624217:1",
   "previous_owner": "41343381705:1",
   "previous_status": "DISPATCHED",
@@ -282,12 +282,12 @@
   "claimed_at": "2026-11-01T21:11:05.876387+00:00",
   "lease_expires_at": "2026-11-02T01:16:05.876401+00:00",
   "preparation_budget_seconds": 14400,
-  "kind": "deliverable_invalid",
+  "kind": "engineer",
   "retryable": true,
-  "diagnostic": "Cline deliverable invalid at /tmp/fleet-artifacts/delivery-supervisor/541bca5787ad4e919a96b0503d8ac00a.preparation.json: action=incomplete: the preparation skeleton was never replaced, so the agent finished without reporting",
+  "diagnostic": "Cline preparation failed: error: No NVIDIA key is currently ready. |",
   "path": "/tmp/fleet-artifacts/delivery-supervisor/541bca5787ad4e919a96b0503d8ac00a.preparation.json",
   "reason": "action=incomplete: the preparation skeleton was never replaced, so the agent finished without reporting",
-  "at": "2026-11-01T19:53:49.341655+00:00",
+  "at": "2026-11-01T21:13:19.105680+00:00",
   "failures": [
     {
       "run_url": "https://github.com/isearchxsolve/bounty-control/actions/runs/41343381705",
@@ -298,7 +298,15 @@
       "path": "/tmp/fleet-artifacts/delivery-supervisor/541bca5787ad4e919a96b0503d8ac00a.preparation.json",
       "reason": "action=incomplete: the preparation skeleton was never replaced, so the agent finished without reporting",
       "at": "2026-11-01T19:53:49.341655+00:00"
+    },
+    {
+      "run_url": "https://github.com/isearchxsolve/bounty-control/actions/runs/41350624217",
+      "status": "FAILED_ENGINEER",
+      "kind": "engineer",
+      "retryable": true,
+      "diagnostic": "Cline preparation failed: error: No NVIDIA key is currently ready. |",
+      "at": "2026-11-01T21:13:19.105680+00:00"
     }
   ],
-  "finished_at": "2026-11-01T19:54:01.087209+00:00"
+  "finished_at": "2026-11-01T21:13:31.979353+00:00"
 }
