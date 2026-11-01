@@ -156,6 +156,6 @@ jobs:
     - name: Sovereign handoff and forensic incident regressions
       run: |
         set -euo pipefail
-        for suite in test_agent_door.py test_agent_queue.py test_cline_entry_door.py test_sovereign_stamps.py test_sovereign_delivery.py test_pipeline_repairs.py test_e2e_door_to_claim.py; do
+        for suite in test_agent_door.py test_agent_queue.py test_cline_entry_door.py test_sovereign_stamps.py test_sovereign_delivery.py test_pipeline_repairs.py test_e2e_door_to_claim.py test_e2e_full_pipeline.py; do
           python3 -W error -m unittest discover -s scripts -p "$suite"
         done
