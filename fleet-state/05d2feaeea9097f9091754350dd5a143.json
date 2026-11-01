@@ -2,7 +2,7 @@
   "task_id": "05d2feaeea9097f9091754350dd5a143",
   "repo": "Spectral-Finance/lux",
   "issue_number": 76,
-  "status": "CLAIMED",
+  "status": "FAILED_DELIVERABLE_MISSING",
   "dispatch_id": "49324270079a493fb28d165ef8ce5eb7",
   "admission": {
     "funding": {
@@ -231,7 +231,7 @@
   ],
   "dispatched_at": "2026-11-01T12:24:09.893831+00:00",
   "attempt": 2,
-  "updated_at": "2026-11-01T12:24:51.434068+00:00",
+  "updated_at": "2026-11-01T12:30:31.043195+00:00",
   "owner": "41306320286:1",
   "previous_owner": "41252194005:1",
   "previous_status": "DISPATCHED",
@@ -240,10 +240,10 @@
   "claimed_at": "2026-11-01T12:24:51.434010+00:00",
   "lease_expires_at": "2026-11-01T16:29:51.434024+00:00",
   "preparation_budget_seconds": 14400,
-  "kind": "engineer",
+  "kind": "deliverable_invalid",
   "retryable": true,
-  "diagnostic": "Independent native-plan review did not approve: {'approved': False, 'reason': \"Rejected: the final_tests command `mix test.unit test/unit/lux/web3/gas_optimizer_test.exs` targets a test file that does not exist in the repository, so it cannot exercise any coverage. Evidence: `test -e lux/test/unit/lux/web3/gas_optimizer_test.exs` -> MISSING; `ls lux/test/unit/lux/web3` -> 'No such file or directory'; there is no `web3` directory under lux/test at all, and `grep -rin 'gas_optimizer|GasOptimizer'` over all *.ex/*.exs/*.md (excluding deps) returns nothing. The file is not cited in any of the listed sources (lux/mix.exs aliases only define `test.unit`/`test.integration`; the CI files run `mix test.unit` with no such path), so the command is unsupported by the cited native sources. Other commands do check out against the cited sources: OTP-27.2/Elixir-1.18.1-otp-27 match .tool-versions (erlang 27.2 / elixir 1.18.1-otp-27); `mix deps.get` and `cd priv/node && npm install` match ci.yml/lux-ci.yml; `MIX_ENV=test mix compile` is valid; `mix credo` and `mix format --check-formatted` match the 'Run Credo' and 'Check Formatting' steps in both workflows (credo is a [:dev,:test] dep; .credo.exs and .formatter.exs are present so `mix credo`/`mix format --check-formatted` resolve); the baseline target `test/unit/lux/lenses/etherscan/gas/gas_oracle_lens_test.exs` exists and is a unit test (uses UnitAPICase -> @moduletag :unit, and test_helper.exs excludes :unit while the `test.unit` alias re-includes it with `--include unit`). Verify note: the file does not exist, so this command fails/does not run real tests rather than providing a silent pass. Secondary coverage gap: the native CI also runs `mix dialyzer --format github`, `mix python.test` (pytest, lux/priv/python/tests) and `mix coveralls.github`, none of which appear in the plan's linters/tests. Overall the plan does not fully cover the native verification requirements and contains a nonexistent test target, so it is rejected.\", 'plan_sha256': 'b70aeab52710654bb3dfb2339f7aff3b663278d4ca1549e18770b2dba251baeb', 'sources': [{'path': '.tool-versions', 'sha256': '4d38a40baeed3bfe4fe7140954a391f1b18bb7c6e6eea7fcd82ed6b191421b26'}, {'path': '.github/workflows/ci.yml', 'sha256': 'cab2e6548a3c519b91fc9a6c7673e71e3d410e438c7293a0e4c6250a153a0fd4'}, {'path': '.github/workflows/lux-ci.yml', 'sha256': 'b5b2b141f4b26b391d9ab06086fe4cf5b614eac5acf437a1ac85c9eacdccc5bb'}, {'path': 'README.md', 'sha256': '54962f652dd2afeb5729e78bb0a65143f236e06537ef3cd6b059ef5361799791'}, {'path': 'test.envrc', 'sha256': '33a9fe325d49db307403580be985e630e9ef692d86bce8c8cfb64001d2b39c4d'}, {'path': 'dev.envrc', 'sha256': '3a5e34ae735da97c7fa0c1da7d1b1a55aeef03cad87283b1d56ad2463a785ae5'}, {'path': 'lux/mix.exs', 'sha256': 'ad82e5c0b69cd3bf3ecfaf925106581148204decfa7e8614a6a7c48c97d6dc2b'}, {'path': 'lux/mix.lock', 'sha256': 'ee88085a637e22f9616f773a6636eec6cc56df97c8b25d290e4b6b1058e1b274'}, {'path': 'lux/config/config.exs', 'sha256': '8c5e65e468a0e91073b48df5b0d32094e603d734d7e43c0f22c66ee7d8d89c18'}, {'path': 'lux/.formatter.exs', 'sha256': 'a9231162595d2686b2437e5d08a57f8e1597f4b6967e63af5e3bdd65df948ef5'}, {'path': 'lux/.credo.exs', 'sha256': '2a79c96c83e25c45bd0bb4315b16cd3c237dda1802b4e5c534d51dc5ec086045'}, {'path': 'lux/test/test_helper.exs', 'sha256': 'bcfe6632f1d851b0c0e98a1c4cc05fa74ccc858cc1b273257a4fb56c124c9372'}, {'path': 'lux/priv/node/package.json', 'sha256': 'd80c18b64846b5934ebde40704dacf1759039e0809cd9a3c78d8bc248114729c'}, {'path': 'lux/priv/python/pyproject.toml', 'sha256': '70294e75c7974937b0f5a38cbe48782ae78445eb2743cf2918214d3ed74e365b'}]}",
-  "at": "2026-10-31T23:35:29.967454+00:00",
+  "diagnostic": "Cline deliverable invalid at /tmp/fleet-artifacts/delivery-supervisor/a5f7e55370614f119eb73a310d1e70f0.preparation.json: action=incomplete: the preparation skeleton was never replaced, so the agent finished without reporting",
+  "at": "2026-11-01T12:30:18.105609+00:00",
   "failures": [
     {
       "run_url": "https://github.com/isearchxsolve/bounty-control/actions/runs/41252194005",
@@ -252,7 +252,19 @@
       "retryable": true,
       "diagnostic": "Independent native-plan review did not approve: {'approved': False, 'reason': \"Rejected: the final_tests command `mix test.unit test/unit/lux/web3/gas_optimizer_test.exs` targets a test file that does not exist in the repository, so it cannot exercise any coverage. Evidence: `test -e lux/test/unit/lux/web3/gas_optimizer_test.exs` -> MISSING; `ls lux/test/unit/lux/web3` -> 'No such file or directory'; there is no `web3` directory under lux/test at all, and `grep -rin 'gas_optimizer|GasOptimizer'` over all *.ex/*.exs/*.md (excluding deps) returns nothing. The file is not cited in any of the listed sources (lux/mix.exs aliases only define `test.unit`/`test.integration`; the CI files run `mix test.unit` with no such path), so the command is unsupported by the cited native sources. Other commands do check out against the cited sources: OTP-27.2/Elixir-1.18.1-otp-27 match .tool-versions (erlang 27.2 / elixir 1.18.1-otp-27); `mix deps.get` and `cd priv/node && npm install` match ci.yml/lux-ci.yml; `MIX_ENV=test mix compile` is valid; `mix credo` and `mix format --check-formatted` match the 'Run Credo' and 'Check Formatting' steps in both workflows (credo is a [:dev,:test] dep; .credo.exs and .formatter.exs are present so `mix credo`/`mix format --check-formatted` resolve); the baseline target `test/unit/lux/lenses/etherscan/gas/gas_oracle_lens_test.exs` exists and is a unit test (uses UnitAPICase -> @moduletag :unit, and test_helper.exs excludes :unit while the `test.unit` alias re-includes it with `--include unit`). Verify note: the file does not exist, so this command fails/does not run real tests rather than providing a silent pass. Secondary coverage gap: the native CI also runs `mix dialyzer --format github`, `mix python.test` (pytest, lux/priv/python/tests) and `mix coveralls.github`, none of which appear in the plan's linters/tests. Overall the plan does not fully cover the native verification requirements and contains a nonexistent test target, so it is rejected.\", 'plan_sha256': 'b70aeab52710654bb3dfb2339f7aff3b663278d4ca1549e18770b2dba251baeb', 'sources': [{'path': '.tool-versions', 'sha256': '4d38a40baeed3bfe4fe7140954a391f1b18bb7c6e6eea7fcd82ed6b191421b26'}, {'path': '.github/workflows/ci.yml', 'sha256': 'cab2e6548a3c519b91fc9a6c7673e71e3d410e438c7293a0e4c6250a153a0fd4'}, {'path': '.github/workflows/lux-ci.yml', 'sha256': 'b5b2b141f4b26b391d9ab06086fe4cf5b614eac5acf437a1ac85c9eacdccc5bb'}, {'path': 'README.md', 'sha256': '54962f652dd2afeb5729e78bb0a65143f236e06537ef3cd6b059ef5361799791'}, {'path': 'test.envrc', 'sha256': '33a9fe325d49db307403580be985e630e9ef692d86bce8c8cfb64001d2b39c4d'}, {'path': 'dev.envrc', 'sha256': '3a5e34ae735da97c7fa0c1da7d1b1a55aeef03cad87283b1d56ad2463a785ae5'}, {'path': 'lux/mix.exs', 'sha256': 'ad82e5c0b69cd3bf3ecfaf925106581148204decfa7e8614a6a7c48c97d6dc2b'}, {'path': 'lux/mix.lock', 'sha256': 'ee88085a637e22f9616f773a6636eec6cc56df97c8b25d290e4b6b1058e1b274'}, {'path': 'lux/config/config.exs', 'sha256': '8c5e65e468a0e91073b48df5b0d32094e603d734d7e43c0f22c66ee7d8d89c18'}, {'path': 'lux/.formatter.exs', 'sha256': 'a9231162595d2686b2437e5d08a57f8e1597f4b6967e63af5e3bdd65df948ef5'}, {'path': 'lux/.credo.exs', 'sha256': '2a79c96c83e25c45bd0bb4315b16cd3c237dda1802b4e5c534d51dc5ec086045'}, {'path': 'lux/test/test_helper.exs', 'sha256': 'bcfe6632f1d851b0c0e98a1c4cc05fa74ccc858cc1b273257a4fb56c124c9372'}, {'path': 'lux/priv/node/package.json', 'sha256': 'd80c18b64846b5934ebde40704dacf1759039e0809cd9a3c78d8bc248114729c'}, {'path': 'lux/priv/python/pyproject.toml', 'sha256': '70294e75c7974937b0f5a38cbe48782ae78445eb2743cf2918214d3ed74e365b'}]}",
       "at": "2026-10-31T23:35:29.967454+00:00"
+    },
+    {
+      "run_url": "https://github.com/isearchxsolve/bounty-control/actions/runs/41306320286",
+      "status": "FAILED_DELIVERABLE_MISSING",
+      "kind": "deliverable_invalid",
+      "retryable": true,
+      "diagnostic": "Cline deliverable invalid at /tmp/fleet-artifacts/delivery-supervisor/a5f7e55370614f119eb73a310d1e70f0.preparation.json: action=incomplete: the preparation skeleton was never replaced, so the agent finished without reporting",
+      "path": "/tmp/fleet-artifacts/delivery-supervisor/a5f7e55370614f119eb73a310d1e70f0.preparation.json",
+      "reason": "action=incomplete: the preparation skeleton was never replaced, so the agent finished without reporting",
+      "at": "2026-11-01T12:30:18.105609+00:00"
     }
   ],
-  "finished_at": "2026-10-31T23:35:39.754750+00:00"
+  "finished_at": "2026-11-01T12:30:30.273506+00:00",
+  "path": "/tmp/fleet-artifacts/delivery-supervisor/a5f7e55370614f119eb73a310d1e70f0.preparation.json",
+  "reason": "action=incomplete: the preparation skeleton was never replaced, so the agent finished without reporting"
 }
