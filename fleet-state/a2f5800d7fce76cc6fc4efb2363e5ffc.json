@@ -2,8 +2,8 @@
   "task_id": "a2f5800d7fce76cc6fc4efb2363e5ffc",
   "repo": "smallbets/userbase",
   "issue_number": 305,
-  "status": "FAILED_ENGINEER",
-  "dispatch_id": "235c1971bdfe4e349c937676b28998d4",
+  "status": "DISPATCHING",
+  "dispatch_id": "0a661ea0eb9f4b968abbf93b2bda40c5",
   "admission": {
     "funding": {
       "amount": "1000",
@@ -33,7 +33,7 @@
     "task_id": "a2f5800d7fce76cc6fc4efb2363e5ffc",
     "source_revision": "fdd2f9d13814e9c0e0bf0606c9b165c60c2ed742993ad0260bb03bdf07e92bb5"
   },
-  "dispatch_attempt": 1,
+  "dispatch_attempt": 2,
   "sovereign_admission": true,
   "competition": {
     "blocking": false,
@@ -62,9 +62,9 @@
   "lanes": [
     "normal"
   ],
-  "dispatched_at": "2026-11-01T21:18:48.082040+00:00",
+  "dispatched_at": "2026-11-01T22:29:31.322142+00:00",
   "attempt": 1,
-  "updated_at": "2026-11-01T21:30:45.913942+00:00",
+  "updated_at": "2026-11-01T22:29:31.322156+00:00",
   "owner": "41351365019:1",
   "previous_owner": null,
   "previous_status": "DISPATCHED",
