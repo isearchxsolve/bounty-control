@@ -2,7 +2,7 @@
   "task_id": "9372a6ec7d2480159d5f642f0c61c271",
   "repo": "sonevalleyinfra/buildcity-web",
   "issue_number": 50,
-  "status": "CLAIMED",
+  "status": "FAILED_ENGINEER",
   "dispatch_id": "eb6bfe34d9634bb0921691593fe384a1",
   "admission": {
     "funding": {
@@ -42,7 +42,7 @@
   ],
   "dispatched_at": "2026-11-01T12:47:52.580349+00:00",
   "attempt": 3,
-  "updated_at": "2026-11-01T12:48:04.315435+00:00",
+  "updated_at": "2026-11-01T12:55:22.279174+00:00",
   "owner": "41308187619:1",
   "previous_owner": "41306358110:1",
   "previous_status": "DISPATCHED",
@@ -54,7 +54,7 @@
   "kind": "engineer",
   "retryable": true,
   "diagnostic": "Native plan source SHA-256 does not match the checkout",
-  "at": "2026-11-01T12:33:29.266335+00:00",
+  "at": "2026-11-01T12:55:11.973587+00:00",
   "failures": [
     {
       "run_url": "https://github.com/isearchxsolve/bounty-control/actions/runs/41253310793",
@@ -71,7 +71,15 @@
       "retryable": true,
       "diagnostic": "Native plan source SHA-256 does not match the checkout",
       "at": "2026-11-01T12:33:29.266335+00:00"
+    },
+    {
+      "run_url": "https://github.com/isearchxsolve/bounty-control/actions/runs/41308187619",
+      "status": "FAILED_ENGINEER",
+      "kind": "engineer",
+      "retryable": true,
+      "diagnostic": "Native plan source SHA-256 does not match the checkout",
+      "at": "2026-11-01T12:55:11.973587+00:00"
     }
   ],
-  "finished_at": "2026-11-01T12:33:39.038938+00:00"
+  "finished_at": "2026-11-01T12:55:21.725263+00:00"
 }
