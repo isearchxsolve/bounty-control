@@ -1,0 +1,68 @@
+{
+  "task_id": "4fe0162e0786ca4b29165ab0ed38d52d",
+  "repo": "OpenOrg-gg/AmphoraProtocol",
+  "issue_number": 4,
+  "status": "DISPATCHING",
+  "dispatch_id": "2c755a3541b5490a841bd8c477c98a67",
+  "admission": {
+    "funding": {
+      "amount": "500",
+      "currency": "USD",
+      "payer": "OpenOrg-gg",
+      "source_url": "https://github.com/OpenOrg-gg/AmphoraProtocol/issues/4",
+      "usd_value": "500",
+      "quote": {
+        "basis": "USD face value",
+        "usd_rate": "1"
+      },
+      "raw": "This bounty will pay out $500 in USDC",
+      "source_author_association": "OWNER",
+      "source_author_login": "OpenOrg-gg"
+    },
+    "agent_reason": "repo owner OpenOrg-gg pledged $500 USDC for reviewing USDA.sol and writing Hardhat tests on AmphoraProtocol.",
+    "scope_quote": "Tests should be written in Hardhat and be added into the testing set up on this repo.",
+    "code_evidence": {
+      "is_product_code": true,
+      "path": "contracts/USDA.sol",
+      "sha": "ad7d2d3aeb60ff24e26e116f212c0e9396490ad3",
+      "quote": "contract USDA is Initializable, PausableUpgradeable, UFragments, IUSDA, ExponentialNoError {"
+    },
+    "source_issue": "https://github.com/OpenOrg-gg/AmphoraProtocol/issues/4",
+    "funding_status": "PRICED_OFFER",
+    "lane": "normal",
+    "task_id": "4fe0162e0786ca4b29165ab0ed38d52d",
+    "source_revision": "40ffbb669a6a50065ca468f0824865be1277ade24ca1566a1327fed6ecba3cc8"
+  },
+  "dispatch_attempt": 1,
+  "sovereign_admission": true,
+  "competition": {
+    "blocking": false,
+    "nominal": [
+      {
+        "pr": "https://github.com/OpenOrg-gg/AmphoraProtocol/pull/12",
+        "author": "huineng6",
+        "number": 12,
+        "author_merged_in_repo": 0,
+        "check_runs": 0,
+        "maintainer_engagement": 0,
+        "reason": "nominal_attempt_only"
+      },
+      {
+        "pr": "https://github.com/OpenOrg-gg/AmphoraProtocol/pull/12",
+        "author": "huineng6",
+        "number": 12,
+        "author_merged_in_repo": 0,
+        "history_cached": true,
+        "check_runs": 0,
+        "maintainer_engagement": 0,
+        "reason": "nominal_attempt_only"
+      }
+    ]
+  },
+  "lanes": [
+    "founder"
+  ],
+  "dispatched_at": "2026-11-01T21:18:58.158624+00:00",
+  "attempt": 0,
+  "updated_at": "2026-11-01T21:18:58.158644+00:00"
+}
