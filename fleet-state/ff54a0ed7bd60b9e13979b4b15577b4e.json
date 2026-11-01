@@ -2,28 +2,29 @@
   "task_id": "ff54a0ed7bd60b9e13979b4b15577b4e",
   "repo": "Spectral-Finance/lux",
   "issue_number": 99,
-  "status": "FAILED_ENGINEER",
-  "dispatch_id": "d4e4b0141be9453a9796844711fce6e4",
+  "status": "DISPATCHING",
+  "dispatch_id": "bb6239d8c4a04022a5d81b3c04e9afce",
   "admission": {
     "funding": {
       "amount": "600",
       "currency": "USD",
       "payer": "rparcus",
       "source_url": "https://github.com/Spectral-Finance/lux/issues/99",
-      "authority_quote": "LLM Provider Abstraction Layer $600",
       "usd_value": "600",
       "quote": {
         "basis": "USD face value",
         "usd_rate": "1"
       },
-      "raw": "## Budget: $600"
+      "raw": "## Budget: $600",
+      "source_author_association": "COLLABORATOR",
+      "source_author_login": "rparcus"
     },
-    "agent_reason": "The issue was authored by rparcus, a COLLABORATOR on Spectral-Finance/lux (Spectral Labs' open-source Lux framework), and states a committed budget in the body ('## Budget: $600'), so the offer comes from a party with commit rights on the project and is above the 250 USD floor. The scope is one bounded engineering feature - a provider abstraction layer - with a defined acceptance list. The cited file is the Lux.LLM behaviour module that the abstraction layer would replace/extend.",
+    "agent_reason": "The issue author rparcus is a COLLABORATOR on Spectral-Finance/lux (Spectral Labs' open-source multi-agent framework) and states the amount in the issue body, so a party who can commit project money sets the price. The scope is a bounded provider-abstraction feature (universal LLM provider interface). lux_app/lib/lux_app/schemas/llm_config.ex is the Ecto schema that already models an LLM config with a :provider field, the product code this provider-abstraction work directly extends.",
     "scope_quote": "Implement a universal provider interface to manage multiple LLM providers efficiently, with automatic model selection, fallback handling, and optimization features.",
     "code_evidence": {
-      "path": "lux/lib/lux/llm.ex",
-      "sha": "b41c27ef098bac7d65d29402405c1946a8f20733",
-      "quote": "A module for interacting with LLMs. Defines the behaviours for LLMs and provides a default implementation.",
+      "path": "lux_app/lib/lux_app/schemas/llm_config.ex",
+      "sha": "c7f53b10bb2eded8f95727c954beb115b5068d50",
+      "quote": "field :provider, :string",
       "is_product_code": true
     },
     "source_issue": "https://github.com/Spectral-Finance/lux/issues/99",
@@ -32,7 +33,7 @@
     "task_id": "ff54a0ed7bd60b9e13979b4b15577b4e",
     "source_revision": "b60fe461ce8652975c6d78be129a281c0844cfa083d62db4eb5454951163681f"
   },
-  "dispatch_attempt": 1,
+  "dispatch_attempt": 2,
   "sovereign_admission": true,
   "competition": {
     "blocking": false,
@@ -566,9 +567,9 @@
   "lanes": [
     "startup"
   ],
-  "dispatched_at": "2026-10-31T23:20:50.875745+00:00",
+  "dispatched_at": "2026-11-01T07:19:13.264429+00:00",
   "attempt": 1,
-  "updated_at": "2026-11-01T00:15:06.480765+00:00",
+  "updated_at": "2026-11-01T07:19:13.264445+00:00",
   "owner": "41252150256:1",
   "previous_owner": null,
   "previous_status": "DISPATCHED",
