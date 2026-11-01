@@ -2,7 +2,7 @@
   "task_id": "685946a5eea19a56b3f871a089b5011f",
   "repo": "qojulia/QuantumOptics.jl",
   "issue_number": 407,
-  "status": "DISPATCHING",
+  "status": "DISPATCHED",
   "dispatch_id": "a2e73705032c455d94ddcdf998d37d8a",
   "admission": {
     "funding": {
@@ -44,7 +44,7 @@
   ],
   "dispatched_at": "2026-11-01T12:24:20.490774+00:00",
   "attempt": 1,
-  "updated_at": "2026-11-01T12:24:20.490788+00:00",
+  "updated_at": "2026-11-01T12:24:22.170749+00:00",
   "owner": "41294829504:1",
   "previous_owner": null,
   "previous_status": "DISPATCHED",
