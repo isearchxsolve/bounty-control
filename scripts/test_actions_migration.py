@@ -348,11 +348,17 @@ class TransportTests(unittest.TestCase):
         api = SimpleNamespace(api=lambda _: {"check_runs": rows}, pages=lambda _: [])
         self.assertEqual(classify_checks(api, "owner/project", "head")["state"], "PASSED")
 
-    def test_maintainer_approval_is_pending_not_a_code_repair(self):
+    def test_maintainer_approval_is_held_not_a_code_repair(self):
+        # Contract change, 2026-11-01. This test previously pinned action_required as PENDING,
+        # which was wrong in a way that cost real deliveries: measured across 18 open PRs, 15 had
+        # no executed checks and paraloom-core/kivaloo returned action_required on 8 of 8 runs, so
+        # every one of them sat in "CI still running" forever and never aged into an obligation.
+        # Held is still not a code repair -- nothing failed -- but it is no longer reported as a
+        # run in progress. The assertion that survives unchanged is failures == [].
         rows = [{"id": 1, "name": "native", "status": "completed", "conclusion": "action_required"}]
         api = SimpleNamespace(api=lambda _: {"check_runs": rows}, pages=lambda _: [])
         proof = classify_checks(api, "owner/project", "head")
-        self.assertEqual(proof["state"], "PENDING")
+        self.assertEqual(proof["state"], "HELD")
         self.assertEqual(proof["failures"], [])
 
 

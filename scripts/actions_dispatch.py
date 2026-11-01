@@ -1040,6 +1040,12 @@ def retry_eligible(state):
     if not state:
         return True
     status = str(state.get("status", ""))
+    # A reviewer's change request is a work order, not a terminal verdict. Measured 2026-11-01:
+    # bl4ckb4ll/blackball#182 carried CHANGES_REQUESTED with a reproducible arithmetic defect
+    # (fedtax() returning 0 above 103350) and no path existed to send it back to engineering.
+    # Bounded by the same attempt budget as every other retry.
+    if status == "CHANGES_REQUESTED":
+        return True
     return status.startswith("FAILED")
 
 

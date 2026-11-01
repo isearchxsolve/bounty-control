@@ -138,12 +138,77 @@ def classify_checks(api, repo, head):
     for row in statuses:  # newest first
         latest_status.setdefault(row["context"], row)
     failures += [r for r in latest_status.values() if r["state"] in ("error", "failure")]
-    pending = any(r["status"] != "completed" or r.get("conclusion") == "action_required"
-                  for r in latest.values()) or any(
+    # Measured 2026-11-01 across 18 open PRs: 15 had no executed checks at all, and
+    # paraloom-labs/paraloom-core plus Tarsnap/kivaloo returned action_required on 8 of 8 runs.
+    # A workflow held for maintainer approval has not run and will not run until a human clicks
+    # approve. Folding it into ``pending`` reported "CI still running" for a PR that was in fact
+    # waiting on a person, so the record never aged and no follow-up obligation was ever raised.
+    # Held is a distinct observation: the workflow never executed, and that is a fact about the
+    # world, not a stage of a run in progress.
+    held = [r for r in latest.values() if r.get("conclusion") == "action_required"]
+    pending = any(r["status"] != "completed" for r in latest.values()) or any(
         r["state"] == "pending" for r in latest_status.values())
     return {"head_sha": head, "checks": list(latest.values()), "statuses": list(latest_status.values()),
-            "failures": failures, "state": "FAILED" if failures else "PENDING" if pending else
+            "failures": failures, "held": held,
+            "state": "FAILED" if failures else "HELD" if held else "PENDING" if pending else
             "PASSED" if latest or latest_status else "NO_REMOTE_CHECKS"}
+
+
+def review_verdict(api, repo, number):
+    """Read what a human actually decided about a published PR.
+
+    Measured 2026-11-01: bl4ckb4ll/blackball#182 carried CHANGES_REQUESTED from a collaborator
+    and fyne-io/fyne#6637 carried a reviewer report of a failing native check, and neither was
+    visible to any pipeline record. The only lane that reads reviews is pr_conversion_watch.py,
+    which is deliberately read-only and reports to a file nobody acts on. A review is the one
+    signal that says what to do next, so it is observed here as durable state.
+
+    Interpretation stays with the model and the engineer; this reads the verdict GitHub
+    recorded and nothing more.
+    """
+    reviews = api.pages(f"repos/{repo}/pulls/{number}/reviews")
+    states = [str((r or {}).get("state") or "").upper() for r in reviews]
+    states = [s for s in states if s]
+    if "CHANGES_REQUESTED" in states:
+        verdict = "CHANGES_REQUESTED"
+    elif "APPROVED" in states:
+        verdict = "APPROVED"
+    elif states:
+        verdict = "COMMENTED"
+    else:
+        verdict = "NONE"
+    latest = reviews[-1] if reviews else {}
+    return {"verdict": verdict, "review_count": len(states),
+            "latest_reviewer": ((latest or {}).get("user") or {}).get("login"),
+            "latest_review_at": (latest or {}).get("submitted_at")}
+
+
+def retry_claim(api, record):
+    """Re-post a claim command that failed to submit.
+
+    Measured 2026-11-01: a claim that failed to post was recorded as
+    ``claim_retry_required=True`` and then never retried by anything. The obligation was durable
+    and unactionable, which is the same as not recording it. A merge without a claim is unpaid
+    work, so this is the last link in the chain and it has to close.
+
+    Only a recorded submission failure is retried. An unconfirmed submission is left alone: the
+    platform may already have read it, and a second identical command is noise on someone's PR.
+    """
+    if not record.get("claim_retry_required"):
+        return None
+    claim = record.get("claim_command")
+    number = record.get("pr_number")
+    if not claim or not number:
+        return {"claim_retry": "NOT_ATTEMPTED",
+                "diagnostic": "Claim retry required but command or PR number is missing"}
+    try:
+        api.api(f"repos/{record['repo']}/issues/{number}/comments", "POST", {"body": claim})
+    except (GitHubError, OSError, ValueError) as exc:
+        return {"claim_retry": "FAILED", "diagnostic": str(exc)[:300]}
+    print(json.dumps({"phase": "CLAIM_RETRIED", "repo": record["repo"], "pr": number}),
+          flush=True)
+    return {"claim_retry": "SUBMITTED_UNCONFIRMED", "claim_status": "SUBMITTED_UNCONFIRMED",
+            "claim_retry_required": False}
 
 
 def reconcile(repair=False, api=None, store=None):
@@ -198,11 +263,23 @@ def reconcile(repair=False, api=None, store=None):
                     fields = {"status": "CLOSED_UNMERGED", "pr_url": pr["html_url"]}
                 else:
                     proof = classify_checks(api, record["repo"], record["head_sha"])
+                    review = review_verdict(api, record["repo"], record["pr_number"])
                     fields = {"status": "FAILED_REMOTE_CHECKS" if proof["failures"] else
+                              "CHECKS_HELD_FOR_APPROVAL" if proof["state"] == "HELD" else
                               "PUBLISHED_PENDING_CHECKS" if proof["state"] == "PENDING" else "AWAITING_REVIEW",
-                              "remote_verification": proof}
+                              "remote_verification": proof, "remote_review": review}
                     if proof["failures"]:
                         fields["failures"] = [*record.get("failures", []), proof]
+                    if review["verdict"] == "CHANGES_REQUESTED":
+                        # A reviewer asked for a change. That is ours to fix, and it is a durable
+                        # obligation rather than a note in a report file.
+                        fields["status"] = "CHANGES_REQUESTED"
+                        fields["review_obligation"] = "address_review"
+                    # A claim that failed to post is unpaid work waiting to happen. Close the last
+                    # link here, where the PR is already being observed.
+                    retried = retry_claim(api, record)
+                    if retried:
+                        fields.update(retried)
             if not fields:
                 continue
             identity = record["task_id"]
@@ -213,7 +290,8 @@ def reconcile(repair=False, api=None, store=None):
             state = store.mutate(identity, update)
             observed[identity] = state
             receipt = {"task_id": identity, "previous": status, "status": state["status"], "at": utcnow()}
-            if repair and state["status"] == "FAILED_REMOTE_CHECKS" and int(state.get("attempt", 0)) < 3:
+            if repair and state["status"] in ("FAILED_REMOTE_CHECKS", "CHANGES_REQUESTED") \
+                    and int(state.get("attempt", 0)) < 3:
                 from actions_dispatch import dispatch
                 from bounty_admission import competition
                 from pipeline_evidence import require_evidence

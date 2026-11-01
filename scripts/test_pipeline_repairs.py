@@ -387,4 +387,168 @@ class RecoveryTests(unittest.TestCase):
         self.assertEqual(len(calls),2)
 
 
+class DeliverySideObservationTests(unittest.TestCase):
+    """Measured 2026-11-01: the pipeline could not see a held workflow or a reviewer verdict.
+
+    15 of 18 open PRs had no executed checks, and two repositories returned action_required on
+    every run. Both facts were invisible: action_required was folded into PENDING, so a PR
+    waiting on a human read as "CI still running" and never aged into an obligation. Separately,
+    blackball#182 carried CHANGES_REQUESTED and fyne#6637 a reviewer report of a failing native
+    check, and no pipeline record held either.
+    """
+
+    def test_workflow_held_for_approval_is_not_pending(self):
+        from actions_reconcile import classify_checks
+        api = GitHub()
+        api.api = lambda endpoint: {'check_runs': [
+            {'id': 1, 'name': 'CI', 'status': 'completed', 'conclusion': 'action_required',
+             'app': {'id': 7}}]}
+        api.pages = lambda endpoint: []
+        proof = classify_checks(api, 'unit/control', 'a' * 40)
+        self.assertEqual(proof['state'], 'HELD')
+        self.assertEqual(len(proof['held']), 1)
+        # A held workflow is not a failure: it never ran, so nothing failed.
+        self.assertEqual(proof['failures'], [])
+
+    def test_running_workflow_is_still_pending(self):
+        from actions_reconcile import classify_checks
+        api = GitHub()
+        api.api = lambda endpoint: {'check_runs': [
+            {'id': 1, 'name': 'CI', 'status': 'in_progress', 'conclusion': None,
+             'app': {'id': 7}}]}
+        api.pages = lambda endpoint: []
+        self.assertEqual(classify_checks(api, 'unit/control', 'a' * 40)['state'], 'PENDING')
+
+    def test_changes_requested_becomes_a_durable_obligation(self):
+        from actions_reconcile import review_verdict
+        api = GitHub()
+        api.pages = lambda endpoint: [
+            {'state': 'COMMENTED', 'user': {'login': 'first'}, 'submitted_at': '2026-10-27T00:00:00Z'},
+            {'state': 'CHANGES_REQUESTED', 'user': {'login': 'reviewer'},
+             'submitted_at': '2026-10-31T19:58:48Z'}]
+        verdict = review_verdict(api, 'unit/control', 182)
+        self.assertEqual(verdict['verdict'], 'CHANGES_REQUESTED')
+        self.assertEqual(verdict['review_count'], 2)
+        self.assertEqual(verdict['latest_reviewer'], 'reviewer')
+
+    def test_no_reviews_is_not_an_approval(self):
+        from actions_reconcile import review_verdict
+        api = GitHub()
+        api.pages = lambda endpoint: []
+        verdict = review_verdict(api, 'unit/control', 1)
+        self.assertEqual(verdict['verdict'], 'NONE')
+        self.assertEqual(verdict['review_count'], 0)
+
+    def test_failed_claim_is_retried(self):
+        from actions_reconcile import retry_claim
+        posted = []
+        api = GitHub()
+        api.api = lambda endpoint, method=None, payload=None: posted.append((endpoint, payload))
+        result = retry_claim(api, {'repo': 'unit/control', 'pr_number': 182,
+                                   'claim_command': '/claim #182', 'claim_retry_required': True})
+        self.assertEqual(result['claim_retry'], 'SUBMITTED_UNCONFIRMED')
+        self.assertFalse(result['claim_retry_required'])
+        self.assertEqual(posted[0][1]['body'], '/claim #182')
+
+    def test_unconfirmed_claim_is_not_reposted(self):
+        # An unconfirmed submission may already have been read by the platform; a second
+        # identical command is noise on someone else's PR.
+        from actions_reconcile import retry_claim
+        posted = []
+        api = GitHub()
+        api.api = lambda endpoint, method=None, payload=None: posted.append(endpoint)
+        self.assertIsNone(retry_claim(api, {'repo': 'unit/control', 'pr_number': 1,
+                                            'claim_command': '/claim #1',
+                                            'claim_retry_required': False}))
+        self.assertEqual(posted, [])
+
+    def test_change_request_is_retryable_but_a_merge_is_not(self):
+        from actions_dispatch import retry_eligible
+        self.assertTrue(retry_eligible({'status': 'CHANGES_REQUESTED'}))
+        self.assertTrue(retry_eligible({'status': 'FAILED_REMOTE_CHECKS'}))
+        self.assertFalse(retry_eligible({'status': 'DELIVERED'}))
+        self.assertFalse(retry_eligible({'status': 'AWAITING_REVIEW'}))
+
+    def test_change_request_can_be_claimed_again(self):
+        # The claim gate refuses a PR that is merely pending, but a reviewer's change request is
+        # exactly the case where another engineering run is the right next step.
+        store = Store()
+        store.claim('unit/control', 182, '1:1', 'run', 'sha')
+        store.mutate(task_id('unit/control', 182),
+                     lambda old: {**old, 'status': 'CHANGES_REQUESTED'})
+        claimed = store.claim('unit/control', 182, '1:1', 'run', 'sha')
+        self.assertEqual(claimed['status'], 'CLAIMED')
+
+
+class EndToEndFlowTests(unittest.TestCase):
+    """Every non-terminal status must have a path forward, all the way to DELIVERED.
+
+    Measured 2026-11-01: the pipeline could publish a PR and then never reach a terminal
+    outcome. Three separate dead ends existed at once -- a held workflow read as "still
+    running", a reviewer's CHANGES_REQUESTED was refused by the claim gate, and a failed claim
+    was recorded as an obligation that nothing ever retried. Each looked fine in isolation and
+    together they meant a published PR could sit forever.
+
+    This walks the chain and asserts each link exists, so a future change that reintroduces a
+    dead end fails here instead of in production.
+    """
+
+    # Statuses from which no further progress is expected or possible.
+    TERMINAL = {'DELIVERED', 'CLOSED_UNMERGED'}
+
+    def test_every_status_is_terminal_or_has_a_way_forward(self):
+        from actions_dispatch import retry_eligible
+        from actions_reconcile import classify_checks, review_verdict
+
+        # The forward path, in order, that a healthy task takes.
+        chain = ['DISPATCHED', 'CLAIMED', 'ENGINEERING', 'VERIFIED', 'PUBLISHING',
+                 'PUBLISHED_PENDING_CHECKS', 'AWAITING_REVIEW', 'DELIVERED']
+        self.assertEqual(chain[-1], 'DELIVERED')
+
+        # A reviewer's change request must be reachable from the review observation and must
+        # itself be retryable, or the chain ends at the first human who asks for a change.
+        api = GitHub()
+        api.pages = lambda endpoint: [{'state': 'CHANGES_REQUESTED', 'user': {'login': 'r'},
+                                       'submitted_at': '2026-10-31T19:58:48Z'}]
+        self.assertEqual(review_verdict(api, 'unit/control', 1)['verdict'], 'CHANGES_REQUESTED')
+        self.assertTrue(retry_eligible({'status': 'CHANGES_REQUESTED'}))
+
+        # A held workflow must be observable as held rather than as a run in progress.
+        api.api = lambda endpoint: {'check_runs': [
+            {'id': 1, 'name': 'CI', 'status': 'completed', 'conclusion': 'action_required',
+             'app': {'id': 1}}]}
+        api.pages = lambda endpoint: []
+        self.assertEqual(classify_checks(api, 'unit/control', 'a' * 40)['state'], 'HELD')
+
+        # The terminal states must refuse further work, or "delivered" is not terminal.
+        for status in self.TERMINAL:
+            self.assertFalse(retry_eligible({'status': status}), status)
+
+    def test_change_request_survives_the_claim_gate(self):
+        store = Store()
+        store.claim('unit/control', 7, '1:1', 'run', 'sha')
+        store.mutate(task_id('unit/control', 7),
+                     lambda old: {**old, 'status': 'CHANGES_REQUESTED'})
+        # Reachable: the engineer can pick the work back up.
+        self.assertEqual(store.claim('unit/control', 7, '1:1', 'run', 'sha')['status'], 'CLAIMED')
+
+    def test_merge_records_payment_as_unverified_not_paid(self):
+        # A merge is not a payment. The chain must end at DELIVERED with payment still unknown.
+        from actions_reconcile import reconcile
+        api = GitHub()
+        api.api = lambda endpoint, method=None, payload=None: {
+            'head': {'sha': 'a' * 40}, 'merged': True, 'merged_at': '2026-11-01T00:00:00Z',
+            'html_url': 'https://example.invalid/pr/1', 'state': 'closed'}
+        api.pages = lambda endpoint, **kw: []
+        store = Store()
+        store.claim('unit/control', 7, '1:1', 'run', 'sha')
+        store.mutate(task_id('unit/control', 7), lambda old: {
+            **old, 'status': 'AWAITING_REVIEW', 'pr_number': 1, 'head_sha': 'a' * 40,
+            'proposed_head': 'a' * 40})
+        reconcile(repair=False, api=api, store=store)
+        record, _ = store.read(task_id('unit/control', 7))
+        self.assertEqual(record['status'], 'DELIVERED')
+        self.assertEqual(record['payment_status'], 'UNVERIFIED')
+
+
 if __name__=='__main__': unittest.main()

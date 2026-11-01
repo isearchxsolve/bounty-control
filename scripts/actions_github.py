@@ -337,8 +337,15 @@ class StateStore:
                 raise ValueError("Task ownership revoked")
             if old.get("status") == "DELIVERED":
                 raise ValueError("Task already delivered")
-            if old.get("status") in ("PUBLISHED_PENDING_CHECKS", "AWAITING_REVIEW"):
+            if old.get("status") in ("PUBLISHED_PENDING_CHECKS", "AWAITING_REVIEW",
+                                     "CHECKS_HELD_FOR_APPROVAL"):
                 raise ValueError("Owned PR is pending; reconcile it before another engineering run")
+            if old.get("status") == "CHANGES_REQUESTED" and not recovery:
+                # A reviewer asked for a change. That is the one status where another engineering
+                # run is exactly the right next step, so it must not be refused by the gate that
+                # refuses PRs which are merely waiting. Measured 2026-11-01: blackball#182 held
+                # CHANGES_REQUESTED with a concrete arithmetic defect and nothing could reach it.
+                pass
             if old.get("owner") == owner and old.get("status") == "CLAIMED":
                 # Same owner re-claiming: refresh the lease timestamp.
                 claimed_at = old.get("claimed_at")
