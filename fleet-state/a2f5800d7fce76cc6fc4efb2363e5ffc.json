@@ -1,0 +1,68 @@
+{
+  "task_id": "a2f5800d7fce76cc6fc4efb2363e5ffc",
+  "repo": "smallbets/userbase",
+  "issue_number": 305,
+  "status": "DISPATCHING",
+  "dispatch_id": "235c1971bdfe4e349c937676b28998d4",
+  "admission": {
+    "funding": {
+      "amount": "1000",
+      "currency": "USD",
+      "payer": "impactvelocity",
+      "source_url": "https://github.com/smallbets/userbase/issues/305",
+      "usd_value": "1000",
+      "quote": {
+        "basis": "USD face value",
+        "usd_rate": "1"
+      },
+      "raw": "I would like to offer a $1,000 bounty reward for these features to the nice clever person who can create these for me. :)",
+      "source_author_association": "NONE",
+      "source_author_login": "impactvelocity"
+    },
+    "agent_reason": "impactvelocity pledged $1,000 for Admin API create/update-app, per-app Stripe and one-time-payment features on smallbets/userbase.",
+    "scope_quote": "Ability to create new apps, and update them.",
+    "code_evidence": {
+      "is_product_code": true,
+      "path": "src/userbase-server/server.js",
+      "sha": "59e3dc747a1e6274ccf38bfc1c353745fab7f769",
+      "quote": "v1Admin.post('/create-app', admin.authenticateAdmin, appController.createAppController)"
+    },
+    "source_issue": "https://github.com/smallbets/userbase/issues/305",
+    "funding_status": "PRICED_OFFER",
+    "lane": "normal",
+    "task_id": "a2f5800d7fce76cc6fc4efb2363e5ffc",
+    "source_revision": "fdd2f9d13814e9c0e0bf0606c9b165c60c2ed742993ad0260bb03bdf07e92bb5"
+  },
+  "dispatch_attempt": 1,
+  "sovereign_admission": true,
+  "competition": {
+    "blocking": false,
+    "nominal": [
+      {
+        "pr": "https://github.com/smallbets/userbase/pull/432",
+        "author": "huineng6",
+        "number": 432,
+        "author_merged_in_repo": 0,
+        "check_runs": 0,
+        "maintainer_engagement": 0,
+        "reason": "nominal_attempt_only"
+      },
+      {
+        "pr": "https://github.com/smallbets/userbase/pull/432",
+        "author": "huineng6",
+        "number": 432,
+        "author_merged_in_repo": 0,
+        "history_cached": true,
+        "check_runs": 0,
+        "maintainer_engagement": 0,
+        "reason": "nominal_attempt_only"
+      }
+    ]
+  },
+  "lanes": [
+    "normal"
+  ],
+  "dispatched_at": "2026-11-01T21:18:48.082040+00:00",
+  "attempt": 0,
+  "updated_at": "2026-11-01T21:18:48.082063+00:00"
+}
