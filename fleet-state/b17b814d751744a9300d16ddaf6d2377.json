@@ -1,0 +1,67 @@
+{
+  "task_id": "b17b814d751744a9300d16ddaf6d2377",
+  "repo": "Manthan-cpp/GramRaksha-AI",
+  "issue_number": 2,
+  "status": "DISPATCHING",
+  "dispatch_id": "776d9d393f194e31a3a0278b3f64935d",
+  "admission": {
+    "funding": {
+      "payer": "Manthan-cpp",
+      "source_url": "https://github.com/Manthan-cpp/GramRaksha-AI/issues/2",
+      "amount": "0",
+      "currency": "FOUNDER",
+      "usd_value": "0",
+      "quote": {
+        "basis": "Unpriced repository-owner request"
+      },
+      "raw": "A critical regression in the core disaster countdown calculator is causing 100% of incoming crop loss intimations to immediately flag as expired upon submission. Simultaneously, localized calamity classification throws unhandled runtime TypeErrors when accessing non-English dictionary entries.",
+      "source_author_association": "OWNER",
+      "source_author_login": "Manthan-cpp"
+    },
+    "agent_reason": "Unpriced OWNER-authored incident: repo owner Manthan-cpp reports a SEV-1 production regression in which every crop-loss intimation is immediately flagged expired. The report names the target subsystem src/lib/fasal/calculator.ts, whose product code shows the inverted deadline math, so the fix scope is concrete and bounded.",
+    "scope_quote": "A critical regression in the core disaster countdown calculator is causing 100% of incoming crop loss intimations to immediately flag as expired upon submission. Simultaneously, localized calamity classification throws unhandled runtime TypeErrors when accessing non-English dictionary entries.",
+    "code_evidence": {
+      "path": "src/lib/fasal/calculator.ts",
+      "sha": "803ff6914b595a03f708b49409316c2d81581785",
+      "quote": "const deadlineMs = incidentMs - WINDOW_MS;",
+      "is_product_code": true
+    },
+    "source_issue": "https://github.com/Manthan-cpp/GramRaksha-AI/issues/2",
+    "funding_status": "UNPRICED_OWNER_REQUEST",
+    "lane": "founder",
+    "task_id": "b17b814d751744a9300d16ddaf6d2377",
+    "source_revision": "5b43f7d6bd7bc9ba404e9cdf09883bf87d5f3cc66319408b50f303037620382b"
+  },
+  "dispatch_attempt": 1,
+  "sovereign_admission": true,
+  "competition": {
+    "blocking": false,
+    "nominal": [
+      {
+        "pr": "https://github.com/Manthan-cpp/GramRaksha-AI/pull/3",
+        "author": "manthan-cpp",
+        "number": 3,
+        "author_merged_in_repo": 0,
+        "check_runs": 0,
+        "maintainer_engagement": 0,
+        "reason": "nominal_attempt_only"
+      },
+      {
+        "pr": "https://github.com/Manthan-cpp/GramRaksha-AI/pull/3",
+        "author": "manthan-cpp",
+        "number": 3,
+        "author_merged_in_repo": 0,
+        "history_cached": true,
+        "check_runs": 0,
+        "maintainer_engagement": 0,
+        "reason": "nominal_attempt_only"
+      }
+    ]
+  },
+  "lanes": [
+    "founder"
+  ],
+  "dispatched_at": "2026-11-01T08:03:20.430653+00:00",
+  "attempt": 0,
+  "updated_at": "2026-11-01T08:03:20.430666+00:00"
+}
