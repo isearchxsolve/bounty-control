@@ -833,6 +833,15 @@ def engagement_comment(receipt, context, pr_url, head):
         fix=f"Apply pull request {pr_url} on top of {receipt.get('base_sha')}.",
         detail=f"Engine run: {receipt.get('run_url')}",
         repo=repo,
+        # The rails guard cannot tell a 40-hex commit from a base58 wallet, so the ids this
+        # receipt actually verified are declared and every other match still refuses.
+        # Measured 2026-11-01: the base SHA blocked the founder comment on a published PR.
+        object_ids=[
+            receipt.get("base_sha"), receipt.get("head_sha"), receipt.get("tree_sha"), head,
+            *((s or {}).get("sha256") for s in receipt.get("sources") or []),
+            *((f or {}).get("sha256") for f in (receipt.get("files") or {}).values()),
+            (receipt.get("regression") or {}).get("red_output_sha256"),
+        ],
     )
     api = GitHub()
     api.api(f"repos/{repo}/issues/{number}/comments", "POST", {"body": body})

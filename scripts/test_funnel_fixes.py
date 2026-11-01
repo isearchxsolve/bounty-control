@@ -122,6 +122,21 @@ class EngagementReportTests(unittest.TestCase):
             with self.assertRaises(MissingEvidence):
                 build_report(impact="none", affected="none", steps=[], proof=[], fix="x", repo="org/pkg")
 
+    def test_verified_commit_sha_is_not_payment_rails(self):
+        # Measured 2026-11-01 (sriahead/aheed-online-store#1382): a 40-hex commit SHA has
+        # the same shape as a base58 wallet, so the rails guard refused the founder comment
+        # on a delivery that had already published. A declared, verified object id passes;
+        # the same string undeclared still refuses.
+        from outreach_report import MissingEvidence, build_report
+        sha = "14c159216b72d8634fabb4a645f391a3dbcb39bc"
+        report = build_report(impact="x", affected="y", steps=["s"],
+                              proof=["Verified base " + sha + " -> head " + sha],
+                              fix="z", repo="org/pkg", object_ids=[sha])
+        self.assertIn(sha, report)
+        with self.assertRaises(MissingEvidence):
+            build_report(impact="x", affected="y", steps=["s"],
+                         proof=["Verified base " + sha], fix="z", repo="org/pkg")
+
     def test_engagement_comment_refused_for_payment_rails(self):
         # Payment coordinates in a public comment are refused by the same guard that
         # protects the live outreach: a UPI handle shape is caught by the real regex.

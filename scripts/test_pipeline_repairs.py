@@ -551,4 +551,161 @@ class EndToEndFlowTests(unittest.TestCase):
         self.assertEqual(record['payment_status'], 'UNVERIFIED')
 
 
+    def test_every_status_the_loop_writes_is_observed(self):
+        """A status the reconcile loop writes but does not observe is a terminal state by accident.
+
+        This is the exact defect the previous commit introduced: CHECKS_HELD_FOR_APPROVAL and
+        CHANGES_REQUESTED were written by the observation branch, which is gated on the status
+        the record already had. Neither new status was in that gate, so both were written once
+        and never read again -- silently terminal, and invisible to the very loop meant to
+        rescue them.
+        """
+        from actions_reconcile import PR_OBSERVATION_STATUSES
+
+        # Every status this loop can write back to a record that still has an open PR.
+        written = {'PUBLISHED_PENDING_CHECKS', 'AWAITING_REVIEW', 'FAILED_REMOTE_CHECKS',
+                   'CHECKS_HELD_FOR_APPROVAL', 'CHANGES_REQUESTED', 'BLOCKED_HEAD_CHANGED'}
+        for status in written - {'BLOCKED_HEAD_CHANGED'}:
+            self.assertIn(status, PR_OBSERVATION_STATUSES,
+                          status + ' is written but never observed')
+
+    def test_held_pr_progresses_on_the_next_pass(self):
+        # End to end: a held PR must be re-observed, and must reach DELIVERED when merged.
+        from actions_reconcile import reconcile
+        store = Store()
+        store.claim('unit/control', 7, '1:1', 'run', 'sha')
+        store.mutate(task_id('unit/control', 7), lambda old: {
+            **old, 'status': 'CHECKS_HELD_FOR_APPROVAL', 'pr_number': 1,
+            'head_sha': 'a' * 40, 'proposed_head': 'a' * 40})
+
+        seen = []
+
+        def api_call(endpoint, method=None, payload=None):
+            seen.append(endpoint)
+            return {'head': {'sha': 'a' * 40}, 'merged': True,
+                    'merged_at': '2026-11-01T00:00:00Z',
+                    'html_url': 'https://example.invalid/pr/1', 'state': 'closed'}
+
+        api = GitHub()
+        api.api = api_call
+        api.pages = lambda endpoint, **kw: []
+        reconcile(repair=False, api=api, store=store)
+        record, _ = store.read(task_id('unit/control', 7))
+        self.assertEqual(record['status'], 'DELIVERED')
+        self.assertTrue(any('/pulls/1' in e for e in seen),
+                        'the held PR was never read back from GitHub')
+
+    def test_change_requested_pr_is_re_observed(self):
+        from actions_reconcile import reconcile
+        store = Store()
+        store.claim('unit/control', 8, '1:1', 'run', 'sha')
+        store.mutate(task_id('unit/control', 8), lambda old: {
+            **old, 'status': 'CHANGES_REQUESTED', 'pr_number': 2,
+            'head_sha': 'b' * 40, 'proposed_head': 'b' * 40})
+        api = GitHub()
+        api.api = lambda endpoint, method=None, payload=None: {
+            'head': {'sha': 'b' * 40}, 'merged': False, 'state': 'open',
+            'html_url': 'https://example.invalid/pr/2'}
+        api.pages = lambda endpoint, **kw: []
+        reconcile(repair=False, api=api, store=store)
+        record, _ = store.read(task_id('unit/control', 8))
+        # Still observed, still actionable: it must not have been frozen as terminal.
+        self.assertIn(record['status'], ('CHANGES_REQUESTED', 'AWAITING_REVIEW',
+                                         'PUBLISHED_PENDING_CHECKS',
+                                         'CHECKS_HELD_FOR_APPROVAL'))
+
+
+class FullLifecycleTests(unittest.TestCase):
+    """Walk one task from dispatch to DELIVERED through the real reconcile loop.
+
+    The graph tests prove no status is an orphan. This proves the loop actually moves a task
+    from one end to the other, including the two states that used to strand it: a CI held for
+    maintainer approval, and a reviewer asking for changes.
+    """
+
+    def _store_with(self, status, **extra):
+        store = Store()
+        store.claim('unit/control', 7, '1:1', 'run', 'sha')
+        store.mutate(task_id('unit/control', 7), lambda old: {
+            **old, 'status': status, 'pr_number': 1, 'head_sha': 'a' * 40,
+            'proposed_head': 'a' * 40, **extra})
+        return store
+
+    def _api(self, *, merged=False, state='open', conclusion='success', reviews=()):
+        class Api:
+            def api(self, endpoint, method=None, payload=None):
+                if '/pulls/1' in endpoint and '/reviews' not in endpoint:
+                    return {'head': {'sha': 'a' * 40}, 'merged': merged,
+                            'merged_at': '2026-11-01T00:00:00Z' if merged else None,
+                            'html_url': 'https://example.invalid/pr/1', 'state': state}
+                return {'check_runs': [{'id': 1, 'name': 'CI', 'status': 'completed',
+                                        'conclusion': conclusion, 'app': {'id': 1}}]}
+
+            def pages(self, endpoint, **kw):
+                if '/reviews' in endpoint:
+                    return [{'state': s, 'user': {'login': 'r'},
+                             'submitted_at': '2026-11-01T00:00:00Z'} for s in reviews]
+                return []
+        return Api()
+
+    def test_held_ci_then_merge_reaches_delivered(self):
+        from actions_reconcile import reconcile
+        store = self._store_with('PUBLISHED_PENDING_CHECKS')
+
+        # Pass 1: CI is held for maintainer approval. The task must be observed, not stranded.
+        reconcile(repair=False, api=self._api(conclusion='action_required'), store=store)
+        record, _ = store.read(task_id('unit/control', 7))
+        self.assertEqual(record['status'], 'CHECKS_HELD_FOR_APPROVAL')
+
+        # Pass 2: the maintainer approved, CI ran, the PR merged.
+        reconcile(repair=False, api=self._api(merged=True, state='closed'), store=store)
+        record, _ = store.read(task_id('unit/control', 7))
+        self.assertEqual(record['status'], 'DELIVERED')
+        self.assertEqual(record['payment_status'], 'UNVERIFIED')
+
+    def test_change_request_then_merge_reaches_delivered(self):
+        from actions_reconcile import reconcile
+        store = self._store_with('AWAITING_REVIEW')
+
+        reconcile(repair=False, api=self._api(reviews=['CHANGES_REQUESTED']), store=store)
+        record, _ = store.read(task_id('unit/control', 7))
+        self.assertEqual(record['status'], 'CHANGES_REQUESTED')
+        self.assertEqual(record['review_obligation'], 'address_review')
+
+        # The engineer fixed it, the reviewer approved, it merged.
+        reconcile(repair=False, api=self._api(merged=True, state='closed'), store=store)
+        record, _ = store.read(task_id('unit/control', 7))
+        self.assertEqual(record['status'], 'DELIVERED')
+
+    def test_failed_ci_is_retryable_and_reaches_delivered(self):
+        from actions_reconcile import reconcile
+        store = self._store_with('AWAITING_REVIEW')
+        reconcile(repair=False, api=self._api(conclusion='failure'), store=store)
+        record, _ = store.read(task_id('unit/control', 7))
+        self.assertEqual(record['status'], 'FAILED_REMOTE_CHECKS')
+        from actions_dispatch import retry_eligible
+        self.assertTrue(retry_eligible(record))
+
+    def test_closed_unmerged_is_terminal(self):
+        from actions_reconcile import reconcile
+        store = self._store_with('AWAITING_REVIEW')
+        reconcile(repair=False, api=self._api(state='closed'), store=store)
+        record, _ = store.read(task_id('unit/control', 7))
+        self.assertEqual(record['status'], 'CLOSED_UNMERGED')
+
+    def test_no_pass_ever_leaves_a_task_unobservable(self):
+        # Whatever the loop writes, the next pass must still be able to read it.
+        from actions_reconcile import PR_OBSERVATION_STATUSES, reconcile
+        for conclusion in ('success', 'failure', 'action_required'):
+            for reviews in ((), ('CHANGES_REQUESTED',), ('APPROVED',)):
+                store = self._store_with('AWAITING_REVIEW')
+                reconcile(repair=False, api=self._api(conclusion=conclusion, reviews=reviews),
+                          store=store)
+                record, _ = store.read(task_id('unit/control', 7))
+                status = record['status']
+                self.assertTrue(
+                    status in PR_OBSERVATION_STATUSES or status in ('DELIVERED', 'CLOSED_UNMERGED'),
+                    f'conclusion={conclusion} reviews={reviews} produced unobservable {status}')
+
+
 if __name__=='__main__': unittest.main()

@@ -64,9 +64,21 @@ def _require(value, name):
     return _clean(value)
 
 
-def _guard_rails(text):
-    hit = _RAILS_RE.search(text)
-    if hit:
+def _guard_rails(text, object_ids=()):
+    """Refuse payment coordinates, except git object ids this release actually verified.
+
+    A 40-character hex commit SHA has the same shape as a base58 wallet address, so the
+    wallet rule refused the founder comment on a delivery that had already published:
+    2026-11-01, ``sriahead/aheed-online-store#1382``, where the base SHA
+    ``14c159216b72d8634fabb4a645f391a3dbcb39bc`` was reported as payment coordinates.
+    Whether that string is a commit is a fact, so the exception is a fact too: only the
+    ids the caller declares from the verified receipt are let through, and every other
+    match still refuses.
+    """
+    allowed = {str(value).strip().lower() for value in object_ids if value}
+    for hit in _RAILS_RE.finditer(text):
+        if hit.group(0).strip().lower() in allowed:
+            continue
         raise MissingEvidence(
             f"payment coordinates found in report body ({hit.group(0)!r}). "
             f"Payment terms belong in a private channel after the founder replies, "
@@ -74,16 +86,19 @@ def _guard_rails(text):
         )
 
 
-def build_report(impact, affected, steps, proof, fix, detail=None, repo=None):
+def build_report(impact, affected, steps, proof, fix, detail=None, repo=None,
+                 object_ids=()):
     """Build the six-part report. Raises MissingEvidence if anything is unproven.
 
-    impact  : one sentence, business impact first. Required.
-    affected: who is affected and how. Required.
-    steps   : list of deterministic reproduction steps. At least one required.
-    proof   : list of concrete evidence items (command output, status code, trace).
-              At least one required.
-    fix     : short suggested direction. Required.
-    detail  : optional extra technical detail, appended last.
+    impact    : one sentence, business impact first. Required.
+    affected  : who is affected and how. Required.
+    steps     : list of deterministic reproduction steps. At least one required.
+    proof     : list of concrete evidence items (command output, status code, trace).
+                At least one required.
+    fix       : short suggested direction. Required.
+    detail    : optional extra technical detail, appended last.
+    object_ids: git object ids this release verified (base/head/tree SHAs, source and blob
+                digests). They are the only wallet-shaped strings allowed in the body.
     """
     impact = _require(impact, "impact")
     affected = _require(affected, "affected")
@@ -123,7 +138,7 @@ def build_report(impact, affected, steps, proof, fix, detail=None, repo=None):
         lines.append(_clean(detail))
 
     body = "\n".join(lines)
-    _guard_rails(body)
+    _guard_rails(body, object_ids)
     return body
 
 
@@ -165,6 +180,20 @@ def self_test():
             pass
         else:
             raise AssertionError(f"rails leaked: {rails}")
+
+    # a verified git object id is not a wallet, and only a declared one is let through
+    sha = "14c159216b72d8634fabb4a645f391a3dbcb39bc"
+    declared = build_report(impact="x", affected="y", steps=["a"],
+                            proof=["Verified head " + sha], fix="z", object_ids=[sha])
+    assert sha in declared, declared
+    for kwargs in ({}, {"object_ids": ["0" * 40]}):
+        try:
+            build_report(impact="x", affected="y", steps=["a"],
+                         proof=["Verified head " + sha], fix="z", **kwargs)
+        except MissingEvidence:
+            pass
+        else:
+            raise AssertionError("undeclared object id leaked through the rails guard")
 
     print("self-test OK")
 

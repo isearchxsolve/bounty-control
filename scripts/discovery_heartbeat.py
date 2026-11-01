@@ -37,7 +37,7 @@ import time
 DEFAULT_REPO = (os.environ.get("BOUNTY_REPOSITORY") or os.environ.get("GITHUB_REPOSITORY")
                 or "isearchxsolve/anonym-family-archive")
 DEFAULT_WORKFLOW = "bounty-discovery.yml"
-DEFAULT_REF = "master"
+DEFAULT_REF = "main"
 
 # States in which GitHub already has (or is about to have) a run. Dispatching now would either
 # duplicate the pass or sit in a concurrency queue behind it.

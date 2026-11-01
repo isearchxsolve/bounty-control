@@ -9,6 +9,17 @@ import time
 from actions_github import BOUNTY_ACCOUNT, GitHub, GitHubError, StateStore, utcnow
 
 ACTIVE_STATUSES = ("CLAIMED", "ENGINEERING", "VERIFIED", "PUBLISHING")
+# Statuses where a PR exists and is still ours to observe. This is the set the reconcile loop
+# reads GitHub for, so a status missing here is a status that never gets looked at again.
+#
+# Measured 2026-11-01, on this file's own previous commit: adding CHECKS_HELD_FOR_APPROVAL and
+# CHANGES_REQUESTED without adding them here made both terminal by omission. A PR whose CI was
+# held, or that a reviewer asked to change, was written once and then never observed -- so it
+# could not progress, and could not even be seen to be stuck. The dead ends this repair set out
+# to close were reopened by the repair itself. Every status this loop can write back must be in
+# this tuple, and test_pipeline_repairs asserts that.
+PR_OBSERVATION_STATUSES = ("PUBLISHED_PENDING_CHECKS", "AWAITING_REVIEW", "FAILED_REMOTE_CHECKS",
+                           "CHECKS_HELD_FOR_APPROVAL", "CHANGES_REQUESTED")
 # engine2.yml runs the engineering job with timeout-minutes: 330. This must match that
 # number: at 300*60 the sweeper cancelled runs GitHub still considered legal, so the
 # recovery sweep could kill a job five hours in that had twenty-five more minutes.
@@ -251,7 +262,7 @@ def reconcile(repair=False, api=None, store=None):
                     fields = {"status": "PUBLISHED_PENDING_CHECKS", "head_sha": record["proposed_head"],
                               "pr_number": matches[0]["number"], "pr_url": matches[0]["html_url"],
                               "branch": matches[0]["head"]["ref"], "publication_recovered": True}
-            if status in ("PUBLISHED_PENDING_CHECKS", "AWAITING_REVIEW", "FAILED_REMOTE_CHECKS"):
+            if status in PR_OBSERVATION_STATUSES:
                 pr = api.api(f"repos/{record['repo']}/pulls/{record['pr_number']}")
                 if pr["head"]["sha"] != record["head_sha"]:
                     fields = {"status": "BLOCKED_HEAD_CHANGED", "diagnostic": "Owned PR head differs from verified receipt"}
