@@ -2,7 +2,7 @@
   "task_id": "7780bd7e1a7be1e5e680e75b47d43dae",
   "repo": "gqrx-sdr/gqrx",
   "issue_number": 1336,
-  "status": "CLAIMED",
+  "status": "FAILED_PUBLISH",
   "dispatch_id": "9d4f5fb64b0c47fa82e410c060214d84",
   "admission": {
     "funding": {
@@ -64,7 +64,7 @@
   ],
   "dispatched_at": "2026-11-01T02:39:35.746567+00:00",
   "attempt": 1,
-  "updated_at": "2026-11-01T02:39:51.141719+00:00",
+  "updated_at": "2026-11-01T03:08:51.039935+00:00",
   "owner": "41266106201:1",
   "previous_owner": null,
   "previous_status": "DISPATCHED",
@@ -72,5 +72,20 @@
   "harness_sha": "0d1e92c3852a9284dcbae57645fd027ade441c9e",
   "claimed_at": "2026-11-01T02:39:51.141671+00:00",
   "lease_expires_at": "2026-11-01T06:44:51.141687+00:00",
-  "preparation_budget_seconds": 14400
+  "preparation_budget_seconds": 14400,
+  "kind": "engineer",
+  "retryable": true,
+  "diagnostic": "",
+  "at": "2026-11-01T03:08:38.723786+00:00",
+  "failures": [
+    {
+      "run_url": "https://github.com/isearchxsolve/bounty-control/actions/runs/41266106201",
+      "status": "FAILED_PUBLISH",
+      "kind": "engineer",
+      "retryable": true,
+      "diagnostic": "",
+      "at": "2026-11-01T03:08:38.723786+00:00"
+    }
+  ],
+  "finished_at": "2026-11-01T03:08:50.530655+00:00"
 }
