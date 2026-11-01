@@ -2,7 +2,7 @@
   "task_id": "d3691c1c60bf7d86f0321eca6d68454f",
   "repo": "getdozer/dozer",
   "issue_number": 1659,
-  "status": "CLAIMED",
+  "status": "FAILED_DELIVERABLE_MISSING",
   "dispatch_id": "630ef0f39684462291e1450ffe58c2bf",
   "admission": {
     "funding": {
@@ -406,7 +406,7 @@
   ],
   "dispatched_at": "2026-11-01T12:25:46.376522+00:00",
   "attempt": 2,
-  "updated_at": "2026-11-01T12:27:27.824214+00:00",
+  "updated_at": "2026-11-01T12:38:01.157186+00:00",
   "owner": "41306450179:1",
   "previous_owner": "41266230781:1",
   "previous_status": "DISPATCHED",
@@ -415,10 +415,10 @@
   "claimed_at": "2026-11-01T12:27:27.824119+00:00",
   "lease_expires_at": "2026-11-01T16:32:27.824137+00:00",
   "preparation_budget_seconds": 14400,
-  "kind": "engineer",
+  "kind": "deliverable_invalid",
   "retryable": true,
-  "diagnostic": "Bounded Cline delivery repair exhausted: Cline failed closed on turn 1: Cline execution failed (exit 1): \u001b[31merror:\u001b[0m TokenHarbor router HTTP 429: deepseek-v4.1-flash is limited for this account for now because recent requests were declined on content-policy grounds, and the shared allowance for such accounts is used up for this minute. Please retry in about 30 seconds. Other models on /v1/models are unaffected.",
-  "at": "2026-11-01T03:22:16.971373+00:00",
+  "diagnostic": "Cline deliverable invalid at /tmp/fleet-artifacts/delivery-supervisor/6a942852e46a4fe89e64a6225bc110e7.preparation.json: Cline preparation must leave a clean, unchanged upstream baseline (dirty: dozer-sql/src/expression/tests/mod.rs, dozer-sql/src/expression/tests/in_subquery.rs)",
+  "at": "2026-11-01T12:37:49.558129+00:00",
   "failures": [
     {
       "run_url": "https://github.com/isearchxsolve/bounty-control/actions/runs/41266230781",
@@ -427,7 +427,19 @@
       "retryable": true,
       "diagnostic": "Bounded Cline delivery repair exhausted: Cline failed closed on turn 1: Cline execution failed (exit 1): \u001b[31merror:\u001b[0m TokenHarbor router HTTP 429: deepseek-v4.1-flash is limited for this account for now because recent requests were declined on content-policy grounds, and the shared allowance for such accounts is used up for this minute. Please retry in about 30 seconds. Other models on /v1/models are unaffected.",
       "at": "2026-11-01T03:22:16.971373+00:00"
+    },
+    {
+      "run_url": "https://github.com/isearchxsolve/bounty-control/actions/runs/41306450179",
+      "status": "FAILED_DELIVERABLE_MISSING",
+      "kind": "deliverable_invalid",
+      "retryable": true,
+      "diagnostic": "Cline deliverable invalid at /tmp/fleet-artifacts/delivery-supervisor/6a942852e46a4fe89e64a6225bc110e7.preparation.json: Cline preparation must leave a clean, unchanged upstream baseline (dirty: dozer-sql/src/expression/tests/mod.rs, dozer-sql/src/expression/tests/in_subquery.rs)",
+      "path": "/tmp/fleet-artifacts/delivery-supervisor/6a942852e46a4fe89e64a6225bc110e7.preparation.json",
+      "reason": "Cline preparation must leave a clean, unchanged upstream baseline (dirty: dozer-sql/src/expression/tests/mod.rs, dozer-sql/src/expression/tests/in_subquery.rs)",
+      "at": "2026-11-01T12:37:49.558129+00:00"
     }
   ],
-  "finished_at": "2026-11-01T03:22:25.610165+00:00"
+  "finished_at": "2026-11-01T12:38:00.654043+00:00",
+  "path": "/tmp/fleet-artifacts/delivery-supervisor/6a942852e46a4fe89e64a6225bc110e7.preparation.json",
+  "reason": "Cline preparation must leave a clean, unchanged upstream baseline (dirty: dozer-sql/src/expression/tests/mod.rs, dozer-sql/src/expression/tests/in_subquery.rs)"
 }
