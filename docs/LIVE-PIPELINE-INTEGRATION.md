@@ -12,7 +12,27 @@ end-to-end evidence and does not satisfy this suite's acceptance condition.
 The first fully successful campaign, including 19 real fault cases and issue-to-merge
 delivery, is recorded in [the repair receipt](PIPELINE-REPAIR-RECEIPT-2026-11-02.md).
 
+
 ## Run
+
+The same suite can target an existing original issue. Only target selection/setup
+changes; no replacement issue, seeded source defect, or new upstream CI is created:
+
+```powershell
+python scripts/live_pipeline_integration.py run --target fiztoz/uptime-phoenix --issue 198 --run-dir scratch/master-original-198
+```
+
+The hosted workflow exposes the same `target_repo` and `issue_number` inputs. Without
+an issue number, the existing sandbox behavior remains the default. All stages, native
+and release gates, exit semantics, and `end_to_end_passed` requirements remain in force.
+An explicit upstream PR access restriction fails preflight and later stages stay
+unexecuted. A permitted original target proceeds through the normal pipeline, which
+can publish a real PR; cleanup never closes that original issue/PR, and the suite never
+merges it on behalf of its maintainer. It can pass merge verification once the maintainer
+has merged it. These are the target's real permissions, not bypasses of the suite.
+
+The original mode proposed during investigation was removed: there is no separate
+audit contract replacing the master suite.
 
 ```powershell
 python -u scripts/live_pipeline_integration.py run --run-dir scratch/live-campaign --merge-fixture

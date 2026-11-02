@@ -3,6 +3,14 @@ run-name: 'Live integration ${{ github.run_id }}'
 'on':
   workflow_dispatch:
     inputs:
+      target_repo:
+        description: Repository containing the target issue
+        type: string
+        default: isearchxsolve/oss-hunter-livefire
+      issue_number:
+        description: Existing original issue number; empty provisions the sandbox fixture
+        type: string
+        required: false
       merge_fixture:
         description: Merge only this run's sandbox PR after real native CI succeeds
         type: boolean
@@ -32,8 +40,11 @@ jobs:
     - name: Exercise real services and production delivery
       env:
         MERGE_FIXTURE: ${{ inputs.merge_fixture }}
+        TARGET_REPO: ${{ inputs.target_repo }}
+        ISSUE_NUMBER: ${{ inputs.issue_number }}
       run: |
-        flags=()
+        flags=(--target "$TARGET_REPO")
+        if [ -n "$ISSUE_NUMBER" ]; then flags+=(--issue "$ISSUE_NUMBER"); fi
         if [ "$MERGE_FIXTURE" = true ]; then flags+=(--merge-fixture); fi
         python3 -u scripts/live_pipeline_integration.py run \
           --run-dir scratch/live-integration \

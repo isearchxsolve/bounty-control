@@ -58,9 +58,15 @@ class LiveRun:
                               "cross-account review changes", "payment settlement",
                               "process death at every publication boundary",
                               "unrestricted scheduled discovery"]}
+        check(self.data.get('mode') != 'ORIGINAL_READ_ONLY',
+              'Legacy audit journal: use a fresh run directory with the master suite')
         check(self.data["target"] == args.target and self.data["control"] == args.control,
               "Run directory belongs to a different target/control pair")
         self.target, self.control = self.data["target"], self.data["control"]
+        if args.issue is not None:
+            check(args.issue > 0, 'Issue number must be positive')
+            check(not self.data.get('issue') or self.data['issue'] == args.issue, 'Run journal names another issue')
+            self.data['existing_issue'] = args.issue
         self.save()
 
     @staticmethod
@@ -98,10 +104,19 @@ class LiveRun:
     def preflight(self):
         user = self.api.api("user")
         target = self.api.api(f"repos/{self.target}")
-        check(self.target.split('/')[0].lower() == user['login'].lower(), "Sandbox must be owned by authenticated account")
-        check(target.get('permissions', {}).get('admin'), "Sandbox admin permission required")
-        check('sandbox' in (target.get('description') or '').lower(), "Target must explicitly identify itself as a sandbox")
+        if not self.data.get('existing_issue'):
+            check(self.target.split('/')[0].lower() == user['login'].lower(), "Sandbox must be owned by authenticated account")
+            check(target.get('permissions', {}).get('admin'), "Sandbox admin permission required")
+            check('sandbox' in (target.get('description') or '').lower(), "Target must explicitly identify itself as a sandbox")
         check(not target['archived'] and not target.get('disabled'), "Sandbox unavailable")
+        self.record('PUBLICATION_ACCESS', 'OBSERVED', repository=self.target,
+                    has_pull_requests=target.get('has_pull_requests'),
+                    pull_request_creation_policy=target.get('pull_request_creation_policy'),
+                    viewer_permissions=target.get('permissions'))
+        check(target.get('has_pull_requests') is not False, 'Target has disabled pull request creation')
+        check(not (target.get('pull_request_creation_policy') == 'collaborators_only'
+                   and target.get('permissions', {}).get('push') is False),
+              'Target restricts PR creation to collaborators; publisher has no write access')
         workflow = self.api.api(f"repos/{self.control}/actions/workflows/engine2.yml")
         check(workflow['state'] == 'active', "Production delivery workflow inactive")
         control = self.api.api(f"repos/{self.control}")
@@ -117,6 +132,14 @@ class LiveRun:
 
     def provision(self):
         self.preflight()
+        if self.data.get('existing_issue'):
+            number = self.data['existing_issue']
+            context = self.api.issue_context(self.target, number)
+            check(context['issue']['state'] == 'open', 'Original issue is not open')
+            self.data.update(issue=number, issue_url=context['issue']['html_url'], task_id=task_id(self.target, number))
+            self.record('FIXTURE', 'PASS', issue=self.data['issue_url'], existing_original=True,
+                        created_or_modified=False)
+            return
         check(not self.data.get('issue'), "Fixture already exists; resume admit/dispatch/observe")
         if self.data.get('issue_title'):
             # Recover a real accepted create with a lost client acknowledgement.
@@ -193,8 +216,9 @@ class LiveRun:
         attempt = 1 + len(list(self.folder.glob('scout-*')))
         work = self.folder / f'scout-{attempt}'
         work.mkdir(exist_ok=True)
+        source_path = self.data.get('source_path') or 'referenced by the issue; choose and read the actual product file'
         prompt = (f'Read the real GitHub issue {self.data["issue_url"]}, its complete comments and the actual '
-                  f'repository source {self.data["source_path"]} using gh/API tools. This is an owner-authorized '
+                  f'repository source {source_path} using gh/API tools. This is an owner-authorized '
                   'live integration exercise. Decide whether the unpriced owner request has a genuine bounded '
                   'code change. Do not invent funding, quotes, SHAs or execution. Only inspect this issue. '
                   'Do not solve it, post comments or mutate GitHub. Write shortlist.jsonl in this workspace '
@@ -320,6 +344,7 @@ class LiveRun:
         pr = self.api.api(f'repos/{self.target}/pulls/{number}')
         check(pr['head']['sha'] == head and pr['user']['login'] == self.data['account'], 'PR ownership/head changed')
         if not pr['merged']:
+            check(not self.data.get('existing_issue'), 'Original upstream PR must be merged by its maintainer')
             result = self.api.api(f'repos/{self.target}/pulls/{number}/merge', 'PUT',
                                   {'sha': head, 'merge_method': 'squash'})
             check(result.get('merged'), 'GitHub did not merge fixture PR')
@@ -467,6 +492,9 @@ class LiveRun:
 
     def cleanup(self):
         """Close only this run's issue/PR. Preserve source, ledger, and remote receipts."""
+        if self.data.get('existing_issue'):
+            self.record('CLEANUP', 'OBSERVED', reason='Original issue and upstream PR are retained unchanged')
+            return
         if self.data.get('run_id'):
             run = self.api.api(f'repos/{self.control}/actions/runs/{self.data["run_id"]}')
             check(run['status'] == 'completed', 'Delivery still running; cleanup refused')
@@ -503,6 +531,8 @@ class LiveRun:
         check(not self.data.get('negative_dispatch'), 'Negative dispatch already submitted; observe it')
         # A separate real issue prevents legitimate positive-job writes from
         # invalidating the negative case's unchanged-ledger assertion.
+        if self.data.get('existing_issue'):
+            self.data['negative_issue'] = self.data['existing_issue']
         if not self.data.get('negative_issue'):
             issue = self.api.api(f'repos/{self.target}/issues', 'POST', {
                 'title': f'[LIVE-INTEGRATION {self.data["id"]}] Invalid generation rejection fixture',
@@ -666,6 +696,7 @@ def main():
     parser.add_argument('--run-dir', type=Path, required=True)
     parser.add_argument('--target', default='isearchxsolve/oss-hunter-livefire')
     parser.add_argument('--control', default='isearchxsolve/bounty-control')
+    parser.add_argument('--issue', type=int, help='Use this existing original issue instead of provisioning a sandbox issue')
     parser.add_argument('--model-timeout', type=int, default=600)
     parser.add_argument('--gateway', choices=['existing', 'isolated'], default='isolated')
     parser.add_argument('--engineering-budget', type=int, default=1800)
