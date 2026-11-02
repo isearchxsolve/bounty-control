@@ -71,6 +71,15 @@ No original issue, repository source, CI, PR or production state was changed by 
 Later stages were not counted as passed. Evidence is in
 `scratch/master-original-uptime-phoenix-198/run.json`.
 
+The same existing hosted master workflow was then run with `target_repo=fiztoz/uptime-phoenix`
+and `issue_number=198`: [run 41498776022](https://github.com/isearchxsolve/bounty-control/actions/runs/41498776022).
+It independently returned the same preflight failure using the publisher's actual secret.
+No replacement issue or source fixture was created. Its report is retained under
+`scratch/master-original-hosted-41498776022/`.
+[Contract CI for the target-input change](https://github.com/isearchxsolve/bounty-control/actions/runs/41498724537)
+passed. The master stage sequence, native/release verification gates and end-to-end pass
+requirements were retained; no separate audit phase was deployed.
+
 ## Coverage gap and consequence
 
 The master positive fixture belongs to the publisher account. A successful fixture
