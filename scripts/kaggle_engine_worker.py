@@ -2893,8 +2893,13 @@ def run_engineering_iteration_loop(
         for test_cmd in plan.builds + test_commands + plan.format_checks:
             cmd_res = run_command_safe(test_cmd, cwd=worktree, timeout=native_verification_timeout(test_cmd, 180))
             run.verification.append(cmd_res)
-            from actions_release import warning_output
-            if cmd_res.exit_code != 0 or warning_output(cmd_res.stdout + "\n" + cmd_res.stderr):
+            # The command's exit code is its verdict. Text on either stream is not: a compiler
+            # that succeeds and warns, a tool that prints a deprecation notice to stderr, and a
+            # build that finishes with advisories all exit 0, and failing them failed the
+            # delivery. Measured 2026-11-02 (Spectral-Finance/lux#80, run 41357378768): the
+            # Elixir compile succeeded and its stderr carried unused-variable warnings plus asdf
+            # upgrade notices, and the turn was stamped failed anyway.
+            if cmd_res.exit_code != 0:
                 tests_passed = False
                 err_text = cmd_res.stderr or cmd_res.stdout
                 test_fail_log = f"Test failure in turn {turn}: {' '.join(test_cmd)}\n{err_text}"
@@ -2917,8 +2922,9 @@ def run_engineering_iteration_loop(
         for lint_cmd in plan.linters:
             l_res = run_command_safe(lint_cmd, cwd=worktree, timeout=native_verification_timeout(lint_cmd, 120))
             run.verification.append(l_res)
-            from actions_release import warning_output
-            if l_res.exit_code != 0 or warning_output(l_res.stdout + "\n" + l_res.stderr):
+            # Exit code is the verdict; stderr text is not. See the note on native tests above:
+            # measured on lux#80, a clean compile was failed for its warnings.
+            if l_res.exit_code != 0:
                 linters_passed = False
                 lint_err = l_res.stderr or l_res.stdout
                 lint_fail_log = f"Linter warning/failure in turn {turn}: {' '.join(lint_cmd)}\n{lint_err}"
@@ -3144,6 +3150,13 @@ Do not manufacture data, command output, test results, or payment evidence. Neve
 
 Establish the unchanged upstream baseline before product edits. Run installations and native verification
 freely. If the toolchain or external credentials/hardware are missing, report that honestly.
+
+The `sources` you cite are the repository's committed objects, not the files on disk. Read each
+one from the base ref before you touch anything: `git show HEAD:<path> | sha256sum`, or
+`git cat-file` on the blob sha. Measured 2026-11-02 (AmphoraProtocol#4): the surveyor hashed
+package-lock.json after its own `npm install`, and the host -- which compares against the clean
+upstream object -- refused a delivery over a file the customer never received. An install may
+rewrite the manifest it was asked to cite, so hash first, provision second.
 
 The commands you put in `plan.bootstrap` are run by the host against the customer's checkout, so
 they must be non-destructive to tracked files. A package manager rewrites what it is asked to:

@@ -51,7 +51,16 @@ def validate_plan(document, worktree, previous=None):
         path = (root / source.get('path', '')).resolve()
         if not path.is_relative_to(root) or not path.is_file():
             raise ValueError('Native plan source is outside the repository or missing')
-        if hashlib.sha256(path.read_bytes()).hexdigest() != source.get('sha256'):
+        # The citation names a committed object, not the file on disk. Measured 2026-11-02
+        # (OpenOrg-gg/AmphoraProtocol#4, run 41370189274): the surveyor ran `npm install` before
+        # recording the manifest, npm 7+ rewrote package-lock.json, and the recorded hash was of
+        # a file the host had never seen. The host compares against the clean upstream object at
+        # HEAD, so a manifest rewritten by the very install it cites still validates exactly.
+        object_bytes = subprocess.run(
+            ['git', '-C', str(root), 'show', 'HEAD:' + source.get('path', '')],
+            capture_output=True, timeout=120)
+        expected = object_bytes.stdout if object_bytes.returncode == 0 else path.read_bytes()
+        if hashlib.sha256(expected).hexdigest() != source.get('sha256'):
             raise ValueError('Native plan source SHA-256 does not match the checkout')
     fields = ('bootstrap', 'baseline_tests', 'targeted_tests', 'final_tests', 'linters', 'format_checks', 'builds')
     result = {}

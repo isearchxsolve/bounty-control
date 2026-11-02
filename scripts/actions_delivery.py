@@ -515,6 +515,17 @@ def runtime():
     os.environ.setdefault("FLEET_ARTIFACT_DIR", str(artifacts()))
     os.environ.setdefault("CLINE_DATA_DIR", str(Path(tempfile.gettempdir()) / "bounty-cline"))
     os.environ["ACTIONS_PUBLISHER_MANAGED"] = "1"
+    # The runner ships Node 22 on Ubuntu 24, and a repository built with Webpack 4 or older
+    # tooling hashes with algorithms OpenSSL 3 no longer offers by default. Measured
+    # 2026-11-02 (smallbets/userbase#305, run 41370206822): `npm run build:userbase-server:npm`
+    # died with ERR_OSSL_EVP_UNSUPPORTED, and Cline -- having correctly diagnosed the cause --
+    # burned the delivery's repair budget reasoning about whether this Node still supports the
+    # flag rather than just using it. It does, on every Node this runner ships, so the delivery
+    # gets it by default and no one has to rediscover it. Composed with, never replacing, any
+    # NODE_OPTIONS already declared (the memory ceiling set below, or the task's own).
+    existing = os.environ.get("NODE_OPTIONS", "")
+    if "--openssl-legacy-provider" not in existing:
+        os.environ["NODE_OPTIONS"] = (existing + " --openssl-legacy-provider").strip()
     import kaggle_engine_worker as worker
     ok, diagnostic = worker.configure_cline_for_engine()
     if not ok:
