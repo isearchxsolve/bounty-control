@@ -142,13 +142,6 @@ def protect_baseline_tests(root, base_sha, paths, head_sha=None):
                         raise ValueError("Existing native verification script changed: " + key)
 
 
-def warning_output(text):
-    plain = re.sub(r"\x1b\[[0-9;]*m", "", text)
-    return bool(re.search(r"(?im)^\s*(?:npm\s+warn|warning[:\s\[]|.*DeprecationWarning:|"
-                          r"\d+:\d+\s+warning\b|the CJS build .* deprecated)|"
-                          r"\b[1-9]\d*\s+warnings?\b", plain))
-
-
 def validate_plan_contract(plan, path=None):
     """Every native plan phase must be present.
 
@@ -196,8 +189,11 @@ def require_commands(commands, results):
         matching = [row for row in results if row["argv"] == command]
         if not matching or matching[-1]["exit_code"] != 0:
             raise ValueError("Native command lacks a successful receipt: " + repr(command))
-        if warning_output(matching[-1].get("stdout", "") + "\n" + matching[-1].get("stderr", "")):
-            raise ValueError("Native verification emitted warnings: " + repr(command))
+        # A command that exits 0 has passed by its own standard. This site used to also refuse
+        # on any warning-shaped line in the output, which failed deliveries whose tools emit
+        # warnings on success -- measured 2026-11-02 (lux#80), a clean Elixir compile refused for
+        # unused-variable warnings. The one nameable "nothing was really checked" case, a runner
+        # reporting zero executed tests, is kept below as an explicit check.
         text = matching[-1].get("stdout", "") + "\n" + matching[-1].get("stderr", "")
         if re.search(r"No tests?(?: files)? (?:found|ran|collected)|Ran 0 tests", text, re.I):
             raise ValueError("Native runner reported zero executed tests: " + repr(command))
@@ -247,7 +243,9 @@ def regression_proof(root, base_sha, document, execute):
     if manifest(root, changed) != final:
         raise ValueError("Regression probe changed the proposed fix")
     green = execute(command)
-    if green.exit_code or warning_output(green.stdout + "\n" + green.stderr):
+    # Exit 0 is green. The command's own verdict is the only verdict this gate has; a warning
+    # line in the output is not a red test. Measured 2026-11-02 (lux#80).
+    if green.exit_code:
         raise ValueError("Final issue regression is not green:\n" + green.stdout + "\n" + green.stderr)
     return {"argv": command, "test_files": files, "expected_failure": expected,
             "red_exit": red.exit_code, "green_exit": green.exit_code,

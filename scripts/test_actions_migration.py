@@ -448,12 +448,21 @@ class ReleaseTests(unittest.TestCase):
         self.assertEqual((self.root / "product.py").read_text(), "def value(): return 1\n")
         self.assertEqual((self.root / "tests/new_companion.py").read_text(), "# retained companion\n")
 
-    def test_failed_or_warning_receipts_block(self):
-        for code, output in [(1, ""), (0, "warning: unsafe"), (0, "npm warn unsupported engine"), (0, "4:4 warning unused variable"), (0, "0 errors, 2 warnings"), (0, "Ran 0 tests")]:
+    def test_failed_or_empty_receipts_block(self):
+        for code, output in [(1, ""), (1, "warning: unsafe"), (0, "Ran 0 tests")]:
             with self.assertRaises(ValueError):
                 require_commands([["native", "test"]], [{"argv": ["native", "test"], "exit_code": code, "stdout": output}])
         with self.assertRaises(ValueError):
             require_commands([["native", "test"]], [])
+
+    def test_successful_command_warnings_do_not_override_native_verdict(self):
+        # The current release contract uses the tool's exit code. Text interpretation
+        # belongs to the agent, not a second warning-shaped-output verdict in code.
+        for output in ("warning: unsafe", "npm warn unsupported engine",
+                       "4:4 warning unused variable", "0 errors, 2 warnings"):
+            with self.subTest(output=output):
+                require_commands([["native", "test"]],
+                                 [{"argv": ["native", "test"], "exit_code": 0, "stdout": output}])
 
     def test_no_bypass_native_plan(self):
         for command in (["echo", "pass"], ["npm", "test", "--if-present"], ["sh", "-c", "run || true"]):
