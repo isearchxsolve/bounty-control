@@ -2,7 +2,7 @@
   "task_id": "6a762aa6ac7bcb142634b471313b489d",
   "repo": "jorgedvp/aks-store-demo",
   "issue_number": 4,
-  "status": "DISPATCHING",
+  "status": "DISPATCHED",
   "dispatch_id": "b1ea620f30424d93a22ee378f02fa729",
   "admission": {
     "funding": {
@@ -42,5 +42,5 @@
   ],
   "dispatched_at": "2026-11-02T22:02:05.454273+00:00",
   "attempt": 0,
-  "updated_at": "2026-11-02T22:02:05.454289+00:00"
+  "updated_at": "2026-11-02T22:02:07.481267+00:00"
 }
