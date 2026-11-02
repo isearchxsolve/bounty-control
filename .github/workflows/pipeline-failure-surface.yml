@@ -1,0 +1,52 @@
+name: Live failure surface
+run-name: 'Failure surface ${{ github.run_id }}'
+'on':
+  schedule:
+  # Hourly. The production lane runs on its own schedule; nothing else reads its failures,
+  # so this job is the reader. It is read-only: the ledger and Actions are the only inputs.
+  - cron: '17 * * * *'
+  workflow_dispatch: {}
+permissions:
+  contents: read
+  actions: read
+concurrency:
+  group: pipeline-failure-surface
+  cancel-in-progress: false
+jobs:
+  surface:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    env:
+      GH_TOKEN: ${{ secrets.GH_PAT }}
+      PYTHONUNBUFFERED: '1'
+      PYTHONIOENCODING: utf-8
+    steps:
+    - uses: actions/checkout@v4
+      with:
+        persist-credentials: false
+    - name: Read every real run failure from the durable ledger and Actions
+      run: |
+        python3 -u scripts/live_pipeline_integration.py failures \
+          --run-dir scratch/failure-surface \
+          --target isearchxsolve/oss-hunter-livefire \
+          --control isearchxsolve/bounty-control
+    - name: Publish the surface on the run page
+      if: always()
+      run: |
+        if [ -f scratch/failure-surface/failures.md ]; then
+          cat scratch/failure-surface/failures.md >> "$GITHUB_STEP_SUMMARY"
+        else
+          echo 'No failure receipt was produced; inspect the phase log above.' >> "$GITHUB_STEP_SUMMARY"
+        fi
+    - name: Retain the receipt
+      if: always()
+      uses: actions/upload-artifact@v4
+      with:
+        name: failure-surface-${{ github.run_id }}
+        path: |
+          scratch/failure-surface/run.json
+          scratch/failure-surface/failures.json
+          scratch/failure-surface/failures.md
+          scratch/failure-surface/*.log
+        if-no-files-found: warn
+        retention-days: 30

@@ -38,6 +38,7 @@ REQUIRED_CASES = (
     'LIVE_RELEASE_TASK_IDENTITY', 'LIVE_RELEASE_HEAD', 'LIVE_RELEASE_TREE',
     'LIVE_RELEASE_FILE_MANIFEST', 'LIVE_RELEASE_NATIVE_RECEIPTS_MISSING',
     'LIVE_RELEASE_REGRESSION_NEVER_RED', 'LIVE_RELEASE_REGRESSION_NOT_GREEN',
+    'LIVE_FAILURE_SURFACE',
 )
 
 
@@ -58,6 +59,42 @@ def drain_evidence(folder, run):
     check(all(datetime.fromisoformat(at.replace('Z', '+00:00')) >= started for (at,) in rows),
           'Hydration left pending rows unexamined')
     return census
+
+
+FAILURE_PREFIXES = ('FAILED_', 'REJECTED_')
+CAUSE_KEYS = ('diagnostic', 'error', 'reason', 'detail', 'message', 'error_summary')
+HISTORY_KEYS = ('failures', 'failure_history', 'history')
+RUN_FAILURE_CONCLUSIONS = ('failure', 'timed_out', 'startup_failure')
+
+
+def failure_kind(status):
+    """Classify the status token only: FAILED_ is a fault, REJECTED_ is a verdict."""
+    text = str(status or '')
+    for prefix in FAILURE_PREFIXES:
+        if text.startswith(prefix):
+            return ('failure' if prefix == 'FAILED_' else 'refusal'), (text[len(prefix):].lower() or 'unknown')
+    return None, None
+
+
+def recorded_cause(row):
+    """The cause the record itself carries, or None. It is never an invented explanation."""
+    for key in CAUSE_KEYS:
+        value = row.get(key)
+        if isinstance(value, str) and value.strip():
+            return value.strip()
+    for key in HISTORY_KEYS:
+        history = row.get(key)
+        if not isinstance(history, list):
+            continue
+        for entry in reversed(history):
+            if isinstance(entry, dict):
+                for inner in CAUSE_KEYS:
+                    value = entry.get(inner)
+                    if isinstance(value, str) and value.strip():
+                        return value.strip()
+            elif isinstance(entry, str) and entry.strip():
+                return entry.strip()
+    return None
 
 
 class ScopedStore(StateStore):
@@ -533,6 +570,110 @@ class LiveRun:
                          checks=checks, delivered_to_pr=True)
         self.record('REAL_PUBLICATION', 'PASS', pr=pr['html_url'], head=pr['head']['sha'], checks=checks['state'])
 
+    def failed_jobs(self, run):
+        """The jobs Actions itself marked failed. Never an interpretation of the log."""
+        try:
+            jobs = self.api.api(f"repos/{self.control}/actions/runs/{run['id']}/jobs?per_page=100")['jobs']
+        except (GitHubError, KeyError, ValueError):
+            return ''
+        failed = [str(j.get('name')) for j in jobs if j.get('conclusion') == 'failure']
+        if failed:
+            return ','.join(failed)
+        skipped = [str(j.get('name')) for j in jobs if j.get('conclusion') == 'skipped']
+        return 'no failed job' + ('; skipped: ' + ','.join(skipped) if skipped else '')
+
+    def surface_entries(self):
+        """Every failure and refusal the production lane carries, with what it states.
+
+        Two independent witnesses, because either alone is blind. The durable ledger holds a
+        row per task; Actions holds a run per dispatch. A run that died before writing a row
+        has no row to read, and a row whose run was deleted has no run to read -- so a surface
+        built from one of them reports a lane that never existed.
+
+        Measured 2026-11-01: 113 ledger records, 8 FAILED_* rows, 0 PR URLs behind them, and
+        no code in the repository read any of them.
+        """
+        entries, violations = [], []
+        try:
+            rows = list(self.ledger().records() or [])
+        except (GitHubError, ValueError) as exc:
+            rows = []
+            violations.append('Durable ledger unreadable: ' + str(exc)[:300])
+        self.data['surface_ledger_rows'] = len(rows)
+        dispatched = {}
+        for row in rows:
+            if row.get('dispatch_id'):
+                dispatched[str(row['dispatch_id'])] = True
+            kind, stage = failure_kind(row.get('status'))
+            if not kind:
+                continue
+            entries.append({'kind': kind, 'status': str(row.get('status')), 'stage': stage,
+                            'identity': row.get('task_id') or 'unknown-task',
+                            'repo': row.get('repo'), 'issue': row.get('issue_number'),
+                            'dispatch_id': row.get('dispatch_id'), 'attempt': row.get('attempt'),
+                            'at': row.get('finished_at') or row.get('updated_at'),
+                            'pr': row.get('pr_url'), 'run_url': row.get('run_url'),
+                            'cause': recorded_cause(row), 'witness': 'ledger'})
+        runs = []
+        try:
+            runs = list(self.api.workflow_runs(self.control, 'completed') or [])
+        except (GitHubError, ValueError) as exc:
+            violations.append('Actions runs unreadable: ' + str(exc)[:300])
+        self.data['surface_completed_runs'] = len(runs)
+        for run in runs:
+            conclusion = str(run.get('conclusion') or '')
+            if conclusion not in RUN_FAILURE_CONCLUSIONS:
+                continue
+            dispatch = next(iter(re.findall(r'[0-9a-f]{32}', run.get('display_title') or '')), None)
+            if dispatch and dispatch in dispatched:
+                continue
+            jobs = self.failed_jobs(run)
+            entries.append({'kind': 'failure', 'status': 'RUN_' + conclusion.upper(),
+                            'stage': jobs or 'unknown', 'identity': dispatch or str(run.get('id')),
+                            'repo': self.target, 'issue': None, 'dispatch_id': dispatch,
+                            'attempt': None, 'at': run.get('updated_at'), 'pr': None,
+                            'run_url': run.get('html_url'),
+                            'cause': 'run concluded ' + conclusion + ('; failing jobs: ' + jobs if jobs else ''),
+                            'witness': 'actions'})
+        for entry in entries:
+            if entry['kind'] != 'failure':
+                continue
+            if not entry['cause']:
+                violations.append(f"unexplained failure {entry['identity']} ({entry['status']})")
+            if entry['stage'] in (None, '', 'unknown'):
+                violations.append(f"unclassified failure {entry['identity']} ({entry['status']})")
+        return entries, violations
+
+    def failures(self):
+        """Surface every real run failure, live, from the ledger and Actions together.
+
+        It judges nothing. A failure is a record whose status says FAILED_; a refusal is one
+        that says REJECTED_ and is counted apart, because re-dispatching a verdict spends a
+        run to relearn an answer already written down. A fault with no stated cause is
+        surfaced as unexplained and fails the case: that is the class that stayed invisible.
+        """
+        entries, violations = self.surface_entries()
+        receipt = self.folder / 'failures.json'
+        receipt.write_text(json.dumps(entries, indent=2) + "\n", encoding='utf-8')
+        faults = [e for e in entries if e['kind'] == 'failure']
+        verdicts = [e for e in entries if e['kind'] == 'refusal']
+        by_stage = {}
+        for entry in faults:
+            by_stage[entry['stage']] = by_stage.get(entry['stage'], 0) + 1
+        summary = ['| kind | stage | status | cause | run |', '|---|---|---|---|---|']
+        for entry in entries:
+            cause = (entry['cause'] or 'UNEXPLAINED').replace('|', '/').replace('\n', ' ')[:180]
+            summary.append('| ' + entry['kind'] + ' | ' + str(entry['stage']) + ' | ' + entry['status']
+                           + ' | ' + cause + ' | ' + (entry['run_url'] or '') + ' |')
+        (self.folder / 'failures.md').write_text("\n".join(summary) + "\n", encoding='utf-8')
+        self.record('LIVE_FAILURE_SURFACE', 'FAIL' if violations else 'PASS',
+                    failures=len(faults), refusals=len(verdicts), by_stage=by_stage,
+                    ledger_rows=self.data.get('surface_ledger_rows'),
+                    completed_runs=self.data.get('surface_completed_runs'),
+                    unexplained=[e['identity'] for e in faults if not e['cause']],
+                    violations=violations, receipt=str(receipt))
+        check(not violations, '; '.join(violations))
+
     def merge(self):
         self.intake()
         check(self.data.get('delivered_to_pr'), 'Observe a successfully published real PR first')
@@ -897,6 +1038,7 @@ class LiveRun:
             self.dispatch()
         self.wait()
         self.artifact_faults()
+        self.failures()
         if self.args.merge_fixture or self.data.get('existing_issue'):
             self.merge()
         else:
@@ -1091,7 +1233,7 @@ class Tee:
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument('phase', choices=['audit', 'provision', 'admit', 'dispatch', 'observe', 'merge', 'faults',
-                                        'negative-claim', 'observe-negative', 'artifact-faults', 'cleanup', 'wait', 'run', 'intake'])
+                                        'negative-claim', 'observe-negative', 'artifact-faults', 'cleanup', 'wait', 'run', 'intake', 'failures'])
     parser.add_argument('--run-dir', type=Path, required=True)
     parser.add_argument('--target', default='isearchxsolve/oss-hunter-livefire')
     parser.add_argument('--control', default='isearchxsolve/bounty-control')
