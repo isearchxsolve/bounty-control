@@ -2,7 +2,7 @@
   "task_id": "bcba80531e63c7f7811e1dde8bdf99e1",
   "repo": "getkcoin-alt/itsmay",
   "issue_number": 27,
-  "status": "CLAIMED",
+  "status": "FAILED_ENGINEER",
   "dispatch_id": "8d7153b4bd2b43a1a5cc309ef061eb3d",
   "admission": {
     "funding": {
@@ -43,7 +43,7 @@
   ],
   "dispatched_at": "2026-11-02T22:11:48.332237+00:00",
   "attempt": 2,
-  "updated_at": "2026-11-02T22:12:01.855710+00:00",
+  "updated_at": "2026-11-02T22:15:27.396755+00:00",
   "owner": "41535145127:1",
   "previous_owner": "41533728353:1",
   "previous_status": "DISPATCHED",
@@ -55,7 +55,7 @@
   "kind": "engineer",
   "retryable": true,
   "diagnostic": "Cline preparation failed: error: No Token Harbor key is currently ready. |",
-  "at": "2026-11-02T22:09:53.992910+00:00",
+  "at": "2026-11-02T22:15:14.612033+00:00",
   "failures": [
     {
       "run_url": "https://github.com/isearchxsolve/bounty-control/actions/runs/41533728353",
@@ -64,7 +64,15 @@
       "retryable": true,
       "diagnostic": "Cline preparation failed: error: No Token Harbor key is currently ready. |",
       "at": "2026-11-02T22:09:53.992910+00:00"
+    },
+    {
+      "run_url": "https://github.com/isearchxsolve/bounty-control/actions/runs/41535145127",
+      "status": "FAILED_ENGINEER",
+      "kind": "engineer",
+      "retryable": true,
+      "diagnostic": "Cline preparation failed: error: No Token Harbor key is currently ready. |",
+      "at": "2026-11-02T22:15:14.612033+00:00"
     }
   ],
-  "finished_at": "2026-11-02T22:10:06.692159+00:00"
+  "finished_at": "2026-11-02T22:15:26.679530+00:00"
 }
