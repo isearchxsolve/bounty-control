@@ -2,7 +2,7 @@
   "task_id": "31e3b38b2cf49152b222244da678385b",
   "repo": "Spectral-Finance/lux",
   "issue_number": 96,
-  "status": "CLAIMED",
+  "status": "FAILED_DELIVERABLE_MISSING",
   "dispatch_id": "86d282d683f743dea6b642b2ff8c6562",
   "admission": {
     "funding": {
@@ -362,7 +362,7 @@
   ],
   "dispatched_at": "2026-11-02T11:51:10.329916+00:00",
   "attempt": 1,
-  "updated_at": "2026-11-02T11:52:39.192216+00:00",
+  "updated_at": "2026-11-02T11:58:42.757161+00:00",
   "owner": "41440041106:1",
   "previous_owner": null,
   "previous_status": "DISPATCHED",
@@ -370,5 +370,24 @@
   "harness_sha": "b9f245366c7c6d94d52c8be985d41977a7c85187",
   "claimed_at": "2026-11-02T11:52:39.192161+00:00",
   "lease_expires_at": "2026-11-02T15:57:39.192178+00:00",
-  "preparation_budget_seconds": 14400
+  "preparation_budget_seconds": 14400,
+  "kind": "deliverable_invalid",
+  "retryable": true,
+  "diagnostic": "Cline deliverable invalid at /tmp/fleet-artifacts/delivery-supervisor/83e9566f8649419c8260588683bf51fc.preparation.json: action=incomplete: the preparation skeleton was never replaced, so the agent finished without reporting",
+  "path": "/tmp/fleet-artifacts/delivery-supervisor/83e9566f8649419c8260588683bf51fc.preparation.json",
+  "reason": "action=incomplete: the preparation skeleton was never replaced, so the agent finished without reporting",
+  "at": "2026-11-02T11:58:33.104859+00:00",
+  "failures": [
+    {
+      "run_url": "https://github.com/isearchxsolve/bounty-control/actions/runs/41440041106",
+      "status": "FAILED_DELIVERABLE_MISSING",
+      "kind": "deliverable_invalid",
+      "retryable": true,
+      "diagnostic": "Cline deliverable invalid at /tmp/fleet-artifacts/delivery-supervisor/83e9566f8649419c8260588683bf51fc.preparation.json: action=incomplete: the preparation skeleton was never replaced, so the agent finished without reporting",
+      "path": "/tmp/fleet-artifacts/delivery-supervisor/83e9566f8649419c8260588683bf51fc.preparation.json",
+      "reason": "action=incomplete: the preparation skeleton was never replaced, so the agent finished without reporting",
+      "at": "2026-11-02T11:58:33.104859+00:00"
+    }
+  ],
+  "finished_at": "2026-11-02T11:58:42.337606+00:00"
 }
