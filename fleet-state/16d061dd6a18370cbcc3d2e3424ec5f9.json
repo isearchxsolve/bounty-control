@@ -2,7 +2,7 @@
   "task_id": "16d061dd6a18370cbcc3d2e3424ec5f9",
   "repo": "QuantumSavory/QuantumSavory.jl",
   "issue_number": 138,
-  "status": "CLAIMED",
+  "status": "FAILED_DELIVERABLE_MISSING",
   "dispatch_id": "202ab26760ca434297183b2721c4b2de",
   "admission": {
     "funding": {
@@ -44,7 +44,7 @@
   ],
   "dispatched_at": "2026-11-02T13:26:05.896653+00:00",
   "attempt": 1,
-  "updated_at": "2026-11-02T13:26:28.111982+00:00",
+  "updated_at": "2026-11-02T13:36:26.818716+00:00",
   "owner": "41452958346:1",
   "previous_owner": null,
   "previous_status": "DISPATCHED",
@@ -52,5 +52,24 @@
   "harness_sha": "b9f245366c7c6d94d52c8be985d41977a7c85187",
   "claimed_at": "2026-11-02T13:26:28.111935+00:00",
   "lease_expires_at": "2026-11-02T17:31:28.111949+00:00",
-  "preparation_budget_seconds": 14400
+  "preparation_budget_seconds": 14400,
+  "kind": "deliverable_invalid",
+  "retryable": true,
+  "diagnostic": "Cline deliverable invalid at /tmp/fleet-artifacts/delivery-supervisor/6bf4231f366d464e9e4f9acd97990eb2.preparation.json: action=incomplete: the preparation skeleton was never replaced, so the agent finished without reporting",
+  "path": "/tmp/fleet-artifacts/delivery-supervisor/6bf4231f366d464e9e4f9acd97990eb2.preparation.json",
+  "reason": "action=incomplete: the preparation skeleton was never replaced, so the agent finished without reporting",
+  "at": "2026-11-02T13:36:09.867794+00:00",
+  "failures": [
+    {
+      "run_url": "https://github.com/isearchxsolve/bounty-control/actions/runs/41452958346",
+      "status": "FAILED_DELIVERABLE_MISSING",
+      "kind": "deliverable_invalid",
+      "retryable": true,
+      "diagnostic": "Cline deliverable invalid at /tmp/fleet-artifacts/delivery-supervisor/6bf4231f366d464e9e4f9acd97990eb2.preparation.json: action=incomplete: the preparation skeleton was never replaced, so the agent finished without reporting",
+      "path": "/tmp/fleet-artifacts/delivery-supervisor/6bf4231f366d464e9e4f9acd97990eb2.preparation.json",
+      "reason": "action=incomplete: the preparation skeleton was never replaced, so the agent finished without reporting",
+      "at": "2026-11-02T13:36:09.867794+00:00"
+    }
+  ],
+  "finished_at": "2026-11-02T13:36:26.106131+00:00"
 }
