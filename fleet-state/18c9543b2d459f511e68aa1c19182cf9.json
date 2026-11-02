@@ -2,8 +2,8 @@
   "task_id": "18c9543b2d459f511e68aa1c19182cf9",
   "repo": "s6pa1rta3n-lab/universal_bounty_fleet",
   "issue_number": 1,
-  "status": "FAILED_ENGINEER",
-  "dispatch_id": "31494cb7271048dfaa11ce6a5fdc6f88",
+  "status": "DISPATCHING",
+  "dispatch_id": "140d6a4603c842ec877f93dc3be6f66a",
   "admission": {
     "funding": {
       "amount": "1200",
@@ -33,7 +33,7 @@
     "task_id": "18c9543b2d459f511e68aa1c19182cf9",
     "source_revision": "df431292e879728face3e884b8b300556df82779c66d533f907c6ff8153cf9a0"
   },
-  "dispatch_attempt": 2,
+  "dispatch_attempt": 3,
   "sovereign_admission": true,
   "competition": {
     "blocking": false,
@@ -140,9 +140,9 @@
   "lanes": [
     "normal"
   ],
-  "dispatched_at": "2026-11-02T11:29:48.937876+00:00",
+  "dispatched_at": "2026-11-02T11:59:46.073497+00:00",
   "attempt": 2,
-  "updated_at": "2026-11-02T11:48:31.436368+00:00",
+  "updated_at": "2026-11-02T11:59:46.073512+00:00",
   "owner": "41437297443:1",
   "previous_owner": "41434967210:1",
   "previous_status": "DISPATCHED",
