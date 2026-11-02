@@ -6,12 +6,13 @@
   "dispatch_id": "4d2da1154ef6448c8a752c6198c05853",
   "attempt": 1,
   "fault_fixture": true,
-  "updated_at": "2026-11-02T16:27:42.145965+00:00",
+  "updated_at": "2026-11-02T16:27:45.060018+00:00",
   "owner": "fault-worker-a:1",
   "previous_owner": null,
   "previous_status": "DISPATCHED",
   "run_url": "https://example.invalid/fault-worker",
   "harness_sha": "74962e23b39a2e92d06454d219974b83496007c0",
   "claimed_at": "2026-11-02T16:27:38.869772+00:00",
-  "lease_expires_at": "2026-11-02T20:32:38.869786+00:00"
+  "lease_expires_at": "2026-11-02T20:32:38.869786+00:00",
+  "owner_revoked": "fault-worker-a:1"
 }
