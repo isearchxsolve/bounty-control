@@ -2,7 +2,7 @@
   "task_id": "18c9543b2d459f511e68aa1c19182cf9",
   "repo": "s6pa1rta3n-lab/universal_bounty_fleet",
   "issue_number": 1,
-  "status": "CLAIMED",
+  "status": "FAILED_DELIVERABLE_MISSING",
   "dispatch_id": "a174b7a666854693af5d42c2f7357918",
   "admission": {
     "funding": {
@@ -142,7 +142,7 @@
   ],
   "dispatched_at": "2026-11-02T11:12:35.392988+00:00",
   "attempt": 1,
-  "updated_at": "2026-11-02T11:13:31.058476+00:00",
+  "updated_at": "2026-11-02T11:20:56.612592+00:00",
   "owner": "41434967210:1",
   "previous_owner": null,
   "previous_status": "DISPATCHED",
@@ -150,5 +150,24 @@
   "harness_sha": "b9f245366c7c6d94d52c8be985d41977a7c85187",
   "claimed_at": "2026-11-02T11:13:31.058428+00:00",
   "lease_expires_at": "2026-11-02T15:18:31.058443+00:00",
-  "preparation_budget_seconds": 14400
+  "preparation_budget_seconds": 14400,
+  "kind": "deliverable_invalid",
+  "retryable": true,
+  "diagnostic": "Cline deliverable invalid at /tmp/fleet-artifacts/delivery-supervisor/82796c553dcc44d582d2a69b38ab691d.preparation.json: Mandatory native plan phase missing: builds",
+  "path": "/tmp/fleet-artifacts/delivery-supervisor/82796c553dcc44d582d2a69b38ab691d.preparation.json",
+  "reason": "Mandatory native plan phase missing: builds",
+  "at": "2026-11-02T11:20:46.758661+00:00",
+  "failures": [
+    {
+      "run_url": "https://github.com/isearchxsolve/bounty-control/actions/runs/41434967210",
+      "status": "FAILED_DELIVERABLE_MISSING",
+      "kind": "deliverable_invalid",
+      "retryable": true,
+      "diagnostic": "Cline deliverable invalid at /tmp/fleet-artifacts/delivery-supervisor/82796c553dcc44d582d2a69b38ab691d.preparation.json: Mandatory native plan phase missing: builds",
+      "path": "/tmp/fleet-artifacts/delivery-supervisor/82796c553dcc44d582d2a69b38ab691d.preparation.json",
+      "reason": "Mandatory native plan phase missing: builds",
+      "at": "2026-11-02T11:20:46.758661+00:00"
+    }
+  ],
+  "finished_at": "2026-11-02T11:20:56.176480+00:00"
 }
