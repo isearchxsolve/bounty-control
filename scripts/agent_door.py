@@ -114,10 +114,19 @@ def ensure_cline(timeout: int = 900) -> Optional[str]:
     return shutil.which("cline")
 
 
-def find_issues(root: Optional[str] = None, rounds: int = 1, timeout: int = 600,
+def find_issues(root: Optional[str] = None, rounds: int = 2, timeout: int = 600,
                 limit: int = 0, on_admitted=None, lanes=None, prior_refusals=None,
                 targets=None) -> Dict[str, object]:
-    """Run the agent door and return what survived its gate. Never raises."""
+    """Run the agent door and return what survived its gate. Never raises.
+
+    ``rounds`` defaults to 2, not 1. Measured 2026-11-02 (run 41517665373): the agent
+    produced one complete, verified row, the door refused it on a field name, and the run
+    died with rows=1, admitted=0. The repair machinery was already built -- FEEDBACK_PROMPT,
+    render_meanings() rendering every gate code from the same table the gates emit from,
+    render_shape_note() telling the agent to re-read the row shape -- but ``rounds=1``
+    meant the loop broke before it could ever run. A repair round is the difference
+    between a fixable transcription slip and a lost run.
+    """
     root = root or os.environ.get("BOUNTY_AGENT_WORKSPACE", "/tmp/bounty-agent")
     gated = os.environ.get("BOUNTY_ENTRY_DOOR", "").strip().lower()
     if gated not in ("cline", "agent", "1", "true"):

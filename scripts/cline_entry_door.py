@@ -677,6 +677,30 @@ def verify_model_rows(rows, **kwargs):
     return verify_rows(rows, decision_verifier=model_admission_refusal, **kwargs)
 
 
+def row_issue(row: dict):
+    """The issue number a row names, under any of the field names the agent has used.
+
+    Measured 2026-11-02 (run 41517665373): the agent wrote a complete, verified row --
+    correct repo, OWNER-authored issue, bug reproduced by execution, blob SHA confirmed
+    against the GitHub API, zero competing PRs -- and named the issue ``issue_number``.
+    The door read ``issue``, got ``None``, and refused the whole row as MALFORMED_ROW.
+    The work was real; only the key was different.
+
+    A field name is a fact, not a judgement, so it belongs here rather than in a new
+    prompt rule. Accepting the spellings the agent actually emits is not leniency about
+    content: every other gate still runs on the row unchanged.
+    """
+    for name in ("issue", "issue_number", "number", "issue_id"):
+        value = row.get(name)
+        if isinstance(value, bool):
+            continue
+        if isinstance(value, int):
+            return value
+        if isinstance(value, str) and value.strip().isdigit():
+            return int(value.strip())
+    return None
+
+
 def verify_rows(rows: List[dict], fetch: Optional[Callable[[str, int], Optional[dict]]] = None,
                 limit: int = 12, admission_client=None, context_builder=None,
                 decision_verifier=None) -> Dict[str, List[dict]]:
@@ -700,7 +724,7 @@ def verify_rows(rows: List[dict], fetch: Optional[Callable[[str, int], Optional[
     # One merge-history probe per repository per pass, shared across every row that names it.
     intent_cache: Dict[str, dict] = {}
     for row in (rows if limit <= 0 else rows[:limit]):
-        repo, number = str(row.get("repo") or ""), row.get("issue")
+        repo, number = str(row.get("repo") or ""), row_issue(row)
         if not repo or not isinstance(number, int):
             refused.append({"row": row, "reason": "MALFORMED_ROW"})
             continue
@@ -1411,7 +1435,7 @@ def iterate(workdir: str, rounds: int = 3, run=run_cline_search, verify=verify_r
                     on_admitted(entry)
 
     def row_key(row: dict):
-        return (str(row.get("repo") or "").lower(), row.get("issue"))
+        return (str(row.get("repo") or "").lower(), row_issue(row))
 
     def bank(row: dict) -> None:
         """Verify a row the instant the agent writes it, and keep it whatever happens next.
