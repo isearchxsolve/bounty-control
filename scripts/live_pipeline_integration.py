@@ -390,8 +390,10 @@ class LiveRun:
         if not rows:
             logs = sorted(work.rglob('agent.log'), key=lambda p: p.stat().st_mtime)
             tail = logs[-1].read_text(encoding='utf-8', errors='replace')[-1200:] if logs else ''
+            detail = {'result': outcome, 'tail': tail, 'log_path': str(logs[-1]) if logs else None}
+            (self.folder / 'scout-result.json').write_text(json.dumps(detail, indent=2), encoding='utf-8')
             raise AssertionError('Real scout failed before writing a row: '
-                                 + str(outcome) + '\n' + (tail or f'No agent log retained under {work}'))
+                                 + str(outcome) + '\n' + (str(detail.get('tail') or '') or f'No agent log retained under {work}'))
         check(len(rows) == 1 and rows[0][0] == self.data['task_id'], 'Production search did not queue exactly the scoped original')
         check(rows[0][2] == 'capacity_wait', f'Production queue did not defer at zero dispatch budget: {outcome}')
         state, state_sha = StateStore(self.api, self.control).read(self.data['task_id'])
