@@ -2,8 +2,8 @@
   "task_id": "bd39667f26e9bde9596b20bc44f8b3e0",
   "repo": "fiztoz/uptime-phoenix",
   "issue_number": 198,
-  "status": "FAILED_ENGINEER",
-  "dispatch_id": "af718f23bf084ae7ab72e52b8f48e60a",
+  "status": "DISPATCHING",
+  "dispatch_id": "30e9b59878ee44d1b99b87f54ead6eee",
   "admission": {
     "funding": {
       "payer": "fiztoz",
@@ -32,7 +32,7 @@
     "task_id": "bd39667f26e9bde9596b20bc44f8b3e0",
     "source_revision": "e95c83819b907936a3017cd63eb1730c29be305027e99ade3dd9abcfa1682e94"
   },
-  "dispatch_attempt": 2,
+  "dispatch_attempt": 3,
   "sovereign_admission": true,
   "competition": {
     "blocking": false,
@@ -41,9 +41,9 @@
   "lanes": [
     "founder"
   ],
-  "dispatched_at": "2026-11-02T17:44:07.439610+00:00",
+  "dispatched_at": "2026-11-02T18:14:09.422081+00:00",
   "attempt": 2,
-  "updated_at": "2026-11-02T18:12:31.807086+00:00",
+  "updated_at": "2026-11-02T18:14:09.422099+00:00",
   "owner": "41493943796:1",
   "previous_owner": "41488848364:1",
   "previous_status": "DISPATCHED",
