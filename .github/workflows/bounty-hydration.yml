@@ -1,9 +1,20 @@
 name: Bounty hydration drain
 'on':
-  # Retired schedule to preserve 100% of API quota for sovereign discovery & delivery
+  # Scheduled, and offset from discovery's '7,37' so the two never contend for a slot.
+  # Measured 2026-11-02: this schedule was retired on 2026-10-31 to "preserve 100% of API
+  # quota for sovereign discovery", but the drain draws on the REST/GraphQL core budget and
+  # never on the 30/min search ceiling, so it was never spending discovery's quota. The cost
+  # of retiring it was 41 tasks stranded in the durable queue, the oldest from 2026-10-31T23:22Z,
+  # with no automated path to dispatch. A backlog with no drain is a silent outage.
+  schedule:
+  - cron: '22,52 * * * *'
   workflow_dispatch: {}
 concurrency:
-  group: bounty-discovery
+  # Its own group. Sharing 'bounty-discovery' meant a scheduled drain queued behind a
+  # 25-minute discovery run and was then bumped by the next one, so the schedule would have
+  # been decorative. Dispatch safety comes from the Contents-API CAS on the durable ledger,
+  # not from serialising the two lanes.
+  group: bounty-hydration
   cancel-in-progress: false
 permissions:
   contents: write

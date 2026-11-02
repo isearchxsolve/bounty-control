@@ -77,6 +77,27 @@ class InstalledScheduleTests(unittest.TestCase):
         self.assertIn("schedule:", text)
         self.assertIn("cron:", text)
 
+    def test_the_hydration_drain_is_actually_scheduled(self):
+        # Recorded defect 2026-11-02: the drain's schedule was retired on 2026-10-31 while
+        # discovery kept filling the durable queue. 41 tasks sat pending with no automated
+        # path to dispatch and nothing failed, because only discovery's schedule was asserted.
+        text = (WORKFLOWS / "bounty-hydration.yml").read_text(encoding="utf-8")
+        self.assertIn("schedule:", text, "The durable backlog has no automated drain")
+        self.assertIn("cron:", text, "The drain schedule carries no cron expression")
+
+    def test_the_drain_does_not_share_the_discovery_concurrency_group(self):
+        # A shared group makes the schedule decorative: the drain queues behind a ~25-minute
+        # discovery run and is bumped by the next. Safety is the ledger CAS, not serialisation.
+        def group(name):
+            for line in (WORKFLOWS / name).read_text(encoding="utf-8").splitlines():
+                if line.strip().startswith("group:"):
+                    return line.split(":", 1)[1].strip()
+            return None
+
+        self.assertIsNotNone(group("bounty-discovery.yml"))
+        self.assertNotEqual(group("bounty-hydration.yml"), group("bounty-discovery.yml"),
+                            "A scheduled drain in discovery's group never gets a slot")
+
     def test_the_heartbeat_daemon_is_present(self):
         self.assertTrue((Path(__file__).resolve().parent / "discovery_heartbeat.py").is_file())
 
