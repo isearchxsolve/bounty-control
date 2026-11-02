@@ -2,8 +2,8 @@
   "task_id": "3ba86a2f9bb5b606b2af7d3d6b698996",
   "repo": "Spectral-Finance/lux",
   "issue_number": 62,
-  "status": "FAILED_ENGINEER",
-  "dispatch_id": "3a1c69588e284d4486de24def6d60380",
+  "status": "DISPATCHING",
+  "dispatch_id": "1cd0093b908a4dd0b3d0625492d7d51d",
   "admission": {
     "funding": {
       "amount": "2500",
@@ -33,7 +33,7 @@
     "task_id": "3ba86a2f9bb5b606b2af7d3d6b698996",
     "source_revision": "58e5a12c430ee573c36b01208a881a8bb87e4a47156f56e1c70d02bf2eadc189"
   },
-  "dispatch_attempt": 1,
+  "dispatch_attempt": 2,
   "sovereign_admission": true,
   "competition": {
     "blocking": false,
@@ -299,9 +299,9 @@
   "lanes": [
     "normal"
   ],
-  "dispatched_at": "2026-11-02T11:49:59.170290+00:00",
+  "dispatched_at": "2026-11-02T12:31:26.207203+00:00",
   "attempt": 1,
-  "updated_at": "2026-11-02T12:17:33.364329+00:00",
+  "updated_at": "2026-11-02T12:31:26.207218+00:00",
   "owner": "41439888442:1",
   "previous_owner": null,
   "previous_status": "DISPATCHED",
