@@ -52,110 +52,15 @@ jobs:
           scripts/delivery_errors.py scripts/discovery_heartbeat.py scripts/failure_digest.py \
           scripts/f11_refusal_census.py scripts/agent_door.py scripts/cline_entry_door.py \
           scripts/pipeline_evidence.py scripts/sovereign_discovery.py
-    - name: Test migration contracts and unchanged master suites
+    - name: Run master pipeline failure and regression suites
       env:
         PYTHONIOENCODING: utf-8
-      run: 'set -euo pipefail
-
-        python3 -W error scripts/test_actions_migration.py
-
-        python3 -W error scripts/test_partition_regressions.py
-
-        python3 -W error scripts/test_cline_delivery_ownership.py
-
-        python3 -W error scripts/test_icu_pipeline_suite.py
-
-        python3 -W error scripts/test_discovery_breadth.py
-
-        python3 -W error scripts/test_admission_trust.py
-
-        python3 -W error scripts/test_funding_evidence_required.py
-
-        python3 -W error scripts/test_repository_intent.py
-
-        python3 -W error scripts/test_program_offers.py
-
-        python3 -W error scripts/test_queue_ordering.py
-
-        python3 -W error scripts/test_by_design_gate.py
-
-        python3 -W error scripts/test_advert_escrow.py
-
-        python3 -W error scripts/test_query_encoding.py
-
-        python3 -W error scripts/test_preparation_terminal.py
-
-        python3 -W error scripts/test_discovery_heartbeat.py
-
-        python3 -W error scripts/test_fresh_discovery_schedule.py
-
-        python3 -W error scripts/test_engineering_evidence.py
-
-        python3 -W error scripts/test_baseline_relationship.py
-
-        python3 -W error scripts/test_base_branch.py
-
-        python3 -W error scripts/test_cline_deliverable.py
-
-        python3 -W error scripts/test_failure_taxonomy.py
-
-        python3 -W error scripts/test_claim_lease.py
-
-        python3 -W error scripts/test_e2e_flow.py
-
-        python3 -W error scripts/test_e2e_walk.py
-
-        python3 -W error scripts/test_gate_centralization.py
-
-        python3 -W error scripts/test_dispatch_velocity.py
-
-        python3 -W error scripts/test_liquidity_ordering.py
-
-        python3 -W error scripts/test_lane_partition.py
-
-        python3 -W error scripts/test_engine_identity.py
-
-        python3 -W error scripts/test_capacity_gate.py
-
-        python3 -W error scripts/test_hydration_capacity.py
-
-        python3 -W error scripts/test_preparation_contract.py
-
-        python3 -W error scripts/test_preflight.py
-
-        python3 -W error scripts/test_download_patch_submodule.py
-
-        python3 -W error scripts/test_heartbeat.py
-
-        python3 -W error scripts/test_code_change_class.py
-
-        python3 -W error scripts/test_f9_class_gate.py
-
-        python3 -W error scripts/test_refusal_census.py
-
-        python3 -W error scripts/test_failure_digest.py
-
-        python3 -W error scripts/test_hardness_ordering.py
-
-        python3 -W error scripts/test_competition_evidence.py
-
-        python3 -W error scripts/test_urgency_ordering.py
-
-        python3 -W error scripts/test_hydrate_only_path.py
-
-        python3 -W error scripts/test_competition_linked.py
-
-        python3 -W error scripts/test_unbounded_scope.py
-
-        python3 -W error scripts/test_non_code_deliverable.py
-
-        python3 -W error scripts/test_search_planner.py
-
-        python3 -W error scripts/test_planner_attribution.py'
-
-    - name: Sovereign handoff and forensic incident regressions
-      run: |
-        set -euo pipefail
-        for suite in test_agent_door.py test_agent_queue.py test_cline_entry_door.py test_sovereign_stamps.py test_sovereign_delivery.py test_pipeline_repairs.py test_e2e_door_to_claim.py test_e2e_full_pipeline.py; do
-          python3 -W error -m unittest discover -s scripts -p "$suite"
-        done
+      run: python3 scripts/run_pipeline_master.py --output scratch/pipeline-master --timeout 180
+    - name: Preserve master suite reports and failure logs
+      if: always()
+      uses: actions/upload-artifact@v4
+      with:
+        name: pipeline-master-${{ github.run_id }}-${{ github.run_attempt }}
+        path: scratch/pipeline-master/
+        if-no-files-found: warn
+        retention-days: 14

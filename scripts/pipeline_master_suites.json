@@ -1,0 +1,237 @@
+{
+  "description": "Reviewed contract suites; excludes live operational probes. Modes preserve existing CI invocation.",
+  "suites": [
+    {
+      "file": "test_actions_migration.py",
+      "mode": "script"
+    },
+    {
+      "file": "test_partition_regressions.py",
+      "mode": "script"
+    },
+    {
+      "file": "test_cline_delivery_ownership.py",
+      "mode": "script"
+    },
+    {
+      "file": "test_icu_pipeline_suite.py",
+      "mode": "script"
+    },
+    {
+      "file": "test_discovery_breadth.py",
+      "mode": "script"
+    },
+    {
+      "file": "test_admission_trust.py",
+      "mode": "script"
+    },
+    {
+      "file": "test_funding_evidence_required.py",
+      "mode": "script"
+    },
+    {
+      "file": "test_repository_intent.py",
+      "mode": "script"
+    },
+    {
+      "file": "test_program_offers.py",
+      "mode": "script"
+    },
+    {
+      "file": "test_queue_ordering.py",
+      "mode": "script"
+    },
+    {
+      "file": "test_by_design_gate.py",
+      "mode": "script"
+    },
+    {
+      "file": "test_advert_escrow.py",
+      "mode": "script"
+    },
+    {
+      "file": "test_query_encoding.py",
+      "mode": "script"
+    },
+    {
+      "file": "test_preparation_terminal.py",
+      "mode": "script"
+    },
+    {
+      "file": "test_discovery_heartbeat.py",
+      "mode": "script"
+    },
+    {
+      "file": "test_fresh_discovery_schedule.py",
+      "mode": "script"
+    },
+    {
+      "file": "test_engineering_evidence.py",
+      "mode": "script"
+    },
+    {
+      "file": "test_baseline_relationship.py",
+      "mode": "script"
+    },
+    {
+      "file": "test_base_branch.py",
+      "mode": "script"
+    },
+    {
+      "file": "test_cline_deliverable.py",
+      "mode": "script"
+    },
+    {
+      "file": "test_failure_taxonomy.py",
+      "mode": "script"
+    },
+    {
+      "file": "test_claim_lease.py",
+      "mode": "script"
+    },
+    {
+      "file": "test_e2e_flow.py",
+      "mode": "script"
+    },
+    {
+      "file": "test_e2e_walk.py",
+      "mode": "script"
+    },
+    {
+      "file": "test_gate_centralization.py",
+      "mode": "script"
+    },
+    {
+      "file": "test_dispatch_velocity.py",
+      "mode": "script"
+    },
+    {
+      "file": "test_liquidity_ordering.py",
+      "mode": "script"
+    },
+    {
+      "file": "test_lane_partition.py",
+      "mode": "script"
+    },
+    {
+      "file": "test_engine_identity.py",
+      "mode": "script"
+    },
+    {
+      "file": "test_capacity_gate.py",
+      "mode": "script"
+    },
+    {
+      "file": "test_hydration_capacity.py",
+      "mode": "script"
+    },
+    {
+      "file": "test_preparation_contract.py",
+      "mode": "script"
+    },
+    {
+      "file": "test_preflight.py",
+      "mode": "script"
+    },
+    {
+      "file": "test_download_patch_submodule.py",
+      "mode": "script"
+    },
+    {
+      "file": "test_heartbeat.py",
+      "mode": "script"
+    },
+    {
+      "file": "test_code_change_class.py",
+      "mode": "script"
+    },
+    {
+      "file": "test_f9_class_gate.py",
+      "mode": "script"
+    },
+    {
+      "file": "test_refusal_census.py",
+      "mode": "script"
+    },
+    {
+      "file": "test_failure_digest.py",
+      "mode": "script"
+    },
+    {
+      "file": "test_hardness_ordering.py",
+      "mode": "script"
+    },
+    {
+      "file": "test_competition_evidence.py",
+      "mode": "script"
+    },
+    {
+      "file": "test_urgency_ordering.py",
+      "mode": "script"
+    },
+    {
+      "file": "test_hydrate_only_path.py",
+      "mode": "script"
+    },
+    {
+      "file": "test_competition_linked.py",
+      "mode": "script"
+    },
+    {
+      "file": "test_unbounded_scope.py",
+      "mode": "script"
+    },
+    {
+      "file": "test_non_code_deliverable.py",
+      "mode": "script"
+    },
+    {
+      "file": "test_search_planner.py",
+      "mode": "script"
+    },
+    {
+      "file": "test_planner_attribution.py",
+      "mode": "script"
+    },
+    {
+      "file": "test_agent_door.py",
+      "mode": "unittest"
+    },
+    {
+      "file": "test_agent_queue.py",
+      "mode": "unittest"
+    },
+    {
+      "file": "test_cline_entry_door.py",
+      "mode": "unittest"
+    },
+    {
+      "file": "test_sovereign_stamps.py",
+      "mode": "unittest"
+    },
+    {
+      "file": "test_sovereign_delivery.py",
+      "mode": "unittest"
+    },
+    {
+      "file": "test_pipeline_repairs.py",
+      "mode": "unittest"
+    },
+    {
+      "file": "test_e2e_door_to_claim.py",
+      "mode": "unittest"
+    },
+    {
+      "file": "test_e2e_full_pipeline.py",
+      "mode": "unittest"
+    },
+    {
+      "file": "test_pipeline_failure_master.py",
+      "mode": "script"
+    },
+    {
+      "file": "test_pipeline_master_runner.py",
+      "mode": "script"
+    }
+  ]
+}
