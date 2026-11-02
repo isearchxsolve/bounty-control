@@ -43,7 +43,7 @@
   ],
   "dispatched_at": "2026-11-02T16:30:29.418098+00:00",
   "attempt": 1,
-  "updated_at": "2026-11-02T16:42:07.482170+00:00",
+  "updated_at": "2026-11-02T16:42:44.146486+00:00",
   "owner": "41482154165:1",
   "previous_owner": null,
   "previous_status": "DISPATCHED",
@@ -63,5 +63,7 @@
   "claim_command": "",
   "claim_retry_required": false,
   "payment_status": "UNVERIFIED",
-  "release_digest": "a5bfdc5709981ddc4952e7e76c2a6a6f6cd48ed69eeb56301521a5dae75b5f07"
+  "release_digest": "a5bfdc5709981ddc4952e7e76c2a6a6f6cd48ed69eeb56301521a5dae75b5f07",
+  "at": "2026-11-02T16:42:08.442224+00:00",
+  "finished_at": "2026-11-02T16:42:43.540107+00:00"
 }
