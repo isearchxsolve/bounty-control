@@ -154,7 +154,7 @@ class LiveRun:
         check(result.returncode == 0, f"Command {argv[0:3]} failed ({result.returncode}): {result.stderr[-1500:]}")
         return result.stdout
 
-    def preflight(self):
+    def preflight(self, *, require_publication=True):
         user = self.api.api("user")
         target = self.api.api(f"repos/{self.target}")
         if not self.data.get('existing_issue'):
@@ -166,10 +166,12 @@ class LiveRun:
                     has_pull_requests=target.get('has_pull_requests'),
                     pull_request_creation_policy=target.get('pull_request_creation_policy'),
                     viewer_permissions=target.get('permissions'))
-        check(target.get('has_pull_requests') is not False, 'Target has disabled pull request creation')
-        check(not (target.get('pull_request_creation_policy') == 'collaborators_only'
-                   and target.get('permissions', {}).get('push') is False),
-              'Target restricts PR creation to collaborators; publisher has no write access')
+        publication_errors = []
+        if target.get('has_pull_requests') is False:
+            publication_errors.append('Target has disabled pull request creation')
+        if (target.get('pull_request_creation_policy') == 'collaborators_only'
+                and target.get('permissions', {}).get('push') is False):
+            publication_errors.append('Target restricts PR creation to collaborators; publisher has no write access')
         workflow = self.api.api(f"repos/{self.control}/actions/workflows/engine2.yml")
         check(workflow['state'] == 'active', "Production delivery workflow inactive")
         control = self.api.api(f"repos/{self.control}")
@@ -182,6 +184,8 @@ class LiveRun:
                          deployed_sha=deployed, local_sha=local)
         self.record('ENVIRONMENT', 'PASS', login=user['login'], deployed_sha=deployed,
                     local_sha=local, workflow=workflow['html_url'], issues_enabled=target['has_issues'])
+        if require_publication:
+            check(not publication_errors, '; '.join(publication_errors))
 
     def intake(self):
         """Inspect deployed intake wiring and actual discovery queue receipts."""
@@ -262,15 +266,17 @@ class LiveRun:
         self.save()
 
     def provision(self):
-        self.preflight()
         if self.data.get('existing_issue'):
             number = self.data['existing_issue']
             context = self.api.issue_context(self.target, number)
             check(context['issue']['state'] == 'open', 'Original issue is not open')
             self.data.update(issue=number, issue_url=context['issue']['html_url'], task_id=task_id(self.target, number))
+            self.save()
+            self.preflight()
             self.record('FIXTURE', 'PASS', issue=self.data['issue_url'], existing_original=True,
                         created_or_modified=False)
             return
+        self.preflight()
         check(not self.data.get('issue'), "Fixture already exists; resume admit/dispatch/observe")
         if self.data.get('issue_title'):
             # Recover a real accepted create with a lost client acknowledgement.
@@ -572,7 +578,7 @@ class LiveRun:
 
     def faults(self):
         """Real remote storage/transport failures. Seeded states are fault inputs, not E2E receipts."""
-        self.preflight()
+        self.preflight(require_publication=False)
         branch = 'live-integration/' + self.data['id']
         store = StateStore(self.api, self.control)
         store.branch = branch
@@ -859,8 +865,17 @@ class LiveRun:
             # Continue collecting real delivery receipts; final acceptance still
             # requires the intake case and every other required case to pass.
             self.record('LIVE_INTAKE', 'FAIL', diagnostic=str(exc)[:2000])
-        if not self.data.get('issue'):
-            self.provision()
+        blockers = []
+        try:
+            if not self.data.get('issue'):
+                self.provision()
+            else:
+                self.preflight()
+        except (AssertionError, GitHubError) as exc:
+            self.record('TARGET_PREFLIGHT', 'FAIL', diagnostic=str(exc)[:2000])
+            if not (self.data.get('existing_issue') and self.data.get('issue') and self.data.get('deployed_sha')):
+                raise
+            blockers.append(str(exc))
         self.faults()
         if not self.data.get('negative_dispatch'):
             self.negative_claim()
@@ -870,6 +885,7 @@ class LiveRun:
             if not self.data.get('negative_claim_passed'):
                 time.sleep(20)
         check(self.data.get('negative_claim_passed'), 'Invalid-generation workflow observation timed out')
+        check(not blockers, 'Delivery blocked; independent fault checks completed: ' + '; '.join(blockers))
         if not self.data.get('admitted'):
             self.admit()
         if not self.data.get('dispatch_id'):
