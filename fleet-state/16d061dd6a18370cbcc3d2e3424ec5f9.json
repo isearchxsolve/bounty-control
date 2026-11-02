@@ -2,7 +2,7 @@
   "task_id": "16d061dd6a18370cbcc3d2e3424ec5f9",
   "repo": "QuantumSavory/QuantumSavory.jl",
   "issue_number": 138,
-  "status": "DISPATCHING",
+  "status": "DISPATCHED",
   "dispatch_id": "9d2635922e384e3d9680f8c5dd1db477",
   "admission": {
     "funding": {
@@ -44,7 +44,7 @@
   ],
   "dispatched_at": "2026-11-02T13:55:50.251404+00:00",
   "attempt": 1,
-  "updated_at": "2026-11-02T13:55:50.251419+00:00",
+  "updated_at": "2026-11-02T13:55:51.938112+00:00",
   "owner": "41452958346:1",
   "previous_owner": null,
   "previous_status": "DISPATCHED",
