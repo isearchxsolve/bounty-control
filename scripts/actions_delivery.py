@@ -24,7 +24,7 @@ from bounty_admission import competition, TRUSTED_BOTS
 # same classes and must never import this adapter back (it is imported lazily here).
 from delivery_errors import (ClineBudgetExhausted, ClineDeliverableInvalid,
                              ClineDeliverableMissing, InfrastructureFault, PreparationRace,
-                             RunnerShutdown, validate_preparation)
+                             RunnerShutdown, PreparationContractViolation, validate_preparation)
 
 
 def write_json_atomic(path, document):
@@ -592,7 +592,19 @@ def engineer():
                 "https://github.com/" + repo):
             raise ValueError("Unexpected upstream remote")
         plan = prepared["plan"]
-        validate_plan_contract(plan, prepared.get("report_path"))
+        for attempt in range(3):
+            try:
+                validate_plan_contract(plan, prepared.get("report_path"))
+                break
+            except PreparationContractViolation as exc:
+                if attempt == 2:
+                    raise
+                repaired, candidate, repair_error = worker.cline_supervise_delivery_phase(
+                    root, repo, number, 'preparation', str(exc), plan)
+                if not repaired:
+                    raise PreparationContractViolation(prepared.get('report_path'), repair_error) from exc
+                plan = candidate
+        prepared['plan'] = plan
         # Admission judgment belongs to the entry door. Execute Cline's native
         # plan and return actual command failures to Cline for repair; a second
         # model's plan approval must not prevent implementation from starting.
