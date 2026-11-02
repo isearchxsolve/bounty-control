@@ -2,6 +2,9 @@
 
 **Result: FAILED in production engineering; not an end-to-end pass.**
 
+This is the original failure record. The subsequent repair and successful live rerun
+are documented in [the repair receipt](PIPELINE-REPAIR-RECEIPT-2026-11-02.md).
+
 This report comes from newly executed real service calls and GitHub Actions jobs, not
 mock responses or replayed historical success. Production code was not patched to make
 the test green. The live driver, workflow and run instructions are in

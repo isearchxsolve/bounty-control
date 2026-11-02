@@ -330,7 +330,9 @@ class LiveRun:
         second, _ = store.read(self.data['task_id'])
         check(first['status'] == second['status'] == 'DELIVERED', 'Merge/replay did not settle to DELIVERED')
         check(second.get('payment_status') == 'UNVERIFIED', 'Merge was incorrectly treated as payment')
-        self.data['end_to_end_passed'] = True
+        self.data.update(end_to_end_passed=True, remote_status=second['status'],
+                         payment_status=second.get('payment_status'))
+        (self.folder / 'terminal-state.json').write_text(json.dumps(second, indent=2), encoding='utf-8')
         self.record('MERGE_AND_RECONCILE_REPLAY', 'PASS', pr=self.data['pr_url'], payment='UNVERIFIED')
 
     def audit(self):

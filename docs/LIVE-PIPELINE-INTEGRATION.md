@@ -9,6 +9,9 @@ successful engineering/publication receipt.
 The existing offline master suite is a separate regression layer. It is not live
 end-to-end evidence and does not satisfy this suite's acceptance condition.
 
+The first fully successful campaign, including 19 real fault cases and issue-to-merge
+delivery, is recorded in [the repair receipt](PIPELINE-REPAIR-RECEIPT-2026-11-02.md).
+
 ## Run
 
 ```powershell
