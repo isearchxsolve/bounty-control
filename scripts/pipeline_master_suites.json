@@ -240,6 +240,10 @@
     {
       "file": "test_live_pipeline_driver.py",
       "mode": "script"
+    },
+    {
+      "file": "test_live_defect_regressions.py",
+      "mode": "script"
     }
   ]
 }

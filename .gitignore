@@ -10,3 +10,5 @@ __pycache__/
 
 # live thinking probes (agent scratch worktrees)
 _probe/
+.coverage
+coverage.json

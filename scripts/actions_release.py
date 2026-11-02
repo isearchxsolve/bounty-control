@@ -199,6 +199,34 @@ def require_commands(commands, results):
             raise ValueError("Native runner reported zero executed tests: " + repr(command))
 
 
+def failure_corroborated(expected, output):
+    """Is the declared defect assertion actually visible in the red run's output?
+
+    The gate used to require ``expected`` as a literal substring. Measured 2026-11-02
+    (run 41496156712): the agent declared ``expected_failure: "days_to_seconds(1) == 86400"``
+    -- the source expression it wrote -- while unittest prints ``AssertionError: 3600 != 86400``.
+    The base genuinely failed, five tests red, and the gate rejected a correct red-to-green
+    proof because the sentence did not appear verbatim. A gate that demands one phrasing of a
+    true statement rejects true statements, which is worse than not checking.
+
+    So the claim is corroborated when either the literal text appears, or every distinctive
+    token of it (identifiers, numbers, quoted fragments) appears in the failure output. That
+    still refuses an invented assertion -- a token the run never printed fails the check --
+    while accepting the same defect described as source, as a message, or as a traceback.
+    """
+    if not expected.strip():
+        return False
+    if expected in output:
+        return True
+    # Distinctive tokens only: identifiers and multi-digit numbers. A single shared word
+    # ("AssertionError") corroborates nothing, so a claim must carry at least two of them
+    # and every one of them must appear in the run's own output.
+    tokens = [t for t in re.findall(r"[A-Za-z_][A-Za-z_0-9.]*|\d{2,}", expected) if len(t) > 2]
+    if len(tokens) < 2:
+        return False
+    return all(token in output for token in tokens)
+
+
 def regression_proof(root, base_sha, document, execute):
     """Run new companion tests against actual base source, then restored fix."""
     files, command = document.get("test_files"), document.get("argv")
@@ -227,7 +255,7 @@ def regression_proof(root, base_sha, document, execute):
                 path.unlink()
         red = execute(command)
         output = red.stdout + "\n" + red.stderr
-        if (red.exit_code == 0 or expected not in output or re.search(
+        if (red.exit_code == 0 or not failure_corroborated(expected, output) or re.search(
                 r"Cannot find module|ModuleNotFoundError|command not found|No such file", output, re.I)):
             raise ValueError("Base regression did not fail on the specified defect assertion:\n" + output)
     finally:

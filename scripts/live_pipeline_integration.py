@@ -11,6 +11,7 @@ from concurrent.futures import ThreadPoolExecutor
 from datetime import datetime, timezone
 import json
 import os
+import re
 import sqlite3
 from pathlib import Path
 import subprocess
@@ -358,6 +359,22 @@ class LiveRun:
         (work / 'result.json').write_text(json.dumps(outcome, indent=2), encoding='utf-8')
         with contextlib.closing(sqlite3.connect(work / 'agent-queue.sqlite3')) as con:
             rows = con.execute('SELECT task_id,payload,disposition FROM decisions').fetchall()
+        # A scout that never wrote a row has a reason, and it is in the scout's own result.
+        # Measured 2026-11-02: the door died on "TokenHarbor router HTTP 429: You've used this
+        # period's free allowance", but this assertion reported only "Real scout failed", so the
+        # one fact that explained the run -- an exhausted provider quota, not a code defect --
+        # was thrown away and the failure looked like a pipeline bug. Report the reason.
+        if not rows:
+            scout = self.folder / 'scout-result.json'
+            detail = {}
+            if scout.is_file():
+                try:
+                    detail = json.loads(scout.read_text(encoding='utf-8'))
+                except ValueError:
+                    detail = {}
+            tail = str(detail.get('tail') or '')[:900]
+            raise AssertionError('Real scout failed before writing a row: '
+                                 + (tail or 'no scout-result.json retained; see scout/agent.log'))
         check(len(rows) == 1 and rows[0][0] == self.data['task_id'], 'Production search did not queue exactly the scoped original')
         check(rows[0][2] == 'capacity_wait', f'Production queue did not defer at zero dispatch budget: {outcome}')
         state, state_sha = StateStore(self.api, self.control).read(self.data['task_id'])
@@ -714,7 +731,13 @@ class LiveRun:
             'baseline_runs': baseline, 'state_sha': sha, 'state': before, 'submitted_at': self.now(),
             'task_id': identity, 'issue': self.data['negative_issue']}
         self.save()  # An ambiguous POST must never be blindly replayed.
+        # Dispatch at a ref that is actually a branch. ``control_branch`` is only written by
+        # preflight(), which this phase does not call, so the fallback has to be a real branch
+        # name -- never a commit SHA: the dispatch API answers HTTP 422 "No ref found" for a
+        # SHA, which reads as a transport fault rather than the wrong-ref mistake it is.
         branch = self.data.get('control_branch') or self.api.api(f'repos/{self.control}')['default_branch']
+        check(isinstance(branch, str) and branch and not re.fullmatch(r'[0-9a-f]{40}', branch),
+              f'Negative dispatch needs a branch name, not {branch!r}')
         try:
             self.api.api(f'repos/{self.control}/actions/workflows/engine2.yml/dispatches', 'POST', {
                 'ref': branch, 'inputs': {'mode': 'deliver', 'target_repo': self.target,

@@ -117,8 +117,12 @@ class GitHub:
                 return json.loads(result.stdout) if result.stdout.strip() else None
             # gh itself masks authentication; do not include body/environment.
             message = result.stderr.decode("utf-8", errors="replace")[-1500:]
+            # Name the endpoint on a terminal failure. Measured 2026-11-02 (run 41488848364):
+            # publish failed with a bare "gh: Not Found (HTTP 404)", which cannot distinguish a
+            # deleted branch from a wrong repo, a missing ref or an absent PR -- four different
+            # repairs. The endpoint is not secret and is the one fact needed to act on it.
             if not self.THROTTLE.search(message) or attempt + 1 >= self.THROTTLE_TRIES:
-                raise GitHubError(message)
+                raise GitHubError(f"{message.strip()} [endpoint: {method} {endpoint[:200]}]")
             wait = self.rate_limit_wait(endpoint, message, environment)
             if wait >= deadline - time.monotonic():
                 raise GitHubError("GitHub throttle exceeds remaining observation budget: " + message)
