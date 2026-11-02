@@ -46,7 +46,11 @@ jobs:
         BOUNTY_ENTRY_DOOR: ${{ vars.ENTRY_DOOR || 'cline' }}
         BOUNTY_ENTRY_MODEL: ${{ vars.ENTRY_MODEL || 'deepseek-v4.1-flash:free' }}
         TOKENHARBOR_MODEL: 'deepseek-v4.1-flash:free'
-        NVIDIA_MODEL: ${{ vars.NVIDIA_MODEL || 'deepseek-v4.1-flash:free' }}
+        # The parachute's brain, named the one variable the worker's failover, the door's proxy
+        # and nvidia_router all read. Measured 2026-11-02: this line used to set NVIDIA_MODEL to
+        # the TokenHarbor model name, which nothing read and NVIDIA does not serve, so when
+        # TokenHarbor was exhausted every one of the door's turns died before writing a row.
+        NVIDIA_ROUTER_MODEL: ${{ vars.NVIDIA_DELIVERY_MODEL || 'nvidia/nemotron-3.5-super-vl-120b-a12b' }}
         BOUNTY_AGENT_ROUNDS: '2'
         BOUNTY_AGENT_TIMEOUT: '800'
       run: python3 -u scripts/actions_dispatch.py --live --once --queries-per-lane 3 --max-dispatches 2 --lane ${{ vars.ACTIVE_LANES || 'all' }}

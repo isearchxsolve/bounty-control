@@ -19,7 +19,14 @@ sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 
 from nvidia_router import DEFAULT_MODEL, NvidiaRouter  # noqa: E402
 
-ROUTER = NvidiaRouter(model=os.environ.get("NVIDIA_MODEL", DEFAULT_MODEL))
+# One variable names the parachute's brain, and it is NVIDIA_ROUTER_MODEL everywhere else in
+# this pipeline (the worker's failover and engine2.yml both read it). This proxy used to read
+# NVIDIA_MODEL instead, so a workflow that configured only NVIDIA_ROUTER_MODEL silently left
+# the door's fallback aimed at a model NVIDIA does not serve -- measured 2026-11-02, discovery
+# runs 41417432357 and 41420103753, where both rounds died before writing a single row.
+ROUTER = NvidiaRouter(model=(os.environ.get("NVIDIA_ROUTER_MODEL")
+                             or os.environ.get("NVIDIA_MODEL")
+                             or DEFAULT_MODEL))
 
 
 def _sse_frames(completion: dict, model: str) -> bytes:

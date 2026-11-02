@@ -25,7 +25,15 @@ import uuid
 from typing import Callable, List, Optional, Tuple
 
 NIM_URL = "https://integrate.api.nvidia.com/v1/chat/completions"
-DEFAULT_MODEL = os.environ.get("NVIDIA_ROUTER_MODEL", "deepseek-ai/deepseek-v4.1-flash")
+# The parachute's brain. Measured 2026-10-30 and written at the top of this file: Nemotron 3.5
+# Super VL returns valid Cline-style tool calls in ~1.5s, and Nemotron-3-Ultra at ~14s is
+# unusable for the hundreds of calls one engineering task makes. The default used to be the
+# TokenHarbor model name, which NVIDIA's endpoint does not serve: measured live 2026-11-02
+# (discovery runs 41417432357 and 41420103753), the door's every turn died with "No Token
+# Harbor key is currently ready", the failover answered from a router built with this default,
+# and the parachute could not open because it was aimed at a model that does not exist here.
+DEFAULT_MODEL = os.environ.get("NVIDIA_ROUTER_MODEL",
+                              "nvidia/nemotron-3.5-super-vl-120b-a12b")
 KEYS_ENV = "NVIDIA_KEYS_JSON"
 SINGLE_KEY_ENV = "NVIDIA_API_KEY"
 

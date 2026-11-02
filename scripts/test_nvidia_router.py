@@ -128,5 +128,41 @@ class KeyLoading(unittest.TestCase):
                 os.environ[nr.KEYS_ENV] = saved
 
 
+class ParachuteModelContract(unittest.TestCase):
+    """The parachute must be aimed at a brain NVIDIA actually serves.
+
+    Measured live 2026-11-02 (discovery runs 41417432357 and 41420103753): TokenHarbor was
+    exhausted, either round's failover answered from a router built with this module's default
+    model, and that default was the TokenHarbor model name -- which NVIDIA's endpoint does not
+    serve. Both rounds died with "No Token Harbor key is currently ready" before writing a
+    single row, so the door produced nothing at all for two consecutive pulses.
+
+    This module's own header records the measurement that contradicts the old default: Nemotron
+    3.5 Super VL returns valid Cline-style tool calls in ~1.5s, and Nemotron-3-Ultra at ~14s is
+    unusable for the hundreds of calls one engineering task makes.
+    """
+
+    def test_the_default_model_is_a_nemotron_model(self):
+        self.assertTrue(nr.DEFAULT_MODEL.startswith("nvidia/nemotron"),
+                        f"the parachute's default brain must be Nemotron, got {nr.DEFAULT_MODEL!r}")
+
+    def test_the_default_model_is_not_the_primary_brain(self):
+        import kaggle_engine_worker as worker
+        primary = worker.CLINE_MODEL if hasattr(worker, "CLINE_MODEL") else None
+        if primary:
+            self.assertNotEqual(nr.DEFAULT_MODEL, primary)
+        # The name NVIDIA does not serve is the one that used to be the default here.
+        self.assertNotIn("deepseek-ai/", nr.DEFAULT_MODEL)
+
+    def test_a_router_built_with_no_model_answers_as_the_measured_brain(self):
+        router = nr.NvidiaRouter(keys=["k1"], model=nr.DEFAULT_MODEL)
+        self.assertEqual(router.model, nr.DEFAULT_MODEL)
+
+    def test_the_measured_brain_agrees_with_the_workers_failover_constant(self):
+        """One variable, one meaning: the failover and this module must not disagree."""
+        import kaggle_engine_worker as worker
+        self.assertEqual(worker.nvidia_delivery_model(), nr.DEFAULT_MODEL)
+
+
 if __name__ == "__main__":
     unittest.main(verbosity=2)
