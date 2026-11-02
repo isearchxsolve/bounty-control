@@ -1,0 +1,146 @@
+{
+  "task_id": "18c9543b2d459f511e68aa1c19182cf9",
+  "repo": "s6pa1rta3n-lab/universal_bounty_fleet",
+  "issue_number": 1,
+  "status": "DISPATCHING",
+  "dispatch_id": "a174b7a666854693af5d42c2f7357918",
+  "admission": {
+    "funding": {
+      "amount": "1200",
+      "currency": "USD",
+      "payer": "Ankur-Thakur-NEU",
+      "source_url": "https://github.com/s6pa1rta3n-lab/universal_bounty_fleet/issues/1#issuecomment-5447618845",
+      "usd_value": "1200",
+      "quote": {
+        "basis": "USD face value",
+        "usd_rate": "1"
+      },
+      "raw": "\ud83d\udcb0 **Bounty Confirmed**: 1,200.00 USD has been locked in GrantFox smart contract escrow.",
+      "source_author_association": "COLLABORATOR",
+      "source_author_login": "Ankur-Thakur-NEU"
+    },
+    "agent_reason": "Collaborator Ankur-Thakur-NEU hung $1,200 USD for the fail-closed auth_bypass fix, owner confirmed escrow, scope bounded to authorization enforcement, repo merges outside work.",
+    "scope_quote": "Second commit removes the bypass.",
+    "code_evidence": {
+      "is_product_code": true,
+      "path": "app/audit/murder_board.py",
+      "sha": "422e8b5f3585a9d5e0613a2924c493141d81b19b",
+      "quote": "- Pillar 2 (Authorization Enforcement): Mandates `require_auth()` / caller validation on state-modifying functions and contracts. Rejects commented-out or bypassed authorization."
+    },
+    "source_issue": "https://github.com/s6pa1rta3n-lab/universal_bounty_fleet/issues/1",
+    "funding_status": "PRICED_OFFER",
+    "lane": "normal",
+    "task_id": "18c9543b2d459f511e68aa1c19182cf9",
+    "source_revision": "df431292e879728face3e884b8b300556df82779c66d533f907c6ff8153cf9a0"
+  },
+  "dispatch_attempt": 1,
+  "sovereign_admission": true,
+  "competition": {
+    "blocking": false,
+    "nominal": [
+      {
+        "pr": "https://github.com/s6pa1rta3n-lab/universal_bounty_fleet/pull/14",
+        "author": "karanp0202",
+        "number": 14,
+        "author_merged_in_repo": 0,
+        "check_runs": 0,
+        "maintainer_engagement": 0,
+        "reason": "nominal_attempt_only"
+      },
+      {
+        "pr": "https://github.com/s6pa1rta3n-lab/universal_bounty_fleet/pull/12",
+        "author": "s6pa1rta3n-lab",
+        "number": 12,
+        "author_merged_in_repo": 0,
+        "check_runs": 0,
+        "maintainer_engagement": 0,
+        "reason": "nominal_attempt_only"
+      },
+      {
+        "pr": "https://github.com/s6pa1rta3n-lab/universal_bounty_fleet/pull/5",
+        "author": "rafaio1",
+        "number": 5,
+        "author_merged_in_repo": 0,
+        "check_runs": 0,
+        "maintainer_engagement": 0,
+        "reason": "nominal_attempt_only"
+      },
+      {
+        "pr": "https://github.com/s6pa1rta3n-lab/universal_bounty_fleet/pull/3",
+        "author": "s6pa1rta3n-lab",
+        "number": 3,
+        "author_merged_in_repo": 0,
+        "history_cached": true,
+        "check_runs": 0,
+        "maintainer_engagement": 0,
+        "reason": "nominal_attempt_only"
+      },
+      {
+        "pr": "https://github.com/s6pa1rta3n-lab/universal_bounty_fleet/pull/3",
+        "author": "s6pa1rta3n-lab",
+        "number": 3,
+        "author_merged_in_repo": 0,
+        "history_cached": true,
+        "check_runs": 0,
+        "maintainer_engagement": 0,
+        "reason": "nominal_attempt_only"
+      },
+      {
+        "pr": "https://github.com/s6pa1rta3n-lab/universal_bounty_fleet/pull/5",
+        "author": "rafaio1",
+        "number": 5,
+        "author_merged_in_repo": 0,
+        "history_cached": true,
+        "check_runs": 0,
+        "maintainer_engagement": 0,
+        "reason": "nominal_attempt_only"
+      },
+      {
+        "pr": "https://github.com/s6pa1rta3n-lab/universal_bounty_fleet/pull/9",
+        "author": "rafaio1",
+        "number": 9,
+        "author_merged_in_repo": 0,
+        "history_cached": true,
+        "check_runs": 0,
+        "maintainer_engagement": 0,
+        "reason": "nominal_attempt_only"
+      },
+      {
+        "pr": "https://github.com/s6pa1rta3n-lab/universal_bounty_fleet/pull/7",
+        "author": "rafaio1",
+        "number": 7,
+        "author_merged_in_repo": 0,
+        "history_cached": true,
+        "check_runs": 0,
+        "maintainer_engagement": 0,
+        "reason": "nominal_attempt_only"
+      },
+      {
+        "pr": "https://github.com/s6pa1rta3n-lab/universal_bounty_fleet/pull/14",
+        "author": "karanp0202",
+        "number": 14,
+        "author_merged_in_repo": 0,
+        "history_cached": true,
+        "check_runs": 0,
+        "maintainer_engagement": 0,
+        "reason": "nominal_attempt_only"
+      },
+      {
+        "pr": "https://github.com/s6pa1rta3n-lab/universal_bounty_fleet/pull/12",
+        "author": "s6pa1rta3n-lab",
+        "number": 12,
+        "author_merged_in_repo": 0,
+        "history_cached": true,
+        "check_runs": 0,
+        "maintainer_engagement": 0,
+        "reason": "nominal_attempt_only"
+      }
+    ]
+  },
+  "lanes": [
+    "normal"
+  ],
+  "dispatched_at": "2026-11-02T11:12:35.392988+00:00",
+  "attempt": 0,
+  "updated_at": "2026-11-02T11:12:35.393004+00:00"
+}
