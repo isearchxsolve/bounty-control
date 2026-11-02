@@ -2,7 +2,7 @@
   "task_id": "18c9543b2d459f511e68aa1c19182cf9",
   "repo": "s6pa1rta3n-lab/universal_bounty_fleet",
   "issue_number": 1,
-  "status": "DISPATCHING",
+  "status": "DISPATCHED",
   "dispatch_id": "a174b7a666854693af5d42c2f7357918",
   "admission": {
     "funding": {
@@ -142,5 +142,5 @@
   ],
   "dispatched_at": "2026-11-02T11:12:35.392988+00:00",
   "attempt": 0,
-  "updated_at": "2026-11-02T11:12:35.393004+00:00"
+  "updated_at": "2026-11-02T11:12:37.568132+00:00"
 }
