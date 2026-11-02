@@ -248,6 +248,10 @@
     {
       "file": "test_live_phase_offline.py",
       "mode": "script"
+    },
+    {
+      "file": "test_live_dispatch_offline.py",
+      "mode": "script"
     }
   ]
 }

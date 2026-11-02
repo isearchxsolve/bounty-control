@@ -73,14 +73,15 @@ class ScopedStore(StateStore):
 
 
 class LiveRun:
-    def __init__(self, args, *, api=None, command=None):
-        """``api`` and ``command`` are injection seams, not test hooks in production.
+    def __init__(self, args, *, api=None, command=None, store=None):
+        """``api``, ``command`` and ``store`` are injection seams, not test hooks in production.
 
-        Every phase drives real remote state through ``self.api`` and shells out through
-        ``self.command``. With both hard-wired, the only way to execute a phase was a live
-        repository, which is why the driver sat at 14.3% line coverage with every phase at
-        0.0%: the contracts around the driver were tested and the driver itself was not.
-        Defaults are unchanged, so a live campaign behaves exactly as before.
+        Every phase drives real remote state through ``self.api``, shells out through
+        ``self.command`` and reads the durable ledger through ``self.ledger()``. With all
+        three hard-wired, the only way to execute a phase was a live repository, which is
+        why the driver sat at 14.3% line coverage with every phase at 0.0%: the contracts
+        around the driver were tested and the driver itself was not. Defaults are unchanged,
+        so a live campaign behaves exactly as before.
         """
         self.args = args
         self.folder = args.run_dir.resolve()
@@ -88,6 +89,7 @@ class LiveRun:
         self.path = self.folder / "run.json"
         self.api = api if api is not None else GitHub()
         self._command = command
+        self._store = store
         self.data = json.loads(self.path.read_text()) if self.path.exists() else {
             "id": "r" + uuid.uuid4().hex[:12], "target": repository(args.target),
             "control": repository(args.control), "started_at": self.now(),
@@ -139,6 +141,10 @@ class LiveRun:
             if len(batch) < 100:
                 return rows
             page += 1
+
+    def ledger(self):
+        """The durable ledger for this run: the injected one in a test, real GitHub otherwise."""
+        return self._store if self._store is not None else StateStore(self.api, self.control)
 
     def command(self, argv, *, env=None, timeout=120):
         if self._command is not None:
@@ -430,7 +436,7 @@ class LiveRun:
     def dispatch(self):
         check(not self.data.get('closed'), 'Campaign closed; use a new run directory')
         check(self.data.get('admitted'), 'Real admission required')
-        store = StateStore(self.api, self.control)
+        store = self.ledger()
         old, _ = store.read(self.data['task_id'])
         if old and not str(old.get('status', '')).startswith('FAILED'):
             check(old.get('admission') == self.data['admitted']['admission'], 'Existing unrelated task record')
