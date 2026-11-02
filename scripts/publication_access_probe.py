@@ -27,6 +27,8 @@ def observe(endpoint):
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument('--repo', required=True)
+    parser.add_argument('--expect-policy', choices=['all', 'collaborators_only'])
+    parser.add_argument('--expect-push', choices=['true', 'false'])
     args = parser.parse_args()
     credential = os.environ.get('GH_TOKEN') or os.environ.get('GITHUB_TOKEN') or ''
     kind = ('fine-grained PAT' if credential.startswith('github_pat_') else
@@ -35,12 +37,21 @@ def main():
     auth, user = observe('user')
     repository, metadata = observe('repos/' + args.repo)
     pulls, rows = observe('repos/' + args.repo + '/pulls?per_page=1')
+    checks = []
+    if args.expect_policy:
+        checks.append(metadata.get('pull_request_creation_policy') == args.expect_policy)
+    if args.expect_push:
+        checks.append(metadata.get('permissions', {}).get('push') is (args.expect_push == 'true'))
     print(json.dumps({'credential_kind': kind, 'authentication': auth, 'login': user.get('login'),
                       'repository_access': repository, 'repository': metadata.get('full_name'),
+                      'has_pull_requests': metadata.get('has_pull_requests'),
+                      'pull_request_creation_policy': metadata.get('pull_request_creation_policy'),
                       'viewer_permissions': metadata.get('permissions'),
                       'pulls_read_access': pulls, 'pulls_read_is_array': isinstance(rows, list),
+                      'expected_facts_passed': all(checks) if checks else None,
                       'writes_performed': False}, indent=2))
+    return 0 if auth['success'] and repository['success'] and pulls['success'] and all(checks) else 1
 
 
 if __name__ == '__main__':
-    main()
+    raise SystemExit(main())
