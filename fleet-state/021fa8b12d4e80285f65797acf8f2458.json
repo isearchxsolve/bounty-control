@@ -3,5 +3,6 @@
   "status": "FAULT_FIXTURE",
   "marker": "rc2e2689e6ee7",
   "text": "Unicode \u20b9 \u65e5\u672c\u8a9e\nsecond line",
-  "updated_at": "2026-11-02T16:22:13.973178+00:00"
+  "updated_at": "2026-11-02T16:22:16.508072+00:00",
+  "counter": 1
 }
