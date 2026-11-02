@@ -1,8 +1,10 @@
 {
   "task_id": "bd39667f26e9bde9596b20bc44f8b3e0",
-  "status": "FAULT_FIXTURE",
-  "marker": "ra91b44580f23",
-  "text": "Unicode \u20b9 \u65e5\u672c\u8a9e\nsecond line",
-  "updated_at": "2026-11-02T22:11:29.820918+00:00",
-  "counter": 1
+  "repo": "fiztoz/uptime-phoenix",
+  "issue_number": 198,
+  "status": "DISPATCHED",
+  "dispatch_id": "353c9dbae113421e90c171d52ada5792",
+  "attempt": 0,
+  "fault_fixture": true,
+  "updated_at": "2026-11-02T22:11:32.028715+00:00"
 }
