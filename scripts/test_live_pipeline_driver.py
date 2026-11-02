@@ -29,7 +29,47 @@ class JournalAcceptanceContract(unittest.TestCase):
             self.assertFalse(json.loads(run.path.read_text())['end_to_end_passed'])
 
 
+class RequiredCaseContract(unittest.TestCase):
+    def test_every_case_that_gates_green_is_named_in_the_contract(self):
+        # A case silently dropped from REQUIRED_CASES stops gating end_to_end_passed:
+        # coverage would never mark it NOT_RUN, so a run missing that evidence reads green.
+        self.assertEqual(len(REQUIRED_CASES), len(set(REQUIRED_CASES)), 'Duplicate required case')
+        for case in ('ENVIRONMENT', 'LIVE_INTAKE', 'LIVE_MODEL_ADMISSION', 'REAL_PUBLICATION',
+                     'ACTIONS_TERMINAL', 'MERGE_AND_RECONCILE_REPLAY',
+                     'LIVE_RELEASE_TASK_IDENTITY', 'LIVE_RELEASE_HEAD', 'LIVE_RELEASE_TREE',
+                     'LIVE_RELEASE_FILE_MANIFEST', 'LIVE_RELEASE_NATIVE_RECEIPTS_MISSING',
+                     'LIVE_RELEASE_REGRESSION_NEVER_RED', 'LIVE_RELEASE_REGRESSION_NOT_GREEN'):
+            self.assertIn(case, REQUIRED_CASES, f'{case} no longer gates green')
+
+    def test_a_run_missing_any_required_case_is_not_green(self):
+        with tempfile.TemporaryDirectory() as directory:
+            run = LiveRun(SimpleNamespace(run_dir=Path(directory), target='owner/repo',
+                                          control='owner/control', issue=None))
+            run.data['events'] = [{'case': name, 'status': 'PASS'} for name in REQUIRED_CASES]
+            run.save()
+            self.assertTrue(all(status == 'PASS' for status in run.data['coverage'].values()))
+            for missing in REQUIRED_CASES:
+                run.data['events'] = [{'case': name, 'status': 'PASS'}
+                                      for name in REQUIRED_CASES if name != missing]
+                run.save()
+                self.assertEqual(run.data['coverage'][missing], 'NOT_RUN')
+                self.assertFalse(run.data['end_to_end_passed'],
+                                 f'A run missing {missing} still reported green')
+
+
 class DrainArtifactContract(unittest.TestCase):
+    def test_census_older_than_the_run_is_rejected_as_inherited_cache(self):
+        with tempfile.TemporaryDirectory() as directory:
+            folder = Path(directory)
+            run = {'run_started_at': '2026-11-03T01:00:00Z'}
+            stale = {'door_reason': 'HYDRATE_ONLY', 'at': '2026-11-02T23:00:00+00:00'}
+            (folder / 'census.jsonl').write_text(json.dumps(stale), encoding='utf-8')
+            with closing(sqlite3.connect(folder / 'agent-queue.sqlite3')) as con:
+                con.execute('CREATE TABLE decisions(disposition TEXT, at TEXT)')
+                con.commit()
+            with self.assertRaisesRegex(AssertionError, 'inherited stale cache'):
+                drain_evidence(folder, run)
+
     def test_fresh_workflow_cannot_hide_wrong_queue_or_unexamined_cached_rows(self):
         with tempfile.TemporaryDirectory() as directory:
             folder = Path(directory)
