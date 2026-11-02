@@ -2,7 +2,7 @@
   "task_id": "3ba86a2f9bb5b606b2af7d3d6b698996",
   "repo": "Spectral-Finance/lux",
   "issue_number": 62,
-  "status": "CLAIMED",
+  "status": "FAILED_ENGINEER",
   "dispatch_id": "3a1c69588e284d4486de24def6d60380",
   "admission": {
     "funding": {
@@ -301,7 +301,7 @@
   ],
   "dispatched_at": "2026-11-02T11:49:59.170290+00:00",
   "attempt": 1,
-  "updated_at": "2026-11-02T11:50:55.129542+00:00",
+  "updated_at": "2026-11-02T12:17:33.364329+00:00",
   "owner": "41439888442:1",
   "previous_owner": null,
   "previous_status": "DISPATCHED",
@@ -309,5 +309,20 @@
   "harness_sha": "b9f245366c7c6d94d52c8be985d41977a7c85187",
   "claimed_at": "2026-11-02T11:50:55.129497+00:00",
   "lease_expires_at": "2026-11-02T15:55:55.129510+00:00",
-  "preparation_budget_seconds": 14400
+  "preparation_budget_seconds": 14400,
+  "kind": "engineer",
+  "retryable": true,
+  "diagnostic": "BLOCKED_BASELINE: Repair turn finished without a decision: repair turn did not write a decision; it was aborted, killed or timed out",
+  "at": "2026-11-02T12:17:22.171758+00:00",
+  "failures": [
+    {
+      "run_url": "https://github.com/isearchxsolve/bounty-control/actions/runs/41439888442",
+      "status": "FAILED_ENGINEER",
+      "kind": "engineer",
+      "retryable": true,
+      "diagnostic": "BLOCKED_BASELINE: Repair turn finished without a decision: repair turn did not write a decision; it was aborted, killed or timed out",
+      "at": "2026-11-02T12:17:22.171758+00:00"
+    }
+  ],
+  "finished_at": "2026-11-02T12:17:32.731354+00:00"
 }
