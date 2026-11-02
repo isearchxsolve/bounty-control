@@ -2,7 +2,7 @@
   "task_id": "31e3b38b2cf49152b222244da678385b",
   "repo": "Spectral-Finance/lux",
   "issue_number": 96,
-  "status": "CLAIMED",
+  "status": "FAILED_ENGINEER",
   "dispatch_id": "f5cf5bd0c36b4ca891449ad4744975d2",
   "admission": {
     "funding": {
@@ -362,7 +362,7 @@
   ],
   "dispatched_at": "2026-11-02T12:00:44.835533+00:00",
   "attempt": 2,
-  "updated_at": "2026-11-02T12:01:52.648663+00:00",
+  "updated_at": "2026-11-02T12:25:24.335826+00:00",
   "owner": "41441256154:1",
   "previous_owner": "41440041106:1",
   "previous_status": "DISPATCHED",
@@ -371,12 +371,12 @@
   "claimed_at": "2026-11-02T12:01:52.648624+00:00",
   "lease_expires_at": "2026-11-02T16:06:52.648633+00:00",
   "preparation_budget_seconds": 14400,
-  "kind": "deliverable_invalid",
+  "kind": "engineer",
   "retryable": true,
-  "diagnostic": "Cline deliverable invalid at /tmp/fleet-artifacts/delivery-supervisor/83e9566f8649419c8260588683bf51fc.preparation.json: action=incomplete: the preparation skeleton was never replaced, so the agent finished without reporting",
+  "diagnostic": "BLOCKED_BASELINE: Repair turn finished without a decision: repair turn did not write a decision; it was aborted, killed or timed out",
   "path": "/tmp/fleet-artifacts/delivery-supervisor/83e9566f8649419c8260588683bf51fc.preparation.json",
   "reason": "action=incomplete: the preparation skeleton was never replaced, so the agent finished without reporting",
-  "at": "2026-11-02T11:58:33.104859+00:00",
+  "at": "2026-11-02T12:25:14.176786+00:00",
   "failures": [
     {
       "run_url": "https://github.com/isearchxsolve/bounty-control/actions/runs/41440041106",
@@ -387,7 +387,15 @@
       "path": "/tmp/fleet-artifacts/delivery-supervisor/83e9566f8649419c8260588683bf51fc.preparation.json",
       "reason": "action=incomplete: the preparation skeleton was never replaced, so the agent finished without reporting",
       "at": "2026-11-02T11:58:33.104859+00:00"
+    },
+    {
+      "run_url": "https://github.com/isearchxsolve/bounty-control/actions/runs/41441256154",
+      "status": "FAILED_ENGINEER",
+      "kind": "engineer",
+      "retryable": true,
+      "diagnostic": "BLOCKED_BASELINE: Repair turn finished without a decision: repair turn did not write a decision; it was aborted, killed or timed out",
+      "at": "2026-11-02T12:25:14.176786+00:00"
     }
   ],
-  "finished_at": "2026-11-02T11:58:42.337606+00:00"
+  "finished_at": "2026-11-02T12:25:23.937034+00:00"
 }
