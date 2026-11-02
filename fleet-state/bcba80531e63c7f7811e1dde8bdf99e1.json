@@ -2,7 +2,7 @@
   "task_id": "bcba80531e63c7f7811e1dde8bdf99e1",
   "repo": "getkcoin-alt/itsmay",
   "issue_number": 27,
-  "status": "CLAIMED",
+  "status": "FAILED_ENGINEER",
   "dispatch_id": "9b60100f755047f9882ae669e22cffe7",
   "admission": {
     "funding": {
@@ -43,7 +43,7 @@
   ],
   "dispatched_at": "2026-11-02T22:42:18.649983+00:00",
   "attempt": 3,
-  "updated_at": "2026-11-02T22:42:32.293171+00:00",
+  "updated_at": "2026-11-02T22:58:51.066210+00:00",
   "owner": "41539500180:1",
   "previous_owner": "41535145127:1",
   "previous_status": "DISPATCHED",
@@ -54,8 +54,8 @@
   "preparation_budget_seconds": 14400,
   "kind": "engineer",
   "retryable": true,
-  "diagnostic": "Cline preparation failed: error: No Token Harbor key is currently ready. |",
-  "at": "2026-11-02T22:15:14.612033+00:00",
+  "diagnostic": "Native plan source SHA-256 does not match the checkout",
+  "at": "2026-11-02T22:58:22.558899+00:00",
   "failures": [
     {
       "run_url": "https://github.com/isearchxsolve/bounty-control/actions/runs/41533728353",
@@ -72,7 +72,15 @@
       "retryable": true,
       "diagnostic": "Cline preparation failed: error: No Token Harbor key is currently ready. |",
       "at": "2026-11-02T22:15:14.612033+00:00"
+    },
+    {
+      "run_url": "https://github.com/isearchxsolve/bounty-control/actions/runs/41539500180",
+      "status": "FAILED_ENGINEER",
+      "kind": "engineer",
+      "retryable": true,
+      "diagnostic": "Native plan source SHA-256 does not match the checkout",
+      "at": "2026-11-02T22:58:22.558899+00:00"
     }
   ],
-  "finished_at": "2026-11-02T22:15:26.679530+00:00"
+  "finished_at": "2026-11-02T22:58:50.502368+00:00"
 }
