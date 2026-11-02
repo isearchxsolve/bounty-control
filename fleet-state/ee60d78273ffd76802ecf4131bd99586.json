@@ -1,0 +1,47 @@
+{
+  "task_id": "ee60d78273ffd76802ecf4131bd99586",
+  "repo": "isearchxsolve/oss-hunter-livefire",
+  "issue_number": 5,
+  "status": "DISPATCHING",
+  "dispatch_id": "0d6a550700ad499cb1f653f9ef1f14ed",
+  "admission": {
+    "funding": {
+      "payer": "isearchxsolve",
+      "source_url": "https://github.com/isearchxsolve/oss-hunter-livefire/issues/5",
+      "amount": "0",
+      "currency": "FOUNDER",
+      "usd_value": "0",
+      "quote": {
+        "basis": "Unpriced repository-owner request"
+      },
+      "raw": "No payment is promised or requested. Treat this as an unpriced owner request.",
+      "source_author_association": "OWNER",
+      "source_author_login": "isearchxsolve"
+    },
+    "agent_reason": "Owner (isearchxsolve, OWNER association) filed an unpriced, bounded request to correct days_to_seconds in live_cases/r332cf3a31d9b/duration.py (returns 3600 for 1 day instead of 86400) and add regression tests; no payment promised or requested. Source evidence confirms the product file and the faulty literal line, so this is a genuine bounded code change.",
+    "scope_quote": "Scope: fix live_cases/r332cf3a31d9b/duration.py and add regression tests in live_cases/r332cf3a31d9b/. Do not edit existing tests or unrelated source.",
+    "code_evidence": {
+      "path": "live_cases/r332cf3a31d9b/duration.py",
+      "sha": "9b8722e2cfd731b799beaff71d56ca9dfb92bf57",
+      "quote": "return days * 3600",
+      "is_product_code": true
+    },
+    "source_issue": "https://github.com/isearchxsolve/oss-hunter-livefire/issues/5",
+    "funding_status": "UNPRICED_OWNER_REQUEST",
+    "lane": "founder",
+    "task_id": "ee60d78273ffd76802ecf4131bd99586",
+    "source_revision": "eed8f8b64295393460b92a25ed54a912d9c0f537eb6035637e94660548e5616c"
+  },
+  "dispatch_attempt": 1,
+  "sovereign_admission": true,
+  "competition": {
+    "blocking": false,
+    "nominal": []
+  },
+  "lanes": [
+    "founder"
+  ],
+  "dispatched_at": "2026-11-02T16:30:29.418098+00:00",
+  "attempt": 0,
+  "updated_at": "2026-11-02T16:30:29.418116+00:00"
+}
