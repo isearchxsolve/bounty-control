@@ -2,8 +2,8 @@
   "task_id": "6a762aa6ac7bcb142634b471313b489d",
   "repo": "jorgedvp/aks-store-demo",
   "issue_number": 4,
-  "status": "FAILED_DELIVERABLE_MISSING",
-  "dispatch_id": "0b269cd6b36e45ebb7fdee5c4813b468",
+  "status": "DISPATCHED",
+  "dispatch_id": "1201f21909fe41b99aa7074d9f39b8c2",
   "admission": {
     "funding": {
       "payer": "jorgedvp",
@@ -31,7 +31,7 @@
     "task_id": "6a762aa6ac7bcb142634b471313b489d",
     "source_revision": "07f211f86114881acb1d250d6cad2686161a940cc238ad7ebee2f020fd6771e7"
   },
-  "dispatch_attempt": 3,
+  "dispatch_attempt": 4,
   "sovereign_admission": true,
   "competition": {
     "blocking": false,
@@ -40,9 +40,9 @@
   "lanes": [
     "founder"
   ],
-  "dispatched_at": "2026-11-02T22:42:08.359944+00:00",
+  "dispatched_at": "2026-11-02T22:59:49.347342+00:00",
   "attempt": 3,
-  "updated_at": "2026-11-02T22:49:27.869395+00:00",
+  "updated_at": "2026-11-02T22:59:49.347342+00:00",
   "owner": "41539473807:1",
   "previous_owner": "41535125426:1",
   "previous_status": "DISPATCHED",
@@ -87,5 +87,14 @@
   ],
   "finished_at": "2026-11-02T22:49:27.166135+00:00",
   "path": "/tmp/fleet-artifacts/delivery-supervisor/407cb7456f564624aae938419c0a817c.preparation.json",
-  "reason": "Mandatory native plan phase missing: builds"
+  "reason": "Mandatory native plan phase missing: builds",
+  "recovery_authorization": {
+    "task_id": "6a762aa6ac7bcb142634b471313b489d",
+    "previous_run": "https://github.com/isearchxsolve/bounty-control/actions/runs/41539473807",
+    "previous_state_sha": "b770e350191b09f617746fa52a9972c532df791c",
+    "previous_generation": "0b269cd6b36e45ebb7fdee5c4813b468",
+    "generation": "1201f21909fe41b99aa7074d9f39b8c2",
+    "reason": "User requested resume after production repair; one bounded fourth recovery attempt",
+    "at": "2026-11-02T22:59:47.368261+00:00"
+  }
 }
