@@ -642,6 +642,11 @@ class Tee:
     def __init__(self, stream, log):
         self.stream, self.log = stream, log
 
+    def __getattr__(self, name):
+        # Production modules configure stdout on Linux. Preserve the wrapped
+        # stream interface (reconfigure, encoding, fileno, isatty), not just write.
+        return getattr(self.stream, name)
+
     def write(self, value):
         self.log.write(value)
         self.log.flush()
