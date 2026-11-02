@@ -25,7 +25,7 @@ class GitHubError(RuntimeError):
 BOUNTY_ACCOUNT = (os.environ.get("BOUNTY_ACCOUNT")
                   or (os.environ.get("GITHUB_REPOSITORY") or "").split("/")[0]
                   or "isearchxsolve")
-DEFAULT_REPOSITORY = os.environ.get("BOUNTY_REPOSITORY") or BOUNTY_ACCOUNT + "/anonym-family-archive"
+DEFAULT_REPOSITORY = os.environ.get("BOUNTY_REPOSITORY") or BOUNTY_ACCOUNT + "/bounty-control"
 
 
 def repository(value):

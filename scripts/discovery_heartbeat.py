@@ -35,7 +35,7 @@ import time
 # niloydassana-maker, found that account's stale run, tried to dispatch there and died with
 # "HTTP 403: Must have admin rights", so the self-healing loop was dark by construction.
 DEFAULT_REPO = (os.environ.get("BOUNTY_REPOSITORY") or os.environ.get("GITHUB_REPOSITORY")
-                or "isearchxsolve/anonym-family-archive")
+or "isearchxsolve/bounty-control")
 DEFAULT_WORKFLOW = "bounty-discovery.yml"
 # None means: ask GitHub which branch this repository actually dispatches on. A compiled-in
 # branch name is a guess, and a guess is a refusal: measured 2026-11-01 (run 41256276495),

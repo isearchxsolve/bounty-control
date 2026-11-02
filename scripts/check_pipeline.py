@@ -12,7 +12,7 @@ except Exception as e:
 
 print()
 print("=== ALL PRs ===")
-result = subprocess.run(['gh', 'pr', 'list', '--repo', 'isearchxsolve/anonym-family-archive', '--state', 'all', '--limit', '10', '--json', 'number,title,state,createdAt,headRef'], capture_output=True, text=True)
+result = subprocess.run(['gh', 'pr', 'list', '--repo', 'isearchxsolve/bounty-control', '--state', 'all', '--limit', '10', '--json', 'number,title,state,createdAt,headRef'], capture_output=True, text=True)
 try:
     prs = json.loads(result.stdout)
     print(f'Total PRs: {len(prs)}')
