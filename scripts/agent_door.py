@@ -117,9 +117,16 @@ def ensure_cline(timeout: int = 900) -> Optional[str]:
     return shutil.which("cline")
 
 
+def task_history_snapshot(records):
+    """Source facts for the agent; no task-selection judgement or counter edits."""
+    fields = ('task_id', 'repo', 'issue_number', 'status', 'attempt', 'dispatch_attempt',
+              'owner', 'run_url', 'pr_url', 'retryable', 'diagnostic', 'updated_at')
+    return [{key: record.get(key) for key in fields} for record in records]
+
+
 def find_issues(root: Optional[str] = None, rounds: int = 2, timeout: int = 600,
                 limit: int = 0, on_admitted=None, lanes=None, prior_refusals=None,
-                targets=None) -> Dict[str, object]:
+                targets=None, task_history=None) -> Dict[str, object]:
     """Run the agent door and return what survived its gate. Never raises.
 
     ``rounds`` defaults to 2, not 1. Measured 2026-11-02 (run 41517665373): the agent
@@ -153,6 +160,12 @@ def find_issues(root: Optional[str] = None, rounds: int = 2, timeout: int = 600,
         round_context = ('You can run the actual read-only production evidence verifier: ' + rendered
                          + '. Read its JSON refusals and exact details, correct your evidence from real sources, '
                          'and rerun it before declaring your shortlist verified. This tool does not dispatch or publish.')
+        if task_history is not None:
+            with open(os.path.join(workdir, 'task-history.json'), 'w', encoding='utf-8') as handle:
+                json.dump(task_history_snapshot(task_history), handle, indent=2)
+            round_context += ('\nRead task-history.json before selecting work. The verifier also returns fresh '
+                              'durable task history for your candidates. Use these actual states and counters '
+                              'when choosing work; never reset counters, claim ownership or dispatch from this phase.')
         if targets:
             from actions_github import repository, issue_number
             scope = {(repository(r).lower(), issue_number(n)) for r, n in targets}

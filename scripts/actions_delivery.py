@@ -562,7 +562,8 @@ def resume_preparation(api, state, task, worker):
         write_json(artifacts() / 'preparation-resume.json', {'status': 'UNAVAILABLE', 'previous_run': prior})
         return None
     claims = destination / 'claim.json'
-    reports = list((destination / 'delivery-supervisor').glob('*.preparation.json'))
+    reports = ([destination / 'prepared-state.json'] if (destination / 'prepared-state.json').is_file()
+               else list((destination / 'delivery-supervisor').glob('*.preparation.json')))
     if not claims.is_file() or len(reports) != 1:
         return None
     previous = read_json(claims)
@@ -587,10 +588,12 @@ def resume_preparation(api, state, task, worker):
     if check_head != report['base_sha']:
         raise ValueError('Recovered preparation base changed')
     report['worktree'] = str(root)
+    report.pop('report_path', None)  # Previous runner paths are not valid on this runner.
     # Re-read cited source objects; the later native-plan gate still reports
     # missing phases to the agent. No receipt or successful test is synthesized.
-    report['plan'] = worker.VerificationPlan(**worker.validate_delivery_plan(report, str(root)))
-    report['report_path'] = str(reports[0])
+    report['plan'] = worker.VerificationPlan(**worker.validate_prepared_plan_with_repair(
+        report, str(root), task['repo'], task['issue_number'], str(reports[0])))
+    report.setdefault('report_path', str(reports[0]))
     report['context_path'] = str(artifacts() / 'claim.json')
     write_json(artifacts() / 'preparation-resume.json', {'status': 'RESUMED_PLAN_VALIDATION',
         'previous_run': prior, 'base_sha': report['base_sha'], 'preparation': str(reports[0])})
@@ -658,6 +661,7 @@ def engineer():
                     raise PreparationContractViolation(prepared.get('report_path'), repair_error) from exc
                 plan = candidate
         prepared['plan'] = plan
+        write_json(artifacts() / 'prepared-state.json', {**prepared, 'plan': asdict(plan)})
         # Admission judgment belongs to the entry door. Execute Cline's native
         # plan and return actual command failures to Cline for repair; a second
         # model's plan approval must not prevent implementation from starting.

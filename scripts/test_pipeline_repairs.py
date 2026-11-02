@@ -1159,6 +1159,14 @@ class RetryObligationTests(unittest.TestCase):
 
 
 class LiveEntryDoorRepairWiring(unittest.TestCase):
+    def test_task_history_preserves_exhausted_counters_and_unknowns(self):
+        from agent_door import task_history_snapshot
+        rows = task_history_snapshot([{'task_id': 'a' * 32, 'status': 'FAILED_ENGINEER',
+                                       'attempt': 3, 'dispatch_attempt': 3}])
+        self.assertEqual(rows[0]['attempt'], 3)
+        self.assertEqual(rows[0]['dispatch_attempt'], 3)
+        self.assertIsNone(rows[0]['owner'])
+
     def test_coordinator_preserves_a_repair_round_by_default(self):
         observed = []
         def finder(**kwargs):
@@ -1175,6 +1183,46 @@ class LiveEntryDoorRepairWiring(unittest.TestCase):
             with self.subTest(metadata=metadata), self.assertRaisesRegex(ValueError, 'Publication blocked'):
                 dispatch.dispatch(object(), object(), {'repo': 'owner/repo', 'issue_number': 198,
                                   'repository': metadata}, {}, ['founder'])
+
+
+class SourceHashRepairFeedback(unittest.TestCase):
+    def test_actual_git_hash_is_rechecked_after_agent_repair(self):
+        import hashlib
+        import kaggle_engine_worker as worker
+        with tempfile.TemporaryDirectory() as folder:
+            root = Path(folder)
+            source = b'[project]\nname = "gate-case"\n'
+            (root / 'pyproject.toml').write_bytes(source)
+            for argv in (['init', '-q'], ['add', 'pyproject.toml'],
+                         ['-c', 'user.name=Test', '-c', 'user.email=test@example.invalid', 'commit', '-qm', 'base']):
+                subprocess.run(['git', '-C', folder, *argv], check=True, capture_output=True)
+            plan = VerificationPlan(baseline_tests=[['pytest']], final_tests=[['pytest']])
+            report = {'action': 'retry', 'sources': [{'path': 'pyproject.toml', 'sha256': '0' * 64}],
+                      'plan': asdict(plan)}
+            journal = root.parent / (root.name + '-repair.json')
+            try:
+                def repair(*args):
+                    self.assertIn('SHA-256', args[4])
+                    decision = {'sources': [{'path': 'pyproject.toml', 'sha256': hashlib.sha256(source).hexdigest()}]}
+                    journal.write_text(json.dumps({'decision': decision}), encoding='utf-8')
+                    return True, plan, str(journal)
+                with patch.object(worker, 'cline_supervise_delivery_phase', side_effect=repair) as agent:
+                    parsed = worker.validate_prepared_plan_with_repair(report, folder, 'owner/repo', 1, root.parent / (root.name + '-prep.json'))
+                self.assertEqual(agent.call_count, 1)
+                self.assertEqual(parsed['baseline_tests'], [['pytest']])
+                self.assertEqual(report['sources'][0]['sha256'], hashlib.sha256(source).hexdigest())
+                # A claimed repair is not proof: the same real Git gate must
+                # refuse an agent that returns another incorrect hash twice.
+                bad = {'action': 'retry', 'sources': [{'path': 'pyproject.toml', 'sha256': '0' * 64}],
+                       'plan': asdict(plan)}
+                journal.write_text(json.dumps({'decision': {'sources': bad['sources']}}), encoding='utf-8')
+                with patch.object(worker, 'cline_supervise_delivery_phase', return_value=(True, plan, str(journal))) as agent:
+                    with self.assertRaisesRegex(worker.PreparationContractViolation, 'SHA-256'):
+                        worker.validate_prepared_plan_with_repair(bad, folder, 'owner/repo', 1, root.parent / (root.name + '-prep.json'))
+                self.assertEqual(agent.call_count, 2)
+            finally:
+                journal.unlink(missing_ok=True)
+                Path(str(root.parent / (root.name + '-prep.json')) + '.repaired.json').unlink(missing_ok=True)
 
 
 if __name__=='__main__': unittest.main()

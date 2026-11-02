@@ -131,6 +131,7 @@ def discover(lanes, max_dispatches=2, live=False, state_dir=None, hydrate_only=F
                 timeout=int(os.environ.get("BOUNTY_AGENT_TIMEOUT", "600")),
                 limit=int(os.environ.get("BOUNTY_AGENT_ROW_LIMIT", "0")),
                 on_admitted=ingest, lanes=lanes,
+                task_history=records(),
                 prior_refusals=[r for r in records() if str(r.get("status", "")).startswith("REJECTED_")])
             for row in door.get("rows") or []:
                 ingest(row)

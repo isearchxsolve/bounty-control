@@ -3091,6 +3091,38 @@ def commit_and_open_pr(
 _DELIVERY_CONTEXT = {}
 
 
+def validate_prepared_plan_with_repair(report, worktree, repo, number, report_path):
+    """Keep source/plan gates strict and give their failures back to the same agent."""
+    from dataclasses import asdict
+    diagnostic = ''
+    try:
+        return validate_delivery_plan(report, worktree)
+    except ValueError as exc:
+        diagnostic = str(exc)
+    raw = report.get('plan') if isinstance(report.get('plan'), dict) else {}
+    plan = VerificationPlan(**{name: raw.get(name, []) for name in VerificationPlan.__dataclass_fields__})
+    for _ in range(2):
+        repaired, candidate, detail = cline_supervise_delivery_phase(
+            worktree, repo, number, 'preparation', diagnostic, plan)
+        if not repaired:
+            diagnostic = detail
+            continue
+        with open(detail, encoding='utf-8') as handle:
+            decision = json.load(handle)['decision']
+        corrected = {**report, 'sources': decision['sources'], 'plan': asdict(candidate)}
+        try:
+            validated = validate_delivery_plan(corrected, worktree, plan)
+        except ValueError as exc:
+            diagnostic = str(exc)
+            continue
+        repaired_path = str(report_path) + '.repaired.json'
+        _write_json_atomic(repaired_path, corrected)
+        report.update(corrected)
+        report['report_path'] = repaired_path
+        return validated
+    raise PreparationContractViolation(report_path, diagnostic)
+
+
 def run_cline_claim_intake(task, lease):
     """Cline is the first task executor; issue context determines preparation."""
     repo, number = task['repo'], task['issue_number']
@@ -3274,7 +3306,7 @@ Do not claim delivery. Save the real plan and receipts, then finish this prepara
         # host never prepared.
         raise PreparationContractViolation(report_path, 'Cline preparation returned an unexpected worktree',
                                            paths=[report.get('worktree', '')])
-    report['plan'] = VerificationPlan(**validate_delivery_plan(report, worktree))
+    report['plan'] = VerificationPlan(**validate_prepared_plan_with_repair(report, worktree, repo, number, report_path))
     head, error = _git_checked(['git', '-C', worktree, 'rev-parse', 'HEAD'], 10, 'Cline prepared baseline SHA')
     status, status_error = _git_checked(['git', '-C', worktree, 'status', '--porcelain',
                                         '--untracked-files=all'], 10, 'Cline prepared baseline integrity')
@@ -3293,6 +3325,7 @@ Do not claim delivery. Save the real plan and receipts, then finish this prepara
     # travel with the report. It used to be assumed by the adapter, which referenced an
     # undefined local and raised NameError the first time a run got far enough to check it
     # (2026-10-29, run 40876500657).
+    report_path = report.get('report_path', report_path)
     report['report_path'] = report_path
     return report
 
