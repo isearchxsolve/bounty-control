@@ -2,9 +2,16 @@
   "task_id": "b17b814d751744a9300d16ddaf6d2377",
   "repo": "Manthan-cpp/GramRaksha-AI",
   "issue_number": 2,
-  "status": "DISPATCHED",
+  "status": "CLAIMED",
   "dispatch_id": "7af16adc84034d798f6f7789b132b683",
-  "attempt": 0,
+  "attempt": 1,
   "fault_fixture": true,
-  "updated_at": "2026-11-02T22:57:33.926748+00:00"
+  "updated_at": "2026-11-02T22:57:35.136869+00:00",
+  "owner": "fault-worker-b:1",
+  "previous_owner": null,
+  "previous_status": "DISPATCHED",
+  "run_url": "https://example.invalid/fault-worker",
+  "harness_sha": "2dc8d36c1737ba805121ec0dc7a7d3c871686cb3",
+  "claimed_at": "2026-11-02T22:57:35.136813+00:00",
+  "lease_expires_at": "2026-11-03T03:02:35.136830+00:00"
 }
