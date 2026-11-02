@@ -132,6 +132,16 @@ class RefusesUnprovenRows(unittest.TestCase):
         result = door.verify_rows([row(is_code_task=False)], fetcher())
         self.assertEqual(result["refused"][0]["reason"], "AGENT_NOT_A_CODE_TASK")
 
+    def test_a_row_missing_is_code_task_but_with_product_code_evidence_is_admitted(self):
+        result = door.verify_rows([row(is_code_task=False, code_evidence={
+            "is_product_code": True, "path": "src/app.py", "quote": "def fix(): pass",
+            "sha": "a" * 40})], fetcher())
+        self.assertEqual(len(result["admitted"]), 1)
+
+    def test_a_row_without_is_code_task_or_product_code_evidence_is_refused(self):
+        result = door.verify_rows([row(is_code_task=False, code_evidence={})], fetcher())
+        self.assertEqual(result["refused"][0]["reason"], "AGENT_NOT_A_CODE_TASK")
+
     def test_a_duplicate_row_is_only_counted_once(self):
         result = door.verify_rows([row(), row()], fetcher())
         self.assertEqual(len(result["admitted"]), 1)

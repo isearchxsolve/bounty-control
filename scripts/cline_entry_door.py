@@ -722,7 +722,8 @@ def verify_rows(rows: List[dict], fetch: Optional[Callable[[str, int], Optional[
         if str(issue.get("state") or "").lower() != "open":
             refused.append({"row": row, "reason": "ISSUE_NOT_OPEN"})
             continue
-        if row.get("is_code_task") is not True:
+        code = row.get("code_evidence") or {}
+        if row.get("is_code_task") is not True and code.get("is_product_code") is not True:
             refused.append({"row": row, "reason": "AGENT_NOT_A_CODE_TASK"})
             continue
 
@@ -1215,6 +1216,10 @@ every field below is something you can hold in your hand from the work you have 
                         "path": "<repository-relative path of a real file>",
                         "quote": "<one line copied exactly from that file>",
                         "sha": "<the file's own blob sha, from the contents response>"}}}}
+- `is_code_task`: whether this is engineering work you can fix. Always `true` on every row you
+  submit to this pipeline; it declares the row is a deliverable code task, not a digest, news
+  feed, or experiment. If `is_code_task` is missing, a valid `code_evidence.is_product_code: true`
+  still counts as the same declaration.
 
 Where each of these comes from, because every one is a lookup and not a judgement:
 
