@@ -2,7 +2,7 @@
   "task_id": "3ba86a2f9bb5b606b2af7d3d6b698996",
   "repo": "Spectral-Finance/lux",
   "issue_number": 62,
-  "status": "CLAIMED",
+  "status": "FAILED_DELIVERABLE_MISSING",
   "dispatch_id": "1cd0093b908a4dd0b3d0625492d7d51d",
   "admission": {
     "funding": {
@@ -301,7 +301,7 @@
   ],
   "dispatched_at": "2026-11-02T12:31:26.207203+00:00",
   "attempt": 2,
-  "updated_at": "2026-11-02T12:32:44.058799+00:00",
+  "updated_at": "2026-11-02T12:48:02.381877+00:00",
   "owner": "41445403962:1",
   "previous_owner": "41439888442:1",
   "previous_status": "DISPATCHED",
@@ -310,10 +310,10 @@
   "claimed_at": "2026-11-02T12:32:44.058747+00:00",
   "lease_expires_at": "2026-11-02T16:37:44.058762+00:00",
   "preparation_budget_seconds": 14400,
-  "kind": "engineer",
+  "kind": "deliverable_invalid",
   "retryable": true,
-  "diagnostic": "BLOCKED_BASELINE: Repair turn finished without a decision: repair turn did not write a decision; it was aborted, killed or timed out",
-  "at": "2026-11-02T12:17:22.171758+00:00",
+  "diagnostic": "Cline deliverable invalid at /tmp/fleet-artifacts/delivery-supervisor/a4f842c93fb247478331739955421110.preparation.json: action=incomplete: the preparation skeleton was never replaced, so the agent finished without reporting",
+  "at": "2026-11-02T12:47:47.126395+00:00",
   "failures": [
     {
       "run_url": "https://github.com/isearchxsolve/bounty-control/actions/runs/41439888442",
@@ -322,7 +322,19 @@
       "retryable": true,
       "diagnostic": "BLOCKED_BASELINE: Repair turn finished without a decision: repair turn did not write a decision; it was aborted, killed or timed out",
       "at": "2026-11-02T12:17:22.171758+00:00"
+    },
+    {
+      "run_url": "https://github.com/isearchxsolve/bounty-control/actions/runs/41445403962",
+      "status": "FAILED_DELIVERABLE_MISSING",
+      "kind": "deliverable_invalid",
+      "retryable": true,
+      "diagnostic": "Cline deliverable invalid at /tmp/fleet-artifacts/delivery-supervisor/a4f842c93fb247478331739955421110.preparation.json: action=incomplete: the preparation skeleton was never replaced, so the agent finished without reporting",
+      "path": "/tmp/fleet-artifacts/delivery-supervisor/a4f842c93fb247478331739955421110.preparation.json",
+      "reason": "action=incomplete: the preparation skeleton was never replaced, so the agent finished without reporting",
+      "at": "2026-11-02T12:47:47.126395+00:00"
     }
   ],
-  "finished_at": "2026-11-02T12:17:32.731354+00:00"
+  "finished_at": "2026-11-02T12:48:01.609244+00:00",
+  "path": "/tmp/fleet-artifacts/delivery-supervisor/a4f842c93fb247478331739955421110.preparation.json",
+  "reason": "action=incomplete: the preparation skeleton was never replaced, so the agent finished without reporting"
 }
