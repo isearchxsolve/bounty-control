@@ -73,12 +73,21 @@ class ScopedStore(StateStore):
 
 
 class LiveRun:
-    def __init__(self, args):
+    def __init__(self, args, *, api=None, command=None):
+        """``api`` and ``command`` are injection seams, not test hooks in production.
+
+        Every phase drives real remote state through ``self.api`` and shells out through
+        ``self.command``. With both hard-wired, the only way to execute a phase was a live
+        repository, which is why the driver sat at 14.3% line coverage with every phase at
+        0.0%: the contracts around the driver were tested and the driver itself was not.
+        Defaults are unchanged, so a live campaign behaves exactly as before.
+        """
         self.args = args
         self.folder = args.run_dir.resolve()
         self.folder.mkdir(parents=True, exist_ok=True)
         self.path = self.folder / "run.json"
-        self.api = GitHub()
+        self.api = api if api is not None else GitHub()
+        self._command = command
         self.data = json.loads(self.path.read_text()) if self.path.exists() else {
             "id": "r" + uuid.uuid4().hex[:12], "target": repository(args.target),
             "control": repository(args.control), "started_at": self.now(),
@@ -132,6 +141,8 @@ class LiveRun:
             page += 1
 
     def command(self, argv, *, env=None, timeout=120):
+        if self._command is not None:
+            return self._command(argv, env=env, timeout=timeout)
         result = subprocess.run(argv, cwd=ROOT, env=env, capture_output=True,
                                 text=True, encoding="utf-8", errors="replace", timeout=timeout)
         check(result.returncode == 0, f"Command {argv[0:3]} failed ({result.returncode}): {result.stderr[-1500:]}")
