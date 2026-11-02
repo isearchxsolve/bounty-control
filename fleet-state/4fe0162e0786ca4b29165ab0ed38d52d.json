@@ -2,8 +2,8 @@
   "task_id": "4fe0162e0786ca4b29165ab0ed38d52d",
   "repo": "OpenOrg-gg/AmphoraProtocol",
   "issue_number": 4,
-  "status": "FAILED_ENGINEER",
-  "dispatch_id": "3007f26fe993474d8ca994f6dd3f21ce",
+  "status": "DISPATCHING",
+  "dispatch_id": "09d8ae8323444e9ab26038748a5bb8f9",
   "admission": {
     "funding": {
       "amount": "500",
@@ -33,7 +33,7 @@
     "task_id": "4fe0162e0786ca4b29165ab0ed38d52d",
     "source_revision": "40ffbb669a6a50065ca468f0824865be1277ade24ca1566a1327fed6ecba3cc8"
   },
-  "dispatch_attempt": 2,
+  "dispatch_attempt": 3,
   "sovereign_admission": true,
   "competition": {
     "blocking": false,
@@ -62,9 +62,9 @@
   "lanes": [
     "founder"
   ],
-  "dispatched_at": "2026-11-01T22:28:35.437570+00:00",
+  "dispatched_at": "2026-11-02T01:00:43.351338+00:00",
   "attempt": 2,
-  "updated_at": "2026-11-01T22:35:37.658336+00:00",
+  "updated_at": "2026-11-02T01:00:43.351354+00:00",
   "owner": "41357319521:1",
   "previous_owner": "41351380624:1",
   "previous_status": "DISPATCHED",
