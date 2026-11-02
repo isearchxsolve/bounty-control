@@ -1,55 +1,17 @@
-name: Live pipeline integration
-run-name: 'Live integration ${{ github.run_id }}'
+name: Publisher access diagnosis
 'on':
-  workflow_dispatch:
-    inputs:
-      merge_fixture:
-        description: Merge only this run's sandbox PR after real native CI succeeds
-        type: boolean
-        default: true
-concurrency:
-  group: pipeline-live-integration
-  cancel-in-progress: false
+  workflow_dispatch: {}
 permissions:
   contents: read
 jobs:
-  live:
+  access:
     runs-on: ubuntu-latest
-    timeout-minutes: 100
-    env:
-      GH_TOKEN: ${{ secrets.GH_PAT }}
-      TOKENHARBOR_KEYS_JSON: ${{ secrets.TOKENHARBOR_KEYS_JSON }}
-      NVIDIA_API_KEY: ${{ secrets.NVIDIA_API_KEY }}
-      NVIDIA_ROUTER_MODEL: ${{ vars.NVIDIA_DELIVERY_MODEL || 'nvidia/nemotron-3.5-super-vl-120b-a12b' }}
-      PYTHONUNBUFFERED: '1'
-      PYTHONIOENCODING: utf-8
+    timeout-minutes: 5
     steps:
     - uses: actions/checkout@v4
       with:
         persist-credentials: false
-    - name: Install the same Cline CLI as production
-      run: npm install --global --no-audit --no-fund cline@3.0.74
-    - name: Exercise real services and production delivery
+    - name: Observe publisher credential without performing writes
       env:
-        MERGE_FIXTURE: ${{ inputs.merge_fixture }}
-      run: |
-        flags=()
-        if [ "$MERGE_FIXTURE" = true ]; then flags+=(--merge-fixture); fi
-        python3 -u scripts/live_pipeline_integration.py run \
-          --run-dir scratch/live-integration \
-          --engineering-budget 1800 --wait-minutes 60 "${flags[@]}"
-    - name: Retain actual receipts including failed and incomplete runs
-      if: always()
-      uses: actions/upload-artifact@v4
-      with:
-        name: live-integration-${{ github.run_id }}
-        path: |
-          scratch/live-integration/run.json
-          scratch/live-integration/*.log
-          scratch/live-integration/*.json
-          scratch/live-integration/scout-*/agent.log
-          scratch/live-integration/scout-*/result.json
-          scratch/live-integration/scout-*/shortlist.jsonl
-          scratch/live-integration/artifacts-*/
-        if-no-files-found: error
-        retention-days: 14
+        GH_TOKEN: ${{ secrets.GH_PAT }}
+      run: python3 scripts/publication_access_probe.py --repo fiztoz/uptime-phoenix
