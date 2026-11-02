@@ -2,8 +2,8 @@
   "task_id": "bcba80531e63c7f7811e1dde8bdf99e1",
   "repo": "getkcoin-alt/itsmay",
   "issue_number": 27,
-  "status": "FAILED_ENGINEER",
-  "dispatch_id": "8d7153b4bd2b43a1a5cc309ef061eb3d",
+  "status": "DISPATCHING",
+  "dispatch_id": "9b60100f755047f9882ae669e22cffe7",
   "admission": {
     "funding": {
       "payer": "getkcoin-alt",
@@ -32,7 +32,7 @@
     "task_id": "bcba80531e63c7f7811e1dde8bdf99e1",
     "source_revision": "eaea05e5c9d07c85d54a5cd18a554356786b848ecf91ec0e4aca5b2c0cdde5cd"
   },
-  "dispatch_attempt": 2,
+  "dispatch_attempt": 3,
   "sovereign_admission": true,
   "competition": {
     "blocking": false,
@@ -41,9 +41,9 @@
   "lanes": [
     "founder"
   ],
-  "dispatched_at": "2026-11-02T22:11:48.332237+00:00",
+  "dispatched_at": "2026-11-02T22:42:18.649983+00:00",
   "attempt": 2,
-  "updated_at": "2026-11-02T22:15:27.396755+00:00",
+  "updated_at": "2026-11-02T22:42:18.650000+00:00",
   "owner": "41535145127:1",
   "previous_owner": "41533728353:1",
   "previous_status": "DISPATCHED",
