@@ -140,10 +140,18 @@ class GateUnchangedTests(unittest.TestCase):
         delivery = (HERE / "actions_delivery.py").read_text(encoding="utf-8-sig")
         self.assertIn('raise RuntimeError("BLOCKED_BASELINE: " + diagnostic)', delivery)
         supervisor = (HERE / "delivery_supervisor.py").read_text(encoding="utf-8-sig")
-        # The sentence is taught as knowledge now (2026-11-01 directive audit): an upstream
-        # defect is a finding to record, because manufacturing a green baseline erases the
-        # evidence the delivery exists to produce.
-        self.assertIn("manufacturing a green baseline erases", supervisor)
+        # The invariant is kept and the case is narrowed (2026-11-01 directive audit): editing
+        # the tree to manufacture a green baseline still erases the evidence the delivery exists
+        # to produce, and a failing test is never repaired by changing the source. The sentence
+        # used to continue "an upstream product/test defect is a finding to record as
+        # BLOCKED_BASELINE", which contradicted the preparation directive that the same defect
+        # is the regression target: SMALLBETS/userbase#305, a ticket about a broken build, was
+        # blocked as an environment fault for exactly that reason.
+        self.assertIn("Manufacturing a green baseline by editing that tree erases", supervisor)
+        self.assertIn("a failing test is never repaired by changing the source", supervisor)
+        self.assertNotIn("An upstream product/test defect is a finding to record as BLOCKED_BASELINE",
+                         supervisor)
+        self.assertIn("BLOCKED_BASELINE is for what no amount of engineering", supervisor)
         self.assertIn("BLOCKED_BASELINE", supervisor)
 
 

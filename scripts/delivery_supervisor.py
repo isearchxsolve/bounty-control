@@ -1,4 +1,5 @@
 """Cline lifecycle repair with immutable-source and native-receipt guards."""
+from datetime import datetime, timezone
 import hashlib
 import json
 from pathlib import Path
@@ -88,8 +89,19 @@ def validate_plan(document, worktree, previous=None):
     return result
 
 
+def write_json_atomic(path: Path, document) -> None:
+    """Write the control artifact whole, or not at all: no half-readable receipt.
+
+    A reader that catches a truncated file reports an unparseable receipt, which is a
+    different fault from a missing one and deserves its own name.
+    """
+    temporary = path.with_suffix('.partial')
+    temporary.write_text(json.dumps(document, indent=2), encoding='utf-8')
+    temporary.replace(path)
+
+
 def supervise(worktree, repo, number, phase, failure, plan, artifact_dir,
-              command_builder, execute, plan_factory, preserve):
+               command_builder, execute, plan_factory, preserve):
     """Run a bounded repair turn; model conclusions never count as test receipts."""
     folder = Path(artifact_dir).resolve() / 'delivery-supervisor'
     folder.mkdir(parents=True, exist_ok=True)
@@ -97,6 +109,19 @@ def supervise(worktree, repo, number, phase, failure, plan, artifact_dir,
     journal = receipt.with_suffix('.journal.json')
     failure_file = receipt.with_suffix('.failure.txt')
     failure_file.write_text(str(failure), encoding='utf-8')
+    # F5: a write-early skeleton at the receipt's own path, before the command is built, so an
+    # aborted turn explains itself instead of vanishing. Measured 2026-11-01
+    # (Spectral-Finance/lux#74, run 41357309340): Cline's repair turn was aborted by the
+    # supervisor timeout while a background compile still ran, no decision was ever written,
+    # and the reader below raised FileNotFoundError -- which the host stamped as
+    # BLOCKED_BASELINE, a transient timeout read as a permanent statement about the repository.
+    # The skeleton is replaced by Cline's own write; if it survives, the turn did not finish.
+    write_json_atomic(receipt, {
+        'action': 'incomplete',
+        'reason': 'repair turn did not write a decision; it was aborted, killed or timed out',
+        'phase': phase, 'repo': repo, 'issue_number': number,
+        'started_at': datetime.now(timezone.utc).isoformat(),
+    })
     before = source_snapshot(worktree)
     current = {name: getattr(plan, name, []) for name in
                ('bootstrap', 'baseline_tests', 'targeted_tests', 'final_tests', 'linters', 'format_checks', 'builds')}
@@ -114,8 +139,13 @@ The checkout stays the customer's ground in this turn too, for the same reason i
 the host proves the delivery by watching one command go from failing to passing against a base that
 never moved. You may read, run, install, and measure -- you leave no edit, no new file, no staged
 change, and no commit behind, and the host compares the tree byte for byte before it accepts your
-artifact. An upstream product/test defect is a finding to record as BLOCKED_BASELINE, not something
-to quietly repair: manufacturing a green baseline erases the evidence the delivery exists to produce.
+artifact. Manufacturing a green baseline by editing that tree erases the evidence the delivery
+exists to produce: a failing test is never repaired by changing the source, the suite, or CI.
+A failure is not automatically a blocker either. When the failure IS the defect this issue
+reports, it is the evidence the delivery exists to produce: put the green subset in
+baseline_tests and name the red target in the plan's targeted command as the reproduction,
+exactly as the preparation directive says. BLOCKED_BASELINE is for what no amount of engineering
+can supply in this environment -- a missing toolchain, a credential, a service, or hardware.
 Never bypass a build approval policy, test, linter, funding/competition check, claim lease, or release guard.
 Do not send messages, push branches, or create a PR yourself. The host performs guarded publication.
 Preserve completed engineering edits and report an external credential/service/hardware blocker honestly.
@@ -142,6 +172,11 @@ Finish after saving the artifact; do not claim delivery or test success from inf
         if result.exit_code != 0:
             raise ValueError('Cline delivery repair failed: ' + str(result.stderr or result.stdout)[-1000:])
         document = json.loads(receipt.read_text(encoding='utf-8'))
+        if document.get('action') == 'incomplete':
+            # The skeleton survived: the turn ended without a decision. That is a timeout or
+            # an abort, never a verdict about the repository, and it is named as one.
+            raise ValueError('Repair turn finished without a decision: '
+                             + str(document.get('reason') or 'no decision was written'))
         evidence['decision'] = document
         if phase in ('preparation', 'baseline'):
             validated = validate_plan(document, worktree, plan)
