@@ -764,8 +764,24 @@ class ScoutWorktree(unittest.TestCase):
     def test_the_feedback_does_not_claim_a_shape_that_was_never_proved(self):
         """Measured 2026-11-01: "Row 0 was accepted" fired on rounds where nothing was."""
         self.assertNotIn("Row 0 was accepted", door.FEEDBACK_PROMPT)
-        self.assertIn("No row was accepted", door.render_shape_note([]))
         self.assertIn("shape is right", door.render_shape_note([{"repo": "a/b"}]))
+
+    def test_a_semantic_refusal_is_not_reported_as_a_shape_fault(self):
+        """Measured 2026-11-01 (run 41357174094): both rows were well formed and refused
+        FUNDING_SOURCE_MISSING, and round 2 was told its row shape was never proved. The scout
+        spent the round's opening minutes re-reading TASK.md instead of searching."""
+        note = door.render_shape_note([], [{"reason": "FUNDING_SOURCE_MISSING"}])
+        self.assertNotIn("field by field", note)
+        self.assertIn("well formed", note)
+
+    def test_a_real_shape_fault_is_still_reported_as_one(self):
+        note = door.render_shape_note([], [{"reason": "MALFORMED_ROW"}])
+        self.assertIn("MALFORMED_ROW", note)
+        self.assertIn("field by field", note)
+
+    def test_an_empty_round_says_so_rather_than_accusing_the_shape(self):
+        """Nothing was written, so there is no evidence about the shape either way."""
+        self.assertIn("No row was written", door.render_shape_note([]))
 
     def test_a_suffixed_reason_still_finds_its_meaning(self):
         """admit() returns 'REFUSED_NOT_A_CODE_CHANGE: aggregator/digest repo'."""
@@ -783,6 +799,24 @@ class ScoutWorktree(unittest.TestCase):
         self.assertNotIn("--label bounty", text)
         self.assertNotIn("gh search issues", text)
         self.assertNotIn("Skip and do not report", text)
+
+    def test_a_comment_quote_must_carry_its_anchor(self):
+        """Measured 2026-11-01 (run 41357174094): the gate matches funding.source_url against a
+        comment's html_url, which carries the #issuecomment-<id> anchor. Both rows offered that
+        round named the bare issue URL and were refused FUNDING_SOURCE_MISSING."""
+        text = (Path(self.workdir) / "TASK.md").read_text(encoding="utf-8")
+        self.assertIn("#issuecomment-", text)
+        self.assertIn("never\n  the bare issue URL", text.replace("never the bare issue URL",
+                                                                  "never\n  the bare issue URL"))
+
+    def test_the_brief_puts_the_money_before_the_architecture(self):
+        """Measured 2026-11-01 (run 41357174094): both rounds ran out of clock proving an
+        architecture sound for issues nobody had offered money on, and both rows that finally
+        landed were refused FUNDING_SOURCE_MISSING."""
+        text = (Path(self.workdir) / "TASK.md").read_text(encoding="utf-8")
+        self.assertIn("stage one", text)
+        self.assertIn("thirty seconds", text)
+        self.assertIn("CURRENT_ISSUER_OFFER_MISSING", text)
 
     def test_the_worktree_is_a_git_repository(self):
         self.assertTrue(os.path.isdir(os.path.join(self.workdir, ".git")))

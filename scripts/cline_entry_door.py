@@ -858,17 +858,34 @@ def render_meanings(refusals) -> str:
     return "\n".join(lines) or "(none)"
 
 
-def render_shape_note(admitted) -> str:
-    """Whether the row shape was actually proved this run.
+def render_shape_note(admitted, refusals=()) -> str:
+    """Whether the row shape was actually proved this run, and if not, which way it broke.
 
     Measured 2026-11-01: the prompt said "Row 0 was accepted, so the shape is right" on every
     repair round, including rounds where nothing was accepted. Telling the agent its format is
     validated when it is not sends it hunting a fault that is not there.
+
+    Measured 2026-11-01 (run 41357174094): the opposite fault. Nothing was admitted, both rows
+    were refused `FUNDING_SOURCE_MISSING` -- a fact about the market, not about the JSON -- and
+    the round-2 prompt still told the scout its row shape was never proved. It spent the first
+    minutes of the round re-reading TASK.md field by field instead of searching, and the round
+    ran out the same way. So the shape note is only about shape: it names the refusals that
+    actually were shape faults, and otherwise points at the refusal that did fire.
     """
     if admitted:
         return "At least one row was accepted, so the shape is right."
-    return ("No row was accepted this round, so the shape was never proved: re-read the row "
-            "shape in TASK.md and check yours against it field by field.")
+    fired = {refusal_code(entry) for entry in refusals}
+    shape_faults = fired & SHAPE_REFUSALS
+    if shape_faults:
+        return ("Nothing was admitted and these rows did not even carry the required fields: "
+                + ", ".join(sorted(shape_faults))
+                + ". Re-read the row shape in TASK.md and check yours against it field by field.")
+    if fired:
+        return ("Nothing was admitted, but the rows were well formed: the refusals above are "
+                "facts about the issues and their offers, not about your JSON. Fix those, and "
+                "the shape is already right.")
+    return ("No row was written this round, so the shape was never proved either: re-read the "
+            "row shape in TASK.md and check yours against it field by field.")
 
 
 CONTINUE_PROMPT = FRESH_START + """The previous round ended with time still on the clock, and this door has no quota. Its rows are kept - everything you already wrote has been collected and checked, and you do not need to write it again.
@@ -911,8 +928,7 @@ is entirely your choice.
 # (verify_model_rows -> model_admission_refusal -> admit()) emitted twenty-four more, and the
 # feedback prompt explained three of them. Every reason the live path can emit now appears here,
 # and the feedback renders its meaning from this same table.
-GATE_CHECKS = [
-    ("MALFORMED_ROW", "the row is not a complete JSON record with repo and issue."),
+GATE_CHECKS = [    ("MALFORMED_ROW", "the row is not a complete JSON record with repo and issue."),
     ("DUPLICATE_ROW", "that issue already appears in the shortlist; someone already has this task open."),
     ("ISSUE_NOT_FOUND", "repo or issue does not exist on GitHub."),
     ("ISSUE_UNREADABLE", "GitHub could not answer (rate limit, server error); not a verdict."),
@@ -939,6 +955,16 @@ GATE_CHECKS = [
     ("ADMISSION_UNAVAILABLE", "the admission module could not be loaded; nothing was decided."),
     ("REFUSED_BY_ADMISSION", "admission refused the row without naming a narrower reason."),
 ]
+
+# The refusals that say the row itself was incomplete or malformed, as opposed to the ones that
+# say the market said no. A repair round is told to re-read the shape only when one of these
+# fired. Measured 2026-11-01 (run 41357174094): a round whose rows were well formed and refused
+# for `FUNDING_SOURCE_MISSING` spent its first minutes checking its own JSON field by field
+# anyway, because the feedback claimed the shape had never been proved.
+SHAPE_REFUSALS = frozenset({
+    'MALFORMED_ROW', 'AGENT_DECISION_MISSING', 'PRODUCT_SOURCE_PATH_INVALID',
+    'DECISION_EVIDENCE_INVALID',
+})
 
 # What the admission and competition checks may write, plus the few facts only the road after the
 # door can know. The agent cannot see these run, but should know they exist so it aims at work
@@ -1162,8 +1188,12 @@ Where each of these comes from, because every one is a lookup and not a judgemen
 - `funding` names the hand that hung the money. The figure is written as a plain number - `2500`,
   not `2,500` or `$2500` - because that is the number the house's reader produces from the
   payer's own sentence. The payer is the login of the person or platform that wrote it, and the
-  source_url is the URL of the exact issue or comment where the sentence lives. The gate re-reads
-  that URL and looks for the same sentence on the page.
+  source_url is the URL of the exact document where the sentence lives. When that document is a
+  comment, the URL must be the comment's own web URL ending in the `#issuecomment-<id>` anchor -
+  the one `gh issue view --comments` prints, and the `url` field of the comment in the API - never
+  the bare issue URL, because the gate matches that exact URL and a comment quoted from the
+  issue's address is refused as `FUNDING_SOURCE_MISSING`. The gate re-reads that URL and looks for
+  the same sentence on the page.
 - `code_evidence` points at the break in the tree: a real file's repository-relative path, one
   line copied exactly from it, and the file's own blob sha. GitHub hands you that sha in the same
   answer as the file: GET /repos/{{owner}}/{{name}}/contents/{{path}} returns the bytes and a
@@ -1176,6 +1206,29 @@ Where each of these comes from, because every one is a lookup and not a judgemen
   (programs), or a plain repository bounty (normal).
 - `admission_reason` is your one-line account of the row: who hung the money and what is broken.
   The gate keeps it with the evidence so the record says why the row was let in.
+
+## The money is stage one, and it is fast
+
+Every row stands or falls on one question, and it is answered in a single read: did a party that
+can commit the money write a figure on this page. That party is the repository's own OWNER, a
+MEMBER or COLLABORATOR, or a bounty platform bot - algora-pbc, algora-io[bot], polar-sh[bot],
+opire[bot], bountyhub-app, bountyhub-bot. Nobody else's number is money here: a reader, a fan, a
+copied aggregator blurb or a well-meaning bystander cannot fund this row, however real the figure
+looks. `CURRENT_ISSUER_OFFER_MISSING` is what a row from anyone else is refused by, downstream of
+this door.
+
+So read for that first, and read nothing else until you have it. An issue with no sentence like
+that in its body or its comments is not a lead: move on inside thirty seconds. Do not open the
+repository, the code, the build, the logs, a Vercel dashboard, an external service or a dependency
+tree until the payer's sentence and the figure are on the page in front of you - that work belongs
+to rows that have already passed stage one, and a row that will be refused for `FUNDING_SOURCE_MISSING`
+spends the time a winning row would have used. Measured 2026-11-01 (run 41357174094): two rounds
+ended with no rows at all because the scout spent its budget proving an architecture sound for
+issues nobody had offered money on, and both rows it finally submitted were refused for exactly
+this reason.
+
+A figure with no currency, or a vague promise with no number, is the same waste: the row needs a
+figure and a currency the gate can read back from the quote.
 
 ## Nobody rations your basket
 
@@ -1360,7 +1413,7 @@ def iterate(workdir: str, rounds: int = 3, run=run_cline_search, verify=verify_r
                 for entry in refusals)
             prompt = FEEDBACK_PROMPT.format(refusals=listed or "(none)",
                                             meanings=render_meanings(refusals),
-                                            shape=render_shape_note(admitted))
+                                            shape=render_shape_note(admitted, refusals))
         kwargs = dict(run_kwargs)
         parameters = inspect.signature(run).parameters
         if "on_row" in parameters or any(
