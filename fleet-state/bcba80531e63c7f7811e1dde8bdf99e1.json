@@ -1,0 +1,47 @@
+{
+  "task_id": "bcba80531e63c7f7811e1dde8bdf99e1",
+  "repo": "getkcoin-alt/itsmay",
+  "issue_number": 27,
+  "status": "DISPATCHING",
+  "dispatch_id": "8980d86cd00946c4bcf9156f971a9a6b",
+  "admission": {
+    "funding": {
+      "payer": "getkcoin-alt",
+      "source_url": "https://github.com/getkcoin-alt/itsmay/issues/27",
+      "amount": "0",
+      "currency": "FOUNDER",
+      "usd_value": "0",
+      "quote": {
+        "basis": "Unpriced repository-owner request"
+      },
+      "raw": "Railway project `vault-zeta`, service `api`, latest deployment `90d595c8-62a7-4294-88dd-c38428f29901` builds successfully but never becomes healthy on `/v1/live`.",
+      "source_author_association": "OWNER",
+      "source_author_login": "getkcoin-alt"
+    },
+    "agent_reason": "Unpriced repository-owner incident: the issue is authored by the repo OWNER (login getkcoin-alt) and announces a P0 production outage - the Railway `api` service never becomes healthy on `/v1/live`. The bounded code path is apps/api/routers/mini.py, the module whose top-level import of the missing core.companion.emotion_stream makes the entire API unimportable.",
+    "scope_quote": "Restore the missing parser implementation (with streaming/chunk-boundary tests for `feed()`, `flush()`, and `.emotion`) or deliberately remove/replace the dependency if the feature was abandoned.",
+    "code_evidence": {
+      "path": "apps/api/routers/mini.py",
+      "sha": "bdbe84e3f42c0762a95b35b26d80c2efb444c438",
+      "quote": "from core.companion.emotion_stream import EmotionResponseParser",
+      "is_product_code": true
+    },
+    "source_issue": "https://github.com/getkcoin-alt/itsmay/issues/27",
+    "funding_status": "UNPRICED_OWNER_REQUEST",
+    "lane": "founder",
+    "task_id": "bcba80531e63c7f7811e1dde8bdf99e1",
+    "source_revision": "eaea05e5c9d07c85d54a5cd18a554356786b848ecf91ec0e4aca5b2c0cdde5cd"
+  },
+  "dispatch_attempt": 1,
+  "sovereign_admission": true,
+  "competition": {
+    "blocking": false,
+    "nominal": []
+  },
+  "lanes": [
+    "founder"
+  ],
+  "dispatched_at": "2026-11-02T22:02:14.809847+00:00",
+  "attempt": 0,
+  "updated_at": "2026-11-02T22:02:14.809863+00:00"
+}
