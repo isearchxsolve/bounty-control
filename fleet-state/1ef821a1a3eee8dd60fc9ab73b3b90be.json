@@ -6,7 +6,7 @@
   "dispatch_id": "92c35283d2f243f3affde95da9ef362a",
   "attempt": 1,
   "fault_fixture": true,
-  "updated_at": "2026-11-02T20:16:51.961364+00:00",
+  "updated_at": "2026-11-02T20:16:55.126050+00:00",
   "owner": "fault-worker-a:1",
   "previous_owner": null,
   "previous_status": "DISPATCHED",
