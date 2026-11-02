@@ -10,9 +10,9 @@ name: Bounty hydration drain
   - cron: '22,52 * * * *'
   workflow_dispatch: {}
 concurrency:
-  # Both jobs restore and save the same SQLite cache. Serialize their writers so
-  # an older discovery snapshot cannot replace the drain's updated queue.
-  group: bounty-discovery
+  # The drain must not queue behind long discovery calls. It reads discovery's
+  # cache but does not publish back to that cache; durable task CAS owns dispatch.
+  group: bounty-hydration
   cancel-in-progress: false
 permissions:
   contents: write
@@ -47,11 +47,6 @@ jobs:
       # ownership (bounty-control branch, Contents-API CAS) keeps dispatch safe against the
       # concurrent discovery lane.
       run: python3 -u scripts/actions_dispatch.py --live --once --hydrate-only --hydrate-batch 300 --max-dispatches 2 --lane all
-    - uses: actions/cache/save@v4
-      if: always()
-      with:
-        path: ${{ env.BOUNTY_STATE_DIR }}
-        key: bounty-state-${{ github.run_id }}-${{ github.run_attempt }}
     - uses: actions/upload-artifact@v4
       if: always()
       with:
