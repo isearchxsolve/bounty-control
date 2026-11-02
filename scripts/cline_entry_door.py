@@ -1226,6 +1226,7 @@ every field below is something you can hold in your hand from the work you have 
 
     {{"repo": "owner/name", "issue": 123, "url": "https://github.com/owner/name/issues/123",
      "is_code_task": true,
+     "is_founder_wound": <true for an unpriced owner request; false otherwise>,
      "reward_quote": "<sentence copied exactly from the issue>",
      "reward_usd": <number or null>,
      "scope_quote": "<sentence copied exactly, saying what to build>",
@@ -1402,7 +1403,7 @@ def _merge_shortlist(workdir: str, rows: List[dict]) -> None:
 
 def iterate(workdir: str, rounds: int = 3, run=run_cline_search, verify=verify_rows,
             limit: int = 0, first_prompt: Optional[str] = None, admission_client=None,
-            on_admitted=None, **run_kwargs) -> Dict[str, object]:
+            on_admitted=None, round_context='', **run_kwargs) -> Dict[str, object]:
     """Search, verify, and feed the refusals back so the agent corrects itself.
 
     The agent is not judged once and dismissed: each round's refusals become the next round's
@@ -1484,13 +1485,15 @@ def iterate(workdir: str, rounds: int = 3, run=run_cline_search, verify=verify_r
             prompt = CONTINUE_PROMPT
         else:
             listed = "\n".join(
-                "- {repo}#{issue}: {reason}".format(
+                "- {repo}#{issue}: {reason}; detail={detail}".format(
                     repo=str(entry["row"].get("repo")), issue=entry["row"].get("issue"),
-                    reason=entry["reason"])
+                    reason=entry["reason"], detail=entry.get('detail') or '')
                 for entry in refusals)
             prompt = FEEDBACK_PROMPT.format(refusals=listed or "(none)",
                                             meanings=render_meanings(refusals),
                                             shape=render_shape_note(admitted, refusals))
+        if round_context:
+            prompt += '\n' + round_context
         kwargs = dict(run_kwargs)
         parameters = inspect.signature(run).parameters
         if "on_row" in parameters or any(

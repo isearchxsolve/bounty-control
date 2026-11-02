@@ -21,6 +21,9 @@ import shutil
 import subprocess
 import threading
 import tempfile
+import sys
+import shlex
+from pathlib import Path
 from typing import Dict, List, Optional
 
 import cline_entry_door
@@ -144,6 +147,12 @@ def find_issues(root: Optional[str] = None, rounds: int = 2, timeout: int = 600,
                 json.dump(leads, handle)
         from actions_github import GitHub  # noqa: E402
         prompt = cline_entry_door.WORKTREE_PROMPT
+        command = [sys.executable, str(Path(__file__).with_name('check_entry_shortlist.py').resolve()),
+                   '--path', 'shortlist.jsonl']
+        rendered = subprocess.list2cmdline(command) if os.name == 'nt' else shlex.join(command)
+        round_context = ('You can run the actual read-only production evidence verifier: ' + rendered
+                         + '. Read its JSON refusals and exact details, correct your evidence from real sources, '
+                         'and rerun it before declaring your shortlist verified. This tool does not dispatch or publish.')
         if targets:
             from actions_github import repository, issue_number
             scope = {(repository(r).lower(), issue_number(n)) for r, n in targets}
@@ -152,6 +161,8 @@ def find_issues(root: Optional[str] = None, rounds: int = 2, timeout: int = 600,
                        + '. Read their actual sources and conversation using tools. '
                        'Only inspect/select these issues. Do not mutate GitHub. '
                        'Finish after evaluating this scope; no global search is needed.')
+            round_context += ('\nKeep every repair round within these original issues: '
+                              + json.dumps(sorted(scope)) + '. Inspect and select only this scope.')
             downstream = on_admitted
 
             def scoped_admission(row):
@@ -198,7 +209,7 @@ The host records this as an unpriced owner request, without asserting a monetary
             limit=limit, timeout=timeout, cline=cline,
             verify=cline_entry_door.verify_model_rows,
             model=os.environ.get("BOUNTY_ENTRY_MODEL", "deepseek-v4.1-flash:free"),
-            first_prompt=prompt, on_admitted=on_admitted,
+            first_prompt=prompt, on_admitted=on_admitted, round_context=round_context,
             admission_client=GitHub())
         cline_entry_door.write_unpriced_leads(workdir, outcome.get("unpriced") or [])
     except Exception as exc:  # a broken door must not stop discovery
