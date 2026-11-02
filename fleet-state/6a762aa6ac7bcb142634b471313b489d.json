@@ -1,0 +1,46 @@
+{
+  "task_id": "6a762aa6ac7bcb142634b471313b489d",
+  "repo": "jorgedvp/aks-store-demo",
+  "issue_number": 4,
+  "status": "DISPATCHING",
+  "dispatch_id": "b1ea620f30424d93a22ee378f02fa729",
+  "admission": {
+    "funding": {
+      "payer": "jorgedvp",
+      "source_url": "https://github.com/jorgedvp/aks-store-demo/issues/4",
+      "authority_quote": "Customers are unable to place orders.",
+      "amount": "0",
+      "currency": "FOUNDER",
+      "usd_value": "0",
+      "quote": {
+        "basis": "Unpriced repository-owner request"
+      },
+      "raw": "All checkout requests to `order-service` in the `pets` namespace on cluster `aks-srelab` are timing out due to a Kubernetes NetworkPolicy that blocks **all ingress and egress** traffic to/from the order-service pods."
+    },
+    "agent_reason": "This is an OWNER-authored (author_association: OWNER, login jorgedvp) incident report announcing a live production outage: customer checkout is fully blocked because a NetworkPolicy denies all ingress/egress to the order-service pods. It is unpriced, so it is recorded as a founder-wound lead with no monetary claim. The report is bounded and actionable - it names the offending object (deny-order-service), the namespace, the failure mode (POST to order-service:3000 times out, egress to rabbitmq:5672 blocked) and includes the manifest and an impact table. The cited product file is the order-service application source whose HTTP endpoint the outage blocks.",
+    "scope_quote": "A NetworkPolicy named **`deny-order-service`** was applied at `2026-10-23T22:36:18Z` in the `pets` namespace.",
+    "code_evidence": {
+      "path": "src/order-service/app.js",
+      "sha": "301113a55163ab56a92fd7589e4713b04a20cadc",
+      "quote": "module.exports = async function (fastify, opts) {",
+      "is_product_code": true
+    },
+    "source_issue": "https://github.com/jorgedvp/aks-store-demo/issues/4",
+    "funding_status": "UNPRICED_OWNER_REQUEST",
+    "lane": "founder",
+    "task_id": "6a762aa6ac7bcb142634b471313b489d",
+    "source_revision": "07f211f86114881acb1d250d6cad2686161a940cc238ad7ebee2f020fd6771e7"
+  },
+  "dispatch_attempt": 1,
+  "sovereign_admission": true,
+  "competition": {
+    "blocking": false,
+    "nominal": []
+  },
+  "lanes": [
+    "founder"
+  ],
+  "dispatched_at": "2026-11-02T22:02:05.454273+00:00",
+  "attempt": 0,
+  "updated_at": "2026-11-02T22:02:05.454289+00:00"
+}
