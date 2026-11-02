@@ -1,0 +1,47 @@
+{
+  "task_id": "f6e765705b42f1517363469c39d501fd",
+  "repo": "isearchxsolve/oss-hunter-livefire",
+  "issue_number": 1,
+  "status": "DISPATCHING",
+  "dispatch_id": "4e5270a06c5a4255aa19d8b4c77cfcf7",
+  "admission": {
+    "funding": {
+      "payer": "isearchxsolve",
+      "source_url": "https://github.com/isearchxsolve/oss-hunter-livefire/issues/1",
+      "amount": "0",
+      "currency": "FOUNDER",
+      "usd_value": "0",
+      "quote": {
+        "basis": "Unpriced repository-owner request"
+      },
+      "raw": "No payment is promised or requested. Treat this as an unpriced owner request.",
+      "source_author_association": "OWNER",
+      "source_author_login": "isearchxsolve"
+    },
+    "agent_reason": "Repository owner requests a bounded, unpriced code fix: correct the day-to-second conversion (3600\u219286400) in duration.py while preserving zero and invalid-input behavior, plus regression tests; this is a genuine bounded code change with no funding or bounty.",
+    "scope_quote": "Scope: fix live_cases/r86314ea55eb4/duration.py and add regression tests in live_cases/r86314ea55eb4/. Do not edit existing tests or unrelated source.",
+    "code_evidence": {
+      "path": "live_cases/r86314ea55eb4/duration.py",
+      "sha": "9b8722e2cfd731b799beaff71d56ca9dfb92bf57",
+      "quote": "return days * 3600",
+      "is_product_code": true
+    },
+    "source_issue": "https://github.com/isearchxsolve/oss-hunter-livefire/issues/1",
+    "funding_status": "UNPRICED_OWNER_REQUEST",
+    "lane": "founder",
+    "task_id": "f6e765705b42f1517363469c39d501fd",
+    "source_revision": "57cdf28481b4f8aa90de00cf67166af4776bfe3055c8583e766bec36babcf755"
+  },
+  "dispatch_attempt": 1,
+  "sovereign_admission": true,
+  "competition": {
+    "blocking": false,
+    "nominal": []
+  },
+  "lanes": [
+    "founder"
+  ],
+  "dispatched_at": "2026-11-02T13:49:12.347973+00:00",
+  "attempt": 0,
+  "updated_at": "2026-11-02T13:49:12.347973+00:00"
+}
