@@ -8,7 +8,7 @@ run-name: 'Live integration ${{ github.run_id }}'
         type: string
         default: isearchxsolve/oss-hunter-livefire
       issue_number:
-        description: Existing original issue number; empty provisions the sandbox fixture
+        description: Optional issue diagnostic; empty drives the production entry door across real issues
         type: string
         required: false
       merge_fixture:
@@ -71,5 +71,10 @@ jobs:
           scratch/live-integration/scout-*/agent/run-*/admitted-stream.jsonl
           scratch/live-integration/artifacts-*/
           scratch/live-integration/intake-*/
+          scratch/live-integration/hydration-*/
+          scratch/live-integration/entry-queue/
+          scratch/live-integration/entry-scout/run-*/*.jsonl
+          scratch/live-integration/entry-scout/run-*/agent.log
+          scratch/live-integration/originals/
         if-no-files-found: error
         retention-days: 14

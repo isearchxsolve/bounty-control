@@ -19,6 +19,7 @@ import sys
 import threading
 import time
 import uuid
+from types import SimpleNamespace
 from urllib.parse import urlencode
 
 from actions_github import GitHub, GitHubError, StateStore, repository, task_id
@@ -852,6 +853,8 @@ class LiveRun:
         raise TimeoutError('Live delivery/CI deadline exhausted; resume observe, do not redispatch')
 
     def run(self):
+        if self.args.issue is None and not self.data.get('existing_issue'):
+            return self.pipeline()
         """Retain fleet-health failures while exercising independent scoped delivery."""
         check(not self.data.get('closed'), 'Campaign was closed; use a new run directory')
         try:
@@ -899,6 +902,171 @@ class LiveRun:
         else:
             self.record('END_TO_END', 'INCOMPLETE', reason='Merge/reconciliation requires --merge-fixture')
             raise AssertionError('End-to-end through merge has not been executed')
+
+    def pipeline(self):
+        """Drive the production door across its live sources; no selected issue or fixture."""
+        from sovereign_discovery import discover
+
+        self.data['mode'] = 'PIPELINE'
+        user = self.api.api('user')
+        control = self.api.api(f'repos/{self.control}')
+        deployed = self.api.api(f'repos/{self.control}/commits/{control["default_branch"]}')['sha']
+        check(not self.data.get('deployed_sha') or self.data['deployed_sha'] == deployed,
+              'Deployment changed during campaign; start a fresh pipeline journal')
+        self.data.update(account=user['login'], deployed_sha=deployed,
+                         local_sha=self.command(['git', 'rev-parse', 'HEAD']).strip())
+        self.save()
+        try:
+            self.intake()
+        except (AssertionError, GitHubError) as exc:
+            self.record('LIVE_INTAKE', 'FAIL', diagnostic=str(exc))
+
+        queue = self.folder / 'entry-queue'
+        if not self.data.get('pipeline_admitted'):
+            settings = {'BOUNTY_ENTRY_DOOR': 'cline',
+                        'BOUNTY_AGENT_WORKSPACE': str((self.folder / 'entry-scout').resolve()),
+                        'BOUNTY_AGENT_TIMEOUT': str(self.args.model_timeout)}
+            previous = {key: os.environ.get(key) for key in settings}
+            os.environ.update(settings)
+            try:
+                result = discover(['startup', 'founder', 'normal', 'programs'],
+                    max_dispatches=0, live=True, state_dir=queue,
+                    api=self.api, store=StateStore(self.api, self.control))
+            finally:
+                for key, value in previous.items():
+                    if value is None:
+                        os.environ.pop(key, None)
+                    else:
+                        os.environ[key] = value
+            self.data['entry_result'] = result
+            self.save()
+            with contextlib.closing(sqlite3.connect(queue / 'agent-queue.sqlite3')) as con:
+                admitted = con.execute("SELECT count(*) FROM decisions WHERE disposition='capacity_wait'").fetchone()[0]
+            self.record('PIPELINE_ENTRY', 'PASS' if admitted else 'FAIL',
+                        result=result, queued_originals=admitted, issue_filter=None)
+            check(admitted, 'Production entry door admitted no real candidate; downstream is unexercised')
+            self.data['pipeline_admitted'] = True
+            self.save()
+
+        with contextlib.closing(sqlite3.connect(queue / 'agent-queue.sqlite3')) as con:
+            rows = con.execute('SELECT task_id,payload,revision,disposition,at FROM decisions ORDER BY at,task_id').fetchall()
+        cohort = self.data.setdefault('cohort', {})
+        children = []
+
+        def absorb(child):
+            position = cohort[child.data['task_id']].get('events_read', 0)
+            for event in child.data['events'][position:]:
+                evidence = {key: value for key, value in event.items() if key not in ('case', 'status', 'at')}
+                evidence.update(original=child.data['issue_url'], evidence_journal=str(child.path), source_at=event['at'])
+                self.record(event['case'], event['status'], **evidence)
+            cohort[child.data['task_id']]['events_read'] = len(child.data['events'])
+            self.save()
+
+        for identity, payload, revision, disposition, at in rows:
+            if disposition != 'capacity_wait':
+                continue
+            row = json.loads(payload)
+            member = cohort.setdefault(identity, {'repo': row['repo'], 'issue': row['issue']})
+            args = SimpleNamespace(**{**vars(self.args), 'target': row['repo'], 'issue': row['issue'],
+                                      'run_dir': self.folder / 'originals' / identity, 'merge_fixture': False})
+            child = LiveRun(args)
+            if not child.data.get('admitted'):
+                child.data.update(issue=row['issue'], issue_url=row['url'], task_id=identity, admitted=row)
+                child_queue = child.folder / 'queue'
+                child_queue.mkdir(exist_ok=True)
+                with contextlib.closing(sqlite3.connect(child_queue / 'agent-queue.sqlite3')) as con:
+                    con.execute('CREATE TABLE IF NOT EXISTS decisions(task_id TEXT PRIMARY KEY,payload TEXT,revision TEXT,disposition TEXT,at TEXT)')
+                    con.execute('INSERT OR REPLACE INTO decisions VALUES(?,?,?,?,?)', (identity, payload, revision, disposition, at))
+                    con.commit()
+                child.data['queue_dir'] = str(child_queue.resolve())
+                child.record('LIVE_MODEL_ADMISSION', 'PASS', production_entry_journal=str(self.path),
+                             source_revision=row['admission']['source_revision'])
+                child.record('LIVE_QUEUE_DEFERRAL', 'PASS', production_queue=str(queue), dispatch_budget=0)
+            try:
+                child.preflight()
+                if not self.data.get('shared_faults_passed'):
+                    child.faults()
+                    if not child.data.get('negative_dispatch'):
+                        child.negative_claim()
+                    deadline = time.monotonic() + 600
+                    while not child.data.get('negative_claim_passed') and time.monotonic() < deadline:
+                        child.observe_negative()
+                        if not child.data.get('negative_claim_passed'):
+                            time.sleep(20)
+                    check(child.data.get('negative_claim_passed'), 'Real invalid-generation observation timed out')
+                    self.data['shared_faults_passed'] = True
+                child.source_rejections()
+                if not child.data.get('dispatch_id'):
+                    child.dispatch()
+                member['state'] = 'DISPATCHED'
+                children.append(child)
+            except (AssertionError, GitHubError, ValueError) as exc:
+                member.update(state='BLOCKED', diagnostic=str(exc))
+                self.record('PIPELINE_CANDIDATE', 'OBSERVED', original=row['url'], state='BLOCKED', diagnostic=str(exc))
+            finally:
+                absorb(child)
+            # Same per-pass dispatch budget as the production discovery workflow.
+            if len(children) >= 2:
+                break
+        check(children, 'No eligible original reached dispatch; candidate refusals retained')
+
+        deadline = time.monotonic() + self.args.wait_minutes * 60
+        while time.monotonic() < deadline:
+            for child in children:
+                member = cohort[child.data['task_id']]
+                if member.get('state') == 'DELIVERED':
+                    continue
+                try:
+                    state, _ = StateStore(self.api, self.control).read(child.data['task_id'])
+                    if state and state.get('dispatch_id') and state['dispatch_id'] != child.data['dispatch_id']:
+                        require_evidence(state, self.api.issue_context(child.target, child.data['issue']))
+                        archive = child.folder / ('generation-' + child.data['dispatch_id'] + '.json')
+                        archive.write_text(json.dumps(child.data, indent=2), encoding='utf-8')
+                        child.data['admitted'].update(admission=state['admission'], competition=state['competition'],
+                                                      sovereign_admission=state['sovereign_admission'])
+                        child.data.update(dispatch_id=state['dispatch_id'], run_search_since=state['dispatched_at'],
+                                          artifacts_downloaded=False, delivered_to_pr=False)
+                        member.pop('release_faults_passed', None)
+                        for name in ('ACTIONS_TERMINAL', 'REAL_PUBLICATION', 'ACTUAL_RELEASE_POSITIVE_CONTROL',
+                                     'MERGE_AND_RECONCILE_REPLAY', *[case for case in REQUIRED_CASES if case.startswith('LIVE_RELEASE_')]):
+                            child.record(name, 'PENDING', reason='Following actual production retry', dispatch_id=state['dispatch_id'])
+                    child.observe()
+                    if child.data.get('delivered_to_pr') and child.data.get('checks', {}).get('state') == 'PASSED':
+                        if not member.get('release_faults_passed'):
+                            child.artifact_faults()
+                            member['release_faults_passed'] = True
+                        pr = self.api.api(f'repos/{child.target}/pulls/{child.data["pr_number"]}')
+                        if pr.get('merged'):
+                            # This verifies a maintainer merge; never merges an upstream PR.
+                            from actions_reconcile import reconcile
+                            store = ScopedStore(self.api, self.control, [child.data['task_id']])
+                            reconcile(repair=False, api=self.api, store=store)
+                            first, _ = store.read(child.data['task_id'])
+                            reconcile(repair=False, api=self.api, store=store)
+                            second, _ = store.read(child.data['task_id'])
+                            check(first['status'] == second['status'] == 'DELIVERED', 'Merge/replay did not settle')
+                            check(second.get('payment_status') == 'UNVERIFIED', 'Merge was treated as payment')
+                            child.record('MERGE_AND_RECONCILE_REPLAY', 'PASS', pr=pr['html_url'], payment='UNVERIFIED')
+                            member['state'] = 'DELIVERED'
+                        else:
+                            member['state'] = 'AWAITING_MAINTAINER_MERGE'
+                    member.pop('diagnostic', None)
+                except (AssertionError, GitHubError, ValueError) as exc:
+                    member.update(state='FAILED_OR_PENDING_RECOVERY', diagnostic=str(exc))
+                    self.record('PIPELINE_MEMBER', 'FAIL', original=child.data['issue_url'], diagnostic=str(exc))
+                finally:
+                    absorb(child)
+            if all(cohort[c.data['task_id']]['state'] == 'DELIVERED' for c in children):
+                self.intake()
+                missing = [case for case, status in self.data['coverage'].items() if status != 'PASS']
+                check(not missing, f'Pipeline coverage incomplete: {missing}')
+                self.data['end_to_end_passed'] = True
+                self.save()
+                return
+            self.save()
+            time.sleep(20)
+        self.record('END_TO_END', 'INCOMPLETE', cohort=cohort, reason='Live delivery/review deadline exhausted')
+        raise TimeoutError('Pipeline remains incomplete; see per-original journals, without redispatching')
 
 
 class Tee:

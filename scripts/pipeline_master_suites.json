@@ -2,6 +2,10 @@
   "description": "Reviewed contract suites; excludes live operational probes. Modes preserve existing CI invocation.",
   "suites": [
     {
+      "file": "test_live_pipeline_scope.py",
+      "mode": "script"
+    },
+    {
       "file": "test_nvidia_router.py",
       "mode": "script"
     },
