@@ -1158,4 +1158,23 @@ class RetryObligationTests(unittest.TestCase):
         self.assertTrue(retryable_backlog([]) == 0)
 
 
+class LiveEntryDoorRepairWiring(unittest.TestCase):
+    def test_coordinator_preserves_a_repair_round_by_default(self):
+        observed = []
+        def finder(**kwargs):
+            observed.append(kwargs['rounds'])
+            return {'rows': [], 'reason': 'NO_ROWS'}
+        with tempfile.TemporaryDirectory() as folder, patch.dict(os.environ, {}, clear=True):
+            discover(['founder'], live=True, state_dir=folder, finder=finder,
+                     api=object(), store=SimpleNamespace(records=lambda: []))
+        self.assertEqual(observed, [2])
+
+    def test_publication_restriction_prevents_even_a_reservation(self):
+        for metadata in ({'has_pull_requests': False},
+                         {'pull_request_creation_policy': 'collaborators_only', 'permissions': {'push': False}}):
+            with self.subTest(metadata=metadata), self.assertRaisesRegex(ValueError, 'Publication blocked'):
+                dispatch.dispatch(object(), object(), {'repo': 'owner/repo', 'issue_number': 198,
+                                  'repository': metadata}, {}, ['founder'])
+
+
 if __name__=='__main__': unittest.main()

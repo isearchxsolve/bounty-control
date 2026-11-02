@@ -743,6 +743,12 @@ def dispatch(api, store, context, proof, lanes, remote_repair=False, preparation
     door ruling that never travelled (measured 2026-10-31, see docs/SOVEREIGN-STAMP-AUDIT).
     """
     repo, number = context["repo"], context["issue_number"]
+    metadata = context.get('repository') or {}
+    if metadata.get('has_pull_requests') is False:
+        raise ValueError('Publication blocked: repository has disabled pull requests')
+    if (metadata.get('pull_request_creation_policy') == 'collaborators_only'
+            and metadata.get('permissions', {}).get('push') is False):
+        raise ValueError('Publication blocked: collaborator-only pull requests; publisher has no write access')
     identity, dispatch_id = task_id(repo, number), uuid.uuid4().hex
     if isinstance(proof, dict) and "source_revision" not in proof and "issue" in context:
         from pipeline_evidence import bind_proof

@@ -127,7 +127,7 @@ def discover(lanes, max_dispatches=2, live=False, state_dir=None, hydrate_only=F
         else:
             agent_workspace_root = os.environ.get("BOUNTY_AGENT_WORKSPACE") or str(Path(tempfile.gettempdir()) / "bounty-agent-workspaces")
             door = (finder or find_issues)(root=agent_workspace_root,
-                rounds=int(os.environ.get("BOUNTY_AGENT_ROUNDS", "1")),
+                rounds=int(os.environ.get("BOUNTY_AGENT_ROUNDS", "2")),
                 timeout=int(os.environ.get("BOUNTY_AGENT_TIMEOUT", "600")),
                 limit=int(os.environ.get("BOUNTY_AGENT_ROW_LIMIT", "0")),
                 on_admitted=ingest, lanes=lanes,

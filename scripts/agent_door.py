@@ -217,7 +217,7 @@ The host records this as an unpriced owner request, without asserting a monetary
 
 
 def main() -> int:
-    result = find_issues(rounds=int(os.environ.get("BOUNTY_AGENT_ROUNDS", "1")))
+    result = find_issues(rounds=int(os.environ.get("BOUNTY_AGENT_ROUNDS", "2")))
     print(json.dumps({"reason": result.get("reason"), "rows": len(result.get("rows") or [])}))
     for row in result.get("rows") or []:
         print("ROW {repo}#{issue} :: {quote}".format(
