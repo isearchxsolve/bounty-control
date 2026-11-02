@@ -2,7 +2,7 @@
   "task_id": "6a762aa6ac7bcb142634b471313b489d",
   "repo": "jorgedvp/aks-store-demo",
   "issue_number": 4,
-  "status": "CLAIMED",
+  "status": "FAILED_DELIVERABLE_MISSING",
   "dispatch_id": "a866228f76ac4a0198fe32d96ddc612c",
   "admission": {
     "funding": {
@@ -42,7 +42,7 @@
   ],
   "dispatched_at": "2026-11-02T22:11:39.548072+00:00",
   "attempt": 2,
-  "updated_at": "2026-11-02T22:11:51.931748+00:00",
+  "updated_at": "2026-11-02T22:17:18.219622+00:00",
   "owner": "41535125426:1",
   "previous_owner": "41533701703:1",
   "previous_status": "DISPATCHED",
@@ -51,10 +51,10 @@
   "claimed_at": "2026-11-02T22:11:51.931690+00:00",
   "lease_expires_at": "2026-11-03T02:16:51.931706+00:00",
   "preparation_budget_seconds": 14400,
-  "kind": "engineer",
+  "kind": "deliverable_invalid",
   "retryable": true,
-  "diagnostic": "Cline preparation failed: error: No Token Harbor key is currently ready. |",
-  "at": "2026-11-02T22:06:01.832162+00:00",
+  "diagnostic": "Cline deliverable invalid at /tmp/fleet-artifacts/delivery-supervisor/cd2376e5d349478e93c9d6fda268bc99.preparation.json: Cline preparation must leave a clean, unchanged upstream baseline (dirty: src/order-service/.tap/processinfo/0a8371b1-044c-4b04-a042-a41d168a4290.json, src/order-service/.tap/processinfo/8947773e-c147-4b36-bbee-e32de04c6820.json)",
+  "at": "2026-11-02T22:16:43.047313+00:00",
   "failures": [
     {
       "run_url": "https://github.com/isearchxsolve/bounty-control/actions/runs/41533701703",
@@ -63,7 +63,19 @@
       "retryable": true,
       "diagnostic": "Cline preparation failed: error: No Token Harbor key is currently ready. |",
       "at": "2026-11-02T22:06:01.832162+00:00"
+    },
+    {
+      "run_url": "https://github.com/isearchxsolve/bounty-control/actions/runs/41535125426",
+      "status": "FAILED_DELIVERABLE_MISSING",
+      "kind": "deliverable_invalid",
+      "retryable": true,
+      "diagnostic": "Cline deliverable invalid at /tmp/fleet-artifacts/delivery-supervisor/cd2376e5d349478e93c9d6fda268bc99.preparation.json: Cline preparation must leave a clean, unchanged upstream baseline (dirty: src/order-service/.tap/processinfo/0a8371b1-044c-4b04-a042-a41d168a4290.json, src/order-service/.tap/processinfo/8947773e-c147-4b36-bbee-e32de04c6820.json)",
+      "path": "/tmp/fleet-artifacts/delivery-supervisor/cd2376e5d349478e93c9d6fda268bc99.preparation.json",
+      "reason": "Cline preparation must leave a clean, unchanged upstream baseline (dirty: src/order-service/.tap/processinfo/0a8371b1-044c-4b04-a042-a41d168a4290.json, src/order-service/.tap/processinfo/8947773e-c147-4b36-bbee-e32de04c6820.json)",
+      "at": "2026-11-02T22:16:43.047313+00:00"
     }
   ],
-  "finished_at": "2026-11-02T22:06:12.770784+00:00"
+  "finished_at": "2026-11-02T22:17:17.611074+00:00",
+  "path": "/tmp/fleet-artifacts/delivery-supervisor/cd2376e5d349478e93c9d6fda268bc99.preparation.json",
+  "reason": "Cline preparation must leave a clean, unchanged upstream baseline (dirty: src/order-service/.tap/processinfo/0a8371b1-044c-4b04-a042-a41d168a4290.json, src/order-service/.tap/processinfo/8947773e-c147-4b36-bbee-e32de04c6820.json)"
 }
