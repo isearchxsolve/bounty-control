@@ -1,18 +1,5 @@
 {
-  "task_id": "bd39667f26e9bde9596b20bc44f8b3e0",
-  "repo": "fiztoz/uptime-phoenix",
-  "issue_number": 198,
-  "status": "CLAIMED",
-  "dispatch_id": "353c9dbae113421e90c171d52ada5792",
-  "attempt": 1,
-  "fault_fixture": true,
-  "updated_at": "2026-11-02T22:11:40.081854+00:00",
-  "owner": "fault-worker-a:1",
-  "previous_owner": null,
-  "previous_status": "DISPATCHED",
-  "run_url": "https://example.invalid/fault-worker",
-  "harness_sha": "565b98385f5e9ac12a9957d2790f66bc3860f273",
-  "claimed_at": "2026-11-02T22:11:33.583029+00:00",
-  "lease_expires_at": "2026-11-03T02:16:33.583041+00:00",
-  "owner_revoked": "fault-worker-a:1"
+  "status": "FAILED_ENGINEERING",
+  "attempt": 3,
+  "updated_at": "2026-11-02T22:11:41.938733+00:00"
 }
