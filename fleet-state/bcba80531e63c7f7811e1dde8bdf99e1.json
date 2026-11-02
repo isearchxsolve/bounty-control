@@ -2,7 +2,7 @@
   "task_id": "bcba80531e63c7f7811e1dde8bdf99e1",
   "repo": "getkcoin-alt/itsmay",
   "issue_number": 27,
-  "status": "DISPATCHING",
+  "status": "DISPATCHED",
   "dispatch_id": "8d7153b4bd2b43a1a5cc309ef061eb3d",
   "admission": {
     "funding": {
@@ -43,7 +43,7 @@
   ],
   "dispatched_at": "2026-11-02T22:11:48.332237+00:00",
   "attempt": 1,
-  "updated_at": "2026-11-02T22:11:48.332252+00:00",
+  "updated_at": "2026-11-02T22:11:49.872482+00:00",
   "owner": "41533728353:1",
   "previous_owner": null,
   "previous_status": "DISPATCHED",
