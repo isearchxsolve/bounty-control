@@ -1,0 +1,48 @@
+{
+  "task_id": "16d061dd6a18370cbcc3d2e3424ec5f9",
+  "repo": "QuantumSavory/QuantumSavory.jl",
+  "issue_number": 138,
+  "status": "DISPATCHING",
+  "dispatch_id": "202ab26760ca434297183b2721c4b2de",
+  "admission": {
+    "funding": {
+      "amount": "400",
+      "currency": "USD",
+      "payer": "Krastanov",
+      "source_url": "https://github.com/QuantumSavory/QuantumSavory.jl/issues/138",
+      "usd_value": "400",
+      "quote": {
+        "basis": "USD face value",
+        "usd_rate": "1"
+      },
+      "raw": "# Implement a new interactive example [$400]",
+      "source_author_association": "MEMBER",
+      "source_author_login": "Krastanov"
+    },
+    "agent_reason": "Repo MEMBER Krastanov hung a $400 bounty on implementing one new interactive example in QuantumSavory.jl.",
+    "scope_quote": "To claim this bounty propose, discuss, and implement new examples of a networking simulations of interest to you.",
+    "code_evidence": {
+      "is_product_code": true,
+      "path": "examples/simpleswitch/1_interactive_visualization.jl",
+      "quote": "fig = Figure(size=(1600,800))",
+      "sha": "3e195528f82db1417f10fb8c52e240859f694148"
+    },
+    "source_issue": "https://github.com/QuantumSavory/QuantumSavory.jl/issues/138",
+    "funding_status": "PRICED_OFFER",
+    "lane": "normal",
+    "task_id": "16d061dd6a18370cbcc3d2e3424ec5f9",
+    "source_revision": "0388a7c4f3580ae0b191d188336bcfbf66b5ee03cecdc77ceeabb367db496027"
+  },
+  "dispatch_attempt": 1,
+  "sovereign_admission": true,
+  "competition": {
+    "blocking": false,
+    "nominal": []
+  },
+  "lanes": [
+    "normal"
+  ],
+  "dispatched_at": "2026-11-02T13:26:05.896653+00:00",
+  "attempt": 0,
+  "updated_at": "2026-11-02T13:26:05.896673+00:00"
+}
