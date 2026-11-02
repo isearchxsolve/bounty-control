@@ -726,7 +726,10 @@ def gateway_failover(payload: dict, error_message: Optional[str], router: Option
             # that would have expired shortly after. Rotate all 17 TokenHarbor keys, then
             # all 14 NVIDIA keys, then wait -- bounded -- for the nearest expiry.
             primary = _get_default_router()
-            wait = min(primary.seconds_until_ready_key(), fallback.seconds_until_ready_key())
+            waits = [primary.seconds_until_ready_key(), fallback.seconds_until_ready_key()]
+            # Zero also means a pool has no recoverable key. It must not cancel
+            # the other pool's measured, positive cooldown.
+            wait = min((value for value in waits if value > 0), default=0)
             if 0 < wait <= GATEWAY_COOLDOWN_WAIT_SECONDS:
                 _command_log(f'CLINE_GATEWAY COOLDOWN id={request_id} both brains throttled; '
                              f'nearest key returns in {wait:.0f}s; resuming after it')
@@ -753,10 +756,12 @@ def gateway_failover(payload: dict, error_message: Optional[str], router: Option
                          f'model={model_used}{elapsed} {combined[:400]}')
             outcome = (False, {}, model_used, combined)
         return outcome
-    except Exception:
+    except Exception as exc:
         # The fallback is an optimisation over a loud failure; it must never be the
         # reason a request dies without a diagnostic.
-        return None
+        diagnostic = f'Provider failover error ({type(exc).__name__}): {_sanitize_runtime_diagnostic(str(exc))}'
+        _command_log(diagnostic)
+        return False, {}, nvidia_delivery_model(), f'{error_message}; {diagnostic}'
 
 
 def call_deepseek_flash(prompt: str, system_prompt: Optional[str] = None, timeout: int = DEFAULT_TIMEOUT_SECONDS) -> Tuple[bool, str, Optional[str]]:

@@ -164,5 +164,34 @@ class ParachuteModelContract(unittest.TestCase):
         self.assertEqual(worker.nvidia_delivery_model(), nr.DEFAULT_MODEL)
 
 
+class LiveCooldownRegression(unittest.TestCase):
+    def test_a_throttled_pool_can_report_and_leave_cooldown(self):
+        now = [100.0]
+        router = nr.NvidiaRouter(keys=['test'], clock=lambda: now[0], cooldown_seconds=20,
+                                 transport=FakeTransport([(429, 'limited'), (200, ok_body())]))
+        payload = {'messages': [{'role': 'user', 'content': 'test'}]}
+        self.assertFalse(router.chat_completion(payload)[0])
+        self.assertEqual(router.seconds_until_ready_key(), 20)
+        now[0] += 20
+        self.assertEqual(router.seconds_until_ready_key(), 0)
+        self.assertTrue(router.chat_completion(payload)[0])
+
+    def test_dead_primary_does_not_prevent_fallback_cooldown_recovery(self):
+        from unittest.mock import patch
+        import kaggle_engine_worker as worker
+        now = [100.0]
+        payload = {'messages': [{'role': 'user', 'content': 'test'}]}
+        primary = worker.TokenHarborRouter(keys=['test-primary'], clock=lambda: now[0],
+            transport=lambda *args: (401, {}, {'error': {'message': 'revoked'}}))
+        primary.chat_completion(payload)
+        fallback = nr.NvidiaRouter(keys=['test-fallback'], clock=lambda: now[0], cooldown_seconds=20,
+            transport=FakeTransport([(429, 'limited'), (200, ok_body())]))
+        def advance(seconds):
+            now[0] += seconds
+        with patch.object(worker, '_get_default_router', return_value=primary), patch.object(worker.time, 'sleep', side_effect=advance):
+            outcome = worker.gateway_failover(payload, 'No Token Harbor key is currently ready.', router=fallback)
+        self.assertTrue(outcome[0], outcome)
+
+
 if __name__ == "__main__":
     unittest.main(verbosity=2)

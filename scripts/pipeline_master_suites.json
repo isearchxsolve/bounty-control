@@ -2,6 +2,10 @@
   "description": "Reviewed contract suites; excludes live operational probes. Modes preserve existing CI invocation.",
   "suites": [
     {
+      "file": "test_nvidia_router.py",
+      "mode": "script"
+    },
+    {
       "file": "test_actions_migration.py",
       "mode": "script"
     },

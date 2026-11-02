@@ -113,6 +113,12 @@ class NvidiaRouter:
             return 0, f"{type(exc).__name__}: {exc}"
 
     # ------------------------------------------------------------------ leasing
+    def _refresh_cooldowns_locked(self) -> None:
+        now = self._clock()
+        for slot in self._slots:
+            if slot.state == COOLDOWN and slot.cooldown_until <= now:
+                slot.state = READY
+
     def _lease(self) -> Optional[Tuple[int, _Slot]]:
         with self._lock:
             now = self._clock()
