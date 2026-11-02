@@ -2,7 +2,7 @@
   "task_id": "bd39667f26e9bde9596b20bc44f8b3e0",
   "repo": "fiztoz/uptime-phoenix",
   "issue_number": 198,
-  "status": "PUBLISHING",
+  "status": "FAILED_PUBLISH",
   "dispatch_id": "30e9b59878ee44d1b99b87f54ead6eee",
   "admission": {
     "funding": {
@@ -43,7 +43,7 @@
   ],
   "dispatched_at": "2026-11-02T18:14:09.422081+00:00",
   "attempt": 3,
-  "updated_at": "2026-11-02T18:32:07.000615+00:00",
+  "updated_at": "2026-11-02T18:32:22.985341+00:00",
   "owner": "41498624114:1",
   "previous_owner": "41493943796:1",
   "previous_status": "DISPATCHED",
@@ -57,8 +57,8 @@
   "verified_run": "https://github.com/isearchxsolve/bounty-control/actions/runs/41498624114",
   "kind": "engineer",
   "retryable": true,
-  "diagnostic": "Bounded Cline delivery repair exhausted: Independent release verification failed: Base regression did not fail on the specified defect assertion:\n--- FAIL: TestApplyOverallRegression_ContiguousDownBucketsCountAsOneOutage (0.00s)\n    insights_projection_companion_test.go:32: contiguous DOWN buckets: outage_count = 420, want 1\nFAIL\nFAIL\tgithub.com/fiztoz/uptime-phoenix/internal/core/services\t0.182s\nFAIL\n\n\nRead complete native receipts at /tmp/fleet-artifacts. Repair the actual failure, preserving completed edits and master tests.",
-  "at": "2026-11-02T18:10:51.017147+00:00",
+  "diagnostic": "gh: Not Found (HTTP 404)\n",
+  "at": "2026-11-02T18:32:12.212400+00:00",
   "failures": [
     {
       "run_url": "https://github.com/isearchxsolve/bounty-control/actions/runs/41488848364",
@@ -75,7 +75,15 @@
       "retryable": true,
       "diagnostic": "Bounded Cline delivery repair exhausted: Independent release verification failed: Base regression did not fail on the specified defect assertion:\n--- FAIL: TestApplyOverallRegression_ContiguousDownBucketsCountAsOneOutage (0.00s)\n    insights_projection_companion_test.go:32: contiguous DOWN buckets: outage_count = 420, want 1\nFAIL\nFAIL\tgithub.com/fiztoz/uptime-phoenix/internal/core/services\t0.182s\nFAIL\n\n\nRead complete native receipts at /tmp/fleet-artifacts. Repair the actual failure, preserving completed edits and master tests.",
       "at": "2026-11-02T18:10:51.017147+00:00"
+    },
+    {
+      "run_url": "https://github.com/isearchxsolve/bounty-control/actions/runs/41498624114",
+      "status": "FAILED_PUBLISH",
+      "kind": "engineer",
+      "retryable": true,
+      "diagnostic": "gh: Not Found (HTTP 404)\n",
+      "at": "2026-11-02T18:32:12.212400+00:00"
     }
   ],
-  "finished_at": "2026-11-02T18:12:31.254982+00:00"
+  "finished_at": "2026-11-02T18:32:22.366578+00:00"
 }
