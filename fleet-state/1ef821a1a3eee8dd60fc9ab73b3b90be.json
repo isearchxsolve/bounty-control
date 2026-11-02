@@ -1,8 +1,10 @@
 {
   "task_id": "1ef821a1a3eee8dd60fc9ab73b3b90be",
-  "status": "FAULT_FIXTURE",
-  "marker": "rc3b74de3bb46",
-  "text": "Unicode \u20b9 \u65e5\u672c\u8a9e\nsecond line",
-  "updated_at": "2026-11-02T20:16:48.291801+00:00",
-  "counter": 1
+  "repo": "isearchxsolve/oss-hunter-livefire",
+  "issue_number": 10,
+  "status": "DISPATCHED",
+  "dispatch_id": "92c35283d2f243f3affde95da9ef362a",
+  "attempt": 0,
+  "fault_fixture": true,
+  "updated_at": "2026-11-02T20:16:50.539077+00:00"
 }
