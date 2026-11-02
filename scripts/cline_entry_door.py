@@ -26,6 +26,7 @@ import sys
 import threading
 import time
 from datetime import datetime, timezone
+from pathlib import Path
 from typing import Callable, Dict, List, Optional
 
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
@@ -1003,9 +1004,37 @@ DOWNSTREAM_CHECKS = [
 RSN = chr(10)
 
 
+def render_founder_roster() -> str:
+    """The pre-curated founder and platform queries, rendered for TASK.md.
+
+    Measured 2026-11-02 (run 41370127163): the scout spent roughly twelve minutes improvising
+    open-ended ``gh search issues`` commands, discovered GitHub offers no REST qualifier for
+    ``author_association:OWNER``, and admitted zero rows from a whole round. These queries were
+    curated in ``bounty_queries.json`` precisely because of that: the platform commenter and
+    wounded-founder veins that REST cannot filter for. Running them first is not a recipe for
+    judgement -- the choice of what to do with a result stays the agent's -- but a round that
+    starts by re-deriving the same search topology from scratch has already spent the budget
+    that buys rows.
+    """
+    try:
+        roster_path = Path(__file__).resolve().parent / "bounty_queries.json"
+        queries = json.loads(roster_path.read_text(encoding="utf-8"))
+    except (OSError, ValueError):
+        return "(the roster file could not be read; search on your own judgement)"
+    founders = queries.get("founder") or []
+    if not founders:
+        return "(the roster is empty; search on your own judgement)"
+    listing = RSN.join(f"{index}. `{query}`" for index, query in enumerate(founders, 1))
+    return (f"Run these {len(founders)} curated queries first, in order. They name the veins that "
+            f"pay: the bounty platforms' own commenters, the founder-wound phrasings, and the "
+            f"outage vocabulary that only an owner writes. Work down the list and stop when your "
+            f"basket is full or the clock is short:{RSN}{RSN}{listing}")
+
+
 def render_task_file() -> str:
     checks = RSN.join(f"- {code}: {meaning}" for code, meaning in GATE_CHECKS)
     downstream = RSN.join(f"- {code}: {meaning}" for code, meaning in DOWNSTREAM_CHECKS)
+    founders = render_founder_roster()
     try:
         budget = int(os.environ.get("BOUNTY_AGENT_TIMEOUT", "1800"))
     except ValueError:
@@ -1049,6 +1078,10 @@ somewhere for you to find.
 There are two streams of genuine work:
 1. Funded Bounties: An open issue with committed monetary payment figures stated in the issue text or comments.
 2. Wounded Founders: An open issue created by the repository OWNER (author_association: OWNER) announcing production downtime, outages, critical regressions, or backend hardening.
+
+The roster of queries that pays, in the order to walk them:
+
+{founders}
 
 ## Facts about this workspace
 
@@ -1229,6 +1262,21 @@ this reason.
 
 A figure with no currency, or a vague promise with no number, is the same waste: the row needs a
 figure and a currency the gate can read back from the quote.
+
+Stage one ends with one command, before you open anything else: `gh pr list --repo OWNER/NAME
+--state open --search "123 in:body" --json number,author,url`. That is the tree being
+climbed, and it costs one call. `COMPETING_OPEN_PRS` is what a row comes back refused by when
+someone has landed work on that issue and is mid-flight - measured 2026-11-02 (run 41370127163),
+dgmolla/fitsy#605 was refused by exactly that gate, and the scout had already read the competing
+pull request before submitting. So run the check before the research, not after: an open pull
+request from a stranger with no landed work here is not competition and the row survives it, but
+an open pull request from someone with landed work is a tree you do not climb.
+
+The quote has to survive transcription too. It must be one contiguous, exact run of at least a
+dozen characters copied from the payer's own sentence - the gate compares it character for
+character, and a paraphrase is refused as `REWARD_QUOTE_NOT_IN_ISSUE`. A platform bot's
+announcement is quotable: algora posts `## :diamond_shape_with_a_circle_exclamation: $500 bounty
+:link: Repo`, so quote from that, not a summary of it.
 
 ## Nobody rations your basket
 

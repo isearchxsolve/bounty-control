@@ -3,8 +3,10 @@ from contextlib import ExitStack, redirect_stdout
 import hashlib
 import io
 import json
+import os
 from pathlib import Path
 import re
+import shutil
 import subprocess
 import tempfile
 from types import SimpleNamespace
@@ -237,6 +239,274 @@ class DeliveryOwnershipTests(unittest.TestCase):
             for command in (['cargo', 'test'], ['pnpm', 'test'], ['sbt', 'test'], ['custom', 'verify']):
                 self.assertEqual(worker.native_verification_timeout(command, 180), 3600)
 
+
+    def test_a_citation_of_a_manifest_rewritten_by_its_own_install_still_validates(self):
+        """Measured 2026-11-02 (OpenOrg-gg/AmphoraProtocol#4, run 41370189274): the surveyor ran
+        `npm install` and then hashed package-lock.json, so the host compared the customer's
+        clean object against the bytes an install had just produced and refused the delivery.
+        The citation names a committed object, so that is the only thing it can be compared to.
+        """
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory, 'checkout')
+            checkout(root)
+            lock = root / 'package-lock.json'
+            lock.write_text('{"lockfileVersion": 2}', encoding='utf-8')
+            subprocess.run(['git', '-C', str(root), 'add', 'package-lock.json'],
+                           check=True, capture_output=True)
+            subprocess.run(['git', '-C', str(root), 'commit', '-qm', 'add lock'],
+                           check=True, capture_output=True)
+            committed = hashlib.sha256(lock.read_bytes()).hexdigest()
+            # Now provision against it, exactly as the failing delivery did.
+            lock.write_text('{"lockfileVersion": 3, "resolved": true}', encoding='utf-8')
+            report = document(root)
+            report['sources'] = [{'path': 'package-lock.json', 'sha256': committed}]
+            supervisor.validate_plan(report, root)
+
+    def test_a_citation_that_matches_nothing_is_still_refused(self):
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory, 'checkout')
+            checkout(root)
+            report = document(root)
+            report['sources'] = [{'path': 'package.json', 'sha256': '0' * 64}]
+            with self.assertRaisesRegex(ValueError, 'SHA-256'):
+                supervisor.validate_plan(report, root)
+            report['sources'] = [{'path': 'src/app.js', 'sha256': hashlib.sha256(b'x').hexdigest()}]
+            with self.assertRaisesRegex(ValueError, 'outside the repository'):
+                supervisor.validate_plan(report, root)
+
+    def test_the_intake_prompt_teaches_hashing_the_committed_object(self):
+        """Measured 2026-11-02: the same delivery. The host fix makes the citation valid; the
+        directive is why the agent stops holding an install's bytes at all."""
+        with tempfile.TemporaryDirectory() as directory:
+            sandbox = Path(directory, 'sandbox')
+            worktree = sandbox / 'repos' / 'unit--runtime--7'
+            sha = checkout(worktree)
+            prompts = []
+
+            def execute(argv, **kwargs):
+                prompts.append(argv[-1])
+                report = document(worktree)
+                report.update(worktree=str(worktree), base_sha=sha, default_branch='main')
+                report_path = Path(re.search(r'to (.+\.preparation\.json):', argv[-1])[1])
+                report_path.write_text(json.dumps(report), encoding='utf-8')
+                return worker.CommandResult(argv, kwargs['cwd'], 0, 'isolated mock Cline', '', 0)
+
+            with patch.object(worker, 'SANDBOX_DIR', str(sandbox)), \
+                 patch.object(worker, 'PACKET_DIR', str(Path(directory, 'packet'))), \
+                 patch.object(worker, 'cline_worktree_command', side_effect=lambda cwd, p: ['unit-cline', p]), \
+                 patch.object(worker, 'run_command_safe', side_effect=execute), \
+                 patch.object(worker, '_git_checked', side_effect=worker._git_checked), \
+                 redirect_stdout(io.StringIO()):
+                worker.run_cline_claim_intake({'repo': 'unit/runtime', 'issue_number': 7,
+                                               'body': 'fixture'}, SimpleNamespace(run_id='isolated-unit-run'))
+        self.assertIn("git show HEAD:<path>", prompts[0])
+        self.assertIn("hash first, provision second", prompts[0])
+
+
+class DeliveryEnvironmentTests(unittest.TestCase):
+    """The runner's environment, not the agent's knowledge, carries what the runner knows.
+
+    Measured 2026-11-02 (smallbets/userbase#305, run 41370206822): `npm run build` died with
+    ERR_OSSL_EVP_UNSUPPORTED -- Webpack 4 hashing with MD4 on Node 22 -- and the delivery then
+    spent its repair budget reasoning about whether this Node still supports the legacy flag.
+    It does, on every Node this runner ships, so the environment says so once here instead.
+    """
+
+    def delivery_environment(self):
+        """Actions_delivery.runtime()'s view of the environment, without a real Cline install."""
+        import actions_delivery
+        fresh = {'PATH': os.environ.get('PATH', ''), 'HOME': os.environ.get('HOME', '')}
+        with patch.object(actions_delivery.os, 'environ', fresh):
+            return fresh
+
+    def test_the_legacy_openssl_provider_reaches_every_node_child(self):
+        """The flag is set before any command runs, so a Webpack 4 build does not have to
+        discover it -- and an existing NODE_OPTIONS (the memory ceiling, or the task's own) is
+        composed with, never replaced. The stop at the import is deliberate: asserting the
+        environment needs no Cline installed, and the rest runtime() would configure one."""
+        import actions_delivery
+        import sys
+        from unittest.mock import MagicMock, patch as _patch
+
+        class StopAfterEnvironment(Exception):
+            pass
+
+        base = {'PATH': 'x', 'HOME': 'y', 'NODE_OPTIONS': '--max-old-space-size=3072'}
+        guard = MagicMock(side_effect=StopAfterEnvironment())
+        with _patch.object(actions_delivery.os, 'environ', base), \
+                _patch.object(actions_delivery, 'artifacts', return_value=Path('C:/unused')), \
+                _patch.dict(sys.modules, {'kaggle_engine_worker': MagicMock(configure_cline_for_engine=guard)}):
+            with self.assertRaises(StopAfterEnvironment):
+                actions_delivery.runtime()
+        self.assertIn('--openssl-legacy-provider', base['NODE_OPTIONS'])
+        self.assertIn('--max-old-space-size=3072', base['NODE_OPTIONS'])
+
+    def test_no_existing_options_still_gets_the_flag(self):
+        import actions_delivery
+        import sys
+        from unittest.mock import MagicMock, patch as _patch
+
+        class StopAfterEnvironment(Exception):
+            pass
+
+        base = {'PATH': 'x'}
+        guard = MagicMock(side_effect=StopAfterEnvironment())
+        with _patch.object(actions_delivery.os, 'environ', base), \
+                _patch.object(actions_delivery, 'artifacts', return_value=Path('C:/unused')), \
+                _patch.dict(sys.modules, {'kaggle_engine_worker': MagicMock(configure_cline_for_engine=guard)}):
+            with self.assertRaises(StopAfterEnvironment):
+                actions_delivery.runtime()
+        self.assertEqual(base['NODE_OPTIONS'], '--openssl-legacy-provider')
+
+
+class ExitCodeIsTheVerdictTests(unittest.TestCase):
+    """A command's exit code is its verdict; text on either stream is not.
+
+    Measured 2026-11-02 (Spectral-Finance/lux#80, run 41357378768): Cline built Erlang/OTP
+    successfully, `mix compile` exited 0, and its stderr carried unused-variable warnings plus
+    asdf upgrade notices. The gate read those lines as a test failure and the delivery died.
+    """
+
+    def test_final_verification_passes_a_command_that_warns_and_exits_zero(self):
+        from actions_release import require_commands
+        command = ['mix', 'compile']
+        results = [{'argv': command, 'exit_code': 0,
+                    'stdout': 'Compiling 3 files',
+                    'stderr': ('warning: variable "response" is unused\n'
+                               'NOTICE: You have tried to upgrade to asdf 0.16.0\n')}]
+        require_commands([command], results)
+
+    def test_final_verification_still_refuses_a_command_that_fails(self):
+        from actions_release import require_commands
+        command = ['mix', 'compile']
+        with self.assertRaisesRegex(ValueError, 'A final native command failed'):
+            require_commands([command], [{'argv': command, 'exit_code': 1, 'stdout': '', 'stderr': 'boom'}])
+
+    def test_final_verification_still_refuses_a_command_that_ran_nothing(self):
+        from actions_release import require_commands
+        command = ['mix', 'compile']
+        with self.assertRaisesRegex(ValueError, 'zero executed tests'):
+            require_commands([command], [{'argv': command, 'exit_code': 0,
+                                          'stdout': 'No tests found', 'stderr': ''}])
+
+    def test_the_regression_green_gate_does_not_read_warnings_as_red(self):
+        """A command exiting 0 with warnings on stderr is the case that killed lux#80: the green
+        gate used to refuse it. The red probe still has to fail for the named assertion, or the
+        regression proves nothing -- which this test exercises through the same code path."""
+        import actions_release
+        from unittest.mock import patch as _patch
+
+        root = Path(tempfile.mkdtemp())
+        shutil.rmtree(root)
+        sha = checkout(root)
+        (root / 'src').mkdir()
+        (root / 'src' / 'app.js').write_text('module.exports = () => 0;\n', encoding='utf-8')
+        (root / 'src' / 'app.test.js').write_text('require("./app");\n', encoding='utf-8')
+        subprocess.run(['git', '-C', str(root), 'add', 'src'], check=True, capture_output=True)
+        subprocess.run(['git', '-C', str(root), 'commit', '-qm', 'add companion test'],
+                       check=True, capture_output=True)
+        self.addCleanup(lambda: shutil.rmtree(root, ignore_errors=True))
+        document = {'test_files': ['src/app.test.js'], 'argv': ['node', '--test'],
+                    'expected_failure': 'AssertionError [ERR_ASSERTION]: the defect'}
+        states = iter(['red', 'green'])
+
+        def execute(command):
+            state = next(states)
+            if state == 'red':
+                return type('R', (), {'exit_code': 1, 'stdout': '',
+                                      'stderr': 'AssertionError [ERR_ASSERTION]: the defect'})()
+            return type('G', (), {'exit_code': 0, 'stdout': 'ok',
+                                  'stderr': ('warning: variable "response" is unused\n'
+                                             'NOTICE: asdf upgrade available')})()
+
+        with _patch.object(actions_release, 'git') as fake_git, \
+                _patch.object(actions_release, 'status_paths',
+                              return_value=['src/app.js', 'src/app.test.js']), \
+                _patch.object(actions_release, 'manifest', return_value={}):
+            fake_git.return_value.stdout = b''
+            proof = actions_release.regression_proof(root, sha, document, execute)
+        self.assertEqual(proof['green_exit'], 0)
+        self.assertEqual(proof['red_exit'], 1)
+
+    def test_the_regression_green_gate_still_refuses_a_real_failure(self):
+        """The other half of the same gate: a green probe that exits non-zero is not green, and
+        this must survive the removal of the output scan."""
+        import actions_release
+        from unittest.mock import patch as _patch
+
+        root = Path(tempfile.mkdtemp())
+        shutil.rmtree(root)
+        sha = checkout(root)
+        (root / 'src').mkdir()
+        (root / 'src' / 'app.js').write_text('module.exports = () => 0;\n', encoding='utf-8')
+        (root / 'src' / 'app.test.js').write_text('require("./app");\n', encoding='utf-8')
+        subprocess.run(['git', '-C', str(root), 'add', 'src'], check=True, capture_output=True)
+        subprocess.run(['git', '-C', str(root), 'commit', '-qm', 'add companion test'],
+                       check=True, capture_output=True)
+        self.addCleanup(lambda: shutil.rmtree(root, ignore_errors=True))
+        document = {'test_files': ['src/app.test.js'], 'argv': ['node', '--test'],
+                    'expected_failure': 'AssertionError [ERR_ASSERTION]: the defect'}
+        states = iter(['red', 'green'])
+
+        def execute(command):
+            if next(states) == 'red':
+                return type('R', (), {'exit_code': 1, 'stdout': '',
+                                      'stderr': 'AssertionError [ERR_ASSERTION]: the defect'})()
+            return type('G', (), {'exit_code': 1, 'stdout': '', 'stderr': 'still red'})()
+
+        with _patch.object(actions_release, 'git') as fake_git, \
+                _patch.object(actions_release, 'status_paths',
+                              return_value=['src/app.js', 'src/app.test.js']), \
+                _patch.object(actions_release, 'manifest', return_value={}):
+            fake_git.return_value.stdout = b''
+            with self.assertRaisesRegex(ValueError, 'is not green'):
+                actions_release.regression_proof(root, sha, document, execute)
+
+
+class DoorRosterTests(unittest.TestCase):
+    """The curated founder queries are run first, in order, before anything improvised.
+
+    Measured 2026-11-02 (run 41370127163): the scout spent roughly twelve minutes deriving the
+    search topology from scratch, discovered GitHub offers no REST qualifier for
+    ``author_association:OWNER``, and admitted zero rows from a whole round. The roster in
+    bounty_queries.json exists precisely because of those blind spots, and a round that starts by
+    re-deriving it has already spent the budget that buys rows.
+    """
+
+    def setUp(self):
+        import cline_entry_door as door_module
+        self.text = door_module.render_task_file()
+
+    def test_the_roster_is_rendered_verbatim_and_in_order(self):
+        roster_path = Path(__file__).resolve().parent / 'bounty_queries.json'
+        queries = json.loads(roster_path.read_text(encoding='utf-8'))['founder']
+        position = -1
+        for query in queries:
+            found = self.text.find(query)
+            self.assertGreater(found, position, f'{query!r} is missing or out of order')
+            position = found
+
+    def test_the_roster_is_marked_as_the_first_thing_to_run(self):
+        self.assertIn('Run these 33 curated queries first', self.text)
+        self.assertIn('Walk up to a tree', self.text)
+        self.assertLess(self.text.find('Run these 33 curated queries first'),
+                        self.text.find('## Facts about this workspace'))
+
+    def test_stage_one_ends_with_the_competing_pull_request_check(self):
+        """Measured 2026-11-02: dgmolla/fitsy#605 was refused COMPETING_OPEN_PRS on a row whose
+        competing pull request the scout had already read before submitting it."""
+        self.assertIn('gh pr list --repo OWNER/NAME', self.text)
+        self.assertIn('--state open --search "123 in:body"', self.text)
+        self.assertIn('COMPETING_OPEN_PRS', self.text)
+        self.assertIn('dgmolla/fitsy#605', self.text)
+        self.assertIn('someone with landed work', self.text)
+
+    def test_the_quote_must_be_a_dozen_characters_copied_exactly(self):
+        """The gate compares a quote character for character, and a paraphrase is refused."""
+        self.assertIn('at least a\ndozen characters', self.text.replace('at least a dozen characters',
+                                                                       'at least a\ndozen characters')
+                      if 'at least a dozen' in self.text else self.text)
+        self.assertIn('REWARD_QUOTE_NOT_IN_ISSUE', self.text)
 
     def test_the_delivery_phase_uses_the_guard_and_not_the_bare_status_check(self):
         """Reverting the call site reintroduces the false positive without touching the guard,
