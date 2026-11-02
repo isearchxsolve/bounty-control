@@ -2,7 +2,7 @@
   "task_id": "6a762aa6ac7bcb142634b471313b489d",
   "repo": "jorgedvp/aks-store-demo",
   "issue_number": 4,
-  "status": "DISPATCHED",
+  "status": "CLAIMED",
   "dispatch_id": "b1ea620f30424d93a22ee378f02fa729",
   "admission": {
     "funding": {
@@ -41,6 +41,14 @@
     "founder"
   ],
   "dispatched_at": "2026-11-02T22:02:05.454273+00:00",
-  "attempt": 0,
-  "updated_at": "2026-11-02T22:02:07.481267+00:00"
+  "attempt": 1,
+  "updated_at": "2026-11-02T22:02:20.519479+00:00",
+  "owner": "41533701703:1",
+  "previous_owner": null,
+  "previous_status": "DISPATCHED",
+  "run_url": "https://github.com/isearchxsolve/bounty-control/actions/runs/41533701703",
+  "harness_sha": "7f59b354f7c389421e899982b7b26d241ea157e0",
+  "claimed_at": "2026-11-02T22:02:20.519431+00:00",
+  "lease_expires_at": "2026-11-03T02:07:20.519444+00:00",
+  "preparation_budget_seconds": 14400
 }
