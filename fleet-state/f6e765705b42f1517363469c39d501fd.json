@@ -2,7 +2,7 @@
   "task_id": "f6e765705b42f1517363469c39d501fd",
   "repo": "isearchxsolve/oss-hunter-livefire",
   "issue_number": 1,
-  "status": "CLAIMED",
+  "status": "FAILED_ENGINEER",
   "dispatch_id": "4e5270a06c5a4255aa19d8b4c77cfcf7",
   "admission": {
     "funding": {
@@ -43,7 +43,7 @@
   ],
   "dispatched_at": "2026-11-02T13:49:12.347973+00:00",
   "attempt": 1,
-  "updated_at": "2026-11-02T13:49:29.416641+00:00",
+  "updated_at": "2026-11-02T13:55:44.859600+00:00",
   "owner": "41456288563:1",
   "previous_owner": null,
   "previous_status": "DISPATCHED",
@@ -51,5 +51,20 @@
   "harness_sha": "b9f245366c7c6d94d52c8be985d41977a7c85187",
   "claimed_at": "2026-11-02T13:49:29.416591+00:00",
   "lease_expires_at": "2026-11-02T17:54:29.416606+00:00",
-  "preparation_budget_seconds": 1800
+  "preparation_budget_seconds": 1800,
+  "kind": "engineer",
+  "retryable": true,
+  "diagnostic": "Bounded Cline delivery repair exhausted: Cline failed closed on turn 1: Cline completed without modifying repository files; using legacy proposal fallback.",
+  "at": "2026-11-02T13:55:30.317564+00:00",
+  "failures": [
+    {
+      "run_url": "https://github.com/isearchxsolve/bounty-control/actions/runs/41456288563",
+      "status": "FAILED_ENGINEER",
+      "kind": "engineer",
+      "retryable": true,
+      "diagnostic": "Bounded Cline delivery repair exhausted: Cline failed closed on turn 1: Cline completed without modifying repository files; using legacy proposal fallback.",
+      "at": "2026-11-02T13:55:30.317564+00:00"
+    }
+  ],
+  "finished_at": "2026-11-02T13:55:44.200179+00:00"
 }
