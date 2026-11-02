@@ -2,7 +2,7 @@
   "task_id": "ee60d78273ffd76802ecf4131bd99586",
   "repo": "isearchxsolve/oss-hunter-livefire",
   "issue_number": 5,
-  "status": "AWAITING_REVIEW",
+  "status": "DELIVERED",
   "dispatch_id": "0d6a550700ad499cb1f653f9ef1f14ed",
   "admission": {
     "funding": {
@@ -43,7 +43,7 @@
   ],
   "dispatched_at": "2026-11-02T16:30:29.418098+00:00",
   "attempt": 1,
-  "updated_at": "2026-11-02T16:42:57.145522+00:00",
+  "updated_at": "2026-11-02T16:43:08.276866+00:00",
   "owner": "41482154165:1",
   "previous_owner": null,
   "previous_status": "DISPATCHED",
@@ -220,5 +220,6 @@
     "latest_reviewer": null,
     "latest_review_at": null
   },
-  "observed_at": "2026-11-02T16:42:57.145508+00:00"
+  "observed_at": "2026-11-02T16:43:08.276852+00:00",
+  "merged_at": "2026-11-02T16:43:05Z"
 }
