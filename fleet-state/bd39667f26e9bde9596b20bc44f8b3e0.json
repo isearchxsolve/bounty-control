@@ -1,0 +1,47 @@
+{
+  "task_id": "bd39667f26e9bde9596b20bc44f8b3e0",
+  "repo": "fiztoz/uptime-phoenix",
+  "issue_number": 198,
+  "status": "DISPATCHING",
+  "dispatch_id": "d9638493e5304e2299a1b13b4bccbc76",
+  "admission": {
+    "funding": {
+      "payer": "fiztoz",
+      "source_url": "https://github.com/fiztoz/uptime-phoenix/issues/198",
+      "amount": "0",
+      "currency": "FOUNDER",
+      "usd_value": "0",
+      "quote": {
+        "basis": "Unpriced repository-owner request"
+      },
+      "raw": "Insights counts each 1-minute DOWN bucket in `monitor_health_history` as its own outage.",
+      "source_author_association": "OWNER",
+      "source_author_login": "fiztoz"
+    },
+    "agent_reason": "Unpriced repository-owner incident (founder wound). The issue is authored by fiztoz (author_association=OWNER) and announces a real production-impacting defect in the uptime-phoenix Insights outage counting: every 1-minute DOWN bucket in monitor_health_history is counted as a separate outage, inflating counts (459 outages for one 7-hour outage). It is bounded to one defect in applyOverallProjection in internal/core/services/insights_projection.go, with reproduction steps, expected/actual behavior, and an exact code pointer. Funding is the owner's own issue (no amount/currency; is_founder_wound). No competing open PR (gh pr list --search \"198 in:body\" empty, no open PRs). The repository actively merges work via pull requests. Issue updated 2026-11-02, not stale.",
+    "scope_quote": "The fix is to count only when entering DOWN, or to merge adjacent same-status intervals first.",
+    "code_evidence": {
+      "path": "internal/core/services/insights_projection.go",
+      "sha": "0b643c911bb060ebed58d17d4b67cd3b31d267b5",
+      "quote": "if interval.Status == domain.StatusDown && !start.Before(from) && start.Before(to) {\n    outages++\n}",
+      "is_product_code": true
+    },
+    "source_issue": "https://github.com/fiztoz/uptime-phoenix/issues/198",
+    "funding_status": "UNPRICED_OWNER_REQUEST",
+    "lane": "founder",
+    "task_id": "bd39667f26e9bde9596b20bc44f8b3e0",
+    "source_revision": "e95c83819b907936a3017cd63eb1730c29be305027e99ade3dd9abcfa1682e94"
+  },
+  "dispatch_attempt": 1,
+  "sovereign_admission": true,
+  "competition": {
+    "blocking": false,
+    "nominal": []
+  },
+  "lanes": [
+    "founder"
+  ],
+  "dispatched_at": "2026-11-02T17:11:51.790294+00:00",
+  "attempt": 0,
+  "updated_at": "2026-11-02T17:11:51.790315+00:00"
+}
