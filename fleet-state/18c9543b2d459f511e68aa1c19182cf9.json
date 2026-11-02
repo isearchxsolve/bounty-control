@@ -2,7 +2,7 @@
   "task_id": "18c9543b2d459f511e68aa1c19182cf9",
   "repo": "s6pa1rta3n-lab/universal_bounty_fleet",
   "issue_number": 1,
-  "status": "CLAIMED",
+  "status": "FAILED_ENGINEER",
   "dispatch_id": "140d6a4603c842ec877f93dc3be6f66a",
   "admission": {
     "funding": {
@@ -142,7 +142,7 @@
   ],
   "dispatched_at": "2026-11-02T11:59:46.073497+00:00",
   "attempt": 3,
-  "updated_at": "2026-11-02T12:00:12.513210+00:00",
+  "updated_at": "2026-11-02T12:15:00.787869+00:00",
   "owner": "41441118352:1",
   "previous_owner": "41437297443:1",
   "previous_status": "DISPATCHED",
@@ -153,10 +153,10 @@
   "preparation_budget_seconds": 14400,
   "kind": "engineer",
   "retryable": true,
-  "diagnostic": "Bounded Cline delivery repair exhausted: Independent release verification failed: [Errno 2] No such file or directory: '/tmp/fleet-artifacts/regression.json'\nRead complete native receipts at /tmp/fleet-artifacts. Repair the actual failure, preserving completed edits and master tests.",
+  "diagnostic": "Bounded Cline delivery repair exhausted: Independent release verification failed: Specific regression test files/command/failure assertion are mandatory\nRead complete native receipts at /tmp/fleet-artifacts. Repair the actual failure, preserving completed edits and master tests.",
   "path": "/tmp/fleet-artifacts/delivery-supervisor/82796c553dcc44d582d2a69b38ab691d.preparation.json",
   "reason": "Mandatory native plan phase missing: builds",
-  "at": "2026-11-02T11:48:20.724134+00:00",
+  "at": "2026-11-02T12:14:46.103455+00:00",
   "failures": [
     {
       "run_url": "https://github.com/isearchxsolve/bounty-control/actions/runs/41434967210",
@@ -175,7 +175,15 @@
       "retryable": true,
       "diagnostic": "Bounded Cline delivery repair exhausted: Independent release verification failed: [Errno 2] No such file or directory: '/tmp/fleet-artifacts/regression.json'\nRead complete native receipts at /tmp/fleet-artifacts. Repair the actual failure, preserving completed edits and master tests.",
       "at": "2026-11-02T11:48:20.724134+00:00"
+    },
+    {
+      "run_url": "https://github.com/isearchxsolve/bounty-control/actions/runs/41441118352",
+      "status": "FAILED_ENGINEER",
+      "kind": "engineer",
+      "retryable": true,
+      "diagnostic": "Bounded Cline delivery repair exhausted: Independent release verification failed: Specific regression test files/command/failure assertion are mandatory\nRead complete native receipts at /tmp/fleet-artifacts. Repair the actual failure, preserving completed edits and master tests.",
+      "at": "2026-11-02T12:14:46.103455+00:00"
     }
   ],
-  "finished_at": "2026-11-02T11:48:31.017190+00:00"
+  "finished_at": "2026-11-02T12:15:00.281793+00:00"
 }
