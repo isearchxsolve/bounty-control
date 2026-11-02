@@ -44,6 +44,20 @@ def check(condition, message):
         raise AssertionError(message)
 
 
+def drain_evidence(folder, run):
+    """Validate actual hydrated queue artifacts, including cache freshness."""
+    census = json.loads((folder / 'census.jsonl').read_text(encoding='utf-8').splitlines()[-1])
+    check(census.get('door_reason') == 'HYDRATE_ONLY', 'Hydration did not run the production agent-queue path')
+    started = datetime.fromisoformat(run['run_started_at'].replace('Z', '+00:00'))
+    check(datetime.fromisoformat(census['at'].replace('Z', '+00:00')) >= started,
+          'Hydration receipt is inherited stale cache evidence')
+    with contextlib.closing(sqlite3.connect((folder / 'agent-queue.sqlite3').resolve().as_uri() + '?mode=ro', uri=True)) as con:
+        rows = con.execute("SELECT at FROM decisions WHERE disposition IN ('capacity_wait','deferred','received')").fetchall()
+    check(all(datetime.fromisoformat(at.replace('Z', '+00:00')) >= started for (at,) in rows),
+          'Hydration left pending rows unexamined')
+    return census
+
+
 class ScopedStore(StateStore):
     """Real GitHub storage, restricting reconciliation to this run's task IDs."""
     def __init__(self, api, repo, identities):
@@ -91,11 +105,15 @@ class LiveRun:
     def save(self):
         latest = {event['case']: event['status'] for event in self.data['events']}
         self.data['coverage'] = {case: latest.get(case, 'NOT_RUN') for case in REQUIRED_CASES}
+        if any(status != 'PASS' for status in self.data['coverage'].values()):
+            self.data['end_to_end_passed'] = False
         temporary = self.path.with_suffix(".tmp")
         temporary.write_text(json.dumps(self.data, indent=2) + "\n", encoding="utf-8")
         temporary.replace(self.path)
 
     def record(self, case, status, **evidence):
+        if status in ('FAIL', 'PENDING', 'INCOMPLETE'):
+            self.data['end_to_end_passed'] = False
         event = {"case": case, "status": status, "at": self.now(), **evidence}
         self.data["events"].append(event)
         self.save()
@@ -105,7 +123,7 @@ class LiveRun:
         """Complete pagination bounded to this campaign's real creation window."""
         rows, page = [], 1
         while True:
-            query = urlencode({'created': '>=' + self.data['started_at'], 'per_page': 100, 'page': page})
+            query = urlencode({'created': '>=' + self.data.get('run_search_since', self.data['started_at']), 'per_page': 100, 'page': page})
             batch = self.api.api(f'repos/{self.control}/actions/workflows/engine2.yml/runs?{query}')['workflow_runs']
             rows.extend(batch)
             if len(batch) < 100:
@@ -173,7 +191,7 @@ class LiveRun:
                           '--name', 'discovery-' + str(run['id']), '--dir', str(destination)], timeout=180)
         queues = list(destination.rglob('agent-queue.sqlite3'))
         check(len(queues) == 1, 'Actual discovery queue receipt missing or ambiguous')
-        with sqlite3.connect(queues[0].resolve().as_uri() + '?mode=ro', uri=True) as con:
+        with contextlib.closing(sqlite3.connect(queues[0].resolve().as_uri() + '?mode=ro', uri=True)) as con:
             counts = dict(con.execute('SELECT disposition,count(*) FROM decisions GROUP BY disposition'))
         censuses = list(destination.rglob('census.jsonl'))
         check(len(censuses) == 1, 'Actual discovery census missing or ambiguous')
@@ -196,6 +214,28 @@ class LiveRun:
         # hydrate_only mode. Its dedicated workflow must therefore run automatically.
         if counts.get('capacity_wait', 0) and (hydration['state'] != 'active' or not hydration['schedule']):
             failures.append('Capacity-wait backlog has no scheduled hydration drain')
+        # A registered cron is not proof that it runs, reads the right queue,
+        # or restores the cached backlog. Inspect the actual workflow artifact.
+        drains = self.api.api(f'repos/{self.control}/actions/workflows/bounty-hydration.yml/runs?status=completed&per_page=1')['workflow_runs']
+        pending = sum(counts.get(k, 0) for k in ('capacity_wait', 'deferred', 'received'))
+        if pending and not drains:
+            failures.append('Pending backlog has no completed hydration execution')
+        if pending and drains:
+            drain = drains[0]
+            drain_age = (datetime.now(timezone.utc) - datetime.fromisoformat(drain['updated_at'].replace('Z', '+00:00'))).total_seconds()
+            if drain['conclusion'] != 'success' or drain_age > self.args.intake_max_age_minutes * 60:
+                failures.append('Backlog drain execution is failed or stale')
+            else:
+                try:
+                    destination = self.folder / ('hydration-' + str(drain['id']))
+                    destination.mkdir(exist_ok=True)
+                    if not (destination / 'census.jsonl').is_file():
+                        self.command(['gh', 'run', 'download', str(drain['id']), '--repo', self.control,
+                                      '--name', 'hydration-' + str(drain['id']), '--dir', str(destination)], timeout=180)
+                    census = drain_evidence(destination, drain)
+                    observations['hydration_execution'] = {'run': drain['html_url'], 'census': census}
+                except (AssertionError, OSError, ValueError, KeyError, IndexError, sqlite3.Error) as exc:
+                    failures.append('Hydration evidence invalid: ' + str(exc))
         self.record('LIVE_INTAKE', 'FAIL' if failures else 'PASS', run=run['html_url'],
                     age_seconds=age, workflows=observations, queue=counts,
                     census=latest, failures=failures)
@@ -299,6 +339,7 @@ class LiveRun:
         os.environ['BOUNTY_AGENT_TIMEOUT'] = str(self.args.model_timeout)
         self.data['queue_dir'] = str(work.resolve())
         self.save()
+        before, before_sha = StateStore(self.api, self.control).read(self.data['task_id'])
         try:
             outcome = discover(['normal', 'founder'], max_dispatches=0, live=True,
                 state_dir=work, api=self.api, store=StateStore(self.api, self.control),
@@ -315,12 +356,12 @@ class LiveRun:
                 server.shutdown()
                 server.server_close()
         (work / 'result.json').write_text(json.dumps(outcome, indent=2), encoding='utf-8')
-        with sqlite3.connect(work / 'agent-queue.sqlite3') as con:
+        with contextlib.closing(sqlite3.connect(work / 'agent-queue.sqlite3')) as con:
             rows = con.execute('SELECT task_id,payload,disposition FROM decisions').fetchall()
         check(len(rows) == 1 and rows[0][0] == self.data['task_id'], 'Production search did not queue exactly the scoped original')
         check(rows[0][2] == 'capacity_wait', f'Production queue did not defer at zero dispatch budget: {outcome}')
-        state, _ = StateStore(self.api, self.control).read(self.data['task_id'])
-        check(not state, 'Zero-budget discovery mutated the durable delivery ledger')
+        state, state_sha = StateStore(self.api, self.control).read(self.data['task_id'])
+        check(state == before and state_sha == before_sha, 'Durable ledger changed during zero-budget discovery; repeat observation')
         check(not outcome['dispatched'], 'Zero-budget discovery dispatched a task')
         self.data['admitted'] = json.loads(rows[0][1])
         require_evidence(self.data['admitted'], self.api.issue_context(self.target, self.data['issue']))
@@ -363,9 +404,11 @@ class LiveRun:
         check(self.data.get('admitted'), 'Real admission required')
         store = StateStore(self.api, self.control)
         old, _ = store.read(self.data['task_id'])
-        if old:
+        if old and not str(old.get('status', '')).startswith('FAILED'):
             check(old.get('admission') == self.data['admitted']['admission'], 'Existing unrelated task record')
+            check(old.get('dispatch_id'), 'Existing task has no delivery generation; cannot resume it')
             self.data['dispatch_id'] = old.get('dispatch_id')
+            self.data['run_search_since'] = min(self.data['started_at'], old.get('dispatched_at') or self.data['started_at'])
             self.save()
             self.record('DISPATCH_RESUME', 'OBSERVED', remote_status=old['status'])
             return
@@ -793,7 +836,7 @@ class LiveRun:
             self.dispatch()
         self.wait()
         self.artifact_faults()
-        if self.args.merge_fixture:
+        if self.args.merge_fixture or self.data.get('existing_issue'):
             self.merge()
         else:
             self.record('END_TO_END', 'INCOMPLETE', reason='Merge/reconciliation requires --merge-fixture')
