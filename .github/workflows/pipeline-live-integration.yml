@@ -37,6 +37,8 @@ jobs:
         persist-credentials: false
     - name: Install the same Cline CLI as production
       run: npm install --global --no-audit --no-fund cline@3.0.74
+    - name: Install workflow receipt parser
+      run: python3 -m pip install PyYAML==6.0.3
     - name: Exercise real services and production delivery
       env:
         MERGE_FIXTURE: ${{ inputs.merge_fixture }}
@@ -62,5 +64,6 @@ jobs:
           scratch/live-integration/scout-*/result.json
           scratch/live-integration/scout-*/shortlist.jsonl
           scratch/live-integration/artifacts-*/
+          scratch/live-integration/intake-*/
         if-no-files-found: error
         retention-days: 14

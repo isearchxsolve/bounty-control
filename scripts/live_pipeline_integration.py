@@ -11,6 +11,7 @@ from concurrent.futures import ThreadPoolExecutor
 from datetime import datetime, timezone
 import json
 import os
+import sqlite3
 from pathlib import Path
 import subprocess
 import sys
@@ -23,6 +24,19 @@ from actions_github import GitHub, GitHubError, StateStore, repository, task_id
 from pipeline_evidence import require_evidence
 
 ROOT = Path(__file__).resolve().parents[1]
+REQUIRED_CASES = (
+    'ENVIRONMENT', 'LIVE_INTAKE', 'LIVE_MODEL_ADMISSION', 'LIVE_QUEUE_DEFERRAL',
+    'LIVE_SOURCE_REJECTIONS', 'LIVE_QUEUE_RECOVERY', 'LIVE_QUEUE_REPLAY',
+    'REAL_REPOSITORY_DISPATCH', 'REAL_INVALID_GENERATION', 'ACTIONS_TERMINAL',
+    'REAL_PUBLICATION', 'ACTUAL_RELEASE_POSITIVE_CONTROL', 'MERGE_AND_RECONCILE_REPLAY',
+    'LIVE_STATE_ROUNDTRIP', 'LIVE_CAS_CONFLICT', 'LIVE_CONCURRENT_CLAIM',
+    'LIVE_CLAIM_REPLAY', 'LIVE_STALE_GENERATION', 'LIVE_WRONG_OWNER',
+    'LIVE_REVOKED_OWNER', 'LIVE_RETRY_CAP', 'LIVE_TRUNCATED_STATE',
+    'LIVE_GITHUB_401', 'LIVE_GITHUB_404',
+    'LIVE_RELEASE_TASK_IDENTITY', 'LIVE_RELEASE_HEAD', 'LIVE_RELEASE_TREE',
+    'LIVE_RELEASE_FILE_MANIFEST', 'LIVE_RELEASE_NATIVE_RECEIPTS_MISSING',
+    'LIVE_RELEASE_REGRESSION_NEVER_RED', 'LIVE_RELEASE_REGRESSION_NOT_GREEN',
+)
 
 
 def check(condition, message):
@@ -57,7 +71,8 @@ class LiveRun:
             "not_exercised": ["provider-wide outage/429", "runner OOM/disk-full",
                               "cross-account review changes", "payment settlement",
                               "process death at every publication boundary",
-                              "unrestricted scheduled discovery"]}
+                              "unrestricted scheduled discovery",
+                              "automatic scheduler execution during an outage"]}
         check(self.data.get('mode') != 'ORIGINAL_READ_ONLY',
               'Legacy audit journal: use a fresh run directory with the master suite')
         check(self.data["target"] == args.target and self.data["control"] == args.control,
@@ -74,6 +89,8 @@ class LiveRun:
         return datetime.now(timezone.utc).isoformat()
 
     def save(self):
+        latest = {event['case']: event['status'] for event in self.data['events']}
+        self.data['coverage'] = {case: latest.get(case, 'NOT_RUN') for case in REQUIRED_CASES}
         temporary = self.path.with_suffix(".tmp")
         temporary.write_text(json.dumps(self.data, indent=2) + "\n", encoding="utf-8")
         temporary.replace(self.path)
@@ -129,6 +146,62 @@ class LiveRun:
                          deployed_sha=deployed, local_sha=local)
         self.record('ENVIRONMENT', 'PASS', login=user['login'], deployed_sha=deployed,
                     local_sha=local, workflow=workflow['html_url'], issues_enabled=target['has_issues'])
+
+    def intake(self):
+        """Inspect deployed intake wiring and actual discovery queue receipts."""
+        import yaml
+
+        self.data.update(intake_passed=False, end_to_end_passed=False)
+        self.save()
+        observations = {}
+        for name in ('bounty-discovery.yml', 'bounty-hydration.yml', 'discovery-heartbeat.yml'):
+            workflow = self.api.api(f'repos/{self.control}/actions/workflows/{name}')
+            source = self.api.api(f'repos/{self.control}/contents/.github/workflows/{name}')
+            document = yaml.load(base64.b64decode(source['content']), Loader=yaml.BaseLoader)
+            observations[name] = {
+                'state': workflow['state'], 'source_sha': source['sha'],
+                'schedule': document.get('on', {}).get('schedule', []),
+            }
+        runs = self.api.api(f'repos/{self.control}/actions/workflows/bounty-discovery.yml/runs?status=completed&per_page=1')['workflow_runs']
+        check(runs, 'No completed live discovery run; intake is unverified')
+        run = runs[0]
+        age = (datetime.now(timezone.utc) - datetime.fromisoformat(run['updated_at'].replace('Z', '+00:00'))).total_seconds()
+        destination = self.folder / ('intake-' + str(run['id']))
+        destination.mkdir(exist_ok=True)
+        if not list(destination.rglob('agent-queue.sqlite3')):
+            self.command(['gh', 'run', 'download', str(run['id']), '--repo', self.control,
+                          '--name', 'discovery-' + str(run['id']), '--dir', str(destination)], timeout=180)
+        queues = list(destination.rglob('agent-queue.sqlite3'))
+        check(len(queues) == 1, 'Actual discovery queue receipt missing or ambiguous')
+        with sqlite3.connect(queues[0].resolve().as_uri() + '?mode=ro', uri=True) as con:
+            counts = dict(con.execute('SELECT disposition,count(*) FROM decisions GROUP BY disposition'))
+        censuses = list(destination.rglob('census.jsonl'))
+        check(len(censuses) == 1, 'Actual discovery census missing or ambiguous')
+        lines = censuses[0].read_text(encoding='utf-8').splitlines()
+        check(lines, 'Discovery census is empty')
+        latest = json.loads(lines[-1])
+        failures = []
+        discovery = observations['bounty-discovery.yml']
+        hydration = observations['bounty-hydration.yml']
+        if discovery['state'] != 'active' or not discovery['schedule']:
+            failures.append('Automatic discovery is inactive or unscheduled')
+        heartbeat = observations['discovery-heartbeat.yml']
+        if heartbeat['state'] != 'active' or not heartbeat['schedule']:
+            failures.append('Discovery scheduler recovery heartbeat is inactive or unscheduled')
+        if age > self.args.intake_max_age_minutes * 60:
+            failures.append('Latest completed discovery exceeds the configured freshness deadline')
+        if run['conclusion'] != 'success':
+            failures.append('Latest real discovery execution failed')
+        # The deployed sovereign discovery branch only replays cached decisions in
+        # hydrate_only mode. Its dedicated workflow must therefore run automatically.
+        if counts.get('capacity_wait', 0) and (hydration['state'] != 'active' or not hydration['schedule']):
+            failures.append('Capacity-wait backlog has no scheduled hydration drain')
+        self.record('LIVE_INTAKE', 'FAIL' if failures else 'PASS', run=run['html_url'],
+                    age_seconds=age, workflows=observations, queue=counts,
+                    census=latest, failures=failures)
+        check(not failures, '; '.join(failures))
+        self.data['intake_passed'] = True
+        self.save()
 
     def provision(self):
         self.preflight()
@@ -197,8 +270,13 @@ class LiveRun:
         check(self.data.get('issue'), 'Provision a fixture first')
         check(not self.data.get('dispatch_id'), 'Cannot re-admit a dispatched generation')
         import agent_door
-        import cline_entry_door as door
+        from functools import partial
+        from sovereign_discovery import discover
         server = None
+        previous_port = agent_door.PROXY_PORT
+        previous_url = os.environ.get('TOKENHARBOR_PROXY_BASE_URL')
+        previous_door = os.environ.get('BOUNTY_ENTRY_DOOR')
+        os.environ['BOUNTY_ENTRY_DOOR'] = 'cline'
         if self.args.gateway == 'isolated':
             # Serve the actual deployed gateway handler, with actual provider calls,
             # on a private port. Do not reuse or stop another application's proxy.
@@ -206,48 +284,79 @@ class LiveRun:
             import kaggle_engine_worker as worker
             server = HTTPServer(('127.0.0.1', 0), worker._ClineProxyHandler)
             threading.Thread(target=server.serve_forever, daemon=True).start()
+            agent_door.PROXY_PORT = server.server_port
             os.environ['TOKENHARBOR_PROXY_BASE_URL'] = f'http://127.0.0.1:{server.server_port}/v1'
             self.record('GATEWAY_INSTANCE', 'OBSERVED', implementation='kaggle_engine_worker._ClineProxyHandler',
                         port=server.server_port, isolated=True)
         else:
             check(agent_door.start_gateway(), 'Real model gateway unavailable')
-        executable = agent_door.ensure_cline()
-        check(executable, 'Cline unavailable')
         attempt = 1 + len(list(self.folder.glob('scout-*')))
         work = self.folder / f'scout-{attempt}'
         work.mkdir(exist_ok=True)
-        source_path = self.data.get('source_path') or 'referenced by the issue; choose and read the actual product file'
-        prompt = (f'Read the real GitHub issue {self.data["issue_url"]}, its complete comments and the actual '
-                  f'repository source {source_path} using gh/API tools. This is an owner-authorized '
-                  'live integration exercise. Decide whether the unpriced owner request has a genuine bounded '
-                  'code change. Do not invent funding, quotes, SHAs or execution. Only inspect this issue. '
-                  'Do not solve it, post comments or mutate GitHub. Write shortlist.jsonl in this workspace '
-                  'with one JSON row if supported by source evidence. Schema: repo, issue (integer), url, '
-                  'is_code_task true, is_founder_wound true, source_lane "founder", reward_quote (literal owner '
-                  'request, no fictional money), scope_quote (literal), funding {payer: actual author, source_url: '
-                  'actual issue URL}, admission_reason (your interpretation), code_evidence {path: actual product '
-                  'file path, sha: GitHub contents blob SHA, quote: literal source, is_product_code: true}. '
-                  'If evidence is insufficient write no rows and explain the precise reason. Then finish.')
-        model = os.environ.get('BOUNTY_ENTRY_MODEL', door.DEFAULT_ENTRY_MODEL)
+        previous_workspace = os.environ.get('BOUNTY_AGENT_WORKSPACE')
+        previous_timeout = os.environ.get('BOUNTY_AGENT_TIMEOUT')
+        os.environ['BOUNTY_AGENT_WORKSPACE'] = str((work / 'agent').resolve())
+        os.environ['BOUNTY_AGENT_TIMEOUT'] = str(self.args.model_timeout)
+        self.data['queue_dir'] = str(work.resolve())
+        self.save()
         try:
-            outcome = door.run_cline_search(str(work), prompt=prompt, timeout=self.args.model_timeout,
-                                           cline=executable, model=model)
+            outcome = discover(['normal', 'founder'], max_dispatches=0, live=True,
+                state_dir=work, api=self.api, store=StateStore(self.api, self.control),
+                finder=partial(agent_door.find_issues, targets=[(self.target, self.data['issue'])]))
         finally:
+            agent_door.PROXY_PORT = previous_port
+            for name, value in [('TOKENHARBOR_PROXY_BASE_URL', previous_url), ('BOUNTY_ENTRY_DOOR', previous_door),
+                                ('BOUNTY_AGENT_WORKSPACE', previous_workspace), ('BOUNTY_AGENT_TIMEOUT', previous_timeout)]:
+                if value is None:
+                    os.environ.pop(name, None)
+                else:
+                    os.environ[name] = value
             if server:
                 server.shutdown()
                 server.server_close()
         (work / 'result.json').write_text(json.dumps(outcome, indent=2), encoding='utf-8')
-        check(outcome['exit_code'] == 0, 'Real scout failed; inspect scout-result.json and scout/agent.log')
-        check(outcome['rows'], 'Real scout produced no candidate; no admission manufactured')
-        check(all(r.get('repo') == self.target and r.get('issue') == self.data['issue'] for r in outcome['rows']),
-              'Scout crossed the fixture scope')
-        verdict = door.verify_model_rows(outcome['rows'], admission_client=self.api)
-        (self.folder / 'admission.json').write_text(json.dumps(verdict, indent=2), encoding='utf-8')
-        check(len(verdict['admitted']) == 1, f'Actual gate refused: {verdict.get("refused")}')
-        self.data['admitted'] = verdict['admitted'][0]
+        with sqlite3.connect(work / 'agent-queue.sqlite3') as con:
+            rows = con.execute('SELECT task_id,payload,disposition FROM decisions').fetchall()
+        check(len(rows) == 1 and rows[0][0] == self.data['task_id'], 'Production search did not queue exactly the scoped original')
+        check(rows[0][2] == 'capacity_wait', f'Production queue did not defer at zero dispatch budget: {outcome}')
+        state, _ = StateStore(self.api, self.control).read(self.data['task_id'])
+        check(not state, 'Zero-budget discovery mutated the durable delivery ledger')
+        check(not outcome['dispatched'], 'Zero-budget discovery dispatched a task')
+        self.data['admitted'] = json.loads(rows[0][1])
         require_evidence(self.data['admitted'], self.api.issue_context(self.target, self.data['issue']))
-        self.record('LIVE_MODEL_ADMISSION', 'PASS', requested_model=model,
+        (self.folder / 'admission.json').write_text(json.dumps(self.data['admitted'], indent=2), encoding='utf-8')
+        self.record('LIVE_MODEL_ADMISSION', 'PASS', implementation='agent_door.find_issues',
                     source_revision=self.data['admitted']['admission']['source_revision'])
+        self.record('LIVE_QUEUE_DEFERRAL', 'PASS', queue=str(work), dispatch_budget=0, ledger_unchanged=True)
+        self.source_rejections()
+
+    def source_rejections(self):
+        """Corrupt copies of real admission evidence; original sources stay untouched."""
+        import copy
+        row = self.data['admitted']
+        context = self.api.issue_context(self.target, self.data['issue'])
+        require_evidence(row, context)
+        before, sha = StateStore(self.api, self.control).read(self.data['task_id'])
+        outcomes = {}
+        mutations = {
+            'identity': ('Admission task identity mismatch', lambda r: r['admission'].update(task_id='0' * 32)),
+            'source_revision': ('Admission source changed', lambda r: r['admission'].update(source_revision='0' * 64)),
+            'competition_unavailable': ('Competition observation unavailable', lambda r: r['competition'].update(verified=False)),
+            'admission_missing': ('Admission proof missing', lambda r: r.update(admission=None)),
+        }
+        for name, (expected, mutate) in mutations.items():
+            changed = copy.deepcopy(row)
+            mutate(changed)
+            try:
+                require_evidence(changed, context)
+            except ValueError as exc:
+                check(expected in str(exc), f'Wrong evidence refusal for {name}: {exc}')
+                outcomes[name] = str(exc)
+            else:
+                raise AssertionError(f'Corrupt real admission accepted: {name}')
+        after, after_sha = StateStore(self.api, self.control).read(self.data['task_id'])
+        check(before == after and sha == after_sha, 'Evidence probes changed the real ledger')
+        self.record('LIVE_SOURCE_REJECTIONS', 'PASS', refusals=outcomes, ledger_unchanged=True)
 
     def dispatch(self):
         check(not self.data.get('closed'), 'Campaign closed; use a new run directory')
@@ -260,7 +369,7 @@ class LiveRun:
             self.save()
             self.record('DISPATCH_RESUME', 'OBSERVED', remote_status=old['status'])
             return
-        from actions_dispatch import dispatch, repository_over_capacity, repository_size_kb
+        from actions_dispatch import repository_over_capacity, repository_size_kb
         context = self.api.issue_context(self.target, self.data['issue'])
         row = self.data['admitted']
         require_evidence(row, context)
@@ -270,12 +379,22 @@ class LiveRun:
         reservations = [r for r in store.records() if r.get('status') in
                         ('DISPATCHING', 'DISPATCHED', 'CLAIMED', 'ENGINEERING', 'VERIFIED', 'PUBLISHING')]
         check(max(len(active), len(reservations)) < 4, 'Live fleet at capacity; resume dispatch later')
-        dispatch(self.api, store, context, row['admission'], ['founder'],
-                 preparation_budget=self.args.engineering_budget,
-                 sovereign_admission=True, competition=row['competition'])
+        from sovereign_discovery import discover
+        check(self.data.get('queue_dir'), 'Production discovery queue is required; re-run admission')
+        outcome = discover(['normal', 'founder'], max_dispatches=1, live=True,
+                           state_dir=self.data['queue_dir'], hydrate_only=True,
+                           api=self.api, store=store, preparation_budget=self.args.engineering_budget)
+        check(outcome['dispatched'] == [self.data['task_id']], f'Production hydration did not dispatch the waiting original: {outcome}')
         state, sha = store.read(self.data['task_id'])
         self.data['dispatch_id'] = state['dispatch_id']
         self.record('REAL_REPOSITORY_DISPATCH', 'PASS', dispatch_id=state['dispatch_id'], state_sha=sha)
+        self.record('LIVE_QUEUE_RECOVERY', 'PASS', resumed_from_disk=True, dispatch_id=state['dispatch_id'])
+        replay = discover(['normal', 'founder'], max_dispatches=1, live=True,
+                          state_dir=self.data['queue_dir'], hydrate_only=True, api=self.api, store=store)
+        after, _ = store.read(self.data['task_id'])
+        check(not replay['dispatched'] and after['dispatch_id'] == state['dispatch_id'],
+              'Hydration replay created another delivery generation')
+        self.record('LIVE_QUEUE_REPLAY', 'PASS', additional_dispatches=0)
 
     def observe(self):
         check(self.data.get('dispatch_id'), 'No dispatched generation to observe')
@@ -335,6 +454,7 @@ class LiveRun:
         self.record('REAL_PUBLICATION', 'PASS', pr=pr['html_url'], head=pr['head']['sha'], checks=checks['state'])
 
     def merge(self):
+        self.intake()
         check(self.data.get('delivered_to_pr'), 'Observe a successfully published real PR first')
         from actions_reconcile import classify_checks, reconcile
         head = self.data['head_sha']
@@ -355,10 +475,13 @@ class LiveRun:
         second, _ = store.read(self.data['task_id'])
         check(first['status'] == second['status'] == 'DELIVERED', 'Merge/replay did not settle to DELIVERED')
         check(second.get('payment_status') == 'UNVERIFIED', 'Merge was incorrectly treated as payment')
-        self.data.update(end_to_end_passed=True, remote_status=second['status'],
-                         payment_status=second.get('payment_status'))
+        self.data.update(remote_status=second['status'], payment_status=second.get('payment_status'))
         (self.folder / 'terminal-state.json').write_text(json.dumps(second, indent=2), encoding='utf-8')
         self.record('MERGE_AND_RECONCILE_REPLAY', 'PASS', pr=self.data['pr_url'], payment='UNVERIFIED')
+        missing = [case for case, status in self.data['coverage'].items() if status != 'PASS']
+        check(not missing, f'Master coverage is incomplete or failing: {missing}')
+        self.data['end_to_end_passed'] = True
+        self.save()
 
     def audit(self):
         self.preflight()
@@ -644,8 +767,15 @@ class LiveRun:
         raise TimeoutError('Live delivery/CI deadline exhausted; resume observe, do not redispatch')
 
     def run(self):
-        """Full repeatable campaign. A failed real stage stops dependent positive stages."""
+        """Retain fleet-health failures while exercising independent scoped delivery."""
         check(not self.data.get('closed'), 'Campaign was closed; use a new run directory')
+        try:
+            self.intake()
+        except (AssertionError, GitHubError) as exc:
+            # Fleet backlog and the explicitly scoped test issue are independent.
+            # Continue collecting real delivery receipts; final acceptance still
+            # requires the intake case and every other required case to pass.
+            self.record('LIVE_INTAKE', 'FAIL', diagnostic=str(exc)[:2000])
         if not self.data.get('issue'):
             self.provision()
         self.faults()
@@ -692,7 +822,7 @@ class Tee:
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument('phase', choices=['audit', 'provision', 'admit', 'dispatch', 'observe', 'merge', 'faults',
-                                        'negative-claim', 'observe-negative', 'artifact-faults', 'cleanup', 'wait', 'run'])
+                                        'negative-claim', 'observe-negative', 'artifact-faults', 'cleanup', 'wait', 'run', 'intake'])
     parser.add_argument('--run-dir', type=Path, required=True)
     parser.add_argument('--target', default='isearchxsolve/oss-hunter-livefire')
     parser.add_argument('--control', default='isearchxsolve/bounty-control')
@@ -701,9 +831,11 @@ def main():
     parser.add_argument('--gateway', choices=['existing', 'isolated'], default='isolated')
     parser.add_argument('--engineering-budget', type=int, default=1800)
     parser.add_argument('--wait-minutes', type=int, default=60)
+    parser.add_argument('--intake-max-age-minutes', type=int, default=90)
     parser.add_argument('--merge-fixture', action='store_true')
     args = parser.parse_args()
-    check(args.model_timeout > 0 and args.engineering_budget > 0 and args.wait_minutes > 0, 'Budgets must be positive')
+    check(args.model_timeout > 0 and args.engineering_budget > 0 and args.wait_minutes > 0
+          and args.intake_max_age_minutes > 0, 'Budgets must be positive')
     run = LiveRun(args)
     log_path = run.folder / f'{args.phase}-{time.time_ns()}.log'
     with log_path.open('w', encoding='utf-8') as log, \

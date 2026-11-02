@@ -14,7 +14,7 @@ from pipeline_evidence import digest, require_evidence
 
 
 def discover(lanes, max_dispatches=2, live=False, state_dir=None, hydrate_only=False,
-             finder=None, api=None, store=None):
+             finder=None, api=None, store=None, preparation_budget=None):
     from actions_dispatch import dispatch, repository_size_kb, repository_over_capacity
     from agent_door import find_issues
     folder = Path(state_dir or os.environ.get("BOUNTY_STATE_DIR", "scratch/actions-discovery"))
@@ -87,8 +87,9 @@ def discover(lanes, max_dispatches=2, live=False, state_dir=None, hydrate_only=F
                 save(identity, row, "capacity_wait")
                 counts["capacity_wait"] += 1
                 return
+            options = {} if preparation_budget is None else {'preparation_budget': preparation_budget}
             result = dispatch(api, store, context, proof, [lane],
-                              sovereign_admission=True, competition=verdict)
+                              sovereign_admission=True, competition=verdict, **options)
             dispatched.append(result)
             capacity["used"] += 1
             save(identity, row, "dispatched")

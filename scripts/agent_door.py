@@ -115,7 +115,8 @@ def ensure_cline(timeout: int = 900) -> Optional[str]:
 
 
 def find_issues(root: Optional[str] = None, rounds: int = 1, timeout: int = 600,
-                limit: int = 0, on_admitted=None, lanes=None, prior_refusals=None) -> Dict[str, object]:
+                limit: int = 0, on_admitted=None, lanes=None, prior_refusals=None,
+                targets=None) -> Dict[str, object]:
     """Run the agent door and return what survived its gate. Never raises."""
     root = root or os.environ.get("BOUNTY_AGENT_WORKSPACE", "/tmp/bounty-agent")
     gated = os.environ.get("BOUNTY_ENTRY_DOOR", "").strip().lower()
@@ -134,6 +135,23 @@ def find_issues(root: Optional[str] = None, rounds: int = 1, timeout: int = 600,
                 json.dump(leads, handle)
         from actions_github import GitHub  # noqa: E402
         prompt = cline_entry_door.WORKTREE_PROMPT
+        if targets:
+            from actions_github import repository, issue_number
+            scope = {(repository(r).lower(), issue_number(n)) for r, n in targets}
+            prompt += ('\nThis execution is scoped to these real original issues: '
+                       + json.dumps(sorted(scope))
+                       + '. Read their actual sources and conversation using tools. '
+                       'Only inspect/select these issues. Do not mutate GitHub. '
+                       'Finish after evaluating this scope; no global search is needed.')
+            downstream = on_admitted
+
+            def scoped_admission(row):
+                if (str(row.get('repo', '')).lower(), row.get('issue')) not in scope:
+                    raise ValueError('Discovery crossed the authorized issue scope')
+                if downstream:
+                    downstream(row)
+
+            on_admitted = scoped_admission
         prompt += '''
 You decide admission by reading the actual source; the host checks literal evidence, not keywords.
 For every priced row include funding: {amount: "250", currency: "USD", payer: "exact source author login",
@@ -179,6 +197,8 @@ The host records this as an unpriced owner request, without asserting a monetary
                           "detail": str(exc)[:300]}), flush=True)
         return {"rows": [], "reason": "DOOR_FAILED"}
     rows: List[dict] = list(outcome.get("admitted") or [])
+    if targets and any((str(r.get('repo', '')).lower(), r.get('issue')) not in scope for r in rows):
+        return {"rows": [], "reason": "OUT_OF_SCOPE", "workspace": workdir}
     print(json.dumps({"phase": "ENTRY_DOOR", "workspace": workdir,
                       "history": outcome.get("history"), "admitted": len(rows),
                       "refused": len(outcome.get("refused") or [])}), flush=True)

@@ -9,6 +9,38 @@ successful engineering/publication receipt.
 The existing offline master suite is a separate regression layer. It is not live
 end-to-end evidence and does not satisfy this suite's acceptance condition.
 
+The master now runs `intake` before delivery and before merge acceptance. It reads
+the deployed discovery/hydration workflows, downloads the latest completed real
+discovery artifact, and inspects its SQLite queue and census. It fails on missing
+receipts, failed or stale discovery (90 minutes by default, configurable with
+`--intake-max-age-minutes`), inactive scheduled discovery, or capacity-wait work
+without the scheduled hydration path that replays it. The receipts are retained
+under `intake-<run-id>`. A delivery-only success cannot bypass this gate.
+
+An intake failure is retained while independent scoped delivery checks continue;
+it still prevents end-to-end acceptance. Scope/access failures stop dependent work.
+
+Admission now uses production `agent_door.find_issues` and `sovereign_discovery.discover`,
+scoped to the selected original. The real agent reads sources and submits evidence
+through production validation. With a zero dispatch budget the real SQLite queue must
+persist `capacity_wait` and leave the remote task ledger untouched. A subsequent call
+reopens that database and uses production hydration with a released dispatch budget.
+Actual fleet capacity and ownership gates still apply. A second hydration call must
+send no additional dispatch and preserve the delivery generation. Corrupted copies
+of the actual admission exercise identity, freshness, unavailable competition and
+missing-proof rejection without changing upstream sources.
+
+`run.json.coverage` lists every required case as PASS, FAIL, PENDING or NOT_RUN.
+Acceptance requires all required cases to pass, including remote storage/auth faults,
+claim fencing, queue recovery, real Actions engineering/native checks/publication,
+release corruption rejection, merge and reconciliation replay. Individual phases
+remain resumable, but cannot mark the campaign green with missing cases.
+
+This tests controlled capacity-budget release against real sources, storage and
+Actions. It does not claim scheduler execution under every outage or exhaustive
+failure coverage. Provider-wide outages, OOM/disk exhaustion, review by an independent
+account and actual payment settlement remain explicitly outside exercised coverage.
+
 The first fully successful campaign, including 19 real fault cases and issue-to-merge
 delivery, is recorded in [the repair receipt](PIPELINE-REPAIR-RECEIPT-2026-11-02.md).
 
