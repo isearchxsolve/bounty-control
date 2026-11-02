@@ -51,6 +51,59 @@ def status_paths(root):
     return sorted(set(paths))
 
 
+def restore_tracked_files(root):
+    """Return every tracked worktree file to its committed bytes; leave untracked trees alone.
+
+    A package manager installing the baseline's dependencies may rewrite a tracked manifest:
+    npm 7+ updates package-lock.json even under ``--no-save`` (and this pipeline's own plan
+    generator proposes a plain ``npm install``), yarn writes yarn.lock on every install. Those
+    bytes are provisioning's, not engineering's -- ``node_modules`` and build outputs are
+    untracked or ignored, so restoring the tracked files returns the baseline to its own
+    commit while the installed tree stays in place and usable.
+
+    Measured 2026-11-01: OpenOrg-gg/AmphoraProtocol#4 (run 41357319521) and
+    Manthan-cpp/GramRaksha-AI#2 both aborted seconds before engineering began, because their
+    bootstrap rewrote the tracked lockfile and the untouched-baseline gate read that as the
+    engineer having touched the source. Cline had verified the opposite -- it ran the same
+    install and proved ``git status`` clean -- so the mutation belonged to provisioning, whose
+    checkout it is.
+
+    Untracked files are never removed: a regression test authored for this delivery, an
+    artifact directory or an installed ``node_modules`` survives, because only committed
+    content is restored.
+    """
+    git(root, "checkout", "HEAD", "--", ".")
+    return status_paths(root)
+
+
+def guard_untouched_baseline(root):
+    """Prove the baseline is untouched after provisioning, discarding provisioning's own writes.
+
+    Two different things appear in ``git status`` here and they are not the same fault. A
+    package manager installing the baseline's dependencies may rewrite a tracked manifest:
+    that write belongs to provisioning, whose checkout it was, and it is discarded. A change
+    in the delivered tree does not: it is either an earlier phase's contract violation or a
+    sign the verified tree is not the tree engineering will build on, so it fails loudly with
+    the paths named rather than as an anonymous "the baseline moved".
+
+    Measured 2026-11-01: OpenOrg-gg/AmphoraProtocol#4 (run 41357319521) and
+    Manthan-cpp/GramRaksha-AI#2 both aborted seconds before engineering began because their
+    bootstrap rewrote the tracked lockfile and this gate read it as a mutated source. Cline
+    had run the same install itself and verified ``git status`` clean, so the write was never
+    engineering's to answer for.
+    """
+    changed = status_paths(root)
+    delivered = product_paths(changed)
+    if delivered:
+        raise ValueError("Repository tree changed before engineering: " + ", ".join(delivered[:10]))
+    restore_tracked_files(root)
+    remaining = status_paths(root)
+    if remaining:
+        raise ValueError("Provisioning mutated the untouched source baseline: "
+                         + ", ".join(remaining[:10]))
+    return remaining
+
+
 def is_test(path):
     return bool(re.search(r"(?:^|/)(?:tests?|specs?|__tests__)(?:/|$)|"
                           r"(?:^|/)test_[^/]+|[._](?:test|spec)[._]", path, re.I))

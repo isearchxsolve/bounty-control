@@ -17,7 +17,8 @@ from actions_github import (BOUNTY_ACCOUNT, GitHub, GitHubError, StateStore, iss
                             repository, task_id, utcnow)
 from actions_release import (git, manifest, product_paths, protect_baseline_tests,
                              regression_proof, require_commands, safe_path, status_paths,
-                             validate_plan_contract, write_json, restore_checkpoint)
+                             validate_plan_contract, write_json, restore_checkpoint,
+                             guard_untouched_baseline)
 from bounty_admission import competition, TRUSTED_BOTS
 # The typed failures live in a dependency-free module because the worker has to raise the
 # same classes and must never import this adapter back (it is imported lazily here).
@@ -597,8 +598,11 @@ def engineer():
             baseline_ok, diagnostic, baseline = worker.verify_baseline(root, plan)
         if not baseline_ok:
             raise RuntimeError("BLOCKED_BASELINE: " + diagnostic)
-        if status_paths(root):
-            raise ValueError("Provisioning mutated the untouched source baseline")
+        # Provisioning's own install may rewrite a tracked manifest (npm 7+ writes
+        # package-lock.json even under --no-save), and that is not engineering's edit. The
+        # tracked files are restored before the invariant is measured, so a surviving change
+        # is a real one and the failure names the paths. See guard_untouched_baseline.
+        guard_untouched_baseline(root)
         if state.get("previous_owner") and not task.get("owned_pr"):
             prior_run = state["previous_owner"].split(":")[0]
             if not prior_run.isdecimal():
