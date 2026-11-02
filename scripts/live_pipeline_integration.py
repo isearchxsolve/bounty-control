@@ -388,16 +388,10 @@ class LiveRun:
         # one fact that explained the run -- an exhausted provider quota, not a code defect --
         # was thrown away and the failure looked like a pipeline bug. Report the reason.
         if not rows:
-            scout = self.folder / 'scout-result.json'
-            detail = {}
-            if scout.is_file():
-                try:
-                    detail = json.loads(scout.read_text(encoding='utf-8'))
-                except ValueError:
-                    detail = {}
-            tail = str(detail.get('tail') or '')[:900]
+            logs = sorted(work.rglob('agent.log'), key=lambda p: p.stat().st_mtime)
+            tail = logs[-1].read_text(encoding='utf-8', errors='replace')[-1200:] if logs else ''
             raise AssertionError('Real scout failed before writing a row: '
-                                 + (tail or 'no scout-result.json retained; see scout/agent.log'))
+                                 + str(outcome) + '\n' + (tail or f'No agent log retained under {work}'))
         check(len(rows) == 1 and rows[0][0] == self.data['task_id'], 'Production search did not queue exactly the scoped original')
         check(rows[0][2] == 'capacity_wait', f'Production queue did not defer at zero dispatch budget: {outcome}')
         state, state_sha = StateStore(self.api, self.control).read(self.data['task_id'])
@@ -876,6 +870,14 @@ class LiveRun:
             if not (self.data.get('existing_issue') and self.data.get('issue') and self.data.get('deployed_sha')):
                 raise
             blockers.append(str(exc))
+        # Source reading and admission are read-only with a zero dispatch budget.
+        # Exercise the real entry door even when publication itself is blocked.
+        if not self.data.get('admitted'):
+            try:
+                self.admit()
+            except (AssertionError, GitHubError) as exc:
+                self.record('LIVE_MODEL_ADMISSION', 'FAIL', diagnostic=str(exc)[:2000])
+                blockers.append('Entry door: ' + str(exc))
         self.faults()
         if not self.data.get('negative_dispatch'):
             self.negative_claim()
@@ -886,8 +888,6 @@ class LiveRun:
                 time.sleep(20)
         check(self.data.get('negative_claim_passed'), 'Invalid-generation workflow observation timed out')
         check(not blockers, 'Delivery blocked; independent fault checks completed: ' + '; '.join(blockers))
-        if not self.data.get('admitted'):
-            self.admit()
         if not self.data.get('dispatch_id'):
             self.dispatch()
         self.wait()
