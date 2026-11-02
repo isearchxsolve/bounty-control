@@ -2326,8 +2326,18 @@ def build_cline_engineering_prompt(
 ) -> str:
     """Build a bounded, self-contained task that gives Cline the worktree context."""
     delivery_context = (arch or {}).get('full_delivery_context')
-    issue_context = (f'Read the complete issue and delivery context from {delivery_context}.'
-                     if delivery_context else sanitize_prompt_input(body or 'No additional issue body was supplied.'))
+    if delivery_context:
+        # Intake context predates the host's release contract. Retain both inputs:
+        # replacing body with only the intake pointer dropped the receipt path,
+        # schema and publication instructions on real Actions run 41456288563.
+        os.makedirs(PACKET_DIR, exist_ok=True)
+        requirements_path = os.path.join(PACKET_DIR, 'engineering-requirements-' + uuid.uuid4().hex + '.txt')
+        with open(requirements_path, 'w', encoding='utf-8') as handle:
+            handle.write(body or 'No additional issue body was supplied.')
+        issue_context = (f'Read the complete issue context from {delivery_context}.\n'
+                         f'Read the complete engineering requirements and delivery artifact contract from {requirements_path}.')
+    else:
+        issue_context = sanitize_prompt_input(body or 'No additional issue body was supplied.')
     try:
         architecture_context = json.dumps(arch or {}, indent=2, default=str)
     except (TypeError, ValueError):

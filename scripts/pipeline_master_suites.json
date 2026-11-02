@@ -232,6 +232,10 @@
     {
       "file": "test_pipeline_master_runner.py",
       "mode": "script"
+    },
+    {
+      "file": "test_engineering_contract_handoff.py",
+      "mode": "script"
     }
   ]
 }
