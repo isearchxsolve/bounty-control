@@ -63,6 +63,12 @@ jobs:
           scratch/live-integration/scout-*/agent.log
           scratch/live-integration/scout-*/result.json
           scratch/live-integration/scout-*/shortlist.jsonl
+          scratch/live-integration/scout-*/agent-queue.sqlite3
+          scratch/live-integration/scout-*/*.jsonl
+          scratch/live-integration/scout-*/agent/run-*/agent.log
+          scratch/live-integration/scout-*/agent/run-*/shortlist.jsonl
+          scratch/live-integration/scout-*/agent/run-*/decisions.jsonl
+          scratch/live-integration/scout-*/agent/run-*/admitted-stream.jsonl
           scratch/live-integration/artifacts-*/
           scratch/live-integration/intake-*/
         if-no-files-found: error
