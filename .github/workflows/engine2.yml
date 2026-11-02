@@ -1,5 +1,5 @@
 name: Bounty delivery
-run-name: 'bounty ${{ github.event.client_payload.task_id || inputs.mode }} ${{ github.event.client_payload.dispatch_id }} ${{ github.event.client_payload.repo || inputs.target_repo }} #${{ github.event.client_payload.issue_number
+run-name: 'bounty ${{ github.event.client_payload.task_id || inputs.mode }} ${{ github.event.client_payload.dispatch_id || inputs.dispatch_id }} ${{ github.event.client_payload.repo || inputs.target_repo }} #${{ github.event.client_payload.issue_number
   || inputs.issue_number }}'
 'on':
   repository_dispatch:
@@ -68,6 +68,9 @@ jobs:
         if-no-files-found: error
         retention-days: 14
   engineer:
+    permissions:
+      contents: read
+      actions: read
     runs-on: ubuntu-latest
     timeout-minutes: 330
     env:

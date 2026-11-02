@@ -546,6 +546,57 @@ def runtime():
     return worker
 
 
+def resume_preparation(api, state, task, worker):
+    """Recover a preparation artifact for this exact failed task and unchanged base."""
+    prior = str(state.get('previous_owner') or '').split(':')[0]
+    if not prior.isdecimal():
+        return None
+    destination = artifacts() / 'previous-run'
+    environment = dict(os.environ)
+    if api.token:
+        environment['GH_TOKEN'] = api.token
+    result = subprocess.run(['gh', 'run', 'download', prior, '--repo', os.environ['GITHUB_REPOSITORY'],
+        '--name', 'task-engineering-' + prior, '--dir', str(destination)],
+        env=environment, capture_output=True, timeout=180)
+    if result.returncode:
+        write_json(artifacts() / 'preparation-resume.json', {'status': 'UNAVAILABLE', 'previous_run': prior})
+        return None
+    claims = destination / 'claim.json'
+    reports = list((destination / 'delivery-supervisor').glob('*.preparation.json'))
+    if not claims.is_file() or len(reports) != 1:
+        return None
+    previous = read_json(claims)
+    if (previous.get('state', {}).get('task_id') != state['task_id']
+            or previous.get('context', {}).get('repo') != task['repo']
+            or previous.get('context', {}).get('issue_number') != task['issue_number']):
+        raise ValueError('Previous preparation belongs to another task')
+    report = read_json(reports[0])
+    if report.get('action') != 'retry' or not re.fullmatch(r'[0-9a-f]{40,64}', report.get('base_sha', '')):
+        return None
+    validate_preparation(report, str(reports[0]))
+    root = Path(worker.SANDBOX_DIR) / 'repos' / (task['repo'].replace('/', '--') + '--' + str(task['issue_number']))
+    if root.exists():
+        raise ValueError('Preparation resume requires a fresh isolated checkout')
+    root.parent.mkdir(parents=True, exist_ok=True)
+    url = 'https://github.com/' + repository(task['repo']) + '.git'
+    subprocess.run(['git', '-c', 'submodule.recurse=false', 'clone', '--no-checkout', url, str(root)], check=True, timeout=180)
+    git(root, 'fetch', 'origin', report['base_sha'])
+    git(root, 'checkout', '--detach', report['base_sha'])
+    git(root, 'remote', 'add', 'upstream', url)
+    check_head = git(root, 'rev-parse', 'HEAD').stdout.decode().strip()
+    if check_head != report['base_sha']:
+        raise ValueError('Recovered preparation base changed')
+    report['worktree'] = str(root)
+    # Re-read cited source objects; the later native-plan gate still reports
+    # missing phases to the agent. No receipt or successful test is synthesized.
+    report['plan'] = worker.VerificationPlan(**worker.validate_delivery_plan(report, str(root)))
+    report['report_path'] = str(reports[0])
+    report['context_path'] = str(artifacts() / 'claim.json')
+    write_json(artifacts() / 'preparation-resume.json', {'status': 'RESUMED_PLAN_VALIDATION',
+        'previous_run': prior, 'base_sha': report['base_sha'], 'preparation': str(reports[0])})
+    return report
+
+
 def engineer():
     document = read_json(artifacts() / "claim.json")
     api = GitHub()  # retain read token only in the host transport object
@@ -571,7 +622,9 @@ def engineer():
     lease = SimpleNamespace(run_id=state["owner"], attempt=state["attempt"], lost=threading.Event(),
                             phase="CLINE_INTAKE", command_pid=0)
     try:
-        prepared = worker.run_cline_claim_intake(task, lease)
+        prepared = resume_preparation(api, state, task, worker)
+        if prepared is None:
+            prepared = worker.run_cline_claim_intake(task, lease)
     except worker.PreparationBlocked as blocked:
         # Terminal for this dispatch: the refusal reason was already verified, so the chain
         # stops here instead of being reported as a broken engineering phase.
@@ -634,9 +687,13 @@ def engineer():
             environment = dict(os.environ)
             if api.token:
                 environment["GH_TOKEN"] = api.token
-            downloaded = subprocess.run(["gh", "run", "download", prior_run,
-                "--repo", os.environ["GITHUB_REPOSITORY"], "--name", "task-engineering-" + prior_run,
-                "--dir", str(recovery_dir)], env=environment, capture_output=True, timeout=180)
+            resume_receipt = artifacts() / 'preparation-resume.json'
+            if resume_receipt.is_file() and read_json(resume_receipt).get('status') == 'RESUMED_PLAN_VALIDATION':
+                downloaded = SimpleNamespace(returncode=0)
+            else:
+                downloaded = subprocess.run(["gh", "run", "download", prior_run,
+                    "--repo", os.environ["GITHUB_REPOSITORY"], "--name", "task-engineering-" + prior_run,
+                    "--dir", str(recovery_dir)], env=environment, capture_output=True, timeout=180)
             if downloaded.returncode:
                 write_json(artifacts() / "recovery.json", {"status": "NO_PRIOR_ARTIFACT_AVAILABLE", "run": prior_run})
             else:
