@@ -2,7 +2,7 @@
   "task_id": "6a762aa6ac7bcb142634b471313b489d",
   "repo": "jorgedvp/aks-store-demo",
   "issue_number": 4,
-  "status": "CLAIMED",
+  "status": "FAILED_ENGINEER",
   "dispatch_id": "1201f21909fe41b99aa7074d9f39b8c2",
   "admission": {
     "funding": {
@@ -42,7 +42,7 @@
   ],
   "dispatched_at": "2026-11-02T22:59:49.347342+00:00",
   "attempt": 4,
-  "updated_at": "2026-11-02T23:00:10.928349+00:00",
+  "updated_at": "2026-11-02T23:24:18.417860+00:00",
   "owner": "41541864643:1",
   "previous_owner": "41539473807:1",
   "previous_status": "DISPATCHED",
@@ -51,10 +51,10 @@
   "claimed_at": "2026-11-02T23:00:10.928303+00:00",
   "lease_expires_at": "2026-11-03T03:05:10.928317+00:00",
   "preparation_budget_seconds": 14400,
-  "kind": "deliverable_invalid",
+  "kind": "engineer",
   "retryable": true,
-  "diagnostic": "Cline deliverable invalid at /tmp/fleet-artifacts/delivery-supervisor/407cb7456f564624aae938419c0a817c.preparation.json: Mandatory native plan phase missing: builds",
-  "at": "2026-11-02T22:49:14.591877+00:00",
+  "diagnostic": "BLOCKED_BASELINE: Cline changed repository source or HEAD during preparation/publication repair",
+  "at": "2026-11-02T23:23:59.250024+00:00",
   "failures": [
     {
       "run_url": "https://github.com/isearchxsolve/bounty-control/actions/runs/41533701703",
@@ -83,9 +83,17 @@
       "path": "/tmp/fleet-artifacts/delivery-supervisor/407cb7456f564624aae938419c0a817c.preparation.json",
       "reason": "Mandatory native plan phase missing: builds",
       "at": "2026-11-02T22:49:14.591877+00:00"
+    },
+    {
+      "run_url": "https://github.com/isearchxsolve/bounty-control/actions/runs/41541864643",
+      "status": "FAILED_ENGINEER",
+      "kind": "engineer",
+      "retryable": true,
+      "diagnostic": "BLOCKED_BASELINE: Cline changed repository source or HEAD during preparation/publication repair",
+      "at": "2026-11-02T23:23:59.250024+00:00"
     }
   ],
-  "finished_at": "2026-11-02T22:49:27.166135+00:00",
+  "finished_at": "2026-11-02T23:24:17.822131+00:00",
   "path": "/tmp/fleet-artifacts/delivery-supervisor/407cb7456f564624aae938419c0a817c.preparation.json",
   "reason": "Mandatory native plan phase missing: builds",
   "recovery_authorization": {
