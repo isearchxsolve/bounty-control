@@ -2,7 +2,7 @@
   "task_id": "ee60d78273ffd76802ecf4131bd99586",
   "repo": "isearchxsolve/oss-hunter-livefire",
   "issue_number": 5,
-  "status": "CLAIMED",
+  "status": "PUBLISHING",
   "dispatch_id": "0d6a550700ad499cb1f653f9ef1f14ed",
   "admission": {
     "funding": {
@@ -43,7 +43,7 @@
   ],
   "dispatched_at": "2026-11-02T16:30:29.418098+00:00",
   "attempt": 1,
-  "updated_at": "2026-11-02T16:30:42.035361+00:00",
+  "updated_at": "2026-11-02T16:42:01.747085+00:00",
   "owner": "41482154165:1",
   "previous_owner": null,
   "previous_status": "DISPATCHED",
@@ -51,5 +51,8 @@
   "harness_sha": "74962e23b39a2e92d06454d219974b83496007c0",
   "claimed_at": "2026-11-02T16:30:42.035309+00:00",
   "lease_expires_at": "2026-11-02T20:35:42.035324+00:00",
-  "preparation_budget_seconds": 1800
+  "preparation_budget_seconds": 1800,
+  "proposed_head": "6a29f8ea5a4f00eac62a15d384c14de01990923b",
+  "proposed_branch": "fix/bounty-5-ee60d7-1",
+  "verified_run": "https://github.com/isearchxsolve/bounty-control/actions/runs/41482154165"
 }
