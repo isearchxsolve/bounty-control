@@ -2,7 +2,7 @@
   "task_id": "1ef821a1a3eee8dd60fc9ab73b3b90be",
   "repo": "isearchxsolve/oss-hunter-livefire",
   "issue_number": 10,
-  "status": "DISPATCHING",
+  "status": "DISPATCHED",
   "dispatch_id": "bc962169001c4c3ea64afc81a87f60d1",
   "admission": {
     "funding": {
@@ -43,5 +43,5 @@
   ],
   "dispatched_at": "2026-11-03T11:38:38.609393+00:00",
   "attempt": 0,
-  "updated_at": "2026-11-03T11:38:38.610398+00:00"
+  "updated_at": "2026-11-03T11:38:43.344494+00:00"
 }
