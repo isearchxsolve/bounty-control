@@ -1,5 +1,5 @@
 {
-  "at": "2026-11-03T06:48:21.542578+00:00",
+  "at": "2026-11-03T06:49:06.499829+00:00",
   "run_url": "https://github.com/isearchxsolve/bounty-control/actions/runs/41588321800",
   "end_to_end_passed": false,
   "coverage": {
@@ -37,16 +37,6 @@
     "LIVE_FAILURE_SURFACE": "PASS"
   },
   "events": [
-    {
-      "case": "ACTIONS_RUN",
-      "status": "PENDING",
-      "at": "2026-11-03T06:43:16.369126+00:00"
-    },
-    {
-      "case": "ACTIONS_RUN",
-      "status": "PENDING",
-      "at": "2026-11-03T06:43:38.673023+00:00"
-    },
     {
       "case": "ACTIONS_RUN",
       "status": "PENDING",
@@ -111,13 +101,23 @@
       "case": "ACTIONS_RUN",
       "status": "PENDING",
       "at": "2026-11-03T06:48:21.541363+00:00"
+    },
+    {
+      "case": "ACTIONS_RUN",
+      "status": "PENDING",
+      "at": "2026-11-03T06:48:43.762179+00:00"
+    },
+    {
+      "case": "PIPELINE_MEMBER",
+      "status": "FAIL",
+      "at": "2026-11-03T06:49:06.498449+00:00"
     }
   ],
   "cohort": {
     "c4ccbe12cb966b88845d970513184ad0": {
       "repo": "mgillr/acfa-rs",
       "issue": 93,
-      "state": "DISPATCHED"
+      "state": "FAILED_OR_PENDING_RECOVERY"
     }
   }
 }
