@@ -1,0 +1,47 @@
+{
+  "task_id": "164c8a7d7e633756c6e21207f67c7074",
+  "repo": "isaim0011/rift",
+  "issue_number": 3,
+  "status": "DISPATCHING",
+  "dispatch_id": "a88fcc9ecad74bda82bd2538b09061c1",
+  "admission": {
+    "funding": {
+      "payer": "isaim0011",
+      "source_url": "https://github.com/isaim0011/rift/issues/3",
+      "amount": "0",
+      "currency": "FOUNDER",
+      "usd_value": "0",
+      "quote": {
+        "basis": "Unpriced repository-owner request"
+      },
+      "raw": "When testing Voice Gateway v8 connections with Discord in production, Discord terminated the voice session with:",
+      "source_author_association": "OWNER",
+      "source_author_login": "isaim0011"
+    },
+    "agent_reason": "Owner isaim0011 reports a production outage: Discord Voice Gateway v8 closes sessions with 4020 because Opcode 3 heartbeats omit seq_ack. Bounded fix: record seq on incoming frames and format the heartbeat payload. Repo intent OK (small repo); no open PR references #3. Code evidence is crates/rift-voice/src/session.rs at its current blob SHA with record_seq quoted. Unpriced repository-owner request.",
+    "scope_quote": "Update incoming message loop to record `seq` into `session.record_seq(seq)`.",
+    "code_evidence": {
+      "path": "crates/rift-voice/src/session.rs",
+      "sha": "c34bf8670e38ec7acc98da7e16d0fdf4d6bfb5f9",
+      "quote": "pub fn record_seq(&mut self, seq: u64) {",
+      "is_product_code": true
+    },
+    "source_issue": "https://github.com/isaim0011/rift/issues/3",
+    "funding_status": "UNPRICED_OWNER_REQUEST",
+    "lane": "founder",
+    "task_id": "164c8a7d7e633756c6e21207f67c7074",
+    "source_revision": "c6b422defcc2f41b9b4839766cb40571973067721d7672c75b73e7035ade001e"
+  },
+  "dispatch_attempt": 1,
+  "sovereign_admission": true,
+  "competition": {
+    "blocking": false,
+    "nominal": []
+  },
+  "lanes": [
+    "founder"
+  ],
+  "dispatched_at": "2026-11-03T10:13:29.877737+00:00",
+  "attempt": 0,
+  "updated_at": "2026-11-03T10:13:29.877754+00:00"
+}
