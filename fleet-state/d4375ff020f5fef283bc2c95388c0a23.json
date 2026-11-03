@@ -1,0 +1,48 @@
+{
+  "task_id": "d4375ff020f5fef283bc2c95388c0a23",
+  "repo": "hashcat/hashcat",
+  "issue_number": 4141,
+  "status": "DISPATCHING",
+  "dispatch_id": "6a756a2a168849138032299b14bcdee8",
+  "admission": {
+    "funding": {
+      "amount": "1000",
+      "currency": "USD",
+      "payer": "sa976171",
+      "source_url": "https://github.com/hashcat/hashcat/issues/4141",
+      "usd_value": "1000",
+      "quote": {
+        "basis": "USD face value",
+        "usd_rate": "1"
+      },
+      "raw": "I will sponsor it and give you $500 for each wallet, a total bounty of $1000.",
+      "source_author_association": "NONE",
+      "source_author_login": "sa976171"
+    },
+    "agent_reason": "sa976171 offered a $1,000 total bounty ($500 per wallet) for adding BitGo and Block.io GPU recovery hash modes to hashcat.",
+    "scope_quote": "Can anyone add these two wallets to Hashcat or help with faster recovery?",
+    "code_evidence": {
+      "is_product_code": true,
+      "path": "src/interface.c",
+      "sha": "2a0cb1061fd95942e43780927979cc1bd087f3c2",
+      "quote": "int module_filename (const folder_config_t *folder_config, const int hash_mode, char *out_buf, const size_t out_size)"
+    },
+    "source_issue": "https://github.com/hashcat/hashcat/issues/4141",
+    "funding_status": "PRICED_OFFER",
+    "lane": "normal",
+    "task_id": "d4375ff020f5fef283bc2c95388c0a23",
+    "source_revision": "9304bf73b679d4c51fb9ea281f2fef1da5e98115b417fe0d1d59ea5ec55b458e"
+  },
+  "dispatch_attempt": 1,
+  "sovereign_admission": true,
+  "competition": {
+    "blocking": false,
+    "nominal": []
+  },
+  "lanes": [
+    "normal"
+  ],
+  "dispatched_at": "2026-11-03T04:17:38.800648+00:00",
+  "attempt": 0,
+  "updated_at": "2026-11-03T04:17:38.800665+00:00"
+}
