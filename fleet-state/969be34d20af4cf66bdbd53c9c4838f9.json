@@ -2,8 +2,8 @@
   "task_id": "969be34d20af4cf66bdbd53c9c4838f9",
   "repo": "Spectral-Finance/lux",
   "issue_number": 86,
-  "status": "FAILED_DELIVERABLE_MISSING",
-  "dispatch_id": "db4832971adc4ba28e769c2140f30c1d",
+  "status": "DISPATCHING",
+  "dispatch_id": "3fe21478029347b4b0fbc0b01941456c",
   "admission": {
     "funding": {
       "amount": "600",
@@ -15,30 +15,49 @@
         "basis": "USD face value",
         "usd_rate": "1"
       },
-      "raw": "## Budget: \\$600",
+      "raw": "TradingView Technical Analysis Integration $600",
       "source_author_association": "COLLABORATOR",
       "source_author_login": "rparcus"
     },
-    "agent_reason": "Funded bounty: rparcus, a COLLABORATOR on Spectral-Finance/lux, states a committed body budget line '## Budget: \\$600' in this issue, so the figure comes from a party with commit rights on the project and clears the 250 USD floor. Scope is one bounded framework feature. Repository merges outside work.",
+    "agent_reason": "Spectral Labs (startup) posted a live $600 bounty on Spectral-Finance/lux#86 via COLLABORATOR rparcus's issue titled with the amount; repo merges outside work (122 merged PRs). Scope bounded: TradingView/technical analysis integration, touching lux/lib/lux/agents/market_researcher.ex. Competition gate nominal (all open PRs nominal_attempt_only).",
     "scope_quote": "Implement TradingView technical analysis integration for advanced market analysis and signal generation.",
     "code_evidence": {
-      "path": "lux/lib/lux/llm.ex",
-      "sha": "b41c27ef098bac7d65d29402405c1946a8f20733",
-      "quote": "A module for interacting with LLMs. Defines the behaviours for LLMs and provides a default implementation.",
+      "path": "lux/lib/lux/agents/market_researcher.ex",
+      "sha": "b0d973064a5becc9cb748d02cd643d09757e64e0",
+      "quote": "An agent that analyzes market conditions and proposes trades based on research.",
       "is_product_code": true
     },
     "source_issue": "https://github.com/Spectral-Finance/lux/issues/86",
     "funding_status": "PRICED_OFFER",
     "lane": "bounty",
     "task_id": "969be34d20af4cf66bdbd53c9c4838f9",
-    "source_revision": "de41c722c25fe8c0597388d1e45f12b2312158bc51ea335d5d9b3ae5447a0dab"
+    "source_revision": "0730117df9c13cf01a953a7bfb30b4452376d76a1201986a7177f050cbff24ba"
   },
-  "dispatch_attempt": 1,
+  "dispatch_attempt": 2,
   "sovereign_admission": true,
   "competition": {
     "blocking": false,
     "nominal": [
       {
+        "pr": "https://github.com/Spectral-Finance/lux/pull/1114",
+        "author": "rohank143",
+        "number": 1114,
+        "author_merged_in_repo": 0,
+        "check_runs": 0,
+        "maintainer_engagement": 0,
+        "reason": "nominal_attempt_only"
+      },
+      {
+        "pr": "https://github.com/Spectral-Finance/lux/pull/1074",
+        "author": "nepreby",
+        "number": 1074,
+        "author_merged_in_repo": 0,
+        "history_cached": true,
+        "check_runs": 0,
+        "maintainer_engagement": 0,
+        "reason": "nominal_attempt_only"
+      },
+      {
         "pr": "https://github.com/Spectral-Finance/lux/pull/1027",
         "author": "davidoo62",
         "number": 1027,
@@ -121,6 +140,7 @@
         "author": "jshaofa-ui",
         "number": 482,
         "author_merged_in_repo": 0,
+        "history_cached": true,
         "check_runs": 0,
         "maintainer_engagement": 0,
         "reason": "nominal_attempt_only"
@@ -229,6 +249,26 @@
         "pr": "https://github.com/Spectral-Finance/lux/pull/1027",
         "author": "davidoo62",
         "number": 1027,
+        "author_merged_in_repo": 0,
+        "history_cached": true,
+        "check_runs": 0,
+        "maintainer_engagement": 0,
+        "reason": "nominal_attempt_only"
+      },
+      {
+        "pr": "https://github.com/Spectral-Finance/lux/pull/1074",
+        "author": "nepreby",
+        "number": 1074,
+        "author_merged_in_repo": 0,
+        "history_cached": true,
+        "check_runs": 0,
+        "maintainer_engagement": 0,
+        "reason": "nominal_attempt_only"
+      },
+      {
+        "pr": "https://github.com/Spectral-Finance/lux/pull/1114",
+        "author": "rohank143",
+        "number": 1114,
         "author_merged_in_repo": 0,
         "history_cached": true,
         "check_runs": 0,
@@ -240,9 +280,9 @@
   "lanes": [
     "startup"
   ],
-  "dispatched_at": "2026-11-03T02:25:59.252471+00:00",
+  "dispatched_at": "2026-11-03T23:34:20.955408+00:00",
   "attempt": 1,
-  "updated_at": "2026-11-03T02:54:24.518228+00:00",
+  "updated_at": "2026-11-03T23:34:20.955423+00:00",
   "owner": "41566086257:1",
   "previous_owner": null,
   "previous_status": "DISPATCHED",
