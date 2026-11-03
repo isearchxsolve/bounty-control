@@ -2,7 +2,7 @@
   "task_id": "a3bc981548a610b22baca0c7b7cfb4bd",
   "repo": "jaystewartuk/spiralclass",
   "issue_number": 110,
-  "status": "DISPATCHING",
+  "status": "DISPATCHED",
   "dispatch_id": "43f88e422af94d2fa4cb6245515265f7",
   "admission": {
     "funding": {
@@ -43,5 +43,5 @@
   ],
   "dispatched_at": "2026-11-03T09:39:29.770556+00:00",
   "attempt": 0,
-  "updated_at": "2026-11-03T09:39:29.770577+00:00"
+  "updated_at": "2026-11-03T09:39:31.792846+00:00"
 }
