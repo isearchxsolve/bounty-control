@@ -1,5 +1,5 @@
 {
-  "at": "2026-11-03T04:23:49.669107+00:00",
+  "at": "2026-11-03T04:25:16.877478+00:00",
   "run_url": "https://github.com/isearchxsolve/bounty-control/actions/runs/41577786375",
   "end_to_end_passed": false,
   "coverage": {
@@ -34,14 +34,9 @@
     "LIVE_RELEASE_NATIVE_RECEIPTS_MISSING": "NOT_RUN",
     "LIVE_RELEASE_REGRESSION_NEVER_RED": "NOT_RUN",
     "LIVE_RELEASE_REGRESSION_NOT_GREEN": "NOT_RUN",
-    "LIVE_FAILURE_SURFACE": "NOT_RUN"
+    "LIVE_FAILURE_SURFACE": "PASS"
   },
   "events": [
-    {
-      "case": "ENVIRONMENT",
-      "status": "PASS",
-      "at": "2026-11-03T04:18:29.546829+00:00"
-    },
     {
       "case": "LIVE_SOURCE_REJECTIONS",
       "status": "PASS",
@@ -111,6 +106,11 @@
       "case": "LIVE_INTAKE",
       "status": "PASS",
       "at": "2026-11-03T04:23:49.667591+00:00"
+    },
+    {
+      "case": "LIVE_FAILURE_SURFACE",
+      "status": "PASS",
+      "at": "2026-11-03T04:25:16.876311+00:00"
     }
   ],
   "cohort": {
