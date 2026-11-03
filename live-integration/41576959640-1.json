@@ -1,5 +1,5 @@
 {
-  "at": "2026-11-03T04:17:29.203316+00:00",
+  "at": "2026-11-03T04:17:30.018107+00:00",
   "run_url": "https://github.com/isearchxsolve/bounty-control/actions/runs/41576959640",
   "end_to_end_passed": false,
   "coverage": {
@@ -76,6 +76,11 @@
       "case": "LIVE_QUEUE_DEFERRAL",
       "status": "PASS",
       "at": "2026-11-03T04:17:29.202499+00:00"
+    },
+    {
+      "case": "PUBLICATION_ACCESS",
+      "status": "OBSERVED",
+      "at": "2026-11-03T04:17:30.017290+00:00"
     }
   ],
   "cohort": {
