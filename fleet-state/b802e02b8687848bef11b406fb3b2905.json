@@ -2,8 +2,8 @@
   "task_id": "b802e02b8687848bef11b406fb3b2905",
   "repo": "DimitarGeorgievski/patuvaj-notes",
   "issue_number": 13,
-  "status": "FAILED_ENGINEER",
-  "dispatch_id": "0715bd990ebe422e880a214e832b2f14",
+  "status": "DISPATCHING",
+  "dispatch_id": "946f3a2a564f41a8a7b6aa2519d8a7f0",
   "admission": {
     "funding": {
       "payer": "DimitarGeorgievski",
@@ -32,7 +32,7 @@
     "task_id": "b802e02b8687848bef11b406fb3b2905",
     "source_revision": "3f2b80516aa43d153331edc105114e20becbf1eb9f63fe131211c9ee622f2288"
   },
-  "dispatch_attempt": 1,
+  "dispatch_attempt": 2,
   "sovereign_admission": true,
   "competition": {
     "blocking": false,
@@ -41,9 +41,9 @@
   "lanes": [
     "founder"
   ],
-  "dispatched_at": "2026-11-03T04:17:25.506597+00:00",
+  "dispatched_at": "2026-11-03T05:06:21.653508+00:00",
   "attempt": 1,
-  "updated_at": "2026-11-03T04:28:11.156622+00:00",
+  "updated_at": "2026-11-03T05:06:21.653523+00:00",
   "owner": "41577249045:1",
   "previous_owner": null,
   "previous_status": "DISPATCHED",
