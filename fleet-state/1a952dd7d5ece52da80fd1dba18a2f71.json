@@ -1,0 +1,47 @@
+{
+  "task_id": "1a952dd7d5ece52da80fd1dba18a2f71",
+  "repo": "jaystewartuk/spiralclass",
+  "issue_number": 106,
+  "status": "DISPATCHING",
+  "dispatch_id": "f0a798ab73034d5f986a4fa562fcac79",
+  "admission": {
+    "funding": {
+      "payer": "jaystewartuk",
+      "source_url": "https://github.com/jaystewartuk/spiralclass/issues/106",
+      "amount": "0",
+      "currency": "FOUNDER",
+      "usd_value": "0",
+      "quote": {
+        "basis": "Unpriced repository-owner request"
+      },
+      "raw": "Nobody knows how long the site is down when production's database password is rotated.",
+      "source_author_association": "OWNER",
+      "source_author_login": "jaystewartuk"
+    },
+    "agent_reason": "Unpriced repository-owner incident: the issue is authored by the repo OWNER (login jaystewartuk) and documents a production-downtime window during secret rotation. The bounded code path is scripts/cloudrun-deploy.sh, whose `--set-secrets ...:latest` mount is the mechanism the issue must be measured against.",
+    "scope_quote": "**Done when** the fastest way to get a rotated secret live on Cloud Run has been measured on the real service, and \u00a74.0/\u00a74.7 give that command and the measured downtime.",
+    "code_evidence": {
+      "path": "scripts/cloudrun-deploy.sh",
+      "sha": "4a2aedd5a05d6b9a5338fb75919ce56d5d60ca7b",
+      "quote": "--set-secrets \"$SECRETS_PATH=$SECRET_NAME:latest\" \\",
+      "is_product_code": true
+    },
+    "source_issue": "https://github.com/jaystewartuk/spiralclass/issues/106",
+    "funding_status": "UNPRICED_OWNER_REQUEST",
+    "lane": "founder",
+    "task_id": "1a952dd7d5ece52da80fd1dba18a2f71",
+    "source_revision": "5ff767134d4f2df95a4013d1aa07af3b312a95fd8b29491de721af7ed4399fac"
+  },
+  "dispatch_attempt": 1,
+  "sovereign_admission": true,
+  "competition": {
+    "blocking": false,
+    "nominal": []
+  },
+  "lanes": [
+    "founder"
+  ],
+  "dispatched_at": "2026-11-03T02:25:54.684399+00:00",
+  "attempt": 0,
+  "updated_at": "2026-11-03T02:25:54.684411+00:00"
+}
