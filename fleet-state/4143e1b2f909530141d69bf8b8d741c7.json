@@ -1,0 +1,47 @@
+{
+  "task_id": "4143e1b2f909530141d69bf8b8d741c7",
+  "repo": "cozyGarage/BookiE",
+  "issue_number": 1953,
+  "status": "DISPATCHING",
+  "dispatch_id": "cb84c8a0899941b8b44ec8059fa39fde",
+  "admission": {
+    "funding": {
+      "amount": "0",
+      "currency": "FOUNDER",
+      "payer": "cozyGarage",
+      "source_url": "https://github.com/cozyGarage/BookiE/issues/1953",
+      "usd_value": "0",
+      "quote": {
+        "basis": "Unpriced repository-owner request"
+      },
+      "raw": "the dialog stays on screen, drawn dimmed",
+      "source_author_association": "OWNER",
+      "source_author_login": "cozyGarage"
+    },
+    "agent_reason": "Unpriced repository-owner incident report: OWNER cozyGarage documents a stuck-UI defect in cozyGarage/BookiE where the session-teardown dialog never dismisses after Roll Back and Close during a database outage, with a bounded fix tied to WINDOW_CLOSE_TIMEOUT in session_teardown.rs and named source file. Issue authored by the repository OWNER, open; code evidence quotes the WINDOW_CLOSE_TIMEOUT line from apps/linux/app/src/ui/app/session_teardown.rs at its current blob sha on the default branch; no competing pull request.",
+    "scope_quote": "the teardown gives up and shows \"Could not close database sessions\" with the close-anyway choice",
+    "code_evidence": {
+      "path": "apps/linux/app/src/ui/app/session_teardown.rs",
+      "sha": "c557ba040c3bf05524e5797103672ac8c2c23681",
+      "quote": "const WINDOW_CLOSE_TIMEOUT: Duration = Duration::from_secs(5);",
+      "is_product_code": true
+    },
+    "source_issue": "https://github.com/cozyGarage/BookiE/issues/1953",
+    "funding_status": "UNPRICED_OWNER_REQUEST",
+    "lane": "founder",
+    "task_id": "4143e1b2f909530141d69bf8b8d741c7",
+    "source_revision": "b23f4efbfbf76725d194a82c895b370d9283c97bfdfbf48940eb1c5e29785230"
+  },
+  "dispatch_attempt": 1,
+  "sovereign_admission": true,
+  "competition": {
+    "blocking": false,
+    "nominal": []
+  },
+  "lanes": [
+    "founder"
+  ],
+  "dispatched_at": "2026-11-03T13:47:24.788740+00:00",
+  "attempt": 0,
+  "updated_at": "2026-11-03T13:47:24.788756+00:00"
+}
