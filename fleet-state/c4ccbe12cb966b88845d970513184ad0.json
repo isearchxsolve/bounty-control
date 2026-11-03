@@ -1,8 +1,10 @@
 {
   "task_id": "c4ccbe12cb966b88845d970513184ad0",
-  "status": "FAULT_FIXTURE",
-  "marker": "r463a05b915c5",
-  "text": "Unicode \u20b9 \u65e5\u672c\u8a9e\nsecond line",
-  "updated_at": "2026-11-03T06:13:57.999567+00:00",
-  "counter": 1
+  "repo": "mgillr/acfa-rs",
+  "issue_number": 93,
+  "status": "DISPATCHED",
+  "dispatch_id": "d822b9ba90044dfcabc767a394380b51",
+  "attempt": 0,
+  "fault_fixture": true,
+  "updated_at": "2026-11-03T06:14:00.075218+00:00"
 }
