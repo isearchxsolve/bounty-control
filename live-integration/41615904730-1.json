@@ -1,0 +1,123 @@
+{
+  "at": "2026-11-03T10:03:10.615940+00:00",
+  "run_url": "https://github.com/isearchxsolve/bounty-control/actions/runs/41615904730",
+  "end_to_end_passed": false,
+  "coverage": {
+    "ENVIRONMENT": "PASS",
+    "LIVE_INTAKE": "FAIL",
+    "LIVE_MODEL_ADMISSION": "PASS",
+    "LIVE_QUEUE_DEFERRAL": "PASS",
+    "LIVE_SOURCE_REJECTIONS": "PASS",
+    "LIVE_QUEUE_RECOVERY": "PASS",
+    "LIVE_QUEUE_REPLAY": "PASS",
+    "REAL_REPOSITORY_DISPATCH": "PASS",
+    "REAL_INVALID_GENERATION": "PASS",
+    "ACTIONS_TERMINAL": "FAIL",
+    "REAL_PUBLICATION": "NOT_RUN",
+    "ACTUAL_RELEASE_POSITIVE_CONTROL": "NOT_RUN",
+    "MERGE_AND_RECONCILE_REPLAY": "NOT_RUN",
+    "LIVE_STATE_ROUNDTRIP": "PASS",
+    "LIVE_CAS_CONFLICT": "PASS",
+    "LIVE_CONCURRENT_CLAIM": "PASS",
+    "LIVE_CLAIM_REPLAY": "PASS",
+    "LIVE_STALE_GENERATION": "PASS",
+    "LIVE_WRONG_OWNER": "PASS",
+    "LIVE_REVOKED_OWNER": "PASS",
+    "LIVE_RETRY_CAP": "PASS",
+    "LIVE_TRUNCATED_STATE": "PASS",
+    "LIVE_GITHUB_401": "PASS",
+    "LIVE_GITHUB_404": "PASS",
+    "LIVE_RELEASE_TASK_IDENTITY": "NOT_RUN",
+    "LIVE_RELEASE_HEAD": "NOT_RUN",
+    "LIVE_RELEASE_TREE": "NOT_RUN",
+    "LIVE_RELEASE_FILE_MANIFEST": "NOT_RUN",
+    "LIVE_RELEASE_NATIVE_RECEIPTS_MISSING": "NOT_RUN",
+    "LIVE_RELEASE_REGRESSION_NEVER_RED": "NOT_RUN",
+    "LIVE_RELEASE_REGRESSION_NOT_GREEN": "NOT_RUN",
+    "LIVE_FAILURE_SURFACE": "PASS"
+  },
+  "events": [
+    {
+      "case": "ACTIONS_TERMINAL",
+      "status": "FAIL",
+      "at": "2026-11-03T07:12:04.742596+00:00"
+    },
+    {
+      "case": "ACTIONS_TERMINAL",
+      "status": "FAIL",
+      "at": "2026-11-03T07:12:26.819770+00:00"
+    },
+    {
+      "case": "ACTIONS_TERMINAL",
+      "status": "FAIL",
+      "at": "2026-11-03T07:12:49.807383+00:00"
+    },
+    {
+      "case": "ACTIONS_TERMINAL",
+      "status": "FAIL",
+      "at": "2026-11-03T07:13:12.079993+00:00"
+    },
+    {
+      "case": "ACTIONS_TERMINAL",
+      "status": "FAIL",
+      "at": "2026-11-03T07:13:34.984582+00:00"
+    },
+    {
+      "case": "ACTIONS_TERMINAL",
+      "status": "FAIL",
+      "at": "2026-11-03T07:13:57.093040+00:00"
+    },
+    {
+      "case": "ACTIONS_TERMINAL",
+      "status": "FAIL",
+      "at": "2026-11-03T07:14:19.959837+00:00"
+    },
+    {
+      "case": "ACTIONS_TERMINAL",
+      "status": "FAIL",
+      "at": "2026-11-03T07:14:41.995301+00:00"
+    },
+    {
+      "case": "ACTIONS_TERMINAL",
+      "status": "FAIL",
+      "at": "2026-11-03T07:15:05.102028+00:00"
+    },
+    {
+      "case": "ACTIONS_TERMINAL",
+      "status": "FAIL",
+      "at": "2026-11-03T07:15:27.254265+00:00"
+    },
+    {
+      "case": "ACTIONS_TERMINAL",
+      "status": "FAIL",
+      "at": "2026-11-03T07:15:50.375600+00:00"
+    },
+    {
+      "case": "ACTIONS_TERMINAL",
+      "status": "FAIL",
+      "at": "2026-11-03T07:16:12.580683+00:00"
+    },
+    {
+      "case": "END_TO_END",
+      "status": "INCOMPLETE",
+      "at": "2026-11-03T07:16:33.723268+00:00"
+    },
+    {
+      "case": "RUN",
+      "status": "FAIL",
+      "at": "2026-11-03T07:16:34.632806+00:00"
+    },
+    {
+      "case": "LIVE_INTAKE",
+      "status": "FAIL",
+      "at": "2026-11-03T10:03:10.613639+00:00"
+    }
+  ],
+  "cohort": {
+    "c4ccbe12cb966b88845d970513184ad0": {
+      "repo": "mgillr/acfa-rs",
+      "issue": 93,
+      "state": "FAILED_OR_PENDING_RECOVERY"
+    }
+  }
+}
