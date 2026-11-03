@@ -1,0 +1,48 @@
+{
+  "task_id": "ac012f3286c90cc63a90720eea3ef9e4",
+  "repo": "osmesirius-ship-it/daxda-next-gen",
+  "issue_number": 39,
+  "status": "DISPATCHING",
+  "dispatch_id": "ec4e6b945170462d9d0c1a68367b039b",
+  "admission": {
+    "funding": {
+      "amount": "5000",
+      "currency": "USD",
+      "payer": "osmesirius-ship-it",
+      "source_url": "https://github.com/osmesirius-ship-it/daxda-next-gen/issues/39",
+      "usd_value": "5000",
+      "quote": {
+        "basis": "USD face value",
+        "usd_rate": "1"
+      },
+      "raw": "### \ud83c\udfc6 Formal Bounty Claim & Settlement Request: [BOUNTY] [$5000] [AGENTIC] [AI] DAXDA MMPIBench Memetic Penetration Depth \u2013 Anthropic Alignment Evaluation",
+      "source_author_association": "OWNER",
+      "source_author_login": "osmesirius-ship-it"
+    },
+    "agent_reason": "osmesirius-ship-it hung $5000 for [PAYOUT CLAIM] [bounty-mmpibench] [BOUNTY] [$5000] [AGENTIC]; issue shows engineering work.",
+    "scope_quote": "[PAYOUT CLAIM] [bounty-mmpibench] [BOUNTY] [$5000] [AGENTIC] [AI] DAXDA MMPIBench Memetic Penetration Depth \u2013 Anthropic Alignment Evaluation ($5,000)",
+    "code_evidence": {
+      "is_product_code": true,
+      "path": "README.md",
+      "quote": "<p align=\"center\">",
+      "sha": "20d7664cc2a09a53b9d76bb8735e49465b083583"
+    },
+    "source_issue": "https://github.com/osmesirius-ship-it/daxda-next-gen/issues/39",
+    "funding_status": "PRICED_OFFER",
+    "lane": "normal",
+    "task_id": "ac012f3286c90cc63a90720eea3ef9e4",
+    "source_revision": "68a0389dbe920fb2604e49729c7b8d7debaa0254ea62f20eef09e45509bacc0a"
+  },
+  "dispatch_attempt": 1,
+  "sovereign_admission": true,
+  "competition": {
+    "blocking": false,
+    "nominal": []
+  },
+  "lanes": [
+    "founder"
+  ],
+  "dispatched_at": "2026-11-03T10:11:17.244687+00:00",
+  "attempt": 0,
+  "updated_at": "2026-11-03T10:11:17.244707+00:00"
+}
