@@ -400,6 +400,18 @@ def read_json(path):
     return json.loads(Path(path).read_text(encoding="utf-8-sig"))
 
 
+def previous_regression_contract(directory, task):
+    """Return the real prior contract only when its claim belongs to this task."""
+    folder = Path(directory)
+    claim_path, regression_path = folder / 'claim.json', folder / 'regression.json'
+    if not claim_path.is_file() or not regression_path.is_file():
+        return None
+    previous = read_json(claim_path).get('context') or {}
+    if any(previous.get(key) != task.get(key) for key in ('task_id', 'repo', 'issue_number')):
+        raise ValueError('Previous regression evidence belongs to another task')
+    return read_json(regression_path)
+
+
 # Refusals that belong to the entry door, not to the engineer. Baba 2026-10-31: the door
 # alone decides whether an issue is funded, genuine, code-bearing and uncontested, so a
 # delivery worker that writes one of these as its reason has re-litigated a settled decision.
@@ -749,6 +761,9 @@ def engineer():
         arch["full_delivery_context"] = prepared["context_path"]
         cases = worker.model_scenarios(task["title"], body, arch)
         feedback = json.dumps(task.get("prior_failures", []))
+        prior_regression = previous_regression_contract(artifacts() / 'previous-run', task)
+        if prior_regression is not None:
+            feedback += '\nRetained previous regression contract (actual artifact):\n' + json.dumps(prior_regression)
 
         # F3's write-early skeleton belongs to the worker, at Cline's real report path
         # (folder/<identity>.preparation.json). A copy written here would land at a

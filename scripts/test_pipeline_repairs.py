@@ -747,6 +747,17 @@ class FullLifecycleTests(unittest.TestCase):
 
 
 class EngineeringFeedbackTests(unittest.TestCase):
+    def test_previous_regression_contract_requires_matching_real_task_identity(self):
+        with tempfile.TemporaryDirectory() as folder:
+            root = Path(folder)
+            task = {'task_id': 'a' * 32, 'repo': 'owner/repo', 'issue_number': 7}
+            (root / 'claim.json').write_text(json.dumps({'context': task}), encoding='utf-8')
+            contract = {'expected_failure': 'actual expected assertion', 'argv': ['pytest']}
+            (root / 'regression.json').write_text(json.dumps(contract), encoding='utf-8')
+            self.assertEqual(delivery.previous_regression_contract(root, task), contract)
+            with self.assertRaisesRegex(ValueError, 'another task'):
+                delivery.previous_regression_contract(root, {**task, 'issue_number': 8})
+
     """The exhausted verdict must carry the exact native failure.
 
     Measured 2026-11-01 on Spectral-Finance/lux#99 (run 41252150256): all three delivery
