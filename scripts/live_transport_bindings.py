@@ -20,12 +20,16 @@ ACTIVE = None
 
 
 class Calls:
-    def __init__(self, operation):
+    def __init__(self, operation, predicate=None):
         self.operation = operation
+        self.predicate = predicate
         self.call_count = 0
+
     def __call__(self, *args, **kwargs):
-        self.call_count += 1
+        if self.predicate is None or self.predicate(*args, **kwargs):
+            self.call_count += 1
         return self.operation(*args, **kwargs)
+
     def assert_not_called(self):
         if self.call_count:
             raise AssertionError('Unexpected actual transport call')
@@ -73,7 +77,10 @@ def fault(kind, status=500):
     server.daemon_threads = True
     thread = threading.Thread(target=server.serve_forever, daemon=True)
     thread.start()
-    run, sleep = Calls(subprocess.run), Calls(time.sleep)
+    # On POSIX runners, subprocess.Popen._wait(timeout=...) polls process exit
+    # with internal time.sleep(0.0005). Real transport backoffs are >= 1.0s.
+    run = Calls(subprocess.run)
+    sleep = Calls(time.sleep, predicate=lambda *a, **k: not a or not isinstance(a[0], (int, float)) or a[0] >= 0.1)
     previous, old_run, old_sleep = ACTIVE, subprocess.run, time.sleep
     old_path = os.environ.get('PATH')
     old_prompt = os.environ.get('GH_PROMPT_DISABLED')
