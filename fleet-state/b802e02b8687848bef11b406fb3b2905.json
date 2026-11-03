@@ -2,9 +2,16 @@
   "task_id": "b802e02b8687848bef11b406fb3b2905",
   "repo": "DimitarGeorgievski/patuvaj-notes",
   "issue_number": 13,
-  "status": "DISPATCHED",
+  "status": "CLAIMED",
   "dispatch_id": "4e48853e12a84adfa6189916bb192a3e",
-  "attempt": 0,
+  "attempt": 1,
   "fault_fixture": true,
-  "updated_at": "2026-11-03T04:15:22.021088+00:00"
+  "updated_at": "2026-11-03T04:15:23.249041+00:00",
+  "owner": "fault-worker-a:1",
+  "previous_owner": null,
+  "previous_status": "DISPATCHED",
+  "run_url": "https://example.invalid/fault-worker",
+  "harness_sha": "b671cfe5788143108fb38fd1bf6709ed34484a66",
+  "claimed_at": "2026-11-03T04:15:23.248999+00:00",
+  "lease_expires_at": "2026-11-03T08:20:23.249009+00:00"
 }
