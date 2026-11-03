@@ -770,6 +770,19 @@ def engineer():
                     # A resource outcome, not a verdict on the code: the run's own clock
                     # ended. Typed so the ledger can say so instead of FAILED_ENGINEER.
                     raise ClineBudgetExhausted(cline_budget)
+                # A failed native command supplies factual evidence for the same
+                # bounded supervisor used by baseline repair. It may repair the
+                # environment or propose a valid plan while preserving the patch;
+                # the host still reruns every required native gate afterwards.
+                if release_turn < 3 and any(item.exit_code != 0 for item in run.verification):
+                    repaired, candidate, repair_detail = worker.cline_supervise_delivery_phase(
+                        root, repo, number, 'baseline', diagnostic, plan)
+                    if repaired:
+                        validate_plan_contract(candidate, prepared.get('report_path'))
+                        if asdict(candidate) != asdict(plan):
+                            feedback = diagnostic + '\nEnvironment repair proposed a changed native plan; the existing plan remains required.'
+                    else:
+                        feedback = diagnostic + '\nEnvironment repair feedback: ' + str(repair_detail)
                 continue
             # F3: Cline reported success but produced no verification receipt at all.
             # This is not an engineering failure: Cline ran and exited, but the
