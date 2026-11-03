@@ -2,7 +2,7 @@
   "task_id": "c3c9d554d8780194e1a6351cea20a782",
   "repo": "eandualem/assistant-runtime",
   "issue_number": 220,
-  "status": "DISPATCHED",
+  "status": "CLAIMED",
   "dispatch_id": "34dafd5cc0864aaf8743c698039c195c",
   "admission": {
     "funding": {
@@ -42,6 +42,14 @@
     "founder"
   ],
   "dispatched_at": "2026-11-03T16:03:19.823634+00:00",
-  "attempt": 0,
-  "updated_at": "2026-11-03T16:03:21.548675+00:00"
+  "attempt": 1,
+  "updated_at": "2026-11-03T16:03:34.161932+00:00",
+  "owner": "41670210337:1",
+  "previous_owner": null,
+  "previous_status": "DISPATCHED",
+  "run_url": "https://github.com/isearchxsolve/bounty-control/actions/runs/41670210337",
+  "harness_sha": "19cc419b62128067e8cc1a83f52def01b3d8a3be",
+  "claimed_at": "2026-11-03T16:03:34.161882+00:00",
+  "lease_expires_at": "2026-11-03T20:08:34.161896+00:00",
+  "preparation_budget_seconds": 14400
 }
