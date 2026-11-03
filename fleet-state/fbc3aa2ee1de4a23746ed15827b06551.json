@@ -2,8 +2,8 @@
   "task_id": "fbc3aa2ee1de4a23746ed15827b06551",
   "repo": "coneyproductions/vms",
   "issue_number": 91,
-  "status": "FAILED_DELIVERABLE_MISSING",
-  "dispatch_id": "951153c4c0534a94a89c9ea8d1f81434",
+  "status": "DISPATCHING",
+  "dispatch_id": "3e47da24c7ba42b1a354e272a60a4ff4",
   "admission": {
     "funding": {
       "payer": "coneyproductions",
@@ -32,7 +32,7 @@
     "task_id": "fbc3aa2ee1de4a23746ed15827b06551",
     "source_revision": "b4e762ef52b788f3b7ae919b5a9218e5cbc0c2577b67b00aad22aadd24d71c25"
   },
-  "dispatch_attempt": 1,
+  "dispatch_attempt": 2,
   "sovereign_admission": true,
   "competition": {
     "blocking": false,
@@ -41,9 +41,9 @@
   "lanes": [
     "founder"
   ],
-  "dispatched_at": "2026-11-03T03:25:37.394870+00:00",
+  "dispatched_at": "2026-11-03T03:52:17.104864+00:00",
   "attempt": 1,
-  "updated_at": "2026-11-03T03:39:44.036391+00:00",
+  "updated_at": "2026-11-03T03:52:17.104864+00:00",
   "owner": "41572134967:1",
   "previous_owner": null,
   "previous_status": "DISPATCHED",
