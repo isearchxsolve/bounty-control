@@ -15,6 +15,7 @@ import subprocess
 
 import actions_delivery as delivery
 import actions_dispatch as dispatch
+import bounty_admission
 from actions_github import GitHub, GitHubError, StateStore, task_id
 from actions_reconcile import reconcile, sweep_stale_runs
 import cline_entry_door as door
@@ -126,28 +127,55 @@ class EvidenceAndHandoffTests(unittest.TestCase):
         self.assertIsNone(proof)
 
     def test_model_path_preserves_unpriced_owner_incidents_without_inventing_payment(self):
+        with patch.dict(os.environ, {"ALLOW_UNPRICED_FOUNDER": "true"}):
+            ctx=context()
+            statement='Production retry is failing; fix src/retry.py.'
+            ctx['issue'].update(body=statement,html_url='https://github.com/acme/http/issues/7',
+                                author_association='OWNER',user={'login':'owner'})
+            candidate={'repo':'acme/http','issue':7,'is_code_task':True,'is_founder_wound':True,
+                'reward_quote':statement,'scope_quote':'fix src/retry.py.',
+                'admission_reason':'Owner reports the current failure and requests a bounded source fix',
+                'funding':{'source_url':ctx['issue']['html_url'],'payer':'owner','authority_quote':statement},
+                'code_evidence':{'path':'src/retry.py','sha':'a'*40,'quote':'def retry():','is_product_code':True}}
+            blob={'type':'file','sha':'a'*40,'encoding':'base64','content':base64.b64encode(b'def retry():\n    pass\n').decode()}
+            api=SimpleNamespace(pages=lambda *a,**k:[])
+            with patch.object(GitHub,'api',return_value=blob):
+                result=door.verify_model_rows([candidate],fetch=lambda *a:ctx['issue'],
+                                             context_builder=lambda *a:ctx,admission_client=api)
+            self.assertEqual(len(result['admitted']),1)
+            proof=result['admitted'][0]['admission']
+            self.assertEqual(proof['funding_status'],'UNPRICED_OWNER_REQUEST')
+            self.assertEqual(proof['funding']['currency'],'FOUNDER')
+            require_evidence(result['admitted'][0],ctx)
+            ctx['issue']['author_association']='NONE'
+            reason,_,_=door.model_admission_refusal(candidate,lambda *a:ctx)
+            self.assertEqual(reason,'FOUNDER_OWNERSHIP_UNVERIFIED')
+
+    def test_unpriced_owner_incidents_refused_under_no_free_service_policy(self):
         ctx=context()
         statement='Production retry is failing; fix src/retry.py.'
         ctx['issue'].update(body=statement,html_url='https://github.com/acme/http/issues/7',
                             author_association='OWNER',user={'login':'owner'})
+        ctx['repository']['owner'] = {'login': 'owner'}
         candidate={'repo':'acme/http','issue':7,'is_code_task':True,'is_founder_wound':True,
             'reward_quote':statement,'scope_quote':'fix src/retry.py.',
             'admission_reason':'Owner reports the current failure and requests a bounded source fix',
             'funding':{'source_url':ctx['issue']['html_url'],'payer':'owner','authority_quote':statement},
             'code_evidence':{'path':'src/retry.py','sha':'a'*40,'quote':'def retry():','is_product_code':True}}
-        blob={'type':'file','sha':'a'*40,'encoding':'base64','content':base64.b64encode(b'def retry():\n    pass\n').decode()}
-        api=SimpleNamespace(pages=lambda *a,**k:[])
-        with patch.object(GitHub,'api',return_value=blob):
-            result=door.verify_model_rows([candidate],fetch=lambda *a:ctx['issue'],
-                                         context_builder=lambda *a:ctx,admission_client=api)
-        self.assertEqual(len(result['admitted']),1)
-        proof=result['admitted'][0]['admission']
-        self.assertEqual(proof['funding_status'],'UNPRICED_OWNER_REQUEST')
-        self.assertEqual(proof['funding']['currency'],'FOUNDER')
-        require_evidence(result['admitted'][0],ctx)
-        ctx['issue']['author_association']='NONE'
-        reason,_,_=door.model_admission_refusal(candidate,lambda *a:ctx)
-        self.assertEqual(reason,'FOUNDER_OWNERSHIP_UNVERIFIED')
+        with patch.dict(os.environ, {"ALLOW_UNPRICED_FOUNDER": "false"}):
+            # 1. Door refuses unpriced owner incident as BOUNTY_FLOOR by default
+            reason,_,_=door.model_admission_refusal(candidate,lambda *a:ctx)
+            self.assertEqual(reason,'BOUNTY_FLOOR')
+
+            # 2. bounty_admission refuses unpriced founder requests
+            proof, admission_reason = bounty_admission.admit(ctx)
+            self.assertIsNone(proof)
+            self.assertEqual(admission_reason, 'CURRENT_ISSUER_OFFER_MISSING')
+
+            # 3. dispatch refuses unpriced owner request
+            mock_proof = {'funding_status': 'UNPRICED_OWNER_REQUEST', 'funding': {'usd_value': '0'}}
+            with self.assertRaisesRegex(ValueError, 'No Free Service'):
+                dispatch.dispatch(object(), object(), ctx, mock_proof, ['normal'])
 
     def test_production_door_checks_model_citations_without_regex_readmission(self):
         ctx = context()

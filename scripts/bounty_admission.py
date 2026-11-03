@@ -679,7 +679,8 @@ def admit(context, quote=None, floor=FLOOR):
         assoc = str(issue.get("author_association") or issue.get("authorAssociation") or "").upper()
         is_founder_req = (context.get("lane") == "founder" or os.environ.get("BOUNTY_LANE") == "founder"
                           or context.get("is_founder") or (context.get("issue") or {}).get("lane") == "founder")
-        if assoc == "OWNER" and is_founder_req:
+        allow_unpriced = os.environ.get("ALLOW_UNPRICED_FOUNDER", "false").lower() in ("true", "1")
+        if assoc == "OWNER" and is_founder_req and allow_unpriced:
             offer = {"amount": "0", "currency": "FOUNDER", "usd_value": "0",
                      "quote": {"basis": "Repository Owner Request"},
                      "raw": "OWNER", "source_url": issue["html_url"],

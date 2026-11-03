@@ -750,6 +750,13 @@ def dispatch(api, store, context, proof, lanes, remote_repair=False, preparation
             and metadata.get('permissions', {}).get('push') is False):
         raise ValueError('Publication blocked: collaborator-only pull requests; publisher has no write access')
     identity, dispatch_id = task_id(repo, number), uuid.uuid4().hex
+    allow_unpriced = os.environ.get("ALLOW_UNPRICED_FOUNDER", "false").lower() in ("true", "1")
+    if not allow_unpriced and isinstance(proof, dict):
+        status = proof.get("funding_status")
+        funding = proof.get("funding") or {}
+        usd_str = str(funding.get("usd_value") or "")
+        if status == "UNPRICED_OWNER_REQUEST" or (usd_str and Decimal(usd_str) <= 0):
+            raise ValueError(f"Dispatch blocked: unpriced issue ({status=}, usd={usd_str}) violates No Free Service policy")
     if isinstance(proof, dict) and "source_revision" not in proof and "issue" in context:
         from pipeline_evidence import bind_proof
         proof = bind_proof(proof, context)

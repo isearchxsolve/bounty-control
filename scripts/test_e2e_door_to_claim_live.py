@@ -137,6 +137,8 @@ class LiveSeam(unittest.TestCase):
             raise unittest.SkipTest(
                 "LIVE_SEAM_LEDGER names the production control ledger; a live probe must not "
                 "write the rows the fleet is reconciling. Point it at a sandbox repository.")
+        cls._prior_allow_unpriced = os.environ.get("ALLOW_UNPRICED_FOUNDER")
+        os.environ["ALLOW_UNPRICED_FOUNDER"] = "true"
         cls.api = RecordingWire()
         try:
             cls.context = cls.api.issue_context(REPO, NUMBER)
@@ -180,6 +182,10 @@ class LiveSeam(unittest.TestCase):
 
     @classmethod
     def tearDownClass(cls):
+        if getattr(cls, "_prior_allow_unpriced", None) is None:
+            os.environ.pop("ALLOW_UNPRICED_FOUNDER", None)
+        else:
+            os.environ["ALLOW_UNPRICED_FOUNDER"] = cls._prior_allow_unpriced
         """Remove every probe row, then the namespace itself, and prove both are gone.
 
         Two mechanisms with two jobs. ``StateStore.delete`` exercises the production delete path

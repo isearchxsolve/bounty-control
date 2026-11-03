@@ -615,6 +615,9 @@ def model_admission_refusal(row, context_builder, source_reader=None):
             return 'AGENT_DECISION_MISSING', None, None
         owner_request = row.get('is_founder_wound') is True and not quote_states_an_amount(quote)
         if owner_request:
+            allow_unpriced = os.environ.get("ALLOW_UNPRICED_FOUNDER", "false").lower() in ("true", "1")
+            if not allow_unpriced:
+                return 'BOUNTY_FLOOR', None, None
             if (context['issue'].get('author_association') != 'OWNER'
                     or source is not context['issue']):
                 return 'FOUNDER_OWNERSHIP_UNVERIFIED', None, None
@@ -773,7 +776,8 @@ def verify_rows(rows: List[dict], fetch: Optional[Callable[[str, int], Optional[
             continue
 
         author_assoc = str(issue.get("author_association") or issue.get("authorAssociation") or "").upper()
-        is_founder = (author_assoc == "OWNER") or bool(row.get("is_founder_wound"))
+        allow_unpriced = os.environ.get("ALLOW_UNPRICED_FOUNDER", "false").lower() in ("true", "1")
+        is_founder = ((author_assoc == "OWNER") or bool(row.get("is_founder_wound"))) and allow_unpriced
         lane = "founder" if is_founder else "bounty"
 
         if not quote_states_an_amount(quote) and not is_founder:
@@ -1227,7 +1231,7 @@ every field below is something you can hold in your hand from the work you have 
 
     {{"repo": "owner/name", "issue": 123, "url": "https://github.com/owner/name/issues/123",
      "is_code_task": true,
-     "is_founder_wound": <true for an unpriced owner request; false otherwise>,
+     "is_founder_wound": false,
      "reward_quote": "<sentence copied exactly from the issue>",
      "reward_usd": <number or null>,
      "scope_quote": "<sentence copied exactly, saying what to build>",
