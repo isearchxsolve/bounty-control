@@ -56,12 +56,12 @@ def fetch_imap_leads(
     try:
         M = imaplib.IMAP4_SSL(DEFAULT_HOST, DEFAULT_PORT, timeout=30)
         M.login(user, pw)
-        typ, _ = M.select('"INBOX"', readonly=True)
+        typ, _ = M.select('INBOX', readonly=True)
         if typ != "OK":
             return []
         
-        # Search for messages mentioning bounty or dollars or github notifications
-        typ, data = M.search(None, '(OR SUBJECT "bounty" SUBJECT "$")')
+        # Search for messages mentioning bounty, dollars, rewards or grants
+        typ, data = M.search(None, '(OR (OR SUBJECT "bounty" SUBJECT "$") (OR SUBJECT "reward" SUBJECT "grant"))')
         if typ != "OK" or not data[0]:
             M.logout()
             return []
@@ -73,7 +73,10 @@ def fetch_imap_leads(
             return []
 
         id_str = b",".join(recent_ids).decode("ascii")
-        typ, fetched = M.fetch(id_str, "(BODY.PEEK[HEADER.FIELDS (FROM SUBJECT DATE MESSAGE-ID)])")
+        typ, fetched = M.fetch(
+            id_str,
+            "(BODY.PEEK[HEADER.FIELDS (FROM SUBJECT DATE MESSAGE-ID LIST-ID X-GITHUB-REASON X-GITHUB-LABELS X-GITHUB-ISSUESTATE)])"
+        )
         M.logout()
     except Exception as exc:
         print(f"[IMAP] Notice: IMAP fetch encountered {type(exc).__name__}: {exc}", file=sys.stderr)
@@ -89,9 +92,14 @@ def fetch_imap_leads(
             continue
         try:
             msg = email.message_from_bytes(item[1])
-            subj = decode_str(msg.get("Subject"))
-            frm = decode_str(msg.get("From"))
-            date = decode_str(msg.get("Date"))
+            subj_raw = decode_str(msg.get("Subject"))
+            subj = re.sub(r'\s+', ' ', subj_raw).strip()
+            frm = re.sub(r'\s+', ' ', decode_str(msg.get("From"))).strip()
+            date = re.sub(r'\s+', ' ', decode_str(msg.get("Date"))).strip()
+            list_id = decode_str(msg.get("List-ID"))
+            labels = decode_str(msg.get("X-GitHub-Labels"))
+            issue_state = decode_str(msg.get("X-GitHub-IssueState")).lower().strip()
+            gh_reason = decode_str(msg.get("X-GitHub-Reason")).strip()
         except Exception:
             continue
 
@@ -99,34 +107,74 @@ def fetch_imap_leads(
         if "isearchxsolve/bounty-control" in subj and "Run failed" in subj:
             continue
 
+        repo = None
+        if list_id:
+            m_list = re.search(r'([a-zA-Z0-9_\-\.]+/[a-zA-Z0-9_\-\.]+)', list_id)
+            if m_list:
+                repo = m_list.group(1).strip()
+
         m = gh_pattern.search(subj)
+        num = None
+        title = subj
         if m:
-            repo = m.group(1).strip()
+            if not repo:
+                repo = m.group(1).strip()
             title = m.group(2).strip()
             num_str = m.group(3)
-            if not num_str:
-                # Look for #123 inside title
-                num_match = re.search(r'#(\d+)', title)
-                num = int(num_match.group(1)) if num_match else None
-            else:
+            if num_str:
                 num = int(num_str)
 
-            if repo and num:
-                key = (repo.lower(), num)
-                if key in seen:
-                    continue
-                seen.add(key)
-                leads.append({
-                    "repo": repo,
-                    "issue": num,
-                    "title": title,
-                    "email_subject": subj,
-                    "email_from": frm,
-                    "email_date": date,
-                    "source": "gmail_imap",
-                    "reason": "EMAIL_IMAP_NOTIFICATION_LEAD",
-                    "url": f"https://github.com/{repo}/issues/{num}",
-                })
+        if not num:
+            m_num = re.search(r'(?:Issue|PR|#)\s*#?(\d+)', subj, re.I)
+            if m_num:
+                num = int(m_num.group(1))
+
+        # Parse USD price
+        usd_value = 0
+        for text in (title, subj, labels):
+            pm = re.search(r'\$\s*(\d+(?:\.\d+)?)\s*([kK])?', text)
+            if pm:
+                try:
+                    v = float(pm.group(1))
+                    if pm.group(2):
+                        v *= 1000
+                    v_int = int(v)
+                    if v_int > usd_value:
+                        usd_value = v_int
+                except ValueError:
+                    pass
+            pm2 = re.search(r'(\d+(?:\.\d+)?)\s*([kK])?\s*(?:usd|dollars)', text, re.I)
+            if pm2:
+                try:
+                    v = float(pm2.group(1))
+                    if pm2.group(2):
+                        v *= 1000
+                    v_int = int(v)
+                    if v_int > usd_value:
+                        usd_value = v_int
+                except ValueError:
+                    pass
+
+        if repo and num:
+            key = (repo.lower(), num)
+            if key in seen:
+                continue
+            seen.add(key)
+            leads.append({
+                "repo": repo,
+                "issue": num,
+                "title": title,
+                "usd_value": usd_value,
+                "labels": labels,
+                "state": issue_state or "unknown",
+                "gh_reason": gh_reason,
+                "email_subject": subj,
+                "email_from": frm,
+                "email_date": date,
+                "source": "gmail_imap",
+                "reason": "EMAIL_IMAP_NOTIFICATION_LEAD",
+                "url": f"https://github.com/{repo}/issues/{num}",
+            })
     return leads
 
 
