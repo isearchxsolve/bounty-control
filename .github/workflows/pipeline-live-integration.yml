@@ -23,7 +23,8 @@ permissions:
 jobs:
   live:
     runs-on: ubuntu-latest
-    timeout-minutes: 100
+    # Two production-sized search rounds plus bounded delivery/review observation.
+    timeout-minutes: 240
     env:
       GH_TOKEN: ${{ secrets.GH_PAT }}
       TOKENHARBOR_KEYS_JSON: ${{ secrets.TOKENHARBOR_KEYS_JSON }}
@@ -35,6 +36,7 @@ jobs:
       NVIDIA_ROUTER_MODEL: ${{ vars.NVIDIA_DELIVERY_MODEL || 'nvidia/nemotron-3.5-super-vl-120b-a12b' }}
       PYTHONUNBUFFERED: '1'
       PYTHONIOENCODING: utf-8
+      BOUNTY_AGENT_MEMORY: ${{ github.workspace }}/scratch/live-integration/entry-scout/discovery-memory
     steps:
     - uses: actions/checkout@v4
       with:
@@ -43,6 +45,12 @@ jobs:
       run: npm install --global --no-audit --no-fund cline@3.0.74
     - name: Install workflow receipt parser
       run: python3 -m pip install PyYAML==6.0.3
+    - name: Restore unverified research continuity
+      uses: actions/cache/restore@v4
+      with:
+        path: scratch/live-integration/entry-scout/discovery-memory
+        key: pipeline-research-${{ github.run_id }}-${{ github.run_attempt }}
+        restore-keys: pipeline-research-
     - name: Exercise real services and production delivery
       env:
         MERGE_FIXTURE: ${{ inputs.merge_fixture }}
@@ -54,7 +62,13 @@ jobs:
         if [ "$MERGE_FIXTURE" = true ]; then flags+=(--merge-fixture); fi
         python3 -u scripts/live_pipeline_integration.py run \
           --run-dir scratch/live-integration \
-          --engineering-budget 1800 --wait-minutes 60 "${flags[@]}"
+          --model-timeout 3600 --engineering-budget 1800 --wait-minutes 60 "${flags[@]}"
+    - name: Preserve unverified research progress
+      if: always()
+      uses: actions/cache/save@v4
+      with:
+        path: scratch/live-integration/entry-scout/discovery-memory
+        key: pipeline-research-${{ github.run_id }}-${{ github.run_attempt }}
     - name: Retain actual receipts including failed and incomplete runs
       if: always()
       uses: actions/upload-artifact@v4
@@ -79,6 +93,7 @@ jobs:
           scratch/live-integration/entry-queue/
           scratch/live-integration/entry-scout/run-*/*.jsonl
           scratch/live-integration/entry-scout/run-*/agent.log
+          scratch/live-integration/entry-scout/discovery-memory/RESEARCH.md
           scratch/live-integration/originals/
         if-no-files-found: error
         retention-days: 14

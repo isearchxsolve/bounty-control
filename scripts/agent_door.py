@@ -117,6 +117,16 @@ def ensure_cline(timeout: int = 900) -> Optional[str]:
     return shutil.which("cline")
 
 
+def research_memory_path(directory):
+    """Keep research bytes across fresh workspaces; never treats them as admission."""
+    folder = Path(directory).resolve()
+    folder.mkdir(parents=True, exist_ok=True)
+    path = folder / 'RESEARCH.md'
+    if not path.exists():
+        path.write_text('# Unverified discovery research\n\nLive sources must be checked again before admission.\n', encoding='utf-8')
+    return path
+
+
 def task_history_snapshot(records):
     """Source facts for the agent; no task-selection judgement or counter edits."""
     fields = ('task_id', 'repo', 'issue_number', 'status', 'attempt', 'dispatch_attempt',
@@ -160,6 +170,12 @@ def find_issues(root: Optional[str] = None, rounds: int = 2, timeout: int = 600,
         round_context = ('You can run the actual read-only production evidence verifier: ' + rendered
                          + '. Read its JSON refusals and exact details, correct your evidence from real sources, '
                          'and rerun it before declaring your shortlist verified. This tool does not dispatch or publish.')
+        if os.environ.get('BOUNTY_AGENT_MEMORY'):
+            memory = research_memory_path(os.environ['BOUNTY_AGENT_MEMORY'])
+            round_context += (f'\nResearch scratchpad: {memory}. It persists across discovery runs. '
+                              'Read it as unverified research and record useful investigation progress there as you work. '
+                              'Recheck live sources before citing them. Admissions still require shortlist.jsonl '
+                              'and the actual verifier. Never store credentials in this scratchpad.')
         if task_history is not None:
             with open(os.path.join(workdir, 'task-history.json'), 'w', encoding='utf-8') as handle:
                 json.dump(task_history_snapshot(task_history), handle, indent=2)

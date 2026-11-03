@@ -60,6 +60,7 @@ jobs:
         # TokenHarbor was exhausted every one of the door's turns died before writing a row.
         NVIDIA_ROUTER_MODEL: ${{ vars.NVIDIA_DELIVERY_MODEL || 'nvidia/nemotron-3.5-super-vl-120b-a12b' }}
         BOUNTY_AGENT_ROUNDS: '2'
+        BOUNTY_AGENT_MEMORY: ${{ env.BOUNTY_STATE_DIR }}/discovery-memory
         # Search is a heavy task: a full lane sweep gathers hundreds of raw candidates and the
         # filtering and evidence check that produces a verified row happens after them. 800 s
         # measured 918 candidates gathered and zero rows written (run 41564183447, both rounds

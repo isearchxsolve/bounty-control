@@ -2,6 +2,7 @@
 
 import os
 import unittest
+import tempfile
 from pathlib import Path
 from unittest import mock
 
@@ -72,6 +73,17 @@ class TheAgentIsNeverPointedStraightAtTheProvider(unittest.TestCase):
         source = Path(agent_door.__file__).read_text(encoding="utf-8")
         self.assertIn("127.0.0.1", source)
         self.assertNotIn("integrate.api.nvidia.com", source)
+
+
+class ResearchContinuity(unittest.TestCase):
+    def test_existing_research_survives_workspace_recreation_without_becoming_a_row(self):
+        with tempfile.TemporaryDirectory() as directory:
+            path = agent_door.research_memory_path(directory)
+            self.assertIn('Unverified', path.read_text(encoding='utf-8'))
+            path.write_text('Unverified lead: revisit its live source before citing.\n', encoding='utf-8')
+            self.assertEqual(agent_door.research_memory_path(directory).read_text(encoding='utf-8'),
+                             'Unverified lead: revisit its live source before citing.\n')
+            self.assertEqual([file.name for file in Path(directory).iterdir()], ['RESEARCH.md'])
 
 
 if __name__ == "__main__":
