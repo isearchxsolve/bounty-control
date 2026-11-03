@@ -2,7 +2,7 @@
   "task_id": "3a73b006d83d324ceb09e60460eccf9d",
   "repo": "pavel1337/perimeter",
   "issue_number": 59,
-  "status": "DISPATCHING",
+  "status": "DISPATCHED",
   "dispatch_id": "dd59ae0bab7444f1a1aa777ba7a674a5",
   "admission": {
     "funding": {
@@ -43,5 +43,5 @@
   ],
   "dispatched_at": "2026-11-03T15:14:54.022061+00:00",
   "attempt": 0,
-  "updated_at": "2026-11-03T15:14:54.022078+00:00"
+  "updated_at": "2026-11-03T15:14:57.038162+00:00"
 }
