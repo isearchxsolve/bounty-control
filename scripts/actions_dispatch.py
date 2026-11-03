@@ -230,8 +230,9 @@ def build_issue_search_query(expression, window=None, fresh=0):
     if window:
         query += " created:" + Horizon.qualifier(window)
     if fresh:
+        days = fresh if isinstance(fresh, (int, float)) and fresh > 0 else 7
         query += " updated:>=" + datetime.fromtimestamp(
-            time.time() - 7 * 86400, timezone.utc).strftime("%Y-%m-%d")
+            time.time() - days * 86400, timezone.utc).strftime("%Y-%m-%d")
     return query
 
 
@@ -1381,13 +1382,18 @@ def discover(lanes, max_dispatches=2, live=False, queries_per_lane=2, state_dir=
                         import cline_entry_door
                         founder_leads = cline_entry_door.ingest_founder_watch_leads()
                         if founder_leads:
-                            f_res = queue_agent_rows(con, api, founder_leads, verdicts={},
-                                                     pending_has_seen_at=any(
-                                                         row[1] == "seen_at"
-                                                         for row in con.execute("PRAGMA table_info(pending)")))
-                            for identity in f_res.get("queued", []):
-                                if identity not in priority_ids:
-                                    priority_ids.insert(0, identity)
+                            priced_founder_leads = [
+                                lead for lead in founder_leads
+                                if lead.get("usd_value", 0) >= 250 or lead.get("funding_status") not in (None, "UNPRICED_OWNER_REQUEST")
+                            ]
+                            if priced_founder_leads:
+                                f_res = queue_agent_rows(con, api, priced_founder_leads, verdicts={},
+                                                         pending_has_seen_at=any(
+                                                             row[1] == "seen_at"
+                                                             for row in con.execute("PRAGMA table_info(pending)")))
+                                for identity in f_res.get("queued", []):
+                                    if identity not in priority_ids:
+                                        priority_ids.insert(0, identity)
                     except Exception:
                         pass
                 except Exception as exc:  # the door never takes discovery down with it

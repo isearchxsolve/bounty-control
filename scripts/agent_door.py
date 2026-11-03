@@ -229,6 +229,9 @@ DO NOT ADMIT UNPRICED ISSUES OR FREE SERVICE REQUESTS. Every admitted issue MUST
 verified cash reward or bounty commitment from an authorized issuer (OWNER/MEMBER/COLLABORATOR or trusted bot),
 with an amount >= $250 USD. Set is_founder_wound false. Unpriced requests, volunteer issues, or zero-dollar
 reports are strictly refused.
+TARGET SOLO FOUNDERS WILLING TO PAY WITH VERIFIED PAYMENT/MERGE HISTORY:
+Prioritize Layer 4 agentic/silo-founders and Layer 3 agile funded startups where the issue has direct production impact
+and is backed by pre-funded programmatic escrow (Algora, Polar, Opire, BountyHub) or verified repository merge history.
 '''
         if prior_refusals:
             with open(os.path.join(workdir, "prior-refusals.json"), "w", encoding="utf-8") as handle:
