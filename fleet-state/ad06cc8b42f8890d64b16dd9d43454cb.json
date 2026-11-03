@@ -378,7 +378,7 @@
   ],
   "dispatched_at": "2026-11-03T21:16:03.582952+00:00",
   "attempt": 3,
-  "updated_at": "2026-11-03T21:37:43.161561+00:00",
+  "updated_at": "2026-11-03T21:38:10.802150+00:00",
   "owner": "41720234421:1",
   "previous_owner": "41710943217:1",
   "previous_status": "DISPATCHED",
@@ -390,7 +390,7 @@
   "kind": "engineer",
   "retryable": true,
   "diagnostic": "Actions run completed (failure) without terminal callback; artifacts retained",
-  "at": "2026-11-03T19:44:29.827171+00:00",
+  "at": "2026-11-03T21:37:44.510214+00:00",
   "failures": [
     {
       "run_url": "https://github.com/isearchxsolve/bounty-control/actions/runs/41702745313",
@@ -401,7 +401,7 @@
       "at": "2026-11-03T19:44:29.827171+00:00"
     }
   ],
-  "finished_at": "2026-11-03T19:44:57.355126+00:00",
+  "finished_at": "2026-11-03T21:38:10.098120+00:00",
   "observed_at": "2026-11-03T21:14:42.758273+00:00",
   "proposed_head": "929cf455efb4dd078ed9258f0f46c0968aa93718",
   "proposed_branch": "fix/bounty-81-ad06cc-3",
