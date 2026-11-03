@@ -54,12 +54,15 @@ class GitHub:
         self.deadline = deadline
 
     THROTTLE = re.compile(r"rate limit exceeded|secondary rate limit|abuse detection", re.I)
-    # A local socket that times out says nothing about the request. Measured 2026-11-03 on the live
-    # probe battery: `Get https://api.github.com/repos/.../contents/...: net/http: TLS handshake
-    # timeout` failed a probe outright while the same call succeeded seconds later. Retried with a
-    # short backoff, never treated as an answer.
+    # Measured 2026-11-03 on the live probe battery: a TLS handshake timeout failed a probe
+    # outright while the same call succeeded seconds later, and 7 of the 9 non-passing probes were
+    # GitHub answering HTTP 500, 503 ("No server is currently available") and 504 on ordinary reads
+    # of fleet-state and repository metadata. None of those are answers about the request. They are
+    # retried with a short backoff and never treated as a verdict.
     TRANSIENT = re.compile(r"TLS handshake timeout|connection reset by peer|i/o timeout|"
-                           r"unexpected EOF|broken pipe|temporarily unavailable|no such host", re.I)
+                           r"unexpected EOF|broken pipe|temporarily unavailable|no such host|"
+                           r"internal server error|bad gateway|service unavailable|"
+                           r"no server is currently available|HTTP\s*(?:500|502|503|504)\b", re.I)
     THROTTLE_TRIES = 4
     TRANSIENT_TRIES = 3
     TRANSIENT_BACKOFF = 2.0
