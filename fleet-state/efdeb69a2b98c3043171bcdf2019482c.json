@@ -2,7 +2,7 @@
   "task_id": "efdeb69a2b98c3043171bcdf2019482c",
   "repo": "gewenbo888/ai-for-money",
   "issue_number": 1,
-  "status": "DISPATCHING",
+  "status": "DISPATCHED",
   "dispatch_id": "c9ac14b5e9eb41c480401c94d8236d11",
   "admission": {
     "funding": {
@@ -83,7 +83,7 @@
   ],
   "dispatched_at": "2026-11-03T12:08:01.578402+00:00",
   "attempt": 2,
-  "updated_at": "2026-11-03T12:08:01.578420+00:00",
+  "updated_at": "2026-11-03T12:08:03.403529+00:00",
   "owner": "41623465836:1",
   "previous_owner": "41617145350:1",
   "previous_status": "DISPATCHED",
