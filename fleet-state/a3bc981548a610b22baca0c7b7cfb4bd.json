@@ -2,7 +2,7 @@
   "task_id": "a3bc981548a610b22baca0c7b7cfb4bd",
   "repo": "jaystewartuk/spiralclass",
   "issue_number": 110,
-  "status": "PUBLISHED_PENDING_CHECKS",
+  "status": "AWAITING_REVIEW",
   "dispatch_id": "03a5f6b7a06043c0a44045737c1e28d4",
   "admission": {
     "funding": {
@@ -43,7 +43,7 @@
   ],
   "dispatched_at": "2026-11-03T12:07:42.943469+00:00",
   "attempt": 2,
-  "updated_at": "2026-11-03T12:18:08.945873+00:00",
+  "updated_at": "2026-11-03T12:49:37.825388+00:00",
   "owner": "41633112092:1",
   "previous_owner": "41612805268:1",
   "previous_status": "DISPATCHED",
@@ -78,5 +78,20 @@
   "claim_command": "",
   "claim_retry_required": false,
   "payment_status": "UNVERIFIED",
-  "release_digest": "920d852febac5f2cfd9e9de007fa8bdd4261eb22b97f0ba897e74a673a0ea15a"
+  "release_digest": "920d852febac5f2cfd9e9de007fa8bdd4261eb22b97f0ba897e74a673a0ea15a",
+  "remote_verification": {
+    "head_sha": "02cbe96710f677bc34f2fa88bec42cffa595d7be",
+    "checks": [],
+    "statuses": [],
+    "failures": [],
+    "held": [],
+    "state": "NO_REMOTE_CHECKS"
+  },
+  "remote_review": {
+    "verdict": "NONE",
+    "review_count": 0,
+    "latest_reviewer": null,
+    "latest_review_at": null
+  },
+  "observed_at": "2026-11-03T12:49:37.825374+00:00"
 }
