@@ -908,6 +908,14 @@ class GatewayFailoverTests(unittest.TestCase):
         self.assertIsNotNone(outcome)
         self.assertTrue(outcome[0], outcome[3])
 
+    def test_transient_network_timeout_delegates_to_nvidia(self):
+        outcome, _ = self.failover(
+            "Token Harbor transient network failure after 60s (fallback attempt 2): The read operation timed out",
+            ready_slots=3)
+        self.assertIsNotNone(outcome, "a timing-out shard must delegate to NVIDIA instead of 502-ing")
+        self.assertTrue(outcome[0], outcome[3])
+        self.assertEqual(outcome[2], self.worker.NVIDIA_DELIVERY_MODEL)
+
     def test_a_non_throttle_failure_keeps_the_primary_brain(self):
         # A 500 or a malformed request is not the measured throttle: the primary
         # brain answers, and the original failure stands without a swap.

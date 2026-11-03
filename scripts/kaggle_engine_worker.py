@@ -379,6 +379,7 @@ class TokenHarborRouter:
         network_attempts = 0
         last_error = "No Token Harbor key is currently ready."
 
+        effective_timeout = min(timeout, 60)
         while True:
             leased = self._lease_key()
             if leased is None:
@@ -388,24 +389,24 @@ class TokenHarborRouter:
             request_id = uuid.uuid4().hex[:10]
             _command_log(
                 f'MODEL_REQUEST START id={request_id} attempt={network_attempts + 1} '
-                f'key_slot={key_index} timeout={timeout}s tools={len(payload.get("tools") or [])}'
+                f'key_slot={key_index} timeout={effective_timeout}s tools={len(payload.get("tools") or [])}'
             )
             try:
-                status, headers, response_payload = self._transport(slot.secret, payload, timeout)
+                status, headers, response_payload = self._transport(slot.secret, payload, effective_timeout)
                 self._last_http_status = status
             except (error.URLError, TimeoutError, OSError) as exc:
                 self._last_http_status = None
-                self._release_ready(slot)
+                self._cool_down(slot, {})
                 network_attempts += 1
                 _command_log(
                     f'MODEL_REQUEST END id={request_id} result=NETWORK_ERROR '
                     f'elapsed={time.monotonic()-request_started:.1f}s attempt={network_attempts}'
                 )
                 last_error = (
-                    f"Token Harbor transient network failure after {timeout}s "
+                    f"Token Harbor transient network failure after {effective_timeout}s "
                     f"(fallback attempt {network_attempts}): {exc}"
                 )
-                if network_attempts >= 4:
+                if network_attempts >= 2:
                     return False, {}, DEEPSEEK_FLASH_MODEL, last_error
                 continue
             except Exception as exc:  # Transport adapters must not strand a lease.
@@ -626,6 +627,9 @@ _THROTTLE_MARKERS = (
     "free tier limit",
     "rate limit",
     "no token harbor key is currently ready",
+    "timed out",
+    "timeout",
+    "transient network failure",
 )
 
 _nvidia_fallback_router: Optional[NvidiaRouter] = None

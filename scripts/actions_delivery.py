@@ -747,7 +747,7 @@ def engineer():
         body = task["body"] + (
             "\n\nDelivery contract: write " + str(regression_file) + " as JSON with "
             "test_files (new companion test paths), argv (the exact native regression command), "
-            "expected_failure (a specific defect assertion, minimum 12 characters). "
+            "expected_failure (the exact failure substring or error line printed by the test on unpatched code, e.g. 'want [192.0.2.3]' or 'AssertionError: ...', minimum 12 characters - MUST literally appear in test output; do not write English prose sentences). "
             "The host runs these tests with actual upstream product source restored, then with your fix. "
             "Do not modify any existing master test or verification configuration. "
             "Do not commit, push, create a fork or publish. Preserve complete issue context at "
@@ -785,6 +785,9 @@ def engineer():
                 max_iterations=1, initial_feedback=feedback)
             if not ok:
                 feedback = diagnostic
+                if "The operation timed out" in diagnostic:
+                    feedback = ("Previous agent process experienced an upstream network timeout. "
+                                "Preserved worktree edits intact; resume engineering and complete the release contract.")
                 worker.preserve_cline_edits(root)
                 if worker.cline_turn_timeout_seconds() <= 0:
                     # A resource outcome, not a verdict on the code: the run's own clock
@@ -841,7 +844,12 @@ def engineer():
                     raise ValueError("Native verification changed the proposed source tree")
                 break
             except (ValueError, RuntimeError, OSError) as exc:
-                feedback = ("Independent release verification failed: " + str(exc) +
+                hint = ""
+                if "did not fail on the specified defect assertion" in str(exc):
+                    hint = ("\nHINT: Set 'expected_failure' in regression.json to the exact literal error message or "
+                            "failure line printed by the test in 'Actual output' above (e.g. an exact failure string); "
+                            "do not write English prose sentences.")
+                feedback = ("Independent release verification failed: " + str(exc) + hint +
                             "\nRead complete native receipts at " + str(artifacts()) +
                             ". Repair the actual failure, preserving completed edits and master tests.")
                 worker.preserve_cline_edits(root)

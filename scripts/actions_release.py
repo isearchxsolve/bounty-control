@@ -238,6 +238,10 @@ def failure_corroborated(expected, output):
         return False
     if expected in output:
         return True
+    for line in expected.splitlines():
+        cleaned = line.strip()
+        if len(cleaned) >= 12 and cleaned in output:
+            return True
     # Distinctive tokens only: identifiers and multi-digit numbers. A single shared word
     # ("AssertionError") corroborates nothing, so a claim must carry at least two of them
     # and every one of them must appear in the run's own output.

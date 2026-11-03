@@ -212,7 +212,7 @@ class TokenHarborRouter:
             try:
                 status, headers, response_payload = self._transport(slot.secret, payload, timeout)
             except (error.URLError, TimeoutError, OSError) as exc:
-                self._release_ready(slot)
+                self._cool_down(slot, {})
                 network_attempts += 1
                 last_error = (
                     f"Token Harbor transient network failure after {timeout}s "
