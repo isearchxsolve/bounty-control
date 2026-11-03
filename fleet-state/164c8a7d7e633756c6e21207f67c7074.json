@@ -2,8 +2,8 @@
   "task_id": "164c8a7d7e633756c6e21207f67c7074",
   "repo": "isaim0011/rift",
   "issue_number": 3,
-  "status": "FAILED_ENGINEER",
-  "dispatch_id": "0d1987d67f55401eb38a01292d90c02d",
+  "status": "DISPATCHING",
+  "dispatch_id": "056e3d327b8d4349a605000d1c40e196",
   "admission": {
     "funding": {
       "payer": "isaim0011",
@@ -32,7 +32,7 @@
     "task_id": "164c8a7d7e633756c6e21207f67c7074",
     "source_revision": "c6b422defcc2f41b9b4839766cb40571973067721d7672c75b73e7035ade001e"
   },
-  "dispatch_attempt": 2,
+  "dispatch_attempt": 3,
   "sovereign_admission": true,
   "competition": {
     "blocking": false,
@@ -41,9 +41,9 @@
   "lanes": [
     "founder"
   ],
-  "dispatched_at": "2026-11-03T12:07:27.605159+00:00",
+  "dispatched_at": "2026-11-03T12:49:14.930669+00:00",
   "attempt": 2,
-  "updated_at": "2026-11-03T12:14:29.135030+00:00",
+  "updated_at": "2026-11-03T12:49:14.930682+00:00",
   "owner": "41633076405:1",
   "previous_owner": "41617463409:1",
   "previous_status": "DISPATCHED",
