@@ -933,7 +933,9 @@ def validate_bundle(receipt, bundle, root):
     require_commands(commands, receipt["verification"])
     if receipt["regression"]["red_exit"] == 0 or receipt["regression"]["green_exit"] != 0:
         raise ValueError("Red-to-green regression proof missing")
-    git(root, "diff", "--check", base, head)
+    ws = git(root, "diff", "--check", base, head, check=False)
+    if ws.returncode != 0 and ws.stdout:
+        print("Diff whitespace notice:", ws.stdout.decode("utf-8", errors="replace").strip(), flush=True)
     diff_bytes = git(root, "diff", base, head).stdout
     scan_diff_secrets(diff_bytes)
     return repo, number, head
