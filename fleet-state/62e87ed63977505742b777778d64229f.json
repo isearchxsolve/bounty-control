@@ -2,7 +2,7 @@
   "task_id": "62e87ed63977505742b777778d64229f",
   "repo": "ilyavzane/Dispo",
   "issue_number": 19,
-  "status": "DISPATCHED",
+  "status": "CLAIMED",
   "dispatch_id": "e047dd8c98d941719583c7dca7eeeae9",
   "admission": {
     "funding": {
@@ -42,6 +42,14 @@
     "founder"
   ],
   "dispatched_at": "2026-11-03T13:46:48.343490+00:00",
-  "attempt": 0,
-  "updated_at": "2026-11-03T13:46:50.237409+00:00"
+  "attempt": 1,
+  "updated_at": "2026-11-03T13:47:02.071557+00:00",
+  "owner": "41647407167:1",
+  "previous_owner": null,
+  "previous_status": "DISPATCHED",
+  "run_url": "https://github.com/isearchxsolve/bounty-control/actions/runs/41647407167",
+  "harness_sha": "6cdb0e376022a1fe569be5fb828cf45a21e4850b",
+  "claimed_at": "2026-11-03T13:47:02.071510+00:00",
+  "lease_expires_at": "2026-11-03T17:52:02.071523+00:00",
+  "preparation_budget_seconds": 14400
 }
