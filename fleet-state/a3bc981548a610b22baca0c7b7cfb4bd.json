@@ -2,7 +2,7 @@
   "task_id": "a3bc981548a610b22baca0c7b7cfb4bd",
   "repo": "jaystewartuk/spiralclass",
   "issue_number": 110,
-  "status": "PUBLISHING",
+  "status": "PUBLISHED_PENDING_CHECKS",
   "dispatch_id": "03a5f6b7a06043c0a44045737c1e28d4",
   "admission": {
     "funding": {
@@ -43,7 +43,7 @@
   ],
   "dispatched_at": "2026-11-03T12:07:42.943469+00:00",
   "attempt": 2,
-  "updated_at": "2026-11-03T12:17:52.266991+00:00",
+  "updated_at": "2026-11-03T12:17:58.724750+00:00",
   "owner": "41633112092:1",
   "previous_owner": "41612805268:1",
   "previous_status": "DISPATCHED",
@@ -69,5 +69,14 @@
   "finished_at": "2026-11-03T11:00:26.567809+00:00",
   "proposed_head": "02cbe96710f677bc34f2fa88bec42cffa595d7be",
   "proposed_branch": "fix/bounty-110-a3bc98-2",
-  "verified_run": "https://github.com/isearchxsolve/bounty-control/actions/runs/41633112092"
+  "verified_run": "https://github.com/isearchxsolve/bounty-control/actions/runs/41633112092",
+  "pr_url": "https://github.com/jaystewartuk/spiralclass/pull/247",
+  "pr_number": 247,
+  "head_sha": "02cbe96710f677bc34f2fa88bec42cffa595d7be",
+  "branch": "fix/bounty-110-a3bc98-2",
+  "claim_status": "NOT_APPLICABLE",
+  "claim_command": "",
+  "claim_retry_required": false,
+  "payment_status": "UNVERIFIED",
+  "release_digest": "920d852febac5f2cfd9e9de007fa8bdd4261eb22b97f0ba897e74a673a0ea15a"
 }
