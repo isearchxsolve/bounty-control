@@ -1,0 +1,246 @@
+{
+  "task_id": "969be34d20af4cf66bdbd53c9c4838f9",
+  "repo": "Spectral-Finance/lux",
+  "issue_number": 86,
+  "status": "DISPATCHING",
+  "dispatch_id": "db4832971adc4ba28e769c2140f30c1d",
+  "admission": {
+    "funding": {
+      "amount": "600",
+      "currency": "USD",
+      "payer": "rparcus",
+      "source_url": "https://github.com/Spectral-Finance/lux/issues/86",
+      "usd_value": "600",
+      "quote": {
+        "basis": "USD face value",
+        "usd_rate": "1"
+      },
+      "raw": "## Budget: \\$600",
+      "source_author_association": "COLLABORATOR",
+      "source_author_login": "rparcus"
+    },
+    "agent_reason": "Funded bounty: rparcus, a COLLABORATOR on Spectral-Finance/lux, states a committed body budget line '## Budget: \\$600' in this issue, so the figure comes from a party with commit rights on the project and clears the 250 USD floor. Scope is one bounded framework feature. Repository merges outside work.",
+    "scope_quote": "Implement TradingView technical analysis integration for advanced market analysis and signal generation.",
+    "code_evidence": {
+      "path": "lux/lib/lux/llm.ex",
+      "sha": "b41c27ef098bac7d65d29402405c1946a8f20733",
+      "quote": "A module for interacting with LLMs. Defines the behaviours for LLMs and provides a default implementation.",
+      "is_product_code": true
+    },
+    "source_issue": "https://github.com/Spectral-Finance/lux/issues/86",
+    "funding_status": "PRICED_OFFER",
+    "lane": "bounty",
+    "task_id": "969be34d20af4cf66bdbd53c9c4838f9",
+    "source_revision": "de41c722c25fe8c0597388d1e45f12b2312158bc51ea335d5d9b3ae5447a0dab"
+  },
+  "dispatch_attempt": 1,
+  "sovereign_admission": true,
+  "competition": {
+    "blocking": false,
+    "nominal": [
+      {
+        "pr": "https://github.com/Spectral-Finance/lux/pull/1027",
+        "author": "davidoo62",
+        "number": 1027,
+        "author_merged_in_repo": 0,
+        "check_runs": 0,
+        "maintainer_engagement": 0,
+        "reason": "nominal_attempt_only"
+      },
+      {
+        "pr": "https://github.com/Spectral-Finance/lux/pull/1005",
+        "author": "lienhoatienphung-svg",
+        "number": 1005,
+        "author_merged_in_repo": 0,
+        "history_cached": true,
+        "check_runs": 0,
+        "maintainer_engagement": 0,
+        "reason": "nominal_attempt_only"
+      },
+      {
+        "pr": "https://github.com/Spectral-Finance/lux/pull/977",
+        "author": "jackmercy",
+        "number": 977,
+        "author_merged_in_repo": 0,
+        "check_runs": 0,
+        "maintainer_engagement": 0,
+        "reason": "nominal_attempt_only"
+      },
+      {
+        "pr": "https://github.com/Spectral-Finance/lux/pull/881",
+        "author": "bwm0223",
+        "number": 881,
+        "author_merged_in_repo": 0,
+        "history_cached": true,
+        "check_runs": 0,
+        "maintainer_engagement": 0,
+        "reason": "nominal_attempt_only"
+      },
+      {
+        "pr": "https://github.com/Spectral-Finance/lux/pull/731",
+        "author": "jahnunyamu",
+        "number": 731,
+        "author_merged_in_repo": 0,
+        "history_cached": true,
+        "check_runs": 0,
+        "maintainer_engagement": 0,
+        "reason": "nominal_attempt_only"
+      },
+      {
+        "pr": "https://github.com/Spectral-Finance/lux/pull/726",
+        "author": "jamesji79",
+        "number": 726,
+        "author_merged_in_repo": 0,
+        "history_cached": true,
+        "check_runs": 0,
+        "maintainer_engagement": 0,
+        "reason": "nominal_attempt_only"
+      },
+      {
+        "pr": "https://github.com/Spectral-Finance/lux/pull/565",
+        "author": "bigpolarbear",
+        "number": 565,
+        "author_merged_in_repo": 0,
+        "history_cached": true,
+        "check_runs": 0,
+        "maintainer_engagement": 0,
+        "reason": "nominal_attempt_only"
+      },
+      {
+        "pr": "https://github.com/Spectral-Finance/lux/pull/531",
+        "author": "treasure520520",
+        "number": 531,
+        "author_merged_in_repo": 0,
+        "history_cached": true,
+        "check_runs": 0,
+        "maintainer_engagement": 0,
+        "reason": "nominal_attempt_only"
+      },
+      {
+        "pr": "https://github.com/Spectral-Finance/lux/pull/482",
+        "author": "jshaofa-ui",
+        "number": 482,
+        "author_merged_in_repo": 0,
+        "check_runs": 0,
+        "maintainer_engagement": 0,
+        "reason": "nominal_attempt_only"
+      },
+      {
+        "pr": "https://github.com/Spectral-Finance/lux/pull/424",
+        "author": "susuhome",
+        "number": 424,
+        "author_merged_in_repo": 0,
+        "history_cached": true,
+        "check_runs": 0,
+        "maintainer_engagement": 0,
+        "reason": "nominal_attempt_only"
+      },
+      {
+        "pr": "https://github.com/Spectral-Finance/lux/pull/424",
+        "author": "susuhome",
+        "number": 424,
+        "author_merged_in_repo": 0,
+        "history_cached": true,
+        "check_runs": 0,
+        "maintainer_engagement": 0,
+        "reason": "nominal_attempt_only"
+      },
+      {
+        "pr": "https://github.com/Spectral-Finance/lux/pull/482",
+        "author": "jshaofa-ui",
+        "number": 482,
+        "author_merged_in_repo": 0,
+        "history_cached": true,
+        "check_runs": 0,
+        "maintainer_engagement": 0,
+        "reason": "nominal_attempt_only"
+      },
+      {
+        "pr": "https://github.com/Spectral-Finance/lux/pull/531",
+        "author": "treasure520520",
+        "number": 531,
+        "author_merged_in_repo": 0,
+        "history_cached": true,
+        "check_runs": 0,
+        "maintainer_engagement": 0,
+        "reason": "nominal_attempt_only"
+      },
+      {
+        "pr": "https://github.com/Spectral-Finance/lux/pull/565",
+        "author": "bigpolarbear",
+        "number": 565,
+        "author_merged_in_repo": 0,
+        "history_cached": true,
+        "check_runs": 0,
+        "maintainer_engagement": 0,
+        "reason": "nominal_attempt_only"
+      },
+      {
+        "pr": "https://github.com/Spectral-Finance/lux/pull/726",
+        "author": "jamesji79",
+        "number": 726,
+        "author_merged_in_repo": 0,
+        "history_cached": true,
+        "check_runs": 0,
+        "maintainer_engagement": 0,
+        "reason": "nominal_attempt_only"
+      },
+      {
+        "pr": "https://github.com/Spectral-Finance/lux/pull/731",
+        "author": "jahnunyamu",
+        "number": 731,
+        "author_merged_in_repo": 0,
+        "history_cached": true,
+        "check_runs": 0,
+        "maintainer_engagement": 0,
+        "reason": "nominal_attempt_only"
+      },
+      {
+        "pr": "https://github.com/Spectral-Finance/lux/pull/881",
+        "author": "bwm0223",
+        "number": 881,
+        "author_merged_in_repo": 0,
+        "history_cached": true,
+        "check_runs": 0,
+        "maintainer_engagement": 0,
+        "reason": "nominal_attempt_only"
+      },
+      {
+        "pr": "https://github.com/Spectral-Finance/lux/pull/977",
+        "author": "jackmercy",
+        "number": 977,
+        "author_merged_in_repo": 0,
+        "history_cached": true,
+        "check_runs": 0,
+        "maintainer_engagement": 0,
+        "reason": "nominal_attempt_only"
+      },
+      {
+        "pr": "https://github.com/Spectral-Finance/lux/pull/1005",
+        "author": "lienhoatienphung-svg",
+        "number": 1005,
+        "author_merged_in_repo": 0,
+        "history_cached": true,
+        "check_runs": 0,
+        "maintainer_engagement": 0,
+        "reason": "nominal_attempt_only"
+      },
+      {
+        "pr": "https://github.com/Spectral-Finance/lux/pull/1027",
+        "author": "davidoo62",
+        "number": 1027,
+        "author_merged_in_repo": 0,
+        "history_cached": true,
+        "check_runs": 0,
+        "maintainer_engagement": 0,
+        "reason": "nominal_attempt_only"
+      }
+    ]
+  },
+  "lanes": [
+    "startup"
+  ],
+  "dispatched_at": "2026-11-03T02:25:59.252471+00:00",
+  "attempt": 0,
+  "updated_at": "2026-11-03T02:25:59.252491+00:00"
+}
