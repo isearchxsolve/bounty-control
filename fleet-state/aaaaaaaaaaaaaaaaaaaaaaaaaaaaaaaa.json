@@ -2,10 +2,14 @@
   "task_id": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
   "repo": "unit/runtime",
   "issue_number": 7,
-  "status": "CLAIMED",
+  "status": "FAILED_MISSING_TERMINAL_RECEIPT",
   "owner": "",
   "attempt": 1,
   "claimed_at": "2026-11-03T13:28:32.340810+00:00",
   "lease_expires_at": "2026-11-03T17:33:32.340810+00:00",
-  "updated_at": "2026-11-03T13:29:39.678878+00:00"
+  "updated_at": "2026-11-03T13:29:47.076924+00:00",
+  "swept": false,
+  "diagnostic": "Claim owner is missing or malformed; refusing to guess a run",
+  "owner_revoked": "",
+  "observed_at": "2026-11-03T13:29:47.076924+00:00"
 }
