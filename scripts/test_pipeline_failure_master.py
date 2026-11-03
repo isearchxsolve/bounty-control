@@ -1,6 +1,8 @@
 """Deterministic fault injection at production boundaries; no external services."""
 import copy
+from functools import lru_cache
 import json
+import os
 import subprocess
 import unittest
 from unittest.mock import Mock, patch
@@ -10,7 +12,17 @@ from actions_github import GitHub, GitHubError, StateStore, task_id
 from pipeline_evidence import bind_proof, require_evidence, source_revision
 
 
+@lru_cache(maxsize=1)
+def live_context():
+    return GitHub().issue_context(
+        os.environ.get('LIVE_EVIDENCE_REPO', 'mgillr/acfa-rs'),
+        int(os.environ.get('LIVE_EVIDENCE_ISSUE', '93')))
+
+
 def context():
+    if os.environ.get('PIPELINE_EVIDENCE_LIVE') == '1':
+        # Same context contract; only the provider changes in explicit live mode.
+        return copy.deepcopy(live_context())
     return {"repo": "acme/http", "issue_number": 7,
             "issue": {"state": "open", "body": "Bounty $250. Fix retry.", "title": "Retry"},
             "comments": [], "complete_comments": True,

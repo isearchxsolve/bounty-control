@@ -1,0 +1,27 @@
+name: Independent live pipeline probes
+on:
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  live-probes:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    env:
+      GH_TOKEN: ${{ secrets.GH_PAT }}
+      PYTHONUNBUFFERED: '1'
+      PYTHONIOENCODING: utf-8
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - name: Run connected master boundary checks
+        run: python3 -u scripts/run_pipeline_live_probes.py
+      - name: Retain all actual probe results
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: live-probes-${{ github.run_id }}
+          path: scratch/live-probes/
+          if-no-files-found: error
+          retention-days: 14

@@ -57,6 +57,10 @@ jobs:
         path: scratch/live-integration/entry-scout/discovery-memory
         key: pipeline-research-${{ github.run_id }}-${{ github.run_attempt }}
         restore-keys: pipeline-research-
+    - name: Exercise independent real master boundaries
+      id: live_probes
+      continue-on-error: true
+      run: python3 -u scripts/run_pipeline_live_probes.py
     - name: Exercise real services and production delivery
       env:
         MERGE_FIXTURE: ${{ inputs.merge_fixture }}
@@ -83,6 +87,7 @@ jobs:
       with:
         name: live-integration-${{ github.run_id }}
         path: |
+          scratch/live-probes/
           scratch/live-integration/run.json
           scratch/live-integration/*.log
           scratch/live-integration/*.json
@@ -106,3 +111,8 @@ jobs:
           scratch/live-integration/continuations/
         if-no-files-found: error
         retention-days: 14
+    - name: Preserve independent live probe failures in campaign verdict
+      if: always() && steps.live_probes.outcome != 'success'
+      run: |
+        echo 'Independent live probes failed or did not complete; inspect report.json in retained artifacts.'
+        exit 1
