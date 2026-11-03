@@ -2,7 +2,7 @@
   "task_id": "c4ccbe12cb966b88845d970513184ad0",
   "repo": "mgillr/acfa-rs",
   "issue_number": 93,
-  "status": "DISPATCHING",
+  "status": "DISPATCHED",
   "dispatch_id": "2b20e64190ec4a2ca7bea8253189ecfd",
   "admission": {
     "funding": {
@@ -43,5 +43,5 @@
   ],
   "dispatched_at": "2026-11-03T06:15:58.396388+00:00",
   "attempt": 0,
-  "updated_at": "2026-11-03T06:15:58.396411+00:00"
+  "updated_at": "2026-11-03T06:16:00.249602+00:00"
 }
