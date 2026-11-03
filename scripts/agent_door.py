@@ -162,6 +162,12 @@ def find_issues(root: Optional[str] = None, rounds: int = 2, timeout: int = 600,
         if leads:
             with open(os.path.join(workdir, "founder-leads.json"), "w", encoding="utf-8") as handle:
                 json.dump(leads, handle)
+        inbox_leads = []
+        try:
+            import email_inbox_watcher
+            inbox_leads = email_inbox_watcher.collect_inbox_leads(Path(workdir) / "inbox-leads.json")
+        except Exception:
+            pass
         from actions_github import GitHub  # noqa: E402
         prompt = cline_entry_door.WORKTREE_PROMPT
         command = [sys.executable, str(Path(__file__).with_name('check_entry_shortlist.py').resolve()),
@@ -245,6 +251,10 @@ and is backed by pre-funded programmatic escrow (Algora, Polar, Opire, BountyHub
                        + ", ".join(lanes) + ". Choose its lane from the actual source; do not invent evidence.")
         if leads:
             prompt += "\nInspect founder-leads.json as unverified leads; read their sources before admitting anything."
+        if inbox_leads:
+            prompt += ("\nInspect inbox-leads.json as real incoming bounty programs and maintainer notifications reaching out. "
+                       "Read their actual issue bodies, comments, and repository code using tools to make the final admission decision "
+                       "(verify authorized cash bounty >= $250, zero unpriced requests, repository merge intent, and low competition).")
         outcome = cline_entry_door.iterate(
             workdir, rounds=rounds,
             data_dir=os.path.join(tempfile.gettempdir(), "bounty-search-profiles", os.path.basename(workdir)),
