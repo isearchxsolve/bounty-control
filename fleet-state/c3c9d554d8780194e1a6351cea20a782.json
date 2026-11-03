@@ -2,7 +2,7 @@
   "task_id": "c3c9d554d8780194e1a6351cea20a782",
   "repo": "eandualem/assistant-runtime",
   "issue_number": 220,
-  "status": "DISPATCHING",
+  "status": "DISPATCHED",
   "dispatch_id": "34dafd5cc0864aaf8743c698039c195c",
   "admission": {
     "funding": {
@@ -43,5 +43,5 @@
   ],
   "dispatched_at": "2026-11-03T16:03:19.823634+00:00",
   "attempt": 0,
-  "updated_at": "2026-11-03T16:03:19.823652+00:00"
+  "updated_at": "2026-11-03T16:03:21.548675+00:00"
 }
