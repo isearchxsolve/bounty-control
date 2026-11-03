@@ -48,6 +48,26 @@ def check(condition, message):
         raise AssertionError(message)
 
 
+def retained_admissions(queue, api):
+    """Recheck actual queued admissions left by an interrupted entry session."""
+    database = Path(queue) / 'agent-queue.sqlite3'
+    if not database.exists():
+        return []
+    with contextlib.closing(sqlite3.connect(database.resolve().as_uri() + '?mode=ro', uri=True)) as con:
+        rows = con.execute("SELECT task_id,payload FROM decisions WHERE disposition='capacity_wait'").fetchall()
+    valid = []
+    for identity, payload in rows:
+        row = json.loads(payload)
+        try:
+            context = api.issue_context(row['repo'], row['issue'])
+            require_evidence(row, context)
+            check(identity == task_id(row['repo'], row['issue']), 'Queued task identity mismatch')
+        except (ValueError, AssertionError):
+            continue
+        valid.append(identity)
+    return valid
+
+
 def delivery_harness(run, state, expected, *, continuation=False):
     """Bind a repaired generation to its actual Actions owner, never ambient HEAD."""
     actual = run['head_sha']
@@ -1129,6 +1149,13 @@ class LiveRun:
             self.record('LIVE_INTAKE', 'FAIL', diagnostic=str(exc))
 
         queue = self.folder / 'entry-queue'
+        if self.data.get('continuations') and not self.data.get('pipeline_admitted'):
+            retained = retained_admissions(queue, self.api)
+            if retained:
+                self.record('PIPELINE_ENTRY', 'PASS', queued_originals=len(retained),
+                            source='retained admissions revalidated against live sources', issue_filter=None)
+                self.data['pipeline_admitted'] = True
+                self.save()
         if not self.data.get('pipeline_admitted'):
             self.record('PIPELINE_ENTRY', 'PENDING', issue_filter=None)
             settings = {'BOUNTY_ENTRY_DOOR': 'cline',

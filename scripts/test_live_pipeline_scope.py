@@ -1,15 +1,19 @@
 """Contract regression: an unfiltered master run starts the whole pipeline."""
 from types import SimpleNamespace
 import base64
+import contextlib
 import json
 import os
 from pathlib import Path
+import sqlite3
 import tempfile
 import unittest
 from unittest.mock import patch
 
-from live_pipeline_integration import LiveRun
+from live_pipeline_integration import LiveRun, retained_admissions
 from actions_github import GitHubError
+from actions_github import task_id
+from pipeline_evidence import bind_proof
 
 
 class FullPipelineDefault(unittest.TestCase):
@@ -24,6 +28,28 @@ class FullPipelineDefault(unittest.TestCase):
         run.pipeline = pipeline
         self.assertEqual(run.run(), 'full-pipeline')
         self.assertEqual(entered, ['production-entry-door'])
+
+    def test_interrupted_entry_reuses_only_current_source_bound_admissions(self):
+        current = {'repo': 'owner/repo', 'issue_number': 7,
+                   'issue': {'number': 7, 'state': 'open'}, 'comments': [],
+                   'complete_comments': True, 'repository': {'archived': False}}
+        row = {'repo': 'owner/repo', 'issue': 7, 'sovereign_admission': True,
+               'admission': bind_proof({'lane': 'founder'}, current),
+               'competition': {'blocking': False, 'verified': True}}
+        class API:
+            def __init__(self, source):
+                self.source = source
+            def issue_context(self, repo, number):
+                return self.source
+        with tempfile.TemporaryDirectory() as folder:
+            database = Path(folder) / 'agent-queue.sqlite3'
+            with contextlib.closing(sqlite3.connect(database)) as con, con:
+                con.execute('CREATE TABLE decisions(task_id TEXT,payload TEXT,disposition TEXT)')
+                con.execute('INSERT INTO decisions VALUES(?,?,?)',
+                            (task_id('owner/repo', 7), json.dumps(row), 'capacity_wait'))
+            self.assertEqual(retained_admissions(folder, API(current)), [task_id('owner/repo', 7)])
+            changed = {**current, 'comments': [{'id': 1, 'body': 'changed'}]}
+            self.assertEqual(retained_admissions(folder, API(changed)), [])
 
 
 class ProgressReceiptTests(unittest.TestCase):
