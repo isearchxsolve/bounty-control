@@ -2,7 +2,7 @@
   "task_id": "f704f1f224452b00f97bc6576d6f261f",
   "repo": "zachshallbetter/acp-gateway",
   "issue_number": 39,
-  "status": "CLAIMED",
+  "status": "FAILED_ENGINEER",
   "dispatch_id": "f59c530657554139bf9b2e873abe4730",
   "admission": {
     "funding": {
@@ -43,7 +43,7 @@
   ],
   "dispatched_at": "2026-11-03T10:11:06.704139+00:00",
   "attempt": 1,
-  "updated_at": "2026-11-03T10:11:21.502014+00:00",
+  "updated_at": "2026-11-03T10:46:10.120651+00:00",
   "owner": "41617131689:1",
   "previous_owner": null,
   "previous_status": "DISPATCHED",
@@ -51,5 +51,20 @@
   "harness_sha": "6267827e87ba4d1db2397a219b2f8c1a5c60d062",
   "claimed_at": "2026-11-03T10:11:21.501957+00:00",
   "lease_expires_at": "2026-11-03T14:16:21.501975+00:00",
-  "preparation_budget_seconds": 14400
+  "preparation_budget_seconds": 14400,
+  "kind": "engineer",
+  "retryable": true,
+  "diagnostic": "Bounded Cline delivery repair exhausted: Cline failed closed on turn 1: Cline proxy did not become healthy after launch.",
+  "at": "2026-11-03T10:45:57.580853+00:00",
+  "failures": [
+    {
+      "run_url": "https://github.com/isearchxsolve/bounty-control/actions/runs/41617131689",
+      "status": "FAILED_ENGINEER",
+      "kind": "engineer",
+      "retryable": true,
+      "diagnostic": "Bounded Cline delivery repair exhausted: Cline failed closed on turn 1: Cline proxy did not become healthy after launch.",
+      "at": "2026-11-03T10:45:57.580853+00:00"
+    }
+  ],
+  "finished_at": "2026-11-03T10:46:09.405242+00:00"
 }
