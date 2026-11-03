@@ -6,5 +6,6 @@
   "status": "DISPATCHED",
   "attempt": 0,
   "dispatch_id": "11a80dd05ef844d48ce921e1daef286f",
-  "updated_at": "2026-11-03T11:58:14.168521+00:00"
+  "updated_at": "2026-11-03T11:58:19.045000+00:00",
+  "count": 9
 }
