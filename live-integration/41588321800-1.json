@@ -1,5 +1,5 @@
 {
-  "at": "2026-11-03T06:16:09.162447+00:00",
+  "at": "2026-11-03T06:16:10.095252+00:00",
   "run_url": "https://github.com/isearchxsolve/bounty-control/actions/runs/41588321800",
   "end_to_end_passed": false,
   "coverage": {
@@ -20,7 +20,7 @@
     "LIVE_CAS_CONFLICT": "PASS",
     "LIVE_CONCURRENT_CLAIM": "PASS",
     "LIVE_CLAIM_REPLAY": "PASS",
-    "LIVE_STALE_GENERATION": "NOT_RUN",
+    "LIVE_STALE_GENERATION": "PASS",
     "LIVE_WRONG_OWNER": "NOT_RUN",
     "LIVE_REVOKED_OWNER": "NOT_RUN",
     "LIVE_RETRY_CAP": "NOT_RUN",
@@ -37,11 +37,6 @@
     "LIVE_FAILURE_SURFACE": "PASS"
   },
   "events": [
-    {
-      "case": "PIPELINE_ENTRY",
-      "status": "PENDING",
-      "at": "2026-11-03T05:14:39.819162+00:00"
-    },
     {
       "case": "LIVE_INTAKE",
       "status": "FAIL",
@@ -111,6 +106,11 @@
       "case": "LIVE_CLAIM_REPLAY",
       "status": "PASS",
       "at": "2026-11-03T06:16:09.161593+00:00"
+    },
+    {
+      "case": "LIVE_STALE_GENERATION",
+      "status": "PASS",
+      "at": "2026-11-03T06:16:10.094255+00:00"
     }
   ],
   "cohort": {
