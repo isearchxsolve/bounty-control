@@ -2,8 +2,8 @@
   "task_id": "efdeb69a2b98c3043171bcdf2019482c",
   "repo": "gewenbo888/ai-for-money",
   "issue_number": 1,
-  "status": "FAILED_ENGINEER",
-  "dispatch_id": "02a5e9a713a145e29bc216503a95cd35",
+  "status": "DISPATCHING",
+  "dispatch_id": "c9ac14b5e9eb41c480401c94d8236d11",
   "admission": {
     "funding": {
       "amount": "650",
@@ -33,7 +33,7 @@
     "task_id": "efdeb69a2b98c3043171bcdf2019482c",
     "source_revision": "28574704ea0f0f948f3111da05bd5cf5846a4c0e57ed8f6d49b31d6f3c0701f8"
   },
-  "dispatch_attempt": 2,
+  "dispatch_attempt": 3,
   "sovereign_admission": true,
   "competition": {
     "blocking": false,
@@ -81,9 +81,9 @@
   "lanes": [
     "founder"
   ],
-  "dispatched_at": "2026-11-03T10:56:51.204774+00:00",
+  "dispatched_at": "2026-11-03T12:08:01.578402+00:00",
   "attempt": 2,
-  "updated_at": "2026-11-03T11:38:59.254728+00:00",
+  "updated_at": "2026-11-03T12:08:01.578420+00:00",
   "owner": "41623465836:1",
   "previous_owner": "41617145350:1",
   "previous_status": "DISPATCHED",
