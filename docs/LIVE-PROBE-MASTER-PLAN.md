@@ -1,10 +1,146 @@
-# Live probe master suite: audit, wiring, execution and repair plan
+# Live probe master suite: replace mocks with real pipeline connections
 
 Date: 2026-11-03  
 Repository: `isearchxsolve/bounty-control`  
-Status: inventory and initial gap review complete; detailed parity audit incomplete.
+Status: live assertion parity has not been independently established by this plan review.
 
 ## 1. Intended outcome
+
+### Governing premise: campaigns observe behavioral contracts; system faults are objective
+
+**A live campaign observes composite behavioral contracts, but system faults are objective to the system itself.**
+
+- **Live runs and campaigns** detect whether the end-to-end composite behavior holds across components in the wild (discovery, admission, dispatch, engineering, publication, reconciliation).
+- **System faults are objective invariants:** Rejection of a corrupt release bundle, CAS write collisions, token expirations, attempt-bound exhaustion, or missing admission stamps are intrinsic, deterministic properties of the system's gates and contracts. They are not subject to or downstream of an ambient live campaign run.
+- **Independent fault probes:** Fault detection therefore does not wait for a delivery campaign to produce an edge case by chance. Keep the original master suite and its assertions. Replace mocked dependencies with real pipeline connections, supply each probe's own inputs and fault condition directly, and execute the defined probes together to collect failures in one report.
+
+A release probe must not wait for discovery, admission and engineering to succeed.
+A publication, reconciliation or recovery probe must not wait for an unrelated
+customer delivery. Give each probe its required real resource, state, artifact or
+process directly. Use the production implementation at the boundary being tested.
+Provision those inputs independently as part of probe setup; do not make obtaining
+them another delivery campaign. A local dependency needed to execute one probe
+does not become a dependency between otherwise independent probes.
+
+| Probe boundary | Independently supplied setup |
+|---|---|
+| Discovery/admission | Actual source access and probe-specific evidence inputs. |
+| State, dispatch and ownership | Isolated real store/queue resources and explicit fault states. |
+| Engineering and native execution | A real worktree, executable commands and the probe's failure trigger. |
+| Release validation | A release input produced through the real probe setup/builder, followed by controlled mutations and the actual validator. |
+| Publication, checks and reconciliation | Owned real probe repository/PR/check resources with the state required by that assertion. |
+| Cancellation/recovery | A dedicated real process or Actions run owned by the probe. |
+
+Probe inputs and fault states are labelled test resources. They are not claims that
+an original customer issue was admitted, engineered, published or delivered. A
+positive control must run the actual operation or gate; it cannot be a handwritten
+success flag. Preserve evidence identifying the resource, injected fault, actual
+operation, assertion and observed result.
+
+The execution order is: **wire the existing probes -> provision their own inputs ->
+run all independent probes -> consolidate failures -> batch repairs -> rerun affected
+probes using valid retained evidence.** One probe's failure must not suppress others.
+The continuous entry-to-delivery journey checks composition separately; it is not a
+prerequisite for fault detection or a substitute for the independent probes.
+
+An unavailable probe prerequisite is an explicit provisioning gap/BLOCKED result.
+Missing wiring is unfinished implementation. Neither justifies waiting for a chain
+of delivery campaigns. This premise governs the remaining sections wherever older
+campaign wording could imply such a dependency.
+
+### Latest agreed premise: convert the original suite directly
+
+The requested implementation is **the existing master suite with its mocked
+dependencies replaced by live pipeline providers**. Preserve its test identities,
+assertions, expected failure semantics and release gates. Reuse the interfaces the
+tests already call. A parallel collection of new live tests is supplementary and
+does not complete this conversion.
+
+For each original suite:
+
+1. Replace the mock provider with the actual client, store, process or workflow
+   operation through the same interface.
+2. Bind fixture identities and inputs to the corresponding real resources. Keep
+   fault resources isolated and visibly labelled; retain their evidence.
+3. Run the original assertions, collect all independent outcomes, and repair the
+   observed causes. Resume affected checks after repair with valid evidence retained.
+
+Where a mock directly substitutes an entire operation being probed, replace that operation too.
+For example, `test_e2e_full_pipeline.py` currently simulates engineering and
+publication by writing `VERIFIED` and `PUBLISHED_PENDING_CHECKS` itself. Live mode
+must invoke real engineering/publication and observe their results before those
+same assertions can establish E2E success. Merely giving those writes a remote
+store would leave the simulated work in place. That composition test must not gate
+the independent fault probes at engineering, release or publication boundaries.
+
+Negative probes may induce faults on actual isolated HTTP, process or storage
+boundaries. They must execute the production client/gate and identify the injected
+condition. A local injected HTTP 500 proves client behaviour under that fault;
+it is not evidence that GitHub itself suffered an outage. Mocked subprocess results,
+invented successful artifacts and manually asserted delivery states cannot count
+as live pipeline evidence.
+
+Missing real prerequisites are explicit BLOCKED results. They do not become PASS,
+and unavailable observations must not satisfy a test through an unrelated error.
+For example, cancellation requires an owned real cancellable Actions fixture;
+an unrelated production run is not an acceptable substitute.
+
+**Current implementation evidence (2026-11-03):**
+
+- The original three `EvidenceFailureMatrix` test bodies are unchanged and pass
+  with a real GitHub issue-context provider.
+- The original `test_claim_lease.py` providers now have live bindings to isolated
+  real GitHub state and actual Actions observations. Its four admission tests pass;
+  cancellation has a named fixture blocker. A completed-owner provider fix was
+  checked by rerunning that original case successfully.
+- The original three `test_pipeline_master_runner.py` tests now have live process
+  providers. Real success, nonzero exit, timeout, launch failure and continuation
+  checks pass. Their original assertions remain in place.
+- All six original `TransportFailureMatrix` methods passed with actual CLI/HTTP
+  fault boundaries: HTTP error statuses, malformed JSON/pagination, missing CLI,
+  timeout, expired deadline and bounded throttling. Actual HTTP request and wait
+  counts are retained in the execution output. These are injected transport faults.
+- The previously published 24-check live run is supplementary subset evidence,
+  not proof that the entire original master suite has been converted.
+
+No full-suite completion ETA is currently verified. The next deliverables are
+converted original providers and their actual assertion results, not another audit
+waiting period or replacement test framework. Full conversion remains unfinished.
+
+Implementation update (2026-11-03): `scripts/run_pipeline_live_probes.py` now
+executes the original `EvidenceFailureMatrix` methods with the context provider
+switched to GitHub, plus real transport, isolated remote-state/claim probes, and
+the existing native process tests. The original evidence test assertions are
+unchanged. Run with `python scripts/run_pipeline_live_probes.py`; use `--test`
+with an exact wired test/class name for a focused post-repair check. Results are
+retained under `scratch/live-probes/`. The E2E workflow runs these independent
+checks before delivery and retains their failures while delivery continues.
+This is implemented partial wiring, not a declaration that all original suites
+or failure permutations have been converted. Unconverted assertions retain their
+original offline coverage and must not be credited as live.
+
+Scope clarification: keep the existing test scenarios, assertions and gates; replace
+their mocked dependencies with real pipeline connections. Use the existing runner
+and reporting wherever possible. No new test framework or separate campaign design
+is required. The sections below describe checks on this conversion, not a sequence
+of prerequisite projects that must finish before wiring begins.
+
+The implementation sequence is concrete:
+
+1. Read an existing test's assertions and mocked boundary.
+2. Connect that boundary to the actual pipeline implementation and real resource;
+   reproduce the failure condition without mocking the component under test.
+3. Execute the unchanged assertion and retain the actual result and evidence.
+4. Repeat for the remaining applicable probes, recording the mapping as work proceeds.
+5. Run the connected suite together, collecting independent failures without stopping
+   at the first one. Batch pipeline repairs, then resume affected checks from valid
+   checkpoints.
+
+The next implementation deliverable is a working conversion with a live receipt and
+unchanged assertions, not another planning document. A mock-induced failure may need
+an actual fault trigger; record that specific work instead of claiming every mock can
+be replaced by changing a URL. Wiring checks can run during development; the
+consolidated campaign remains the basis for the pipeline repair batch.
 
 Preserve the original master suite's verification contract and connect its applicable
 pipeline failure probes to the real environment. One campaign should execute all
@@ -67,9 +203,9 @@ does not certify live parity or successful delivery.
   plumbing and factual validation. Give the agent missing tools and gate feedback
   instead of adding an endless series of issue-specific rules.
 
-## 4. Phase A: complete the parity audit
+## 4. Assertion mapping during wiring
 
-Read the actual assertions and setup in every original suite. Do not map tests by
+Read the actual assertions and setup as each suite is wired. Do not map tests by
 filename or similar wording alone. Include dynamic cases and script-level checks
 that the static method inventory does not capture.
 
@@ -100,7 +236,7 @@ preparation and native-plan contracts; model routing and tool execution; baselin
 integrity; engineering and regression proof; release artifacts; publication and
 remote CI; reconciliation and replay; checkpoint recovery; and failure reporting.
 
-**Exit gate:** every original assertion/scenario has a reviewed disposition and
+**Completion gate, not a prerequisite to starting wiring:** every original assertion/scenario has a reviewed disposition and
 every claimed live equivalent has a concrete implementation/evidence reference.
 An unmapped or silently excluded case prevents a claim of full parity.
 
@@ -115,8 +251,9 @@ adapters/probes identified by the audit, preserving their assertions.
    checks can continue after another check fails.
 3. Exercise state corruption, conflicts, stale ownership and related negative cases
    on isolated real resources with retained evidence and controlled cleanup.
-4. Exercise artifact rejection against copies of a genuine validated release bundle.
-   A genuine positive control must pass before rejection tests can be credited.
+4. Supply release probes with independently provisioned real probe artifacts and
+   exercise the actual builder/validator. A real positive control must pass before
+   rejection tests can be credited. Do not wait for a customer delivery to supply it.
 5. Plan provider failures, process termination and resource faults in isolated real
    executions. Do not disrupt unrelated production deliveries to manufacture a fault.
 6. Provide model/tool feedback with the actual failed command, expected assertion,
@@ -130,9 +267,11 @@ explicit gaps; they are not counted as completed live coverage.
 
 ## 6. Phase C: one consolidated live probe campaign
 
-Run the existing full, unfiltered master campaign. Execute every independent probe
-despite failures elsewhere. Observe the actual production delivery through its
-dependent stages. Keep campaign state and attempt budgets durable.
+Run the connected original master probes together, with their independently
+provisioned inputs. Execute every independent probe despite failures elsewhere.
+Retain setup, fault and assertion evidence for each probe. A continuous production
+delivery may be observed separately; its progress does not gate the fault suite.
+Keep probe state and any actual task attempt budgets durable.
 
 The consolidated report must distinguish:
 
@@ -149,9 +288,10 @@ already emits that token. The current driver also uses PENDING/NOT_RUN/INCOMPLET
 Audit and wire the reporting gaps while preserving their meaning.
 
 A production delivery failure must not prevent independent transport, state,
-ownership, queue, scheduler and existing-artifact probes from running. Where a
-downstream probe genuinely requires a release, successful publication or maintainer
-action, name that dependency instead of inventing a substitute success.
+ownership, queue, scheduler, release, publication or reconciliation probes from
+running. Provision each probe's own real inputs. If a required resource or permission
+cannot be supplied, identify that specific gap. Do not use an unsuccessful customer
+campaign as the explanation for leaving an independently executable probe unrun.
 
 The report must include source/driver revisions, continuation history, all probe
 outcomes, original task/run identities, active failures, historical failures,
@@ -192,10 +332,10 @@ Capture newly reachable failures in the next consolidated report. Do not repeat
 unrestricted discovery if a valid later checkpoint exists. Do not spend exhausted
 attempt budgets or exceed fleet capacity merely to rerun a report.
 
-The expected progression is a finite list of observed causes and explicitly blocked
-checks, with batches of verified repairs. Further iterations may be necessary when
-previously blocked stages become executable; they must be evidence-driven rather
-than an untracked sequence of narrow patches.
+The expected progression is a consolidated list of observed causes and explicit
+probe setup gaps, followed by batches of verified repairs. Retry affected probes
+directly. Do not require upstream delivery stages to be repaired before probing
+another boundary whose own inputs can be supplied independently.
 
 ## 9. Acceptance criteria
 
@@ -245,10 +385,15 @@ finishes; use the published progress receipts while it runs.
 
 ## 11. Estimates and progress reporting
 
-The stated audit-only estimate is **2–4 hours of focused active work**, provisional
-until representative case mapping confirms the effort. This does not include real
-wiring, deployment, model execution, downstream repair, or external maintainer time.
-Estimate wiring and live validation after the audit identifies their concrete scope.
+The earlier 2-4 hour audit estimate is withdrawn: it was not supported by measured
+conversion work. There is no separate audit waiting period before wiring starts.
+Report progress as actual boundaries connected, assertions executed live, remaining
+mock dependencies, and named blockers. Do not turn suite-level production activity
+into a claim that every assertion in that suite has been exercised live.
+
+A defensible completion estimate requires inspecting the remaining mock boundaries
+and measuring a representative conversion. Until then, no full-suite ETA is verified.
+Separate implementation time from the measured duration of the live suite itself.
 
 The audit does not continue automatically in the background when the assistant's
 turn ends. GitHub Actions can continue independently, but that does not mean a model

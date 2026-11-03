@@ -1,5 +1,6 @@
 """Deterministic fault injection at production boundaries; no external services."""
 import copy
+import contextlib
 from functools import lru_cache
 import json
 import os
@@ -10,6 +11,43 @@ from unittest.mock import Mock, patch
 import actions_dispatch as dispatch
 from actions_github import GitHub, GitHubError, StateStore, task_id
 from pipeline_evidence import bind_proof, require_evidence, source_revision
+
+
+def transport_client(**kwargs):
+    if os.environ.get('PIPELINE_TRANSPORT_LIVE') == '1':
+        from live_transport_bindings import client
+        return client(**kwargs)
+    return GitHub(**kwargs)
+
+
+@contextlib.contextmanager
+def transport_boundary(kind, value=None):
+    if os.environ.get('PIPELINE_TRANSPORT_LIVE') == '1':
+        from live_transport_bindings import fault
+        actual = ('missing' if isinstance(value, FileNotFoundError) else 'timeout') if kind == 'launch' else kind
+        with fault(actual, value if kind == 'status' else 500) as wire:
+            yield (wire.run, wire.sleep) if kind == 'throttle' else wire.run
+        return
+    with contextlib.ExitStack() as stack:
+        if kind == 'launch':
+            run = stack.enter_context(patch('actions_github.subprocess.run', side_effect=value))
+        elif kind == 'status':
+            run = stack.enter_context(patch('actions_github.subprocess.run', return_value=
+                subprocess.CompletedProcess([], 1, b'', f'HTTP {value}'.encode())))
+        elif kind == 'json':
+            run = stack.enter_context(patch('actions_github.subprocess.run', return_value=
+                subprocess.CompletedProcess([], 0, b'{"partial":', b'')))
+        elif kind == 'throttle':
+            run = stack.enter_context(patch('actions_github.subprocess.run', return_value=
+                subprocess.CompletedProcess([], 1, b'', b'rate limit exceeded')))
+            stack.enter_context(patch.object(GitHub, 'rate_limit_wait', return_value=1))
+            sleep = stack.enter_context(patch('actions_github.time.sleep'))
+        elif kind == 'deadline':
+            stack.enter_context(patch('actions_github.time.monotonic', return_value=10))
+            run = stack.enter_context(patch('actions_github.subprocess.run'))
+        elif kind == 'page':
+            run = stack.enter_context(patch.object(GitHub, 'api', return_value=[[{'id': 1}], {'message': 'error'}]))
+        yield (run, sleep) if kind == 'throttle' else run
 
 
 @lru_cache(maxsize=1)
@@ -93,79 +131,122 @@ class EvidenceFailureMatrix(unittest.TestCase):
 class TransportFailureMatrix(unittest.TestCase):
     def test_cli_missing_and_timeout_are_explicit_transport_failures(self):
         for fault in (FileNotFoundError("gh"), subprocess.TimeoutExpired("gh", 90)):
-            with self.subTest(fault=type(fault).__name__), patch(
-                    "actions_github.subprocess.run", side_effect=fault) as run:
+            with self.subTest(fault=type(fault).__name__), transport_boundary('launch', fault) as run:
                 with self.assertRaises(GitHubError):
-                    GitHub(token="synthetic").api("repos/acme/http")
+                    transport_client(token="synthetic").api("repos/acme/http")
                 self.assertEqual(run.call_count, 1)
 
     def test_auth_not_found_and_server_errors_do_not_return_empty_success(self):
         for status in (401, 403, 404, 422, 500, 502, 503):
-            with self.subTest(status=status), patch("actions_github.subprocess.run",
-                    return_value=subprocess.CompletedProcess([], 1, b"", f"HTTP {status}".encode())):
+            with self.subTest(status=status), transport_boundary('status', status):
                 with self.assertRaises(GitHubError):
-                    GitHub(token="synthetic").api("repos/acme/http")
+                    transport_client(token="synthetic").api("repos/acme/http")
 
     def test_bad_json_cannot_become_success(self):
-        with patch("actions_github.subprocess.run", return_value=
-                   subprocess.CompletedProcess([], 0, b'{"partial":', b"")):
+        with transport_boundary('json'):
             with self.assertRaises(json.JSONDecodeError):
-                GitHub(token="synthetic").api("repos/acme/http")
+                transport_client(token="synthetic").api("repos/acme/http")
 
     def test_throttle_retry_is_bounded(self):
-        with patch("actions_github.subprocess.run", return_value=
-                   subprocess.CompletedProcess([], 1, b"", b"rate limit exceeded")) as run, \
-                patch.object(GitHub, "rate_limit_wait", return_value=1), \
-                patch("actions_github.time.sleep") as sleep:
+        with transport_boundary('throttle') as (run, sleep):
             with self.assertRaises(GitHubError):
-                GitHub(token="synthetic").api("repos/acme/http")
+                transport_client(token="synthetic").api("repos/acme/http")
             self.assertEqual(run.call_count, GitHub.THROTTLE_TRIES)
             self.assertEqual(sleep.call_count, GitHub.THROTTLE_TRIES - 1)
 
     def test_expired_deadline_prevents_any_transport(self):
-        with patch("actions_github.time.monotonic", return_value=10), \
-                patch("actions_github.subprocess.run") as run:
+        with transport_boundary('deadline') as run:
             with self.assertRaisesRegex(GitHubError, "deadline"):
-                GitHub(token="synthetic", deadline=9).api("repos/acme/http")
+                transport_client(token="synthetic", deadline=9).api("repos/acme/http")
             run.assert_not_called()
 
     def test_malformed_page_never_becomes_empty_supply(self):
-        with patch.object(GitHub, "api", return_value=[[{"id": 1}], {"message": "error"}]):
+        with transport_boundary('page'):
             with self.assertRaises(GitHubError):
-                list(GitHub().pages("issues"))
+                list(transport_client().pages("issues"))
 
 
 class DurableStateFaults(unittest.TestCase):
-    def test_conflict_rereads_latest_state_before_retry(self):
+    @staticmethod
+    def live():
+        return os.environ.get('PIPELINE_DURABLE_LIVE') == '1'
+
+    def resource(self, store):
+        self.branch, self.control = store.branch, store.repo
+
+    @contextlib.contextmanager
+    def retry_fixture(self, identity):
+        if self.live():
+            from live_durable_bindings import conflict
+            with conflict(identity) as fixture:
+                self.resource(fixture[0])
+                yield fixture
+            return
         store = StateStore(api=Mock(), repo="unit/control")
         with patch.object(store, "ensure"), patch.object(store, "read", side_effect=[
                 ({"status": "CLAIMED", "count": 1}, "old"),
                 ({"status": "CLAIMED", "count": 9}, "new")]), \
                 patch.object(store, "write", side_effect=[GitHubError("409 conflict"), None]) as write, \
                 patch("actions_github.time.sleep"):
-            result = store.mutate(task_id("acme/http", 7), lambda old: {**old, "count": old["count"] + 1})
+            from types import SimpleNamespace
+            yield store, write, SimpleNamespace(sha='new')
+
+    @contextlib.contextmanager
+    def exhausted_fixture(self, identity, status):
+        if self.live():
+            from live_durable_bindings import write_failure
+            with write_failure(identity, status) as fixture:
+                self.resource(fixture[0])
+                yield fixture
+            return
+        store = StateStore(api=Mock(), repo="unit/control")
+        with patch.object(store, "ensure"), patch.object(store, "read", return_value=(None, None)), \
+                patch.object(store, "write", side_effect=GitHubError(str(status))) as write, \
+                patch("actions_github.time.sleep"):
+            yield store, write
+
+    def dispatch_fixture(self):
+        if self.live():
+            from live_durable_bindings import dispatch_fixture
+            store, api = dispatch_fixture()
+            self.resource(store)
+            return store, api, context()
+        return MemoryStore(), Mock(), context()
+
+    @contextlib.contextmanager
+    def reservation_failure(self, store):
+        if self.live():
+            from live_durable_bindings import unavailable_reservation
+            with unavailable_reservation(store):
+                yield
+            return
+        with patch.object(store, "mutate", side_effect=GitHubError("storage unavailable")):
+            yield
+
+    def test_conflict_rereads_latest_state_before_retry(self):
+        identity = task_id(context()['repo'], context()['issue_number'])
+        with self.retry_fixture(identity) as (store, write, latest):
+            result = store.mutate(identity, lambda old: {**old, "count": old["count"] + 1})
         self.assertEqual(result["count"], 10)
-        self.assertEqual(write.call_args.args[2], "new")
+        self.assertEqual(write.call_args.args[2], latest.sha)
 
     def test_exhausted_conflicts_and_permission_errors_propagate(self):
         for status, attempts in ((409, 5), (422, 5), (403, 1), (500, 1)):
             with self.subTest(status=status):
-                store = StateStore(api=Mock(), repo="unit/control")
-                with patch.object(store, "ensure"), patch.object(store, "read", return_value=(None, None)), \
-                        patch.object(store, "write", side_effect=GitHubError(str(status))) as write, \
-                        patch("actions_github.time.sleep"):
+                identity = task_id(context()['repo'], context()['issue_number'])
+                with self.exhausted_fixture(identity, status) as (store, write):
                     with self.assertRaises(GitHubError):
-                        store.mutate(task_id("acme/http", 7), lambda old: {"status": "DISPATCHING"})
+                        store.mutate(identity, lambda old: {"status": "DISPATCHING"})
                     self.assertEqual(write.call_count, attempts)
 
     def test_ambiguous_dispatch_failure_keeps_reservation_and_blocks_duplicate(self):
-        store, api, ctx = MemoryStore(), Mock(), context()
+        store, api, ctx = self.dispatch_fixture()
         api.api.side_effect = GitHubError("response lost after POST")
         proof = bind_proof({}, ctx)
         with self.assertRaises(GitHubError):
             dispatch.dispatch(api, store, ctx, proof, ["normal"],
                               sovereign_admission=True, competition={"blocking": False})
-        record = store.read(task_id("acme/http", 7))[0]
+        record = store.read(task_id(ctx['repo'], ctx['issue_number']))[0]
         self.assertEqual(record["status"], "DISPATCHING")
         self.assertTrue(record["dispatch_id"])
         with self.assertRaises(ValueError):
@@ -181,11 +262,11 @@ class DurableStateFaults(unittest.TestCase):
         green, which is how a missing coverage is found. Every other guard this matrix pins was
         caught the same way.
         """
-        store, api, ctx = MemoryStore(), Mock(), context()
+        store, api, ctx = self.dispatch_fixture()
         # The first attempt succeeds, so a successful dispatch still works.
         dispatch.dispatch(api, store, ctx, bind_proof({}, ctx), ["normal"],
                           sovereign_admission=True, competition={"blocking": False})
-        identity = task_id("acme/http", 7)
+        identity = task_id(ctx['repo'], ctx['issue_number'])
         self.assertEqual(api.api.call_count, 1)
         # A task left in a non-retryable state is refused with the durable state named, which
         # is the guard a duplicate dispatch actually meets.
@@ -203,10 +284,10 @@ class DurableStateFaults(unittest.TestCase):
         self.assertEqual(api.api.call_count, 1)
 
     def test_fast_runner_claim_survives_late_dispatch_ack(self):
-        store, api, ctx = MemoryStore(), Mock(), context()
-        identity = task_id("acme/http", 7)
+        store, api, ctx = self.dispatch_fixture()
+        identity = task_id(ctx['repo'], ctx['issue_number'])
         def accepted(*args):
-            store.claim("acme/http", 7, "123:1", "https://example.invalid/run", "a" * 40,
+            store.claim(ctx['repo'], ctx['issue_number'], "123:1", "https://example.invalid/run", "a" * 40,
                         dispatch_id=store.rows[identity]["dispatch_id"])
         api.api.side_effect = accepted
         dispatch.dispatch(api, store, ctx, bind_proof({}, ctx), ["normal"],
@@ -215,12 +296,26 @@ class DurableStateFaults(unittest.TestCase):
         self.assertEqual(store.rows[identity]["owner"], "123:1")
 
     def test_failed_reservation_prevents_dispatch_post(self):
-        store, api = MemoryStore(), Mock()
-        with patch.object(store, "mutate", side_effect=GitHubError("storage unavailable")):
+        store, api, ctx = self.dispatch_fixture()
+        with self.reservation_failure(store):
             with self.assertRaises(GitHubError):
-                dispatch.dispatch(api, store, context(), bind_proof({}, context()), ["normal"],
+                dispatch.dispatch(api, store, ctx, bind_proof({}, ctx), ["normal"],
                                   sovereign_admission=True, competition={"blocking": False})
         api.api.assert_not_called()
+
+
+
+
+class ReleaseFailureMatrix(unittest.TestCase):
+    def test_independent_release_bundle_and_fault_mutations(self):
+        from live_release_bindings import run_release_probes
+        import tempfile
+        from pathlib import Path
+        with tempfile.TemporaryDirectory() as tmp:
+            results = run_release_probes(Path(tmp))
+            for row in results:
+                with self.subTest(case=row['case']):
+                    self.assertEqual(row.get('status'), 'PASS', row.get('diagnostic') or row.get('refusal'))
 
 
 if __name__ == "__main__":

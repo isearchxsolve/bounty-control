@@ -14,6 +14,7 @@ from urllib.request import Request, urlopen
 import unittest
 
 import autonomous_icu_pipeline as dispatcher
+from actions_github import GitHub
 import fleet_local_relay as relay
 import kaggle_engine_worker as worker
 from fleet_recovery_policy import non_engineering_dispatch_reason, recovery_decision
@@ -22,7 +23,33 @@ from fleet_recovery_policy import non_engineering_dispatch_reason, recovery_deci
 class AuthenticDispatchRegressionTests(unittest.TestCase):
     @classmethod
     def setUpClass(cls):
-        cls.fixtures = json.loads(Path(os.environ['DISPATCH_REGRESSION_FIXTURES']).read_text(encoding='utf-8'))
+        # The probe owns its inputs and its own loopback credential. Two things used to prevent
+        # these five assertions from running at all: `DISPATCH_REGRESSION_FIXTURES` was read from
+        # the environment although nothing in the repository produced it (bare KeyError), and the
+        # local relay compared the door token against an empty string (HTTP 401).
+        os.environ.setdefault('FLEET_RELAY_TOKEN', 'regression-probe-' + hashlib.sha256(
+            b'loopback').hexdigest()[:12])
+        os.environ.setdefault('FLEET_DOOR_TOKEN', os.environ['FLEET_RELAY_TOKEN'])
+        # Both modules read the token into a constant at import time, so setting the environment
+        # here alone arrives too late for a process that already imported them.
+        relay.TOKEN = os.environ['FLEET_RELAY_TOKEN']
+        dispatcher.FLEET_DOOR_TOKEN = os.environ['FLEET_DOOR_TOKEN']
+        worker.DOOR_TOKEN = os.environ['FLEET_DOOR_TOKEN']
+        cls.fixtures = cls.load_fixtures()
+
+    @classmethod
+    def load_fixtures(cls):
+        """Explicit path, else a fresh read of the real repositories, else the recorded receipt."""
+        declared = os.environ.get('DISPATCH_REGRESSION_FIXTURES')
+        if declared:
+            return json.loads(Path(declared).read_text(encoding='utf-8'))
+        try:
+            import build_dispatch_regression_fixtures as builder
+            return builder.build(GitHub())
+        except Exception as exc:  # no credentials or no network is a setup state, not a verdict
+            print('live fixture build unavailable (%s); using the recorded receipt' % exc)
+            recorded = Path(__file__).with_name('fixtures') / 'dispatch_regression.json'
+            return json.loads(recorded.read_text(encoding='utf-8'))
 
     def test_actual_archive_and_program_budget_records_are_excluded(self):
         exclusions = {'CodeYHJ/hackernews-daily', 'lessuselesss/bounty-crawl', 'B1nary-Calhoun-Partnership/MPC-Spec'}

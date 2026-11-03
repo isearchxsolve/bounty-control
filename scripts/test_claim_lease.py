@@ -6,6 +6,7 @@ These tests drive the real ``StateStore.claim()`` decision path and the real
 case asserts the admission decision or the persisted status the pipeline actually depends on.
 """
 from datetime import datetime, timedelta, timezone
+import os
 from pathlib import Path
 import sys
 import unittest
@@ -28,6 +29,12 @@ def stamp(delta_seconds=0):
 class FakeAPI:
     """Serves run status by run id; ``fail`` makes every probe an API error."""
 
+    def __new__(cls, runs=None, fail=False):
+        if os.environ.get('PIPELINE_LEASE_LIVE') == '1':
+            from live_lease_bindings import LeaseAPI
+            return LeaseAPI(runs, fail)
+        return super().__new__(cls)
+
     def __init__(self, runs=None, fail=False):
         self.runs = dict(runs or {})
         self.fail = fail
@@ -47,6 +54,12 @@ class FakeAPI:
 
 class FakeStore:
     """A durable store that behaves like StateStore for the sweeper's purposes."""
+
+    def __new__(cls, rows):
+        if os.environ.get('PIPELINE_LEASE_LIVE') == '1':
+            from live_lease_bindings import LeaseStore
+            return LeaseStore(rows)
+        return super().__new__(cls)
 
     def __init__(self, rows):
         self.repo = REPO
@@ -70,6 +83,9 @@ class FakeStore:
 def claimable(api, current):
     """A StateStore whose durable write is captured instead of sent to GitHub."""
 
+    if os.environ.get('PIPELINE_LEASE_LIVE') == '1':
+        from live_lease_bindings import claimable as live_claimable
+        return live_claimable(api, current)
     store = StateStore(api=api, repo=REPO)
     store.mutate = lambda identity, change: change(current)
     return store

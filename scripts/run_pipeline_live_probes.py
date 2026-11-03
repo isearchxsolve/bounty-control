@@ -16,7 +16,17 @@ import unittest
 
 ROOT = Path(__file__).resolve().parents[1]
 MODULES = (
-    'test_pipeline_transport_live', 'test_pipeline_state_live', 'test_cline_process',
+    'test_pipeline_transport_live',
+    'test_pipeline_state_live',
+    'test_cline_process',
+    'test_claim_lease',
+    'test_cline_delivery_ownership',
+    'test_non_code_deliverable',
+    'test_capacity_gate',
+    'test_queue_ordering',
+    'test_discovery_heartbeat',
+    'test_competition_evidence',
+    'test_pipeline_master_runner',
     'test_preflight.PreflightShapeTests',
     'test_preflight.PreflightClassificationTests.test_disk_below_floor_names_the_disk_subsystem_and_the_measured_figure',
     'test_preflight.PreflightClassificationTests.test_a_missing_executable_names_the_executable_subsystem',
@@ -86,9 +96,18 @@ def main():
               'scope': 'wired live boundary probes; full assertion parity not established',
               'full_e2e_passed': False, 'complete': False, 'results': []}
     os.environ['PIPELINE_EVIDENCE_LIVE'] = '1'
-    from test_pipeline_failure_master import EvidenceFailureMatrix, live_context
+    os.environ['PIPELINE_LEASE_LIVE'] = '1'
+    os.environ['PIPELINE_RUNNER_LIVE'] = '1'
+    os.environ['PIPELINE_TRANSPORT_LIVE'] = '1'
+    os.environ['PIPELINE_DURABLE_LIVE'] = '1'
+    from test_pipeline_failure_master import (
+        EvidenceFailureMatrix, TransportFailureMatrix, DurableStateFaults, ReleaseFailureMatrix, live_context
+    )
     suite = unittest.TestSuite()
     suite.addTests(unittest.defaultTestLoader.loadTestsFromTestCase(EvidenceFailureMatrix))
+    suite.addTests(unittest.defaultTestLoader.loadTestsFromTestCase(TransportFailureMatrix))
+    suite.addTests(unittest.defaultTestLoader.loadTestsFromTestCase(DurableStateFaults))
+    suite.addTests(unittest.defaultTestLoader.loadTestsFromTestCase(ReleaseFailureMatrix))
     for name in MODULES:
         suite.addTests(unittest.defaultTestLoader.loadTestsFromName(name))
     def tests(items):
@@ -111,7 +130,8 @@ def main():
     report['source_files'] = {
         name: hashlib.sha256((ROOT / 'scripts' / (name + '.py')).read_bytes()).hexdigest()
         for name in {*[item.split('.')[0] for item in MODULES],
-                     'test_pipeline_failure_master', 'run_pipeline_live_probes'}}
+                     'test_pipeline_failure_master', 'run_pipeline_live_probes', 'live_lease_bindings',
+                     'live_transport_bindings', 'live_durable_bindings', 'live_release_bindings'}}
     runner = unittest.TextTestRunner(verbosity=2, failfast=False,
         resultclass=lambda *a, **kw: Receipts(*a, **kw, report=report, path=path))
     print('Live receipts: ' + str(path), flush=True)
