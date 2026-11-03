@@ -1,5 +1,5 @@
 {
-  "at": "2026-11-03T06:16:04.994204+00:00",
+  "at": "2026-11-03T06:16:05.751340+00:00",
   "run_url": "https://github.com/isearchxsolve/bounty-control/actions/runs/41588321800",
   "end_to_end_passed": false,
   "coverage": {
@@ -96,6 +96,11 @@
       "case": "PUBLICATION_ACCESS",
       "status": "OBSERVED",
       "at": "2026-11-03T06:16:04.993419+00:00"
+    },
+    {
+      "case": "ENVIRONMENT",
+      "status": "PASS",
+      "at": "2026-11-03T06:16:05.750536+00:00"
     }
   ],
   "cohort": {
