@@ -2,7 +2,7 @@
   "task_id": "f7aa2ed7745a348068259274ebfd9667",
   "repo": "yegor256/online",
   "issue_number": 148,
-  "status": "DISPATCHED",
+  "status": "FAILED_DISPATCH",
   "dispatch_id": "cadfa28dc2b945b0af754eb318d43e77",
   "admission": {
     "funding": {
@@ -43,5 +43,8 @@
   ],
   "dispatched_at": "2026-11-03T12:57:22.787390+00:00",
   "attempt": 0,
-  "updated_at": "2026-11-03T12:57:24.807350+00:00"
+  "updated_at": "2026-11-03T13:59:21.646358+00:00",
+  "diagnostic": "Dispatch run completed without acquiring ownership",
+  "owner_revoked": null,
+  "observed_at": "2026-11-03T13:59:21.646344+00:00"
 }
