@@ -1,0 +1,47 @@
+{
+  "task_id": "f704f1f224452b00f97bc6576d6f261f",
+  "repo": "zachshallbetter/acp-gateway",
+  "issue_number": 39,
+  "status": "DISPATCHING",
+  "dispatch_id": "f59c530657554139bf9b2e873abe4730",
+  "admission": {
+    "funding": {
+      "payer": "zachshallbetter",
+      "source_url": "https://github.com/zachshallbetter/acp-gateway/issues/39",
+      "amount": "0",
+      "currency": "FOUNDER",
+      "usd_value": "0",
+      "quote": {
+        "basis": "Unpriced repository-owner request"
+      },
+      "raw": "ACP was down and every ACP-bound repository failed closed.",
+      "source_author_association": "OWNER",
+      "source_author_login": "zachshallbetter"
+    },
+    "agent_reason": "Owner zachshallbetter reports a production outage: redeploying main removed api/index.py so /health and /ready returned 404 and ACP failed closed. Bounded engineering recovery: land the Vercel runtime and add a pre-promotion health check. Repo merges outside work (12 merged PRs); no open PR references #39; issue open and updated today. Code evidence is api/index.py at its current blob SHA, with a line quoted from the file. Unpriced repository-owner request.",
+    "scope_quote": "Add a pre-promotion check that a production candidate serves `/health` and `/ready` (status ready, storage postgres) on its own deployment URL before it may take the alias.",
+    "code_evidence": {
+      "path": "api/index.py",
+      "sha": "2db5edd367a7a77989ebe233bc6dfe2a24473cd6",
+      "quote": "class handler(Handler):",
+      "is_product_code": true
+    },
+    "source_issue": "https://github.com/zachshallbetter/acp-gateway/issues/39",
+    "funding_status": "UNPRICED_OWNER_REQUEST",
+    "lane": "founder",
+    "task_id": "f704f1f224452b00f97bc6576d6f261f",
+    "source_revision": "da6940ffddff957f767983663f907658f95c39c729982b9ecf0afc579bf4515b"
+  },
+  "dispatch_attempt": 1,
+  "sovereign_admission": true,
+  "competition": {
+    "blocking": false,
+    "nominal": []
+  },
+  "lanes": [
+    "founder"
+  ],
+  "dispatched_at": "2026-11-03T10:11:06.704139+00:00",
+  "attempt": 0,
+  "updated_at": "2026-11-03T10:11:06.704154+00:00"
+}
