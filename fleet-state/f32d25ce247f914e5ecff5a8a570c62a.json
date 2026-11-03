@@ -1,0 +1,47 @@
+{
+  "task_id": "f32d25ce247f914e5ecff5a8a570c62a",
+  "repo": "leonapivato/ai-assistant",
+  "issue_number": 3054,
+  "status": "DISPATCHING",
+  "dispatch_id": "1a19cc52969743e6bc20e5c833ca956d",
+  "admission": {
+    "funding": {
+      "amount": "0",
+      "currency": "FOUNDER",
+      "payer": "leonapivato",
+      "source_url": "https://github.com/leonapivato/ai-assistant/issues/3054",
+      "usd_value": "0",
+      "quote": {
+        "basis": "Unpriced repository-owner request"
+      },
+      "raw": "A story-store outage while authorizing makes any round holding a call that is not safe to repeat fail outright.",
+      "source_author_association": "OWNER",
+      "source_author_login": "leonapivato"
+    },
+    "agent_reason": "Repository-owner production outage (founder wound): leonapivato (OWNER) reports story-store outage while authorizing makes rounds fail outright and messages lost. No competing open PRs reference issue #3054. Product code src/ai_assistant/orchestration/authorizer.py current blob sha d8441e9b546a06d0b6b5da68b5490c03a16e55fd contains raise StoryStoreError(msg). Unpriced owner request.",
+    "scope_quote": "On `StoryStoreError`, either:",
+    "code_evidence": {
+      "path": "src/ai_assistant/orchestration/authorizer.py",
+      "sha": "d8441e9b546a06d0b6b5da68b5490c03a16e55fd",
+      "quote": "raise StoryStoreError(msg)",
+      "is_product_code": true
+    },
+    "source_issue": "https://github.com/leonapivato/ai-assistant/issues/3054",
+    "funding_status": "UNPRICED_OWNER_REQUEST",
+    "lane": "founder",
+    "task_id": "f32d25ce247f914e5ecff5a8a570c62a",
+    "source_revision": "1bc6e9c8a84bf85a9c173cbb7886b018bcae863d451f37773f9b98de52c2514e"
+  },
+  "dispatch_attempt": 1,
+  "sovereign_admission": true,
+  "competition": {
+    "blocking": false,
+    "nominal": []
+  },
+  "lanes": [
+    "founder"
+  ],
+  "dispatched_at": "2026-11-03T15:47:05.554574+00:00",
+  "attempt": 0,
+  "updated_at": "2026-11-03T15:47:05.554597+00:00"
+}
