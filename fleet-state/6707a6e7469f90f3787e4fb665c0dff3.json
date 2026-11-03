@@ -2,7 +2,7 @@
   "task_id": "6707a6e7469f90f3787e4fb665c0dff3",
   "repo": "getdozer/dozer",
   "issue_number": 1690,
-  "status": "DISPATCHING",
+  "status": "DISPATCHED",
   "dispatch_id": "8d69e6f3b0fa4c89a997971377948934",
   "admission": {
     "funding": {
@@ -292,7 +292,7 @@
   ],
   "dispatched_at": "2026-11-03T20:14:28.541011+00:00",
   "attempt": 1,
-  "updated_at": "2026-11-03T20:14:28.541028+00:00",
+  "updated_at": "2026-11-03T20:14:30.425537+00:00",
   "owner": "41694986768:1",
   "previous_owner": null,
   "previous_status": "DISPATCHED",
