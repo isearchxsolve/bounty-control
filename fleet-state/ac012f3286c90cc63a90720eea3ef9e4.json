@@ -2,8 +2,8 @@
   "task_id": "ac012f3286c90cc63a90720eea3ef9e4",
   "repo": "osmesirius-ship-it/daxda-next-gen",
   "issue_number": 39,
-  "status": "FAILED_ENGINEER",
-  "dispatch_id": "8d7f00f13c4c424c832ecd6bff47088a",
+  "status": "DISPATCHING",
+  "dispatch_id": "0c77d893f4be453eaaa84dbb4d51b885",
   "admission": {
     "funding": {
       "amount": "5000",
@@ -33,7 +33,7 @@
     "task_id": "ac012f3286c90cc63a90720eea3ef9e4",
     "source_revision": "68a0389dbe920fb2604e49729c7b8d7debaa0254ea62f20eef09e45509bacc0a"
   },
-  "dispatch_attempt": 2,
+  "dispatch_attempt": 3,
   "sovereign_admission": true,
   "competition": {
     "blocking": false,
@@ -42,9 +42,9 @@
   "lanes": [
     "founder"
   ],
-  "dispatched_at": "2026-11-03T10:56:34.709473+00:00",
+  "dispatched_at": "2026-11-03T12:07:48.176336+00:00",
   "attempt": 2,
-  "updated_at": "2026-11-03T10:59:15.167528+00:00",
+  "updated_at": "2026-11-03T12:07:48.176354+00:00",
   "owner": "41623430851:1",
   "previous_owner": "41617152768:1",
   "previous_status": "DISPATCHED",
