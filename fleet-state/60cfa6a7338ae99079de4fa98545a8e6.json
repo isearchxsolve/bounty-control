@@ -2,7 +2,7 @@
   "task_id": "60cfa6a7338ae99079de4fa98545a8e6",
   "repo": "kendraio/kendraio-app",
   "issue_number": 169,
-  "status": "DISPATCHING",
+  "status": "DISPATCHED",
   "dispatch_id": "06b84e0bb3974a6d9eba5715f5f8e441",
   "admission": {
     "funding": {
@@ -44,5 +44,5 @@
   ],
   "dispatched_at": "2026-11-03T16:31:40.779415+00:00",
   "attempt": 0,
-  "updated_at": "2026-11-03T16:31:40.779432+00:00"
+  "updated_at": "2026-11-03T16:31:42.949459+00:00"
 }
