@@ -32,6 +32,15 @@ def safe_path(root, name):
     return target
 
 
+_BYTECODE_EXTS = (".pyc", ".pyo", ".pyd", ".class", ".beam", ".rbc", ".elc")
+_CACHE_SEGMENTS = {"__pycache__", ".pytest_cache", ".mypy_cache", ".ruff_cache"}
+
+
+def is_cache_path(path):
+    parts = set(Path(path).parts)
+    return bool(parts & _CACHE_SEGMENTS or path.lower().endswith(_BYTECODE_EXTS))
+
+
 def status_paths(root):
     entries = iter(git(root, "status", "--porcelain=v1", "--untracked-files=all", "-z").stdout.split(b"\0"))
     paths = []
@@ -40,12 +49,17 @@ def status_paths(root):
             continue
         if len(entry) < 4 or entry[2:3] != b" ":
             raise ValueError("Malformed Git status")
-        paths.append(os.fsdecode(entry[3:]))
+        path_str = os.fsdecode(entry[3:])
+        if is_cache_path(path_str):
+            continue
+        paths.append(path_str)
         if b"R" in entry[:2] or b"C" in entry[:2]:
             original = next(entries, b"")
             if not original:
                 raise ValueError("Missing rename/copy source")
-            paths.append(os.fsdecode(original))
+            orig_str = os.fsdecode(original)
+            if not is_cache_path(orig_str):
+                paths.append(orig_str)
     for path in paths:
         safe_path(root, path)
     return sorted(set(paths))
@@ -97,7 +111,7 @@ def guard_untouched_baseline(root):
     if delivered:
         raise ValueError("Repository tree changed before engineering: " + ", ".join(delivered[:10]))
     restore_tracked_files(root)
-    remaining = status_paths(root)
+    remaining = product_paths(status_paths(root))
     if remaining:
         raise ValueError("Provisioning mutated the untouched source baseline: "
                          + ", ".join(remaining[:10]))
@@ -112,17 +126,13 @@ def is_test(path):
 def product_paths(paths):
     # Bytecode caches and compiled artefacts are never engineering source edits.
     # Python writes __pycache__/*.pyc when verify_baseline runs pytest; Node/Rust/Java
-    # write equivalents.  None are product source.
-    # Measured 2026-11-03: DimitarGeorgievski/patuvaj-notes#13 (run 41577249045) aborted
-    # at guard_untouched_baseline because code/__pycache__/booking.cpython-312.pyc was
-    # written by Cline's own baseline pytest invocation and treated as a product mutation,
-    # blocking the entire E2E cohort.
-    _BYTECODE_EXTS = (".pyc", ".pyo", ".pyd", ".class", ".beam", ".rbc", ".elc")
-    return [p for p in paths if not is_test(p) and not p.startswith(("docs/", ".github/"))
+    # write equivalents. None are product source.
+    # Measured 2026-11-03: DimitarGeorgievski/patuvaj-notes#13 (runs 41577249045, 41581930854)
+    # aborted at guard_untouched_baseline when verify_baseline ran pytest and left bytecode
+    # caches behind in repositories with no .gitignore.
+    return [p for p in paths if not is_test(p) and not is_cache_path(p) and not p.startswith(("docs/", ".github/"))
             and not p.lower().endswith((".md", ".rst", ".txt", ".lock", "lock.json", "lock.yaml"))
-            and Path(p).name not in {"yarn.lock", "package-lock.json", "bun.lockb", "Cargo.lock"}
-            and "__pycache__" not in p.split("/")
-            and not p.lower().endswith(_BYTECODE_EXTS)]
+            and Path(p).name not in {"yarn.lock", "package-lock.json", "bun.lockb", "Cargo.lock"}]
 
 
 def manifest(root, paths):

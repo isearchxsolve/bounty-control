@@ -165,6 +165,7 @@ jobs:
         # is set here and the fan-out is bounded rather than left to the toolchain.
         NODE_OPTIONS: '--max-old-space-size=3072'
         UV_THREADPOOL_SIZE: '2'
+        PYTHONDONTWRITEBYTECODE: '1'
       run: python3 -u scripts/actions_delivery.py engineer
       timeout-minutes: 300
     - uses: actions/upload-artifact@v4

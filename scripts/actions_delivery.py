@@ -515,6 +515,7 @@ def runtime():
     os.environ.setdefault("FLEET_ARTIFACT_DIR", str(artifacts()))
     os.environ.setdefault("CLINE_DATA_DIR", str(Path(tempfile.gettempdir()) / "bounty-cline"))
     os.environ["ACTIONS_PUBLISHER_MANAGED"] = "1"
+    os.environ["PYTHONDONTWRITEBYTECODE"] = "1"
     # The runner ships Node 22 on Ubuntu 24, and a repository built with Webpack 4 or older
     # tooling hashes with algorithms OpenSSL 3 no longer offers by default. Measured
     # 2026-11-02 (smallbets/userbase#305, run 41370206822): `npm run build:userbase-server:npm`
