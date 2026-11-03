@@ -703,7 +703,7 @@ def row_issue(row: dict):
 
 def verify_rows(rows: List[dict], fetch: Optional[Callable[[str, int], Optional[dict]]] = None,
                 limit: int = 12, admission_client=None, context_builder=None,
-                decision_verifier=None) -> Dict[str, List[dict]]:
+                decision_verifier=None, source_reader=None) -> Dict[str, List[dict]]:
     """Admit only rows whose issue exists, is open, and whose reward quote is really there.
 
     The agent chose them; this decides whether the choice survives contact with the source.
@@ -793,7 +793,8 @@ def verify_rows(rows: List[dict], fetch: Optional[Callable[[str, int], Optional[
         proof, competition_verdict = None, None
         if ADMISSION_GATE and admission_client is not None:
             if decision_verifier is not None:
-                reason, detail, proof = decision_verifier(row, context_builder or _default_context_builder)
+                reason, detail, proof = decision_verifier(row, context_builder or _default_context_builder,
+                                                          source_reader=source_reader)
             else:
                 # ``lane`` is passed, not inferred: admit() needs it to grant an owner-authored
                 # incident report its zero-amount FOUNDER offer, and without it every wound is

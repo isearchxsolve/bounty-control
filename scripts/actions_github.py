@@ -311,6 +311,21 @@ class StateStore:
             body["sha"] = expected_sha
         return self.api.api(f"repos/{self.repo}/contents/fleet-state/{identity}.json", "PUT", body)
 
+    def delete(self, identity, message=None):
+        """Remove a durable row. Used by probes that dispatch a real identity repeatedly.
+
+        A task's dispatch budget lives in its own record (``dispatch_attempt``, capped at 3), so a
+        probe that dispatches the same real issue more than three times starts being refused by a
+        budget production spent, not by the code under test. Deleting the row gives the probe the
+        clean pre-dispatch state it asserts from.
+        """
+        _, sha = self.read(identity)
+        if not sha:
+            return None
+        return self.api.api(f"repos/{self.repo}/contents/fleet-state/{identity}.json", "DELETE",
+                            {"message": message or f"fleet: {identity} removed by probe",
+                             "branch": self.branch, "sha": sha})
+
     def mutate(self, identity, change):
         self.ensure()
         for attempt in range(5):
