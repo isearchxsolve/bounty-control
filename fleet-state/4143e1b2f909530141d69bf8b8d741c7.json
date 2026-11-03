@@ -2,7 +2,7 @@
   "task_id": "4143e1b2f909530141d69bf8b8d741c7",
   "repo": "cozyGarage/BookiE",
   "issue_number": 1953,
-  "status": "CLAIMED",
+  "status": "FAILED_PUBLISH",
   "dispatch_id": "8fa946f2424d4827b77a60b20a7c7fd3",
   "admission": {
     "funding": {
@@ -43,7 +43,7 @@
   ],
   "dispatched_at": "2026-11-03T15:57:44.461881+00:00",
   "attempt": 3,
-  "updated_at": "2026-11-03T15:58:53.609542+00:00",
+  "updated_at": "2026-11-03T17:20:52.113599+00:00",
   "owner": "41669384456:1",
   "previous_owner": "41660209132:1",
   "previous_status": "DISPATCHED",
@@ -52,12 +52,12 @@
   "claimed_at": "2026-11-03T15:58:53.609488+00:00",
   "lease_expires_at": "2026-11-03T20:03:53.609506+00:00",
   "preparation_budget_seconds": 14400,
-  "kind": "runner_shutdown",
+  "kind": "engineer",
   "retryable": true,
-  "diagnostic": "No engineering result and no failure record: the phase was terminated before it could report (exit 143 / runner shutdown)",
+  "diagnostic": "Command '['git', '-c', 'core.hooksPath=/dev/null', '-c', 'submodule.recurse=false', 'clone', '--no-checkout', 'https://github.com/cozyGarage/BookiE.git', '/tmp/tmpkwh99zpv/objects']' timed out after 179.99998434100002 seconds",
   "path": "/tmp/fleet-artifacts/delivery-supervisor/562d19ba69644b65b0bea2141f884a71.preparation.json",
   "reason": "Cline delivery repair failed: Command timed out after 3600 seconds\n",
-  "at": "2026-11-03T15:56:48.754136+00:00",
+  "at": "2026-11-03T17:20:35.881759+00:00",
   "failures": [
     {
       "run_url": "https://github.com/isearchxsolve/bounty-control/actions/runs/41647500141",
@@ -77,8 +77,16 @@
       "inferred": true,
       "diagnostic": "No engineering result and no failure record: the phase was terminated before it could report (exit 143 / runner shutdown)",
       "at": "2026-11-03T15:56:48.754136+00:00"
+    },
+    {
+      "run_url": "https://github.com/isearchxsolve/bounty-control/actions/runs/41669384456",
+      "status": "FAILED_PUBLISH",
+      "kind": "engineer",
+      "retryable": true,
+      "diagnostic": "Command '['git', '-c', 'core.hooksPath=/dev/null', '-c', 'submodule.recurse=false', 'clone', '--no-checkout', 'https://github.com/cozyGarage/BookiE.git', '/tmp/tmpkwh99zpv/objects']' timed out after 179.99998434100002 seconds",
+      "at": "2026-11-03T17:20:35.881759+00:00"
     }
   ],
-  "finished_at": "2026-11-03T15:56:48.754170+00:00",
+  "finished_at": "2026-11-03T17:20:51.443874+00:00",
   "inferred": true
 }
