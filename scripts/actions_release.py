@@ -277,7 +277,10 @@ def regression_proof(root, base_sha, document, execute):
         output = red.stdout + "\n" + red.stderr
         if (red.exit_code == 0 or not failure_corroborated(expected, output) or re.search(
                 r"Cannot find module|ModuleNotFoundError|command not found|No such file", output, re.I)):
-            raise ValueError("Base regression did not fail on the specified defect assertion:\n" + output)
+            raise ValueError("Base regression did not fail on the specified defect assertion:\n"
+                             + "Expected assertion: " + expected + "\n"
+                             + "Actual exit code: " + str(red.exit_code) + "\n"
+                             + "Actual output:\n" + output)
     finally:
         for name, backup in backups.items():
             path = safe_path(root, name)

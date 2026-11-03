@@ -37,3 +37,10 @@ jobs:
         else
           python3 -u scripts/discovery_heartbeat.py
         fi
+    - name: Probe hydration and dispatch only if it has gone stale
+      if: always()
+      run: |
+        args=(--workflow bounty-hydration.yml --max-age-minutes 60
+              --state scratch/hydration-heartbeat.jsonl --lock scratch/hydration-heartbeat.lock)
+        if [ "${{ inputs.dry_run }}" = "true" ]; then args+=(--dry-run); fi
+        python3 -u scripts/discovery_heartbeat.py "${args[@]}"
