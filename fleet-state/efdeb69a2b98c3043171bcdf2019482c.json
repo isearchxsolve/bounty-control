@@ -1,0 +1,87 @@
+{
+  "task_id": "efdeb69a2b98c3043171bcdf2019482c",
+  "repo": "gewenbo888/ai-for-money",
+  "issue_number": 1,
+  "status": "DISPATCHING",
+  "dispatch_id": "86d1406c89ff483fb5b5804e7c15f4f0",
+  "admission": {
+    "funding": {
+      "amount": "650",
+      "currency": "USD",
+      "payer": "gewenbo888",
+      "source_url": "https://github.com/gewenbo888/ai-for-money/issues/1",
+      "usd_value": "650",
+      "quote": {
+        "basis": "USD face value",
+        "usd_rate": "1"
+      },
+      "raw": "# \u6211\u7528 AI \u667a\u80fd\u4f53\u626b\u8361 GitHub \u5f00\u6e90\u60ac\u8d4f\uff1a48 \u5c0f\u65f6\u5408\u5e76 6 \u4e2a PR \u65a9\u83b7 $650 \u7684\u5b9e\u64cd\u5168\u89e3\u5bc6",
+      "source_author_association": "OWNER",
+      "source_author_login": "gewenbo888"
+    },
+    "agent_reason": "gewenbo888 hung $650 for \u3010\u5b9e\u6218\u89e3\u5bc6\u3011\u6211\u7528 AI \u667a\u80fd\u4f53\u626b\u8361 GitHub \u5f00\u6e90\u60ac\u8d4f\uff1a48 \u5c0f\u65f6\u5408\u5e76 6 \u4e2a PR \u65a9\u83b7  \u7f8e\u91d1\u5168\u6d41\u7a0b; issue shows engineering work.",
+    "scope_quote": "\u3010\u5b9e\u6218\u89e3\u5bc6\u3011\u6211\u7528 AI \u667a\u80fd\u4f53\u626b\u8361 GitHub \u5f00\u6e90\u60ac\u8d4f\uff1a48 \u5c0f\u65f6\u5408\u5e76 6 \u4e2a PR \u65a9\u83b7  \u7f8e\u91d1\u5168\u6d41\u7a0b",
+    "code_evidence": {
+      "is_product_code": true,
+      "path": "README.md",
+      "quote": "# AI for Money \u00b7 \u9879\u76ee\u5de5\u4f5c\u53f0",
+      "sha": "235968353d6db88b9160b13146f699cae1f533c0"
+    },
+    "source_issue": "https://github.com/gewenbo888/ai-for-money/issues/1",
+    "funding_status": "PRICED_OFFER",
+    "lane": "normal",
+    "task_id": "efdeb69a2b98c3043171bcdf2019482c",
+    "source_revision": "28574704ea0f0f948f3111da05bd5cf5846a4c0e57ed8f6d49b31d6f3c0701f8"
+  },
+  "dispatch_attempt": 1,
+  "sovereign_admission": true,
+  "competition": {
+    "blocking": false,
+    "nominal": [
+      {
+        "pr": "https://github.com/gewenbo888/ai-for-money/pull/3",
+        "author": "sezginkipel",
+        "number": 3,
+        "author_merged_in_repo": 0,
+        "check_runs": 0,
+        "maintainer_engagement": 0,
+        "reason": "nominal_attempt_only"
+      },
+      {
+        "pr": "https://github.com/gewenbo888/ai-for-money/pull/2",
+        "author": "rohitkaswan",
+        "number": 2,
+        "author_merged_in_repo": 0,
+        "check_runs": 0,
+        "maintainer_engagement": 0,
+        "reason": "nominal_attempt_only"
+      },
+      {
+        "pr": "https://github.com/gewenbo888/ai-for-money/pull/2",
+        "author": "rohitkaswan",
+        "number": 2,
+        "author_merged_in_repo": 0,
+        "history_cached": true,
+        "check_runs": 0,
+        "maintainer_engagement": 0,
+        "reason": "nominal_attempt_only"
+      },
+      {
+        "pr": "https://github.com/gewenbo888/ai-for-money/pull/3",
+        "author": "sezginkipel",
+        "number": 3,
+        "author_merged_in_repo": 0,
+        "history_cached": true,
+        "check_runs": 0,
+        "maintainer_engagement": 0,
+        "reason": "nominal_attempt_only"
+      }
+    ]
+  },
+  "lanes": [
+    "founder"
+  ],
+  "dispatched_at": "2026-11-03T10:11:13.047524+00:00",
+  "attempt": 0,
+  "updated_at": "2026-11-03T10:11:13.047558+00:00"
+}
