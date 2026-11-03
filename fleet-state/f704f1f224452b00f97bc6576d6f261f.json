@@ -2,7 +2,7 @@
   "task_id": "f704f1f224452b00f97bc6576d6f261f",
   "repo": "zachshallbetter/acp-gateway",
   "issue_number": 39,
-  "status": "DISPATCHING",
+  "status": "DISPATCHED",
   "dispatch_id": "aabd8ac38a5742fe96d993eef0a8ed6c",
   "admission": {
     "funding": {
@@ -43,7 +43,7 @@
   ],
   "dispatched_at": "2026-11-03T12:08:07.856980+00:00",
   "attempt": 2,
-  "updated_at": "2026-11-03T12:08:07.856998+00:00",
+  "updated_at": "2026-11-03T12:08:09.631449+00:00",
   "owner": "41623480806:1",
   "previous_owner": "41617131689:1",
   "previous_status": "DISPATCHED",
