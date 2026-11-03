@@ -1,0 +1,58 @@
+{
+  "task_id": "bcd847e7a094e480e74c9566aad0300f",
+  "repo": "MetaFam/Fork-The-World",
+  "issue_number": 5,
+  "status": "DISPATCHING",
+  "dispatch_id": "ec2bb3cf76514ee3af08ad379b9d53c6",
+  "admission": {
+    "funding": {
+      "amount": "500",
+      "currency": "USD",
+      "payer": "peth-eth",
+      "source_url": "https://github.com/MetaFam/Fork-The-World/issues/5",
+      "usd_value": "500",
+      "quote": {
+        "basis": "USD face value",
+        "usd_rate": "1"
+      },
+      "raw": "Up to $500 total",
+      "source_author_association": "MEMBER",
+      "source_author_login": "peth-eth"
+    },
+    "agent_reason": "peth-eth hung $500 for MetaMaps Simple Mapping; issue shows engineering work.",
+    "scope_quote": "MetaMaps Simple Mapping",
+    "code_evidence": {
+      "is_product_code": true,
+      "path": "README.md",
+      "quote": "# Fork The World 2020",
+      "sha": "a3d42dc5cd911b9f8d9353e6f9204c4ffef92121"
+    },
+    "source_issue": "https://github.com/MetaFam/Fork-The-World/issues/5",
+    "funding_status": "PRICED_OFFER",
+    "lane": "normal",
+    "task_id": "bcd847e7a094e480e74c9566aad0300f",
+    "source_revision": "dc623283ad84dccc8ca69dd4dab3644aecf0b5ff402a38f6e52c80f38a770d69"
+  },
+  "dispatch_attempt": 1,
+  "sovereign_admission": true,
+  "competition": {
+    "blocking": false,
+    "nominal": [
+      {
+        "pr": "https://github.com/MetaFam/Fork-The-World/pull/17",
+        "author": "sunwh227",
+        "number": 17,
+        "author_merged_in_repo": 0,
+        "check_runs": 0,
+        "maintainer_engagement": 0,
+        "reason": "nominal_attempt_only"
+      }
+    ]
+  },
+  "lanes": [
+    "normal"
+  ],
+  "dispatched_at": "2026-11-03T16:31:35.389619+00:00",
+  "attempt": 0,
+  "updated_at": "2026-11-03T16:31:35.389636+00:00"
+}
