@@ -2,7 +2,7 @@
   "task_id": "bcd847e7a094e480e74c9566aad0300f",
   "repo": "MetaFam/Fork-The-World",
   "issue_number": 5,
-  "status": "DISPATCHING",
+  "status": "DISPATCHED",
   "dispatch_id": "ec2bb3cf76514ee3af08ad379b9d53c6",
   "admission": {
     "funding": {
@@ -54,5 +54,5 @@
   ],
   "dispatched_at": "2026-11-03T16:31:35.389619+00:00",
   "attempt": 0,
-  "updated_at": "2026-11-03T16:31:35.389636+00:00"
+  "updated_at": "2026-11-03T16:31:37.426373+00:00"
 }
