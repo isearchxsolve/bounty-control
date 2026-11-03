@@ -5,7 +5,6 @@
   "fault_fixture": true,
   "status": "DISPATCHED",
   "attempt": 0,
-  "dispatch_id": "d65e9cb56cfa43e0a47db77d912b231e",
-  "updated_at": "2026-11-03T16:38:21.923709+00:00",
-  "count": 9
+  "dispatch_id": "fb8b292343d04020b7ca2239a40d5603",
+  "updated_at": "2026-11-03T16:38:23.995134+00:00"
 }
