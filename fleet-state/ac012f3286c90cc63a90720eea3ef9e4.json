@@ -2,7 +2,7 @@
   "task_id": "ac012f3286c90cc63a90720eea3ef9e4",
   "repo": "osmesirius-ship-it/daxda-next-gen",
   "issue_number": 39,
-  "status": "CLAIMED",
+  "status": "FAILED_ENGINEER",
   "dispatch_id": "ec4e6b945170462d9d0c1a68367b039b",
   "admission": {
     "funding": {
@@ -44,7 +44,7 @@
   ],
   "dispatched_at": "2026-11-03T10:11:17.244687+00:00",
   "attempt": 1,
-  "updated_at": "2026-11-03T10:11:32.789249+00:00",
+  "updated_at": "2026-11-03T10:35:32.596400+00:00",
   "owner": "41617152768:1",
   "previous_owner": null,
   "previous_status": "DISPATCHED",
@@ -52,5 +52,20 @@
   "harness_sha": "6267827e87ba4d1db2397a219b2f8c1a5c60d062",
   "claimed_at": "2026-11-03T10:11:32.789203+00:00",
   "lease_expires_at": "2026-11-03T14:16:32.789217+00:00",
-  "preparation_budget_seconds": 14400
+  "preparation_budget_seconds": 14400,
+  "kind": "engineer",
+  "retryable": true,
+  "diagnostic": "Repository tree changed before engineering: outputs/cl16_4_recursive_self_improvement_latest.json",
+  "at": "2026-11-03T10:35:20.828008+00:00",
+  "failures": [
+    {
+      "run_url": "https://github.com/isearchxsolve/bounty-control/actions/runs/41617152768",
+      "status": "FAILED_ENGINEER",
+      "kind": "engineer",
+      "retryable": true,
+      "diagnostic": "Repository tree changed before engineering: outputs/cl16_4_recursive_self_improvement_latest.json",
+      "at": "2026-11-03T10:35:20.828008+00:00"
+    }
+  ],
+  "finished_at": "2026-11-03T10:35:32.152956+00:00"
 }
