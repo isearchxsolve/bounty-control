@@ -2,8 +2,8 @@
   "task_id": "d4375ff020f5fef283bc2c95388c0a23",
   "repo": "hashcat/hashcat",
   "issue_number": 4141,
-  "status": "FAILED_ENGINEER",
-  "dispatch_id": "6a756a2a168849138032299b14bcdee8",
+  "status": "DISPATCHING",
+  "dispatch_id": "2eb34de02e264716a1f4e4c7d6ebb385",
   "admission": {
     "funding": {
       "amount": "1000",
@@ -33,7 +33,7 @@
     "task_id": "d4375ff020f5fef283bc2c95388c0a23",
     "source_revision": "9304bf73b679d4c51fb9ea281f2fef1da5e98115b417fe0d1d59ea5ec55b458e"
   },
-  "dispatch_attempt": 1,
+  "dispatch_attempt": 2,
   "sovereign_admission": true,
   "competition": {
     "blocking": false,
@@ -42,9 +42,9 @@
   "lanes": [
     "normal"
   ],
-  "dispatched_at": "2026-11-03T04:17:38.800648+00:00",
+  "dispatched_at": "2026-11-03T06:29:54.986402+00:00",
   "attempt": 1,
-  "updated_at": "2026-11-03T06:19:51.025888+00:00",
+  "updated_at": "2026-11-03T06:29:54.986419+00:00",
   "owner": "41577269576:1",
   "previous_owner": null,
   "previous_status": "DISPATCHED",
