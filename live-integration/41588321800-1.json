@@ -1,5 +1,5 @@
 {
-  "at": "2026-11-03T06:16:05.751340+00:00",
+  "at": "2026-11-03T06:16:06.635387+00:00",
   "run_url": "https://github.com/isearchxsolve/bounty-control/actions/runs/41588321800",
   "end_to_end_passed": false,
   "coverage": {
@@ -16,7 +16,7 @@
     "REAL_PUBLICATION": "NOT_RUN",
     "ACTUAL_RELEASE_POSITIVE_CONTROL": "NOT_RUN",
     "MERGE_AND_RECONCILE_REPLAY": "NOT_RUN",
-    "LIVE_STATE_ROUNDTRIP": "NOT_RUN",
+    "LIVE_STATE_ROUNDTRIP": "PASS",
     "LIVE_CAS_CONFLICT": "NOT_RUN",
     "LIVE_CONCURRENT_CLAIM": "NOT_RUN",
     "LIVE_CLAIM_REPLAY": "NOT_RUN",
@@ -101,6 +101,11 @@
       "case": "ENVIRONMENT",
       "status": "PASS",
       "at": "2026-11-03T06:16:05.750536+00:00"
+    },
+    {
+      "case": "LIVE_STATE_ROUNDTRIP",
+      "status": "PASS",
+      "at": "2026-11-03T06:16:06.634597+00:00"
     }
   ],
   "cohort": {
