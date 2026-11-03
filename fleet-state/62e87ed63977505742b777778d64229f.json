@@ -2,7 +2,7 @@
   "task_id": "62e87ed63977505742b777778d64229f",
   "repo": "ilyavzane/Dispo",
   "issue_number": 19,
-  "status": "DISPATCHING",
+  "status": "DISPATCHED",
   "dispatch_id": "b6c0a38b357b4970b5e03e1fa6f401e3",
   "admission": {
     "funding": {
@@ -43,7 +43,7 @@
   ],
   "dispatched_at": "2026-11-03T14:39:27.726995+00:00",
   "attempt": 1,
-  "updated_at": "2026-11-03T14:39:27.727010+00:00",
+  "updated_at": "2026-11-03T14:39:29.555021+00:00",
   "owner": "41647407167:1",
   "previous_owner": null,
   "previous_status": "DISPATCHED",
