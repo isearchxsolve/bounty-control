@@ -133,8 +133,8 @@ jobs:
     - name: Set up Elixir and Erlang
       uses: erlef/setup-beam@v1
       with:
-        elixir-version: '1.16'
-        otp-version: '26'
+        elixir-version: '1.18'
+        otp-version: '27'
     - name: Install the executable actually used by the worker
       run: |
         npm install --global --no-audit --no-fund cline@3.0.74
