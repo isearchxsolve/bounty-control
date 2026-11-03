@@ -2,7 +2,7 @@
   "task_id": "9362999ad0b16422d01e611f74c612ba",
   "repo": "Spectral-Finance/lux",
   "issue_number": 54,
-  "status": "CLAIMED",
+  "status": "FAILED_MISSING_TERMINAL_RECEIPT",
   "dispatch_id": "0ffddc7483084f6bae0f6c158ce314f5",
   "admission": {
     "funding": {
@@ -102,7 +102,7 @@
   ],
   "dispatched_at": "2026-11-03T22:19:00.855397+00:00",
   "attempt": 1,
-  "updated_at": "2026-11-03T22:19:28.444698+00:00",
+  "updated_at": "2026-11-03T23:13:25.716516+00:00",
   "owner": "41729722301:1",
   "previous_owner": null,
   "previous_status": "DISPATCHED",
@@ -110,5 +110,7 @@
   "harness_sha": "41161bb7afbe95d90f7c3cb066ac620f893c0803",
   "claimed_at": "2026-11-03T22:19:28.444647+00:00",
   "lease_expires_at": "2026-11-04T02:24:28.444661+00:00",
-  "preparation_budget_seconds": 14400
+  "preparation_budget_seconds": 14400,
+  "diagnostic": "Actions run completed (failure) without terminal callback; artifacts retained",
+  "observed_at": "2026-11-03T23:13:25.716506+00:00"
 }
