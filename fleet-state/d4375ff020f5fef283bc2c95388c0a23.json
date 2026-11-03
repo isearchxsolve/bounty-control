@@ -2,7 +2,7 @@
   "task_id": "d4375ff020f5fef283bc2c95388c0a23",
   "repo": "hashcat/hashcat",
   "issue_number": 4141,
-  "status": "CLAIMED",
+  "status": "FAILED_ENGINEER",
   "dispatch_id": "2eb34de02e264716a1f4e4c7d6ebb385",
   "admission": {
     "funding": {
@@ -44,7 +44,7 @@
   ],
   "dispatched_at": "2026-11-03T06:29:54.986402+00:00",
   "attempt": 2,
-  "updated_at": "2026-11-03T06:30:06.188680+00:00",
+  "updated_at": "2026-11-03T07:30:28.886873+00:00",
   "owner": "41590251975:1",
   "previous_owner": "41577269576:1",
   "previous_status": "DISPATCHED",
@@ -56,7 +56,7 @@
   "kind": "engineer",
   "retryable": true,
   "diagnostic": "Bounded Cline delivery repair exhausted: Iteration exhausted after 1 turns without green. Last reported failure:\nTest failure in turn 1: python3 tools/test.py --edge -m 79010 -D 1 -f\n! hash type 79010 has no tools/test_modules/m79010.py, so test.py --edge cannot run it",
-  "at": "2026-11-03T06:19:01.143044+00:00",
+  "at": "2026-11-03T07:30:18.014320+00:00",
   "failures": [
     {
       "run_url": "https://github.com/isearchxsolve/bounty-control/actions/runs/41577269576",
@@ -65,7 +65,15 @@
       "retryable": true,
       "diagnostic": "Bounded Cline delivery repair exhausted: Iteration exhausted after 1 turns without green. Last reported failure:\nTest failure in turn 1: python3 tools/test.py --edge -m 79010 -D 1 -f\n! hash type 79010 has no tools/test_modules/m79010.py, so test.py --edge cannot run it",
       "at": "2026-11-03T06:19:01.143044+00:00"
+    },
+    {
+      "run_url": "https://github.com/isearchxsolve/bounty-control/actions/runs/41590251975",
+      "status": "FAILED_ENGINEER",
+      "kind": "engineer",
+      "retryable": true,
+      "diagnostic": "Bounded Cline delivery repair exhausted: Iteration exhausted after 1 turns without green. Last reported failure:\nTest failure in turn 1: python3 tools/test.py --edge -m 79010 -D 1 -f\n! hash type 79010 has no tools/test_modules/m79010.py, so test.py --edge cannot run it",
+      "at": "2026-11-03T07:30:18.014320+00:00"
     }
   ],
-  "finished_at": "2026-11-03T06:19:50.515270+00:00"
+  "finished_at": "2026-11-03T07:30:28.241604+00:00"
 }
