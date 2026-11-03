@@ -2,8 +2,8 @@
   "task_id": "c3c9d554d8780194e1a6351cea20a782",
   "repo": "eandualem/assistant-runtime",
   "issue_number": 220,
-  "status": "FAILED_ENGINEER",
-  "dispatch_id": "34dafd5cc0864aaf8743c698039c195c",
+  "status": "DISPATCHING",
+  "dispatch_id": "845d69708c964e548651a3375544c74e",
   "admission": {
     "funding": {
       "payer": "eandualem",
@@ -32,7 +32,7 @@
     "task_id": "c3c9d554d8780194e1a6351cea20a782",
     "source_revision": "628b9261496f4f984789177242c509f47e52115accc26b62337d1ce7651be895"
   },
-  "dispatch_attempt": 1,
+  "dispatch_attempt": 2,
   "sovereign_admission": true,
   "competition": {
     "blocking": false,
@@ -41,9 +41,9 @@
   "lanes": [
     "founder"
   ],
-  "dispatched_at": "2026-11-03T16:03:19.823634+00:00",
+  "dispatched_at": "2026-11-03T17:17:47.367964+00:00",
   "attempt": 1,
-  "updated_at": "2026-11-03T16:23:49.549826+00:00",
+  "updated_at": "2026-11-03T17:17:47.367978+00:00",
   "owner": "41670210337:1",
   "previous_owner": null,
   "previous_status": "DISPATCHED",
