@@ -3,10 +3,16 @@
   "repo": "unit/runtime",
   "issue_number": 7,
   "status": "CLAIMED",
-  "owner": "1234:attempt-1",
-  "attempt": 1,
-  "claimed_at": "2026-11-03T10:49:34.642035+00:00",
-  "lease_expires_at": "2026-11-03T14:54:34.642060+00:00",
-  "updated_at": "2026-11-03T14:56:36.421207+00:00",
-  "fault_fixture": true
+  "owner": "9999:attempt-1",
+  "attempt": 2,
+  "claimed_at": "2026-11-03T14:56:38.099340+00:00",
+  "lease_expires_at": "2026-11-03T19:01:38.099342+00:00",
+  "updated_at": "2026-11-03T14:56:38.099374+00:00",
+  "fault_fixture": true,
+  "takeover_reason": "lease expired and owner run is provably dead",
+  "takeover_at": "2026-11-03T14:56:38.099323+00:00",
+  "previous_owner": "1234:attempt-1",
+  "previous_status": "CLAIMED",
+  "run_url": "https://example.invalid/run",
+  "harness_sha": "sha"
 }
