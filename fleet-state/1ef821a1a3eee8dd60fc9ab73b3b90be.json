@@ -1,0 +1,47 @@
+{
+  "task_id": "1ef821a1a3eee8dd60fc9ab73b3b90be",
+  "repo": "isearchxsolve/oss-hunter-livefire",
+  "issue_number": 10,
+  "status": "DISPATCHING",
+  "dispatch_id": "b5e79ced51fe47a9b86429af0208e411",
+  "admission": {
+    "funding": {
+      "amount": "0",
+      "currency": "FOUNDER",
+      "payer": "isearchxsolve",
+      "source_url": "https://github.com/isearchxsolve/oss-hunter-livefire/issues/10",
+      "usd_value": "0",
+      "quote": {
+        "basis": "Unpriced repository-owner request"
+      },
+      "raw": "one day has 86400 seconds",
+      "source_author_association": "OWNER",
+      "source_author_login": "isearchxsolve"
+    },
+    "agent_reason": "Owner states one bounded, reproducible conversion defect",
+    "scope_quote": "Correct the conversion for all nonnegative integer inputs",
+    "code_evidence": {
+      "path": "live_cases/rc3b74de3bb46/duration.py",
+      "sha": "9b8722e2cfd731b799beaff71d56ca9dfb92bf57",
+      "quote": "def days_to_seconds(days):",
+      "is_product_code": true
+    },
+    "source_issue": "https://github.com/isearchxsolve/oss-hunter-livefire/issues/10",
+    "funding_status": "UNPRICED_OWNER_REQUEST",
+    "lane": "founder",
+    "task_id": "1ef821a1a3eee8dd60fc9ab73b3b90be",
+    "source_revision": "d866e8da72a6615c28a81d2fa07a26a396db2c544d5223ccf3dda06bb32df07f"
+  },
+  "dispatch_attempt": 1,
+  "sovereign_admission": true,
+  "competition": {
+    "blocking": false,
+    "nominal": []
+  },
+  "lanes": [
+    "founder"
+  ],
+  "dispatched_at": "2026-11-03T15:06:02.967160+00:00",
+  "attempt": 0,
+  "updated_at": "2026-11-03T15:06:02.967176+00:00"
+}
