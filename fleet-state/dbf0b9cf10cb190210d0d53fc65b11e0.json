@@ -2,8 +2,8 @@
   "task_id": "dbf0b9cf10cb190210d0d53fc65b11e0",
   "repo": "Spectral-Finance/lux",
   "issue_number": 77,
-  "status": "FAILED_ENGINEER",
-  "dispatch_id": "4fc347aaee5c4885b484f1fc3cca1064",
+  "status": "DISPATCHING",
+  "dispatch_id": "a76b2f62fdcc437ea2b88e76aa31896e",
   "admission": {
     "funding": {
       "amount": "1000",
@@ -15,29 +15,47 @@
         "basis": "USD face value",
         "usd_rate": "1"
       },
-      "raw": "## Budget: \\$1,000",
+      "raw": "Web3 Authentication and Authorization Framework $1,000",
       "source_author_association": "COLLABORATOR",
       "source_author_login": "rparcus"
     },
-    "agent_reason": "COLLABORATOR rparcus hung $1,000 for a bounded Web3 auth framework on a repo that merges outside work; no competing claimant has landed work.",
+    "agent_reason": "Spectral Labs (startup) posted a live $1,000 bounty on Spectral-Finance/lux#77 via COLLABORATOR rparcus's issue titled with the amount; repo merges outside work (122 merged PRs). Scope bounded: implement Web3 auth/authorization framework, touching lux/lib/lux/web3/contracts. No competing open PR landed work (competition gate nominal).",
     "scope_quote": "Implement a comprehensive Web3 authentication and authorization framework supporting multiple signature types and permission models.",
     "code_evidence": {
-      "is_product_code": true,
-      "path": "lux_app/lib/lux_app_web/controllers/page_controller.ex",
-      "quote": "def home(conn, _params) do",
-      "sha": "8045ba1f92a567db8df221851bd2ecf829bf98c5"
+      "path": "lux/lib/lux/web3/contracts/agentic_company.ex",
+      "sha": "0500f964ba230cf5848fa4da93e28b4b30a5822c",
+      "quote": "defmodule Lux.Web3.Contracts.AgenticCompany do",
+      "is_product_code": true
     },
     "source_issue": "https://github.com/Spectral-Finance/lux/issues/77",
     "funding_status": "PRICED_OFFER",
-    "lane": "normal",
+    "lane": "bounty",
     "task_id": "dbf0b9cf10cb190210d0d53fc65b11e0",
-    "source_revision": "6633aec22b2361ee5c3cb00bd1dcad406594c0981bd35b34cef082b669495a6b"
+    "source_revision": "44686d0ef46cdd53089c5004c166db06f032112c8622f8e4a80bb7c71ff32427"
   },
-  "dispatch_attempt": 1,
+  "dispatch_attempt": 2,
   "sovereign_admission": true,
   "competition": {
     "blocking": false,
     "nominal": [
+      {
+        "pr": "https://github.com/Spectral-Finance/lux/pull/1110",
+        "author": "garter-black",
+        "number": 1110,
+        "author_merged_in_repo": 0,
+        "check_runs": 0,
+        "maintainer_engagement": 0,
+        "reason": "nominal_attempt_only"
+      },
+      {
+        "pr": "https://github.com/Spectral-Finance/lux/pull/1064",
+        "author": "nepreby",
+        "number": 1064,
+        "author_merged_in_repo": 0,
+        "check_runs": 0,
+        "maintainer_engagement": 0,
+        "reason": "nominal_attempt_only"
+      },
       {
         "pr": "https://github.com/Spectral-Finance/lux/pull/1037",
         "author": "milindchatrabhuji",
@@ -333,15 +351,35 @@
         "check_runs": 0,
         "maintainer_engagement": 0,
         "reason": "nominal_attempt_only"
+      },
+      {
+        "pr": "https://github.com/Spectral-Finance/lux/pull/1064",
+        "author": "nepreby",
+        "number": 1064,
+        "author_merged_in_repo": 0,
+        "history_cached": true,
+        "check_runs": 0,
+        "maintainer_engagement": 0,
+        "reason": "nominal_attempt_only"
+      },
+      {
+        "pr": "https://github.com/Spectral-Finance/lux/pull/1110",
+        "author": "garter-black",
+        "number": 1110,
+        "author_merged_in_repo": 0,
+        "history_cached": true,
+        "check_runs": 0,
+        "maintainer_engagement": 0,
+        "reason": "nominal_attempt_only"
       }
     ]
   },
   "lanes": [
-    "normal"
+    "startup"
   ],
-  "dispatched_at": "2026-11-02T14:53:09.120193+00:00",
+  "dispatched_at": "2026-11-03T19:21:49.379914+00:00",
   "attempt": 1,
-  "updated_at": "2026-11-02T15:23:47.688289+00:00",
+  "updated_at": "2026-11-03T19:21:49.379929+00:00",
   "owner": "41466201761:1",
   "previous_owner": null,
   "previous_status": "DISPATCHED",
