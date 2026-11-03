@@ -110,7 +110,7 @@ class HydrationStub:
         self.calls = []
 
     def __call__(self, lanes, **kwargs):
-        self.calls.append(kwargs)
+        self.calls.append({'lanes': list(lanes), **kwargs})
         budget = kwargs.get('max_dispatches', 0)
         current = self.store.state or {}
         # A failed record is not a live generation: hydration replaces it.
@@ -178,6 +178,12 @@ class DispatchPhaseOffline(unittest.TestCase):
         self.assertEqual(run.data['coverage']['LIVE_QUEUE_REPLAY'], 'PASS')
         self.assertEqual(len(hydration.calls), 2, 'dispatch must hydrate once and replay once')
         self.assertEqual(store.state['dispatch_id'], 'gen-1')
+
+    def test_handoff_and_replay_keep_every_production_entry_lane(self):
+        run, _, _, hydration = self.build()
+        run.dispatch()
+        for call in hydration.calls:
+            self.assertEqual(set(call['lanes']), {'startup', 'founder', 'normal', 'programs'})
 
     def test_hydration_is_asked_for_exactly_one_dispatch(self):
         run, _, _, hydration = self.build()

@@ -26,6 +26,7 @@ from actions_github import GitHub, GitHubError, StateStore, repository, task_id
 from pipeline_evidence import require_evidence
 
 ROOT = Path(__file__).resolve().parents[1]
+PRODUCTION_LANES = ('startup', 'founder', 'normal', 'programs')
 REQUIRED_CASES = (
     'ENVIRONMENT', 'LIVE_INTAKE', 'LIVE_MODEL_ADMISSION', 'LIVE_QUEUE_DEFERRAL',
     'LIVE_SOURCE_REJECTIONS', 'LIVE_QUEUE_RECOVERY', 'LIVE_QUEUE_REPLAY',
@@ -498,7 +499,7 @@ class LiveRun:
         check(max(len(active), len(reservations)) < 4, 'Live fleet at capacity; resume dispatch later')
         from sovereign_discovery import discover
         check(self.data.get('queue_dir'), 'Production discovery queue is required; re-run admission')
-        outcome = discover(['normal', 'founder'], max_dispatches=1, live=True,
+        outcome = discover(list(PRODUCTION_LANES), max_dispatches=1, live=True,
                            state_dir=self.data['queue_dir'], hydrate_only=True,
                            api=self.api, store=store, preparation_budget=self.args.engineering_budget)
         check(outcome['dispatched'] == [self.data['task_id']], f'Production hydration did not dispatch the waiting original: {outcome}')
@@ -506,7 +507,7 @@ class LiveRun:
         self.data['dispatch_id'] = state['dispatch_id']
         self.record('REAL_REPOSITORY_DISPATCH', 'PASS', dispatch_id=state['dispatch_id'], state_sha=sha)
         self.record('LIVE_QUEUE_RECOVERY', 'PASS', resumed_from_disk=True, dispatch_id=state['dispatch_id'])
-        replay = discover(['normal', 'founder'], max_dispatches=1, live=True,
+        replay = discover(list(PRODUCTION_LANES), max_dispatches=1, live=True,
                           state_dir=self.data['queue_dir'], hydrate_only=True, api=self.api, store=store)
         after, _ = store.read(self.data['task_id'])
         check(not replay['dispatched'] and after['dispatch_id'] == state['dispatch_id'],
@@ -1071,7 +1072,7 @@ class LiveRun:
             previous = {key: os.environ.get(key) for key in settings}
             os.environ.update(settings)
             try:
-                result = discover(['startup', 'founder', 'normal', 'programs'],
+                result = discover(list(PRODUCTION_LANES),
                     max_dispatches=0, live=True, state_dir=queue,
                     api=self.api, store=StateStore(self.api, self.control))
             finally:
