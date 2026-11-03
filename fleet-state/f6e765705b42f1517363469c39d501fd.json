@@ -1,1 +1,10 @@
-{"status":
+{
+  "task_id": "f6e765705b42f1517363469c39d501fd",
+  "repo": "isearchxsolve/oss-hunter-livefire",
+  "issue_number": 1,
+  "fault_fixture": true,
+  "status": "DISPATCHED",
+  "attempt": 0,
+  "dispatch_id": "5dc7327499834c048f9ea864d6a1fad2",
+  "updated_at": "2026-11-03T16:39:37.802465+00:00"
+}
