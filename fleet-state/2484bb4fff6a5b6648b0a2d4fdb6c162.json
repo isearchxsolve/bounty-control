@@ -1,0 +1,363 @@
+{
+  "task_id": "2484bb4fff6a5b6648b0a2d4fdb6c162",
+  "repo": "Spectral-Finance/lux",
+  "issue_number": 95,
+  "status": "DISPATCHING",
+  "dispatch_id": "51d1ae140e9b47a393030944ed4fe83a",
+  "admission": {
+    "funding": {
+      "amount": "500",
+      "currency": "USD",
+      "payer": "rparcus",
+      "source_url": "https://github.com/Spectral-Finance/lux/issues/95",
+      "usd_value": "500",
+      "quote": {
+        "basis": "USD face value",
+        "usd_rate": "1"
+      },
+      "raw": "Budget: $500",
+      "source_author_association": "COLLABORATOR",
+      "source_author_login": "rparcus"
+    },
+    "agent_reason": "Priced bounty posted by COLLABORATOR rparcus on Spectral-Finance/lux#95 (OpenRouter Integration). The issue body states \"Budget: $500\" verbatim, so funding.amount=500, currency=USD, payer=rparcus, source_url is the issue; $500 is above the $250 floor. The ask is bounded to one feature: implement an OpenRouter API client with multi-model support, model selection/routing, rate limiting and quotas, cost tracking and optimization, error handling and retries, documentation, and integration tests. This is an active Elixir/Phoenix repo that merges outside work. Code evidence: lux/lib/lux/llm/open_ai.ex is the product OpenAI LLM provider module that an OpenRouter integration would mirror, recorded at its current main-branch blob sha 4a343d84ff6992b0a03950e12aa98d5195ee80bd with a verbatim line quote.",
+    "scope_quote": "Implement integration with OpenRouter to provide access to a wide range of LLM models through a single unified API.",
+    "code_evidence": {
+      "path": "lux/lib/lux/llm/open_ai.ex",
+      "sha": "4a343d84ff6992b0a03950e12aa98d5195ee80bd",
+      "quote": "defmodule Lux.LLM.OpenAI do",
+      "is_product_code": true
+    },
+    "source_issue": "https://github.com/Spectral-Finance/lux/issues/95",
+    "funding_status": "PRICED_OFFER",
+    "lane": "bounty",
+    "task_id": "2484bb4fff6a5b6648b0a2d4fdb6c162",
+    "source_revision": "baadab1f720721ce95e95a750138a32e95700572d3ac2997abd5c8eddefc6f55"
+  },
+  "dispatch_attempt": 1,
+  "sovereign_admission": true,
+  "competition": {
+    "blocking": false,
+    "nominal": [
+      {
+        "pr": "https://github.com/Spectral-Finance/lux/pull/1077",
+        "author": "nepreby",
+        "number": 1077,
+        "author_merged_in_repo": 0,
+        "check_runs": 0,
+        "maintainer_engagement": 0,
+        "reason": "nominal_attempt_only"
+      },
+      {
+        "pr": "https://github.com/Spectral-Finance/lux/pull/1050",
+        "author": "zongsm-cmyk",
+        "number": 1050,
+        "author_merged_in_repo": 0,
+        "check_runs": 0,
+        "maintainer_engagement": 0,
+        "reason": "nominal_attempt_only"
+      },
+      {
+        "pr": "https://github.com/Spectral-Finance/lux/pull/1030",
+        "author": "milindchatrabhuji",
+        "number": 1030,
+        "author_merged_in_repo": 0,
+        "check_runs": 0,
+        "maintainer_engagement": 0,
+        "reason": "nominal_attempt_only"
+      },
+      {
+        "pr": "https://github.com/Spectral-Finance/lux/pull/1015",
+        "author": "lienhoatienphung-svg",
+        "number": 1015,
+        "author_merged_in_repo": 0,
+        "check_runs": 0,
+        "maintainer_engagement": 0,
+        "reason": "nominal_attempt_only"
+      },
+      {
+        "pr": "https://github.com/Spectral-Finance/lux/pull/942",
+        "author": "konor1743",
+        "number": 942,
+        "author_merged_in_repo": 0,
+        "check_runs": 0,
+        "maintainer_engagement": 0,
+        "reason": "nominal_attempt_only"
+      },
+      {
+        "pr": "https://github.com/Spectral-Finance/lux/pull/931",
+        "author": "elevasyncsolutions-jpg",
+        "number": 931,
+        "author_merged_in_repo": 0,
+        "check_runs": 0,
+        "maintainer_engagement": 0,
+        "reason": "nominal_attempt_only"
+      },
+      {
+        "pr": "https://github.com/Spectral-Finance/lux/pull/902",
+        "author": "chenlinxi890-spec",
+        "number": 902,
+        "author_merged_in_repo": 0,
+        "check_runs": 0,
+        "maintainer_engagement": 0,
+        "reason": "nominal_attempt_only"
+      },
+      {
+        "pr": "https://github.com/Spectral-Finance/lux/pull/860",
+        "author": "bwm0223",
+        "number": 860,
+        "author_merged_in_repo": 0,
+        "check_runs": 0,
+        "maintainer_engagement": 0,
+        "reason": "nominal_attempt_only"
+      },
+      {
+        "pr": "https://github.com/Spectral-Finance/lux/pull/748",
+        "author": "wangleei",
+        "number": 748,
+        "author_merged_in_repo": 0,
+        "check_runs": 0,
+        "maintainer_engagement": 0,
+        "reason": "nominal_attempt_only"
+      },
+      {
+        "pr": "https://github.com/Spectral-Finance/lux/pull/719",
+        "author": "yogeshkampalliwar",
+        "number": 719,
+        "author_merged_in_repo": 0,
+        "check_runs": 0,
+        "maintainer_engagement": 0,
+        "reason": "nominal_attempt_only"
+      },
+      {
+        "pr": "https://github.com/Spectral-Finance/lux/pull/716",
+        "author": "jamesji79",
+        "number": 716,
+        "author_merged_in_repo": 0,
+        "check_runs": 0,
+        "maintainer_engagement": 0,
+        "reason": "nominal_attempt_only"
+      },
+      {
+        "pr": "https://github.com/Spectral-Finance/lux/pull/657",
+        "author": "faisalnugroho",
+        "number": 657,
+        "author_merged_in_repo": 0,
+        "check_runs": 0,
+        "maintainer_engagement": 0,
+        "reason": "nominal_attempt_only"
+      },
+      {
+        "pr": "https://github.com/Spectral-Finance/lux/pull/636",
+        "author": "genesisrevelationinc-debug",
+        "number": 636,
+        "author_merged_in_repo": 0,
+        "check_runs": 0,
+        "maintainer_engagement": 0,
+        "reason": "nominal_attempt_only"
+      },
+      {
+        "pr": "https://github.com/Spectral-Finance/lux/pull/633",
+        "author": "jira44",
+        "number": 633,
+        "author_merged_in_repo": 0,
+        "check_runs": 0,
+        "maintainer_engagement": 0,
+        "reason": "nominal_attempt_only"
+      },
+      {
+        "pr": "https://github.com/Spectral-Finance/lux/pull/472",
+        "author": "daletyler1737",
+        "number": 472,
+        "author_merged_in_repo": 0,
+        "check_runs": 0,
+        "maintainer_engagement": 0,
+        "reason": "nominal_attempt_only"
+      },
+      {
+        "pr": "https://github.com/Spectral-Finance/lux/pull/427",
+        "author": "susuhome",
+        "number": 427,
+        "author_merged_in_repo": 0,
+        "check_runs": 0,
+        "maintainer_engagement": 0,
+        "reason": "nominal_attempt_only"
+      },
+      {
+        "pr": "https://github.com/Spectral-Finance/lux/pull/427",
+        "author": "susuhome",
+        "number": 427,
+        "author_merged_in_repo": 0,
+        "history_cached": true,
+        "check_runs": 0,
+        "maintainer_engagement": 0,
+        "reason": "nominal_attempt_only"
+      },
+      {
+        "pr": "https://github.com/Spectral-Finance/lux/pull/472",
+        "author": "daletyler1737",
+        "number": 472,
+        "author_merged_in_repo": 0,
+        "history_cached": true,
+        "check_runs": 0,
+        "maintainer_engagement": 0,
+        "reason": "nominal_attempt_only"
+      },
+      {
+        "pr": "https://github.com/Spectral-Finance/lux/pull/633",
+        "author": "jira44",
+        "number": 633,
+        "author_merged_in_repo": 0,
+        "history_cached": true,
+        "check_runs": 0,
+        "maintainer_engagement": 0,
+        "reason": "nominal_attempt_only"
+      },
+      {
+        "pr": "https://github.com/Spectral-Finance/lux/pull/636",
+        "author": "genesisrevelationinc-debug",
+        "number": 636,
+        "author_merged_in_repo": 0,
+        "history_cached": true,
+        "check_runs": 0,
+        "maintainer_engagement": 0,
+        "reason": "nominal_attempt_only"
+      },
+      {
+        "pr": "https://github.com/Spectral-Finance/lux/pull/657",
+        "author": "faisalnugroho",
+        "number": 657,
+        "author_merged_in_repo": 0,
+        "history_cached": true,
+        "check_runs": 0,
+        "maintainer_engagement": 0,
+        "reason": "nominal_attempt_only"
+      },
+      {
+        "pr": "https://github.com/Spectral-Finance/lux/pull/716",
+        "author": "jamesji79",
+        "number": 716,
+        "author_merged_in_repo": 0,
+        "history_cached": true,
+        "check_runs": 0,
+        "maintainer_engagement": 0,
+        "reason": "nominal_attempt_only"
+      },
+      {
+        "pr": "https://github.com/Spectral-Finance/lux/pull/719",
+        "author": "yogeshkampalliwar",
+        "number": 719,
+        "author_merged_in_repo": 0,
+        "history_cached": true,
+        "check_runs": 0,
+        "maintainer_engagement": 0,
+        "reason": "nominal_attempt_only"
+      },
+      {
+        "pr": "https://github.com/Spectral-Finance/lux/pull/748",
+        "author": "wangleei",
+        "number": 748,
+        "author_merged_in_repo": 0,
+        "history_cached": true,
+        "check_runs": 0,
+        "maintainer_engagement": 0,
+        "reason": "nominal_attempt_only"
+      },
+      {
+        "pr": "https://github.com/Spectral-Finance/lux/pull/860",
+        "author": "bwm0223",
+        "number": 860,
+        "author_merged_in_repo": 0,
+        "history_cached": true,
+        "check_runs": 0,
+        "maintainer_engagement": 0,
+        "reason": "nominal_attempt_only"
+      },
+      {
+        "pr": "https://github.com/Spectral-Finance/lux/pull/902",
+        "author": "chenlinxi890-spec",
+        "number": 902,
+        "author_merged_in_repo": 0,
+        "history_cached": true,
+        "check_runs": 0,
+        "maintainer_engagement": 0,
+        "reason": "nominal_attempt_only"
+      },
+      {
+        "pr": "https://github.com/Spectral-Finance/lux/pull/931",
+        "author": "elevasyncsolutions-jpg",
+        "number": 931,
+        "author_merged_in_repo": 0,
+        "history_cached": true,
+        "check_runs": 0,
+        "maintainer_engagement": 0,
+        "reason": "nominal_attempt_only"
+      },
+      {
+        "pr": "https://github.com/Spectral-Finance/lux/pull/930",
+        "author": "elevasyncsolutions-jpg",
+        "number": 930,
+        "author_merged_in_repo": 0,
+        "history_cached": true,
+        "check_runs": 0,
+        "maintainer_engagement": 0,
+        "reason": "nominal_attempt_only"
+      },
+      {
+        "pr": "https://github.com/Spectral-Finance/lux/pull/942",
+        "author": "konor1743",
+        "number": 942,
+        "author_merged_in_repo": 0,
+        "history_cached": true,
+        "check_runs": 0,
+        "maintainer_engagement": 0,
+        "reason": "nominal_attempt_only"
+      },
+      {
+        "pr": "https://github.com/Spectral-Finance/lux/pull/1015",
+        "author": "lienhoatienphung-svg",
+        "number": 1015,
+        "author_merged_in_repo": 0,
+        "history_cached": true,
+        "check_runs": 0,
+        "maintainer_engagement": 0,
+        "reason": "nominal_attempt_only"
+      },
+      {
+        "pr": "https://github.com/Spectral-Finance/lux/pull/1030",
+        "author": "milindchatrabhuji",
+        "number": 1030,
+        "author_merged_in_repo": 0,
+        "history_cached": true,
+        "check_runs": 0,
+        "maintainer_engagement": 0,
+        "reason": "nominal_attempt_only"
+      },
+      {
+        "pr": "https://github.com/Spectral-Finance/lux/pull/1050",
+        "author": "zongsm-cmyk",
+        "number": 1050,
+        "author_merged_in_repo": 0,
+        "history_cached": true,
+        "check_runs": 0,
+        "maintainer_engagement": 0,
+        "reason": "nominal_attempt_only"
+      },
+      {
+        "pr": "https://github.com/Spectral-Finance/lux/pull/1077",
+        "author": "nepreby",
+        "number": 1077,
+        "author_merged_in_repo": 0,
+        "history_cached": true,
+        "check_runs": 0,
+        "maintainer_engagement": 0,
+        "reason": "nominal_attempt_only"
+      }
+    ]
+  },
+  "lanes": [
+    "normal"
+  ],
+  "dispatched_at": "2026-11-03T07:45:58.017549+00:00",
+  "attempt": 0,
+  "updated_at": "2026-11-03T07:45:58.017570+00:00"
+}
