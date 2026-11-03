@@ -1,0 +1,47 @@
+{
+  "task_id": "27414e5464bdf69a8094963cdd6ed86f",
+  "repo": "atyrode/manifold",
+  "issue_number": 1084,
+  "status": "DISPATCHING",
+  "dispatch_id": "f6c0bfc29c534392aa7911461330e182",
+  "admission": {
+    "funding": {
+      "payer": "atyrode",
+      "source_url": "https://github.com/atyrode/manifold/issues/1084",
+      "amount": "0",
+      "currency": "FOUNDER",
+      "usd_value": "0",
+      "quote": {
+        "basis": "Unpriced repository-owner request"
+      },
+      "raw": "Enabled native instance services do not come back after their owner host reboots. They stay `unavailable` with reason `cancelled` until someone disables and re-enables them.",
+      "source_author_association": "OWNER",
+      "source_author_login": "atyrode"
+    },
+    "agent_reason": "OWNER-authored production outage (enabled instance services do not recover after owner host reboot; pinned `cancelled`). Bounded single-defect change in packages/server/src/job-service.ts: add the host-shutdown `cancelled` reason to `readmittableCancellations` so `ensureInstanceService` readmits enabled services. Manifold is an active TypeScript repo that merges work (merged PRs present). No open PR references #1084. Unpriced founder wound: payer=atyrode, source_url=issue html_url.",
+    "scope_quote": "`readmittableCancellations` covers `requested`, `plugin_held`, `installation_changed`, `plugin_disabled`, `owner_fenced` and `owner_restart_effects_unknown`, but not the `cancelled` result",
+    "code_evidence": {
+      "path": "packages/server/src/job-service.ts",
+      "sha": "e28380fd1506239cf15491297322abe452c99b71",
+      "quote": "owner_restart_effects_unknown: true,",
+      "is_product_code": true
+    },
+    "source_issue": "https://github.com/atyrode/manifold/issues/1084",
+    "funding_status": "UNPRICED_OWNER_REQUEST",
+    "lane": "founder",
+    "task_id": "27414e5464bdf69a8094963cdd6ed86f",
+    "source_revision": "407b283cd529f949a3a96ea13ee40f250a95ac34274c90680a142c132ce4ffab"
+  },
+  "dispatch_attempt": 1,
+  "sovereign_admission": true,
+  "competition": {
+    "blocking": false,
+    "nominal": []
+  },
+  "lanes": [
+    "founder"
+  ],
+  "dispatched_at": "2026-11-03T14:53:38.553274+00:00",
+  "attempt": 0,
+  "updated_at": "2026-11-03T14:53:38.553290+00:00"
+}
