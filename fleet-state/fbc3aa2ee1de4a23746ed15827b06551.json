@@ -2,7 +2,7 @@
   "task_id": "fbc3aa2ee1de4a23746ed15827b06551",
   "repo": "coneyproductions/vms",
   "issue_number": 91,
-  "status": "DISPATCHING",
+  "status": "DISPATCHED",
   "dispatch_id": "2e8f7eea3eaf4469adf5a5b82989a1b6",
   "admission": {
     "funding": {
@@ -43,7 +43,7 @@
   ],
   "dispatched_at": "2026-11-03T05:06:32.925350+00:00",
   "attempt": 2,
-  "updated_at": "2026-11-03T05:06:32.925366+00:00",
+  "updated_at": "2026-11-03T05:06:37.344627+00:00",
   "owner": "41574750258:1",
   "previous_owner": "41572134967:1",
   "previous_status": "DISPATCHED",
