@@ -2,7 +2,7 @@
   "task_id": "efdeb69a2b98c3043171bcdf2019482c",
   "repo": "gewenbo888/ai-for-money",
   "issue_number": 1,
-  "status": "DISPATCHED",
+  "status": "CLAIMED",
   "dispatch_id": "86d1406c89ff483fb5b5804e7c15f4f0",
   "admission": {
     "funding": {
@@ -82,6 +82,14 @@
     "founder"
   ],
   "dispatched_at": "2026-11-03T10:11:13.047524+00:00",
-  "attempt": 0,
-  "updated_at": "2026-11-03T10:11:14.777762+00:00"
+  "attempt": 1,
+  "updated_at": "2026-11-03T10:11:34.662317+00:00",
+  "owner": "41617145350:1",
+  "previous_owner": null,
+  "previous_status": "DISPATCHED",
+  "run_url": "https://github.com/isearchxsolve/bounty-control/actions/runs/41617145350",
+  "harness_sha": "6267827e87ba4d1db2397a219b2f8c1a5c60d062",
+  "claimed_at": "2026-11-03T10:11:34.662245+00:00",
+  "lease_expires_at": "2026-11-03T14:16:34.662259+00:00",
+  "preparation_budget_seconds": 14400
 }
