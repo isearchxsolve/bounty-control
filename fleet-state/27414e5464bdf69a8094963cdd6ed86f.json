@@ -2,7 +2,7 @@
   "task_id": "27414e5464bdf69a8094963cdd6ed86f",
   "repo": "atyrode/manifold",
   "issue_number": 1084,
-  "status": "CLAIMED",
+  "status": "FAILED_ENGINEER",
   "dispatch_id": "f6c0bfc29c534392aa7911461330e182",
   "admission": {
     "funding": {
@@ -43,7 +43,7 @@
   ],
   "dispatched_at": "2026-11-03T14:53:38.553274+00:00",
   "attempt": 1,
-  "updated_at": "2026-11-03T14:53:53.307184+00:00",
+  "updated_at": "2026-11-03T15:48:11.206344+00:00",
   "owner": "41658212601:1",
   "previous_owner": null,
   "previous_status": "DISPATCHED",
@@ -51,5 +51,20 @@
   "harness_sha": "726e59d5e2e595828f2be0d05a6e2245efcc091f",
   "claimed_at": "2026-11-03T14:53:53.307138+00:00",
   "lease_expires_at": "2026-11-03T18:58:53.307151+00:00",
-  "preparation_budget_seconds": 14400
+  "preparation_budget_seconds": 14400,
+  "kind": "engineer",
+  "retryable": true,
+  "diagnostic": "Bounded Cline delivery repair exhausted: Iteration exhausted after 1 turns without green. Last reported failure:\nTest failure in turn 1: bun test packages/server/test/job-service.test.ts -t owner-cancelled instance service is readmitted after clean host shutdown and reattach\n\n::group::packages/server/test/job-service.test.ts:\n\n::endgroup::\n\nerror: regex \"owner-cancelled instance service is readmitted after clean host shutdown and reattach\" matched 0 tests. Searched 1 file (skipping 201 tests) [362.00ms]",
+  "at": "2026-11-03T15:47:58.560933+00:00",
+  "failures": [
+    {
+      "run_url": "https://github.com/isearchxsolve/bounty-control/actions/runs/41658212601",
+      "status": "FAILED_ENGINEER",
+      "kind": "engineer",
+      "retryable": true,
+      "diagnostic": "Bounded Cline delivery repair exhausted: Iteration exhausted after 1 turns without green. Last reported failure:\nTest failure in turn 1: bun test packages/server/test/job-service.test.ts -t owner-cancelled instance service is readmitted after clean host shutdown and reattach\n\n::group::packages/server/test/job-service.test.ts:\n\n::endgroup::\n\nerror: regex \"owner-cancelled instance service is readmitted after clean host shutdown and reattach\" matched 0 tests. Searched 1 file (skipping 201 tests) [362.00ms]",
+      "at": "2026-11-03T15:47:58.560933+00:00"
+    }
+  ],
+  "finished_at": "2026-11-03T15:48:10.552965+00:00"
 }
