@@ -34,7 +34,8 @@ import actions_dispatch as dispatch  # noqa: E402
 import actions_reconcile as reconcile_mod  # noqa: E402
 from actions_github import GitHub, StateStore, task_id  # noqa: E402
 from actions_reconcile import reconcile  # noqa: E402
-from pipeline_evidence import bind_proof  # noqa: E402
+from pipeline_evidence import bind_proof, require_evidence, source_revision  # noqa: E402
+from pipeline_lineage import assert_gate_refuses, assert_lineage_preserved  # noqa: E402
 
 REPO = "acme/http"
 NUMBER = 7
@@ -286,6 +287,74 @@ class FullPipelineWalkTests(unittest.TestCase):
                          "ENGINEERING is now written -- add it to the declared chain")
         self.assertNotIn('"status": "ENGINEERING"', writers,
                          "ENGINEERING is now written -- add it to the declared chain")
+
+    # --- receipt lineage: one row, every hop, nothing rewritten ------------------------------
+
+    def expected_lineage(self, bound):
+        """The facts the hop that admitted this task fixed, and no later hop may change."""
+        return {"task_id": self.identity, "repo": REPO, "issue_number": NUMBER,
+                "proof_task_id": bound["task_id"],
+                "source_revision": bound["source_revision"]}
+
+    def test_every_hop_preserves_the_task_identity_and_source_revision(self):
+        """Dispatch to DELIVERED on one row, re-reading the receipt after every hop."""
+        bound = proof()
+        expected = self.expected_lineage(bound)
+        dispatch.dispatch(self.api, self.store, context(), bound, ["bounty"],
+                          competition=competition())
+        assert_lineage_preserved(self, self.store.read(self.identity)[0], expected, "dispatch")
+
+        record = self.store.read(self.identity)[0]
+        self.store.claim(REPO, NUMBER, OWNER, "https://example.invalid/run", HEAD,
+                         dispatch_id=record["dispatch_id"])
+        assert_lineage_preserved(self, self.store.read(self.identity)[0], expected, "claim")
+
+        for status in ("VERIFIED", "PUBLISHING", "PUBLISHED_PENDING_CHECKS"):
+            self.store.owned_update(self.identity, OWNER, status=status,
+                                    pr_number=1, head_sha=HEAD)
+            assert_lineage_preserved(self, self.store.read(self.identity)[0], expected,
+                                     status.lower())
+
+        reconcile(repair=False, api=self.api, store=self.store)
+        assert_lineage_preserved(self, self.store.read(self.identity)[0], expected,
+                                 "awaiting_review")
+        self.api.merged, self.api.pr_state = True, "closed"
+        reconcile(repair=False, api=self.api, store=self.store)
+
+        final = self.store.read(self.identity)[0]
+        carried = assert_lineage_preserved(self, final, expected, "terminal")
+        self.assertEqual(final["status"], "DELIVERED")
+        self.assertEqual(carried["source_revision"], source_revision(context()),
+                         "the delivered row is bound to bytes the walk never admitted")
+        self.assertEqual(carried["code_sha"], None,
+                         "this walk binds no code revision; a value appearing here would mean "
+                         "some hop invented one")
+
+    def test_a_hop_that_rewrites_the_proof_cannot_advance(self):
+        """A durable replay that rewrites the bound proof is refused by the gate on read."""
+        bound = proof()
+        dispatch.dispatch(self.api, self.store, context(), bound, ["bounty"],
+                          competition=competition())
+        record = self.store.read(self.identity)[0]
+        self.store.claim(REPO, NUMBER, OWNER, "https://example.invalid/run", HEAD,
+                         dispatch_id=record["dispatch_id"])
+
+        tampered = self.store.mutate(self.identity, lambda row: {
+            **row, "admission": {**row["admission"], "source_revision": "c" * 64}})
+        assert_gate_refuses(self, tampered, context(), "source changed")
+
+        tampered = self.store.mutate(self.identity, lambda row: {
+            **row, "admission": {**row["admission"], "task_id": "e" * 32}})
+        assert_gate_refuses(self, tampered, context(), "task identity mismatch")
+
+        # Positive control: the untouched proof is admitted again, so both refusals were about
+        # the rewrite rather than about the gate refusing this task.
+        self.store.mutate(self.identity, lambda row: {**row, "admission": record["admission"]})
+        proof_back, competition_back = require_evidence(self.store.read(self.identity)[0],
+                                                        context())
+        self.assertEqual(proof_back["task_id"], self.identity)
+        self.assertEqual(proof_back["source_revision"], bound["source_revision"])
+        self.assertIs(competition_back["blocking"], False)
 
 
 if __name__ == "__main__":

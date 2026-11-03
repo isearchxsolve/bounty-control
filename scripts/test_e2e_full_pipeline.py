@@ -32,6 +32,8 @@ import cline_entry_door as door  # noqa: E402
 from actions_github import GitHub, StateStore, task_id  # noqa: E402
 from actions_reconcile import reconcile  # noqa: E402
 from pipeline_evidence import require_evidence, source_revision  # noqa: E402
+from pipeline_lineage import (assert_gate_refuses, assert_lineage_preserved,  # noqa: E402
+                              lineage)
 
 REPO = "acme/http"
 NUMBER = 7
@@ -178,12 +180,20 @@ class FullPipelineReceiptWalk(unittest.TestCase):
             funding_usd=admitted["admission"]["funding"]["amount"],
             code_sha=admitted["admission"]["code_evidence"]["sha"])
 
+        # The lineage every later hop must still carry, taken from the door's own verdict
+        # rather than rebuilt from the constants above: a door that bound the wrong revision
+        # has to fail here instead of being quietly repaired by the test.
+        self.expected = {"task_id": self.identity, "repo": REPO, "issue_number": NUMBER,
+                         "proof_task_id": admitted["admission"]["task_id"],
+                         "source_revision": admitted["admission"]["source_revision"]}
+
         # --- hop 2: the dispatcher stamps and reserves it --------------------------------
         dispatch.dispatch(self.api, self.store, context(), admitted["admission"],
                          [admitted["source_lane"]],
                          sovereign_admission=admitted["sovereign_admission"],
                          competition=admitted["competition"])
         state = self.store.read(self.identity)[0]
+        assert_lineage_preserved(self, state, self.expected, "dispatch")
         dispatch_receipt = self.receipt(
             "dispatch", status=state["status"], dispatch_id=state["dispatch_id"],
             sovereign=state["sovereign_admission"],
@@ -196,6 +206,7 @@ class FullPipelineReceiptWalk(unittest.TestCase):
         with self.assertRaises(ValueError):
             self.store.claim(REPO, NUMBER, OWNER, RUN_URL, HEAD,
                              dispatch_id="stale-generation")
+        assert_lineage_preserved(self, self.store.read(self.identity)[0], self.expected, "claim")
         proof, competition = require_evidence(self.store.read(self.identity)[0], context())
         self.receipt("claim", owner=OWNER, head_sha=HEAD,
                      dispatch_id=claimed["dispatch_id"],
@@ -205,6 +216,8 @@ class FullPipelineReceiptWalk(unittest.TestCase):
         # --- hop 4: engineering verifies, and the delivery side records it ---------------
         self.store.owned_update(self.identity, OWNER, status="VERIFIED",
                                 head_sha=HEAD, proposed_head=HEAD)
+        assert_lineage_preserved(self, self.store.read(self.identity)[0], self.expected,
+                                 "engineering")
         self.receipt("engineering", status=self.store.read(self.identity)[0]["status"],
                      head_sha=HEAD)
 
@@ -213,12 +226,14 @@ class FullPipelineReceiptWalk(unittest.TestCase):
         self.store.owned_update(self.identity, OWNER, status="PUBLISHED_PENDING_CHECKS",
                                 pr_number=1, pr_url="https://example.invalid/pr/1",
                                 head_sha=HEAD)
+        assert_lineage_preserved(self, self.store.read(self.identity)[0], self.expected, "publish")
         self.receipt("publish", status=self.store.read(self.identity)[0]["status"],
                      pr_number=1, head_sha=HEAD)
 
         # --- hop 6: reconcile observes the green PR -------------------------------------
         reconcile(repair=False, api=self.api, store=self.store)
         observed = self.store.read(self.identity)[0]
+        assert_lineage_preserved(self, observed, self.expected, "reconcile")
         self.receipt("reconcile", status=observed["status"],
                      observed_head_sha=observed["remote_verification"]["head_sha"],
                      observed_state=observed["remote_verification"]["state"],
@@ -236,6 +251,8 @@ class FullPipelineReceiptWalk(unittest.TestCase):
         self.store.owned_update(self.identity, OWNER, status="VERIFIED", head_sha=HEAD)
         self.store.owned_update(self.identity, OWNER, status="PUBLISHED_PENDING_CHECKS",
                                 pr_number=1, head_sha=HEAD)
+        assert_lineage_preserved(self, self.store.read(self.identity)[0], self.expected,
+                                 "reclaim_and_repair")
         self.receipt("reclaim_and_repair",
                      status=self.store.read(self.identity)[0]["status"], head_sha=HEAD)
 
@@ -248,8 +265,10 @@ class FullPipelineReceiptWalk(unittest.TestCase):
         self.api.pr_merged = True
         reconcile(repair=False, api=self.api, store=self.store)
         final = self.store.read(self.identity)[0]
+        assert_lineage_preserved(self, final, self.expected, "terminal")
         self.receipt("terminal", status=final["status"], merged_at=final["merged_at"],
-                     payment_status=final["payment_status"])
+                     payment_status=final["payment_status"],
+                     proof_source_revision=lineage(final)["source_revision"])
         return door_receipt, dispatch_receipt, final
 
     def test_one_row_travels_the_whole_pipeline(self):
@@ -302,6 +321,60 @@ class FullPipelineReceiptWalk(unittest.TestCase):
         self.walk()
         self.assertNotIn("FAILED", " ".join(str(r.get("status", "")) for r in self.receipts),
                          "a receipt in this walk recorded a failure")
+
+
+    # --- receipt lineage: identity and source revision may never be rewritten -----------------
+
+    def admit_and_dispatch(self):
+        """The first two hops only: enough to hold a bound proof in the durable row."""
+        verdict = run_door([candidate()], self.api)
+        self.assertEqual(verdict["refused"], [])
+        admitted = verdict["admitted"][0]
+        dispatch.dispatch(self.api, self.store, context(), admitted["admission"],
+                          [admitted["source_lane"]],
+                          sovereign_admission=admitted["sovereign_admission"],
+                          competition=admitted["competition"])
+        return admitted, self.store.read(self.identity)[0]
+
+    def test_every_hop_carried_the_same_task_and_source_revision(self):
+        """The walk's own per-hop checks, asserted once more on the row that ends the chain."""
+        self.walk()
+        final = self.store.read(self.identity)[0]
+        carried = assert_lineage_preserved(self, final, self.expected, "terminal")
+        self.assertEqual(carried["proof_task_id"], self.identity)
+        self.assertEqual(carried["source_revision"], source_revision(context()),
+                         "the delivered row is not bound to the issue bytes it was admitted on")
+        terminal = self.receipts[-1]
+        self.assertEqual(terminal["proof_source_revision"], self.expected["source_revision"],
+                         "the terminal receipt lost the source revision it inherited")
+
+    def test_a_transition_that_mutates_the_source_revision_cannot_advance(self):
+        """A row rewritten after dispatch is refused by the gate the next hop calls."""
+        admitted, state = self.admit_and_dispatch()
+        bound = state["admission"]["source_revision"]
+        tampered = self.store.mutate(self.identity, lambda row: {
+            **row, "admission": {**row["admission"], "source_revision": "b" * 64}})
+        self.assertEqual(tampered["admission"]["source_revision"], "b" * 64,
+                         "the store accepted the rewrite; only the gate can refuse it")
+        assert_gate_refuses(self, tampered, context(), "source changed")
+        # Positive control: the real admission is admitted again, so the refusal above was
+        # about the rewritten revision and not about the gate refusing this task.
+        self.store.mutate(self.identity, lambda row: {**row, "admission": admitted["admission"]})
+        proof, _ = require_evidence(self.store.read(self.identity)[0], context())
+        self.assertEqual(proof["source_revision"], bound)
+
+    def test_a_transition_that_mutates_the_task_identity_cannot_advance(self):
+        """A proof re-pointed at another task is refused, and the row key does not hide it."""
+        admitted, _ = self.admit_and_dispatch()
+        tampered = self.store.mutate(self.identity, lambda row: {
+            **row, "admission": {**row["admission"], "task_id": "f" * 32}})
+        self.assertEqual(tampered["task_id"], self.identity,
+                         "the durable row is keyed by the real identity")
+        self.assertEqual(lineage(tampered)["proof_task_id"], "f" * 32)
+        assert_gate_refuses(self, tampered, context(), "task identity mismatch")
+        self.store.mutate(self.identity, lambda row: {**row, "admission": admitted["admission"]})
+        proof, _ = require_evidence(self.store.read(self.identity)[0], context())
+        self.assertEqual(proof["task_id"], self.identity)
 
 
 if __name__ == "__main__":
