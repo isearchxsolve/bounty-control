@@ -1,0 +1,296 @@
+{
+  "task_id": "6707a6e7469f90f3787e4fb665c0dff3",
+  "repo": "getdozer/dozer",
+  "issue_number": 1690,
+  "status": "DISPATCHING",
+  "dispatch_id": "246b422267554d968d072e775e77d716",
+  "admission": {
+    "funding": {
+      "amount": "250",
+      "currency": "USD",
+      "payer": "algora-pbc[bot]",
+      "source_url": "https://github.com/getdozer/dozer/issues/1690#issuecomment-1611491232",
+      "usd_value": "250",
+      "quote": {
+        "basis": "USD face value",
+        "usd_rate": "1"
+      },
+      "raw": "$250 bounty [\u2022 Dozer Data](https://algora.io/getdozer)",
+      "source_author_association": "NONE",
+      "source_author_login": "algora-pbc[bot]"
+    },
+    "agent_reason": "algora-pbc[bot] announced a live $250 bounty on dozer issue #1690 (build an LLM/Langchain sample); no competing open-PR author has merged work in dozer.",
+    "scope_quote": "Based on this article, a complete working sample must be produced.",
+    "code_evidence": {
+      "is_product_code": true,
+      "path": "dozer-core/src/lib.rs",
+      "sha": "33f8663d9a94c33fc4a9844b23494bc10c91cb05",
+      "quote": "pub mod app;"
+    },
+    "source_issue": "https://github.com/getdozer/dozer/issues/1690",
+    "funding_status": "PRICED_OFFER",
+    "lane": "programs",
+    "task_id": "6707a6e7469f90f3787e4fb665c0dff3",
+    "source_revision": "1c13297bee3490d122e0ce1140dfc3e8694d7684265c63ebcf350f96ad417773"
+  },
+  "dispatch_attempt": 1,
+  "sovereign_admission": true,
+  "competition": {
+    "blocking": false,
+    "nominal": [
+      {
+        "pr": "https://github.com/getdozer/dozer/pull/2539",
+        "author": "goddrivenbullet",
+        "number": 2539,
+        "author_merged_in_repo": 0,
+        "check_runs": 0,
+        "maintainer_engagement": 0,
+        "reason": "nominal_attempt_only"
+      },
+      {
+        "pr": "https://github.com/getdozer/dozer/pull/2536",
+        "author": "zeda0104",
+        "number": 2536,
+        "author_merged_in_repo": 0,
+        "check_runs": 0,
+        "maintainer_engagement": 0,
+        "reason": "nominal_attempt_only"
+      },
+      {
+        "pr": "https://github.com/getdozer/dozer/pull/2535",
+        "author": "huynhnhatquandongnai-source",
+        "number": 2535,
+        "author_merged_in_repo": 0,
+        "check_runs": 0,
+        "maintainer_engagement": 0,
+        "reason": "nominal_attempt_only"
+      },
+      {
+        "pr": "https://github.com/getdozer/dozer/pull/2534",
+        "author": "adamscarmccoy-boop",
+        "number": 2534,
+        "author_merged_in_repo": 0,
+        "check_runs": 0,
+        "maintainer_engagement": 0,
+        "reason": "nominal_attempt_only"
+      },
+      {
+        "pr": "https://github.com/getdozer/dozer/pull/2533",
+        "author": "open5588",
+        "number": 2533,
+        "author_merged_in_repo": 0,
+        "check_runs": 0,
+        "maintainer_engagement": 0,
+        "reason": "nominal_attempt_only"
+      },
+      {
+        "pr": "https://github.com/getdozer/dozer/pull/2528",
+        "author": "ollie520",
+        "number": 2528,
+        "author_merged_in_repo": 0,
+        "check_runs": 0,
+        "maintainer_engagement": 0,
+        "reason": "nominal_attempt_only"
+      },
+      {
+        "pr": "https://github.com/getdozer/dozer/pull/2527",
+        "author": "indra112f",
+        "number": 2527,
+        "author_merged_in_repo": 0,
+        "check_runs": 0,
+        "maintainer_engagement": 0,
+        "reason": "nominal_attempt_only"
+      },
+      {
+        "pr": "https://github.com/getdozer/dozer/pull/2525",
+        "author": "callumjb125",
+        "number": 2525,
+        "author_merged_in_repo": 0,
+        "check_runs": 0,
+        "maintainer_engagement": 0,
+        "reason": "nominal_attempt_only"
+      },
+      {
+        "pr": "https://github.com/getdozer/dozer/pull/2519",
+        "author": "book051193-hash",
+        "number": 2519,
+        "author_merged_in_repo": 0,
+        "check_runs": 0,
+        "maintainer_engagement": 0,
+        "reason": "nominal_attempt_only"
+      },
+      {
+        "pr": "https://github.com/getdozer/dozer/pull/2516",
+        "author": "iprasen",
+        "number": 2516,
+        "author_merged_in_repo": 0,
+        "check_runs": 0,
+        "maintainer_engagement": 0,
+        "reason": "nominal_attempt_only"
+      },
+      {
+        "pr": "https://github.com/getdozer/dozer/pull/2511",
+        "author": "plurzs01",
+        "number": 2511,
+        "author_merged_in_repo": 0,
+        "check_runs": 0,
+        "maintainer_engagement": 0,
+        "reason": "nominal_attempt_only"
+      },
+      {
+        "pr": "https://github.com/getdozer/dozer/pull/2508",
+        "author": "wanieldd",
+        "number": 2508,
+        "author_merged_in_repo": 0,
+        "check_runs": 0,
+        "maintainer_engagement": 0,
+        "reason": "nominal_attempt_only"
+      },
+      {
+        "pr": "https://github.com/getdozer/dozer/pull/2492",
+        "author": "shaowei6",
+        "number": 2492,
+        "author_merged_in_repo": 0,
+        "check_runs": 0,
+        "maintainer_engagement": 0,
+        "reason": "nominal_attempt_only"
+      },
+      {
+        "pr": "https://github.com/getdozer/dozer/pull/2492",
+        "author": "shaowei6",
+        "number": 2492,
+        "author_merged_in_repo": 0,
+        "history_cached": true,
+        "check_runs": 0,
+        "maintainer_engagement": 0,
+        "reason": "nominal_attempt_only"
+      },
+      {
+        "pr": "https://github.com/getdozer/dozer/pull/2508",
+        "author": "wanieldd",
+        "number": 2508,
+        "author_merged_in_repo": 0,
+        "history_cached": true,
+        "check_runs": 0,
+        "maintainer_engagement": 0,
+        "reason": "nominal_attempt_only"
+      },
+      {
+        "pr": "https://github.com/getdozer/dozer/pull/2511",
+        "author": "plurzs01",
+        "number": 2511,
+        "author_merged_in_repo": 0,
+        "history_cached": true,
+        "check_runs": 0,
+        "maintainer_engagement": 0,
+        "reason": "nominal_attempt_only"
+      },
+      {
+        "pr": "https://github.com/getdozer/dozer/pull/2516",
+        "author": "iprasen",
+        "number": 2516,
+        "author_merged_in_repo": 0,
+        "history_cached": true,
+        "check_runs": 0,
+        "maintainer_engagement": 0,
+        "reason": "nominal_attempt_only"
+      },
+      {
+        "pr": "https://github.com/getdozer/dozer/pull/2519",
+        "author": "book051193-hash",
+        "number": 2519,
+        "author_merged_in_repo": 0,
+        "history_cached": true,
+        "check_runs": 0,
+        "maintainer_engagement": 0,
+        "reason": "nominal_attempt_only"
+      },
+      {
+        "pr": "https://github.com/getdozer/dozer/pull/2525",
+        "author": "callumjb125",
+        "number": 2525,
+        "author_merged_in_repo": 0,
+        "history_cached": true,
+        "check_runs": 0,
+        "maintainer_engagement": 0,
+        "reason": "nominal_attempt_only"
+      },
+      {
+        "pr": "https://github.com/getdozer/dozer/pull/2527",
+        "author": "indra112f",
+        "number": 2527,
+        "author_merged_in_repo": 0,
+        "history_cached": true,
+        "check_runs": 0,
+        "maintainer_engagement": 0,
+        "reason": "nominal_attempt_only"
+      },
+      {
+        "pr": "https://github.com/getdozer/dozer/pull/2528",
+        "author": "ollie520",
+        "number": 2528,
+        "author_merged_in_repo": 0,
+        "history_cached": true,
+        "check_runs": 0,
+        "maintainer_engagement": 0,
+        "reason": "nominal_attempt_only"
+      },
+      {
+        "pr": "https://github.com/getdozer/dozer/pull/2533",
+        "author": "open5588",
+        "number": 2533,
+        "author_merged_in_repo": 0,
+        "history_cached": true,
+        "check_runs": 0,
+        "maintainer_engagement": 0,
+        "reason": "nominal_attempt_only"
+      },
+      {
+        "pr": "https://github.com/getdozer/dozer/pull/2534",
+        "author": "adamscarmccoy-boop",
+        "number": 2534,
+        "author_merged_in_repo": 0,
+        "history_cached": true,
+        "check_runs": 0,
+        "maintainer_engagement": 0,
+        "reason": "nominal_attempt_only"
+      },
+      {
+        "pr": "https://github.com/getdozer/dozer/pull/2535",
+        "author": "huynhnhatquandongnai-source",
+        "number": 2535,
+        "author_merged_in_repo": 0,
+        "history_cached": true,
+        "check_runs": 0,
+        "maintainer_engagement": 0,
+        "reason": "nominal_attempt_only"
+      },
+      {
+        "pr": "https://github.com/getdozer/dozer/pull/2536",
+        "author": "zeda0104",
+        "number": 2536,
+        "author_merged_in_repo": 0,
+        "history_cached": true,
+        "check_runs": 0,
+        "maintainer_engagement": 0,
+        "reason": "nominal_attempt_only"
+      },
+      {
+        "pr": "https://github.com/getdozer/dozer/pull/2539",
+        "author": "goddrivenbullet",
+        "number": 2539,
+        "author_merged_in_repo": 0,
+        "history_cached": true,
+        "check_runs": 0,
+        "maintainer_engagement": 0,
+        "reason": "nominal_attempt_only"
+      }
+    ]
+  },
+  "lanes": [
+    "normal"
+  ],
+  "dispatched_at": "2026-11-03T18:33:38.125601+00:00",
+  "attempt": 0,
+  "updated_at": "2026-11-03T18:33:38.125619+00:00"
+}
