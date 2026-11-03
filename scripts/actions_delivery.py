@@ -648,6 +648,7 @@ def engineer():
                 "https://github.com/" + repo):
             raise ValueError("Unexpected upstream remote")
         plan = prepared["plan"]
+        repair_feedback = None
         for attempt in range(3):
             try:
                 validate_plan_contract(plan, prepared.get("report_path"))
@@ -656,10 +657,14 @@ def engineer():
                 if attempt == 2:
                     raise
                 repaired, candidate, repair_error = worker.cline_supervise_delivery_phase(
-                    root, repo, number, 'preparation', str(exc), plan)
+                    root, repo, number, 'preparation', repair_feedback or str(exc), plan)
                 if not repaired:
-                    raise PreparationContractViolation(prepared.get('report_path'), repair_error) from exc
+                    if attempt == 1:
+                        raise PreparationContractViolation(prepared.get('report_path'), repair_error) from exc
+                    repair_feedback = repair_error
+                    continue
                 plan = candidate
+                repair_feedback = None
         prepared['plan'] = plan
         write_json(artifacts() / 'prepared-state.json', {**prepared, 'plan': asdict(plan)})
         # Admission judgment belongs to the entry door. Execute Cline's native
