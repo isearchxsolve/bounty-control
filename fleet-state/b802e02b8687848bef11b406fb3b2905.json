@@ -2,7 +2,7 @@
   "task_id": "b802e02b8687848bef11b406fb3b2905",
   "repo": "DimitarGeorgievski/patuvaj-notes",
   "issue_number": 13,
-  "status": "CLAIMED",
+  "status": "FAILED_ENGINEER",
   "dispatch_id": "946f3a2a564f41a8a7b6aa2519d8a7f0",
   "admission": {
     "funding": {
@@ -43,7 +43,7 @@
   ],
   "dispatched_at": "2026-11-03T05:06:21.653508+00:00",
   "attempt": 2,
-  "updated_at": "2026-11-03T05:06:34.856952+00:00",
+  "updated_at": "2026-11-03T05:09:38.321692+00:00",
   "owner": "41581930854:1",
   "previous_owner": "41577249045:1",
   "previous_status": "DISPATCHED",
@@ -54,8 +54,8 @@
   "preparation_budget_seconds": 14400,
   "kind": "engineer",
   "retryable": true,
-  "diagnostic": "Repository tree changed before engineering: code/__pycache__/booking.cpython-312.pyc",
-  "at": "2026-11-03T04:28:01.458907+00:00",
+  "diagnostic": "Provisioning mutated the untouched source baseline: code/__pycache__/booking.cpython-312.pyc, code/__pycache__/test_booking.cpython-312-pytest-9.2.0.pyc",
+  "at": "2026-11-03T05:09:28.476886+00:00",
   "failures": [
     {
       "run_url": "https://github.com/isearchxsolve/bounty-control/actions/runs/41577249045",
@@ -64,7 +64,15 @@
       "retryable": true,
       "diagnostic": "Repository tree changed before engineering: code/__pycache__/booking.cpython-312.pyc",
       "at": "2026-11-03T04:28:01.458907+00:00"
+    },
+    {
+      "run_url": "https://github.com/isearchxsolve/bounty-control/actions/runs/41581930854",
+      "status": "FAILED_ENGINEER",
+      "kind": "engineer",
+      "retryable": true,
+      "diagnostic": "Provisioning mutated the untouched source baseline: code/__pycache__/booking.cpython-312.pyc, code/__pycache__/test_booking.cpython-312-pytest-9.2.0.pyc",
+      "at": "2026-11-03T05:09:28.476886+00:00"
     }
   ],
-  "finished_at": "2026-11-03T04:28:10.687756+00:00"
+  "finished_at": "2026-11-03T05:09:37.755695+00:00"
 }
