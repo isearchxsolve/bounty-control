@@ -615,9 +615,6 @@ def model_admission_refusal(row, context_builder, source_reader=None):
             return 'AGENT_DECISION_MISSING', None, None
         owner_request = row.get('is_founder_wound') is True and not quote_states_an_amount(quote)
         if owner_request:
-            allow_unpriced = os.environ.get("ALLOW_UNPRICED_FOUNDER", "false").lower() in ("true", "1")
-            if not allow_unpriced:
-                return 'BOUNTY_FLOOR', None, None
             if (context['issue'].get('author_association') != 'OWNER'
                     or source is not context['issue']):
                 return 'FOUNDER_OWNERSHIP_UNVERIFIED', None, None
@@ -776,8 +773,7 @@ def verify_rows(rows: List[dict], fetch: Optional[Callable[[str, int], Optional[
             continue
 
         author_assoc = str(issue.get("author_association") or issue.get("authorAssociation") or "").upper()
-        allow_unpriced = os.environ.get("ALLOW_UNPRICED_FOUNDER", "false").lower() in ("true", "1")
-        is_founder = ((author_assoc == "OWNER") or bool(row.get("is_founder_wound"))) and allow_unpriced
+        is_founder = (author_assoc == "OWNER") or bool(row.get("is_founder_wound"))
         lane = "founder" if is_founder else "bounty"
 
         if not quote_states_an_amount(quote) and not is_founder:

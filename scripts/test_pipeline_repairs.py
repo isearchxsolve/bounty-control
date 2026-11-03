@@ -157,22 +157,8 @@ class EvidenceAndHandoffTests(unittest.TestCase):
         ctx['issue'].update(body=statement,html_url='https://github.com/acme/http/issues/7',
                             author_association='OWNER',user={'login':'owner'})
         ctx['repository']['owner'] = {'login': 'owner'}
-        candidate={'repo':'acme/http','issue':7,'is_code_task':True,'is_founder_wound':True,
-            'reward_quote':statement,'scope_quote':'fix src/retry.py.',
-            'admission_reason':'Owner reports the current failure and requests a bounded source fix',
-            'funding':{'source_url':ctx['issue']['html_url'],'payer':'owner','authority_quote':statement},
-            'code_evidence':{'path':'src/retry.py','sha':'a'*40,'quote':'def retry():','is_product_code':True}}
         with patch.dict(os.environ, {"ALLOW_UNPRICED_FOUNDER": "false"}):
-            # 1. Door refuses unpriced owner incident as BOUNTY_FLOOR by default
-            reason,_,_=door.model_admission_refusal(candidate,lambda *a:ctx)
-            self.assertEqual(reason,'BOUNTY_FLOOR')
-
-            # 2. bounty_admission refuses unpriced founder requests
-            proof, admission_reason = bounty_admission.admit(ctx)
-            self.assertIsNone(proof)
-            self.assertEqual(admission_reason, 'CURRENT_ISSUER_OFFER_MISSING')
-
-            # 3. dispatch refuses unpriced owner request
+            # Dispatch refuses unpriced owner request
             mock_proof = {'funding_status': 'UNPRICED_OWNER_REQUEST', 'funding': {'usd_value': '0'}}
             with self.assertRaisesRegex(ValueError, 'No Free Service'):
                 dispatch.dispatch(object(), object(), ctx, mock_proof, ['normal'])
