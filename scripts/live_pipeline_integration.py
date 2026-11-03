@@ -1148,6 +1148,14 @@ class LiveRun:
         except (AssertionError, GitHubError) as exc:
             self.record('LIVE_INTAKE', 'FAIL', diagnostic=str(exc))
 
+        # Surface production failures independently of whether entry or delivery
+        # can advance. A failed surface remains a failed required case, while
+        # the rest of the live campaign continues to collect real evidence.
+        try:
+            self.failures()
+        except (AssertionError, GitHubError) as exc:
+            self.record('LIVE_FAILURE_SURFACE', 'FAIL', diagnostic=str(exc))
+
         queue = self.folder / 'entry-queue'
         if self.data.get('continuations') and not self.data.get('pipeline_admitted'):
             retained = retained_admissions(queue, self.api)

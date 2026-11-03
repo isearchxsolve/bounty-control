@@ -14,9 +14,38 @@ from live_pipeline_integration import LiveRun, retained_admissions
 from actions_github import GitHubError
 from actions_github import task_id
 from pipeline_evidence import bind_proof
+import sovereign_discovery
 
 
 class FullPipelineDefault(unittest.TestCase):
+    def test_full_pipeline_surfaces_failures_even_when_intake_fails(self):
+        class API:
+            def api(self, endpoint):
+                if endpoint == 'user':
+                    return {'login': 'owner'}
+                if endpoint == 'repos/owner/control':
+                    return {'default_branch': 'main'}
+                return {'sha': 'a' * 40}
+        class StopAtEntry(Exception):
+            pass
+        with tempfile.TemporaryDirectory() as folder:
+            run = LiveRun.__new__(LiveRun)
+            run.args = SimpleNamespace(issue=None, model_timeout=60)
+            run.data, run.api, run.control, run.folder = {}, API(), 'owner/control', Path(folder)
+            run.command = lambda *args, **kwargs: 'a' * 40
+            run.save = lambda: None
+            events = []
+            run.record = lambda case, status, **evidence: events.append((case, status))
+            def broken_intake():
+                raise AssertionError('actual intake failed')
+            run.intake = broken_intake
+            run.failures = lambda: events.append(('LIVE_FAILURE_SURFACE', 'PASS'))
+            with patch.object(sovereign_discovery, 'discover', side_effect=StopAtEntry):
+                with self.assertRaises(StopAtEntry):
+                    run.pipeline()
+            self.assertIn(('LIVE_INTAKE', 'FAIL'), events)
+            self.assertIn(('LIVE_FAILURE_SURFACE', 'PASS'), events)
+
     def test_empty_issue_does_not_enter_fixture_or_single_issue_path(self):
         run = LiveRun.__new__(LiveRun)
         run.args = SimpleNamespace(issue=None)
