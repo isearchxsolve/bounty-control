@@ -209,7 +209,7 @@ def review_verdict(api, repo, number):
 # a row) the de-facto retry path died and the queue froze silently. A retry obligation must be
 # durable in the ledger, not contingent on a fresh issue appearing.
 REPAIRABLE_STATUSES = ("FAILED_REMOTE_CHECKS", "CHANGES_REQUESTED",
-                       "FAILED_ENGINEER", "FAILED_DELIVERABLE_MISSING")
+                       "FAILED_ENGINEER", "FAILED_DELIVERABLE_MISSING", "FAILED_PUBLISH")
 REPAIR_ATTEMPT_CAP = 3
 
 
