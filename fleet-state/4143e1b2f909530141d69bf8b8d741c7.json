@@ -2,7 +2,7 @@
   "task_id": "4143e1b2f909530141d69bf8b8d741c7",
   "repo": "cozyGarage/BookiE",
   "issue_number": 1953,
-  "status": "CLAIMED",
+  "status": "FAILED_RUNNER_SHUTDOWN",
   "dispatch_id": "631ccad5d61c407fa45787cb41441a94",
   "admission": {
     "funding": {
@@ -43,7 +43,7 @@
   ],
   "dispatched_at": "2026-11-03T15:05:18.137689+00:00",
   "attempt": 2,
-  "updated_at": "2026-11-03T15:05:32.391218+00:00",
+  "updated_at": "2026-11-03T15:56:49.328346+00:00",
   "owner": "41660209132:1",
   "previous_owner": "41647500141:1",
   "previous_status": "DISPATCHED",
@@ -52,12 +52,12 @@
   "claimed_at": "2026-11-03T15:05:32.391170+00:00",
   "lease_expires_at": "2026-11-03T19:10:32.391184+00:00",
   "preparation_budget_seconds": 14400,
-  "kind": "deliverable_invalid",
+  "kind": "runner_shutdown",
   "retryable": true,
-  "diagnostic": "Cline deliverable invalid at /tmp/fleet-artifacts/delivery-supervisor/562d19ba69644b65b0bea2141f884a71.preparation.json: Cline delivery repair failed: Command timed out after 3600 seconds\n",
+  "diagnostic": "No engineering result and no failure record: the phase was terminated before it could report (exit 143 / runner shutdown)",
   "path": "/tmp/fleet-artifacts/delivery-supervisor/562d19ba69644b65b0bea2141f884a71.preparation.json",
   "reason": "Cline delivery repair failed: Command timed out after 3600 seconds\n",
-  "at": "2026-11-03T15:01:20.232209+00:00",
+  "at": "2026-11-03T15:56:48.754136+00:00",
   "failures": [
     {
       "run_url": "https://github.com/isearchxsolve/bounty-control/actions/runs/41647500141",
@@ -68,7 +68,17 @@
       "path": "/tmp/fleet-artifacts/delivery-supervisor/562d19ba69644b65b0bea2141f884a71.preparation.json",
       "reason": "Cline delivery repair failed: Command timed out after 3600 seconds\n",
       "at": "2026-11-03T15:01:20.232209+00:00"
+    },
+    {
+      "run_url": "https://github.com/isearchxsolve/bounty-control/actions/runs/41660209132",
+      "status": "FAILED_RUNNER_SHUTDOWN",
+      "kind": "runner_shutdown",
+      "retryable": true,
+      "inferred": true,
+      "diagnostic": "No engineering result and no failure record: the phase was terminated before it could report (exit 143 / runner shutdown)",
+      "at": "2026-11-03T15:56:48.754136+00:00"
     }
   ],
-  "finished_at": "2026-11-03T15:01:33.494825+00:00"
+  "finished_at": "2026-11-03T15:56:48.754170+00:00",
+  "inferred": true
 }
