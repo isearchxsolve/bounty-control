@@ -2,7 +2,7 @@
   "task_id": "60cfa6a7338ae99079de4fa98545a8e6",
   "repo": "kendraio/kendraio-app",
   "issue_number": 169,
-  "status": "CLAIMED",
+  "status": "PUBLISHING",
   "dispatch_id": "06b84e0bb3974a6d9eba5715f5f8e441",
   "admission": {
     "funding": {
@@ -44,7 +44,7 @@
   ],
   "dispatched_at": "2026-11-03T16:31:40.779415+00:00",
   "attempt": 1,
-  "updated_at": "2026-11-03T16:31:57.225390+00:00",
+  "updated_at": "2026-11-03T17:20:01.098627+00:00",
   "owner": "41675116149:1",
   "previous_owner": null,
   "previous_status": "DISPATCHED",
@@ -52,5 +52,8 @@
   "harness_sha": "bd4ffe4979b64194d0fbd83593d8cbac092058d3",
   "claimed_at": "2026-11-03T16:31:57.225340+00:00",
   "lease_expires_at": "2026-11-03T20:36:57.225356+00:00",
-  "preparation_budget_seconds": 14400
+  "preparation_budget_seconds": 14400,
+  "proposed_head": "b0e20622a5bf2f10c2b71d8b745773483b30591b",
+  "proposed_branch": "fix/bounty-169-60cfa6-1",
+  "verified_run": "https://github.com/isearchxsolve/bounty-control/actions/runs/41675116149"
 }
