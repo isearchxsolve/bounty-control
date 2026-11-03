@@ -101,6 +101,24 @@ class CauseGrouping(unittest.TestCase):
             self.assertTrue(isinstance(causes, list))
 
 
+class FingerprintFidelity(unittest.TestCase):
+    def test_a_shared_head_does_not_merge_different_causes(self):
+        head = ('Cline deliverable invalid at /tmp/fleet-artifacts/delivery-supervisor/'
+                + 'a' * 32 + '.preparation.json: action=incomplete: ')
+        one = head + 'the preparation report is missing the diff it claims'
+        two = head + 'the preparation report names a file it never wrote'
+        self.assertNotEqual(normalized_fingerprint(one), normalized_fingerprint(two))
+
+    def test_the_distinguishing_tail_survives(self):
+        long = 'prefix ' * 60 + 'distinctive-tail-marker'
+        self.assertIn('distinctive-tail-marker', normalized_fingerprint(long))
+
+    def test_task_identity_and_numbers_do_not_split_one_cause(self):
+        a = 'native verification failed at run 41577249045 for ' + 'a' * 32
+        b = 'native verification failed at run 41590239151 for ' + 'b' * 32
+        self.assertEqual(normalized_fingerprint(a), normalized_fingerprint(b))
+
+
 class BlockedPrerequisite(unittest.TestCase):
     def test_a_named_missing_prerequisite_is_blocked_not_failed(self):
         self.assertEqual(blocker_of('Cline preparation failed: error: No Token Harbor key is '

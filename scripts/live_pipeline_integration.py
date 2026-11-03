@@ -65,12 +65,17 @@ def normalized_fingerprint(cause):
     """Group repeat sightings of one root cause without inventing an interpretation.
 
     Only facts the state itself carries are dropped: task identity, numbers, digests and
-    timing. No model is asked what a failure means here.
+    timing. No model is asked what a failure means here. The distinguishing part of a long
+    diagnostic is usually its end (which action or assertion failed), so the tail is kept
+    rather than truncated away -- measured 2026-11-03: several `deliverable_missing` causes were
+    only told apart past the 220th character and printed identically in the report.
     """
-    text = ' '.join(str(cause or '').split())[:220].lower()
+    text = ' '.join(str(cause or '').split()).lower()
     text = re.sub(r'\b[0-9a-f]{32,64}\b', '<sha>', text)
     text = re.sub(r'\b\d{3,}\b', '<n>', text)
-    return text
+    if len(text) <= 220:
+        return text
+    return text[:150] + ' ... ' + text[-70:]
 
 
 PREREQUISITE_RULES = (
@@ -909,7 +914,7 @@ class LiveRun:
                    'verdict for the current generation; historical means it was superseded.', '',
                    '| cause | outcome | active | repeats | stage | prerequisite |', '|---|---|---|---|---|---|']
         for cause in causes:
-            summary.append('| ' + cause['fingerprint'][:110].replace('|', '/') + ' | ' + cause['outcome']
+            summary.append('| ' + cause['fingerprint'][:150].replace('|', '/') + ' | ' + cause['outcome']
                            + ' | ' + str(cause['active']) + ' | ' + str(cause['sightings']) + ' | '
                            + str(cause['stage']) + ' | ' + (cause['prerequisite'] or '') + ' |')
         summary += ['', '## Every sighting', '', '| kind | stage | status | outcome | cause | run |',
