@@ -2265,6 +2265,26 @@ def cline_worktree_command(worktree: str, prompt: str, retries: int = 3) -> List
     command = resolve_cline_command()
     if not command:
         raise RuntimeError('Cline executable is unavailable after bootstrap.')
+    process_tool = shlex.join([sys.executable, os.path.join(os.path.dirname(os.path.abspath(__file__)),
+                                                         'cline_process.py')])
+    process_root = shlex.quote(os.path.abspath(os.path.join(PACKET_DIR, 'native-jobs')))
+    prompt += f'''
+
+Available tool for commands longer than the shell tool's 30-second limit:
+  {process_tool} start --root {process_root} --cwd <absolute-directory> --timeout <seconds> -- <program> <args...>
+This starts one bounded native command and returns its job directory and next_cursor.
+For a shell expression choose bash -lc <quoted-expression> as the program and arguments.
+  {process_tool} wait <job-directory> --cursor <previous-next_cursor> --seconds 20
+Each wait returns new stdout/stderr bytes, an observation cursor, and the real exit receipt
+when available. Use the returned next_cursor for the next observation, including quiet builds.
+  {process_tool} cancel <job-directory>
+Read the saved stdout.log/stderr.log for full output. PENDING_EXIT_RECEIPT is not completion;
+only status=EXITED with exit_code=0 proves command success. A timeout or cancellation is a
+failed command. Choose the timeout within this turn's remaining budget. Do not infer success
+from a PID or repeatedly poll ps/tail, and never pass secrets as command arguments.
+These are process observations only; the required preparation/repair report and all host
+verification gates still apply. The tool does not approve a plan or alter repository source.
+'''
     return [*command, '--data-dir', CLINE_DATA_DIR, '--provider', CLINE_PROVIDER,
             '--model', CLINE_MODEL, '--key', CLINE_PROXY_API_KEY,
             '-y', '--retries', str(retries), '-c', worktree, prompt]
