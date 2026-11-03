@@ -3,7 +3,8 @@
   "repo": "isearchxsolve/oss-hunter-livefire",
   "issue_number": 1,
   "fault_fixture": true,
-  "status": "FAULT_FIXTURE",
-  "text": "Unicode \u20b9 \u65e5\u672c\u8a9e\nsecond line",
-  "updated_at": "2026-11-03T12:37:31.715039+00:00"
+  "status": "DISPATCHED",
+  "attempt": 0,
+  "dispatch_id": "ff1a3200c140423fb08acf86db2cebe5",
+  "updated_at": "2026-11-03T12:37:36.576212+00:00"
 }
