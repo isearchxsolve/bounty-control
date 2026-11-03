@@ -2,7 +2,7 @@
   "task_id": "c4ccbe12cb966b88845d970513184ad0",
   "repo": "mgillr/acfa-rs",
   "issue_number": 93,
-  "status": "CLAIMED",
+  "status": "FAILED_ENGINEER",
   "dispatch_id": "3aef54120d7f42749c90cb870e21b242",
   "admission": {
     "funding": {
@@ -43,7 +43,7 @@
   ],
   "dispatched_at": "2026-11-03T08:12:27.833543+00:00",
   "attempt": 3,
-  "updated_at": "2026-11-03T08:12:38.628483+00:00",
+  "updated_at": "2026-11-03T08:56:51.992694+00:00",
   "owner": "41601570698:1",
   "previous_owner": "41595597948:1",
   "previous_status": "DISPATCHED",
@@ -56,7 +56,7 @@
   "retryable": true,
   "diagnostic": "Bounded Cline delivery repair exhausted: Independent release verification failed: Base regression did not fail on the specified defect assertion:\n== regression-guard must fail on a reverted fingerprint ==\n  FAIL guard exited 0 on a reverted fingerprint (grep-based guard does this)\n== regression-guard must pass on an intact tree ==\n  OK  guard passes on intact tree (fingerprint computed and matches)\n== coverage-claim-check self-test must prove the check can fail ==\n  OK  coverage-claim-check --self-test passed\n\nCOMPANION REGRESSION TEST FAILED\n\n\nRead complete native receipts at /tmp/fleet-artifacts. Repair the actual failure, preserving completed edits and master tests.",
   "budget_seconds": 1800,
-  "at": "2026-11-03T07:57:23.419659+00:00",
+  "at": "2026-11-03T08:56:30.353274+00:00",
   "failures": [
     {
       "run_url": "https://github.com/isearchxsolve/bounty-control/actions/runs/41588803632",
@@ -74,7 +74,15 @@
       "retryable": true,
       "diagnostic": "Bounded Cline delivery repair exhausted: Independent release verification failed: Base regression did not fail on the specified defect assertion:\n== regression-guard must fail on a reverted fingerprint ==\n  FAIL guard exited 0 on a reverted fingerprint (grep-based guard does this)\n== regression-guard must pass on an intact tree ==\n  OK  guard passes on intact tree (fingerprint computed and matches)\n== coverage-claim-check self-test must prove the check can fail ==\n  OK  coverage-claim-check --self-test passed\n\nCOMPANION REGRESSION TEST FAILED\n\n\nRead complete native receipts at /tmp/fleet-artifacts. Repair the actual failure, preserving completed edits and master tests.",
       "at": "2026-11-03T07:57:23.419659+00:00"
+    },
+    {
+      "run_url": "https://github.com/isearchxsolve/bounty-control/actions/runs/41601570698",
+      "status": "FAILED_ENGINEER",
+      "kind": "engineer",
+      "retryable": true,
+      "diagnostic": "Bounded Cline delivery repair exhausted: Independent release verification failed: Base regression did not fail on the specified defect assertion:\n== regression-guard must fail on a reverted fingerprint ==\n  FAIL guard exited 0 on a reverted fingerprint (grep-based guard does this)\n== regression-guard must pass on an intact tree ==\n  OK  guard passes on intact tree (fingerprint computed and matches)\n== coverage-claim-check self-test must prove the check can fail ==\n  OK  coverage-claim-check --self-test passed\n\nCOMPANION REGRESSION TEST FAILED\n\n\nRead complete native receipts at /tmp/fleet-artifacts. Repair the actual failure, preserving completed edits and master tests.",
+      "at": "2026-11-03T08:56:30.353274+00:00"
     }
   ],
-  "finished_at": "2026-11-03T07:57:40.242969+00:00"
+  "finished_at": "2026-11-03T08:56:51.299227+00:00"
 }
