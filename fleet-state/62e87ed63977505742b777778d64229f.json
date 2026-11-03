@@ -2,8 +2,8 @@
   "task_id": "62e87ed63977505742b777778d64229f",
   "repo": "ilyavzane/Dispo",
   "issue_number": 19,
-  "status": "FAILED_ENGINEER",
-  "dispatch_id": "b6c0a38b357b4970b5e03e1fa6f401e3",
+  "status": "DISPATCHING",
+  "dispatch_id": "7162c1ff42d549238343baddeae5444b",
   "admission": {
     "funding": {
       "amount": "0",
@@ -32,7 +32,7 @@
     "task_id": "62e87ed63977505742b777778d64229f",
     "source_revision": "1b99558d5214c6236d114f8212fc878453f162921615f46d594697f6646512c2"
   },
-  "dispatch_attempt": 2,
+  "dispatch_attempt": 3,
   "sovereign_admission": true,
   "competition": {
     "blocking": false,
@@ -41,9 +41,9 @@
   "lanes": [
     "founder"
   ],
-  "dispatched_at": "2026-11-03T14:39:27.726995+00:00",
+  "dispatched_at": "2026-11-03T15:05:24.963587+00:00",
   "attempt": 2,
-  "updated_at": "2026-11-03T14:54:41.672509+00:00",
+  "updated_at": "2026-11-03T15:05:24.963604+00:00",
   "owner": "41655861470:1",
   "previous_owner": "41647407167:1",
   "previous_status": "DISPATCHED",
