@@ -2,7 +2,7 @@
   "task_id": "f32d25ce247f914e5ecff5a8a570c62a",
   "repo": "leonapivato/ai-assistant",
   "issue_number": 3054,
-  "status": "DISPATCHED",
+  "status": "CLAIMED",
   "dispatch_id": "1a19cc52969743e6bc20e5c833ca956d",
   "admission": {
     "funding": {
@@ -42,6 +42,14 @@
     "founder"
   ],
   "dispatched_at": "2026-11-03T15:47:05.554574+00:00",
-  "attempt": 0,
-  "updated_at": "2026-11-03T15:47:07.877608+00:00"
+  "attempt": 1,
+  "updated_at": "2026-11-03T15:47:19.947593+00:00",
+  "owner": "41667468438:1",
+  "previous_owner": null,
+  "previous_status": "DISPATCHED",
+  "run_url": "https://github.com/isearchxsolve/bounty-control/actions/runs/41667468438",
+  "harness_sha": "19cc419b62128067e8cc1a83f52def01b3d8a3be",
+  "claimed_at": "2026-11-03T15:47:19.947539+00:00",
+  "lease_expires_at": "2026-11-03T19:52:19.947557+00:00",
+  "preparation_budget_seconds": 14400
 }
