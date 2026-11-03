@@ -2,8 +2,8 @@
   "task_id": "27414e5464bdf69a8094963cdd6ed86f",
   "repo": "atyrode/manifold",
   "issue_number": 1084,
-  "status": "FAILED_ENGINEER",
-  "dispatch_id": "4f1ed6212fba4b69bf25ab76e38a768b",
+  "status": "DISPATCHING",
+  "dispatch_id": "5473d312c098440d85c4a77fb83f5958",
   "admission": {
     "funding": {
       "payer": "atyrode",
@@ -32,7 +32,7 @@
     "task_id": "27414e5464bdf69a8094963cdd6ed86f",
     "source_revision": "407b283cd529f949a3a96ea13ee40f250a95ac34274c90680a142c132ce4ffab"
   },
-  "dispatch_attempt": 2,
+  "dispatch_attempt": 3,
   "sovereign_admission": true,
   "competition": {
     "blocking": false,
@@ -41,9 +41,9 @@
   "lanes": [
     "founder"
   ],
-  "dispatched_at": "2026-11-03T15:57:26.819886+00:00",
+  "dispatched_at": "2026-11-03T16:18:57.992226+00:00",
   "attempt": 2,
-  "updated_at": "2026-11-03T16:15:09.539551+00:00",
+  "updated_at": "2026-11-03T16:18:57.992249+00:00",
   "owner": "41669207941:1",
   "previous_owner": "41658212601:1",
   "previous_status": "DISPATCHED",
