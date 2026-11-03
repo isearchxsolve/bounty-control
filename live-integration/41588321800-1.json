@@ -1,5 +1,5 @@
 {
-  "at": "2026-11-03T07:00:23.538105+00:00",
+  "at": "2026-11-03T07:01:08.758390+00:00",
   "run_url": "https://github.com/isearchxsolve/bounty-control/actions/runs/41588321800",
   "end_to_end_passed": false,
   "coverage": {
@@ -37,16 +37,6 @@
     "LIVE_FAILURE_SURFACE": "PASS"
   },
   "events": [
-    {
-      "case": "ACTIONS_TERMINAL",
-      "status": "FAIL",
-      "at": "2026-11-03T06:55:07.911661+00:00"
-    },
-    {
-      "case": "ACTIONS_TERMINAL",
-      "status": "FAIL",
-      "at": "2026-11-03T06:55:30.851435+00:00"
-    },
     {
       "case": "ACTIONS_TERMINAL",
       "status": "FAIL",
@@ -111,6 +101,16 @@
       "case": "ACTIONS_TERMINAL",
       "status": "FAIL",
       "at": "2026-11-03T07:00:23.536652+00:00"
+    },
+    {
+      "case": "ACTIONS_TERMINAL",
+      "status": "FAIL",
+      "at": "2026-11-03T07:00:46.547682+00:00"
+    },
+    {
+      "case": "ACTIONS_TERMINAL",
+      "status": "FAIL",
+      "at": "2026-11-03T07:01:08.757023+00:00"
     }
   ],
   "cohort": {
