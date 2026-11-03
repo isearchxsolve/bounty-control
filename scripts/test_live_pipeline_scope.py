@@ -81,6 +81,96 @@ class FullPipelineDefault(unittest.TestCase):
             self.assertEqual(retained_admissions(folder, API(changed)), [])
 
 
+class DiscoveryReceiptTests(unittest.TestCase):
+    """Intake causes a discovery run instead of sampling a throttled cron."""
+
+    def harness(self, folder, runs, *, intake_max_age_minutes=90):
+        class API:
+            def __init__(self):
+                self.runs = runs
+            def api(self, endpoint, method='GET', body=None):
+                if '/runs' not in endpoint:
+                    raise GitHubError('unexpected endpoint ' + endpoint)
+                status = endpoint.split('status=')[1].split('&')[0] if 'status=' in endpoint else None
+                return {'workflow_runs': [r for r in self.runs if status is None or r['status'] == status]}
+        run = LiveRun.__new__(LiveRun)
+        run.args = SimpleNamespace(intake_max_age_minutes=intake_max_age_minutes)
+        run.data, run.api, run.control, run.folder = {}, API(), 'owner/control', Path(folder)
+        run.save = lambda: None
+        events, commands = [], []
+        run.record = lambda case, status, **evidence: events.append((case, status, evidence))
+        run.command = lambda argv, **kwargs: commands.append(argv) or 'dispatched'
+        return run, events, commands
+
+    @staticmethod
+    def stamp(minutes_ago):
+        from datetime import datetime, timedelta, timezone
+        return (datetime.now(timezone.utc) - timedelta(minutes=minutes_ago)).isoformat().replace('+00:00', 'Z')
+
+    def test_stale_completed_run_dispatches_instead_of_failing_on_a_throttled_cron(self):
+        stale = {'id': 1, 'status': 'completed', 'conclusion': 'success',
+                 'event': 'workflow_dispatch', 'html_url': 'u/1', 'created_at': self.stamp(400),
+                 'updated_at': self.stamp(395)}
+        fresh = {'id': 2, 'status': 'completed', 'conclusion': 'success',
+                 'event': 'workflow_dispatch', 'html_url': 'u/2', 'created_at': self.stamp(4),
+                 'updated_at': self.stamp(3)}
+        with tempfile.TemporaryDirectory() as folder:
+            run, events, commands = self.harness(folder, [stale])
+            # The dispatch lands between the first poll and the next one.
+            original_command = run.command
+            def land(argv, **kwargs):
+                original_command(argv, **kwargs)
+                run.api.runs.append(fresh)
+                return 'dispatched'
+            run.command = land
+            self.assertEqual(run.ensure_discovery_receipt()['id'], 2)
+            self.assertEqual(len(commands), 1)
+            self.assertIn('bounty-discovery.yml', commands[0])
+            self.assertEqual(events[0][0], 'LIVE_DISCOVERY_DISPATCH')
+            self.assertEqual(events[0][2]['previous_run'], 'u/1')
+            self.assertGreater(events[0][2]['previous_age_minutes'], 90)
+
+    def test_fresh_completed_run_is_used_without_dispatching(self):
+        fresh = {'id': 3, 'status': 'completed', 'conclusion': 'success',
+                 'event': 'schedule', 'html_url': 'u/3', 'created_at': self.stamp(9),
+                 'updated_at': self.stamp(8)}
+        with tempfile.TemporaryDirectory() as folder:
+            run, events, commands = self.harness(folder, [fresh])
+            self.assertEqual(run.ensure_discovery_receipt()['id'], 3)
+            self.assertEqual(commands, [])
+            self.assertEqual(events, [])
+
+    def test_in_flight_run_is_waited_for_not_doubled(self):
+        stale = {'id': 1, 'status': 'completed', 'conclusion': 'success',
+                 'event': 'workflow_dispatch', 'html_url': 'u/1', 'created_at': self.stamp(400),
+                 'updated_at': self.stamp(395)}
+        running = {'id': 4, 'status': 'in_progress', 'conclusion': None,
+                   'event': 'workflow_dispatch', 'html_url': 'u/4', 'created_at': self.stamp(80),
+                   'updated_at': self.stamp(79)}
+        clock = iter(range(0, 10_000, 30))
+        with tempfile.TemporaryDirectory() as folder, \
+                patch('live_pipeline_integration.time.sleep'), \
+                patch('live_pipeline_integration.time.monotonic', lambda: next(clock)):
+            run, events, commands = self.harness(folder, [stale, running], intake_max_age_minutes=1)
+            with self.assertRaises(AssertionError) as caught:
+                run.ensure_discovery_receipt()
+            # Never doubles a run the production concurrency group would queue behind.
+            self.assertEqual(commands, [])
+            message = str(caught.exception)
+            self.assertIn('u/4', message)
+            self.assertIn('in_progress', message)
+            self.assertIn('Cancel or repair that run', message)
+
+    def test_cadence_reports_the_observed_schedule_interval(self):
+        runs = [{'event': 'schedule', 'created_at': self.stamp(7 * 60 * n), 'updated_at': self.stamp(7 * 60 * n)}
+                for n in (0, 1, 2)]
+        with tempfile.TemporaryDirectory() as folder:
+            run, _, _ = self.harness(folder, runs)
+            cadence = run.discovery_cadence()
+            self.assertEqual(cadence['scheduled_runs_sampled'], 3)
+            self.assertAlmostEqual(cadence['observed_interval_hours'], 7.0, places=1)
+
+
 class ProgressReceiptTests(unittest.TestCase):
     def test_status_receipt_is_throttled_and_excludes_diagnostics_and_task_bodies(self):
         class API:

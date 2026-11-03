@@ -304,13 +304,93 @@ class LiveRun:
         if require_publication:
             check(not publication_errors, '; '.join(publication_errors))
 
+    @staticmethod
+    def age_seconds(run):
+        return (datetime.now(timezone.utc)
+                - datetime.fromisoformat(run['updated_at'].replace('Z', '+00:00'))).total_seconds()
+
+    def discovery_runs(self, *, status=None, per_page=20):
+        query = f'?per_page={per_page}' + (f'&status={status}' if status else '')
+        return self.api.api(f'repos/{self.control}/actions/workflows/bounty-discovery.yml/runs{query}')['workflow_runs']
+
+    def discovery_cadence(self):
+        """How often scheduled discovery actually fires, in hours. A platform fact, not a gate."""
+        scheduled = [r for r in self.discovery_runs(per_page=100) if r.get('event') == 'schedule']
+        if len(scheduled) < 2:
+            return {'scheduled_runs_sampled': len(scheduled), 'observed_interval_hours': None}
+        stamps = sorted(datetime.fromisoformat(r['created_at'].replace('Z', '+00:00')) for r in scheduled)
+        gaps = [(b - a).total_seconds() / 3600 for a, b in zip(stamps, stamps[1:])]
+        return {'scheduled_runs_sampled': len(scheduled),
+                'youngest_scheduled_age_hours': round((datetime.now(timezone.utc) - stamps[-1]).total_seconds() / 3600, 2),
+                'observed_interval_hours': round(sum(gaps) / len(gaps), 2),
+                'interval_min_hours': round(min(gaps), 2), 'interval_max_hours': round(max(gaps), 2)}
+
+    def ensure_discovery_receipt(self):
+        """Cause a fresh completed discovery run instead of sampling a throttled cron.
+
+        The campaign needs a completed discovery run inside the freshness deadline to read real
+        intake receipts. Waiting for the scheduler to supply one is a race against GitHub's cron
+        throttle, measured 2026-11-03: `bounty-discovery` is declared `7,37 * * * *` (every 30
+        minutes) but its scheduled runs actually fired every 5-7 hours, while each run itself
+        takes ~63 minutes. The freshness window therefore existed for roughly 85 minutes in every
+        5-7 hours, so LIVE_INTAKE flipped PASS at 05:13 and FAIL at 06:11 in the same campaign
+        with no code change -- and each flip read as a pipeline defect.
+
+        So the suite dispatches the real production workflow and waits for it, which is the same
+        power it already uses for hydration. Freshness is then owed by construction and the
+        receipts it reads are still this pipeline's own. Nothing about liveness is weakened:
+        workflow state, a registered schedule, the recovery heartbeat, the hydration drain and the
+        run's own conclusion are all still checked, and a failed discovery run still fails intake.
+        A run that is already in flight is waited for rather than doubled, because the production
+        workflow holds a `bounty-discovery` concurrency group and a second dispatch would queue
+        behind the first. If that in-flight run overruns the deadline, the failure names the run
+        and its elapsed time: that is a real, actionable fact, not a hidden freshness miss.
+        """
+        budget = self.args.intake_max_age_minutes * 60
+        deadline = time.monotonic() + budget
+        dispatched = self.data.get('discovery_dispatch')
+        while True:
+            completed = [r for r in self.discovery_runs(status='completed') if r.get('conclusion')]
+            fresh = [r for r in completed if self.age_seconds(r) <= budget]
+            if fresh:
+                return fresh[0]
+            running = (self.discovery_runs(status='in_progress')
+                       + self.discovery_runs(status='queued') + self.discovery_runs(status='pending'))
+            if not running and not dispatched:
+                self.command(['gh', 'workflow', 'run', 'bounty-discovery.yml', '--repo', self.control,
+                              '--ref', 'main'], timeout=120)
+                dispatched = self.data['discovery_dispatch'] = {
+                    'at': self.now(),
+                    'reason': 'no completed discovery run inside the freshness deadline',
+                    'previous_run': completed[0].get('html_url') if completed else None,
+                    'previous_age_minutes': (round(self.age_seconds(completed[0]) / 60, 1)
+                                             if completed else None)}
+                self.save()
+                self.record('LIVE_DISCOVERY_DISPATCH', 'OBSERVED', **dispatched)
+                continue
+            if time.monotonic() >= deadline:
+                if running:
+                    newest = running[0]
+                    elapsed = (datetime.now(timezone.utc)
+                               - datetime.fromisoformat(newest['created_at'].replace('Z', '+00:00'))).total_seconds() / 60
+                    detail = f"discovery run {newest['html_url']} has been {newest['status']} for {round(elapsed, 1)} minutes"
+                elif completed:
+                    detail = (f"youngest completed discovery run {completed[0]['html_url']} is "
+                              f"{round(self.age_seconds(completed[0]) / 60, 1)} minutes old and the dispatch did not land")
+                else:
+                    detail = 'no discovery run exists and the dispatch did not land'
+                raise AssertionError(f'No discovery receipt inside the {self.args.intake_max_age_minutes}-minute '
+                                     f'freshness deadline: {detail}. Cancel or repair that run; the campaign '
+                                     'cannot read intake receipts while the production discovery queue is blocked.')
+            time.sleep(20)
+
     def intake(self):
         """Inspect deployed intake wiring and actual discovery queue receipts."""
         import yaml
 
         self.data.update(intake_passed=False, end_to_end_passed=False)
         self.save()
-        observations = {}
+        observations = {'discovery_cadence': self.discovery_cadence()}
         for name in ('bounty-discovery.yml', 'bounty-hydration.yml', 'discovery-heartbeat.yml'):
             workflow = self.api.api(f'repos/{self.control}/actions/workflows/{name}')
             source = self.api.api(f'repos/{self.control}/contents/.github/workflows/{name}')
@@ -319,10 +399,8 @@ class LiveRun:
                 'state': workflow['state'], 'source_sha': source['sha'],
                 'schedule': document.get('on', {}).get('schedule', []),
             }
-        runs = self.api.api(f'repos/{self.control}/actions/workflows/bounty-discovery.yml/runs?status=completed&per_page=1')['workflow_runs']
-        check(runs, 'No completed live discovery run; intake is unverified')
-        run = runs[0]
-        age = (datetime.now(timezone.utc) - datetime.fromisoformat(run['updated_at'].replace('Z', '+00:00'))).total_seconds()
+        run = self.ensure_discovery_receipt()
+        age = self.age_seconds(run)
         destination = self.folder / ('intake-' + str(run['id']))
         destination.mkdir(exist_ok=True)
         if not list(destination.rglob('agent-queue.sqlite3')):
