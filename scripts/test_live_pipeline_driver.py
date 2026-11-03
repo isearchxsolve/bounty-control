@@ -96,9 +96,13 @@ class DrainArtifactContract(unittest.TestCase):
 class FailureSurface(unittest.TestCase):
     """The live surface: every real run failure is named, or the case fails."""
 
-    def drive(self, rows, runs=(), jobs=None):
-        """Run failures() against an injected ledger and Actions; nothing remote."""
-        args = SimpleNamespace(run_dir=Path('/runs/x'), target='owner/repo',
+    def drive(self, directory, rows, runs=(), jobs=None):
+        """Run failures() against an injected ledger and Actions; nothing remote.
+
+        ``directory`` is the caller's TemporaryDirectory: the run journal is durable on
+        disk, so an absolute path that only exists on one host cannot be used here.
+        """
+        args = SimpleNamespace(run_dir=Path(directory), target='owner/repo',
                                control='owner/control', issue=None)
         api = SimpleNamespace(
             workflow_runs=lambda repo, status: list(runs),
@@ -111,7 +115,7 @@ class FailureSurface(unittest.TestCase):
 
     def test_a_failure_with_a_stated_cause_is_recorded_and_does_not_fail_the_case(self):
         with tempfile.TemporaryDirectory() as directory:
-            run = self.drive([{'task_id': 'a' * 32, 'status': 'FAILED_ENGINEER',
+            run = self.drive(directory, [{'task_id': 'a' * 32, 'status': 'FAILED_ENGINEER',
                                'repo': 'owner/repo', 'issue_number': 7,
                                'dispatch_id': 'b' * 32, 'finished_at': '2026-11-01T00:00:00Z',
                                'diagnostic': 'test suite failed: 2 assertions'}])
@@ -129,7 +133,7 @@ class FailureSurface(unittest.TestCase):
 
     def test_a_failure_with_no_stated_cause_fails_the_case_as_unexplained(self):
         with tempfile.TemporaryDirectory() as directory:
-            run = self.drive([{'task_id': 'a' * 32, 'status': 'FAILED_ENGINEER'}])
+            run = self.drive(directory, [{'task_id': 'a' * 32, 'status': 'FAILED_ENGINEER'}])
             with self.assertRaisesRegex(AssertionError, 'unexplained failure'):
                 run.failures()
             self.assertTrue(run.folder.joinpath('failures.md').exists())
@@ -144,7 +148,7 @@ class FailureSurface(unittest.TestCase):
         with tempfile.TemporaryDirectory() as directory:
             runs = [{'id': 42, 'conclusion': 'failure', 'display_title': 'engine2 ' + 'b' * 32,
                      'html_url': 'https://example.test/run/42', 'updated_at': '2026-11-01T00:00:00Z'}]
-            args = SimpleNamespace(run_dir=Path('/runs/x'), target='owner/repo',
+            args = SimpleNamespace(run_dir=Path(directory), target='owner/repo',
                                    control='owner/control', issue=None)
 
             def unreadable_jobs(endpoint, method='GET', data=None):
@@ -163,14 +167,14 @@ class FailureSurface(unittest.TestCase):
                      'html_url': 'https://example.test/run/42', 'updated_at': '2026-11-01T00:00:00Z'}]
             jobs = [{'name': 'engineer', 'conclusion': 'skipped'},
                     {'name': 'finish', 'conclusion': 'success'}]
-            run = self.drive([], runs=runs, jobs=jobs)
+            run = self.drive(directory, [], runs=runs, jobs=jobs)
             entries, violations = run.surface_entries()
             self.assertEqual(entries[0]['stage'], 'no failed job; skipped: engineer')
             self.assertEqual(violations, [])
 
     def test_a_refusal_is_counted_apart_and_never_fails_the_case(self):
         with tempfile.TemporaryDirectory() as directory:
-            run = self.drive([{'task_id': 'a' * 32, 'status': 'REJECTED_NEVER_RED',
+            run = self.drive(directory, [{'task_id': 'a' * 32, 'status': 'REJECTED_NEVER_RED',
                                'reason': 'positive control stayed green', 'finished_at': '2026-11-01T00:00:00Z'}])
             run.failures()
             receipt = json.loads(run.folder.joinpath('failures.json').read_text())
@@ -183,7 +187,7 @@ class FailureSurface(unittest.TestCase):
             runs = [{'id': 42, 'conclusion': 'failure', 'display_title': 'engine2 ' + 'b' * 32,
                      'html_url': 'https://example.test/run/42', 'updated_at': '2026-11-01T00:00:00Z'}]
             jobs = [{'name': 'engineer', 'conclusion': 'failure'}]
-            run = self.drive([], runs=runs, jobs=jobs)
+            run = self.drive(directory, [], runs=runs, jobs=jobs)
             entries, violations = run.surface_entries()
             self.assertEqual([e['witness'] for e in entries], ['actions'])
             self.assertEqual(entries[0]['stage'], 'engineer')
@@ -197,14 +201,14 @@ class FailureSurface(unittest.TestCase):
             runs = [{'id': 42, 'conclusion': 'failure', 'display_title': 'engine2 ' + dispatch,
                      'html_url': 'https://example.test/run/42', 'updated_at': '2026-11-01T00:00:00Z'}]
             jobs = [{'name': 'engineer', 'conclusion': 'failure'}]
-            run = self.drive([{'task_id': 'a' * 32, 'status': 'DELIVERED', 'dispatch_id': dispatch}],
+            run = self.drive(directory, [{'task_id': 'a' * 32, 'status': 'DELIVERED', 'dispatch_id': dispatch}],
                             runs=runs, jobs=jobs)
             entries, _ = run.surface_entries()
             self.assertEqual(entries, [])
 
     def test_an_unreadable_witness_fails_the_case_with_its_reason(self):
         with tempfile.TemporaryDirectory() as directory:
-            args = SimpleNamespace(run_dir=Path('/runs/x'), target='owner/repo',
+            args = SimpleNamespace(run_dir=Path(directory), target='owner/repo',
                                    control='owner/control', issue=None)
 
             def boom(*args, **kwargs):
@@ -214,7 +218,7 @@ class FailureSurface(unittest.TestCase):
                           store=SimpleNamespace(records=boom))
             with self.assertRaisesRegex(AssertionError, 'Durable ledger unreadable'):
                 run.failures()
-            args2 = SimpleNamespace(run_dir=Path('/runs/y'), target='owner/repo',
+            args2 = SimpleNamespace(run_dir=Path(directory), target='owner/repo',
                                     control='owner/control', issue=None)
 
             def boom_runs(repo, status):
