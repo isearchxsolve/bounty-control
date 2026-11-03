@@ -2,8 +2,8 @@
   "task_id": "84293362e61eb7c6532b853b8302c1a0",
   "repo": "mendyraul/TrackFlights",
   "issue_number": 89,
-  "status": "FAILED_ENGINEER",
-  "dispatch_id": "0af0e5ad7fc2458d8f5d9f951a3d9a74",
+  "status": "DISPATCHING",
+  "dispatch_id": "a81a024932564c50ac59097b8e65fe8e",
   "admission": {
     "funding": {
       "payer": "mendyraul",
@@ -32,7 +32,7 @@
     "task_id": "84293362e61eb7c6532b853b8302c1a0",
     "source_revision": "d0f620a085c9700cc9a4e13ab6d167dac0432e11f0c7d258d7eb5d2236fabf44"
   },
-  "dispatch_attempt": 1,
+  "dispatch_attempt": 2,
   "sovereign_admission": true,
   "competition": {
     "blocking": false,
@@ -41,9 +41,9 @@
   "lanes": [
     "founder"
   ],
-  "dispatched_at": "2026-11-03T12:56:43.710400+00:00",
+  "dispatched_at": "2026-11-03T13:58:55.648632+00:00",
   "attempt": 1,
-  "updated_at": "2026-11-03T13:42:41.528786+00:00",
+  "updated_at": "2026-11-03T13:58:55.648648+00:00",
   "owner": "41639983873:1",
   "previous_owner": null,
   "previous_status": "DISPATCHED",
