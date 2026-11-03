@@ -2,7 +2,7 @@
   "task_id": "f32d25ce247f914e5ecff5a8a570c62a",
   "repo": "leonapivato/ai-assistant",
   "issue_number": 3054,
-  "status": "DISPATCHING",
+  "status": "DISPATCHED",
   "dispatch_id": "1a19cc52969743e6bc20e5c833ca956d",
   "admission": {
     "funding": {
@@ -43,5 +43,5 @@
   ],
   "dispatched_at": "2026-11-03T15:47:05.554574+00:00",
   "attempt": 0,
-  "updated_at": "2026-11-03T15:47:05.554597+00:00"
+  "updated_at": "2026-11-03T15:47:07.877608+00:00"
 }
