@@ -16,6 +16,24 @@ class GitHubError(RuntimeError):
     pass
 
 
+# gh reports a status as "gh: <message> (HTTP 404)". Read the code the server actually named,
+# never a digit run that happens to appear somewhere else in the message.
+HTTP_STATUS = re.compile(r"HTTP[ \t]*([1-5][0-9][0-9])\b", re.I)
+
+
+def http_status(message):
+    """The HTTP status GitHub answered, or None when it named no status.
+
+    Measured 2026-11-03 (run 41675762958): retryability was decided by searching the whole error
+    string for "409"/"422". That string embeds the endpoint, and a live fault resource listening
+    on ephemeral port 40912 made a hard 403 read as a retryable CAS conflict -- so the store wrote
+    five times where the contract says once, and the probe battery went red. The earlier run of
+    the same commit passed because its port carried no such digits. A port is not a verdict.
+    """
+    match = HTTP_STATUS.search(str(message or ""))
+    return int(match.group(1)) if match else None
+
+
 # The bounty account owns the fork/PR identity. It is read once from the environment so a
 # mirror to another account is one variable, not a seventeen-file rename.
 # The bounty account owns the fork and PR identity, so it must be the account that is
@@ -305,7 +323,7 @@ class StateStore:
         try:
             self.api.api(f"repos/{self.repo}/git/ref/heads/{self.branch}")
         except GitHubError as exc:
-            if "404" not in str(exc):
+            if http_status(exc) != 404:
                 raise
             info = self.api.api(f"repos/{self.repo}")
             head = self.api.api(f"repos/{self.repo}/git/ref/heads/{info['default_branch']}")
@@ -313,7 +331,7 @@ class StateStore:
                 self.api.api(f"repos/{self.repo}/git/refs", "POST",
                              {"ref": "refs/heads/" + self.branch, "sha": head["object"]["sha"]})
             except GitHubError as race:
-                if "422" not in str(race):
+                if http_status(race) != 422:
                     raise
 
     def read(self, identity):
@@ -322,7 +340,7 @@ class StateStore:
         try:
             obj = self.api.api(f"repos/{self.repo}/contents/fleet-state/{identity}.json?ref={self.branch}")
         except GitHubError as exc:
-            if "404" in str(exc):
+            if http_status(exc) == 404:
                 return None, None
             raise
         return json.loads(base64.b64decode(obj["content"])), obj["sha"]
@@ -352,9 +370,9 @@ class StateStore:
                                     {"message": message or f"fleet: {identity} removed by probe",
                                      "branch": self.branch, "sha": sha})
             except GitHubError as exc:
-                if any(k in str(exc) for k in ("404", "Not Found")):
+                if http_status(exc) == 404 or "Not Found" in str(exc):
                     return None
-                if not any(code in str(exc) for code in ("409", "422")) or attempt == 4:
+                if http_status(exc) not in (409, 422) or attempt == 4:
                     raise
                 # If GitHub reveals the current sha in the 409 message, we can invalidate or wait.
                 time.sleep(min(attempt + 1, 4))
@@ -378,7 +396,7 @@ class StateStore:
                 self.write(identity, document, sha)
                 return document
             except GitHubError as exc:
-                if not any(code in str(exc) for code in ("409", "422")) or attempt == 4:
+                if http_status(exc) not in (409, 422) or attempt == 4:
                     raise
                 time.sleep(min(attempt + 1, 4))
         raise GitHubError("State compare-and-swap exhausted")
@@ -465,7 +483,7 @@ class StateStore:
         try:
             tree = self.api.api(f"repos/{self.repo}/git/trees/{self.branch}")
         except GitHubError as exc:
-            if "404" in str(exc):
+            if http_status(exc) == 404:
                 return
             raise
         subtree = next((entry for entry in tree["tree"] if entry["path"] == "fleet-state" and entry["type"] == "tree"), None)

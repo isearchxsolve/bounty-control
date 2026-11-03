@@ -13,8 +13,8 @@ import tempfile
 import threading
 from types import SimpleNamespace
 
-from actions_github import (BOUNTY_ACCOUNT, GitHub, GitHubError, StateStore, issue_number,
-                            repository, task_id, utcnow)
+from actions_github import (BOUNTY_ACCOUNT, GitHub, GitHubError, StateStore, http_status,
+                            issue_number, repository, task_id, utcnow)
 from actions_release import (git, manifest, product_paths, protect_baseline_tests,
                              regression_proof, require_commands, safe_path, status_paths,
                              validate_plan_contract, write_json, restore_checkpoint,
@@ -1103,7 +1103,7 @@ def publish():
         try:
             fork = api.api(f"repos/{account}/{name}")
         except GitHubError as exc:
-            if "404" not in str(exc):
+            if http_status(exc) != 404:
                 raise
             fork = api.api(f"repos/{repo}/forks", "POST", {"default_branch_only": True})
         if (fork.get("parent") or {}).get("full_name", "").lower() != repo.lower():

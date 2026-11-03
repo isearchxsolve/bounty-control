@@ -9,8 +9,21 @@ import unittest
 from unittest.mock import Mock, patch
 
 import actions_dispatch as dispatch
-from actions_github import GitHub, GitHubError, StateStore, task_id
+from actions_github import GitHub, GitHubError, StateStore, http_status, task_id
 from pipeline_evidence import bind_proof, require_evidence, source_revision
+
+
+def wire_message(status):
+    """A gh-shaped failure carrying every digit run an ephemeral port can forge.
+
+    Measured 2026-11-03 (run 41675762958): a live fault resource listening on port 40912 made a
+    hard 403 read as a retryable CAS conflict, because retryability searched the whole message for
+    "409"/"422" and gh's message embeds the endpoint. The offline fixture used a bare "403", so
+    there were no digits to collide with, the suite stayed green, and only the wire went red. This
+    endpoint is deliberately hostile so the collision is reproducible without a network.
+    """
+    return (f"gh: injected durable HTTP {status} (HTTP {status}) "
+            f"[endpoint: PUT http://127.0.0.1:40912/422/404/fault]")
 
 
 def transport_client(**kwargs):
@@ -186,7 +199,7 @@ class DurableStateFaults(unittest.TestCase):
         with patch.object(store, "ensure"), patch.object(store, "read", side_effect=[
                 ({"status": "CLAIMED", "count": 1}, "old"),
                 ({"status": "CLAIMED", "count": 9}, "new")]), \
-                patch.object(store, "write", side_effect=[GitHubError("409 conflict"), None]) as write, \
+                patch.object(store, "write", side_effect=[GitHubError(wire_message(409)), None]) as write, \
                 patch("actions_github.time.sleep"):
             from types import SimpleNamespace
             yield store, write, SimpleNamespace(sha='new')
@@ -201,7 +214,7 @@ class DurableStateFaults(unittest.TestCase):
             return
         store = StateStore(api=Mock(), repo="unit/control")
         with patch.object(store, "ensure"), patch.object(store, "read", return_value=(None, None)), \
-                patch.object(store, "write", side_effect=GitHubError(str(status))) as write, \
+                patch.object(store, "write", side_effect=GitHubError(wire_message(status))) as write, \
                 patch("actions_github.time.sleep"):
             yield store, write
 
@@ -238,6 +251,30 @@ class DurableStateFaults(unittest.TestCase):
                     with self.assertRaises(GitHubError):
                         store.mutate(identity, lambda old: {"status": "DISPATCHING"})
                     self.assertEqual(write.call_count, attempts)
+
+    def test_the_answer_decides_retryability_not_the_endpoint(self):
+        """A port cannot forge a verdict.
+
+        Measured 2026-11-03 (run 41675762958): the probe battery went red on
+        ``status=403 ... AssertionError: 5 != 1``. Retryability was decided by searching the whole
+        error string for "409"/"422", and gh's message embeds the endpoint, so a live fault
+        resource on port 40912 made a hard permission error retry five times. The same commit had
+        passed an hour earlier because that port carried no such digits -- which is exactly what a
+        coincidence, and not a contract, looks like.
+        """
+        message = wire_message(403)
+        for forged in ("409", "422", "404", "127.0.0.1:40912"):
+            self.assertIn(forged, message)
+        self.assertEqual(http_status(message), 403)
+        for text, expected in (
+                ("gh: Not Found (HTTP 404) [endpoint: GET repos/a/b/git/trees/40912]", 404),
+                ("gh: Validation Failed (HTTP 422)", 422),
+                ("gh: Conflict (HTTP 409) [endpoint: PUT repos/a/b/contents/422.json]", 409),
+                ("GitHub observation deadline exhausted: repos/40912/422", None),
+                ("", None),
+        ):
+            with self.subTest(text=text):
+                self.assertEqual(http_status(text), expected)
 
     def test_ambiguous_dispatch_failure_keeps_reservation_and_blocks_duplicate(self):
         store, api, ctx = self.dispatch_fixture()
