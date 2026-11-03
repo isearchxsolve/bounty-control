@@ -2,7 +2,7 @@
   "task_id": "27414e5464bdf69a8094963cdd6ed86f",
   "repo": "atyrode/manifold",
   "issue_number": 1084,
-  "status": "DISPATCHING",
+  "status": "DISPATCHED",
   "dispatch_id": "f6c0bfc29c534392aa7911461330e182",
   "admission": {
     "funding": {
@@ -43,5 +43,5 @@
   ],
   "dispatched_at": "2026-11-03T14:53:38.553274+00:00",
   "attempt": 0,
-  "updated_at": "2026-11-03T14:53:38.553290+00:00"
+  "updated_at": "2026-11-03T14:53:40.645691+00:00"
 }
