@@ -1,5 +1,5 @@
 {
-  "at": "2026-11-03T04:15:10.344464+00:00",
+  "at": "2026-11-03T04:15:13.005969+00:00",
   "run_url": "https://github.com/isearchxsolve/bounty-control/actions/runs/41576959640",
   "end_to_end_passed": false,
   "coverage": {
@@ -56,6 +56,16 @@
       "case": "LIVE_INTAKE",
       "status": "FAIL",
       "at": "2026-11-03T04:15:10.343568+00:00"
+    },
+    {
+      "case": "LIVE_INTAKE",
+      "status": "FAIL",
+      "at": "2026-11-03T04:15:11.358590+00:00"
+    },
+    {
+      "case": "PIPELINE_ENTRY",
+      "status": "PASS",
+      "at": "2026-11-03T04:15:13.005270+00:00"
     }
   ],
   "cohort": {}
