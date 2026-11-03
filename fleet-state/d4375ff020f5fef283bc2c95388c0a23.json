@@ -2,7 +2,7 @@
   "task_id": "d4375ff020f5fef283bc2c95388c0a23",
   "repo": "hashcat/hashcat",
   "issue_number": 4141,
-  "status": "DISPATCHING",
+  "status": "DISPATCHED",
   "dispatch_id": "2eb34de02e264716a1f4e4c7d6ebb385",
   "admission": {
     "funding": {
@@ -44,7 +44,7 @@
   ],
   "dispatched_at": "2026-11-03T06:29:54.986402+00:00",
   "attempt": 1,
-  "updated_at": "2026-11-03T06:29:54.986419+00:00",
+  "updated_at": "2026-11-03T06:29:57.111984+00:00",
   "owner": "41577269576:1",
   "previous_owner": null,
   "previous_status": "DISPATCHED",
