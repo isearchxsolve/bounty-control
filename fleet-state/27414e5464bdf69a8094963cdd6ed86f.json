@@ -2,7 +2,7 @@
   "task_id": "27414e5464bdf69a8094963cdd6ed86f",
   "repo": "atyrode/manifold",
   "issue_number": 1084,
-  "status": "CLAIMED",
+  "status": "FAILED_ENGINEER",
   "dispatch_id": "4f1ed6212fba4b69bf25ab76e38a768b",
   "admission": {
     "funding": {
@@ -43,7 +43,7 @@
   ],
   "dispatched_at": "2026-11-03T15:57:26.819886+00:00",
   "attempt": 2,
-  "updated_at": "2026-11-03T15:57:42.118857+00:00",
+  "updated_at": "2026-11-03T16:15:09.539551+00:00",
   "owner": "41669207941:1",
   "previous_owner": "41658212601:1",
   "previous_status": "DISPATCHED",
@@ -55,7 +55,7 @@
   "kind": "engineer",
   "retryable": true,
   "diagnostic": "Bounded Cline delivery repair exhausted: Iteration exhausted after 1 turns without green. Last reported failure:\nTest failure in turn 1: bun test packages/server/test/job-service.test.ts -t owner-cancelled instance service is readmitted after clean host shutdown and reattach\n\n::group::packages/server/test/job-service.test.ts:\n\n::endgroup::\n\nerror: regex \"owner-cancelled instance service is readmitted after clean host shutdown and reattach\" matched 0 tests. Searched 1 file (skipping 201 tests) [362.00ms]",
-  "at": "2026-11-03T15:47:58.560933+00:00",
+  "at": "2026-11-03T16:14:54.441081+00:00",
   "failures": [
     {
       "run_url": "https://github.com/isearchxsolve/bounty-control/actions/runs/41658212601",
@@ -64,7 +64,15 @@
       "retryable": true,
       "diagnostic": "Bounded Cline delivery repair exhausted: Iteration exhausted after 1 turns without green. Last reported failure:\nTest failure in turn 1: bun test packages/server/test/job-service.test.ts -t owner-cancelled instance service is readmitted after clean host shutdown and reattach\n\n::group::packages/server/test/job-service.test.ts:\n\n::endgroup::\n\nerror: regex \"owner-cancelled instance service is readmitted after clean host shutdown and reattach\" matched 0 tests. Searched 1 file (skipping 201 tests) [362.00ms]",
       "at": "2026-11-03T15:47:58.560933+00:00"
+    },
+    {
+      "run_url": "https://github.com/isearchxsolve/bounty-control/actions/runs/41669207941",
+      "status": "FAILED_ENGINEER",
+      "kind": "engineer",
+      "retryable": true,
+      "diagnostic": "Bounded Cline delivery repair exhausted: Iteration exhausted after 1 turns without green. Last reported failure:\nTest failure in turn 1: bun test packages/server/test/job-service.test.ts -t owner-cancelled instance service is readmitted after clean host shutdown and reattach\n\n::group::packages/server/test/job-service.test.ts:\n\n::endgroup::\n\nerror: regex \"owner-cancelled instance service is readmitted after clean host shutdown and reattach\" matched 0 tests. Searched 1 file (skipping 201 tests) [362.00ms]",
+      "at": "2026-11-03T16:14:54.441081+00:00"
     }
   ],
-  "finished_at": "2026-11-03T15:48:10.552965+00:00"
+  "finished_at": "2026-11-03T16:15:09.029546+00:00"
 }
