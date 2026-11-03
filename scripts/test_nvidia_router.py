@@ -3,7 +3,10 @@
 Each test pins a behaviour that a live run measured or that would waste a claim if wrong.
 """
 
+import json
+import os
 import unittest
+from unittest.mock import patch
 
 import nvidia_router as nr
 
@@ -191,6 +194,65 @@ class LiveCooldownRegression(unittest.TestCase):
         with patch.object(worker, '_get_default_router', return_value=primary), patch.object(worker.time, 'sleep', side_effect=advance):
             outcome = worker.gateway_failover(payload, 'No Token Harbor key is currently ready.', router=fallback)
         self.assertTrue(outcome[0], outcome)
+
+
+class KeyPool(unittest.TestCase):
+    """The parachute's pool is the pool the secret actually publishes, not one key.
+
+    Measured live 2026-11-02 (delivery engine, run 41543384839): production wires only
+    NVIDIA_API_KEY, so load_keys() returned one slot, the budget became one attempt, and
+    every turn died on "Every NVIDIA key failed after 1 attempt(s)" while 10 other keys
+    sat unused. A 429 is one account's cooldown, so a pool of 11 has 11 cooldowns to spend.
+    """
+
+    def test_a_json_list_published_as_one_secret_is_the_whole_pool(self):
+        with patch.dict(os.environ, {"NVIDIA_API_KEY": json.dumps(["k1", "k2", "k3"]), "NVIDIA_KEYS_JSON": ""}):
+            self.assertEqual(nr.load_keys(), ["k1", "k2", "k3"])
+
+    def test_a_keys_document_published_as_one_secret_is_the_whole_pool(self):
+        with patch.dict(os.environ, {"NVIDIA_API_KEY": json.dumps({"keys": ["k1", "k2"]}), "NVIDIA_KEYS_JSON": ""}):
+            self.assertEqual(nr.load_keys(), ["k1", "k2"])
+
+    def test_separated_keys_published_as_one_secret_are_the_whole_pool(self):
+        with patch.dict(os.environ, {"NVIDIA_API_KEY": "k1\nk2\n\nk3  ", "NVIDIA_KEYS_JSON": ""}):
+            self.assertEqual(nr.load_keys(), ["k1", "k2", "k3"])
+        with patch.dict(os.environ, {"NVIDIA_API_KEY": "k1,k2,k3", "NVIDIA_KEYS_JSON": ""}):
+            self.assertEqual(nr.load_keys(), ["k1", "k2", "k3"])
+
+    def test_a_single_plain_key_is_still_one_key(self):
+        with patch.dict(os.environ, {"NVIDIA_API_KEY": "nvapi-abc", "NVIDIA_KEYS_JSON": ""}):
+            self.assertEqual(nr.load_keys(), ["nvapi-abc"])
+
+    def test_a_pool_in_nvidia_keys_json_still_wins(self):
+        with patch.dict(os.environ, {"NVIDIA_KEYS_JSON": json.dumps(["a", "b"]),
+                                     "NVIDIA_API_KEY": "single"}):
+            self.assertEqual(nr.load_keys(), ["a", "b"])
+
+    def test_eleven_keys_budget_eleven_attempts(self):
+        """The budget that made the failure message read 'after 1 attempt(s)'."""
+        keys = [f"k{i}" for i in range(11)]
+        transport = FakeTransport([(429, "limited")] * len(keys))
+        router = nr.NvidiaRouter(keys=keys, transport=transport)
+        succeeded, _, _, error = router.chat_completion({"messages": [{"role": "user", "content": "hi"}]})
+        self.assertFalse(succeeded)
+        self.assertEqual(len(set(transport.tried)), 11, "a key was tried twice in one call")
+        self.assertIn("after 11 attempt(s)", error, "the pool was not rotated through")
+
+    def test_a_fleet_of_keys_is_used_when_one_secret_publishes_it(self):
+        keys = nr._pool_from(json.dumps([f"k{i}" for i in range(11)]), "NVIDIA_API_KEY")
+        self.assertEqual(len(keys), 11)
+        transport = FakeTransport([(429, "limited")] * 10 + [(200, ok_body("twelfth account"))])
+        router = nr.NvidiaRouter(keys=keys, transport=transport)
+        succeeded, _, _, error = router.chat_completion({"messages": [{"role": "user", "content": "hi"}]})
+        self.assertTrue(succeeded, error)
+        self.assertEqual(len(set(transport.tried)), 11)
+
+    def test_a_pool_survives_one_throttled_key_without_failing_the_call(self):
+        keys = [f"k{i}" for i in range(11)]
+        transport = FakeTransport([(429, "limited"), (200, ok_body("second brain"))])
+        router = nr.NvidiaRouter(keys=keys, transport=transport)
+        succeeded, _, _, error = router.chat_completion({"messages": [{"role": "user", "content": "hi"}]})
+        self.assertTrue(succeeded, error)
 
 
 if __name__ == "__main__":

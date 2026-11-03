@@ -28,6 +28,10 @@ jobs:
       GH_TOKEN: ${{ secrets.GH_PAT }}
       TOKENHARBOR_KEYS_JSON: ${{ secrets.TOKENHARBOR_KEYS_JSON }}
       NVIDIA_API_KEY: ${{ secrets.NVIDIA_API_KEY }}
+      # The whole NVIDIA key pool, however the secret publishes it: a JSON list, a
+      # {"keys": [...]} document, or newline/comma separated keys. One secret, 11 keys,
+      # 11 separate accounts -- so a 429 spends one account's cooldown, not the brain.
+      NVIDIA_KEYS_JSON: ${{ secrets.NVIDIA_KEYS_JSON }}
       NVIDIA_ROUTER_MODEL: ${{ vars.NVIDIA_DELIVERY_MODEL || 'nvidia/nemotron-3.5-super-vl-120b-a12b' }}
       PYTHONUNBUFFERED: '1'
       PYTHONIOENCODING: utf-8

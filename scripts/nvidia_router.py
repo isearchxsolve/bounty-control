@@ -44,24 +44,44 @@ def _log(line: str) -> None:
     print(line, flush=True)
 
 
+def _pool_from(raw: str, source: str) -> List[str]:
+    """A key pool from one environment value, in whatever shape it was published.
+
+    Published as a JSON list or ``{"keys": [...]}`` it is used as written. Published as a
+    single plain key it still yields that one key, so existing configuration keeps working.
+    Published as newline or comma separated keys it is pooled too: 11 keys delivered as one
+    secret are 11 slots with 11 accounts, not one account throttled 11 times in a row --
+    measured live 2026-11-02 (run 41543384839), where every delivery turn died on
+    "Every NVIDIA key failed after 1 attempt(s)" because production wires exactly one key.
+    """
+    text = raw.strip().lstrip("\ufeff")
+    if not text:
+        return []
+    if text[:1] in "[{":
+        try:
+            document = json.loads(text)
+        except ValueError:
+            document = None
+        if document is not None:
+            values = document.get("keys", []) if isinstance(document, dict) else document
+            if not isinstance(values, list):
+                raise ValueError(f"{source} must be a JSON key list or {{\"keys\": [...]}}.")
+            return [v.strip() for v in values if isinstance(v, str) and v.strip()]
+    return [part.strip() for part in text.replace(",", "\n").split("\n") if part.strip()]
+
+
 def load_keys() -> List[str]:
-    """Keys from NVIDIA_KEYS_JSON (list or {"keys": [...]}), else NVIDIA_API_KEY, else a file."""
-    raw = os.environ.get(KEYS_ENV, "").strip().lstrip("\ufeff")
+    """Keys from NVIDIA_KEYS_JSON, else NVIDIA_API_KEY, else a file. A pool is a pool."""
+    raw = os.environ.get(KEYS_ENV, "").strip()
     if raw:
-        document = json.loads(raw)
-        values = document.get("keys", []) if isinstance(document, dict) else document
-        if not isinstance(values, list):
-            raise ValueError(f"{KEYS_ENV} must be a JSON key list or {{\"keys\": [...]}}.")
-        return [v.strip() for v in values if isinstance(v, str) and v.strip()]
+        return _pool_from(raw, KEYS_ENV)
     single = os.environ.get(SINGLE_KEY_ENV, "").strip()
     if single:
-        return [single]
+        return _pool_from(single, SINGLE_KEY_ENV)
     path = os.environ.get("NVIDIA_KEYS_FILE", "").strip()
     if path:
         with open(path, encoding="utf-8-sig") as handle:
-            document = json.load(handle)
-        values = document.get("keys", []) if isinstance(document, dict) else document
-        return [v.strip() for v in values if isinstance(v, str) and v.strip()]
+            return _pool_from(handle.read(), path)
     return []
 
 

@@ -43,6 +43,10 @@ jobs:
       env:
         TOKENHARBOR_KEYS_JSON: ${{ secrets.TOKENHARBOR_KEYS_JSON }}
         NVIDIA_API_KEY: ${{ secrets.NVIDIA_API_KEY }}
+        # The whole NVIDIA key pool, however the secret publishes it: a JSON list, a
+        # {"keys": [...]} document, or newline/comma separated keys. One secret, 11 keys,
+        # 11 separate accounts -- so a 429 spends one account's cooldown, not the brain.
+        NVIDIA_KEYS_JSON: ${{ secrets.NVIDIA_KEYS_JSON }}
         BOUNTY_ENTRY_DOOR: ${{ vars.ENTRY_DOOR || 'cline' }}
         BOUNTY_ENTRY_MODEL: ${{ vars.ENTRY_MODEL || 'deepseek-v4.1-flash:free' }}
         TOKENHARBOR_MODEL: 'deepseek-v4.1-flash:free'
