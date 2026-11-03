@@ -36,6 +36,8 @@ jobs:
       NVIDIA_ROUTER_MODEL: ${{ vars.NVIDIA_DELIVERY_MODEL || 'nvidia/nemotron-3.5-super-vl-120b-a12b' }}
       PYTHONUNBUFFERED: '1'
       PYTHONIOENCODING: utf-8
+      # Publish status facts to the control branch while job logs are still live.
+      LIVE_PIPELINE_PROGRESS: '1'
       BOUNTY_AGENT_MEMORY: ${{ github.workspace }}/scratch/live-integration/entry-scout/discovery-memory
     steps:
     - uses: actions/checkout@v4

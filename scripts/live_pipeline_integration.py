@@ -169,6 +169,48 @@ class LiveRun:
         self.data["events"].append(event)
         self.save()
         print(json.dumps(event), flush=True)
+        self.publish_progress()
+
+    def publish_progress(self, *, force=False):
+        """Expose factual stage receipts while Actions' unfinished logs are unavailable."""
+        run_id = os.environ.get('GITHUB_RUN_ID', '')
+        if (os.environ.get('LIVE_PIPELINE_PROGRESS') != '1' or not run_id.isdecimal()
+                or self.args.issue is not None):
+            return
+        if not force and time.monotonic() < getattr(self, '_progress_next', 0):
+            return
+        self._progress_next = time.monotonic() + 30
+        attempt = os.environ.get('GITHUB_RUN_ATTEMPT', '1')
+        if not attempt.isdecimal():
+            return
+        path = f'live-integration/{run_id}-{attempt}.json'
+        store = StateStore(self.api, self.control)
+        # Only allowlisted status facts travel here, never prompts, model logs,
+        # environment, task bodies or arbitrary diagnostic text.
+        progress = {'at': self.now(), 'run_url': f'https://github.com/{self.control}/actions/runs/{run_id}',
+                    'end_to_end_passed': self.data['end_to_end_passed'],
+                    'coverage': dict(self.data['coverage']),
+                    'events': [{key: event.get(key) for key in ('case', 'status', 'at')}
+                               for event in self.data['events'][-15:]],
+                    'cohort': {identity: {key: member.get(key) for key in ('repo', 'issue', 'state')}
+                               for identity, member in self.data.get('cohort', {}).items()}}
+        try:
+            current = getattr(self, '_progress_sha', None)
+            if current is None:
+                try:
+                    current = self.api.api(f'repos/{self.control}/contents/{path}?ref={store.branch}')['sha']
+                except GitHubError as exc:
+                    if '404' not in str(exc):
+                        raise
+            body = {'message': f'live integration progress {run_id}', 'branch': store.branch,
+                    'content': base64.b64encode(json.dumps(progress, indent=2).encode()).decode()}
+            if current:
+                body['sha'] = current
+            result = self.api.api(f'repos/{self.control}/contents/{path}', 'PUT', body)
+            self._progress_sha = result['content']['sha']
+        except (GitHubError, KeyError, TypeError, OSError):
+            self._progress_sha = None
+            print(json.dumps({'phase': 'LIVE_PROGRESS_UNAVAILABLE', 'run_id': run_id}), flush=True)
 
     def recent_runs(self):
         """Complete pagination bounded to this campaign's real creation window."""
@@ -1066,6 +1108,7 @@ class LiveRun:
 
         queue = self.folder / 'entry-queue'
         if not self.data.get('pipeline_admitted'):
+            self.record('PIPELINE_ENTRY', 'PENDING', issue_filter=None)
             settings = {'BOUNTY_ENTRY_DOOR': 'cline',
                         'BOUNTY_AGENT_WORKSPACE': str((self.folder / 'entry-scout').resolve()),
                         'BOUNTY_AGENT_TIMEOUT': str(self.args.model_timeout)}
@@ -1257,6 +1300,8 @@ def main():
         except Exception as exc:
             run.record(args.phase.upper(), 'FAIL', error=type(exc).__name__, diagnostic=str(exc)[:2000])
             return 1
+        finally:
+            run.publish_progress(force=True)
     return 0
 
 
