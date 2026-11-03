@@ -1121,14 +1121,30 @@ class LiveRun:
         check(not blockers, 'Delivery blocked; independent fault checks completed: ' + '; '.join(blockers))
         if not self.data.get('dispatch_id'):
             self.dispatch()
-        self.wait()
-        self.artifact_faults()
-        self.failures()
+        # One shot, every independent surface. A wait deadline or a blocked publication used to
+        # abort the remaining cases, so each repair round only ever revealed the next one. Each
+        # phase below now records its own verdict and the campaign continues; the aggregate at the
+        # end names every failing required case at once.
+        def phase(case, action):
+            try:
+                action()
+            except (AssertionError, GitHubError, ValueError, TimeoutError) as exc:
+                if self.data['coverage'].get(case) != 'FAIL':
+                    self.record(case, 'FAIL', diagnostic=str(exc)[:2000])
+
+        phase('LIVE_DELIVERY', self.wait)
+        phase('LIVE_ARTIFACT_FAULTS', self.artifact_faults)
+        phase('LIVE_FAILURE_SURFACE', self.failures)
         if self.args.merge_fixture or self.data.get('existing_issue'):
-            self.merge()
+            phase('MERGE_AND_RECONCILE_REPLAY', self.merge)
         else:
             self.record('END_TO_END', 'INCOMPLETE', reason='Merge/reconciliation requires --merge-fixture')
-            raise AssertionError('End-to-end through merge has not been executed')
+            self.record('MERGE_AND_RECONCILE_REPLAY', 'INCOMPLETE', reason='--merge-fixture required')
+        missing = {case: status for case, status in self.data['coverage'].items() if status != 'PASS'}
+        check(not missing, 'Live campaign incomplete or failing; every independent case was executed: '
+              + json.dumps(missing))
+        self.data['end_to_end_passed'] = True
+        self.save()
 
     def pipeline(self):
         """Drive the production door across its live sources; no selected issue or fixture."""
@@ -1299,7 +1315,13 @@ class LiveRun:
                     member.pop('diagnostic', None)
                 except (AssertionError, GitHubError, ValueError) as exc:
                     member.update(state='FAILED_OR_PENDING_RECOVERY', diagnostic=str(exc))
-                    self.record('PIPELINE_MEMBER', 'FAIL', original=child.data['issue_url'], diagnostic=str(exc))
+                    # A conclusive failure is recorded once; re-observing the same terminal
+                    # generation every 20s for the whole wait window only multiplies identical
+                    # FAIL rows. The first failure and the final aggregate both keep their full
+                    # diagnostic, so no signal is lost -- only the repeat count is.
+                    if member.get('last_failure') != str(exc):
+                        self.record('PIPELINE_MEMBER', 'FAIL', original=child.data['issue_url'], diagnostic=str(exc))
+                        member['last_failure'] = str(exc)
                 finally:
                     absorb(child)
             if all(cohort[c.data['task_id']]['state'] == 'DELIVERED' for c in children):
@@ -1309,6 +1331,24 @@ class LiveRun:
                 self.data['end_to_end_passed'] = True
                 self.save()
                 return
+            # Aggregate exit: every dispatched original is terminal, none owes a repair and none
+            # is mid-flight, so there is nothing left to wait for. Production's own retry sweep
+            # is the only actor that can change these records; while a repair obligation still
+            # stands the ledger says so, and while a generation is running its status is active.
+            # This is a gate over ledger facts, not a heuristic: a retry that arrives later is
+            # still picked up by the deadline backstop and the next observation pass.
+            terminal = [c for c in children if cohort[c.data['task_id']].get('state') not in
+                        ('DELIVERED', 'AWAITING_MAINTAINER_MERGE')]
+            if terminal and all(cohort[c.data['task_id']].get('state') == 'FAILED_OR_PENDING_RECOVERY'
+                                for c in terminal):
+                from actions_reconcile import repair_obligation
+                records = [StateStore(self.api, self.control).read(c.data['task_id'])[0] for c in terminal]
+                active = {'DISPATCHING', 'DISPATCHED', 'CLAIMED', 'ENGINEERING', 'VERIFIED', 'PUBLISHING'}
+                if (not any(repair_obligation(r) for r in records)
+                        and not any(r and str(r.get('status')) in active for r in records)):
+                    self.record('END_TO_END', 'INCOMPLETE', cohort=cohort,
+                                reason='Every dispatched original is terminal with no remaining repair obligation')
+                    raise TimeoutError('All dispatched originals failed and none owes a repair; see per-original journals')
             self.save()
             time.sleep(20)
         self.record('END_TO_END', 'INCOMPLETE', cohort=cohort, reason='Live delivery/review deadline exhausted')
