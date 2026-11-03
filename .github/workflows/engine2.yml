@@ -160,7 +160,7 @@ jobs:
         # Measured live 2026-11-02 (run 41543384839): with a single key wired the router's
         # budget was one attempt and every turn died on "after 1 attempt(s)".
         NVIDIA_KEYS_JSON: ${{ secrets.NVIDIA_KEYS_JSON }}
-        NVIDIA_ROUTER_MODEL: ${{ vars.NVIDIA_DELIVERY_MODEL || 'mistralai/mistral-large-4-1t-a52b' }}
+        NVIDIA_ROUTER_MODEL: ${{ vars.NVIDIA_DELIVERY_MODEL || 'nvidia/nemotron-3.5-super-vl-120b-a12b' }}
         ENGINE_ID: actions-${{ github.run_id }}
         CLINE_TOTAL_BUDGET_SECONDS: '14400'
         # The dispatch payload still carries a preparation window, and it can only shorten
