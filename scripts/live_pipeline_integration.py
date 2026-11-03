@@ -48,6 +48,18 @@ def check(condition, message):
         raise AssertionError(message)
 
 
+def delivery_harness(run, state, expected, *, continuation=False):
+    """Bind a repaired generation to its actual Actions owner, never ambient HEAD."""
+    actual = run['head_sha']
+    if actual != expected:
+        check(continuation, 'Deployed harness changed since preflight')
+        check(re.fullmatch(r'[0-9a-f]{40}', actual), 'Invalid delivery harness SHA')
+        check(state.get('harness_sha') == actual, 'Claim and Actions harness differ')
+        check(state.get('owner') == f'{run["id"]}:{run["run_attempt"]}', 'Claim and Actions owner differ')
+        check(state.get('run_url') == run['html_url'], 'Claim and Actions execution differ')
+    return actual
+
+
 def drain_evidence(folder, run):
     """Validate actual hydrated queue artifacts, including cache freshness."""
     census = json.loads((folder / 'census.jsonl').read_text(encoding='utf-8').splitlines()[-1])
@@ -592,7 +604,9 @@ class LiveRun:
         self.record('ACTIONS_TERMINAL', 'PASS' if run['conclusion'] == 'success' else 'FAIL',
                     url=run['html_url'], conclusion=run['conclusion'], state=state['status'], state_sha=sha,
                     diagnostic=state.get('diagnostic'))
-        check(run['head_sha'] == self.data['deployed_sha'], 'Deployed harness changed since preflight')
+        expected = self.data.get('delivery_harnesses', {}).get(self.data['dispatch_id'], self.data['deployed_sha'])
+        verified_harness = delivery_harness(run, state, expected,
+                                            continuation=bool(self.data.get('continuations')))
         check(run['conclusion'] == 'success', 'Real pipeline failed; artifacts retained, downstream stages untested')
         required = {'claim', 'engineer', 'publish', 'reconcile'}
         check(required <= {j['name'] for j in jobs if j['conclusion'] == 'success'}, 'A real delivery job did not succeed')
@@ -602,6 +616,7 @@ class LiveRun:
         releases = list(destination.rglob('release.json'))
         check(releases, 'Real release receipt missing')
         release = json.loads(releases[0].read_text())
+        check(release.get('harness_sha') == verified_harness, 'Release and Actions harness differ')
         check(release['task_id'] == identity and release['admission'] == self.data['admitted']['admission'],
               'Source-bound proof did not survive the real pipeline')
         check(release['head_sha'] == pr['head']['sha'], 'Release receipt head mismatch')
@@ -611,6 +626,9 @@ class LiveRun:
         checks = classify_checks(self.api, self.target, pr['head']['sha'])
         self.data.update(pr_number=pr['number'], pr_url=pr['html_url'], head_sha=pr['head']['sha'],
                          checks=checks, delivered_to_pr=True)
+        self.data.setdefault('delivery_harnesses', {})[self.data['dispatch_id']] = verified_harness
+        self.record('DELIVERY_HARNESS', 'OBSERVED', dispatch_id=self.data['dispatch_id'],
+                    actions_sha=verified_harness, driver_sha=self.data['local_sha'])
         self.record('REAL_PUBLICATION', 'PASS', pr=pr['html_url'], head=pr['head']['sha'], checks=checks['state'])
 
     def failed_jobs(self, run):
@@ -1156,6 +1174,8 @@ class LiveRun:
             args = SimpleNamespace(**{**vars(self.args), 'target': row['repo'], 'issue': row['issue'],
                                       'run_dir': self.folder / 'originals' / identity, 'merge_fixture': False})
             child = LiveRun(args)
+            if self.data.get('continuations'):
+                child.data['continuations'] = list(self.data['continuations'])
             if not child.data.get('admitted'):
                 child.data.update(issue=row['issue'], issue_url=row['url'], task_id=identity, admitted=row)
                 child_queue = child.folder / 'queue'
@@ -1169,7 +1189,8 @@ class LiveRun:
                              source_revision=row['admission']['source_revision'])
                 child.record('LIVE_QUEUE_DEFERRAL', 'PASS', production_queue=str(queue), dispatch_budget=0)
             try:
-                child.preflight()
+                if child.data['coverage'].get('ENVIRONMENT') != 'PASS':
+                    child.preflight()
                 if not self.data.get('shared_faults_passed'):
                     child.faults()
                     if not child.data.get('negative_dispatch'):
@@ -1279,6 +1300,7 @@ def main():
     parser.add_argument('phase', choices=['audit', 'provision', 'admit', 'dispatch', 'observe', 'merge', 'faults',
                                         'negative-claim', 'observe-negative', 'artifact-faults', 'cleanup', 'wait', 'run', 'intake', 'failures'])
     parser.add_argument('--run-dir', type=Path, required=True)
+    parser.add_argument('--resume-run', help='Restore a completed full master campaign before continuing')
     parser.add_argument('--target', default='isearchxsolve/oss-hunter-livefire')
     parser.add_argument('--control', default='isearchxsolve/bounty-control')
     parser.add_argument('--issue', type=int, help='Use this existing original issue instead of provisioning a sandbox issue')
@@ -1291,6 +1313,10 @@ def main():
     args = parser.parse_args()
     check(args.model_timeout > 0 and args.engineering_budget > 0 and args.wait_minutes > 0
           and args.intake_max_age_minutes > 0, 'Budgets must be positive')
+    if args.resume_run:
+        check(args.phase == 'run' and args.issue is None, 'Checkpoint resume keeps the full unfiltered campaign')
+        from live_pipeline_resume import restore_campaign
+        restore_campaign(args.resume_run, args.run_dir, args.control, args.target)
     run = LiveRun(args)
     log_path = run.folder / f'{args.phase}-{time.time_ns()}.log'
     with log_path.open('w', encoding='utf-8') as log, \

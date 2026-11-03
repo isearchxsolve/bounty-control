@@ -11,6 +11,10 @@ run-name: 'Live integration ${{ github.run_id }}'
         description: Optional issue diagnostic; empty drives the production entry door across real issues
         type: string
         required: false
+      resume_run:
+        description: Resume a completed master run from retained real checkpoints after repair
+        type: string
+        required: false
       merge_fixture:
         description: Merge only this run's sandbox PR after real native CI succeeds
         type: boolean
@@ -58,8 +62,10 @@ jobs:
         MERGE_FIXTURE: ${{ inputs.merge_fixture }}
         TARGET_REPO: ${{ inputs.target_repo }}
         ISSUE_NUMBER: ${{ inputs.issue_number }}
+        RESUME_RUN: ${{ inputs.resume_run }}
       run: |
         flags=(--target "$TARGET_REPO")
+        if [ -n "$RESUME_RUN" ]; then flags+=(--resume-run "$RESUME_RUN"); fi
         if [ -n "$ISSUE_NUMBER" ]; then flags+=(--issue "$ISSUE_NUMBER"); fi
         if [ "$MERGE_FIXTURE" = true ]; then flags+=(--merge-fixture); fi
         python3 -u scripts/live_pipeline_integration.py run \
@@ -97,5 +103,6 @@ jobs:
           scratch/live-integration/entry-scout/run-*/agent.log
           scratch/live-integration/entry-scout/discovery-memory/RESEARCH.md
           scratch/live-integration/originals/
+          scratch/live-integration/continuations/
         if-no-files-found: error
         retention-days: 14
