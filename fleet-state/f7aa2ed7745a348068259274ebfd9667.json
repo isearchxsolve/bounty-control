@@ -1,0 +1,47 @@
+{
+  "task_id": "f7aa2ed7745a348068259274ebfd9667",
+  "repo": "yegor256/online",
+  "issue_number": 148,
+  "status": "DISPATCHING",
+  "dispatch_id": "cadfa28dc2b945b0af754eb318d43e77",
+  "admission": {
+    "funding": {
+      "payer": "yegor256",
+      "source_url": "https://github.com/yegor256/online/issues/148",
+      "amount": "0",
+      "currency": "FOUNDER",
+      "usd_value": "0",
+      "quote": {
+        "basis": "Unpriced repository-owner request"
+      },
+      "raw": "When the network is down or the host refuses the connection, `online?` raises an exception instead of returning `false`.",
+      "source_author_association": "OWNER",
+      "source_author_login": "yegor256"
+    },
+    "agent_reason": "Repository owner reports online? raises ECONNREFUSED/ENETUNREACH/ECONNRESET instead of returning false in lib/online.rb; the rescue clause misses these common network errors.",
+    "scope_quote": "The rescue should cover these cases too:",
+    "code_evidence": {
+      "is_product_code": true,
+      "path": "lib/online.rb",
+      "sha": "18c0b065ba3bd181938b63385336735c7aba5034",
+      "quote": "def online?(uri: 'https://www.google.com/generate_204', ttl: 300, timeout: 10)"
+    },
+    "source_issue": "https://github.com/yegor256/online/issues/148",
+    "funding_status": "UNPRICED_OWNER_REQUEST",
+    "lane": "founder",
+    "task_id": "f7aa2ed7745a348068259274ebfd9667",
+    "source_revision": "698f395a4acd52ba8e060e8735cab25f243986302fb5e783a402a30993451f60"
+  },
+  "dispatch_attempt": 1,
+  "sovereign_admission": true,
+  "competition": {
+    "blocking": false,
+    "nominal": []
+  },
+  "lanes": [
+    "founder"
+  ],
+  "dispatched_at": "2026-11-03T12:57:22.787390+00:00",
+  "attempt": 0,
+  "updated_at": "2026-11-03T12:57:22.787407+00:00"
+}
