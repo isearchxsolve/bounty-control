@@ -1,5 +1,5 @@
 {
-  "at": "2026-11-03T04:17:48.280999+00:00",
+  "at": "2026-11-03T04:18:26.340187+00:00",
   "run_url": "https://github.com/isearchxsolve/bounty-control/actions/runs/41576959640",
   "end_to_end_passed": false,
   "coverage": {
@@ -37,11 +37,6 @@
     "LIVE_FAILURE_SURFACE": "NOT_RUN"
   },
   "events": [
-    {
-      "case": "LIVE_STALE_GENERATION",
-      "status": "PASS",
-      "at": "2026-11-03T04:17:36.438578+00:00"
-    },
     {
       "case": "LIVE_WRONG_OWNER",
       "status": "PASS",
@@ -111,6 +106,11 @@
       "case": "LIVE_QUEUE_REPLAY",
       "status": "PASS",
       "at": "2026-11-03T04:17:48.280027+00:00"
+    },
+    {
+      "case": "PIPELINE_CANDIDATE",
+      "status": "OBSERVED",
+      "at": "2026-11-03T04:18:26.339233+00:00"
     }
   ],
   "cohort": {
@@ -118,6 +118,11 @@
       "repo": "DimitarGeorgievski/patuvaj-notes",
       "issue": 13,
       "state": "DISPATCHED"
+    },
+    "1b775e000d87d5799c1b22ebe834bf96": {
+      "repo": "DimitarGeorgievski/patuvaj-notes",
+      "issue": 11,
+      "state": "BLOCKED"
     }
   }
 }
