@@ -2,7 +2,7 @@
   "task_id": "164c8a7d7e633756c6e21207f67c7074",
   "repo": "isaim0011/rift",
   "issue_number": 3,
-  "status": "DISPATCHING",
+  "status": "DISPATCHED",
   "dispatch_id": "a88fcc9ecad74bda82bd2538b09061c1",
   "admission": {
     "funding": {
@@ -43,5 +43,5 @@
   ],
   "dispatched_at": "2026-11-03T10:13:29.877737+00:00",
   "attempt": 0,
-  "updated_at": "2026-11-03T10:13:29.877754+00:00"
+  "updated_at": "2026-11-03T10:13:31.999077+00:00"
 }
