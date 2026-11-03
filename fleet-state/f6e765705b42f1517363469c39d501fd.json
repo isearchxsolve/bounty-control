@@ -3,8 +3,15 @@
   "repo": "isearchxsolve/oss-hunter-livefire",
   "issue_number": 1,
   "fault_fixture": true,
-  "status": "DISPATCHED",
-  "attempt": 0,
+  "status": "CLAIMED",
+  "attempt": 1,
   "dispatch_id": "4726f19edb2c407898d56a7427c636f7",
-  "updated_at": "2026-11-03T11:47:32.149928+00:00"
+  "updated_at": "2026-11-03T11:47:49.364769+00:00",
+  "owner": "probe-owner:1",
+  "previous_owner": null,
+  "previous_status": "DISPATCHED",
+  "run_url": "https://example.invalid/fault-input",
+  "harness_sha": "042436c6438600d0a63b9d9c5cf9f8befab6915a",
+  "claimed_at": "2026-11-03T11:47:49.364769+00:00",
+  "lease_expires_at": "2026-11-03T15:52:49.364769+00:00"
 }
