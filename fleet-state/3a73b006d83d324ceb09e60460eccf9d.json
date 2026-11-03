@@ -1,0 +1,47 @@
+{
+  "task_id": "3a73b006d83d324ceb09e60460eccf9d",
+  "repo": "pavel1337/perimeter",
+  "issue_number": 59,
+  "status": "DISPATCHING",
+  "dispatch_id": "dd59ae0bab7444f1a1aa777ba7a674a5",
+  "admission": {
+    "funding": {
+      "payer": "pavel1337",
+      "source_url": "https://github.com/pavel1337/perimeter/issues/59",
+      "amount": "0",
+      "currency": "FOUNDER",
+      "usd_value": "0",
+      "quote": {
+        "basis": "Unpriced repository-owner request"
+      },
+      "raw": "`GetUnresolvedTargets` (`internal/storage/storage.go:452`) only selects targets with no IPs, so a name that resolved once is never resolved again.",
+      "source_author_association": "OWNER",
+      "source_author_login": "pavel1337"
+    },
+    "agent_reason": "Repository owner pavel1337 reports production DNS staleness bug (targets never re-resolved); unpriced founder wound with Go storage code evidence.",
+    "scope_quote": "link exactly the IPs in the answer and unlink the rest",
+    "code_evidence": {
+      "path": "internal/storage/storage.go",
+      "sha": "69ea4d5922685685a77578f9e340aab35c3b7609",
+      "quote": "func (s *EntStorage) GetUnresolvedTargets(ctx context.Context, limit int, _ time.Duration) ([]*ent.Target, error) {",
+      "is_product_code": true
+    },
+    "source_issue": "https://github.com/pavel1337/perimeter/issues/59",
+    "funding_status": "UNPRICED_OWNER_REQUEST",
+    "lane": "founder",
+    "task_id": "3a73b006d83d324ceb09e60460eccf9d",
+    "source_revision": "0aaab930e9dad175be5d9d21fa44f75545505eb69a340a8b0957fd1f9e7da406"
+  },
+  "dispatch_attempt": 1,
+  "sovereign_admission": true,
+  "competition": {
+    "blocking": false,
+    "nominal": []
+  },
+  "lanes": [
+    "founder"
+  ],
+  "dispatched_at": "2026-11-03T15:14:54.022061+00:00",
+  "attempt": 0,
+  "updated_at": "2026-11-03T15:14:54.022078+00:00"
+}
