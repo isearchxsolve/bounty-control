@@ -60,9 +60,10 @@ class GitHub:
     # of fleet-state and repository metadata. None of those are answers about the request. They are
     # retried with a short backoff and never treated as a verdict.
     TRANSIENT = re.compile(r"TLS handshake timeout|connection reset by peer|i/o timeout|"
-                           r"unexpected EOF|broken pipe|temporarily unavailable|no such host|"
-                           r"internal server error|bad gateway|service unavailable|"
-                           r"no server is currently available|HTTP\s*(?:500|502|503|504)\b", re.I)
+                           r"unexpected EOF|unexpected end of (?:JSON input|input)|broken pipe|"
+                           r"temporarily unavailable|no such host|internal server error|"
+                           r"bad gateway|service unavailable|no server is currently available|"
+                           r"HTTP\s*(?:500|502|503|504)\b", re.I)
     THROTTLE_TRIES = 4
     TRANSIENT_TRIES = 3
     TRANSIENT_BACKOFF = 2.0
