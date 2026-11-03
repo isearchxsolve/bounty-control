@@ -2,7 +2,7 @@
   "task_id": "fbc3aa2ee1de4a23746ed15827b06551",
   "repo": "coneyproductions/vms",
   "issue_number": 91,
-  "status": "CLAIMED",
+  "status": "FAILED_DELIVERABLE_MISSING",
   "dispatch_id": "951153c4c0534a94a89c9ea8d1f81434",
   "admission": {
     "funding": {
@@ -43,7 +43,7 @@
   ],
   "dispatched_at": "2026-11-03T03:25:37.394870+00:00",
   "attempt": 1,
-  "updated_at": "2026-11-03T03:25:47.483548+00:00",
+  "updated_at": "2026-11-03T03:39:44.036391+00:00",
   "owner": "41572134967:1",
   "previous_owner": null,
   "previous_status": "DISPATCHED",
@@ -51,5 +51,24 @@
   "harness_sha": "992234d5b134b7767525f021105fb665a76fc350",
   "claimed_at": "2026-11-03T03:25:47.483499+00:00",
   "lease_expires_at": "2026-11-03T07:30:47.483514+00:00",
-  "preparation_budget_seconds": 14400
+  "preparation_budget_seconds": 14400,
+  "kind": "deliverable_invalid",
+  "retryable": true,
+  "diagnostic": "Cline deliverable invalid at /tmp/fleet-artifacts/delivery-supervisor/7c4dd01c3f144a369fccd77e18649c40.preparation.json: Both untouched baseline and final tests are mandatory",
+  "path": "/tmp/fleet-artifacts/delivery-supervisor/7c4dd01c3f144a369fccd77e18649c40.preparation.json",
+  "reason": "Both untouched baseline and final tests are mandatory",
+  "at": "2026-11-03T03:39:29.761340+00:00",
+  "failures": [
+    {
+      "run_url": "https://github.com/isearchxsolve/bounty-control/actions/runs/41572134967",
+      "status": "FAILED_DELIVERABLE_MISSING",
+      "kind": "deliverable_invalid",
+      "retryable": true,
+      "diagnostic": "Cline deliverable invalid at /tmp/fleet-artifacts/delivery-supervisor/7c4dd01c3f144a369fccd77e18649c40.preparation.json: Both untouched baseline and final tests are mandatory",
+      "path": "/tmp/fleet-artifacts/delivery-supervisor/7c4dd01c3f144a369fccd77e18649c40.preparation.json",
+      "reason": "Both untouched baseline and final tests are mandatory",
+      "at": "2026-11-03T03:39:29.761340+00:00"
+    }
+  ],
+  "finished_at": "2026-11-03T03:39:43.340267+00:00"
 }
