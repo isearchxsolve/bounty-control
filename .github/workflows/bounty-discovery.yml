@@ -18,7 +18,7 @@ jobs:
     # candidates gathered, zero rows written, both rounds expired with 44 items pending.
     timeout-minutes: 135
     env:
-      GH_TOKEN: ${{ secrets.GH_PAT }}
+      GH_TOKEN: ${{ secrets.GH_DISCOVERY_PAT || secrets.GH_PAT }}
       BOUNTY_STATE_DIR: /tmp/bounty-state
     steps:
     - uses: actions/checkout@v4
@@ -40,6 +40,8 @@ jobs:
     # Reconciliation is a bookkeeping pass, so it must never be able to destroy a search run.
     - name: Reconcile actual results and repair owned failing PRs
       continue-on-error: true
+      env:
+        GH_TOKEN: ${{ secrets.GH_PAT }}
       run: python3 -u scripts/actions_reconcile.py --repair
     - name: Search all lanes and dispatch qualified originals
       # The production entry door chooses sources and supplies cited decisions. The
@@ -58,7 +60,7 @@ jobs:
         # and nvidia_router all read. Measured 2026-11-02: this line used to set NVIDIA_MODEL to
         # the TokenHarbor model name, which nothing read and NVIDIA does not serve, so when
         # TokenHarbor was exhausted every one of the door's turns died before writing a row.
-        NVIDIA_ROUTER_MODEL: ${{ vars.NVIDIA_DELIVERY_MODEL || 'nvidia/nemotron-3.5-super-vl-120b-a12b' }}
+        NVIDIA_ROUTER_MODEL: ${{ vars.NVIDIA_DELIVERY_MODEL || 'mistralai/mistral-large-4-1t-a52b' }}
         BOUNTY_AGENT_ROUNDS: '2'
         BOUNTY_AGENT_MEMORY: ${{ env.BOUNTY_STATE_DIR }}/discovery-memory
         # Search is a heavy task: a full lane sweep gathers hundreds of raw candidates and the
