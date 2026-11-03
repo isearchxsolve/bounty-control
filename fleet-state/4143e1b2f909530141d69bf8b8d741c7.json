@@ -2,7 +2,7 @@
   "task_id": "4143e1b2f909530141d69bf8b8d741c7",
   "repo": "cozyGarage/BookiE",
   "issue_number": 1953,
-  "status": "DISPATCHED",
+  "status": "CLAIMED",
   "dispatch_id": "cb84c8a0899941b8b44ec8059fa39fde",
   "admission": {
     "funding": {
@@ -42,6 +42,14 @@
     "founder"
   ],
   "dispatched_at": "2026-11-03T13:47:24.788740+00:00",
-  "attempt": 0,
-  "updated_at": "2026-11-03T13:47:26.878493+00:00"
+  "attempt": 1,
+  "updated_at": "2026-11-03T13:47:37.992401+00:00",
+  "owner": "41647500141:1",
+  "previous_owner": null,
+  "previous_status": "DISPATCHED",
+  "run_url": "https://github.com/isearchxsolve/bounty-control/actions/runs/41647500141",
+  "harness_sha": "6cdb0e376022a1fe569be5fb828cf45a21e4850b",
+  "claimed_at": "2026-11-03T13:47:37.992348+00:00",
+  "lease_expires_at": "2026-11-03T17:52:37.992364+00:00",
+  "preparation_budget_seconds": 14400
 }
