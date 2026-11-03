@@ -2,8 +2,8 @@
   "task_id": "f32d25ce247f914e5ecff5a8a570c62a",
   "repo": "leonapivato/ai-assistant",
   "issue_number": 3054,
-  "status": "FAILED_ENGINEER",
-  "dispatch_id": "1a19cc52969743e6bc20e5c833ca956d",
+  "status": "DISPATCHING",
+  "dispatch_id": "221286418ba14949ba8f7dcbd8c13f94",
   "admission": {
     "funding": {
       "amount": "0",
@@ -32,7 +32,7 @@
     "task_id": "f32d25ce247f914e5ecff5a8a570c62a",
     "source_revision": "1bc6e9c8a84bf85a9c173cbb7886b018bcae863d451f37773f9b98de52c2514e"
   },
-  "dispatch_attempt": 1,
+  "dispatch_attempt": 2,
   "sovereign_admission": true,
   "competition": {
     "blocking": false,
@@ -41,9 +41,9 @@
   "lanes": [
     "founder"
   ],
-  "dispatched_at": "2026-11-03T15:47:05.554574+00:00",
+  "dispatched_at": "2026-11-03T17:17:52.840871+00:00",
   "attempt": 1,
-  "updated_at": "2026-11-03T16:20:44.419222+00:00",
+  "updated_at": "2026-11-03T17:17:52.840886+00:00",
   "owner": "41667468438:1",
   "previous_owner": null,
   "previous_status": "DISPATCHED",
