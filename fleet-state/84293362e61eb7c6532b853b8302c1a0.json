@@ -2,7 +2,7 @@
   "task_id": "84293362e61eb7c6532b853b8302c1a0",
   "repo": "mendyraul/TrackFlights",
   "issue_number": 89,
-  "status": "CLAIMED",
+  "status": "FAILED_ENGINEER",
   "dispatch_id": "a81a024932564c50ac59097b8e65fe8e",
   "admission": {
     "funding": {
@@ -43,7 +43,7 @@
   ],
   "dispatched_at": "2026-11-03T13:58:55.648632+00:00",
   "attempt": 2,
-  "updated_at": "2026-11-03T13:59:12.813254+00:00",
+  "updated_at": "2026-11-03T14:17:02.607595+00:00",
   "owner": "41649243715:1",
   "previous_owner": "41639983873:1",
   "previous_status": "DISPATCHED",
@@ -55,7 +55,7 @@
   "kind": "engineer",
   "retryable": true,
   "diagnostic": "Bounded Cline delivery repair exhausted: Iteration exhausted after 1 turns without green. Last reported failure:\nTest failure in turn 1: SUPABASE_URL=https://example.supabase.co SUPABASE_SERVICE_ROLE_KEY=ci-placeholder-key python -m pytest apps/ingestor/tests -q\nExecution error: [Errno 2] No such file or directory: 'SUPABASE_URL=https://example.supabase.co'",
-  "at": "2026-11-03T13:42:28.813261+00:00",
+  "at": "2026-11-03T14:16:49.320935+00:00",
   "failures": [
     {
       "run_url": "https://github.com/isearchxsolve/bounty-control/actions/runs/41639983873",
@@ -64,7 +64,15 @@
       "retryable": true,
       "diagnostic": "Bounded Cline delivery repair exhausted: Iteration exhausted after 1 turns without green. Last reported failure:\nTest failure in turn 1: SUPABASE_URL=https://example.supabase.co SUPABASE_SERVICE_ROLE_KEY=ci-placeholder-key python -m pytest apps/ingestor/tests -q\nExecution error: [Errno 2] No such file or directory: 'SUPABASE_URL=https://example.supabase.co'",
       "at": "2026-11-03T13:42:28.813261+00:00"
+    },
+    {
+      "run_url": "https://github.com/isearchxsolve/bounty-control/actions/runs/41649243715",
+      "status": "FAILED_ENGINEER",
+      "kind": "engineer",
+      "retryable": true,
+      "diagnostic": "Bounded Cline delivery repair exhausted: Iteration exhausted after 1 turns without green. Last reported failure:\nTest failure in turn 1: SUPABASE_URL=https://example.supabase.co SUPABASE_SERVICE_ROLE_KEY=ci-placeholder-key python -m pytest apps/ingestor/tests -q\nExecution error: [Errno 2] No such file or directory: 'SUPABASE_URL=https://example.supabase.co'",
+      "at": "2026-11-03T14:16:49.320935+00:00"
     }
   ],
-  "finished_at": "2026-11-03T13:42:40.747445+00:00"
+  "finished_at": "2026-11-03T14:17:02.013720+00:00"
 }
