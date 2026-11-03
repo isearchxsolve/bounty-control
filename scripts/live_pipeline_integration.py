@@ -48,6 +48,55 @@ def check(condition, message):
         raise AssertionError(message)
 
 
+class CampaignIncomplete(RuntimeError):
+    """The campaign ended deterministically without a green result. Not a deadline expiry."""
+
+
+class Blocked(RuntimeError):
+    """A named prerequisite is unavailable, so the assertion was never exercised."""
+
+
+def run_only_cause(cause):
+    """True when an Actions entry states only which job failed, never what went wrong."""
+    return str(cause or '').startswith('run concluded ')
+
+
+def normalized_fingerprint(cause):
+    """Group repeat sightings of one root cause without inventing an interpretation.
+
+    Only facts the state itself carries are dropped: task identity, numbers, digests and
+    timing. No model is asked what a failure means here.
+    """
+    text = ' '.join(str(cause or '').split())[:220].lower()
+    text = re.sub(r'\b[0-9a-f]{32,64}\b', '<sha>', text)
+    text = re.sub(r'\b\d{3,}\b', '<n>', text)
+    return text
+
+
+PREREQUISITE_RULES = (
+    (r'no token harbor key|no tokenharbor key', 'No model gateway key is configured and ready'),
+    (r'429|free allowance|rate limit', 'The model provider allowance is exhausted'),
+    (r'tree changed|untouched source baseline|blocked_baseline', 'The worktree baseline cannot be preserved'),
+    (r'repository is unavailable|repository_over_capacity|over capacity', 'The target repository is unavailable or over capacity'),
+    (r'not found \(http 404\)|\b404\b', 'A required GitHub resource is missing'),
+    (r'regression test files/command/failure assertion are mandatory|no test suite|native setup', "The target repository's own test setup is unusable"),
+)
+
+
+def blocker_of(cause):
+    """The named prerequisite behind a cause, or None when the cause stands on its own.
+
+    A cause naming a missing capability means the pipeline is blocked on it, not that the
+    assertion was exercised and found false. Phase C of docs/LIVE-PROBE-MASTER-PLAN.md requires
+    BLOCKED to be separated from FAIL for exactly this reason, and the row keeps the real cause
+    so the named prerequisite is never a substitute for the evidence.
+    """
+    for pattern, prerequisite in PREREQUISITE_RULES:
+        if re.search(pattern, str(cause or ''), re.I):
+            return prerequisite
+    return None
+
+
 def retained_admissions(queue, api):
     """Recheck actual queued admissions left by an interrupted entry session."""
     database = Path(queue) / 'agent-queue.sqlite3'
@@ -195,7 +244,7 @@ class LiveRun:
         temporary.replace(self.path)
 
     def record(self, case, status, **evidence):
-        if status in ('FAIL', 'PENDING', 'INCOMPLETE'):
+        if status in ('FAIL', 'PENDING', 'INCOMPLETE', 'BLOCKED'):
             self.data['end_to_end_passed'] = False
         # Collapse an identical repeat. A poll loop re-records the same terminal verdict every
         # 20s -- measured 2026-11-03, run 41588321800 wrote 15 identical ACTIONS_TERMINAL FAIL
@@ -780,6 +829,10 @@ class LiveRun:
             violations.append('Durable ledger unreadable: ' + str(exc)[:300])
         self.data['surface_ledger_rows'] = len(rows)
         dispatched = {}
+        # One task can carry a later generation than the failure it is reported for. An entry is
+        # active only while its own record still holds that same failing status, so a repaired and
+        # redelivered task stops reading as a new defect while its history stays visible.
+        current = {str(row.get('task_id') or ''): str(row.get('status') or '') for row in rows}
         for row in rows:
             if row.get('dispatch_id'):
                 dispatched[str(row['dispatch_id'])] = True
@@ -792,7 +845,8 @@ class LiveRun:
                             'dispatch_id': row.get('dispatch_id'), 'attempt': row.get('attempt'),
                             'at': row.get('finished_at') or row.get('updated_at'),
                             'pr': row.get('pr_url'), 'run_url': row.get('run_url'),
-                            'cause': recorded_cause(row), 'witness': 'ledger'})
+                            'cause': recorded_cause(row), 'witness': 'ledger',
+                            'active': current.get(str(row.get('task_id') or '')) == str(row.get('status'))})
         runs = []
         try:
             runs = list(self.api.workflow_runs(self.control, 'completed') or [])
@@ -813,8 +867,10 @@ class LiveRun:
                             'attempt': None, 'at': run.get('updated_at'), 'pr': None,
                             'run_url': run.get('html_url'),
                             'cause': 'run concluded ' + conclusion + ('; failing jobs: ' + jobs if jobs else ''),
-                            'witness': 'actions'})
+                            'witness': 'actions', 'active': False})
         for entry in entries:
+            entry['outcome'] = ('REFUSAL' if entry['kind'] == 'refusal'
+                                else 'BLOCKED' if blocker_of(entry['cause']) else 'FAIL')
             if entry['kind'] != 'failure':
                 continue
             if not entry['cause']:
@@ -832,26 +888,74 @@ class LiveRun:
         surfaced as unexplained and fails the case: that is the class that stayed invisible.
         """
         entries, violations = self.surface_entries()
-        receipt = self.folder / 'failures.json'
-        receipt.write_text(json.dumps(entries, indent=2) + "\n", encoding='utf-8')
         faults = [e for e in entries if e['kind'] == 'failure']
         verdicts = [e for e in entries if e['kind'] == 'refusal']
+        causes = self.group_causes(entries)
+        # failures.json keeps its existing shape: one row per sighting. The grouped view is a
+        # separate receipt so an existing reader of the per-sighting list is not broken.
+        receipt = self.folder / 'failures.json'
+        receipt.write_text(json.dumps(entries, indent=2) + "\n", encoding='utf-8')
+        causes_receipt = self.folder / 'causes.json'
+        causes_receipt.write_text(json.dumps(causes, indent=2) + "\n", encoding='utf-8')
         by_stage = {}
         for entry in faults:
             by_stage[entry['stage']] = by_stage.get(entry['stage'], 0) + 1
-        summary = ['| kind | stage | status | cause | run |', '|---|---|---|---|---|']
+        by_outcome = {}
+        for entry in faults:
+            by_outcome[entry['outcome']] = by_outcome.get(entry['outcome'], 0) + 1
+        summary = ['# Consolidated failures', '',
+                   'Repeat sightings of one cause are grouped; a cause is not a new defect because '
+                   'an old run recorded it again. Active means the durable record still carries this '
+                   'verdict for the current generation; historical means it was superseded.', '',
+                   '| cause | outcome | active | repeats | stage | prerequisite |', '|---|---|---|---|---|---|']
+        for cause in causes:
+            summary.append('| ' + cause['fingerprint'][:110].replace('|', '/') + ' | ' + cause['outcome']
+                           + ' | ' + str(cause['active']) + ' | ' + str(cause['sightings']) + ' | '
+                           + str(cause['stage']) + ' | ' + (cause['prerequisite'] or '') + ' |')
+        summary += ['', '## Every sighting', '', '| kind | stage | status | outcome | cause | run |',
+                    '|---|---|---|---|---|---|']
         for entry in entries:
             cause = (entry['cause'] or 'UNEXPLAINED').replace('|', '/').replace('\n', ' ')[:180]
             summary.append('| ' + entry['kind'] + ' | ' + str(entry['stage']) + ' | ' + entry['status']
-                           + ' | ' + cause + ' | ' + (entry['run_url'] or '') + ' |')
+                           + ' | ' + entry['outcome'] + ' | ' + cause + ' | ' + (entry['run_url'] or '') + ' |')
         (self.folder / 'failures.md').write_text("\n".join(summary) + "\n", encoding='utf-8')
         self.record('LIVE_FAILURE_SURFACE', 'FAIL' if violations else 'PASS',
                     failures=len(faults), refusals=len(verdicts), by_stage=by_stage,
+                    by_outcome=by_outcome, unique_causes=len(causes),
+                    active_causes=sum(1 for c in causes if c['active']),
+                    blocked_causes=sum(1 for c in causes if c['outcome'] == 'BLOCKED'),
+                    repeat_sightings=len(faults) - len(causes),
                     ledger_rows=self.data.get('surface_ledger_rows'),
                     completed_runs=self.data.get('surface_completed_runs'),
                     unexplained=[e['identity'] for e in faults if not e['cause']],
-                    violations=violations, receipt=str(receipt))
+                    violations=violations, receipt=str(receipt), causes_receipt=str(causes_receipt))
         check(not violations, '; '.join(violations))
+
+    def group_causes(self, entries):
+        """Collapse repeat sightings into unique causes, keeping activity and blockers factual."""
+        groups = {}
+        for entry in entries:
+            if entry['kind'] != 'failure':
+                continue
+            key = (entry['cause'] if run_only_cause(entry['cause'])
+                   else entry['stage'] + '\u0000' + normalized_fingerprint(entry['cause']))
+            group = groups.setdefault(key, {
+                'fingerprint': ('Actions run concluded without a stated cause; only the failing job '
+                                'is known: ' + str(entry['stage'])) if run_only_cause(entry['cause'])
+                               else normalized_fingerprint(entry['cause']),
+                'cause': entry['cause'], 'stage': entry['stage'], 'sightings': 0,
+                'active': False, 'identities': [], 'runs': [],
+                'first_at': entry['at'], 'last_at': entry['at'],
+                'prerequisite': blocker_of(entry['cause'])})
+            group['sightings'] += 1
+            group['active'] = group['active'] or bool(entry.get('active'))
+            if entry['identity'] not in group['identities']:
+                group['identities'].append(entry['identity'])
+            if entry.get('run_url') and entry['run_url'] not in group['runs']:
+                group['runs'].append(entry['run_url'])
+        for group in groups.values():
+            group['outcome'] = 'BLOCKED' if group['prerequisite'] else 'FAIL'
+        return sorted(groups.values(), key=lambda c: (not c['active'], -c['sightings'], c['stage']))
 
     def merge(self):
         self.intake()
@@ -1222,6 +1326,11 @@ class LiveRun:
         def phase(case, action):
             try:
                 action()
+            except Blocked as exc:
+                # A named prerequisite is unavailable. The assertion was never exercised, so it is
+                # reported BLOCKED with the prerequisite, never as a failure of the pipeline.
+                if self.data['coverage'].get(case) != 'BLOCKED':
+                    self.record(case, 'BLOCKED', prerequisite=str(exc)[:500])
             except (AssertionError, GitHubError, ValueError, TimeoutError) as exc:
                 if self.data['coverage'].get(case) != 'FAIL':
                     self.record(case, 'FAIL', diagnostic=str(exc)[:2000])
@@ -1233,7 +1342,8 @@ class LiveRun:
             phase('MERGE_AND_RECONCILE_REPLAY', self.merge)
         else:
             self.record('END_TO_END', 'INCOMPLETE', reason='Merge/reconciliation requires --merge-fixture')
-            self.record('MERGE_AND_RECONCILE_REPLAY', 'INCOMPLETE', reason='--merge-fixture required')
+            self.record('MERGE_AND_RECONCILE_REPLAY', 'BLOCKED',
+                        prerequisite='--merge-fixture was not requested for this campaign')
         missing = {case: status for case, status in self.data['coverage'].items() if status != 'PASS'}
         check(not missing, 'Live campaign incomplete or failing; every independent case was executed: '
               + json.dumps(missing))
@@ -1436,11 +1546,12 @@ class LiveRun:
                         and not any(r and str(r.get('status')) in active for r in records)):
                     self.record('END_TO_END', 'INCOMPLETE', cohort=cohort,
                                 reason='Every dispatched original is terminal with no remaining repair obligation')
-                    raise TimeoutError('All dispatched originals failed and none owes a repair; see per-original journals')
+                    raise CampaignIncomplete('All dispatched originals failed and none owes a repair; '
+                                             'see per-original journals')
             self.save()
             time.sleep(20)
         self.record('END_TO_END', 'INCOMPLETE', cohort=cohort, reason='Live delivery/review deadline exhausted')
-        raise TimeoutError('Pipeline remains incomplete; see per-original journals, without redispatching')
+        raise CampaignIncomplete('Pipeline remains incomplete; see per-original journals, without redispatching')
 
 
 class Tee:
