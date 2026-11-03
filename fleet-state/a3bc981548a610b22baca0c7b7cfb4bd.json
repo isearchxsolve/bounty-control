@@ -2,8 +2,8 @@
   "task_id": "a3bc981548a610b22baca0c7b7cfb4bd",
   "repo": "jaystewartuk/spiralclass",
   "issue_number": 110,
-  "status": "FAILED_ENGINEER",
-  "dispatch_id": "43f88e422af94d2fa4cb6245515265f7",
+  "status": "DISPATCHING",
+  "dispatch_id": "03a5f6b7a06043c0a44045737c1e28d4",
   "admission": {
     "funding": {
       "amount": "0",
@@ -32,7 +32,7 @@
     "task_id": "a3bc981548a610b22baca0c7b7cfb4bd",
     "source_revision": "62cf5d3e450166c41b76a561092a558dd6eb1a7a29352345b557d4d5a362b32f"
   },
-  "dispatch_attempt": 1,
+  "dispatch_attempt": 2,
   "sovereign_admission": true,
   "competition": {
     "blocking": false,
@@ -41,9 +41,9 @@
   "lanes": [
     "founder"
   ],
-  "dispatched_at": "2026-11-03T09:39:29.770556+00:00",
+  "dispatched_at": "2026-11-03T12:07:42.943469+00:00",
   "attempt": 1,
-  "updated_at": "2026-11-03T11:00:27.405880+00:00",
+  "updated_at": "2026-11-03T12:07:42.943486+00:00",
   "owner": "41612805268:1",
   "previous_owner": null,
   "previous_status": "DISPATCHED",
