@@ -1,0 +1,62 @@
+{
+  "at": "2026-11-03T06:11:52.529013+00:00",
+  "run_url": "https://github.com/isearchxsolve/bounty-control/actions/runs/41588321800",
+  "end_to_end_passed": false,
+  "coverage": {
+    "ENVIRONMENT": "NOT_RUN",
+    "LIVE_INTAKE": "FAIL",
+    "LIVE_MODEL_ADMISSION": "NOT_RUN",
+    "LIVE_QUEUE_DEFERRAL": "NOT_RUN",
+    "LIVE_SOURCE_REJECTIONS": "NOT_RUN",
+    "LIVE_QUEUE_RECOVERY": "NOT_RUN",
+    "LIVE_QUEUE_REPLAY": "NOT_RUN",
+    "REAL_REPOSITORY_DISPATCH": "NOT_RUN",
+    "REAL_INVALID_GENERATION": "NOT_RUN",
+    "ACTIONS_TERMINAL": "NOT_RUN",
+    "REAL_PUBLICATION": "NOT_RUN",
+    "ACTUAL_RELEASE_POSITIVE_CONTROL": "NOT_RUN",
+    "MERGE_AND_RECONCILE_REPLAY": "NOT_RUN",
+    "LIVE_STATE_ROUNDTRIP": "NOT_RUN",
+    "LIVE_CAS_CONFLICT": "NOT_RUN",
+    "LIVE_CONCURRENT_CLAIM": "NOT_RUN",
+    "LIVE_CLAIM_REPLAY": "NOT_RUN",
+    "LIVE_STALE_GENERATION": "NOT_RUN",
+    "LIVE_WRONG_OWNER": "NOT_RUN",
+    "LIVE_REVOKED_OWNER": "NOT_RUN",
+    "LIVE_RETRY_CAP": "NOT_RUN",
+    "LIVE_TRUNCATED_STATE": "NOT_RUN",
+    "LIVE_GITHUB_401": "NOT_RUN",
+    "LIVE_GITHUB_404": "NOT_RUN",
+    "LIVE_RELEASE_TASK_IDENTITY": "NOT_RUN",
+    "LIVE_RELEASE_HEAD": "NOT_RUN",
+    "LIVE_RELEASE_TREE": "NOT_RUN",
+    "LIVE_RELEASE_FILE_MANIFEST": "NOT_RUN",
+    "LIVE_RELEASE_NATIVE_RECEIPTS_MISSING": "NOT_RUN",
+    "LIVE_RELEASE_REGRESSION_NEVER_RED": "NOT_RUN",
+    "LIVE_RELEASE_REGRESSION_NOT_GREEN": "NOT_RUN",
+    "LIVE_FAILURE_SURFACE": "PASS"
+  },
+  "events": [
+    {
+      "case": "LIVE_INTAKE",
+      "status": "PASS",
+      "at": "2026-11-03T05:13:18.572021+00:00"
+    },
+    {
+      "case": "LIVE_FAILURE_SURFACE",
+      "status": "PASS",
+      "at": "2026-11-03T05:14:39.038301+00:00"
+    },
+    {
+      "case": "PIPELINE_ENTRY",
+      "status": "PENDING",
+      "at": "2026-11-03T05:14:39.819162+00:00"
+    },
+    {
+      "case": "LIVE_INTAKE",
+      "status": "FAIL",
+      "at": "2026-11-03T06:11:52.528166+00:00"
+    }
+  ],
+  "cohort": {}
+}
