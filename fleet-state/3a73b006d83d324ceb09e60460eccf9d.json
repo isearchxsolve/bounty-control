@@ -2,7 +2,7 @@
   "task_id": "3a73b006d83d324ceb09e60460eccf9d",
   "repo": "pavel1337/perimeter",
   "issue_number": 59,
-  "status": "PUBLISHED_PENDING_CHECKS",
+  "status": "AWAITING_REVIEW",
   "dispatch_id": "dd59ae0bab7444f1a1aa777ba7a674a5",
   "admission": {
     "funding": {
@@ -43,7 +43,7 @@
   ],
   "dispatched_at": "2026-11-03T15:14:54.022061+00:00",
   "attempt": 3,
-  "updated_at": "2026-11-03T17:05:44.333933+00:00",
+  "updated_at": "2026-11-03T17:17:28.064164+00:00",
   "owner": "41678172894:1",
   "previous_owner": "41671619124:1",
   "previous_status": "FAILED_ENGINEER",
@@ -86,5 +86,20 @@
   "claim_command": "",
   "claim_retry_required": false,
   "payment_status": "UNVERIFIED",
-  "release_digest": "6ec4d44a8ef3e4a4f872985acbbf44cc08f5daa372322313ee08096124f8d291"
+  "release_digest": "6ec4d44a8ef3e4a4f872985acbbf44cc08f5daa372322313ee08096124f8d291",
+  "remote_verification": {
+    "head_sha": "2a75f462a7cdeaeac8a2329779fc434924007df7",
+    "checks": [],
+    "statuses": [],
+    "failures": [],
+    "held": [],
+    "state": "NO_REMOTE_CHECKS"
+  },
+  "remote_review": {
+    "verdict": "NONE",
+    "review_count": 0,
+    "latest_reviewer": null,
+    "latest_review_at": null
+  },
+  "observed_at": "2026-11-03T17:17:28.064150+00:00"
 }
