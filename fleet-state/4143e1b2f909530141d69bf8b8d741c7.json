@@ -2,7 +2,7 @@
   "task_id": "4143e1b2f909530141d69bf8b8d741c7",
   "repo": "cozyGarage/BookiE",
   "issue_number": 1953,
-  "status": "DISPATCHING",
+  "status": "DISPATCHED",
   "dispatch_id": "631ccad5d61c407fa45787cb41441a94",
   "admission": {
     "funding": {
@@ -43,7 +43,7 @@
   ],
   "dispatched_at": "2026-11-03T15:05:18.137689+00:00",
   "attempt": 1,
-  "updated_at": "2026-11-03T15:05:18.137705+00:00",
+  "updated_at": "2026-11-03T15:05:20.149671+00:00",
   "owner": "41647500141:1",
   "previous_owner": null,
   "previous_status": "DISPATCHED",
