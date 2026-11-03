@@ -1,11 +1,11 @@
 {
-  "at": "2026-11-03T06:13:50.371132+00:00",
+  "at": "2026-11-03T06:16:01.713977+00:00",
   "run_url": "https://github.com/isearchxsolve/bounty-control/actions/runs/41588321800",
   "end_to_end_passed": false,
   "coverage": {
     "ENVIRONMENT": "NOT_RUN",
     "LIVE_INTAKE": "FAIL",
-    "LIVE_MODEL_ADMISSION": "NOT_RUN",
+    "LIVE_MODEL_ADMISSION": "PASS",
     "LIVE_QUEUE_DEFERRAL": "NOT_RUN",
     "LIVE_SOURCE_REJECTIONS": "NOT_RUN",
     "LIVE_QUEUE_RECOVERY": "NOT_RUN",
@@ -71,7 +71,18 @@
       "case": "PIPELINE_ENTRY",
       "status": "PASS",
       "at": "2026-11-03T06:13:50.370482+00:00"
+    },
+    {
+      "case": "LIVE_MODEL_ADMISSION",
+      "status": "PASS",
+      "at": "2026-11-03T06:16:01.713492+00:00"
     }
   ],
-  "cohort": {}
+  "cohort": {
+    "c4ccbe12cb966b88845d970513184ad0": {
+      "repo": "mgillr/acfa-rs",
+      "issue": 93,
+      "state": "DISPATCHED"
+    }
+  }
 }
