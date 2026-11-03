@@ -1,0 +1,47 @@
+{
+  "task_id": "62e87ed63977505742b777778d64229f",
+  "repo": "ilyavzane/Dispo",
+  "issue_number": 19,
+  "status": "DISPATCHING",
+  "dispatch_id": "e047dd8c98d941719583c7dca7eeeae9",
+  "admission": {
+    "funding": {
+      "amount": "0",
+      "currency": "FOUNDER",
+      "payer": "ilyavzane",
+      "source_url": "https://github.com/ilyavzane/Dispo/issues/19",
+      "usd_value": "0",
+      "quote": {
+        "basis": "Unpriced repository-owner request"
+      },
+      "raw": "check_health: returns {\"status\": \"error\"} with HTTP 200, so monitoring (Render) doesn't notice the outage.",
+      "source_author_association": "OWNER",
+      "source_author_login": "ilyavzane"
+    },
+    "agent_reason": "Unpriced repository-owner incident report: OWNER ilyavzane documents a production monitoring defect in ilyavzane/Dispo where check_health in repositories/db.py returns HTTP 200 during a database outage, with a bounded fix (return 503 when the DB check fails) and named source file. Issue authored by the repository OWNER, open; code evidence quotes the check_health definition from backend/app/repositories/db.py at its current blob sha; no competing pull request.",
+    "scope_quote": "Fix: return 503 when the DB check fails.",
+    "code_evidence": {
+      "path": "backend/app/repositories/db.py",
+      "sha": "d806733a736b354904fc8114efd5fd550c4f5661",
+      "quote": "async def check_health():",
+      "is_product_code": true
+    },
+    "source_issue": "https://github.com/ilyavzane/Dispo/issues/19",
+    "funding_status": "UNPRICED_OWNER_REQUEST",
+    "lane": "founder",
+    "task_id": "62e87ed63977505742b777778d64229f",
+    "source_revision": "1b99558d5214c6236d114f8212fc878453f162921615f46d594697f6646512c2"
+  },
+  "dispatch_attempt": 1,
+  "sovereign_admission": true,
+  "competition": {
+    "blocking": false,
+    "nominal": []
+  },
+  "lanes": [
+    "founder"
+  ],
+  "dispatched_at": "2026-11-03T13:46:48.343490+00:00",
+  "attempt": 0,
+  "updated_at": "2026-11-03T13:46:48.343504+00:00"
+}
