@@ -2,7 +2,7 @@
   "task_id": "d4375ff020f5fef283bc2c95388c0a23",
   "repo": "hashcat/hashcat",
   "issue_number": 4141,
-  "status": "DISPATCHED",
+  "status": "CLAIMED",
   "dispatch_id": "6a756a2a168849138032299b14bcdee8",
   "admission": {
     "funding": {
@@ -43,6 +43,14 @@
     "normal"
   ],
   "dispatched_at": "2026-11-03T04:17:38.800648+00:00",
-  "attempt": 0,
-  "updated_at": "2026-11-03T04:17:42.512789+00:00"
+  "attempt": 1,
+  "updated_at": "2026-11-03T04:17:55.528432+00:00",
+  "owner": "41577269576:1",
+  "previous_owner": null,
+  "previous_status": "DISPATCHED",
+  "run_url": "https://github.com/isearchxsolve/bounty-control/actions/runs/41577269576",
+  "harness_sha": "b671cfe5788143108fb38fd1bf6709ed34484a66",
+  "claimed_at": "2026-11-03T04:17:55.528392+00:00",
+  "lease_expires_at": "2026-11-03T08:22:55.528403+00:00",
+  "preparation_budget_seconds": 14400
 }
