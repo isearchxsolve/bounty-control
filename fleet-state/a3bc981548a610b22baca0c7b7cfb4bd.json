@@ -43,7 +43,7 @@
   ],
   "dispatched_at": "2026-11-03T12:07:42.943469+00:00",
   "attempt": 2,
-  "updated_at": "2026-11-03T12:17:58.724750+00:00",
+  "updated_at": "2026-11-03T12:18:08.945873+00:00",
   "owner": "41633112092:1",
   "previous_owner": "41612805268:1",
   "previous_status": "DISPATCHED",
@@ -55,7 +55,7 @@
   "kind": "engineer",
   "retryable": true,
   "diagnostic": "Bounded Cline delivery repair exhausted: Independent release verification failed: Base regression did not fail on the specified defect assertion:\n\n--- happy path: no PREVIEW_DB_PASSWORD ---\n\n\nRead complete native receipts at /tmp/fleet-artifacts. Repair the actual failure, preserving completed edits and master tests.",
-  "at": "2026-11-03T11:00:15.414794+00:00",
+  "at": "2026-11-03T12:17:59.545433+00:00",
   "failures": [
     {
       "run_url": "https://github.com/isearchxsolve/bounty-control/actions/runs/41612805268",
@@ -66,7 +66,7 @@
       "at": "2026-11-03T11:00:15.414794+00:00"
     }
   ],
-  "finished_at": "2026-11-03T11:00:26.567809+00:00",
+  "finished_at": "2026-11-03T12:18:08.457956+00:00",
   "proposed_head": "02cbe96710f677bc34f2fa88bec42cffa595d7be",
   "proposed_branch": "fix/bounty-110-a3bc98-2",
   "verified_run": "https://github.com/isearchxsolve/bounty-control/actions/runs/41633112092",
