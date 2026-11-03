@@ -2,7 +2,7 @@
   "task_id": "b802e02b8687848bef11b406fb3b2905",
   "repo": "DimitarGeorgievski/patuvaj-notes",
   "issue_number": 13,
-  "status": "DISPATCHING",
+  "status": "DISPATCHED",
   "dispatch_id": "946f3a2a564f41a8a7b6aa2519d8a7f0",
   "admission": {
     "funding": {
@@ -43,7 +43,7 @@
   ],
   "dispatched_at": "2026-11-03T05:06:21.653508+00:00",
   "attempt": 1,
-  "updated_at": "2026-11-03T05:06:21.653523+00:00",
+  "updated_at": "2026-11-03T05:06:23.793082+00:00",
   "owner": "41577249045:1",
   "previous_owner": null,
   "previous_status": "DISPATCHED",
