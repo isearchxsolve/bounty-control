@@ -2,8 +2,8 @@
   "task_id": "f704f1f224452b00f97bc6576d6f261f",
   "repo": "zachshallbetter/acp-gateway",
   "issue_number": 39,
-  "status": "FAILED_ENGINEER",
-  "dispatch_id": "f59c530657554139bf9b2e873abe4730",
+  "status": "DISPATCHING",
+  "dispatch_id": "a43bd1c9a97b4a8f8b4f951605ec5e67",
   "admission": {
     "funding": {
       "payer": "zachshallbetter",
@@ -32,7 +32,7 @@
     "task_id": "f704f1f224452b00f97bc6576d6f261f",
     "source_revision": "da6940ffddff957f767983663f907658f95c39c729982b9ecf0afc579bf4515b"
   },
-  "dispatch_attempt": 1,
+  "dispatch_attempt": 2,
   "sovereign_admission": true,
   "competition": {
     "blocking": false,
@@ -41,9 +41,9 @@
   "lanes": [
     "founder"
   ],
-  "dispatched_at": "2026-11-03T10:11:06.704139+00:00",
+  "dispatched_at": "2026-11-03T10:56:57.750488+00:00",
   "attempt": 1,
-  "updated_at": "2026-11-03T10:46:10.120651+00:00",
+  "updated_at": "2026-11-03T10:56:57.750504+00:00",
   "owner": "41617131689:1",
   "previous_owner": null,
   "previous_status": "DISPATCHED",
