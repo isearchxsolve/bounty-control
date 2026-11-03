@@ -2,7 +2,7 @@
   "task_id": "ac012f3286c90cc63a90720eea3ef9e4",
   "repo": "osmesirius-ship-it/daxda-next-gen",
   "issue_number": 39,
-  "status": "DISPATCHING",
+  "status": "DISPATCHED",
   "dispatch_id": "ec4e6b945170462d9d0c1a68367b039b",
   "admission": {
     "funding": {
@@ -44,5 +44,5 @@
   ],
   "dispatched_at": "2026-11-03T10:11:17.244687+00:00",
   "attempt": 0,
-  "updated_at": "2026-11-03T10:11:17.244707+00:00"
+  "updated_at": "2026-11-03T10:11:18.890369+00:00"
 }
