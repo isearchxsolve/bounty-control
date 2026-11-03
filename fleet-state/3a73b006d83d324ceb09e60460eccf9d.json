@@ -2,7 +2,7 @@
   "task_id": "3a73b006d83d324ceb09e60460eccf9d",
   "repo": "pavel1337/perimeter",
   "issue_number": 59,
-  "status": "PUBLISHING",
+  "status": "PUBLISHED_PENDING_CHECKS",
   "dispatch_id": "dd59ae0bab7444f1a1aa777ba7a674a5",
   "admission": {
     "funding": {
@@ -43,7 +43,7 @@
   ],
   "dispatched_at": "2026-11-03T15:14:54.022061+00:00",
   "attempt": 3,
-  "updated_at": "2026-11-03T17:05:26.187365+00:00",
+  "updated_at": "2026-11-03T17:05:32.970850+00:00",
   "owner": "41678172894:1",
   "previous_owner": "41671619124:1",
   "previous_status": "FAILED_ENGINEER",
@@ -77,5 +77,14 @@
   "finished_at": "2026-11-03T16:23:42.193591+00:00",
   "proposed_head": "2a75f462a7cdeaeac8a2329779fc434924007df7",
   "proposed_branch": "fix/bounty-59-3a73b0-3",
-  "verified_run": "https://github.com/isearchxsolve/bounty-control/actions/runs/41678172894"
+  "verified_run": "https://github.com/isearchxsolve/bounty-control/actions/runs/41678172894",
+  "pr_url": "https://github.com/pavel1337/perimeter/pull/82",
+  "pr_number": 82,
+  "head_sha": "2a75f462a7cdeaeac8a2329779fc434924007df7",
+  "branch": "fix/bounty-59-3a73b0-3",
+  "claim_status": "NOT_APPLICABLE",
+  "claim_command": "",
+  "claim_retry_required": false,
+  "payment_status": "UNVERIFIED",
+  "release_digest": "6ec4d44a8ef3e4a4f872985acbbf44cc08f5daa372322313ee08096124f8d291"
 }
