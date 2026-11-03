@@ -1,0 +1,12 @@
+{
+  "task_id": "fc963c86212a52ed6bd834c3e04d8268",
+  "repo": "unit/runtime",
+  "issue_number": 7,
+  "status": "CLAIMED",
+  "owner": "1234:attempt-1",
+  "attempt": 1,
+  "claimed_at": "2026-11-03T14:38:12.632462+00:00",
+  "lease_expires_at": "2026-11-03T15:39:12.632432+00:00",
+  "updated_at": "2026-11-03T14:39:14.724310+00:00",
+  "fault_fixture": true
+}
