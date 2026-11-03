@@ -197,6 +197,22 @@ class LiveRun:
     def record(self, case, status, **evidence):
         if status in ('FAIL', 'PENDING', 'INCOMPLETE'):
             self.data['end_to_end_passed'] = False
+        # Collapse an identical repeat. A poll loop re-records the same terminal verdict every
+        # 20s -- measured 2026-11-03, run 41588321800 wrote 15 identical ACTIONS_TERMINAL FAIL
+        # rows for one failed delivery, and the run before wrote 8 PIPELINE_MEMBER FAIL rows for
+        # one cause. Fixing that per call site only moved it (the dedupe held for PIPELINE_MEMBER
+        # and the repeats reappeared one case over), so the rule lives here instead: an event is
+        # dropped only when it repeats the previous event's case, status and diagnostic exactly.
+        # Every real transition still lands, and the count is kept on the event so a repeated
+        # verdict stays visible as a fact (`repeats`) rather than vanishing.
+        previous = self.data['events'][-1] if self.data['events'] else None
+        if (previous and previous.get('case') == case and previous.get('status') == status
+                and previous.get('diagnostic') == evidence.get('diagnostic')):
+            previous['repeats'] = previous.get('repeats', 1) + 1
+            previous['last_at'] = self.now()
+            self.save()
+            self.publish_progress()
+            return
         event = {"case": case, "status": status, "at": self.now(), **evidence}
         self.data["events"].append(event)
         self.save()
@@ -1393,13 +1409,7 @@ class LiveRun:
                     member.pop('diagnostic', None)
                 except (AssertionError, GitHubError, ValueError) as exc:
                     member.update(state='FAILED_OR_PENDING_RECOVERY', diagnostic=str(exc))
-                    # A conclusive failure is recorded once; re-observing the same terminal
-                    # generation every 20s for the whole wait window only multiplies identical
-                    # FAIL rows. The first failure and the final aggregate both keep their full
-                    # diagnostic, so no signal is lost -- only the repeat count is.
-                    if member.get('last_failure') != str(exc):
-                        self.record('PIPELINE_MEMBER', 'FAIL', original=child.data['issue_url'], diagnostic=str(exc))
-                        member['last_failure'] = str(exc)
+                    self.record('PIPELINE_MEMBER', 'FAIL', original=child.data['issue_url'], diagnostic=str(exc))
                 finally:
                     absorb(child)
             if all(cohort[c.data['task_id']]['state'] == 'DELIVERED' for c in children):

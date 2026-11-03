@@ -171,6 +171,45 @@ class DiscoveryReceiptTests(unittest.TestCase):
             self.assertAlmostEqual(cadence['observed_interval_hours'], 7.0, places=1)
 
 
+class RecordDeduplication(unittest.TestCase):
+    """A poll loop must not multiply one verdict into a wall of identical rows."""
+
+    def run_in(self, folder):
+        run = LiveRun(SimpleNamespace(run_dir=Path(folder), issue=None,
+                      target='owner/original', control='owner/control'),
+                      api=SimpleNamespace(api=lambda *a, **k: {'content': {'sha': 's'}}))
+        return run
+
+    def test_identical_repeat_collapses_and_reports_its_count(self):
+        with tempfile.TemporaryDirectory() as folder, patch.dict(os.environ, {}, clear=False):
+            run = self.run_in(folder)
+            for _ in range(15):
+                run.record('ACTIONS_TERMINAL', 'FAIL', diagnostic='same failure')
+            self.assertEqual(len(run.data['events']), 1)
+            self.assertEqual(run.data['events'][0]['repeats'], 15)
+            self.assertIn('last_at', run.data['events'][0])
+
+    def test_distinct_cause_and_status_transitions_are_kept(self):
+        with tempfile.TemporaryDirectory() as folder:
+            run = self.run_in(folder)
+            run.record('ACTIONS_TERMINAL', 'FAIL', diagnostic='first cause')
+            run.record('ACTIONS_TERMINAL', 'FAIL', diagnostic='second cause')
+            run.record('ACTIONS_TERMINAL', 'PASS', diagnostic='second cause')
+            run.record('ACTIONS_TERMINAL', 'FAIL', diagnostic='second cause')
+            self.assertEqual([e['status'] for e in run.data['events']], ['FAIL', 'FAIL', 'PASS', 'FAIL'])
+            self.assertEqual([e['diagnostic'] for e in run.data['events']],
+                             ['first cause', 'second cause', 'second cause', 'second cause'])
+            self.assertTrue(all('repeats' not in e for e in run.data['events']))
+
+    def test_collapsing_never_clears_a_failed_coverage_verdict(self):
+        with tempfile.TemporaryDirectory() as folder:
+            run = self.run_in(folder)
+            run.record('LIVE_INTAKE', 'FAIL', diagnostic='x')
+            run.record('LIVE_INTAKE', 'FAIL', diagnostic='x')
+            self.assertEqual(run.data['coverage']['LIVE_INTAKE'], 'FAIL')
+            self.assertFalse(run.data['end_to_end_passed'])
+
+
 class ProgressReceiptTests(unittest.TestCase):
     def test_status_receipt_is_throttled_and_excludes_diagnostics_and_task_bodies(self):
         class API:
