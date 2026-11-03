@@ -1,5 +1,5 @@
 {
-  "at": "2026-11-03T04:18:27.160352+00:00",
+  "at": "2026-11-03T04:18:27.911201+00:00",
   "run_url": "https://github.com/isearchxsolve/bounty-control/actions/runs/41576959640",
   "end_to_end_passed": false,
   "coverage": {
@@ -37,11 +37,6 @@
     "LIVE_FAILURE_SURFACE": "NOT_RUN"
   },
   "events": [
-    {
-      "case": "LIVE_REVOKED_OWNER",
-      "status": "PASS",
-      "at": "2026-11-03T04:17:38.310366+00:00"
-    },
     {
       "case": "LIVE_RETRY_CAP",
       "status": "PASS",
@@ -111,6 +106,11 @@
       "case": "LIVE_MODEL_ADMISSION",
       "status": "PASS",
       "at": "2026-11-03T04:18:27.159424+00:00"
+    },
+    {
+      "case": "LIVE_QUEUE_DEFERRAL",
+      "status": "PASS",
+      "at": "2026-11-03T04:18:27.910211+00:00"
     }
   ],
   "cohort": {
