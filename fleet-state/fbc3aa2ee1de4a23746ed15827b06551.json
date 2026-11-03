@@ -2,7 +2,7 @@
   "task_id": "fbc3aa2ee1de4a23746ed15827b06551",
   "repo": "coneyproductions/vms",
   "issue_number": 91,
-  "status": "DISPATCHING",
+  "status": "DISPATCHED",
   "dispatch_id": "951153c4c0534a94a89c9ea8d1f81434",
   "admission": {
     "funding": {
@@ -43,5 +43,5 @@
   ],
   "dispatched_at": "2026-11-03T03:25:37.394870+00:00",
   "attempt": 0,
-  "updated_at": "2026-11-03T03:25:37.394890+00:00"
+  "updated_at": "2026-11-03T03:25:39.126843+00:00"
 }
