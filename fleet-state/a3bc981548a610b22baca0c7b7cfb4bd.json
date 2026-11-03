@@ -1,0 +1,47 @@
+{
+  "task_id": "a3bc981548a610b22baca0c7b7cfb4bd",
+  "repo": "jaystewartuk/spiralclass",
+  "issue_number": 110,
+  "status": "DISPATCHING",
+  "dispatch_id": "43f88e422af94d2fa4cb6245515265f7",
+  "admission": {
+    "funding": {
+      "amount": "0",
+      "currency": "FOUNDER",
+      "payer": "jaystewartuk",
+      "source_url": "https://github.com/jaystewartuk/spiralclass/issues/110",
+      "usd_value": "0",
+      "quote": {
+        "basis": "Unpriced repository-owner request"
+      },
+      "raw": "The first deploy to a rebuilt Oracle box will stop at the render step, because nothing generates preview's database password.",
+      "source_author_association": "OWNER",
+      "source_author_login": "jaystewartuk"
+    },
+    "agent_reason": "Repository-owner incident (founder wound): the repo owner reports that the first deploy to a rebuilt Oracle box fails because oracle-render-livekit.sh never generates preview's database password, causing set -euo pipefail to abort on the unset variable. No monetary figure is offered, so it is recorded as an unpriced owner request (UNPRICED_OWNER_REQUEST), with the owner as payer and the issue as the funding source. The requested change is bounded: make oracle-render-livekit.sh generate preview's database password when none is supplied.",
+    "scope_quote": "`oracle-render-livekit.sh` generates preview's database password when none is supplied, a test runs the render with no `PREVIEW_DB_PASSWORD` and gets a non-empty one in `.env` and `preview-db.env`, and a second render given that password writes it back unchanged.",
+    "code_evidence": {
+      "path": "scripts/oracle-render-livekit.sh",
+      "sha": "9fc0874261b65e7f017d36d748669c2e93bf0ce6",
+      "quote": "PREVIEW_DB_PASSWORD=$(env_escape \"$PREVIEW_DB_PASSWORD\")",
+      "is_product_code": true
+    },
+    "source_issue": "https://github.com/jaystewartuk/spiralclass/issues/110",
+    "funding_status": "UNPRICED_OWNER_REQUEST",
+    "lane": "founder",
+    "task_id": "a3bc981548a610b22baca0c7b7cfb4bd",
+    "source_revision": "62cf5d3e450166c41b76a561092a558dd6eb1a7a29352345b557d4d5a362b32f"
+  },
+  "dispatch_attempt": 1,
+  "sovereign_admission": true,
+  "competition": {
+    "blocking": false,
+    "nominal": []
+  },
+  "lanes": [
+    "founder"
+  ],
+  "dispatched_at": "2026-11-03T09:39:29.770556+00:00",
+  "attempt": 0,
+  "updated_at": "2026-11-03T09:39:29.770577+00:00"
+}
