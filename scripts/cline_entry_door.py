@@ -754,12 +754,12 @@ def verify_rows(rows: List[dict], fetch: Optional[Callable[[str, int], Optional[
             refused.append({"row": row, "reason": "AGENT_NOT_A_CODE_TASK"})
             continue
 
-        if decision_verifier is None and FUNDING_WITHDRAWN_RE.search(issue_haystack(issue)):
+        if FUNDING_WITHDRAWN_RE.search(issue_haystack(issue)):
             refused.append({"row": row, "reason": "FUNDING_WITHDRAWN"})
             continue
 
         stale_days = issue_age_days(issue)
-        if decision_verifier is None and stale_days is not None and stale_days > ISSUE_STALE_DAYS:
+        if stale_days is not None and stale_days > ISSUE_STALE_DAYS:
             # Measured on the first run that reached dispatch: two rows were admitted and both
             # died in the delivery engine as dead offers - one had last moved 2.8 years earlier
             # (funding long withdrawn), the other 7 years earlier. The engineer run is the most
