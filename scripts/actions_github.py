@@ -343,18 +343,36 @@ class StateStore:
         budget production spent, not by the code under test. Deleting the row gives the probe the
         clean pre-dispatch state it asserts from.
         """
-        _, sha = self.read(identity)
-        if not sha:
-            return None
-        return self.api.api(f"repos/{self.repo}/contents/fleet-state/{identity}.json", "DELETE",
-                            {"message": message or f"fleet: {identity} removed by probe",
-                             "branch": self.branch, "sha": sha})
+        for attempt in range(5):
+            _, sha = self.read(identity)
+            if not sha:
+                return None
+            try:
+                return self.api.api(f"repos/{self.repo}/contents/fleet-state/{identity}.json", "DELETE",
+                                    {"message": message or f"fleet: {identity} removed by probe",
+                                     "branch": self.branch, "sha": sha})
+            except GitHubError as exc:
+                if any(k in str(exc) for k in ("404", "Not Found")):
+                    return None
+                if not any(code in str(exc) for code in ("409", "422")) or attempt == 4:
+                    raise
+                # If GitHub reveals the current sha in the 409 message, we can invalidate or wait.
+                time.sleep(min(attempt + 1, 4))
+        return None
 
     def mutate(self, identity, change):
         self.ensure()
         for attempt in range(5):
             previous, sha = self.read(identity)
-            document = change(previous)
+            try:
+                document = change(previous)
+            except ValueError:
+                # Handle read-after-write eventual consistency where upstream GitHub contents API
+                # serves a stale read that has not yet observed the preceding write.
+                if attempt < 4:
+                    time.sleep(min(attempt + 1, 4))
+                    continue
+                raise
             document["updated_at"] = utcnow()
             try:
                 self.write(identity, document, sha)

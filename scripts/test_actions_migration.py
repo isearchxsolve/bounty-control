@@ -111,6 +111,17 @@ class AdmissionTests(unittest.TestCase):
 
 
 class TransportTests(unittest.TestCase):
+    def setUp(self):
+        super().setUp()
+        self._saved_nvidia_key = os.environ.get('NVIDIA_API_KEY')
+        os.environ['NVIDIA_API_KEY'] = ''
+
+    def tearDown(self):
+        if self._saved_nvidia_key is not None:
+            os.environ['NVIDIA_API_KEY'] = self._saved_nvidia_key
+        else:
+            os.environ.pop('NVIDIA_API_KEY', None)
+        super().tearDown()
     def test_live_discovery_workflow_advances_three_queries_per_lane(self):
         workflow = (Path(__file__).resolve().parents[1] / ".github" / "workflows" /
                     "bounty-discovery.yml").read_text(encoding="utf-8")

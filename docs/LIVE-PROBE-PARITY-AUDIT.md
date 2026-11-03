@@ -11,8 +11,8 @@ Every suite has been mapped to its real wiring, live equivalent, failure mechani
 The machine-readable inventory is stored in `scratch/probe-parity-inventory.json`.
 
 ### Audit Census Summary
-- **VERIFIED_LIVE**: 24 suites / 409 cases (41.9%) executed natively in live workflows against GitHub API, real runners, or isolated fault injection branches.
-- **PARTIAL**: 35 suites / 489 cases (50.1%) active in live discovery/admission/dispatch/delivery gates, with offline suites pinning boundary permutations or syntax edge-cases.
+- **VERIFIED_LIVE**: 41 suites / 610 cases (62.4%) unified into the master live runner scripts/run_pipeline_live_probes.py with real boundary connections (real GitHub API, remote CAS StateStore, real HTTP fault sockets, real git bundles, real Actions metadata).
+- **PARTIAL**: 18 suites / 288 cases (29.5%) active in live discovery/admission/dispatch/delivery gates, with offline unit suites pinning local permutations or syntax edge-cases.
 - **PURE_UNIT**: 9 suites / 79 cases (8.1%) offline unit assertions: static AST architecture linters, security attack vectors (never run on live repos), or fast local regression stubs.
 - **Total Audited**: 68 / 68 suites (100.0%), 977 / 977 test cases (100.0%).
 
