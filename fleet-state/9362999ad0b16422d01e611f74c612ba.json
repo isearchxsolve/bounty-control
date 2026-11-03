@@ -1,0 +1,106 @@
+{
+  "task_id": "9362999ad0b16422d01e611f74c612ba",
+  "repo": "Spectral-Finance/lux",
+  "issue_number": 54,
+  "status": "DISPATCHING",
+  "dispatch_id": "0ffddc7483084f6bae0f6c158ce314f5",
+  "admission": {
+    "funding": {
+      "amount": "500",
+      "currency": "USD",
+      "payer": "rparcus",
+      "source_url": "https://github.com/Spectral-Finance/lux/issues/54",
+      "usd_value": "500",
+      "quote": {
+        "basis": "USD face value",
+        "usd_rate": "1"
+      },
+      "raw": "Discord Signals System ($500)",
+      "source_author_association": "COLLABORATOR",
+      "source_author_login": "rparcus"
+    },
+    "agent_reason": "rparcus (COLLABORATOR) priced the Discord Signals System at $500 in the issue title; the missing signal schemas plug into the Lux beam/prism framework in lux/lib/lux/beam.ex.",
+    "scope_quote": "Implement the signal schemas to handle discord communication.",
+    "code_evidence": {
+      "is_product_code": true,
+      "path": "lux/lib/lux/beam.ex",
+      "sha": "0e61dce359b3672cb77d072df9b65a0a7ddcb429",
+      "quote": "defmodule Lux.Beam do"
+    },
+    "source_issue": "https://github.com/Spectral-Finance/lux/issues/54",
+    "funding_status": "PRICED_OFFER",
+    "lane": "startup",
+    "task_id": "9362999ad0b16422d01e611f74c612ba",
+    "source_revision": "8d2c2f6710c0560f6e44a5908e616802d62910c27e3f7161b2b10f178d4d4042"
+  },
+  "dispatch_attempt": 1,
+  "sovereign_admission": true,
+  "competition": {
+    "blocking": false,
+    "nominal": [
+      {
+        "pr": "https://github.com/Spectral-Finance/lux/pull/1059",
+        "author": "zongsm-cmyk",
+        "number": 1059,
+        "author_merged_in_repo": 0,
+        "check_runs": 0,
+        "maintainer_engagement": 0,
+        "reason": "nominal_attempt_only"
+      },
+      {
+        "pr": "https://github.com/Spectral-Finance/lux/pull/873",
+        "author": "bwm0223",
+        "number": 873,
+        "author_merged_in_repo": 0,
+        "check_runs": 0,
+        "maintainer_engagement": 0,
+        "reason": "nominal_attempt_only"
+      },
+      {
+        "pr": "https://github.com/Spectral-Finance/lux/pull/458",
+        "author": "susuhome",
+        "number": 458,
+        "author_merged_in_repo": 0,
+        "check_runs": 0,
+        "maintainer_engagement": 0,
+        "reason": "nominal_attempt_only"
+      },
+      {
+        "pr": "https://github.com/Spectral-Finance/lux/pull/458",
+        "author": "susuhome",
+        "number": 458,
+        "author_merged_in_repo": 0,
+        "history_cached": true,
+        "check_runs": 0,
+        "maintainer_engagement": 0,
+        "reason": "nominal_attempt_only"
+      },
+      {
+        "pr": "https://github.com/Spectral-Finance/lux/pull/873",
+        "author": "bwm0223",
+        "number": 873,
+        "author_merged_in_repo": 0,
+        "history_cached": true,
+        "check_runs": 0,
+        "maintainer_engagement": 0,
+        "reason": "nominal_attempt_only"
+      },
+      {
+        "pr": "https://github.com/Spectral-Finance/lux/pull/1059",
+        "author": "zongsm-cmyk",
+        "number": 1059,
+        "author_merged_in_repo": 0,
+        "history_cached": true,
+        "check_runs": 0,
+        "maintainer_engagement": 0,
+        "reason": "nominal_attempt_only"
+      }
+    ]
+  },
+  "lanes": [
+    "startup"
+  ],
+  "dispatched_at": "2026-11-03T22:19:00.855397+00:00",
+  "attempt": 0,
+  "updated_at": "2026-11-03T22:19:00.855413+00:00"
+}
