@@ -6,7 +6,7 @@
   "status": "CLAIMED",
   "attempt": 1,
   "dispatch_id": "49d6479d48e945f89a8e8d1ff1efb215",
-  "updated_at": "2026-11-03T11:29:45.707648+00:00",
+  "updated_at": "2026-11-03T11:29:50.259824+00:00",
   "owner": "probe-owner:1",
   "previous_owner": null,
   "previous_status": "DISPATCHED",
