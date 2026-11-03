@@ -2,7 +2,7 @@
   "task_id": "2484bb4fff6a5b6648b0a2d4fdb6c162",
   "repo": "Spectral-Finance/lux",
   "issue_number": 95,
-  "status": "CLAIMED",
+  "status": "FAILED_ENGINEER",
   "dispatch_id": "51d1ae140e9b47a393030944ed4fe83a",
   "admission": {
     "funding": {
@@ -359,7 +359,7 @@
   ],
   "dispatched_at": "2026-11-03T07:45:58.017549+00:00",
   "attempt": 1,
-  "updated_at": "2026-11-03T07:47:00.366019+00:00",
+  "updated_at": "2026-11-03T08:07:29.119290+00:00",
   "owner": "41598486392:1",
   "previous_owner": null,
   "previous_status": "DISPATCHED",
@@ -367,5 +367,20 @@
   "harness_sha": "6267827e87ba4d1db2397a219b2f8c1a5c60d062",
   "claimed_at": "2026-11-03T07:47:00.365969+00:00",
   "lease_expires_at": "2026-11-03T11:52:00.365983+00:00",
-  "preparation_budget_seconds": 14400
+  "preparation_budget_seconds": 14400,
+  "kind": "engineer",
+  "retryable": true,
+  "diagnostic": "BLOCKED_BASELINE: Baseline test failure on untouched upstream: bash -lc if [ -f mix.exs ]; then mix test.unit; else cd lux && mix test.unit; fi\n     warning: variable \"response\" is unused (if the variable is not meant to be used, prefix it with an underscore)\n     \u2502\n 105 \u2502   def after_focus(%{\"data\" => %{\"topics\" => topics}} = response) do\n     \u2502                                                        ~~~~~~~~\n     \u2502\n     \u2514\u2500 lib/lux/lenses/allora/get_topics.ex:105:56: Lux.Lenses.Allora.GetTopics.after_focus/1\n\n     warning: variable \"response\" is unused (if the variable is not meant to be used, prefix it with an underscore)\n     \u2502\n 112 \u2502   def after_focus(%{\"error\" => error} = response) do\n     \u2502                                         ~~~~~~~~\n     \u2502\n     \u2514\u2500 lib/lux/lenses/allora/get_topics.ex:112:41: Lux.Lenses.Allora.GetTopics.after_focus/1\n\n     warning: got \"@impl true\" for function before_focus/1 but no behaviour specifies such callback. The known callbacks are:\n\n       * Lux.Lens.after_focus/1 (function)\n\n     \u2502\n 107 \u2502   def before_focus(%{topic_id: topic_id} = params) do\n     \u2502   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n     \u2502\n     \u2514\u2500 lib/lux/lenses/allora/get_inference.ex:107: Lux.Lenses.Allora.GetInference (module)\n\n     warning: the underscored variable \"_config\" is used after being set. A leading underscore indicates that the value of the variable should be ignored. If this is intended please rename the variable to remove the underscore\n     \u2502\n 141 \u2502       {:ok, decoded} -> handle_response(%{body: decoded}, _config)\n     \u2502                                                           ~\n     \u2502\n     \u2514\u2500 lib/lux/llm/mira.ex:141:59: Lux.LLM.Mira.handle_response/2\n\n    warning: module attribute @endpoint was set but never used\n    \u2502\n 17 \u2502   @endpoint \"https://api.mira.network/v1/chat/completions\"\n    \u2502   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n    \u2502\n    \u2514\u2500 lib/lux/llm/mira.ex:17: Lux.LLM.Mira (module)\n\n    warning: variable \"config\" is unused (if the variable is not meant to be used, prefix it with an underscore)\n    \u2502\n 15 \u2502     test \"can fetch current bot user information\", %{config: config} do\n    \u2502                                                              ~~~~~~\n    \u2502\n    \u2514\u2500 test/integration/discord_client_test.exs:15:62: Lux.Integration.Discord.ClientTest.\"test basic Discord API integration can fetch current bot user information\"/1\n\n",
+  "at": "2026-11-03T08:07:14.359269+00:00",
+  "failures": [
+    {
+      "run_url": "https://github.com/isearchxsolve/bounty-control/actions/runs/41598486392",
+      "status": "FAILED_ENGINEER",
+      "kind": "engineer",
+      "retryable": true,
+      "diagnostic": "BLOCKED_BASELINE: Baseline test failure on untouched upstream: bash -lc if [ -f mix.exs ]; then mix test.unit; else cd lux && mix test.unit; fi\n     warning: variable \"response\" is unused (if the variable is not meant to be used, prefix it with an underscore)\n     \u2502\n 105 \u2502   def after_focus(%{\"data\" => %{\"topics\" => topics}} = response) do\n     \u2502                                                        ~~~~~~~~\n     \u2502\n     \u2514\u2500 lib/lux/lenses/allora/get_topics.ex:105:56: Lux.Lenses.Allora.GetTopics.after_focus/1\n\n     warning: variable \"response\" is unused (if the variable is not meant to be used, prefix it with an underscore)\n     \u2502\n 112 \u2502   def after_focus(%{\"error\" => error} = response) do\n     \u2502                                         ~~~~~~~~\n     \u2502\n     \u2514\u2500 lib/lux/lenses/allora/get_topics.ex:112:41: Lux.Lenses.Allora.GetTopics.after_focus/1\n\n     warning: got \"@impl true\" for function before_focus/1 but no behaviour specifies such callback. The known callbacks are:\n\n       * Lux.Lens.after_focus/1 (function)\n\n     \u2502\n 107 \u2502   def before_focus(%{topic_id: topic_id} = params) do\n     \u2502   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n     \u2502\n     \u2514\u2500 lib/lux/lenses/allora/get_inference.ex:107: Lux.Lenses.Allora.GetInference (module)\n\n     warning: the underscored variable \"_config\" is used after being set. A leading underscore indicates that the value of the variable should be ignored. If this is intended please rename the variable to remove the underscore\n     \u2502\n 141 \u2502       {:ok, decoded} -> handle_response(%{body: decoded}, _config)\n     \u2502                                                           ~\n     \u2502\n     \u2514\u2500 lib/lux/llm/mira.ex:141:59: Lux.LLM.Mira.handle_response/2\n\n    warning: module attribute @endpoint was set but never used\n    \u2502\n 17 \u2502   @endpoint \"https://api.mira.network/v1/chat/completions\"\n    \u2502   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n    \u2502\n    \u2514\u2500 lib/lux/llm/mira.ex:17: Lux.LLM.Mira (module)\n\n    warning: variable \"config\" is unused (if the variable is not meant to be used, prefix it with an underscore)\n    \u2502\n 15 \u2502     test \"can fetch current bot user information\", %{config: config} do\n    \u2502                                                              ~~~~~~\n    \u2502\n    \u2514\u2500 test/integration/discord_client_test.exs:15:62: Lux.Integration.Discord.ClientTest.\"test basic Discord API integration can fetch current bot user information\"/1\n\n",
+      "at": "2026-11-03T08:07:14.359269+00:00"
+    }
+  ],
+  "finished_at": "2026-11-03T08:07:28.687447+00:00"
 }
