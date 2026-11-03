@@ -2,8 +2,8 @@
   "task_id": "c4ccbe12cb966b88845d970513184ad0",
   "repo": "mgillr/acfa-rs",
   "issue_number": 93,
-  "status": "FAILED_ENGINEER",
-  "dispatch_id": "a3b4b0fb57d14c7a90efc271b4f52837",
+  "status": "DISPATCHING",
+  "dispatch_id": "3aef54120d7f42749c90cb870e21b242",
   "admission": {
     "funding": {
       "payer": "mgillr",
@@ -32,7 +32,7 @@
     "task_id": "c4ccbe12cb966b88845d970513184ad0",
     "source_revision": "b72044605ca856fba557457a13a057eaae35822268a6ea711e6719d6ab413382"
   },
-  "dispatch_attempt": 2,
+  "dispatch_attempt": 3,
   "sovereign_admission": true,
   "competition": {
     "blocking": false,
@@ -41,9 +41,9 @@
   "lanes": [
     "founder"
   ],
-  "dispatched_at": "2026-11-03T07:19:50.706416+00:00",
+  "dispatched_at": "2026-11-03T08:12:27.833543+00:00",
   "attempt": 2,
-  "updated_at": "2026-11-03T07:57:40.744154+00:00",
+  "updated_at": "2026-11-03T08:12:27.833559+00:00",
   "owner": "41595597948:1",
   "previous_owner": "41588803632:1",
   "previous_status": "DISPATCHED",
