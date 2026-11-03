@@ -15,7 +15,13 @@ import time
 import unittest
 
 ROOT = Path(__file__).resolve().parents[1]
-MODULES = ('test_pipeline_transport_live', 'test_pipeline_state_live', 'test_cline_process')
+MODULES = (
+    'test_pipeline_transport_live', 'test_pipeline_state_live', 'test_cline_process',
+    'test_preflight.PreflightShapeTests',
+    'test_preflight.PreflightClassificationTests.test_disk_below_floor_names_the_disk_subsystem_and_the_measured_figure',
+    'test_preflight.PreflightClassificationTests.test_a_missing_executable_names_the_executable_subsystem',
+    'test_preflight.PreflightClassificationTests.test_git_version_floor_is_enforced_in_both_directions',
+)
 
 
 class Receipts(unittest.TextTestResult):
@@ -104,7 +110,8 @@ def main():
         report['scope'] = 'selected converted checks after repair; full suite verdict remains in source campaign'
     report['source_files'] = {
         name: hashlib.sha256((ROOT / 'scripts' / (name + '.py')).read_bytes()).hexdigest()
-        for name in (*MODULES, 'test_pipeline_failure_master', 'run_pipeline_live_probes')}
+        for name in {*[item.split('.')[0] for item in MODULES],
+                     'test_pipeline_failure_master', 'run_pipeline_live_probes'}}
     runner = unittest.TextTestRunner(verbosity=2, failfast=False,
         resultclass=lambda *a, **kw: Receipts(*a, **kw, report=report, path=path))
     print('Live receipts: ' + str(path), flush=True)
