@@ -2,7 +2,7 @@
   "task_id": "b802e02b8687848bef11b406fb3b2905",
   "repo": "DimitarGeorgievski/patuvaj-notes",
   "issue_number": 13,
-  "status": "DISPATCHED",
+  "status": "CLAIMED",
   "dispatch_id": "0715bd990ebe422e880a214e832b2f14",
   "admission": {
     "funding": {
@@ -42,6 +42,14 @@
     "founder"
   ],
   "dispatched_at": "2026-11-03T04:17:25.506597+00:00",
-  "attempt": 0,
-  "updated_at": "2026-11-03T04:17:27.084401+00:00"
+  "attempt": 1,
+  "updated_at": "2026-11-03T04:17:36.078084+00:00",
+  "owner": "41577249045:1",
+  "previous_owner": null,
+  "previous_status": "DISPATCHED",
+  "run_url": "https://github.com/isearchxsolve/bounty-control/actions/runs/41577249045",
+  "harness_sha": "b671cfe5788143108fb38fd1bf6709ed34484a66",
+  "claimed_at": "2026-11-03T04:17:36.078033+00:00",
+  "lease_expires_at": "2026-11-03T08:22:36.078050+00:00",
+  "preparation_budget_seconds": 1800
 }
