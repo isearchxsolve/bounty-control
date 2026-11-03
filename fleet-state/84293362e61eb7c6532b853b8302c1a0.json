@@ -2,7 +2,7 @@
   "task_id": "84293362e61eb7c6532b853b8302c1a0",
   "repo": "mendyraul/TrackFlights",
   "issue_number": 89,
-  "status": "DISPATCHING",
+  "status": "DISPATCHED",
   "dispatch_id": "0af0e5ad7fc2458d8f5d9f951a3d9a74",
   "admission": {
     "funding": {
@@ -43,5 +43,5 @@
   ],
   "dispatched_at": "2026-11-03T12:56:43.710400+00:00",
   "attempt": 0,
-  "updated_at": "2026-11-03T12:56:43.710418+00:00"
+  "updated_at": "2026-11-03T12:56:46.048975+00:00"
 }
