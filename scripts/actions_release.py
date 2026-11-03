@@ -110,9 +110,19 @@ def is_test(path):
 
 
 def product_paths(paths):
+    # Bytecode caches and compiled artefacts are never engineering source edits.
+    # Python writes __pycache__/*.pyc when verify_baseline runs pytest; Node/Rust/Java
+    # write equivalents.  None are product source.
+    # Measured 2026-11-03: DimitarGeorgievski/patuvaj-notes#13 (run 41577249045) aborted
+    # at guard_untouched_baseline because code/__pycache__/booking.cpython-312.pyc was
+    # written by Cline's own baseline pytest invocation and treated as a product mutation,
+    # blocking the entire E2E cohort.
+    _BYTECODE_EXTS = (".pyc", ".pyo", ".pyd", ".class", ".beam", ".rbc", ".elc")
     return [p for p in paths if not is_test(p) and not p.startswith(("docs/", ".github/"))
             and not p.lower().endswith((".md", ".rst", ".txt", ".lock", "lock.json", "lock.yaml"))
-            and Path(p).name not in {"yarn.lock", "package-lock.json", "bun.lockb", "Cargo.lock"}]
+            and Path(p).name not in {"yarn.lock", "package-lock.json", "bun.lockb", "Cargo.lock"}
+            and "__pycache__" not in p.split("/")
+            and not p.lower().endswith(_BYTECODE_EXTS)]
 
 
 def manifest(root, paths):

@@ -654,13 +654,17 @@ def engineer():
                 validate_plan_contract(plan, prepared.get("report_path"))
                 break
             except PreparationContractViolation as exc:
+                # Three repair rounds, all of them spent. Measured 2026-11-03 (run
+                # 41572134967): the loop promised three attempts but a repair that did not
+                # succeed on attempt 1 raised immediately, so a recoverable plan defect
+                # consumed two attempts and died with the third never used -- and the
+                # supervisor's own diagnostic was discarded on the way out.
+                # A survey never ends early because one round failed.
                 if attempt == 2:
                     raise
                 repaired, candidate, repair_error = worker.cline_supervise_delivery_phase(
                     root, repo, number, 'preparation', repair_feedback or str(exc), plan)
                 if not repaired:
-                    if attempt == 1:
-                        raise PreparationContractViolation(prepared.get('report_path'), repair_error) from exc
                     repair_feedback = repair_error
                     continue
                 plan = candidate
