@@ -54,7 +54,15 @@ class GitHub:
         self.deadline = deadline
 
     THROTTLE = re.compile(r"rate limit exceeded|secondary rate limit|abuse detection", re.I)
+    # A local socket that times out says nothing about the request. Measured 2026-11-03 on the live
+    # probe battery: `Get https://api.github.com/repos/.../contents/...: net/http: TLS handshake
+    # timeout` failed a probe outright while the same call succeeded seconds later. Retried with a
+    # short backoff, never treated as an answer.
+    TRANSIENT = re.compile(r"TLS handshake timeout|connection reset by peer|i/o timeout|"
+                           r"unexpected EOF|broken pipe|temporarily unavailable|no such host", re.I)
     THROTTLE_TRIES = 4
+    TRANSIENT_TRIES = 3
+    TRANSIENT_BACKOFF = 2.0
 
     @staticmethod
     def throttle_wait(message):
@@ -104,7 +112,8 @@ class GitHub:
             environment["GH_TOKEN"] = self.token
         message = ""
         deadline = min(self.deadline or float("inf"), time.monotonic() + 180)
-        for attempt in range(self.THROTTLE_TRIES):
+        attempt = transient = 0
+        while attempt < self.THROTTLE_TRIES:
             remaining = deadline - time.monotonic()
             if remaining <= 0:
                 raise GitHubError("GitHub observation deadline exhausted: " + endpoint[:160])
@@ -121,8 +130,19 @@ class GitHub:
             # publish failed with a bare "gh: Not Found (HTTP 404)", which cannot distinguish a
             # deleted branch from a wrong repo, a missing ref or an absent PR -- four different
             # repairs. The endpoint is not secret and is the one fact needed to act on it.
+            if self.TRANSIENT.search(message) and not self.THROTTLE.search(message):
+                if transient + 1 < self.TRANSIENT_TRIES:
+                    transient += 1
+                    pause = self.TRANSIENT_BACKOFF * transient
+                    if pause < deadline - time.monotonic():
+                        print(json.dumps({"phase": "TRANSIENT", "endpoint": endpoint[:160],
+                                          "attempt": transient, "wait_s": pause}), flush=True)
+                        time.sleep(pause)
+                        continue
+                raise GitHubError(f"{message.strip()} [endpoint: {method} {endpoint[:200]}]")
             if not self.THROTTLE.search(message) or attempt + 1 >= self.THROTTLE_TRIES:
                 raise GitHubError(f"{message.strip()} [endpoint: {method} {endpoint[:200]}]")
+            attempt += 1
             wait = self.rate_limit_wait(endpoint, message, environment)
             if wait >= deadline - time.monotonic():
                 raise GitHubError("GitHub throttle exceeds remaining observation budget: " + message)

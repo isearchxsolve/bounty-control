@@ -793,7 +793,15 @@ def dispatch(api, store, context, proof, lanes, remote_repair=False, preparation
         if old and old.get("dispatch_id") == dispatch_id and old["status"] == "DISPATCHING":
             return {**old, "status": "DISPATCHED"}
         if not old:
-            raise ValueError("Dispatch state disappeared")
+            # The reserve write above succeeded, so a missing record means something else removed
+            # it. Name that fact instead of inventing a DISPATCHED row: a synthesized record would
+            # be a dispatch receipt with no admission behind it, which is the one thing the
+            # durable ledger exists to prevent. Measured 2026-11-03 (live door-to-claim probe):
+            # the probe deleted the identity while its own dispatch was in flight, and the bare
+            # message could not tell that apart from a real loss of state.
+            raise ValueError("Dispatch state disappeared after reservation: task " + identity
+                             + " dispatch " + dispatch_id + " is absent from " + store.repo
+                             + "; another actor removed the record while this dispatch was in flight")
         return old  # A runner can claim before the POST acknowledgement arrives.
     store.mutate(identity, acknowledge)
     return identity
@@ -1217,7 +1225,8 @@ def discover(lanes, max_dispatches=2, live=False, queries_per_lane=2, state_dir=
         return discover_sovereign(lanes, max_dispatches, live, state_dir, hydrate_only)
     folder = Path(state_dir or os.environ.get("BOUNTY_STATE_DIR", Path(__file__).resolve().parents[1] / "scratch/actions-discovery"))
     folder.mkdir(parents=True, exist_ok=True)
-    api, store = GitHub(), StateStore()
+    api = GitHub()
+    store = StateStore(api)
     horizon = Horizon(folder / "horizon.sqlite3")
     con = sqlite3.connect(folder / "discovery.sqlite3", timeout=30)
     con.execute("CREATE TABLE IF NOT EXISTS cursors(lane TEXT PRIMARY KEY, position INTEGER)")
