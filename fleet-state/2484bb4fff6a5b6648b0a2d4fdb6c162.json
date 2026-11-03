@@ -2,7 +2,7 @@
   "task_id": "2484bb4fff6a5b6648b0a2d4fdb6c162",
   "repo": "Spectral-Finance/lux",
   "issue_number": 95,
-  "status": "CLAIMED",
+  "status": "FAILED_ENGINEER",
   "dispatch_id": "e2a156d5e2674038868cfcc8d3938551",
   "admission": {
     "funding": {
@@ -359,7 +359,7 @@
   ],
   "dispatched_at": "2026-11-03T08:41:56.768355+00:00",
   "attempt": 3,
-  "updated_at": "2026-11-03T08:43:15.553903+00:00",
+  "updated_at": "2026-11-03T09:09:25.881409+00:00",
   "owner": "41605214810:1",
   "previous_owner": "41601416988:1",
   "previous_status": "DISPATCHED",
@@ -371,7 +371,7 @@
   "kind": "engineer",
   "retryable": true,
   "diagnostic": "BLOCKED_BASELINE: Bootstrap command failed: mix deps.get\n** (Mix) Could not find a Mix.Project, please ensure you are running Mix in a directory with a mix.exs file\n",
-  "at": "2026-11-03T08:38:52.688936+00:00",
+  "at": "2026-11-03T09:09:15.168193+00:00",
   "failures": [
     {
       "run_url": "https://github.com/isearchxsolve/bounty-control/actions/runs/41598486392",
@@ -388,7 +388,15 @@
       "retryable": true,
       "diagnostic": "BLOCKED_BASELINE: Bootstrap command failed: mix deps.get\n** (Mix) Could not find a Mix.Project, please ensure you are running Mix in a directory with a mix.exs file\n",
       "at": "2026-11-03T08:38:52.688936+00:00"
+    },
+    {
+      "run_url": "https://github.com/isearchxsolve/bounty-control/actions/runs/41605214810",
+      "status": "FAILED_ENGINEER",
+      "kind": "engineer",
+      "retryable": true,
+      "diagnostic": "BLOCKED_BASELINE: Bootstrap command failed: mix deps.get\n** (Mix) Could not find a Mix.Project, please ensure you are running Mix in a directory with a mix.exs file\n",
+      "at": "2026-11-03T09:09:15.168193+00:00"
     }
   ],
-  "finished_at": "2026-11-03T08:39:05.143640+00:00"
+  "finished_at": "2026-11-03T09:09:25.401666+00:00"
 }
