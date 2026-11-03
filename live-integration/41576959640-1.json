@@ -1,5 +1,5 @@
 {
-  "at": "2026-11-03T04:17:38.311289+00:00",
+  "at": "2026-11-03T04:17:39.868955+00:00",
   "run_url": "https://github.com/isearchxsolve/bounty-control/actions/runs/41576959640",
   "end_to_end_passed": false,
   "coverage": {
@@ -23,8 +23,8 @@
     "LIVE_STALE_GENERATION": "PASS",
     "LIVE_WRONG_OWNER": "PASS",
     "LIVE_REVOKED_OWNER": "PASS",
-    "LIVE_RETRY_CAP": "NOT_RUN",
-    "LIVE_TRUNCATED_STATE": "NOT_RUN",
+    "LIVE_RETRY_CAP": "PASS",
+    "LIVE_TRUNCATED_STATE": "PASS",
     "LIVE_GITHUB_401": "NOT_RUN",
     "LIVE_GITHUB_404": "NOT_RUN",
     "LIVE_RELEASE_TASK_IDENTITY": "NOT_RUN",
@@ -37,16 +37,6 @@
     "LIVE_FAILURE_SURFACE": "NOT_RUN"
   },
   "events": [
-    {
-      "case": "LIVE_INTAKE",
-      "status": "FAIL",
-      "at": "2026-11-03T04:15:11.358590+00:00"
-    },
-    {
-      "case": "PIPELINE_ENTRY",
-      "status": "PASS",
-      "at": "2026-11-03T04:15:13.005270+00:00"
-    },
     {
       "case": "LIVE_MODEL_ADMISSION",
       "status": "PASS",
@@ -111,6 +101,16 @@
       "case": "LIVE_REVOKED_OWNER",
       "status": "PASS",
       "at": "2026-11-03T04:17:38.310366+00:00"
+    },
+    {
+      "case": "LIVE_RETRY_CAP",
+      "status": "PASS",
+      "at": "2026-11-03T04:17:39.097589+00:00"
+    },
+    {
+      "case": "LIVE_TRUNCATED_STATE",
+      "status": "PASS",
+      "at": "2026-11-03T04:17:39.868057+00:00"
     }
   ],
   "cohort": {
