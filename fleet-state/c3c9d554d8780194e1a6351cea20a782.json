@@ -2,7 +2,7 @@
   "task_id": "c3c9d554d8780194e1a6351cea20a782",
   "repo": "eandualem/assistant-runtime",
   "issue_number": 220,
-  "status": "PUBLISHING",
+  "status": "PUBLISHED_PENDING_CHECKS",
   "dispatch_id": "845d69708c964e548651a3375544c74e",
   "admission": {
     "funding": {
@@ -43,7 +43,7 @@
   ],
   "dispatched_at": "2026-11-03T17:17:47.367964+00:00",
   "attempt": 2,
-  "updated_at": "2026-11-03T17:39:06.462242+00:00",
+  "updated_at": "2026-11-03T17:39:13.275750+00:00",
   "owner": "41682853280:1",
   "previous_owner": "41670210337:1",
   "previous_status": "DISPATCHED",
@@ -69,5 +69,14 @@
   "finished_at": "2026-11-03T16:23:49.052200+00:00",
   "proposed_head": "fb770139d1cd8d5cf2c401a39bb47cc9468ae0ec",
   "proposed_branch": "fix/bounty-220-c3c9d5-2",
-  "verified_run": "https://github.com/isearchxsolve/bounty-control/actions/runs/41682853280"
+  "verified_run": "https://github.com/isearchxsolve/bounty-control/actions/runs/41682853280",
+  "pr_url": "https://github.com/eandualem/assistant-runtime/pull/248",
+  "pr_number": 248,
+  "head_sha": "fb770139d1cd8d5cf2c401a39bb47cc9468ae0ec",
+  "branch": "fix/bounty-220-c3c9d5-2",
+  "claim_status": "NOT_APPLICABLE",
+  "claim_command": "",
+  "claim_retry_required": false,
+  "payment_status": "UNVERIFIED",
+  "release_digest": "92a8f3d0cad99c61dfe1af8fd18d4bb0f2155bd9620f977a76c7bc0a94acc2f9"
 }
