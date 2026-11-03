@@ -2,7 +2,7 @@
   "task_id": "27414e5464bdf69a8094963cdd6ed86f",
   "repo": "atyrode/manifold",
   "issue_number": 1084,
-  "status": "DISPATCHED",
+  "status": "CLAIMED",
   "dispatch_id": "f6c0bfc29c534392aa7911461330e182",
   "admission": {
     "funding": {
@@ -42,6 +42,14 @@
     "founder"
   ],
   "dispatched_at": "2026-11-03T14:53:38.553274+00:00",
-  "attempt": 0,
-  "updated_at": "2026-11-03T14:53:40.645691+00:00"
+  "attempt": 1,
+  "updated_at": "2026-11-03T14:53:53.307184+00:00",
+  "owner": "41658212601:1",
+  "previous_owner": null,
+  "previous_status": "DISPATCHED",
+  "run_url": "https://github.com/isearchxsolve/bounty-control/actions/runs/41658212601",
+  "harness_sha": "726e59d5e2e595828f2be0d05a6e2245efcc091f",
+  "claimed_at": "2026-11-03T14:53:53.307138+00:00",
+  "lease_expires_at": "2026-11-03T18:58:53.307151+00:00",
+  "preparation_budget_seconds": 14400
 }
