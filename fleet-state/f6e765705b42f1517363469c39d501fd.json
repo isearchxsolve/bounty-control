@@ -3,8 +3,7 @@
   "repo": "isearchxsolve/oss-hunter-livefire",
   "issue_number": 1,
   "fault_fixture": true,
-  "status": "DISPATCHED",
-  "attempt": 0,
-  "dispatch_id": "06637abedc7a4779b29f78b2cfddafa3",
-  "updated_at": "2026-11-03T11:28:04.744984+00:00"
+  "status": "FAILED_RUNNER_SHUTDOWN",
+  "attempt": 3,
+  "updated_at": "2026-11-03T11:28:11.133813+00:00"
 }
