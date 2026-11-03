@@ -130,10 +130,15 @@ jobs:
         key: pkgcache-${{ runner.os }}-${{ github.run_id }}-${{ github.run_attempt }}
         restore-keys: |
           pkgcache-${{ runner.os }}-
+    - name: Set up Elixir and Erlang
+      uses: erlef/setup-beam@v1
+      with:
+        elixir-version: '1.16'
+        otp-version: '26'
     - name: Install the executable actually used by the worker
-      run: 'npm install --global --no-audit --no-fund cline@3.0.74
-
-        cline --version'
+      run: |
+        npm install --global --no-audit --no-fund cline@3.0.74
+        cline --version
     - name: Cline-first engineering and independent native verification
       id: engineer
       env:
