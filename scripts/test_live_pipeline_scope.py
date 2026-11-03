@@ -45,10 +45,12 @@ class ProgressReceiptTests(unittest.TestCase):
                           target='owner/original', control='owner/control'), api=api)
             run.data['private_prompt'] = 'DO_NOT_TRANSMIT'
             run.record('PIPELINE_ENTRY', 'PENDING', diagnostic='DO_NOT_TRANSMIT')
-            run.record('PIPELINE_MEMBER', 'FAIL', diagnostic='DO_NOT_TRANSMIT')
+            run.record('PIPELINE_ENTRY', 'PENDING', diagnostic='DO_NOT_TRANSMIT')
             self.assertEqual(len(api.written), 1)
-            run.publish_progress(force=True)
+            run.record('PIPELINE_MEMBER', 'FAIL', diagnostic='DO_NOT_TRANSMIT')
             self.assertEqual(len(api.written), 2)
+            run.publish_progress(force=True)
+            self.assertEqual(len(api.written), 3)
             endpoint, body = api.written[-1]
             self.assertTrue(endpoint.endswith('/contents/live-integration/123-2.json'))
             self.assertEqual(body['branch'], 'bounty-control')

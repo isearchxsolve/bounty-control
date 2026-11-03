@@ -189,7 +189,10 @@ class LiveRun:
         if (os.environ.get('LIVE_PIPELINE_PROGRESS') != '1' or not run_id.isdecimal()
                 or self.args.issue is not None):
             return
-        if not force and time.monotonic() < getattr(self, '_progress_next', 0):
+        latest = self.data['events'][-1] if self.data['events'] else {}
+        signature = (latest.get('case'), latest.get('status'))
+        if (not force and signature == getattr(self, '_progress_signature', None)
+                and time.monotonic() < getattr(self, '_progress_next', 0)):
             return
         self._progress_next = time.monotonic() + 30
         attempt = os.environ.get('GITHUB_RUN_ATTEMPT', '1')
@@ -220,6 +223,7 @@ class LiveRun:
                 body['sha'] = current
             result = self.api.api(f'repos/{self.control}/contents/{path}', 'PUT', body)
             self._progress_sha = result['content']['sha']
+            self._progress_signature = signature
         except (GitHubError, KeyError, TypeError, OSError):
             self._progress_sha = None
             print(json.dumps({'phase': 'LIVE_PROGRESS_UNAVAILABLE', 'run_id': run_id}), flush=True)
