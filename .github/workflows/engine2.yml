@@ -130,6 +130,10 @@ jobs:
         key: pkgcache-${{ runner.os }}-${{ github.run_id }}-${{ github.run_attempt }}
         restore-keys: |
           pkgcache-${{ runner.os }}-
+    - name: Ensure native build tools
+      run: |
+        sudo apt-get update -qq
+        sudo apt-get install -y -qq protobuf-compiler
     - name: Set up Elixir and Erlang
       uses: erlef/setup-beam@v1
       with:
@@ -171,6 +175,7 @@ jobs:
         NODE_OPTIONS: '--max-old-space-size=3072'
         UV_THREADPOOL_SIZE: '2'
         PYTHONDONTWRITEBYTECODE: '1'
+        RUSTFLAGS: '-A clippy::empty_line_after_outer_attr'
       run: python3 -u scripts/actions_delivery.py engineer
       timeout-minutes: 300
     - uses: actions/upload-artifact@v4
