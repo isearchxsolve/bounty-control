@@ -1,0 +1,11 @@
+{
+  "task_id": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+  "repo": "unit/runtime",
+  "issue_number": 7,
+  "status": "CLAIMED",
+  "owner": "1234:attempt-1",
+  "attempt": 1,
+  "claimed_at": "2026-11-03T07:57:29.814951+00:00",
+  "lease_expires_at": "2026-11-03T17:41:29.814951+00:00",
+  "updated_at": "2026-11-03T13:37:38.695576+00:00"
+}
