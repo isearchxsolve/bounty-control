@@ -1,8 +1,10 @@
 {
   "task_id": "b802e02b8687848bef11b406fb3b2905",
-  "status": "FAULT_FIXTURE",
-  "marker": "ra08793486256",
-  "text": "Unicode \u20b9 \u65e5\u672c\u8a9e\nsecond line",
-  "updated_at": "2026-11-03T04:15:20.334046+00:00",
-  "counter": 1
+  "repo": "DimitarGeorgievski/patuvaj-notes",
+  "issue_number": 13,
+  "status": "DISPATCHED",
+  "dispatch_id": "4e48853e12a84adfa6189916bb192a3e",
+  "attempt": 0,
+  "fault_fixture": true,
+  "updated_at": "2026-11-03T04:15:22.021088+00:00"
 }
