@@ -2,8 +2,8 @@
   "task_id": "e0e701d96bf8e24f771fc02e27d32f07",
   "repo": "stride3d/stride",
   "issue_number": 2553,
-  "status": "FAILED_PUBLISH",
-  "dispatch_id": "f12452a688c54cfa9222e9e4542cefe1",
+  "status": "DISPATCHING",
+  "dispatch_id": "41ac0f53248240afaccdfd85fe582034",
   "admission": {
     "funding": {
       "amount": "700",
@@ -45,7 +45,7 @@
     "task_id": "e0e701d96bf8e24f771fc02e27d32f07",
     "source_revision": "14f1424893cb0cbd9ef0d43d18cc577301db2f14591b7b576dfad14c6e8aecc6"
   },
-  "dispatch_attempt": 2,
+  "dispatch_attempt": 3,
   "sovereign_admission": true,
   "competition": {
     "blocking": false,
@@ -54,9 +54,9 @@
   "lanes": [
     "startup"
   ],
-  "dispatched_at": "2026-11-04T18:30:53.902411+00:00",
+  "dispatched_at": "2026-11-04T18:40:20.107450+00:00",
   "attempt": 2,
-  "updated_at": "2026-11-04T18:37:18.132719+00:00",
+  "updated_at": "2026-11-04T18:40:20.107450+00:00",
   "owner": "41867352564:1",
   "previous_owner": "41857659581:1",
   "previous_status": "DISPATCHED",
