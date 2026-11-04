@@ -830,9 +830,25 @@ def engineer():
                 # killed the publish job minutes later with no turn left to repair it. Run the
                 # publisher's own gate here, per turn, where the failure becomes feedback.
                 git(root, "diff", "--check", base)
+                reg_doc = read_json(regression_file)
+                # Find project working directory for monorepos
+                root_res = Path(root).resolve()
+                reg_cwd = root_res
+                for rf in (reg_doc.get("test_files") or []):
+                    rf_p = Path(rf)
+                    for parent in [rf_p.parent, *rf_p.parents]:
+                        p_str = str(parent).replace("\\", "/")
+                        if p_str and p_str != ".":
+                            cand = (root_res / p_str).resolve()
+                            if any((cand / m).is_file() for m in ("mix.exs", "Cargo.toml", "package.json", "pyproject.toml", "go.mod", "pom.xml", "build.gradle")):
+                                reg_cwd = cand
+                                break
+                    if reg_cwd != root_res:
+                        break
+
                 regression = regression_proof(
-                    root, base, read_json(regression_file),
-                    lambda argv: worker.run_command_safe(argv, cwd=root, timeout=3600))
+                    root, base, reg_doc,
+                    lambda argv: worker.run_command_safe(argv, cwd=str(reg_cwd), timeout=3600))
                 before = manifest(root, status_paths(root))
                 final_commands = plan.builds + worker.verification_test_commands(plan) + plan.linters + plan.format_checks
                 final = [worker.run_command_safe(argv, cwd=root, timeout=3600) for argv in final_commands]

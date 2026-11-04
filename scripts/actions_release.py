@@ -287,6 +287,30 @@ def regression_proof(root, base_sha, document, execute):
     for name in files:
         if git(root, "cat-file", "-e", f"{base_sha}:{name}", check=False).returncode == 0:
             raise ValueError("Regression cannot replace an existing master test")
+
+    # Determine project directory if repository is a monorepo
+    root_resolved = Path(root).resolve()
+    project_dir = root_resolved
+    for f in files:
+        f_p = Path(f)
+        for parent in [f_p.parent, *f_p.parents]:
+            p_str = str(parent).replace("\\", "/")
+            if p_str and p_str != ".":
+                cand = (root_resolved / p_str).resolve()
+                if any((cand / m).is_file() for m in ("mix.exs", "Cargo.toml", "package.json", "pyproject.toml", "go.mod", "pom.xml", "build.gradle")):
+                    project_dir = cand
+                    break
+        if project_dir != root_resolved:
+            break
+
+    # If the project manifest is in a subdirectory (monorepo), and command doesn't already cd into it:
+    if project_dir != root_resolved:
+        rel_p = project_dir.relative_to(root_resolved).as_posix()
+        cmd_str = " ".join(command)
+        if not ("cd " in cmd_str and rel_p in cmd_str):
+            if command and command[0] != "bash":
+                joined_cmd = " ".join(command)
+                command = ["bash", "-lc", f"cd {rel_p} && {joined_cmd}"]
     final = manifest(root, changed)
     backups = {}
     try:
