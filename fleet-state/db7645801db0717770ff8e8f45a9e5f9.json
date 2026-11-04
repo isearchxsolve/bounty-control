@@ -2,7 +2,7 @@
   "task_id": "db7645801db0717770ff8e8f45a9e5f9",
   "repo": "Spectral-Finance/lux",
   "issue_number": 83,
-  "status": "PUBLISHING",
+  "status": "FAILED_PUBLISH",
   "dispatch_id": "5521fd481b7542d1ba048480125b39df",
   "admission": {
     "funding": {
@@ -303,7 +303,7 @@
   ],
   "dispatched_at": "2026-11-04T09:16:34.415234+00:00",
   "attempt": 1,
-  "updated_at": "2026-11-04T09:43:13.267667+00:00",
+  "updated_at": "2026-11-04T09:43:25.581947+00:00",
   "owner": "41806137211:1",
   "previous_owner": null,
   "previous_status": "DISPATCHED",
@@ -314,5 +314,20 @@
   "preparation_budget_seconds": 14400,
   "proposed_head": "2a58ccfeb7e0a7be3ff0ec7910527abaade70d2c",
   "proposed_branch": "fix/bounty-83-db7645-1",
-  "verified_run": "https://github.com/isearchxsolve/bounty-control/actions/runs/41806137211"
+  "verified_run": "https://github.com/isearchxsolve/bounty-control/actions/runs/41806137211",
+  "kind": "engineer",
+  "retryable": true,
+  "diagnostic": "remote: Internal Server Error        \nremote: Request ID 4048:2833B7:21F26D0:2CCD9D3:6AEAFE33        \nremote: Time 2026-11-04T09:43:15Z\nTo https://github.com/isearchxsolve/lux.git\n ! [remote rejected] 2a58ccfeb7e0a7be3ff0ec7910527abaade70d2c -> fix/bounty-83-db7645-1 (Internal Server Error)\nerror: failed to push some refs to 'https://github.com/isearchxsolve/lux.git'\n",
+  "at": "2026-11-04T09:43:15.795634+00:00",
+  "failures": [
+    {
+      "run_url": "https://github.com/isearchxsolve/bounty-control/actions/runs/41806137211",
+      "status": "FAILED_PUBLISH",
+      "kind": "engineer",
+      "retryable": true,
+      "diagnostic": "remote: Internal Server Error        \nremote: Request ID 4048:2833B7:21F26D0:2CCD9D3:6AEAFE33        \nremote: Time 2026-11-04T09:43:15Z\nTo https://github.com/isearchxsolve/lux.git\n ! [remote rejected] 2a58ccfeb7e0a7be3ff0ec7910527abaade70d2c -> fix/bounty-83-db7645-1 (Internal Server Error)\nerror: failed to push some refs to 'https://github.com/isearchxsolve/lux.git'\n",
+      "at": "2026-11-04T09:43:15.795634+00:00"
+    }
+  ],
+  "finished_at": "2026-11-04T09:43:25.083722+00:00"
 }
