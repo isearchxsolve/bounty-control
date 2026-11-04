@@ -82,8 +82,8 @@
     "\"happy to pay\" \"fix\" is:issue is:open",
     "\"I will pay\" \"bug\" is:issue is:open",
     "\"paying for\" \"fix\" \"production\" is:issue is:open",
-    "\"production outage\" is:issue is:open",
-    "\"critical regression\" is:issue is:open",
+    "\"production outage\" \"will pay\" is:issue is:open",
+    "\"critical regression\" \"will pay\" is:issue is:open",
     "commenter:polar-sh \"rust\" OR \"solana\" OR \"polygon\" is:issue is:open",
     "org:0xPolygon label:bounty is:issue is:open",
     "org:maticnetwork label:bounty is:issue is:open"
