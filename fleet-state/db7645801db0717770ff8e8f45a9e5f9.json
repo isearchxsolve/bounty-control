@@ -303,7 +303,7 @@
   ],
   "dispatched_at": "2026-11-04T11:03:30.201516+00:00",
   "attempt": 2,
-  "updated_at": "2026-11-04T11:40:44.849080+00:00",
+  "updated_at": "2026-11-04T11:40:57.238229+00:00",
   "owner": "41818305083:1",
   "previous_owner": "41806137211:1",
   "previous_status": "DISPATCHED",
@@ -318,7 +318,7 @@
   "kind": "engineer",
   "retryable": true,
   "diagnostic": "remote: Internal Server Error        \nremote: Request ID 4048:2833B7:21F26D0:2CCD9D3:6AEAFE33        \nremote: Time 2026-11-04T09:43:15Z\nTo https://github.com/isearchxsolve/lux.git\n ! [remote rejected] 2a58ccfeb7e0a7be3ff0ec7910527abaade70d2c -> fix/bounty-83-db7645-1 (Internal Server Error)\nerror: failed to push some refs to 'https://github.com/isearchxsolve/lux.git'\n",
-  "at": "2026-11-04T09:43:15.795634+00:00",
+  "at": "2026-11-04T11:40:45.682357+00:00",
   "failures": [
     {
       "run_url": "https://github.com/isearchxsolve/bounty-control/actions/runs/41806137211",
@@ -329,7 +329,7 @@
       "at": "2026-11-04T09:43:15.795634+00:00"
     }
   ],
-  "finished_at": "2026-11-04T09:43:25.083722+00:00",
+  "finished_at": "2026-11-04T11:40:56.612976+00:00",
   "pr_url": "https://github.com/Spectral-Finance/lux/pull/1136",
   "pr_number": 1136,
   "head_sha": "1f3ac8ff44d9cd1242f025958216aa77335f768c",
