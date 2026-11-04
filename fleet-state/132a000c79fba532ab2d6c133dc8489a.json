@@ -2,7 +2,7 @@
   "task_id": "132a000c79fba532ab2d6c133dc8489a",
   "repo": "Spectral-Finance/lux",
   "issue_number": 82,
-  "status": "PUBLISHING",
+  "status": "PUBLISHED_PENDING_CHECKS",
   "dispatch_id": "4312948dced343839e9e01729d113109",
   "admission": {
     "funding": {
@@ -564,7 +564,7 @@
   ],
   "dispatched_at": "2026-11-04T03:29:54.443472+00:00",
   "attempt": 1,
-  "updated_at": "2026-11-04T04:15:27.562993+00:00",
+  "updated_at": "2026-11-04T04:16:53.696235+00:00",
   "owner": "41767485834:1",
   "previous_owner": null,
   "previous_status": "DISPATCHED",
@@ -575,5 +575,14 @@
   "preparation_budget_seconds": 14400,
   "proposed_head": "96c7bd3a0c045bca655e643dd3b06b3a6e6b3144",
   "proposed_branch": "fix/bounty-82-132a00-1",
-  "verified_run": "https://github.com/isearchxsolve/bounty-control/actions/runs/41767485834"
+  "verified_run": "https://github.com/isearchxsolve/bounty-control/actions/runs/41767485834",
+  "pr_url": "https://github.com/Spectral-Finance/lux/pull/1130",
+  "pr_number": 1130,
+  "head_sha": "96c7bd3a0c045bca655e643dd3b06b3a6e6b3144",
+  "branch": "fix/bounty-82-132a00-1",
+  "claim_status": "NOT_APPLICABLE",
+  "claim_command": "",
+  "claim_retry_required": false,
+  "payment_status": "UNVERIFIED",
+  "release_digest": "33ae3ac6e885622ac791f2e6015245ef5b02812b05a1fb6c6794bdbea36fbd25"
 }
