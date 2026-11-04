@@ -807,9 +807,6 @@ def dispatch(api, store, context, proof, lanes, remote_repair=False, preparation
         proof = bind_proof(proof, context)
     stamps = _sovereign_stamps(proof, sovereign_admission, competition)
     def reserve(old):
-        dispatch_attempt = int((old or {}).get("dispatch_attempt", 0)) + 1
-        if dispatch_attempt > 3:
-            raise ValueError("Bounded dispatch attempts exhausted")
         if old:
             status = old.get("status", "")
             retryable = retry_eligible(old) and int(old.get("attempt", 0)) < 3
@@ -826,10 +823,14 @@ def dispatch(api, store, context, proof, lanes, remote_repair=False, preparation
             if changed_refusal:
                 old = {**old, "refusal_history": [*old.get("refusal_history", []),
                        {"status": status, "reason": old.get("reason"),
-                        "admission": old.get("admission"), "at": old.get("updated_at")} ]}
+                        "admission": old.get("admission"), "at": old.get("updated_at")}],
+                       "dispatch_attempt": 0}
                 retryable = True
             if not retryable:
                 raise ValueError("Existing durable task state: " + status)
+        dispatch_attempt = int((old or {}).get("dispatch_attempt", 0)) + 1
+        if dispatch_attempt > 3:
+            raise ValueError("Bounded dispatch attempts exhausted")
         return {**(old or {}), "task_id": identity, "repo": repo, "issue_number": number,
                 "status": "DISPATCHING", "dispatch_id": dispatch_id, "admission": proof,
                 "dispatch_attempt": dispatch_attempt,

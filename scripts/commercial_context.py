@@ -22,7 +22,11 @@ def sources(context):
 
 
 def review_revision(context):
-    return digest({'observations': context.get('commercial_observations'), 'documents': [
+    obs = context.get('commercial_observations') or {}
+    if isinstance(obs, dict):
+        obs = {k: v for k, v in sorted(obs.items())
+               if k not in ('pushed_at', 'last_merged_at', 'last_merged_author', 'commit_hours', 'total')}
+    return digest({'observations': obs, 'documents': [
                    {'url': d.get('html_url'), 'body': d.get('body') or '',
                     'title': d.get('title') or '', 'updated_at': d.get('updated_at'),
                     'created_at': d.get('created_at'),

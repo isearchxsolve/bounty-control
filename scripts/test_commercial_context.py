@@ -150,6 +150,28 @@ class CommercialReviewTests(unittest.TestCase):
         self.assertTrue(any('never paid' in d['body'] for d in ctx['commercial_sources']))
         self.assertEqual(review_refusal(ctx)[0], 'COMMERCIAL_REVIEW_REQUIRED')
 
+    def test_review_revision_is_invariant_to_volatile_repo_commit_timestamps(self):
+        ctx = context()
+        ctx['commercial_observations'] = {
+            'licence_document_present': True,
+            'merged': 100,
+            'total': 150,
+            'pushed_at': '2026-11-04T12:00:00Z',
+            'last_merged_at': '2026-11-04T11:00:00Z',
+            'last_merged_author': 'alice',
+            'commit_hours': [1, 2, 3]
+        }
+        rev1 = review_revision(ctx)
+        ctx['commercial_observations'].update(
+            total=155,
+            pushed_at='2026-11-04T18:30:00Z',
+            last_merged_at='2026-11-04T18:25:00Z',
+            last_merged_author='bob',
+            commit_hours=[18, 17, 16]
+        )
+        rev2 = review_revision(ctx)
+        self.assertEqual(rev1, rev2, 'Volatile commit activity must not invalidate commercial review (Law 85)')
+
 
 class FundingFreshnessTests(unittest.TestCase):
     now = datetime(2026, 11, 4, tzinfo=timezone.utc)
