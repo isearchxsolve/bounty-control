@@ -618,7 +618,7 @@ def _get_default_router() -> TokenHarborRouter:
 # The decision is a fact, not a judgement: an HTTP 429, a free-tier limit, or zero
 # ready slots. A changed brain is always visible in the engine log with its request
 # id, because a silent brain swap cannot be measured. No API key is ever logged.
-NVIDIA_DELIVERY_MODEL = "nvidia/nemotron-3.5-super-vl-120b-a12b"
+NVIDIA_DELIVERY_MODEL = "mistralai/mistral-large-4-1t-a52b"
 
 # Credential-free markers of a throttled shard. These strings are produced by this
 # file and by TokenHarbor's own error text; none of them can contain a key.

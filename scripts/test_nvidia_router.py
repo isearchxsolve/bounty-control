@@ -145,9 +145,9 @@ class ParachuteModelContract(unittest.TestCase):
     unusable for the hundreds of calls one engineering task makes.
     """
 
-    def test_the_default_model_is_a_nemotron_model(self):
-        self.assertTrue(nr.DEFAULT_MODEL.startswith("nvidia/nemotron"),
-                        f"the parachute's default brain must be Nemotron, got {nr.DEFAULT_MODEL!r}")
+    def test_the_default_model_is_a_measured_frontier_model(self):
+        self.assertTrue(nr.DEFAULT_MODEL.startswith("mistralai/") or nr.DEFAULT_MODEL.startswith("nvidia/"),
+                        f"the parachute's default brain must be a measured frontier model, got {nr.DEFAULT_MODEL!r}")
 
     def test_the_default_model_is_not_the_primary_brain(self):
         import kaggle_engine_worker as worker

@@ -33,7 +33,7 @@ NIM_URL = "https://integrate.api.nvidia.com/v1/chat/completions"
 # Harbor key is currently ready", the failover answered from a router built with this default,
 # and the parachute could not open because it was aimed at a model that does not exist here.
 DEFAULT_MODEL = os.environ.get("NVIDIA_ROUTER_MODEL",
-                              "nvidia/nemotron-3.5-super-vl-120b-a12b")
+                              "mistralai/mistral-large-4-1t-a52b")
 KEYS_ENV = "NVIDIA_KEYS_JSON"
 SINGLE_KEY_ENV = "NVIDIA_API_KEY"
 
