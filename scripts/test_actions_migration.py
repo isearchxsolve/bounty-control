@@ -463,6 +463,13 @@ class ReleaseTests(unittest.TestCase):
         self.assertNotEqual(proof_inferred["red_exit"], 0)
         self.assertEqual(proof_inferred["green_exit"], 0)
 
+        # String argv normalization: string argv like "python -B test.py" is split cleanly without character interleaving
+        str_cmd = f'"{sys.executable}" -B "{str(test)}"'
+        proof_str = regression_proof(self.root, self.base, {
+                "argv": str_cmd, "expected_failure": "specific regression fixture assertion"}, execute)
+        self.assertNotEqual(proof_str["red_exit"], 0)
+        self.assertEqual(proof_str["green_exit"], 0)
+
     def test_checkpoint_restores_real_tracked_and_new_companion_bytes(self):
         import zipfile
         (self.root / "product.py").write_text("def value(): return 1\n")

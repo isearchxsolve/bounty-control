@@ -264,6 +264,13 @@ def regression_proof(root, base_sha, document, execute):
     expected = document.get("expected_failure")
     if not command or not isinstance(expected, str) or len(expected) < 12:
         raise ValueError("Specific regression test files/command/failure assertion are mandatory")
+    if isinstance(command, str):
+        command = shlex.split(command)
+    elif isinstance(command, (list, tuple)):
+        if len(command) == 1 and isinstance(command[0], str) and " " in command[0]:
+            command = shlex.split(command[0])
+        else:
+            command = [str(c) for c in command]
     changed = status_paths(root)
     changed_set = set(changed)
 
