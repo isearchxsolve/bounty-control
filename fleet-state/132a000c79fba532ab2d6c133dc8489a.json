@@ -2,7 +2,7 @@
   "task_id": "132a000c79fba532ab2d6c133dc8489a",
   "repo": "Spectral-Finance/lux",
   "issue_number": 82,
-  "status": "DISPATCHED",
+  "status": "CLAIMED",
   "dispatch_id": "4312948dced343839e9e01729d113109",
   "admission": {
     "funding": {
@@ -563,6 +563,14 @@
     "startup"
   ],
   "dispatched_at": "2026-11-04T03:29:54.443472+00:00",
-  "attempt": 0,
-  "updated_at": "2026-11-04T03:29:56.757431+00:00"
+  "attempt": 1,
+  "updated_at": "2026-11-04T03:31:47.241975+00:00",
+  "owner": "41767485834:1",
+  "previous_owner": null,
+  "previous_status": "DISPATCHED",
+  "run_url": "https://github.com/isearchxsolve/bounty-control/actions/runs/41767485834",
+  "harness_sha": "28d227bd6ef1eb496aaba90c9a854d1412aa779e",
+  "claimed_at": "2026-11-04T03:31:47.241924+00:00",
+  "lease_expires_at": "2026-11-04T07:36:47.241938+00:00",
+  "preparation_budget_seconds": 14400
 }
