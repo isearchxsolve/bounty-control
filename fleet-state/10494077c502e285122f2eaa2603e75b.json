@@ -2,7 +2,7 @@
   "task_id": "10494077c502e285122f2eaa2603e75b",
   "repo": "stride3d/stride",
   "issue_number": 339,
-  "status": "CLAIMED",
+  "status": "FAILED_ENGINEER",
   "dispatch_id": "9aabaf0eee2a44bd800fa24634e28dc2",
   "admission": {
     "funding": {
@@ -60,7 +60,7 @@
   ],
   "dispatched_at": "2026-11-04T20:31:34.356700+00:00",
   "attempt": 2,
-  "updated_at": "2026-11-04T20:32:11.775127+00:00",
+  "updated_at": "2026-11-04T21:11:19.115038+00:00",
   "kind": "engineer",
   "retryable": true,
   "review_required": true,
@@ -68,7 +68,7 @@
   "reason": "COMMERCIAL_REVIEW_STALE",
   "detail": [],
   "diagnostic": "Cline preparation failed: error: The operation timed out. |",
-  "at": "2026-11-04T20:28:02.140502+00:00",
+  "at": "2026-11-04T21:11:06.556232+00:00",
   "refusal_history": [
     {
       "status": "REJECTED_COMMERCIAL_REVIEW",
@@ -133,7 +133,15 @@
       "retryable": true,
       "diagnostic": "Cline preparation failed: error: The operation timed out. |",
       "at": "2026-11-04T20:28:02.140502+00:00"
+    },
+    {
+      "run_url": "https://github.com/isearchxsolve/bounty-control/actions/runs/41907454760",
+      "status": "FAILED_ENGINEER",
+      "kind": "engineer",
+      "retryable": true,
+      "diagnostic": "Cline preparation failed: error: The operation timed out. |",
+      "at": "2026-11-04T21:11:06.556232+00:00"
     }
   ],
-  "finished_at": "2026-11-04T20:28:14.981557+00:00"
+  "finished_at": "2026-11-04T21:11:18.593449+00:00"
 }
