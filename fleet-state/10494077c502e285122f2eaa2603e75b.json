@@ -2,8 +2,8 @@
   "task_id": "10494077c502e285122f2eaa2603e75b",
   "repo": "stride3d/stride",
   "issue_number": 339,
-  "status": "FAILED_ENGINEER",
-  "dispatch_id": "9aabaf0eee2a44bd800fa24634e28dc2",
+  "status": "DISPATCHING",
+  "dispatch_id": "e666d94b3b4646bf93e596d592d957ea",
   "admission": {
     "funding": {
       "amount": "800",
@@ -49,7 +49,7 @@
       "reason": "Source-backed commercial review revalidation passed exit 0 under Baba Law 86 with updated commit-filtering hash."
     }
   },
-  "dispatch_attempt": 2,
+  "dispatch_attempt": 3,
   "sovereign_admission": true,
   "competition": {
     "blocking": false,
@@ -58,9 +58,9 @@
   "lanes": [
     "startup"
   ],
-  "dispatched_at": "2026-11-04T20:31:34.356700+00:00",
+  "dispatched_at": "2026-11-04T21:34:08.752123+00:00",
   "attempt": 2,
-  "updated_at": "2026-11-04T21:11:19.115038+00:00",
+  "updated_at": "2026-11-04T21:34:08.752141+00:00",
   "kind": "engineer",
   "retryable": true,
   "review_required": true,
