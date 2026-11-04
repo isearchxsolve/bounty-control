@@ -2,8 +2,8 @@
   "task_id": "53b72f29ccaf11ed97d68b238fcc9256",
   "repo": "Spectral-Finance/lux",
   "issue_number": 100,
-  "status": "FAILED_ENGINEER",
-  "dispatch_id": "6600d91226b4423a8d67fb19ecd77599",
+  "status": "DISPATCHING",
+  "dispatch_id": "ca25a261d30f434c96bb40002e22906d",
   "admission": {
     "funding": {
       "amount": "300",
@@ -33,7 +33,7 @@
     "task_id": "53b72f29ccaf11ed97d68b238fcc9256",
     "source_revision": "d168924507302960b471504ec7caaf4601e7941340d5c5e8a1bfc5ae76c768b1"
   },
-  "dispatch_attempt": 2,
+  "dispatch_attempt": 3,
   "sovereign_admission": true,
   "competition": {
     "blocking": false,
@@ -429,9 +429,9 @@
   "lanes": [
     "startup"
   ],
-  "dispatched_at": "2026-11-04T02:12:50.409119+00:00",
+  "dispatched_at": "2026-11-04T02:58:38.719894+00:00",
   "attempt": 1,
-  "updated_at": "2026-11-04T02:26:12.408694+00:00",
+  "updated_at": "2026-11-04T02:58:38.719908+00:00",
   "diagnostic": "BLOCKED_BASELINE: Native plan source SHA-256 does not match the checkout",
   "owner_revoked": null,
   "observed_at": "2026-11-03T06:29:32.216183+00:00",
