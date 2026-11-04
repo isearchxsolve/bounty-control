@@ -2,7 +2,7 @@
   "task_id": "ce1a305dc42412d866543f677fe997f4",
   "repo": "Spectral-Finance/lux",
   "issue_number": 97,
-  "status": "DISPATCHED",
+  "status": "CLAIMED",
   "dispatch_id": "94f474af13884f72a18860f96b193ae8",
   "admission": {
     "funding": {
@@ -272,15 +272,15 @@
     "startup"
   ],
   "dispatched_at": "2026-11-04T00:09:26.660736+00:00",
-  "attempt": 1,
-  "updated_at": "2026-11-04T00:09:28.425304+00:00",
-  "owner": "41720980825:1",
-  "previous_owner": null,
+  "attempt": 2,
+  "updated_at": "2026-11-04T00:10:15.164234+00:00",
+  "owner": "41744700461:1",
+  "previous_owner": "41720980825:1",
   "previous_status": "DISPATCHED",
-  "run_url": "https://github.com/isearchxsolve/bounty-control/actions/runs/41720980825",
-  "harness_sha": "9cc2791abb40868ccd2e18955f3c1adf5ca4bd2f",
-  "claimed_at": "2026-11-03T21:22:36.333776+00:00",
-  "lease_expires_at": "2026-11-04T01:27:36.333789+00:00",
+  "run_url": "https://github.com/isearchxsolve/bounty-control/actions/runs/41744700461",
+  "harness_sha": "d5d4038b4a88cf7e596dc1ef2fe83fc556b69a06",
+  "claimed_at": "2026-11-04T00:10:15.164186+00:00",
+  "lease_expires_at": "2026-11-04T04:15:15.164199+00:00",
   "preparation_budget_seconds": 14400,
   "diagnostic": "Actions run completed (failure) without terminal callback; artifacts retained",
   "observed_at": "2026-11-03T22:12:52.751497+00:00"
