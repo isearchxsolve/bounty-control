@@ -806,8 +806,10 @@ def engineer():
                         root, repo, number, 'baseline', diagnostic, plan)
                     if repaired:
                         validate_plan_contract(candidate, prepared.get('report_path'))
-                        if asdict(candidate) != asdict(plan):
-                            feedback = diagnostic + '\nEnvironment repair proposed a changed native plan; the existing plan remains required.'
+                        plan = candidate
+                        plan_file = Path(prepared.get('report_path')).with_suffix('.plan.json')
+                        plan_file.write_text(json.dumps(asdict(candidate), indent=2), encoding='utf-8')
+                        feedback = "Adopted repaired native verification plan: " + json.dumps(asdict(candidate))
                     else:
                         feedback = diagnostic + '\nEnvironment repair feedback: ' + str(repair_detail)
                 continue
