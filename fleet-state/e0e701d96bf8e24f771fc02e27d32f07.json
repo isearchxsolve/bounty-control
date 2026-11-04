@@ -2,8 +2,8 @@
   "task_id": "e0e701d96bf8e24f771fc02e27d32f07",
   "repo": "stride3d/stride",
   "issue_number": 2553,
-  "status": "FAILED_PUBLISH",
-  "dispatch_id": "ec46cf2a0fbf429db8447e9d4edd2466",
+  "status": "DISPATCHING",
+  "dispatch_id": "f12452a688c54cfa9222e9e4542cefe1",
   "admission": {
     "funding": {
       "amount": "700",
@@ -19,12 +19,12 @@
       "source_author_association": "MEMBER",
       "source_author_login": "Aggror"
     },
-    "agent_reason": "Aggror (MEMBER on stride3d/stride) hung a $700 USD OpenCollective-funded bounty in the issue body ('### Funding: $700,- USD'); the request is a bounded feature to add a hierarchical FBX import toggle in the model-import pipeline (sources/engine/Stride.Assets.Models/ImportModelCommand.cs), and the repo merges outside work (1493+ merged PRs, latest 2026-11-04) with no open competing pull request on this issue.",
-    "scope_quote": "We aim to develop an enhancement for our engine that introduces a much-needed feature: the option to split an FBX file into multiple model assets based on its internal hierarchy.",
+    "agent_reason": "Aggror (MEMBER of stride3d/stride, verified author_association) wrote the funding line '### Funding: $700,- USD' in the issue body, so the payer is the issue author and the offer is current; the repository merges outside work (1493 merged PRs, last 2026-11-04) and the requested change is a bounded FBX importer feature in sources/engine/Stride.Assets.Models/ImportModelCommand.cs.",
+    "scope_quote": "introduces a much-needed feature: the option to split an FBX file into multiple model assets based on its internal hierarchy.",
     "code_evidence": {
       "is_product_code": true,
       "path": "sources/engine/Stride.Assets.Models/ImportModelCommand.cs",
-      "quote": "public abstract partial class ImportModelCommand : SingleFileImportCommand",
+      "quote": "public abstract partial class ImportModelCommand",
       "sha": "d5648141e6ac21231b0b02074c32d430a14f5d55"
     },
     "source_issue": "https://github.com/stride3d/stride/issues/2553",
@@ -33,8 +33,8 @@
     "commercial_scope": "linked-discussions",
     "commercial_review": {
       "decision": "proceed",
-      "source_revision": "0f8d8d399b81e4e299a3aae93a6bcd55b3f56ccf48a906bac3c0cba87d382eee",
-      "reason": "Aggror (MEMBER) states a $700 USD bounty in the issue body, funded through the repository's own OpenCollective project; the issue is still open and unassigned after the prior author moved on (maintainer Eideren, 2026-03-06), the repository merges outside work (1493+ merged PRs, latest 2026-11-04), and no warning/settlement/withdrawal text appears in the commercial sources (complete, no payment-warning matches).",
+      "source_revision": "b9c16135f00ba59619e2d2bd0841d4e3d698d9b7a4d950c4231f686f63d836b1",
+      "reason": "The funding line is written by the issue author Aggror (MEMBER) and the $700 is committed on OpenCollective; stride merges outside contributions (1493 merged PRs, last merge 2026-11-04) and no warning or unpaid-work allegation appears in the thread.",
       "evidence": [
         {
           "source_url": "https://github.com/stride3d/stride/issues/2553",
@@ -45,7 +45,7 @@
     "task_id": "e0e701d96bf8e24f771fc02e27d32f07",
     "source_revision": "14f1424893cb0cbd9ef0d43d18cc577301db2f14591b7b576dfad14c6e8aecc6"
   },
-  "dispatch_attempt": 2,
+  "dispatch_attempt": 3,
   "sovereign_admission": true,
   "competition": {
     "blocking": false,
@@ -54,9 +54,9 @@
   "lanes": [
     "startup"
   ],
-  "dispatched_at": "2026-11-04T18:23:26.552831+00:00",
+  "dispatched_at": "2026-11-04T18:30:53.902411+00:00",
   "attempt": 2,
-  "updated_at": "2026-11-04T18:30:42.433558+00:00",
+  "updated_at": "2026-11-04T18:30:53.902528+00:00",
   "owner": "41867352564:1",
   "previous_owner": "41857659581:1",
   "previous_status": "DISPATCHED",
