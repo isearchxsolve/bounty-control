@@ -64,6 +64,8 @@ def discover(lanes, max_dispatches=2, live=False, state_dir=None, hydrate_only=F
                 raise ValueError("OUT_OF_LANE")
             context = api.issue_context(row["repo"], row["issue"])
             proof, verdict = require_evidence(row, context)
+            from commercial_context import revalidate as revalidate_commercial
+            revalidate_commercial(api, context, proof)
             context["lane"] = row.get("lane")
             if repository_over_capacity(repository_size_kb(api, context["repo"])):
                 raise ValueError("CAPACITY_EXCLUDED")

@@ -1788,7 +1788,7 @@ def main(argv=None):
     parser.add_argument("--daemon", action="store_true")
     parser.add_argument("--once", action="store_true")
     parser.add_argument("--interval", type=int, default=180)
-    parser.add_argument("--max-dispatches", "--max", type=int, default=2)
+    parser.add_argument("--max-dispatches", "--max", type=int, default=4)
     parser.add_argument("--queries-per-lane", type=int, default=2)
     parser.add_argument("--hydrate-only", action="store_true",
                         help="skip the search-API lanes and drain the durable pending "

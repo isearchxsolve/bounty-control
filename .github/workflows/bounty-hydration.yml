@@ -46,7 +46,7 @@ jobs:
       # budget and is not throttled by the 65-second secondary search waits. Shared durable
       # ownership (bounty-control branch, Contents-API CAS) keeps dispatch safe against the
       # concurrent discovery lane.
-      run: python3 -u scripts/actions_dispatch.py --live --once --hydrate-only --hydrate-batch 300 --max-dispatches 2 --lane all
+      run: python3 -u scripts/actions_dispatch.py --live --once --hydrate-only --hydrate-batch 300 --max-dispatches 4 --lane all
     - uses: actions/upload-artifact@v4
       if: always()
       with:
