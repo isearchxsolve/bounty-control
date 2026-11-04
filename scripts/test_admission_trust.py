@@ -99,6 +99,32 @@ class FundingAuthorityTests(unittest.TestCase):
         self.assertIsNone(proof)
         self.assertEqual(reason, "CURRENT_ISSUER_OFFER_MISSING")
 
+    def test_community_unpaid_warning_refuses_issue(self):
+        warning_comment = {"user": {"login": "contributor"}, "author_association": "NONE",
+                           "html_url": "https://github.com/test/test/issues/1#issuecomment-1",
+                           "body": "WARNING: don't contribute, they didn't pay me... might be a scam"}
+        ctx = context([attestation("algora-pbc[bot]", 900), warning_comment])
+        proof, reason = admit(ctx)
+        self.assertIsNone(proof)
+        self.assertEqual(reason, "COMMUNITY_UNPAID_WARNING")
+
+    def test_unescrowed_stale_issue_without_recent_maintainer_is_refused(self):
+        # Stale unescrowed issue: created in 2025 (20 months ago) with plain-text $900 in body
+        stale_ctx = context([], association="OWNER",
+                            body="Implement bridge feature $900 bounty in CrossChainBridge.sol verifySignature()")
+        stale_ctx["issue"]["created_at"] = "2025-02-25T10:00:00Z"
+        proof, reason = admit(stale_ctx)
+        self.assertIsNone(proof)
+        self.assertEqual(reason, "OFFER_STALE_UNESCROWED")
+
+    def test_escrowed_old_issue_is_still_admitted(self):
+        # Even if created in 2025, an issue with an active algora[bot] escrow is admitted
+        escrow_ctx = context([attestation("algora-pbc[bot]", 900)])
+        escrow_ctx["issue"]["created_at"] = "2025-02-25T10:00:00Z"
+        proof, reason = admit(escrow_ctx)
+        self.assertIsNotNone(proof)
+        self.assertEqual(reason, "")
+
 
 if __name__ == "__main__":
     unittest.main()

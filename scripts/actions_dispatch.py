@@ -16,7 +16,7 @@ from urllib.parse import urlencode
 import uuid
 
 from actions_github import GitHub, GitHubError, StateStore, task_id, utcnow
-from bounty_admission import admit, competition, NON_WORK, repository_intent, FUNDING_PROGRAMS
+from bounty_admission import admit, competition, NON_WORK, repository_intent, FUNDING_PROGRAMS, TRUSTED_BOTS
 from bounty_fx import quote
 from discovery_horizon import Horizon
 from hardness_score import hardness_score
@@ -1593,8 +1593,17 @@ def discover(lanes, max_dispatches=2, live=False, queries_per_lane=2, state_dir=
                         print(json.dumps({"phase": "ADMISSION", "repo": context["repo"], "issue_number": context["issue_number"],
                                           "reason": code_reason}), flush=True)
                         continue
-                    merge_ok, merge_reason = repository_intent(
-                        merge_evidence(api, context["repo"], intent_cache))
+                    repo_ev = merge_evidence(api, context["repo"], intent_cache)
+                    merge_ok, merge_reason = repository_intent(repo_ev)
+                    usd_val = Decimal(proof.get("funding", {}).get("usd_value", "0"))
+                    has_escrow_bot = any(
+                        ((c.get("user") or {}).get("login", "") in TRUSTED_BOTS or
+                         (c.get("user") or {}).get("login", "").removesuffix("[bot]") in TRUSTED_BOTS)
+                        for c in context.get("comments") or ()
+                    )
+                    if not has_escrow_bot and usd_val >= Decimal("250"):
+                        if not repo_ev or repo_ev.get("unavailable") or repo_ev.get("merged") is None:
+                            merge_ok, merge_reason = False, "UNVERIFIED_HIGH_VALUE_REPOSITORY_INTENT"
                     if not merge_ok:
                         refuse(con, counts, identity, merge_reason)
                         first_seen = seen_by_id.get(source_id) or 0
