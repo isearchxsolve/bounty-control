@@ -2,7 +2,7 @@
   "task_id": "53b72f29ccaf11ed97d68b238fcc9256",
   "repo": "Spectral-Finance/lux",
   "issue_number": 100,
-  "status": "PUBLISHED_PENDING_CHECKS",
+  "status": "AWAITING_REVIEW",
   "dispatch_id": "ca25a261d30f434c96bb40002e22906d",
   "admission": {
     "funding": {
@@ -431,10 +431,10 @@
   ],
   "dispatched_at": "2026-11-04T02:58:38.719894+00:00",
   "attempt": 2,
-  "updated_at": "2026-11-04T03:40:34.666220+00:00",
+  "updated_at": "2026-11-04T04:31:09.676859+00:00",
   "diagnostic": "BLOCKED_BASELINE: Native plan source SHA-256 does not match the checkout",
   "owner_revoked": null,
-  "observed_at": "2026-11-03T06:29:32.216183+00:00",
+  "observed_at": "2026-11-04T04:31:09.676842+00:00",
   "owner": "41764161799:1",
   "previous_owner": "41759254523:1",
   "previous_status": "DISPATCHED",
@@ -468,5 +468,19 @@
   "claim_command": "",
   "claim_retry_required": false,
   "payment_status": "UNVERIFIED",
-  "release_digest": "97fbcea3300ac563bca3026181ffcd20b69d64b9fe6a62d8f2c61e2caaff30b6"
+  "release_digest": "97fbcea3300ac563bca3026181ffcd20b69d64b9fe6a62d8f2c61e2caaff30b6",
+  "remote_verification": {
+    "head_sha": "dd22a5b325dbb2ed3c69a713b67b76e668fb6e63",
+    "checks": [],
+    "statuses": [],
+    "failures": [],
+    "held": [],
+    "state": "NO_REMOTE_CHECKS"
+  },
+  "remote_review": {
+    "verdict": "NONE",
+    "review_count": 0,
+    "latest_reviewer": null,
+    "latest_review_at": null
+  }
 }
