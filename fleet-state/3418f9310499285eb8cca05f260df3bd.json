@@ -2,7 +2,7 @@
   "task_id": "3418f9310499285eb8cca05f260df3bd",
   "repo": "Spectral-Finance/lux",
   "issue_number": 84,
-  "status": "CLAIMED",
+  "status": "FAILED_ENGINEER",
   "dispatch_id": "2cc6ad23ce804efe91e7d38ec26be8f7",
   "admission": {
     "funding": {
@@ -283,7 +283,7 @@
   ],
   "dispatched_at": "2026-11-04T11:21:55.045309+00:00",
   "attempt": 1,
-  "updated_at": "2026-11-04T11:23:06.018620+00:00",
+  "updated_at": "2026-11-04T11:33:46.154923+00:00",
   "owner": "41820269884:1",
   "previous_owner": null,
   "previous_status": "DISPATCHED",
@@ -291,5 +291,20 @@
   "harness_sha": "88a2e6f63552d72e8356030a9c6176ff6d4f655b",
   "claimed_at": "2026-11-04T11:23:06.018566+00:00",
   "lease_expires_at": "2026-11-04T15:28:06.018583+00:00",
-  "preparation_budget_seconds": 14400
+  "preparation_budget_seconds": 14400,
+  "kind": "engineer",
+  "retryable": true,
+  "diagnostic": "error: No such remote 'upstream'\n",
+  "at": "2026-11-04T11:33:31.248015+00:00",
+  "failures": [
+    {
+      "run_url": "https://github.com/isearchxsolve/bounty-control/actions/runs/41820269884",
+      "status": "FAILED_ENGINEER",
+      "kind": "engineer",
+      "retryable": true,
+      "diagnostic": "error: No such remote 'upstream'\n",
+      "at": "2026-11-04T11:33:31.248015+00:00"
+    }
+  ],
+  "finished_at": "2026-11-04T11:33:45.644067+00:00"
 }
