@@ -524,9 +524,12 @@ class DoorRosterTests(unittest.TestCase):
             position = found
 
     def test_the_roster_is_marked_as_the_first_thing_to_run(self):
-        self.assertIn('Run these 33 curated queries first', self.text)
+        roster_path = Path(__file__).resolve().parent / 'bounty_queries.json'
+        queries = json.loads(roster_path.read_text(encoding='utf-8'))['founder']
+        expected_phrase = f'Run these {len(queries)} curated queries first'
+        self.assertIn(expected_phrase, self.text)
         self.assertIn('Walk up to a tree', self.text)
-        self.assertLess(self.text.find('Run these 33 curated queries first'),
+        self.assertLess(self.text.find(expected_phrase),
                         self.text.find('## Facts about this workspace'))
 
     def test_stage_one_ends_with_the_competing_pull_request_check(self):
