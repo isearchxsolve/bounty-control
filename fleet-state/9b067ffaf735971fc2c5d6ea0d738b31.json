@@ -2,7 +2,7 @@
   "task_id": "9b067ffaf735971fc2c5d6ea0d738b31",
   "repo": "Spectral-Finance/lux",
   "issue_number": 75,
-  "status": "PUBLISHED_PENDING_CHECKS",
+  "status": "AWAITING_REVIEW",
   "dispatch_id": "af2f32efb8b34c0abed648d5a37be694",
   "admission": {
     "funding": {
@@ -361,7 +361,7 @@
   ],
   "dispatched_at": "2026-11-04T04:32:18.799404+00:00",
   "attempt": 2,
-  "updated_at": "2026-11-04T04:53:35.427366+00:00",
+  "updated_at": "2026-11-04T05:52:38.938381+00:00",
   "owner": "41773804832:1",
   "previous_owner": "41764654941:1",
   "previous_status": "DISPATCHED",
@@ -396,5 +396,20 @@
   "claim_command": "",
   "claim_retry_required": false,
   "payment_status": "UNVERIFIED",
-  "release_digest": "197813a29d4eefcb18eafd1bb6c6b1813e938a8e516154e826f947560be5543c"
+  "release_digest": "197813a29d4eefcb18eafd1bb6c6b1813e938a8e516154e826f947560be5543c",
+  "remote_verification": {
+    "head_sha": "e0c61e96bcfda7bb24f6149fc5463efff02f9b63",
+    "checks": [],
+    "statuses": [],
+    "failures": [],
+    "held": [],
+    "state": "NO_REMOTE_CHECKS"
+  },
+  "remote_review": {
+    "verdict": "NONE",
+    "review_count": 0,
+    "latest_reviewer": null,
+    "latest_review_at": null
+  },
+  "observed_at": "2026-11-04T05:52:38.938367+00:00"
 }
