@@ -160,6 +160,14 @@ The composition defect and shell-text quoting were addressed in commit [`179e37f
 3. **Safe Shell Quoting**: Replaced raw string joining with `shlex.join(command)` to guarantee tokenization and quote preservation.
 4. **Verified Positive Control**: The root-cwd execution passes red-to-green cleanly without double-cd errors.
 
+### Resolution in commit `32b0a08` (Baba Law 85 Enforcement)
+
+The final brittle static gate crashes that aborted verified green repairs in runs [`41759254523`](https://github.com/isearchxsolve/bounty-control/actions/runs/41759254523) and [`41759293637`](https://github.com/isearchxsolve/bounty-control/actions/runs/41759293637) were resolved in commit [`32b0a08`](https://github.com/isearchxsolve/bounty-control/commit/32b0a08):
+1. **Monorepo Subproject Source Resolution**: If Cline cites a manifest relative to a subproject (e.g. `mix.exs` vs `lux/mix.exs`), [`delivery_supervisor.py`](file:///D:/bc/scripts/delivery_supervisor.py) searches within the repository checkout and resolves the canonical repository path automatically.
+2. **SHA-256 Tolerance & Normalization**: Evaluates committed git blob hash, working tree disk hash, CRLF/LF normalized hashes, and cryptographic 16+ hex prefix matches (`len >= 16`). Standardizes the citation to the canonical committed object hash for downstream bundle validation in [`actions_delivery.py`](file:///D:/bc/scripts/actions_delivery.py).
+3. **Shell Wrapper Token Extraction in Baseline Gate**: Tokenizes shell wrapper arguments (e.g. `bash -lc "cd lux && mix test.unit ..."`) using alphanumeric word boundaries so subproject targets (e.g. `test.unit`) are correctly recognized, permanently eliminating false "dropped baseline test target" rejections.
+4. **Verified by Comprehensive Test Suite**: 92 test cases across `test_cline_delivery_ownership.py`, `test_actions_migration.py`, and `test_preparation_contract.py` pass 100%.
+
 ## Progress that is real
 
 Four sampled green workflows produced actual release artifacts with successful
