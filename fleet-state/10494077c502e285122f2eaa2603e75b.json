@@ -2,7 +2,7 @@
   "task_id": "10494077c502e285122f2eaa2603e75b",
   "repo": "stride3d/stride",
   "issue_number": 339,
-  "status": "DISPATCHING",
+  "status": "DISPATCHED",
   "dispatch_id": "6e37ea182e2e48ad975ba6d02527e0cf",
   "admission": {
     "funding": {
@@ -60,7 +60,7 @@
   ],
   "dispatched_at": "2026-11-04T20:07:10.723125+00:00",
   "attempt": 0,
-  "updated_at": "2026-11-04T20:07:10.723125+00:00",
+  "updated_at": "2026-11-04T20:07:15.917024+00:00",
   "kind": "commercial_review",
   "retryable": false,
   "review_required": true,
