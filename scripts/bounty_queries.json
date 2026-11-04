@@ -4,7 +4,7 @@
   ],
   "normal": [
     "commenter:algora-pbc is:issue is:open \"bounty\"",
-    "label:\"\ud83d\udc8e Bounty\" is:issue is:open",
+    "label:\"💎 Bounty\" is:issue is:open",
     "\"/bounty $\" is:issue is:open",
     "opire.dev is:issue is:open",
     "\"/reward\" is:issue is:open",
@@ -17,7 +17,7 @@
     "label:bounty \"$200\" is:issue is:open",
     "label:bounty \"$500\" is:issue is:open",
     "\"will pay\" \"$100\" is:issue is:open",
-    "label:\"\ud83d\udcb0 Bounty\" is:issue is:open",
+    "label:\"💰 Bounty\" is:issue is:open",
     "bounty in:title",
     "\"will pay\"",
     "label:bounty",
@@ -26,7 +26,7 @@
   ],
   "startup": [
     "\"/bounty $\" is:issue is:open",
-    "label:\"\ud83d\udc8e Bounty\" is:issue is:open",
+    "label:\"💎 Bounty\" is:issue is:open",
     "commenter:algora-pbc is:issue is:open \"bounty\"",
     "\"/bounty\" \"wallet\" OR \"solana\" OR \"token\" is:issue is:open",
     "label:bounty \"wallet\" OR \"solana\" OR \"token\" is:issue is:open",
@@ -45,7 +45,10 @@
     "label:bounty \"Open Collective\" is:issue is:open",
     "label:bounty \"$100\" is:issue is:open",
     "label:bounty \"$200\" is:issue is:open",
-    "label:bounty \"$500\" is:issue is:open"
+    "label:bounty \"$500\" is:issue is:open",
+    "\"polygon\" OR \"matic\" label:bounty is:issue is:open",
+    "\"solana\" OR \"superteam\" label:bounty is:issue is:open",
+    "commenter:algora-pbc \"solana\" OR \"polygon\" is:issue is:open"
   ],
   "founder": [
     "polar.sh agent is:issue is:open \"bounty\"",
@@ -80,7 +83,10 @@
     "\"I will pay\" \"bug\" is:issue is:open",
     "\"paying for\" \"fix\" \"production\" is:issue is:open",
     "\"production outage\" is:issue is:open",
-    "\"critical regression\" is:issue is:open"
+    "\"critical regression\" is:issue is:open",
+    "commenter:polar-sh \"rust\" OR \"solana\" OR \"polygon\" is:issue is:open",
+    "org:0xPolygon label:bounty is:issue is:open",
+    "org:maticnetwork label:bounty is:issue is:open"
   ],
   "programs": [
     "in:comments bountyhub-bot is:issue is:open",

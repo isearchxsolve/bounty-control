@@ -474,6 +474,27 @@ def two_edged_score(item):
 
 
 
+def is_daylight_active(commit_hours, pushed_at=None):
+    """Return 1 if maintainer is currently in their active window, 0 otherwise.
+
+    Baba Law 85: evaluates factual git telemetry (actual commit hours and push recency)
+    rather than brittle hardcoded lists. Predicts maintainer reply latency.
+    """
+    now_utc = datetime.now(timezone.utc)
+    if pushed_at:
+        try:
+            pushed = datetime.fromisoformat(str(pushed_at).replace("Z", "+00:00"))
+            if (now_utc - pushed).total_seconds() <= 10800:
+                return 1
+        except (ValueError, TypeError):
+            pass
+    if commit_hours:
+        now_h = now_utc.hour
+        if any(abs(now_h - h) <= 2 or abs(now_h - h) >= 22 for h in commit_hours):
+            return 1
+    return 0
+
+
 def candidate_sort_key(item):
     """Band, then the two-edged conjunction, then solvency, then difficulty, then quiet.
 
@@ -500,10 +521,14 @@ def candidate_sort_key(item):
     moat beats silence, because a quiet repository is only a proxy for competition while
     the ticket's own vocabulary is evidence of it.
     """
-    return (candidate_priority_key(item[1]),
+    candidate = item[1]
+    evidence = candidate.get("merge_evidence") or {}
+    daylight = is_daylight_active(evidence.get("commit_hours"), evidence.get("pushed_at"))
+    return (candidate_priority_key(candidate),
+            -daylight,
             -two_edged_score(item),
-            -liquidity_rank_key(liquidity_view(item[1]))[0],
-            -hardness_score(hardness_view(item[1]))[0],
+            -liquidity_rank_key(liquidity_view(candidate))[0],
+            -hardness_score(hardness_view(candidate))[0],
             velocity_sort_key(item))
 
 
@@ -685,6 +710,8 @@ def merge_evidence(api, repo, cache):
     owner, name = repo.split("/", 1)
     query = ("query($owner:String!,$name:String!){repository(owner:$owner,name:$name){"
              "pushedAt "
+             "owner{login ... on User{location} ... on Organization{location}} "
+             "defaultBranchRef{target{... on Commit{history(first:5){nodes{committedDate}}}}} "
              "merged:pullRequests(states:MERGED,last:1){"
              "totalCount nodes{mergedAt author{login}}}"
              "all:pullRequests{totalCount}}}")
@@ -695,12 +722,24 @@ def merge_evidence(api, repo, cache):
         merged_node = node.get("merged") or {}
         nodes = merged_node.get("nodes") or []
         last_node = nodes[0] if nodes else {}
+        target = (node.get("defaultBranchRef") or {}).get("target") or {}
+        commit_nodes = (target.get("history") or {}).get("nodes") or []
+        commit_hours = []
+        for cn in commit_nodes:
+            date_str = cn.get("committedDate")
+            if date_str and len(date_str) >= 13:
+                try:
+                    commit_hours.append(int(date_str[11:13]))
+                except ValueError:
+                    pass
         cache[repo] = {
             "merged": int(merged_node.get("totalCount", 0)),
             "total": int((node.get("all") or {}).get("totalCount", 0)),
             "pushed_at": node.get("pushedAt"),
             "last_merged_at": last_node.get("mergedAt"),
             "last_merged_author": (last_node.get("author") or {}).get("login"),
+            "owner_location": (node.get("owner") or {}).get("location"),
+            "commit_hours": commit_hours,
         }
     except (GitHubError, OSError, ValueError, KeyError, TypeError) as exc:
         cache[repo] = {"unavailable": str(exc)[:160]}

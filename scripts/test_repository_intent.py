@@ -94,6 +94,33 @@ class RepositoryIntentTests(unittest.TestCase):
         recent = datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ")
         self.assertAllowed({"merged": 1272, "total": 1300, "last_merged_at": recent})
 
+    def test_daylight_active_maintainer_prioritization(self):
+        from actions_dispatch import is_daylight_active, candidate_sort_key
+        from datetime import datetime, timezone
+        now_h = datetime.now(timezone.utc).hour
+
+        # Maintainer active right now based on recent commit hour
+        self.assertEqual(is_daylight_active([now_h]), 1)
+        # Maintainer active right now based on push in last 30 minutes
+        recent_push = datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ")
+        self.assertEqual(is_daylight_active([], pushed_at=recent_push), 1)
+
+        # Candidate with active daylight maintainer sorts ahead of sleeping maintainer
+        active_candidate = {
+            "merge_evidence": {"commit_hours": [now_h]},
+            "context": {"repo": "active/repo", "title": "fix bug", "body": "fix"},
+            "lanes": ["founder"]
+        }
+        asleep_h = (now_h + 12) % 24
+        asleep_candidate = {
+            "merge_evidence": {"commit_hours": [asleep_h]},
+            "context": {"repo": "asleep/repo", "title": "fix bug", "body": "fix"},
+            "lanes": ["founder"]
+        }
+        key_active = candidate_sort_key(("id1", active_candidate))
+        key_asleep = candidate_sort_key(("id2", asleep_candidate))
+        self.assertLess(key_active, key_asleep)
+
 
 if __name__ == "__main__":
     unittest.main()
