@@ -2,8 +2,8 @@
   "task_id": "10494077c502e285122f2eaa2603e75b",
   "repo": "stride3d/stride",
   "issue_number": 339,
-  "status": "REJECTED_COMMERCIAL_REVIEW",
-  "dispatch_id": "2f929690fa634f0d80e4f3102180c979",
+  "status": "DISPATCHING",
+  "dispatch_id": "6e37ea182e2e48ad975ba6d02527e0cf",
   "admission": {
     "funding": {
       "amount": "800",
@@ -33,7 +33,7 @@
     "commercial_scope": "linked-discussions",
     "commercial_review": {
       "decision": "proceed",
-      "source_revision": "3cf197c1ee6054f2c75602696244e32e77301a4cdf0e261b87762a39e0b4febd",
+      "source_revision": "bbafa267ae559332395903c8b39dfdc17429ad92c9c436d825d3f7d19b1da736",
       "reason": "The $800 commitment is written by Eideren, a COLLABORATOR, in the linked deliverables comment; stride merges outside work (1493 merged PRs, last merge 2026-11-04) and the thread contains no unpaid-work or fraud allegation.",
       "evidence": [
         {
@@ -43,7 +43,11 @@
       ]
     },
     "task_id": "10494077c502e285122f2eaa2603e75b",
-    "source_revision": "3abd8cf27dc9155f5f05e3093dde0d781a7b86816a9b185b6d6dad188b8c76cd"
+    "source_revision": "3abd8cf27dc9155f5f05e3093dde0d781a7b86816a9b185b6d6dad188b8c76cd",
+    "reconsideration": {
+      "previous_updated_at": "2026-11-04T18:31:43.399765+00:00",
+      "reason": "Source-backed commercial review revalidation passed exit 0 under Baba Law 86 with updated commit-filtering hash."
+    }
   },
   "dispatch_attempt": 1,
   "sovereign_admission": true,
@@ -54,9 +58,9 @@
   "lanes": [
     "startup"
   ],
-  "dispatched_at": "2026-11-04T18:31:13.968901+00:00",
+  "dispatched_at": "2026-11-04T20:07:10.723125+00:00",
   "attempt": 0,
-  "updated_at": "2026-11-04T18:31:43.399765+00:00",
+  "updated_at": "2026-11-04T20:07:10.723125+00:00",
   "kind": "commercial_review",
   "retryable": false,
   "review_required": true,
@@ -64,5 +68,53 @@
   "reason": "COMMERCIAL_REVIEW_STALE",
   "detail": [],
   "diagnostic": "COMMERCIAL_REVIEW_STALE: source-backed commercial review required; retain existing work",
-  "at": "2026-11-04T18:31:42.701067+00:00"
+  "at": "2026-11-04T18:31:42.701067+00:00",
+  "refusal_history": [
+    {
+      "status": "REJECTED_COMMERCIAL_REVIEW",
+      "reason": "COMMERCIAL_REVIEW_STALE",
+      "admission": {
+        "funding": {
+          "amount": "800",
+          "currency": "USD",
+          "payer": "Eideren",
+          "source_url": "https://github.com/stride3d/stride/issues/339#issuecomment-1041573693",
+          "usd_value": "800",
+          "quote": {
+            "basis": "USD face value",
+            "usd_rate": "1"
+          },
+          "raw": "For the work you deliver, you will receive at least $800 USD",
+          "source_author_association": "COLLABORATOR",
+          "source_author_login": "Eideren"
+        },
+        "agent_reason": "Eideren (COLLABORATOR of stride3d/stride, verified author_association) wrote 'For the work you deliver, you will receive at least $800 USD' in the issue comment, so an authorized maintainer committed the $800; the repository merges outside work (1493 merged PRs, last 2026-11-04) and the request is a bounded morph-target feature in sources/engine/Stride.Engine/Engine/ModelComponent.Morphs.cs.",
+        "scope_quote": "add a new toggle to the import UI to include morph targets, store morph targets into a new collection inside of the model asset.",
+        "code_evidence": {
+          "is_product_code": true,
+          "path": "sources/engine/Stride.Engine/Engine/ModelComponent.Morphs.cs",
+          "quote": "public sealed partial class ModelComponent",
+          "sha": "45fdbac8c6299480bd8a4df3d347bd0640561b2f"
+        },
+        "source_issue": "https://github.com/stride3d/stride/issues/339",
+        "funding_status": "PRICED_OFFER",
+        "lane": "startup",
+        "commercial_scope": "linked-discussions",
+        "commercial_review": {
+          "decision": "proceed",
+          "source_revision": "3cf197c1ee6054f2c75602696244e32e77301a4cdf0e261b87762a39e0b4febd",
+          "reason": "The $800 commitment is written by Eideren, a COLLABORATOR, in the linked deliverables comment; stride merges outside work (1493 merged PRs, last merge 2026-11-04) and the thread contains no unpaid-work or fraud allegation.",
+          "evidence": [
+            {
+              "source_url": "https://github.com/stride3d/stride/issues/339#issuecomment-1041573693",
+              "quote": "For the work you deliver, you will receive at least $800 USD"
+            }
+          ]
+        },
+        "task_id": "10494077c502e285122f2eaa2603e75b",
+        "source_revision": "3abd8cf27dc9155f5f05e3093dde0d781a7b86816a9b185b6d6dad188b8c76cd"
+      },
+      "at": "2026-11-04T18:31:43.399765+00:00"
+    }
+  ]
 }
