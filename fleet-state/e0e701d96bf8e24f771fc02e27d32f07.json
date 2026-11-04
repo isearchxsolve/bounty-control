@@ -33,7 +33,7 @@
     "commercial_scope": "linked-discussions",
     "commercial_review": {
       "decision": "proceed",
-      "source_revision": "a208469b82877d7b9882f5757da8abe2cd315ad68a87b59cf51bb6003a98e438",
+      "source_revision": "0f8d8d399b81e4e299a3aae93a6bcd55b3f56ccf48a906bac3c0cba87d382eee",
       "reason": "Aggror (MEMBER) states a $700 USD bounty in the issue body, funded through the repository's own OpenCollective project; the issue is still open and unassigned after the prior author moved on (maintainer Eideren, 2026-03-06), the repository merges outside work (1493+ merged PRs, latest 2026-11-04), and no warning/settlement/withdrawal text appears in the commercial sources (complete, no payment-warning matches).",
       "evidence": [
         {
@@ -56,7 +56,7 @@
   ],
   "dispatched_at": "2026-11-04T18:23:26.552831+00:00",
   "attempt": 2,
-  "updated_at": "2026-11-04T18:23:44.159486+00:00",
+  "updated_at": "2026-11-04T18:25:50.216719+00:00",
   "owner": "41867352564:1",
   "previous_owner": "41857659581:1",
   "previous_status": "DISPATCHED",
