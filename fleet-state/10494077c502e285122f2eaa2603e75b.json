@@ -2,7 +2,7 @@
   "task_id": "10494077c502e285122f2eaa2603e75b",
   "repo": "stride3d/stride",
   "issue_number": 339,
-  "status": "CLAIMED",
+  "status": "FAILED_ENGINEER",
   "dispatch_id": "6e37ea182e2e48ad975ba6d02527e0cf",
   "admission": {
     "funding": {
@@ -60,15 +60,15 @@
   ],
   "dispatched_at": "2026-11-04T20:07:10.723125+00:00",
   "attempt": 1,
-  "updated_at": "2026-11-04T20:07:40.330964+00:00",
-  "kind": "commercial_review",
-  "retryable": false,
+  "updated_at": "2026-11-04T20:28:15.704082+00:00",
+  "kind": "engineer",
+  "retryable": true,
   "review_required": true,
   "resume_phase": "claim",
   "reason": "COMMERCIAL_REVIEW_STALE",
   "detail": [],
-  "diagnostic": "COMMERCIAL_REVIEW_STALE: source-backed commercial review required; retain existing work",
-  "at": "2026-11-04T18:31:42.701067+00:00",
+  "diagnostic": "Cline preparation failed: error: The operation timed out. |",
+  "at": "2026-11-04T20:28:02.140502+00:00",
   "refusal_history": [
     {
       "status": "REJECTED_COMMERCIAL_REVIEW",
@@ -124,5 +124,16 @@
   "harness_sha": "98082a03336645c734afb86a360d4b7439ad1171",
   "claimed_at": "2026-11-04T20:07:40.330916+00:00",
   "lease_expires_at": "2026-11-05T00:12:40.330930+00:00",
-  "preparation_budget_seconds": 14400
+  "preparation_budget_seconds": 14400,
+  "failures": [
+    {
+      "run_url": "https://github.com/isearchxsolve/bounty-control/actions/runs/41903531886",
+      "status": "FAILED_ENGINEER",
+      "kind": "engineer",
+      "retryable": true,
+      "diagnostic": "Cline preparation failed: error: The operation timed out. |",
+      "at": "2026-11-04T20:28:02.140502+00:00"
+    }
+  ],
+  "finished_at": "2026-11-04T20:28:14.981557+00:00"
 }
