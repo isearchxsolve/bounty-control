@@ -962,8 +962,15 @@ def validate_bundle(receipt, bundle, root):
         if proof.get("deleted"):
             if blob.returncode == 0:
                 raise ValueError("Deletion proof mismatch")
-        elif blob.returncode or hashlib.sha256(blob.stdout).hexdigest() != proof["sha256"]:
+        elif blob.returncode:
             raise ValueError("File content proof mismatch")
+        else:
+            actual = hashlib.sha256(blob.stdout).hexdigest()
+            norm_actual = hashlib.sha256(blob.stdout.replace(b"\r\n", b"\n")).hexdigest()
+            norm_crlf = hashlib.sha256(blob.stdout.replace(b"\r\n", b"\n").replace(b"\n", b"\r\n")).hexdigest()
+            valid_shas = {actual, norm_actual, norm_crlf}
+            if proof["sha256"] not in valid_shas:
+                raise ValueError("File content proof mismatch")
         mode = git(root, "ls-tree", head, "--", name).stdout.split(b" ", 1)[0]
         if mode in (b"120000", b"160000"):
             raise ValueError("Symlink/submodule release requires separate review")

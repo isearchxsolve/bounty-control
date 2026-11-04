@@ -401,6 +401,39 @@ class RecoveryTests(unittest.TestCase):
             with self.assertRaisesRegex(ValueError,'native command failed'):
                 delivery.validate_bundle(receipt,'bundle',Path('checkout'))
 
+    def test_validate_bundle_accepts_crlf_normalized_file_content_proof(self):
+        import hashlib
+        import actions_delivery as delivery
+        plan = VerificationPlan(builds=[['mix','compile']],
+            baseline_tests=[['mix','test','existing_test.exs']],
+            final_tests=[['mix','test','new_regression_test.exs']])
+        commands = plan.builds + plan.baseline_tests + plan.final_tests
+        receipt = {'status':'VERIFIED', 'harness_sha':'harness',
+            'repo':'acme/http', 'issue_number':7, 'task_id':task_id('acme/http',7),
+            'head_sha':'head', 'base_sha':'base', 'tree_sha':'tree',
+            'files':{'src/retry.py':{'sha256':hashlib.sha256(b'fixed\r\n').hexdigest()}},
+            'sources':[], 'plan':asdict(plan),
+            'baseline':[{'argv':plan.baseline_tests[0], 'exit_code':0, 'stdout':'1 test passed'}],
+            'verification':[{'argv':c, 'exit_code':0, 'stdout':'1 test passed'} for c in commands],
+            'regression':{'red_exit':1, 'green_exit':0}}
+        def git_result(root, *args, **kwargs):
+            values = {
+                ('rev-parse', 'FETCH_HEAD'): b'head',
+                ('rev-list', '--count', 'base..head'): b'1',
+                ('show', '-s', '--format=%P', 'head'): b'base',
+                ('rev-parse', 'head^{tree}'): b'tree',
+                ('diff', '--name-only', '-z', 'base', 'head'): b'src/retry.py\0',
+                ('show', 'head:src/retry.py'): b'fixed\n',
+                ('ls-tree', 'head', '--', 'src/retry.py'): b'100644 blob content'
+            }
+            return SimpleNamespace(stdout=values.get(args, b''), returncode=0)
+        with patch.dict(os.environ, {'GITHUB_SHA': 'harness'}), \
+                patch.object(delivery.subprocess, 'run'), \
+                patch.object(delivery, 'git', side_effect=git_result), \
+                patch.object(delivery, 'protect_baseline_tests'):
+            self.assertEqual(delivery.validate_bundle(receipt, 'bundle', Path('checkout')),
+                             ('acme/http', 7, 'head'))
+
     def test_workflow_run_pagination_is_complete(self):
         api = GitHub()
         calls=[]
