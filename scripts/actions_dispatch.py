@@ -684,13 +684,24 @@ def merge_evidence(api, repo, cache):
         return cache[repo]
     owner, name = repo.split("/", 1)
     query = ("query($owner:String!,$name:String!){repository(owner:$owner,name:$name){"
-             "merged:pullRequests(states:MERGED){totalCount} all:pullRequests{totalCount}}}")
+             "pushedAt "
+             "merged:pullRequests(states:MERGED,last:1){"
+             "totalCount nodes{mergedAt author{login}}}"
+             "all:pullRequests{totalCount}}}")
     try:
         result = api.api("graphql", "POST",
                          {"query": query, "variables": {"owner": owner, "name": name}})
         node = (result or {})["data"]["repository"]
-        cache[repo] = {"merged": int(node["merged"]["totalCount"]),
-                       "total": int(node["all"]["totalCount"])}
+        merged_node = node.get("merged") or {}
+        nodes = merged_node.get("nodes") or []
+        last_node = nodes[0] if nodes else {}
+        cache[repo] = {
+            "merged": int(merged_node.get("totalCount", 0)),
+            "total": int((node.get("all") or {}).get("totalCount", 0)),
+            "pushed_at": node.get("pushedAt"),
+            "last_merged_at": last_node.get("mergedAt"),
+            "last_merged_author": (last_node.get("author") or {}).get("login"),
+        }
     except (GitHubError, OSError, ValueError, KeyError, TypeError) as exc:
         cache[repo] = {"unavailable": str(exc)[:160]}
     return cache[repo]
@@ -1004,7 +1015,7 @@ def precheck_repository_intent(api, con, rows, cache, limit=INTENT_PRECHECK_MAX)
     con.commit()
     retired = 0
     for row in rows:
-        if verdicts.get(repository_of(row[1])) != "REPOSITORY_DOES_NOT_MERGE":
+        if verdicts.get(repository_of(row[1])) not in ("REPOSITORY_DOES_NOT_MERGE", "REPOSITORY_MERGES_STALE"):
             continue
         retired += con.execute(
             "UPDATE pending SET status=? WHERE task_id=? AND status='pending'",
@@ -1027,7 +1038,7 @@ def preferred_order(rows, verdicts, priority_ids=()):
     for row in rows:
         if verdicts.get(repository_of(row[1])) == "OK":
             good.append(row)
-        elif verdicts.get(repository_of(row[1])) != "REPOSITORY_DOES_NOT_MERGE":
+        elif verdicts.get(repository_of(row[1])) not in ("REPOSITORY_DOES_NOT_MERGE", "REPOSITORY_MERGES_STALE"):
             rest.append(row)
     good.sort(key=lambda row: row[3] or "", reverse=True)
     # Keep current-cycle query matches ahead of the historical backlog after repository
@@ -1148,7 +1159,7 @@ def store_pending_item(con, item, lane, expression, verdicts, pending_has_seen_a
     excluded_status = query_exclusion_status(item)
     if excluded_status:
         status = excluded_status
-    elif verdicts.get(repository) == "REPOSITORY_DOES_NOT_MERGE":
+    elif verdicts.get(repository) in ("REPOSITORY_DOES_NOT_MERGE", "REPOSITORY_MERGES_STALE"):
         status = REPO_INTENT_RETIRED
     first_seen = (old[4] if old and old[4] else time.time()) if old else time.time()
     if expression:

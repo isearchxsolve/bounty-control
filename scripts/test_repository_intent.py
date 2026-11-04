@@ -82,6 +82,18 @@ class RepositoryIntentTests(unittest.TestCase):
         self.assertRejected({"merged": "0", "total": "4458"})
         self.assertAllowed({"merged": "18", "total": "322"})
 
+    def test_dormant_repository_with_old_merges_is_rejected_as_stale(self):
+        """Spectral-Finance/lux: 122 merged in early 2025, zero in last 18 months."""
+        ok, reason = repository_intent({"merged": 122, "total": 780, "last_merged_at": "2025-05-14T10:15:55Z"})
+        self.assertFalse(ok)
+        self.assertEqual(reason, "REPOSITORY_MERGES_STALE")
+
+    def test_active_repository_with_recent_merge_is_allowed(self):
+        """paraspell/xcm-tools: 1272 merged, latest yesterday."""
+        from datetime import datetime, timezone
+        recent = datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ")
+        self.assertAllowed({"merged": 1272, "total": 1300, "last_merged_at": recent})
+
 
 if __name__ == "__main__":
     unittest.main()

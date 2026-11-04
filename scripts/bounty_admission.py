@@ -247,6 +247,7 @@ def offer_expired(context, today=None):
 
 
 MERGE_EVIDENCE_MIN = 10
+MAX_MERGE_IDLE_DAYS = 60
 
 
 def repository_intent(evidence):
@@ -257,6 +258,11 @@ def repository_intent(evidence):
     Measured shape of that failure (2026-10-27): one repository took 4,458 pull
     requests and merged 0, while still publishing funded-looking issues, and its
     CONTRIBUTING.md declared the bounties symbolic.
+
+    Recency gate (measured 2026-11-04): Spectral-Finance/lux merged 122 PRs in early 2025
+    but zero in the last 18 months, leaving 665 issues/PRs dormant. If the most recent
+    merge is older than MAX_MERGE_IDLE_DAYS, the project is abandoned/dormant and cannot
+    provide economic turnaround.
 
     Absence of evidence is never rejection. A repository with fewer than
     MERGE_EVIDENCE_MIN pull requests, or an unreachable probe, gets no verdict --
@@ -269,6 +275,16 @@ def repository_intent(evidence):
         return True, ""
     if int(total) >= MERGE_EVIDENCE_MIN and int(merged) == 0:
         return False, "REPOSITORY_DOES_NOT_MERGE"
+
+    last_merged = evidence.get("last_merged_at")
+    if last_merged and int(merged) > 0:
+        try:
+            when = datetime.fromisoformat(str(last_merged).replace("Z", "+00:00"))
+            idle_days = (datetime.now(timezone.utc) - when).total_seconds() / 86400.0
+            if idle_days > MAX_MERGE_IDLE_DAYS:
+                return False, "REPOSITORY_MERGES_STALE"
+        except (ValueError, TypeError):
+            pass
     return True, ""
 
 

@@ -1015,6 +1015,7 @@ DOWNSTREAM_CHECKS = [
      "the issue is a whole-product roadmap or rewrite rather than a bounded, deliverable engineering fix."),
     ("REPORTED_BEHAVIOUR_DECLARED_BY_DESIGN", "the issue states the behaviour is by design."),
     ("REPOSITORY_DOES_NOT_MERGE", "the repository's history shows it does not merge outside work."),
+    ("REPOSITORY_MERGES_STALE", "the repository has been dormant with no merged pull requests for over 60 days."),
     ("CLOSED_OR_READ_ONLY", "the issue is closed or the repository is read-only."),
     ("EXPIRED_OFFER", "the offer carried a deadline that has already passed."),
     ("REFUSED_NOT_A_CODE_CHANGE", "the issue is a digest, aggregator or news feed, not engineering work."),
