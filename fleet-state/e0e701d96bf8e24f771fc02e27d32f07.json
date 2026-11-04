@@ -2,7 +2,7 @@
   "task_id": "e0e701d96bf8e24f771fc02e27d32f07",
   "repo": "stride3d/stride",
   "issue_number": 2553,
-  "status": "DISPATCHING",
+  "status": "DISPATCHED",
   "dispatch_id": "ec46cf2a0fbf429db8447e9d4edd2466",
   "admission": {
     "funding": {
@@ -56,7 +56,7 @@
   ],
   "dispatched_at": "2026-11-04T18:23:26.552831+00:00",
   "attempt": 2,
-  "updated_at": "2026-11-04T18:23:26.552842+00:00",
+  "updated_at": "2026-11-04T18:23:28.051350+00:00",
   "owner": "41867352564:1",
   "previous_owner": "41857659581:1",
   "previous_status": "DISPATCHED",
