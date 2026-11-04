@@ -2,7 +2,7 @@
   "task_id": "e0e701d96bf8e24f771fc02e27d32f07",
   "repo": "stride3d/stride",
   "issue_number": 2553,
-  "status": "DISPATCHED",
+  "status": "REJECTED_COMMERCIAL_REVIEW",
   "dispatch_id": "f12452a688c54cfa9222e9e4542cefe1",
   "admission": {
     "funding": {
@@ -56,7 +56,7 @@
   ],
   "dispatched_at": "2026-11-04T18:30:53.902411+00:00",
   "attempt": 2,
-  "updated_at": "2026-11-04T18:30:55.513980+00:00",
+  "updated_at": "2026-11-04T18:31:20.006729+00:00",
   "owner": "41867352564:1",
   "previous_owner": "41857659581:1",
   "previous_status": "DISPATCHED",
@@ -66,9 +66,9 @@
   "lease_expires_at": "2026-11-04T20:32:28.257134+00:00",
   "preparation_budget_seconds": 14400,
   "kind": "commercial_review",
-  "retryable": true,
-  "diagnostic": "File content proof mismatch",
-  "at": "2026-11-04T18:23:43.701475+00:00",
+  "retryable": false,
+  "diagnostic": "COMMERCIAL_REVIEW_STALE: source-backed commercial review required; retain existing work",
+  "at": "2026-11-04T18:31:13.754423+00:00",
   "failures": [
     {
       "run_url": "https://github.com/isearchxsolve/bounty-control/actions/runs/41857659581",
@@ -87,5 +87,9 @@
       "at": "2026-11-04T17:28:40.448699+00:00"
     }
   ],
-  "finished_at": "2026-11-04T17:28:50.892649+00:00"
+  "finished_at": "2026-11-04T17:28:50.892649+00:00",
+  "review_required": true,
+  "resume_phase": "claim",
+  "reason": "COMMERCIAL_REVIEW_STALE",
+  "detail": []
 }
