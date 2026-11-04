@@ -2,7 +2,7 @@
   "task_id": "e0e701d96bf8e24f771fc02e27d32f07",
   "repo": "stride3d/stride",
   "issue_number": 2553,
-  "status": "REJECTED_COMMERCIAL_REVIEW",
+  "status": "FAILED_PUBLISH",
   "dispatch_id": "f12452a688c54cfa9222e9e4542cefe1",
   "admission": {
     "funding": {
@@ -33,7 +33,7 @@
     "commercial_scope": "linked-discussions",
     "commercial_review": {
       "decision": "proceed",
-      "source_revision": "b9c16135f00ba59619e2d2bd0841d4e3d698d9b7a4d950c4231f686f63d836b1",
+      "source_revision": "0f8d8d399b81e4e299a3aae93a6bcd55b3f56ccf48a906bac3c0cba87d382eee",
       "reason": "The funding line is written by the issue author Aggror (MEMBER) and the $700 is committed on OpenCollective; stride merges outside contributions (1493 merged PRs, last merge 2026-11-04) and no warning or unpaid-work allegation appears in the thread.",
       "evidence": [
         {
@@ -45,7 +45,7 @@
     "task_id": "e0e701d96bf8e24f771fc02e27d32f07",
     "source_revision": "14f1424893cb0cbd9ef0d43d18cc577301db2f14591b7b576dfad14c6e8aecc6"
   },
-  "dispatch_attempt": 3,
+  "dispatch_attempt": 2,
   "sovereign_admission": true,
   "competition": {
     "blocking": false,
@@ -56,7 +56,7 @@
   ],
   "dispatched_at": "2026-11-04T18:30:53.902411+00:00",
   "attempt": 2,
-  "updated_at": "2026-11-04T18:31:20.006729+00:00",
+  "updated_at": "2026-11-04T18:37:18.132719+00:00",
   "owner": "41867352564:1",
   "previous_owner": "41857659581:1",
   "previous_status": "DISPATCHED",
@@ -66,8 +66,8 @@
   "lease_expires_at": "2026-11-04T20:32:28.257134+00:00",
   "preparation_budget_seconds": 14400,
   "kind": "commercial_review",
-  "retryable": false,
-  "diagnostic": "COMMERCIAL_REVIEW_STALE: source-backed commercial review required; retain existing work",
+  "retryable": true,
+  "diagnostic": "File content proof mismatch",
   "at": "2026-11-04T18:31:13.754423+00:00",
   "failures": [
     {
@@ -87,9 +87,5 @@
       "at": "2026-11-04T17:28:40.448699+00:00"
     }
   ],
-  "finished_at": "2026-11-04T17:28:50.892649+00:00",
-  "review_required": true,
-  "resume_phase": "claim",
-  "reason": "COMMERCIAL_REVIEW_STALE",
-  "detail": []
+  "finished_at": "2026-11-04T17:28:50.892649+00:00"
 }
