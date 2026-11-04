@@ -2,7 +2,7 @@
   "task_id": "53b72f29ccaf11ed97d68b238fcc9256",
   "repo": "Spectral-Finance/lux",
   "issue_number": 100,
-  "status": "DISPATCHING",
+  "status": "DISPATCHED",
   "dispatch_id": "ca25a261d30f434c96bb40002e22906d",
   "admission": {
     "funding": {
@@ -431,7 +431,7 @@
   ],
   "dispatched_at": "2026-11-04T02:58:38.719894+00:00",
   "attempt": 1,
-  "updated_at": "2026-11-04T02:58:38.719908+00:00",
+  "updated_at": "2026-11-04T02:58:40.470455+00:00",
   "diagnostic": "BLOCKED_BASELINE: Native plan source SHA-256 does not match the checkout",
   "owner_revoked": null,
   "observed_at": "2026-11-03T06:29:32.216183+00:00",
