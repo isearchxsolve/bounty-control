@@ -2,7 +2,7 @@
   "task_id": "3a73b006d83d324ceb09e60460eccf9d",
   "repo": "pavel1337/perimeter",
   "issue_number": 59,
-  "status": "AWAITING_REVIEW",
+  "status": "CLOSED_UNMERGED",
   "dispatch_id": "dd59ae0bab7444f1a1aa777ba7a674a5",
   "admission": {
     "funding": {
@@ -43,7 +43,7 @@
   ],
   "dispatched_at": "2026-11-03T15:14:54.022061+00:00",
   "attempt": 3,
-  "updated_at": "2026-11-04T08:53:23.748503+00:00",
+  "updated_at": "2026-11-04T10:57:00.141089+00:00",
   "owner": "41678172894:1",
   "previous_owner": "41671619124:1",
   "previous_status": "FAILED_ENGINEER",
@@ -101,5 +101,5 @@
     "latest_reviewer": null,
     "latest_review_at": null
   },
-  "observed_at": "2026-11-04T08:53:23.748489+00:00"
+  "observed_at": "2026-11-04T10:57:00.141072+00:00"
 }
