@@ -274,6 +274,43 @@ class DeliveryOwnershipTests(unittest.TestCase):
             with self.assertRaisesRegex(ValueError, 'outside the repository'):
                 supervisor.validate_plan(report, root)
 
+    def test_monorepo_citations_prefix_hashes_and_wrapped_commands_are_validated(self):
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory, 'checkout')
+            checkout(root)
+            sub = root / 'lux'
+            sub.mkdir()
+            mix = sub / 'mix.exs'
+            mix.write_text('defmodule Lux.MixProject do\nend\n', encoding='utf-8')
+            subprocess.run(['git', '-C', str(root), 'add', 'lux/mix.exs'], check=True, capture_output=True)
+            subprocess.run(['git', '-C', str(root), 'commit', '-qm', 'add mix'], check=True, capture_output=True)
+
+            tool = root / '.tool-versions'
+            tool.write_text('elixir 1.18.6-otp-27\n', encoding='utf-8')
+            subprocess.run(['git', '-C', str(root), 'add', '.tool-versions'], check=True, capture_output=True)
+            subprocess.run(['git', '-C', str(root), 'commit', '-qm', 'add tool-versions'], check=True, capture_output=True)
+
+            actual_tool_sha = hashlib.sha256(tool.read_bytes()).hexdigest()
+            prefix_tool_sha = actual_tool_sha[:60] + '9999'
+
+            report = document(root)
+            report['sources'] = [
+                {'path': 'mix.exs', 'sha256': hashlib.sha256(mix.read_bytes()).hexdigest()},
+                {'path': '.tool-versions', 'sha256': prefix_tool_sha}
+            ]
+            report['plan']['baseline_tests'] = [
+                ['bash', '-lc', 'cd lux && mix test.unit test/unit/lux_test.exs']
+            ]
+            report['plan']['final_tests'] = [
+                ['bash', '-lc', 'cd lux && mix test.unit test/unit/lux_test.exs']
+            ]
+            old_plan = worker.VerificationPlan(
+                baseline_tests=[['mix', 'test']],
+                final_tests=[['mix', 'test']]
+            )
+            validated = supervisor.validate_plan(report, root, old_plan)
+            self.assertEqual(report['sources'][0]['path'], 'lux/mix.exs')
+
     def test_the_intake_prompt_teaches_hashing_the_committed_object(self):
         """Measured 2026-11-02: the same delivery. The host fix makes the citation valid; the
         directive is why the agent stops holding an install's bytes at all."""

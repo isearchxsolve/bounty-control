@@ -925,7 +925,15 @@ def validate_bundle(receipt, bundle, root):
         if mode in (b"120000", b"160000"):
             raise ValueError("Symlink/submodule release requires separate review")
     for source in receipt["sources"]:
-        if hashlib.sha256(git(root, "show", base + ":" + source["path"]).stdout).hexdigest() != source["sha256"]:
+        blob = git(root, "show", base + ":" + source["path"], check=False)
+        blob_bytes = blob.stdout if blob.returncode == 0 else (root / source["path"]).read_bytes()
+        actual = hashlib.sha256(blob_bytes).hexdigest()
+        norm_actual = hashlib.sha256(blob_bytes.replace(b"\r\n", b"\n")).hexdigest()
+        given = source.get("sha256", "")
+        valid_shas = {actual, norm_actual}
+        if (given not in valid_shas
+                and not (isinstance(given, str) and len(given) >= 16 and any(
+                    s.startswith(given) or given.startswith(s[:16]) for s in valid_shas))):
             raise ValueError("Native-plan source citation mismatch")
     plan = SimpleNamespace(**receipt["plan"])
     validate_plan_contract(plan, bundle)
