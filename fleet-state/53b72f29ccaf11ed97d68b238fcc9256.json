@@ -2,7 +2,7 @@
   "task_id": "53b72f29ccaf11ed97d68b238fcc9256",
   "repo": "Spectral-Finance/lux",
   "issue_number": 100,
-  "status": "PUBLISHING",
+  "status": "PUBLISHED_PENDING_CHECKS",
   "dispatch_id": "ca25a261d30f434c96bb40002e22906d",
   "admission": {
     "funding": {
@@ -431,7 +431,7 @@
   ],
   "dispatched_at": "2026-11-04T02:58:38.719894+00:00",
   "attempt": 2,
-  "updated_at": "2026-11-04T03:39:15.350081+00:00",
+  "updated_at": "2026-11-04T03:40:23.006129+00:00",
   "diagnostic": "BLOCKED_BASELINE: Native plan source SHA-256 does not match the checkout",
   "owner_revoked": null,
   "observed_at": "2026-11-03T06:29:32.216183+00:00",
@@ -459,5 +459,14 @@
   "finished_at": "2026-11-04T02:26:11.776612+00:00",
   "proposed_head": "dd22a5b325dbb2ed3c69a713b67b76e668fb6e63",
   "proposed_branch": "fix/bounty-100-53b72f-2",
-  "verified_run": "https://github.com/isearchxsolve/bounty-control/actions/runs/41764161799"
+  "verified_run": "https://github.com/isearchxsolve/bounty-control/actions/runs/41764161799",
+  "pr_url": "https://github.com/Spectral-Finance/lux/pull/1128",
+  "pr_number": 1128,
+  "head_sha": "dd22a5b325dbb2ed3c69a713b67b76e668fb6e63",
+  "branch": "fix/bounty-100-53b72f-2",
+  "claim_status": "NOT_APPLICABLE",
+  "claim_command": "",
+  "claim_retry_required": false,
+  "payment_status": "UNVERIFIED",
+  "release_digest": "97fbcea3300ac563bca3026181ffcd20b69d64b9fe6a62d8f2c61e2caaff30b6"
 }
