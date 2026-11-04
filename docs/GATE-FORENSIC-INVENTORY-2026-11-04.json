@@ -1,0 +1,2778 @@
+{
+  "generated_at": "2026-11-04T14:48:27.772649+00:00",
+  "base_revision": "20ae33f5d783c4e7889e766ad1b63e931d8e36e2",
+  "scope": "Actions control plane and shared guards, including legacy branches in these modules; optional external deployments not certified",
+  "interpretation": "Raises/assertions and named return literals are structural candidates, not a proof that every predicate or deployment is safe",
+  "source_files": {
+    "scripts/agent_door.py": "b1c8dc65191ab088dd224d0b0b3708093d6768767eae01b305764ad5752a76e1",
+    "scripts/cline_entry_door.py": "001bb2a78303b2ee4f33a1332504d4f71fb0131382ed5b6b802eee9a8c04735b",
+    "scripts/bounty_admission.py": "91b78d676cb6aec97ce35c6a3ca6d7cf5e0b4aa221a07fb65f0c3302988af24f",
+    "scripts/issue_scout.py": "3007785bbf2264eb8d1e610a162befeae945a65ab9613adae532c3c58fbe0dcc",
+    "scripts/sovereign_discovery.py": "ba7133fe96739516b977d92460e809184c43814a6af9aa612894aa0d0117c939",
+    "scripts/actions_dispatch.py": "4b9cb7e7b01c7dc6c2c0dadb02c301848b8bdb9a2b195c75f6f5f60134a81afe",
+    "scripts/pipeline_evidence.py": "04df1b62ca0af824c8f1825d2ccaba1774c3db5ad0fc245cc860010f4904c602",
+    "scripts/actions_github.py": "fcedf7f9691986026e67c1467910e078daddf12b0548093db0602256777949fd",
+    "scripts/actions_delivery.py": "5c7620c2eca616f583c1b7775a5a9131a2a00f34288b382eca716a4c50a4b55f",
+    "scripts/actions_release.py": "9281379ff3a0c6ed3789f378f88aa3effdace0676b5c7ca163fabb308cb90e19",
+    "scripts/actions_reconcile.py": "c855d718920ad8aa515165a6df548d7c8e3a8a15c1e7654d5feaba225709f3bf",
+    "scripts/delivery_errors.py": "21ff99b38c175a29e98872c13fa20eccc4a1311c2b530ec761c9f276003e56df",
+    "scripts/delivery_supervisor.py": "000d43c318b32478b32e3acc88dfa831b9257ff3fef0cc611b0baa98e578b2ba",
+    "scripts/publication_access_probe.py": "a3c74eaaa0bf715ef6859cfae15871a85bb86df17ed1f222d83d02ea0a990e26",
+    "scripts/run_pipeline_live_probes.py": "c4e1d2df8408a4aea88970b4cb8c2a703cef3c1d048feb494cce541d7c9cd6ec",
+    "scripts/payment_gates.py": "d1fbbd1559713e464ac6af08dbc44d87b923f59fdb6630ca6d43a6eff540fc36",
+    "scripts/commercial_context.py": "f57dfb58a3e5730c12cea33b9e5a51863f69f120c328fbc618f28fc788519bd3",
+    "scripts/kaggle_engine_worker.py": "77e1dbf89a4d86e3d0cfdee9fa656e813c46356e0aa053d88c08c546fb8dcb6d",
+    "scripts/check_tracked_secrets.py": "129a0b61aec5584f8be5c65e8481175f2a080c8aa1cbc54d39e9017c11e08d2d",
+    "scripts/live_pipeline_resume.py": "ebe455251bb003d71d4babd3b22cd5d3c055eab83b3291f5b08b76925811569b",
+    "scripts/pipeline_lineage.py": "c67e874183f6a2d946d88672dad47e24c6b269834122e696d384d7e55b814970",
+    "scripts/nvidia_router.py": "4ca8dd4ce8c628a7754c2bd1f24463d0a44e9792a5a52170ba2cd9a8c7f90c39",
+    "scripts/tokenharbor_router.py": "cfbb834129dded1b5ac28f911f17aedb63cb39aea917f11f40d1cb7c4b8512b6",
+    "scripts/cline_process.py": "70c4fadec16c46c67390585cede5ea2b210a949e7ebde9d9095a0f05b679f035",
+    "scripts/discovery_heartbeat.py": "bc40138e027e8a4f050e20334d2ea5633e977596dcee9f1c1b599c80d41b0ecf",
+    "scripts/pr_conversion_watch.py": "c89ed2426c9c13ac2cd50ebb61dd9792f276e0c4123850750e64dfc5e6fa4809"
+  },
+  "workflows": {
+    ".github/workflows/actions-contracts.yml": "2aab124a888a17f1a789b1c9b9014f975ada6ef21ee9fed644eee038231b6849",
+    ".github/workflows/bounty-discovery.yml": "3aa322e558a22c99f1cc0cb1249fc60a471d8b9de87399c57f1850572c3a9f83",
+    ".github/workflows/bounty-hydration.yml": "cdf0b2af31a08e5dff4a190eb6cbb100ec6d26fb65e9f85a9676bc77b055dd28",
+    ".github/workflows/discovery-heartbeat.yml": "7da4a2aeea2be5350e20b6a9b7a3f07d685f5f99b64ed649de5fd47e7eae7d48",
+    ".github/workflows/engine2.yml": "afd26dccf1e4a995935168a6adb3f36dcc21fe8a8e204bc9158cd3acbc9bf918",
+    ".github/workflows/pipeline-failure-surface.yml": "d43bc19aca10c0a774676f0acaf3d90f9a6721adc387f67b57a095c082e27b93",
+    ".github/workflows/pipeline-live-integration.yml": "e40804588606768452bf9f2c5ad9899eb7cc1e0ab21c9bd437fbdf987aae23ce",
+    ".github/workflows/pipeline-live-probes.yml": "fb8b1f7cc38506c6e18269391b09a213fd5a5528bf05800b0f6c6e855d843617"
+  },
+  "sites": [
+    {
+      "file": "scripts/actions_delivery.py",
+      "line": 40,
+      "kind": "ReturnCodes",
+      "codes": [
+        "REJECTED_COMMERCIAL_REVIEW"
+      ]
+    },
+    {
+      "file": "scripts/actions_delivery.py",
+      "line": 59,
+      "kind": "Raise",
+      "expression": "raise ValueError('Commercial review hold lost its dispatch generation')"
+    },
+    {
+      "file": "scripts/actions_delivery.py",
+      "line": 64,
+      "kind": "Raise",
+      "expression": "raise"
+    },
+    {
+      "file": "scripts/actions_delivery.py",
+      "line": 122,
+      "kind": "Raise",
+      "expression": "raise InfrastructureFault('submodule', (repo + ': ' if repo else '') + '.gitmodules is malformed: ' + broken + ' declares no url')"
+    },
+    {
+      "file": "scripts/actions_delivery.py",
+      "line": 131,
+      "kind": "Raise",
+      "expression": "raise InfrastructureFault('submodule', (repo + ': ' if repo else '') + stderr.strip()[:500])"
+    },
+    {
+      "file": "scripts/actions_delivery.py",
+      "line": 132,
+      "kind": "Raise",
+      "expression": "raise RuntimeError(stderr)"
+    },
+    {
+      "file": "scripts/actions_delivery.py",
+      "line": 135,
+      "kind": "Raise",
+      "expression": "raise ValueError('Owned PR changed since claim; reconcile before repair')"
+    },
+    {
+      "file": "scripts/actions_delivery.py",
+      "line": 146,
+      "kind": "Raise",
+      "expression": "raise InfrastructureFault('submodule', (repo + ': ' if repo else '') + stderr.strip()[:500])"
+    },
+    {
+      "file": "scripts/actions_delivery.py",
+      "line": 147,
+      "kind": "Raise",
+      "expression": "raise RuntimeError(stderr)"
+    },
+    {
+      "file": "scripts/actions_delivery.py",
+      "line": 160,
+      "kind": "Raise",
+      "expression": "raise InfrastructureFault(subsystem, detail)"
+    },
+    {
+      "file": "scripts/actions_delivery.py",
+      "line": 287,
+      "kind": "Raise",
+      "expression": "raise ValueError('Prepared baseline is not the current upstream default')"
+    },
+    {
+      "file": "scripts/actions_delivery.py",
+      "line": 288,
+      "kind": "Raise",
+      "expression": "raise ValueError(f\"Prepared baseline is not on the declared base branch's history (relationship {status!r})\")"
+    },
+    {
+      "file": "scripts/actions_delivery.py",
+      "line": 307,
+      "kind": "Raise",
+      "expression": "raise ValueError(f'Declared base branch {declared!r} does not exist in {repo}') from exc"
+    },
+    {
+      "file": "scripts/actions_delivery.py",
+      "line": 309,
+      "kind": "Raise",
+      "expression": "raise"
+    },
+    {
+      "file": "scripts/actions_delivery.py",
+      "line": 312,
+      "kind": "Raise",
+      "expression": "raise ValueError(f'Branch {declared!r} returned no head commit')"
+    },
+    {
+      "file": "scripts/actions_delivery.py",
+      "line": 345,
+      "kind": "Raise",
+      "expression": "raise PreparationRace(base, record['live_sha'], set(), unknown=True, ahead_by=record['ahead_by'])"
+    },
+    {
+      "file": "scripts/actions_delivery.py",
+      "line": 348,
+      "kind": "Raise",
+      "expression": "raise PreparationRace(base, record['live_sha'], sorted(overlap), ahead_by=record['ahead_by'])"
+    },
+    {
+      "file": "scripts/actions_delivery.py",
+      "line": 360,
+      "kind": "ReturnCodes",
+      "codes": [
+        "GITHUB_RUN_ATTEMPT",
+        "GITHUB_RUN_ID"
+      ]
+    },
+    {
+      "file": "scripts/actions_delivery.py",
+      "line": 368,
+      "kind": "Raise",
+      "expression": "raise ValueError('Unsafe Actions output value')"
+    },
+    {
+      "file": "scripts/actions_delivery.py",
+      "line": 412,
+      "kind": "Raise",
+      "expression": "raise ValueError('Delivery invariant violated: the engineer judged the issue (' + denial + ') after the sovereign entry door had admitted it')"
+    },
+    {
+      "file": "scripts/actions_delivery.py",
+      "line": 440,
+      "kind": "Raise",
+      "expression": "raise ValueError('Previous regression evidence belongs to another task')"
+    },
+    {
+      "file": "scripts/actions_delivery.py",
+      "line": 480,
+      "kind": "Raise",
+      "expression": "raise ValueError('Admission proof missing; entry door reconsideration required')"
+    },
+    {
+      "file": "scripts/actions_delivery.py",
+      "line": 495,
+      "kind": "Raise",
+      "expression": "raise ValueError('Competition evidence missing; entry door reconsideration required')"
+    },
+    {
+      "file": "scripts/actions_delivery.py",
+      "line": 507,
+      "kind": "Raise",
+      "expression": "raise ValueError('Unknown task mode')"
+    },
+    {
+      "file": "scripts/actions_delivery.py",
+      "line": 523,
+      "kind": "Raise",
+      "expression": "raise ValueError('Matching admitted dispatch generation required')"
+    },
+    {
+      "file": "scripts/actions_delivery.py",
+      "line": 530,
+      "kind": "Raise",
+      "expression": "raise ValueError('Dispatch payload proof differs from durable evidence')"
+    },
+    {
+      "file": "scripts/actions_delivery.py",
+      "line": 577,
+      "kind": "Raise",
+      "expression": "raise RuntimeError(diagnostic)"
+    },
+    {
+      "file": "scripts/actions_delivery.py",
+      "line": 585,
+      "kind": "Raise",
+      "expression": "raise RuntimeError('Gateway has no ready provider key')"
+    },
+    {
+      "file": "scripts/actions_delivery.py",
+      "line": 588,
+      "kind": "Raise",
+      "expression": "raise RuntimeError(diagnostic)"
+    },
+    {
+      "file": "scripts/actions_delivery.py",
+      "line": 618,
+      "kind": "Raise",
+      "expression": "raise ValueError('Previous preparation belongs to another task')"
+    },
+    {
+      "file": "scripts/actions_delivery.py",
+      "line": 625,
+      "kind": "Raise",
+      "expression": "raise ValueError('Preparation resume requires a fresh isolated checkout')"
+    },
+    {
+      "file": "scripts/actions_delivery.py",
+      "line": 634,
+      "kind": "Raise",
+      "expression": "raise ValueError('Recovered preparation base changed')"
+    },
+    {
+      "file": "scripts/actions_delivery.py",
+      "line": 698,
+      "kind": "Raise",
+      "expression": "raise ValueError('Unexpected upstream remote')"
+    },
+    {
+      "file": "scripts/actions_delivery.py",
+      "line": 713,
+      "kind": "Raise",
+      "expression": "raise"
+    },
+    {
+      "file": "scripts/actions_delivery.py",
+      "line": 728,
+      "kind": "Raise",
+      "expression": "raise ValueError('Cline must identify the defect component')"
+    },
+    {
+      "file": "scripts/actions_delivery.py",
+      "line": 734,
+      "kind": "Raise",
+      "expression": "raise RuntimeError('BLOCKED_BASELINE: ' + repair_error)"
+    },
+    {
+      "file": "scripts/actions_delivery.py",
+      "line": 738,
+      "kind": "Raise",
+      "expression": "raise RuntimeError('BLOCKED_BASELINE: ' + diagnostic)"
+    },
+    {
+      "file": "scripts/actions_delivery.py",
+      "line": 747,
+      "kind": "Raise",
+      "expression": "raise ValueError('Invalid previous run identity')"
+    },
+    {
+      "file": "scripts/actions_delivery.py",
+      "line": 831,
+      "kind": "Raise",
+      "expression": "raise ClineBudgetExhausted(cline_budget)"
+    },
+    {
+      "file": "scripts/actions_delivery.py",
+      "line": 852,
+      "kind": "Raise",
+      "expression": "raise ClineDeliverableMissing(report_path, elapsed=None, exit_code=0)"
+    },
+    {
+      "file": "scripts/actions_delivery.py",
+      "line": 858,
+      "kind": "Raise",
+      "expression": "raise ValueError('Cline changed Git HEAD before release verification')"
+    },
+    {
+      "file": "scripts/actions_delivery.py",
+      "line": 862,
+      "kind": "Raise",
+      "expression": "raise ValueError('No issue-linked product change; no-op/docs/lockfile-only release blocked')"
+    },
+    {
+      "file": "scripts/actions_delivery.py",
+      "line": 883,
+      "kind": "Raise",
+      "expression": "raise ValueError('Native verification changed the proposed source tree')"
+    },
+    {
+      "file": "scripts/actions_delivery.py",
+      "line": 896,
+      "kind": "Raise",
+      "expression": "raise RuntimeError('Bounded Cline delivery repair exhausted: ' + feedback)"
+    },
+    {
+      "file": "scripts/actions_delivery.py",
+      "line": 907,
+      "kind": "Raise",
+      "expression": "raise ValueError('Expected exactly one verified task commit')"
+    },
+    {
+      "file": "scripts/actions_delivery.py",
+      "line": 932,
+      "kind": "Raise",
+      "expression": "raise ValueError('Release/harness provenance mismatch')"
+    },
+    {
+      "file": "scripts/actions_delivery.py",
+      "line": 935,
+      "kind": "Raise",
+      "expression": "raise ValueError('Release task identity mismatch')"
+    },
+    {
+      "file": "scripts/actions_delivery.py",
+      "line": 943,
+      "kind": "Raise",
+      "expression": "raise ValueError('Bundle HEAD mismatch')"
+    },
+    {
+      "file": "scripts/actions_delivery.py",
+      "line": 945,
+      "kind": "Raise",
+      "expression": "raise ValueError('Release is not one task commit')"
+    },
+    {
+      "file": "scripts/actions_delivery.py",
+      "line": 947,
+      "kind": "Raise",
+      "expression": "raise ValueError('Release must have exactly the verified upstream parent')"
+    },
+    {
+      "file": "scripts/actions_delivery.py",
+      "line": 949,
+      "kind": "Raise",
+      "expression": "raise ValueError('Release tree mismatch')"
+    },
+    {
+      "file": "scripts/actions_delivery.py",
+      "line": 952,
+      "kind": "Raise",
+      "expression": "raise ValueError('Changed-file release proof mismatch')"
+    },
+    {
+      "file": "scripts/actions_delivery.py",
+      "line": 960,
+      "kind": "Raise",
+      "expression": "raise ValueError('Deletion proof mismatch')"
+    },
+    {
+      "file": "scripts/actions_delivery.py",
+      "line": 962,
+      "kind": "Raise",
+      "expression": "raise ValueError('File content proof mismatch')"
+    },
+    {
+      "file": "scripts/actions_delivery.py",
+      "line": 965,
+      "kind": "Raise",
+      "expression": "raise ValueError('Symlink/submodule release requires separate review')"
+    },
+    {
+      "file": "scripts/actions_delivery.py",
+      "line": 976,
+      "kind": "Raise",
+      "expression": "raise ValueError('Native-plan source citation mismatch')"
+    },
+    {
+      "file": "scripts/actions_delivery.py",
+      "line": 983,
+      "kind": "Raise",
+      "expression": "raise ValueError('Red-to-green regression proof missing')"
+    },
+    {
+      "file": "scripts/actions_delivery.py",
+      "line": 1005,
+      "kind": "Raise",
+      "expression": "raise ValueError('Security gate violation: proposed release diff contains prohibited credential pattern')"
+    },
+    {
+      "file": "scripts/actions_delivery.py",
+      "line": 1134,
+      "kind": "Raise",
+      "expression": "raise ValueError('Publication lease ownership lost')"
+    },
+    {
+      "file": "scripts/actions_delivery.py",
+      "line": 1146,
+      "kind": "Raise",
+      "expression": "raise ValueError('Release admission differs from claimed evidence')"
+    },
+    {
+      "file": "scripts/actions_delivery.py",
+      "line": 1156,
+      "kind": "Raise",
+      "expression": "raise PreparationRace(receipt['base_sha'], current_base, [], unknown=True)"
+    },
+    {
+      "file": "scripts/actions_delivery.py",
+      "line": 1164,
+      "kind": "Raise",
+      "expression": "raise"
+    },
+    {
+      "file": "scripts/actions_delivery.py",
+      "line": 1169,
+      "kind": "Raise",
+      "expression": "raise ValueError('Fork parent mismatch')"
+    },
+    {
+      "file": "scripts/actions_delivery.py",
+      "line": 1183,
+      "kind": "Raise",
+      "expression": "raise ValueError('Multiple matching PRs need reconciliation')"
+    },
+    {
+      "file": "scripts/actions_delivery.py",
+      "line": 1250,
+      "kind": "ReturnCodes",
+      "codes": [
+        "FAILED_RUNNER_SHUTDOWN"
+      ]
+    },
+    {
+      "file": "scripts/actions_delivery.py",
+      "line": 1255,
+      "kind": "ReturnCodes",
+      "codes": [
+        "FAILED_MISSING_RECEIPT"
+      ]
+    },
+    {
+      "file": "scripts/actions_delivery.py",
+      "line": 1271,
+      "kind": "Raise",
+      "expression": "raise ValueError('Result owner mismatch')"
+    },
+    {
+      "file": "scripts/actions_delivery.py",
+      "line": 1314,
+      "kind": "Raise",
+      "expression": "raise"
+    },
+    {
+      "file": "scripts/actions_delivery.py",
+      "line": 1325,
+      "kind": "Raise",
+      "expression": "raise"
+    },
+    {
+      "file": "scripts/actions_delivery.py",
+      "line": 1336,
+      "kind": "Raise",
+      "expression": "raise"
+    },
+    {
+      "file": "scripts/actions_delivery.py",
+      "line": 1346,
+      "kind": "Raise",
+      "expression": "raise"
+    },
+    {
+      "file": "scripts/actions_delivery.py",
+      "line": 1358,
+      "kind": "Raise",
+      "expression": "raise"
+    },
+    {
+      "file": "scripts/actions_delivery.py",
+      "line": 1368,
+      "kind": "Raise",
+      "expression": "raise"
+    },
+    {
+      "file": "scripts/actions_delivery.py",
+      "line": 1378,
+      "kind": "Raise",
+      "expression": "raise"
+    },
+    {
+      "file": "scripts/actions_delivery.py",
+      "line": 1386,
+      "kind": "Raise",
+      "expression": "raise"
+    },
+    {
+      "file": "scripts/actions_dispatch.py",
+      "line": 130,
+      "kind": "Raise",
+      "expression": "raise ValueError('Unbalanced parentheses in GitHub search expression')"
+    },
+    {
+      "file": "scripts/actions_dispatch.py",
+      "line": 142,
+      "kind": "Raise",
+      "expression": "raise ValueError('Unbalanced quote or parentheses in GitHub search expression')"
+    },
+    {
+      "file": "scripts/actions_dispatch.py",
+      "line": 145,
+      "kind": "Raise",
+      "expression": "raise ValueError('Empty branch in GitHub OR search expression')"
+    },
+    {
+      "file": "scripts/actions_dispatch.py",
+      "line": 152,
+      "kind": "Raise",
+      "expression": "raise ValueError('Missing alternative in GitHub OR search expression')"
+    },
+    {
+      "file": "scripts/actions_dispatch.py",
+      "line": 154,
+      "kind": "Raise",
+      "expression": "raise ValueError('Place shared query context before the first OR alternative')"
+    },
+    {
+      "file": "scripts/actions_dispatch.py",
+      "line": 162,
+      "kind": "Raise",
+      "expression": "raise ValueError('Missing final alternative in GitHub OR search expression')"
+    },
+    {
+      "file": "scripts/actions_dispatch.py",
+      "line": 169,
+      "kind": "Raise",
+      "expression": "raise ValueError('Empty branch in GitHub OR search expression')"
+    },
+    {
+      "file": "scripts/actions_dispatch.py",
+      "line": 218,
+      "kind": "Raise",
+      "expression": "raise ValueError('Compile OR expressions with build_issue_search_queries')"
+    },
+    {
+      "file": "scripts/actions_dispatch.py",
+      "line": 651,
+      "kind": "Raise",
+      "expression": "raise GitHubError('Search horizon incomplete; cursor retained')"
+    },
+    {
+      "file": "scripts/actions_dispatch.py",
+      "line": 798,
+      "kind": "Raise",
+      "expression": "raise ValueError('Publication blocked: repository has disabled pull requests')"
+    },
+    {
+      "file": "scripts/actions_dispatch.py",
+      "line": 801,
+      "kind": "Raise",
+      "expression": "raise ValueError('Publication blocked: collaborator-only pull requests; publisher has no write access')"
+    },
+    {
+      "file": "scripts/actions_dispatch.py",
+      "line": 812,
+      "kind": "Raise",
+      "expression": "raise ValueError('Bounded dispatch attempts exhausted')"
+    },
+    {
+      "file": "scripts/actions_dispatch.py",
+      "line": 832,
+      "kind": "Raise",
+      "expression": "raise ValueError('Existing durable task state: ' + status)"
+    },
+    {
+      "file": "scripts/actions_dispatch.py",
+      "line": 833,
+      "kind": "ReturnCodes",
+      "codes": [
+        "DISPATCHING"
+      ]
+    },
+    {
+      "file": "scripts/actions_dispatch.py",
+      "line": 846,
+      "kind": "ReturnCodes",
+      "codes": [
+        "DISPATCHED"
+      ]
+    },
+    {
+      "file": "scripts/actions_dispatch.py",
+      "line": 854,
+      "kind": "Raise",
+      "expression": "raise ValueError('Dispatch state disappeared after reservation: task ' + identity + ' dispatch ' + dispatch_id + ' is absent from ' + store.repo + '; another actor removed the record while this dispatch was in flight')"
+    },
+    {
+      "file": "scripts/actions_dispatch.py",
+      "line": 1115,
+      "kind": "ReturnCodes",
+      "codes": [
+        "FAILED"
+      ]
+    },
+    {
+      "file": "scripts/actions_dispatch.py",
+      "line": 1135,
+      "kind": "Raise",
+      "expression": "raise ValueError('unknown lane ' + repr(token) + ' (expected all, ' + ', '.join(QUERIES) + ')')"
+    },
+    {
+      "file": "scripts/actions_dispatch.py",
+      "line": 1940,
+      "kind": "ReturnCodes",
+      "codes": [
+        "REFUSED_NOT_A_CODE_CHANGE: "
+      ]
+    },
+    {
+      "file": "scripts/actions_dispatch.py",
+      "line": 1960,
+      "kind": "ReturnCodes",
+      "codes": [
+        "REFUSED_NOT_A_CODE_CHANGE: "
+      ]
+    },
+    {
+      "file": "scripts/actions_dispatch.py",
+      "line": 1970,
+      "kind": "ReturnCodes",
+      "codes": [
+        "REFUSED_NOT_A_CODE_CHANGE: auto_digest: dated title plus digest label"
+      ]
+    },
+    {
+      "file": "scripts/actions_dispatch.py",
+      "line": 1977,
+      "kind": "ReturnCodes",
+      "codes": [
+        "REFUSED_NOT_A_CODE_CHANGE: question_without_defect: interrogative title, no repro"
+      ]
+    },
+    {
+      "file": "scripts/actions_dispatch.py",
+      "line": 1981,
+      "kind": "ReturnCodes",
+      "codes": [
+        "REFUSED_NOT_A_CODE_CHANGE: umbrella_request: epic/rfc label, no code reference"
+      ]
+    },
+    {
+      "file": "scripts/actions_dispatch.py",
+      "line": 1986,
+      "kind": "ReturnCodes",
+      "codes": [
+        "REFUSED_NOT_A_CODE_CHANGE: hardware_product: acceptance needs a physical part"
+      ]
+    },
+    {
+      "file": "scripts/actions_dispatch.py",
+      "line": 1992,
+      "kind": "ReturnCodes",
+      "codes": [
+        "REFUSED_NOT_A_CODE_CHANGE: video_deliverable: deliverable is not source code"
+      ]
+    },
+    {
+      "file": "scripts/actions_dispatch.py",
+      "line": 2011,
+      "kind": "ReturnCodes",
+      "codes": [
+        "REFUSED_NOT_A_CODE_CHANGE: non_code_deliverable: title names copy, design or media, no code label, no reproduction, no code reference"
+      ]
+    },
+    {
+      "file": "scripts/actions_github.py",
+      "line": 51,
+      "kind": "Raise",
+      "expression": "raise ValueError('Invalid GitHub repository')"
+    },
+    {
+      "file": "scripts/actions_github.py",
+      "line": 57,
+      "kind": "Raise",
+      "expression": "raise ValueError('Invalid issue number')"
+    },
+    {
+      "file": "scripts/actions_github.py",
+      "line": 141,
+      "kind": "Raise",
+      "expression": "raise GitHubError('GitHub observation deadline exhausted: ' + endpoint[:160])"
+    },
+    {
+      "file": "scripts/actions_github.py",
+      "line": 146,
+      "kind": "Raise",
+      "expression": "raise GitHubError('GitHub transport failed: ' + str(exc)) from exc"
+    },
+    {
+      "file": "scripts/actions_github.py",
+      "line": 164,
+      "kind": "Raise",
+      "expression": "raise GitHubError(f'{message.strip()} [endpoint: {method} {endpoint[:200]}]')"
+    },
+    {
+      "file": "scripts/actions_github.py",
+      "line": 166,
+      "kind": "Raise",
+      "expression": "raise GitHubError(f'{message.strip()} [endpoint: {method} {endpoint[:200]}]')"
+    },
+    {
+      "file": "scripts/actions_github.py",
+      "line": 170,
+      "kind": "Raise",
+      "expression": "raise GitHubError('GitHub throttle exceeds remaining observation budget: ' + message)"
+    },
+    {
+      "file": "scripts/actions_github.py",
+      "line": 177,
+      "kind": "Raise",
+      "expression": "raise GitHubError(message)"
+    },
+    {
+      "file": "scripts/actions_github.py",
+      "line": 202,
+      "kind": "Raise",
+      "expression": "raise GitHubError('Expected paginated GitHub array')"
+    },
+    {
+      "file": "scripts/actions_github.py",
+      "line": 224,
+      "kind": "Raise",
+      "expression": "raise ValueError('Task is a pull request, not an issue')"
+    },
+    {
+      "file": "scripts/actions_github.py",
+      "line": 238,
+      "kind": "Raise",
+      "expression": "raise GitHubError('Visible comment count could not be independently established')"
+    },
+    {
+      "file": "scripts/actions_github.py",
+      "line": 270,
+      "kind": "ReturnCodes",
+      "codes": [
+        "CLINE_TOTAL_BUDGET_SECONDS"
+      ]
+    },
+    {
+      "file": "scripts/actions_github.py",
+      "line": 327,
+      "kind": "Raise",
+      "expression": "raise"
+    },
+    {
+      "file": "scripts/actions_github.py",
+      "line": 335,
+      "kind": "Raise",
+      "expression": "raise"
+    },
+    {
+      "file": "scripts/actions_github.py",
+      "line": 339,
+      "kind": "Raise",
+      "expression": "raise ValueError('Invalid canonical task identity')"
+    },
+    {
+      "file": "scripts/actions_github.py",
+      "line": 345,
+      "kind": "Raise",
+      "expression": "raise"
+    },
+    {
+      "file": "scripts/actions_github.py",
+      "line": 369,
+      "kind": "ReturnCodes",
+      "codes": [
+        "DELETE"
+      ]
+    },
+    {
+      "file": "scripts/actions_github.py",
+      "line": 376,
+      "kind": "Raise",
+      "expression": "raise"
+    },
+    {
+      "file": "scripts/actions_github.py",
+      "line": 393,
+      "kind": "Raise",
+      "expression": "raise"
+    },
+    {
+      "file": "scripts/actions_github.py",
+      "line": 400,
+      "kind": "Raise",
+      "expression": "raise"
+    },
+    {
+      "file": "scripts/actions_github.py",
+      "line": 402,
+      "kind": "Raise",
+      "expression": "raise GitHubError('State compare-and-swap exhausted')"
+    },
+    {
+      "file": "scripts/actions_github.py",
+      "line": 410,
+      "kind": "Raise",
+      "expression": "raise ValueError('Dispatch generation mismatch')"
+    },
+    {
+      "file": "scripts/actions_github.py",
+      "line": 414,
+      "kind": "Raise",
+      "expression": "raise ValueError('Dispatch generation is not claimable')"
+    },
+    {
+      "file": "scripts/actions_github.py",
+      "line": 416,
+      "kind": "Raise",
+      "expression": "raise ValueError('Task ownership revoked')"
+    },
+    {
+      "file": "scripts/actions_github.py",
+      "line": 418,
+      "kind": "Raise",
+      "expression": "raise ValueError('Task already delivered')"
+    },
+    {
+      "file": "scripts/actions_github.py",
+      "line": 421,
+      "kind": "Raise",
+      "expression": "raise ValueError('Owned PR is pending; reconcile it before another engineering run')"
+    },
+    {
+      "file": "scripts/actions_github.py",
+      "line": 452,
+      "kind": "Raise",
+      "expression": "raise ValueError('A live Actions run already owns this task')"
+    },
+    {
+      "file": "scripts/actions_github.py",
+      "line": 455,
+      "kind": "Raise",
+      "expression": "raise ValueError('Bounded recovery attempts exhausted')"
+    },
+    {
+      "file": "scripts/actions_github.py",
+      "line": 471,
+      "kind": "Raise",
+      "expression": "raise ValueError('Task ownership lost')"
+    },
+    {
+      "file": "scripts/actions_github.py",
+      "line": 479,
+      "kind": "Raise",
+      "expression": "raise ValueError('Task ownership lost')"
+    },
+    {
+      "file": "scripts/actions_github.py",
+      "line": 488,
+      "kind": "Raise",
+      "expression": "raise"
+    },
+    {
+      "file": "scripts/actions_github.py",
+      "line": 494,
+      "kind": "Raise",
+      "expression": "raise GitHubError('Durable state tree truncated; reconciliation must be partitioned')"
+    },
+    {
+      "file": "scripts/actions_reconcile.py",
+      "line": 37,
+      "kind": "Raise",
+      "expression": "raise ValueError('Concurrent state change; sweep deferred')"
+    },
+    {
+      "file": "scripts/actions_reconcile.py",
+      "line": 162,
+      "kind": "ReturnCodes",
+      "codes": [
+        "FAILED",
+        "HELD",
+        "PENDING",
+        "PASSED",
+        "NO_REMOTE_CHECKS"
+      ]
+    },
+    {
+      "file": "scripts/actions_reconcile.py",
+      "line": 257,
+      "kind": "ReturnCodes",
+      "codes": [
+        "NOT_ATTEMPTED"
+      ]
+    },
+    {
+      "file": "scripts/actions_reconcile.py",
+      "line": 262,
+      "kind": "ReturnCodes",
+      "codes": [
+        "FAILED"
+      ]
+    },
+    {
+      "file": "scripts/actions_reconcile.py",
+      "line": 265,
+      "kind": "ReturnCodes",
+      "codes": [
+        "SUBMITTED_UNCONFIRMED",
+        "SUBMITTED_UNCONFIRMED"
+      ]
+    },
+    {
+      "file": "scripts/actions_reconcile.py",
+      "line": 362,
+      "kind": "Raise",
+      "expression": "raise ValueError('Concurrent state change; reconciliation deferred')"
+    },
+    {
+      "file": "scripts/actions_reconcile.py",
+      "line": 385,
+      "kind": "Raise",
+      "expression": "raise ValueError('CAPACITY_WAIT: repair shares the global delivery capacity of 4')"
+    },
+    {
+      "file": "scripts/actions_release.py",
+      "line": 20,
+      "kind": "Raise",
+      "expression": "raise RuntimeError(result.stderr.decode('utf-8', errors='replace'))"
+    },
+    {
+      "file": "scripts/actions_release.py",
+      "line": 27,
+      "kind": "Raise",
+      "expression": "raise ValueError('Unsafe worktree path')"
+    },
+    {
+      "file": "scripts/actions_release.py",
+      "line": 29,
+      "kind": "Raise",
+      "expression": "raise ValueError('Workflow mutation is prohibited')"
+    },
+    {
+      "file": "scripts/actions_release.py",
+      "line": 32,
+      "kind": "Raise",
+      "expression": "raise ValueError('Symlink/worktree boundary violation')"
+    },
+    {
+      "file": "scripts/actions_release.py",
+      "line": 58,
+      "kind": "Raise",
+      "expression": "raise ValueError('Malformed Git status')"
+    },
+    {
+      "file": "scripts/actions_release.py",
+      "line": 66,
+      "kind": "Raise",
+      "expression": "raise ValueError('Missing rename/copy source')"
+    },
+    {
+      "file": "scripts/actions_release.py",
+      "line": 119,
+      "kind": "Raise",
+      "expression": "raise ValueError('Repository tree changed before engineering: ' + ', '.join(delivered[:10]))"
+    },
+    {
+      "file": "scripts/actions_release.py",
+      "line": 123,
+      "kind": "Raise",
+      "expression": "raise ValueError('Provisioning mutated the untouched source baseline: ' + ', '.join(remaining[:10]))"
+    },
+    {
+      "file": "scripts/actions_release.py",
+      "line": 158,
+      "kind": "Raise",
+      "expression": "raise ValueError('Existing master test mutation: ' + name)"
+    },
+    {
+      "file": "scripts/actions_release.py",
+      "line": 161,
+      "kind": "Raise",
+      "expression": "raise ValueError('Existing verification configuration mutation: ' + name)"
+    },
+    {
+      "file": "scripts/actions_release.py",
+      "line": 169,
+      "kind": "Raise",
+      "expression": "raise ValueError('Existing native verification script changed: ' + key)"
+    },
+    {
+      "file": "scripts/actions_release.py",
+      "line": 187,
+      "kind": "Raise",
+      "expression": "raise PreparationContractViolation(path or '<native plan contract>', 'Mandatory native plan phase missing: ' + name)"
+    },
+    {
+      "file": "scripts/actions_release.py",
+      "line": 197,
+      "kind": "Raise",
+      "expression": "raise PreparationContractViolation(path or '<native plan contract>', 'Native command must be a nonempty argv array in phase ' + phase)"
+    },
+    {
+      "file": "scripts/actions_release.py",
+      "line": 204,
+      "kind": "Raise",
+      "expression": "raise PreparationContractViolation(path or '<native plan contract>', 'Bypassed or synthetic native verification command in phase ' + phase + ': ' + ' '.join(command))"
+    },
+    {
+      "file": "scripts/actions_release.py",
+      "line": 212,
+      "kind": "Raise",
+      "expression": "raise ValueError('No native verification commands')"
+    },
+    {
+      "file": "scripts/actions_release.py",
+      "line": 214,
+      "kind": "Raise",
+      "expression": "raise ValueError('A final native command failed')"
+    },
+    {
+      "file": "scripts/actions_release.py",
+      "line": 218,
+      "kind": "Raise",
+      "expression": "raise ValueError('Native command lacks a successful receipt: ' + repr(command))"
+    },
+    {
+      "file": "scripts/actions_release.py",
+      "line": 226,
+      "kind": "Raise",
+      "expression": "raise ValueError('Native runner reported zero executed tests: ' + repr(command))"
+    },
+    {
+      "file": "scripts/actions_release.py",
+      "line": 266,
+      "kind": "Raise",
+      "expression": "raise ValueError('Specific regression test files/command/failure assertion are mandatory')"
+    },
+    {
+      "file": "scripts/actions_release.py",
+      "line": 294,
+      "kind": "Raise",
+      "expression": "raise ValueError('Regression must name the actual added companion tests')"
+    },
+    {
+      "file": "scripts/actions_release.py",
+      "line": 297,
+      "kind": "Raise",
+      "expression": "raise ValueError('Regression cannot replace an existing master test')"
+    },
+    {
+      "file": "scripts/actions_release.py",
+      "line": 340,
+      "kind": "Raise",
+      "expression": "raise ValueError('Base regression did not fail on the specified defect assertion:\\n' + 'Expected assertion: ' + expected + '\\n' + 'Actual exit code: ' + str(red.exit_code) + '\\n' + 'Actual output:\\n' + output)"
+    },
+    {
+      "file": "scripts/actions_release.py",
+      "line": 355,
+      "kind": "Raise",
+      "expression": "raise ValueError('Regression probe changed the proposed fix')"
+    },
+    {
+      "file": "scripts/actions_release.py",
+      "line": 360,
+      "kind": "Raise",
+      "expression": "raise ValueError('Final issue regression is not green:\\n' + green.stdout + '\\n' + green.stderr)"
+    },
+    {
+      "file": "scripts/actions_release.py",
+      "line": 376,
+      "kind": "Raise",
+      "expression": "raise ValueError('Checkpoint baseline differs; retain artifact for explicit Cline rebase')"
+    },
+    {
+      "file": "scripts/actions_release.py",
+      "line": 383,
+      "kind": "Raise",
+      "expression": "raise ValueError('Oversized source checkpoint requires explicit recovery')"
+    },
+    {
+      "file": "scripts/actions_release.py",
+      "line": 385,
+      "kind": "Raise",
+      "expression": "raise ValueError('Checkpoint companion would overwrite upstream: ' + name)"
+    },
+    {
+      "file": "scripts/actions_release.py",
+      "line": 399,
+      "kind": "ReturnCodes",
+      "codes": [
+        "RESTORED"
+      ]
+    },
+    {
+      "file": "scripts/agent_door.py",
+      "line": 36,
+      "kind": "ReturnCodes",
+      "codes": [
+        "TOKENHARBOR_KEYS_JSON",
+        "TOKENHARBOR_KEY_FILE",
+        "NVIDIA_KEYS_JSON",
+        "NVIDIA_API_KEY"
+      ]
+    },
+    {
+      "file": "scripts/agent_door.py",
+      "line": 153,
+      "kind": "ReturnCodes",
+      "codes": [
+        "DOOR_DISABLED"
+      ]
+    },
+    {
+      "file": "scripts/agent_door.py",
+      "line": 156,
+      "kind": "ReturnCodes",
+      "codes": [
+        "CLINE_UNAVAILABLE"
+      ]
+    },
+    {
+      "file": "scripts/agent_door.py",
+      "line": 158,
+      "kind": "ReturnCodes",
+      "codes": [
+        "GATEWAY_UNAVAILABLE"
+      ]
+    },
+    {
+      "file": "scripts/agent_door.py",
+      "line": 205,
+      "kind": "Raise",
+      "expression": "raise ValueError('Discovery crossed the authorized issue scope')"
+    },
+    {
+      "file": "scripts/agent_door.py",
+      "line": 288,
+      "kind": "ReturnCodes",
+      "codes": [
+        "DOOR_FAILED"
+      ]
+    },
+    {
+      "file": "scripts/agent_door.py",
+      "line": 291,
+      "kind": "ReturnCodes",
+      "codes": [
+        "OUT_OF_SCOPE"
+      ]
+    },
+    {
+      "file": "scripts/agent_door.py",
+      "line": 295,
+      "kind": "ReturnCodes",
+      "codes": [
+        "NO_ROWS"
+      ]
+    },
+    {
+      "file": "scripts/agent_door.py",
+      "line": 311,
+      "kind": "Raise",
+      "expression": "raise SystemExit(main())"
+    },
+    {
+      "file": "scripts/bounty_admission.py",
+      "line": 277,
+      "kind": "ReturnCodes",
+      "codes": [
+        "REPOSITORY_DOES_NOT_MERGE"
+      ]
+    },
+    {
+      "file": "scripts/bounty_admission.py",
+      "line": 285,
+      "kind": "ReturnCodes",
+      "codes": [
+        "REPOSITORY_MERGES_STALE"
+      ]
+    },
+    {
+      "file": "scripts/bounty_admission.py",
+      "line": 448,
+      "kind": "ReturnCodes",
+      "codes": [
+        "BY_DESIGN",
+        "LABEL"
+      ]
+    },
+    {
+      "file": "scripts/bounty_admission.py",
+      "line": 597,
+      "kind": "ReturnCodes",
+      "codes": [
+        "UNBOUNDED_SCOPE"
+      ]
+    },
+    {
+      "file": "scripts/bounty_admission.py",
+      "line": 604,
+      "kind": "ReturnCodes",
+      "codes": [
+        "INCOMPLETE_COMMENTS"
+      ]
+    },
+    {
+      "file": "scripts/bounty_admission.py",
+      "line": 606,
+      "kind": "ReturnCodes",
+      "codes": [
+        "CLOSED_OR_READ_ONLY"
+      ]
+    },
+    {
+      "file": "scripts/bounty_admission.py",
+      "line": 608,
+      "kind": "ReturnCodes",
+      "codes": [
+        "EXPIRED_OFFER"
+      ]
+    },
+    {
+      "file": "scripts/bounty_admission.py",
+      "line": 617,
+      "kind": "ReturnCodes",
+      "codes": [
+        "REFUSED_NOT_A_CODE_CHANGE: aggregator/digest repo"
+      ]
+    },
+    {
+      "file": "scripts/bounty_admission.py",
+      "line": 620,
+      "kind": "ReturnCodes",
+      "codes": [
+        "REFUSED_NOT_A_CODE_CHANGE: daily news digest"
+      ]
+    },
+    {
+      "file": "scripts/bounty_admission.py",
+      "line": 622,
+      "kind": "ReturnCodes",
+      "codes": [
+        "MIRROR_OR_NON_ENGINEERING"
+      ]
+    },
+    {
+      "file": "scripts/bounty_admission.py",
+      "line": 624,
+      "kind": "ReturnCodes",
+      "codes": [
+        "MIRROR_OR_NON_ENGINEERING"
+      ]
+    },
+    {
+      "file": "scripts/bounty_admission.py",
+      "line": 626,
+      "kind": "ReturnCodes",
+      "codes": [
+        "MARKETING_OR_EXPERIMENT"
+      ]
+    },
+    {
+      "file": "scripts/bounty_admission.py",
+      "line": 629,
+      "kind": "ReturnCodes",
+      "codes": [
+        "NON_PAYMENT_OR_INSTRUCTION_EXFILTRATION"
+      ]
+    },
+    {
+      "file": "scripts/bounty_admission.py",
+      "line": 634,
+      "kind": "ReturnCodes",
+      "codes": [
+        "ADVERT_OR_ESCROW_SPAM"
+      ]
+    },
+    {
+      "file": "scripts/bounty_admission.py",
+      "line": 639,
+      "kind": "ReturnCodes",
+      "codes": [
+        "REPORTED_BEHAVIOUR_DECLARED_BY_DESIGN"
+      ]
+    },
+    {
+      "file": "scripts/bounty_admission.py",
+      "line": 650,
+      "kind": "ReturnCodes",
+      "codes": [
+        "HARD_ISSUE_EVIDENCE_MISSING"
+      ]
+    },
+    {
+      "file": "scripts/bounty_admission.py",
+      "line": 713,
+      "kind": "ReturnCodes",
+      "codes": [
+        "CURRENT_ISSUER_OFFER_MISSING"
+      ]
+    },
+    {
+      "file": "scripts/bounty_admission.py",
+      "line": 818,
+      "kind": "Raise",
+      "expression": "raise ValueError('Competing open PR: ' + pr['html_url'])"
+    },
+    {
+      "file": "scripts/bounty_admission.py",
+      "line": 839,
+      "kind": "Raise",
+      "expression": "raise ValueError('Linked open PR: ' + pull['html_url'])"
+    },
+    {
+      "file": "scripts/bounty_admission.py",
+      "line": 854,
+      "kind": "Raise",
+      "expression": "raise ValueError('Issue already resolved by merged PR: ' + pull['html_url'])"
+    },
+    {
+      "file": "scripts/check_tracked_secrets.py",
+      "line": 29,
+      "kind": "Raise",
+      "expression": "raise SystemExit(bool(findings))"
+    },
+    {
+      "file": "scripts/cline_entry_door.py",
+      "line": 287,
+      "kind": "Raise",
+      "expression": "raise"
+    },
+    {
+      "file": "scripts/cline_entry_door.py",
+      "line": 355,
+      "kind": "Raise",
+      "expression": "raise IssueUnreadable(f'transport: {exc}') from exc"
+    },
+    {
+      "file": "scripts/cline_entry_door.py",
+      "line": 360,
+      "kind": "Raise",
+      "expression": "raise IssueUnreadable((done.stderr or done.stdout or '').strip()[:300])"
+    },
+    {
+      "file": "scripts/cline_entry_door.py",
+      "line": 364,
+      "kind": "Raise",
+      "expression": "raise IssueUnreadable('non-JSON response') from None"
+    },
+    {
+      "file": "scripts/cline_entry_door.py",
+      "line": 498,
+      "kind": "ReturnCodes",
+      "codes": [
+        "ADMISSION_UNAVAILABLE"
+      ]
+    },
+    {
+      "file": "scripts/cline_entry_door.py",
+      "line": 504,
+      "kind": "ReturnCodes",
+      "codes": [
+        "ISSUE_UNREADABLE"
+      ]
+    },
+    {
+      "file": "scripts/cline_entry_door.py",
+      "line": 515,
+      "kind": "ReturnCodes",
+      "codes": [
+        "REFUSED_BY_ADMISSION"
+      ]
+    },
+    {
+      "file": "scripts/cline_entry_door.py",
+      "line": 535,
+      "kind": "ReturnCodes",
+      "codes": [
+        "COMPETITION_UNAVAILABLE"
+      ]
+    },
+    {
+      "file": "scripts/cline_entry_door.py",
+      "line": 546,
+      "kind": "ReturnCodes",
+      "codes": [
+        "COMPETITION_UNAVAILABLE"
+      ]
+    },
+    {
+      "file": "scripts/cline_entry_door.py",
+      "line": 601,
+      "kind": "ReturnCodes",
+      "codes": [
+        "INCOMPLETE_COMMENTS"
+      ]
+    },
+    {
+      "file": "scripts/cline_entry_door.py",
+      "line": 613,
+      "kind": "ReturnCodes",
+      "codes": [
+        "FUNDING_SOURCE_MISSING"
+      ]
+    },
+    {
+      "file": "scripts/cline_entry_door.py",
+      "line": 617,
+      "kind": "ReturnCodes",
+      "codes": [
+        "REWARD_QUOTE_NOT_IN_SOURCE"
+      ]
+    },
+    {
+      "file": "scripts/cline_entry_door.py",
+      "line": 619,
+      "kind": "ReturnCodes",
+      "codes": [
+        "PAYER_SOURCE_MISMATCH"
+      ]
+    },
+    {
+      "file": "scripts/cline_entry_door.py",
+      "line": 621,
+      "kind": "ReturnCodes",
+      "codes": [
+        "AGENT_DECISION_MISSING"
+      ]
+    },
+    {
+      "file": "scripts/cline_entry_door.py",
+      "line": 626,
+      "kind": "ReturnCodes",
+      "codes": [
+        "FOUNDER_OWNERSHIP_UNVERIFIED"
+      ]
+    },
+    {
+      "file": "scripts/cline_entry_door.py",
+      "line": 632,
+      "kind": "ReturnCodes",
+      "codes": [
+        "QUOTED_AMOUNT_MISMATCH"
+      ]
+    },
+    {
+      "file": "scripts/cline_entry_door.py",
+      "line": 636,
+      "kind": "ReturnCodes",
+      "codes": [
+        "BOUNTY_FLOOR"
+      ]
+    },
+    {
+      "file": "scripts/cline_entry_door.py",
+      "line": 644,
+      "kind": "ReturnCodes",
+      "codes": [
+        "SCOPE_QUOTE_NOT_IN_SOURCE"
+      ]
+    },
+    {
+      "file": "scripts/cline_entry_door.py",
+      "line": 647,
+      "kind": "ReturnCodes",
+      "codes": [
+        "PRODUCT_SOURCE_EVIDENCE_MISSING"
+      ]
+    },
+    {
+      "file": "scripts/cline_entry_door.py",
+      "line": 651,
+      "kind": "ReturnCodes",
+      "codes": [
+        "PRODUCT_SOURCE_PATH_INVALID"
+      ]
+    },
+    {
+      "file": "scripts/cline_entry_door.py",
+      "line": 661,
+      "kind": "ReturnCodes",
+      "codes": [
+        "PRODUCT_SOURCE_REVISION_MISMATCH"
+      ]
+    },
+    {
+      "file": "scripts/cline_entry_door.py",
+      "line": 664,
+      "kind": "ReturnCodes",
+      "codes": [
+        "PRODUCT_SOURCE_QUOTE_MISMATCH"
+      ]
+    },
+    {
+      "file": "scripts/cline_entry_door.py",
+      "line": 680,
+      "kind": "ReturnCodes",
+      "codes": [
+        "ISSUE_UNREADABLE"
+      ]
+    },
+    {
+      "file": "scripts/cline_entry_door.py",
+      "line": 687,
+      "kind": "ReturnCodes",
+      "codes": [
+        "DECISION_EVIDENCE_INVALID"
+      ]
+    },
+    {
+      "file": "scripts/cline_entry_door.py",
+      "line": 877,
+      "kind": "ReturnCodes",
+      "codes": [
+        "UNKNOWN"
+      ]
+    },
+    {
+      "file": "scripts/cline_entry_door.py",
+      "line": 1712,
+      "kind": "Raise",
+      "expression": "raise SystemExit(main())"
+    },
+    {
+      "file": "scripts/cline_process.py",
+      "line": 68,
+      "kind": "Raise",
+      "expression": "raise ValueError('Cursor values must be nonnegative')"
+    },
+    {
+      "file": "scripts/cline_process.py",
+      "line": 81,
+      "kind": "Raise",
+      "expression": "raise ValueError('Cursor exceeds actual log size')"
+    },
+    {
+      "file": "scripts/cline_process.py",
+      "line": 87,
+      "kind": "Raise",
+      "expression": "raise ValueError('Cursor references a missing log')"
+    },
+    {
+      "file": "scripts/cline_process.py",
+      "line": 100,
+      "kind": "Raise",
+      "expression": "raise argparse.ArgumentTypeError('Timeout must be >0 and <=14400 seconds')"
+    },
+    {
+      "file": "scripts/commercial_context.py",
+      "line": 41,
+      "kind": "ReturnCodes",
+      "codes": [
+        "COMMERCIAL_CONTEXT_UNAVAILABLE"
+      ]
+    },
+    {
+      "file": "scripts/commercial_context.py",
+      "line": 48,
+      "kind": "ReturnCodes",
+      "codes": [
+        "COMMERCIAL_REVIEW_REQUIRED"
+      ]
+    },
+    {
+      "file": "scripts/commercial_context.py",
+      "line": 50,
+      "kind": "ReturnCodes",
+      "codes": [
+        "COMMERCIAL_REVIEW_STALE"
+      ]
+    },
+    {
+      "file": "scripts/commercial_context.py",
+      "line": 52,
+      "kind": "ReturnCodes",
+      "codes": [
+        "COMMERCIAL_REVIEW_NOT_APPROVED"
+      ]
+    },
+    {
+      "file": "scripts/commercial_context.py",
+      "line": 55,
+      "kind": "ReturnCodes",
+      "codes": [
+        "COMMERCIAL_REVIEW_EVIDENCE_MISSING"
+      ]
+    },
+    {
+      "file": "scripts/commercial_context.py",
+      "line": 59,
+      "kind": "ReturnCodes",
+      "codes": [
+        "COMMERCIAL_REVIEW_EVIDENCE_MISSING"
+      ]
+    },
+    {
+      "file": "scripts/commercial_context.py",
+      "line": 67,
+      "kind": "ReturnCodes",
+      "codes": [
+        "COMMERCIAL_REVIEW_EVIDENCE_MISSING"
+      ]
+    },
+    {
+      "file": "scripts/commercial_context.py",
+      "line": 111,
+      "kind": "Raise",
+      "expression": "raise ValueError('Unsupported policy document response')"
+    },
+    {
+      "file": "scripts/commercial_context.py",
+      "line": 144,
+      "kind": "Raise",
+      "expression": "raise CommercialReviewRequired('COMMERCIAL_REVIEW_REQUIRED', 'Legacy admission has no linked-discussion review')"
+    },
+    {
+      "file": "scripts/commercial_context.py",
+      "line": 148,
+      "kind": "Raise",
+      "expression": "raise CommercialReviewRequired(reason, detail)"
+    },
+    {
+      "file": "scripts/commercial_context.py",
+      "line": 168,
+      "kind": "Raise",
+      "expression": "raise SystemExit(main())"
+    },
+    {
+      "file": "scripts/delivery_errors.py",
+      "line": 176,
+      "kind": "Raise",
+      "expression": "raise ClineDeliverableInvalid(path, 'not a JSON object')"
+    },
+    {
+      "file": "scripts/delivery_errors.py",
+      "line": 180,
+      "kind": "Raise",
+      "expression": "raise ClineDeliverableInvalid(path, 'invalid action: ' + repr(action))"
+    },
+    {
+      "file": "scripts/delivery_errors.py",
+      "line": 182,
+      "kind": "Raise",
+      "expression": "raise ClineDeliverableInvalid(path, 'action=incomplete: the preparation skeleton was never replaced, so the agent finished without reporting')"
+    },
+    {
+      "file": "scripts/delivery_errors.py",
+      "line": 188,
+      "kind": "Raise",
+      "expression": "raise ClineDeliverableInvalid(path, 'invalid base_sha: ' + repr(base_sha))"
+    },
+    {
+      "file": "scripts/delivery_errors.py",
+      "line": 193,
+      "kind": "Raise",
+      "expression": "raise ClineDeliverableInvalid(path, 'retry action missing plan')"
+    },
+    {
+      "file": "scripts/delivery_errors.py",
+      "line": 196,
+      "kind": "Raise",
+      "expression": "raise ClineDeliverableInvalid(path, 'regression_plan missing component')"
+    },
+    {
+      "file": "scripts/delivery_supervisor.py",
+      "line": 34,
+      "kind": "Raise",
+      "expression": "raise ValueError('Unsafe preparation artifact in repository: ' + relative)"
+    },
+    {
+      "file": "scripts/delivery_supervisor.py",
+      "line": 41,
+      "kind": "Raise",
+      "expression": "raise ValueError('Cline decision must be a JSON object')"
+    },
+    {
+      "file": "scripts/delivery_supervisor.py",
+      "line": 43,
+      "kind": "Raise",
+      "expression": "raise ValueError(document.get('reason') or 'Cline reported an unresolved prerequisite')"
+    },
+    {
+      "file": "scripts/delivery_supervisor.py",
+      "line": 47,
+      "kind": "Raise",
+      "expression": "raise ValueError('A native plan requires repository source citations')"
+    },
+    {
+      "file": "scripts/delivery_supervisor.py",
+      "line": 50,
+      "kind": "Raise",
+      "expression": "raise ValueError('Invalid repository source citation')"
+    },
+    {
+      "file": "scripts/delivery_supervisor.py",
+      "line": 55,
+      "kind": "Raise",
+      "expression": "raise ValueError('Native plan source path is unsafe')"
+    },
+    {
+      "file": "scripts/delivery_supervisor.py",
+      "line": 65,
+      "kind": "Raise",
+      "expression": "raise ValueError('Native plan source is outside the repository or missing')"
+    },
+    {
+      "file": "scripts/delivery_supervisor.py",
+      "line": 80,
+      "kind": "Raise",
+      "expression": "raise ValueError('Native plan source SHA-256 does not match the checkout')"
+    },
+    {
+      "file": "scripts/delivery_supervisor.py",
+      "line": 87,
+      "kind": "Raise",
+      "expression": "raise ValueError('Invalid native command list: ' + field)"
+    },
+    {
+      "file": "scripts/delivery_supervisor.py",
+      "line": 91,
+      "kind": "Raise",
+      "expression": "raise ValueError('Native commands must be nonempty argv arrays')"
+    },
+    {
+      "file": "scripts/delivery_supervisor.py",
+      "line": 94,
+      "kind": "Raise",
+      "expression": "raise ValueError('Both untouched baseline and final tests are mandatory')"
+    },
+    {
+      "file": "scripts/delivery_supervisor.py",
+      "line": 107,
+      "kind": "Raise",
+      "expression": "raise ValueError('Synthetic or bypassed verification command: ' + repr(command))"
+    },
+    {
+      "file": "scripts/delivery_supervisor.py",
+      "line": 130,
+      "kind": "Raise",
+      "expression": "raise ValueError('Preparation repair dropped an existing baseline test target')"
+    },
+    {
+      "file": "scripts/delivery_supervisor.py",
+      "line": 132,
+      "kind": "Raise",
+      "expression": "raise ValueError('Preparation repair dropped the required linter commands')"
+    },
+    {
+      "file": "scripts/delivery_supervisor.py",
+      "line": 215,
+      "kind": "Raise",
+      "expression": "raise ValueError('Cline changed repository source or HEAD during preparation/publication repair')"
+    },
+    {
+      "file": "scripts/delivery_supervisor.py",
+      "line": 217,
+      "kind": "Raise",
+      "expression": "raise ValueError('Cline delivery repair failed: ' + str(result.stderr or result.stdout)[-1000:])"
+    },
+    {
+      "file": "scripts/delivery_supervisor.py",
+      "line": 222,
+      "kind": "Raise",
+      "expression": "raise ValueError('Repair turn finished without a decision: ' + str(document.get('reason') or 'no decision was written'))"
+    },
+    {
+      "file": "scripts/delivery_supervisor.py",
+      "line": 230,
+      "kind": "Raise",
+      "expression": "raise ValueError(document.get('reason') or 'Delivery repair remains blocked')"
+    },
+    {
+      "file": "scripts/delivery_supervisor.py",
+      "line": 242,
+      "kind": "Raise",
+      "expression": "raise"
+    },
+    {
+      "file": "scripts/discovery_heartbeat.py",
+      "line": 110,
+      "kind": "Raise",
+      "expression": "raise ProbeError((result.stderr or result.stdout or 'gh run list failed').strip()[:600])"
+    },
+    {
+      "file": "scripts/discovery_heartbeat.py",
+      "line": 114,
+      "kind": "Raise",
+      "expression": "raise ProbeError('Unreadable run list: ' + str(exc)) from exc"
+    },
+    {
+      "file": "scripts/issue_scout.py",
+      "line": 108,
+      "kind": "ReturnCodes",
+      "codes": [
+        "REWARD_IS_TITLE_ONLY"
+      ]
+    },
+    {
+      "file": "scripts/issue_scout.py",
+      "line": 110,
+      "kind": "ReturnCodes",
+      "codes": [
+        "REWARD_IS_LINK_ONLY"
+      ]
+    },
+    {
+      "file": "scripts/issue_scout.py",
+      "line": 132,
+      "kind": "ReturnCodes",
+      "codes": [
+        "EMPTY_ISSUE"
+      ]
+    },
+    {
+      "file": "scripts/issue_scout.py",
+      "line": 136,
+      "kind": "ReturnCodes",
+      "codes": [
+        "AGENT_UNAVAILABLE"
+      ]
+    },
+    {
+      "file": "scripts/issue_scout.py",
+      "line": 141,
+      "kind": "ReturnCodes",
+      "codes": [
+        "AGENT_UNPARSEABLE"
+      ]
+    },
+    {
+      "file": "scripts/issue_scout.py",
+      "line": 147,
+      "kind": "ReturnCodes",
+      "codes": [
+        "LOW_CONFIDENCE"
+      ]
+    },
+    {
+      "file": "scripts/issue_scout.py",
+      "line": 151,
+      "kind": "ReturnCodes",
+      "codes": [
+        "AGENT_NOT_A_CODE_TASK"
+      ]
+    },
+    {
+      "file": "scripts/issue_scout.py",
+      "line": 155,
+      "kind": "ReturnCodes",
+      "codes": [
+        "AGENT_NO_STATED_REWARD"
+      ]
+    },
+    {
+      "file": "scripts/issue_scout.py",
+      "line": 170,
+      "kind": "ReturnCodes",
+      "codes": [
+        "AGENT_WITHDREW_REWARD"
+      ]
+    },
+    {
+      "file": "scripts/issue_scout.py",
+      "line": 177,
+      "kind": "ReturnCodes",
+      "codes": [
+        "REWARD_QUOTE_NOT_FOUND"
+      ]
+    },
+    {
+      "file": "scripts/issue_scout.py",
+      "line": 187,
+      "kind": "ReturnCodes",
+      "codes": [
+        "ADMITTED"
+      ]
+    },
+    {
+      "file": "scripts/kaggle_engine_worker.py",
+      "line": 176,
+      "kind": "Raise",
+      "expression": "raise ValueError('Configured private TokenHarbor shard is unavailable or malformed.') from exc"
+    },
+    {
+      "file": "scripts/kaggle_engine_worker.py",
+      "line": 185,
+      "kind": "Raise",
+      "expression": "raise ValueError(f'{TOKEN_HARBOR_KEYS_ENV} must contain a JSON key list.') from exc"
+    },
+    {
+      "file": "scripts/kaggle_engine_worker.py",
+      "line": 203,
+      "kind": "Raise",
+      "expression": "raise ValueError('Token Harbor key file must contain a key list.')"
+    },
+    {
+      "file": "scripts/kaggle_engine_worker.py",
+      "line": 205,
+      "kind": "Raise",
+      "expression": "raise ValueError('Token Harbor key file contains invalid key entries.')"
+    },
+    {
+      "file": "scripts/kaggle_engine_worker.py",
+      "line": 211,
+      "kind": "Raise",
+      "expression": "raise ValueError('TOKENHARBOR_EXPECTED_KEY_COUNT must be an integer.') from exc"
+    },
+    {
+      "file": "scripts/kaggle_engine_worker.py",
+      "line": 213,
+      "kind": "Raise",
+      "expression": "raise ValueError(f'Engine TokenHarbor shard requires exactly {expected_count} keys; found {len(values)}.')"
+    },
+    {
+      "file": "scripts/kaggle_engine_worker.py",
+      "line": 217,
+      "kind": "Raise",
+      "expression": "raise ValueError('TokenHarbor key list is empty.')"
+    },
+    {
+      "file": "scripts/kaggle_engine_worker.py",
+      "line": 642,
+      "kind": "ReturnCodes",
+      "codes": [
+        "NVIDIA_ROUTER_MODEL",
+        "NVIDIA_DELIVERY_MODEL"
+      ]
+    },
+    {
+      "file": "scripts/kaggle_engine_worker.py",
+      "line": 1868,
+      "kind": "Raise",
+      "expression": "raise ClineDeliverableMissing(path, elapsed=elapsed, exit_code=exit_code)"
+    },
+    {
+      "file": "scripts/kaggle_engine_worker.py",
+      "line": 1873,
+      "kind": "Raise",
+      "expression": "raise ClineDeliverableInvalid(path, str(exc)) from exc"
+    },
+    {
+      "file": "scripts/kaggle_engine_worker.py",
+      "line": 1882,
+      "kind": "Raise",
+      "expression": "raise FleetOwnershipLost('claim lease lost before command; execution blocked')"
+    },
+    {
+      "file": "scripts/kaggle_engine_worker.py",
+      "line": 1949,
+      "kind": "Raise",
+      "expression": "raise FleetOwnershipLost('claim lease lost during command; owned process group stopped')"
+    },
+    {
+      "file": "scripts/kaggle_engine_worker.py",
+      "line": 1952,
+      "kind": "Raise",
+      "expression": "raise subprocess.TimeoutExpired(argv, timeout)"
+    },
+    {
+      "file": "scripts/kaggle_engine_worker.py",
+      "line": 1958,
+      "kind": "Raise",
+      "expression": "raise"
+    },
+    {
+      "file": "scripts/kaggle_engine_worker.py",
+      "line": 1965,
+      "kind": "Raise",
+      "expression": "raise subprocess.TimeoutExpired(argv, timeout)"
+    },
+    {
+      "file": "scripts/kaggle_engine_worker.py",
+      "line": 1977,
+      "kind": "Raise",
+      "expression": "raise FleetOwnershipLost(str(failure), ''.join(stdout_parts), ''.join(stderr_parts))"
+    },
+    {
+      "file": "scripts/kaggle_engine_worker.py",
+      "line": 1979,
+      "kind": "Raise",
+      "expression": "raise subprocess.TimeoutExpired(argv, timeout, output=''.join(stdout_parts), stderr=''.join(stderr_parts))"
+    },
+    {
+      "file": "scripts/kaggle_engine_worker.py",
+      "line": 1993,
+      "kind": "Raise",
+      "expression": "raise ClineBudgetExhausted(0)"
+    },
+    {
+      "file": "scripts/kaggle_engine_worker.py",
+      "line": 2192,
+      "kind": "Raise",
+      "expression": "raise RuntimeError('Cline proxy key readiness is unavailable; dispatch is blocked')"
+    },
+    {
+      "file": "scripts/kaggle_engine_worker.py",
+      "line": 2286,
+      "kind": "Raise",
+      "expression": "raise RuntimeError('Cline executable is unavailable after bootstrap.')"
+    },
+    {
+      "file": "scripts/kaggle_engine_worker.py",
+      "line": 2480,
+      "kind": "Raise",
+      "expression": "raise ValueError(f'Unsafe recovery path: {rel_path}')"
+    },
+    {
+      "file": "scripts/kaggle_engine_worker.py",
+      "line": 2489,
+      "kind": "Raise",
+      "expression": "raise ValueError(f'Unsafe recovery path: {rel_path}')"
+    },
+    {
+      "file": "scripts/kaggle_engine_worker.py",
+      "line": 2492,
+      "kind": "Raise",
+      "expression": "raise ValueError(f'Recovery path is not a regular file: {rel_path}')"
+    },
+    {
+      "file": "scripts/kaggle_engine_worker.py",
+      "line": 2510,
+      "kind": "Raise",
+      "expression": "raise ValueError('Cline execution budget must be positive')"
+    },
+    {
+      "file": "scripts/kaggle_engine_worker.py",
+      "line": 2551,
+      "kind": "ReturnCodes",
+      "codes": [
+        "CLINE_TOTAL_BUDGET_EXHAUSTED: no Cline execution time remains."
+      ]
+    },
+    {
+      "file": "scripts/kaggle_engine_worker.py",
+      "line": 2599,
+      "kind": "ReturnCodes",
+      "codes": [
+        "FLEET_NATIVE_TIMEOUT_SECONDS"
+      ]
+    },
+    {
+      "file": "scripts/kaggle_engine_worker.py",
+      "line": 3173,
+      "kind": "Raise",
+      "expression": "raise PreparationContractViolation(report_path, diagnostic)"
+    },
+    {
+      "file": "scripts/kaggle_engine_worker.py",
+      "line": 3343,
+      "kind": "Raise",
+      "expression": "raise RuntimeError('Cline preparation failed: ' + _sanitize_runtime_diagnostic(result.stderr or result.stdout, 1000))"
+    },
+    {
+      "file": "scripts/kaggle_engine_worker.py",
+      "line": 3353,
+      "kind": "Raise",
+      "expression": "raise PreparationBlocked(report)"
+    },
+    {
+      "file": "scripts/kaggle_engine_worker.py",
+      "line": 3357,
+      "kind": "Raise",
+      "expression": "raise PreparationContractViolation(report_path, 'Cline preparation returned an unexpected worktree', paths=[report.get('worktree', '')])"
+    },
+    {
+      "file": "scripts/kaggle_engine_worker.py",
+      "line": 3367,
+      "kind": "Raise",
+      "expression": "raise PreparationContractViolation(report_path, 'Cline preparation must leave a clean, unchanged upstream baseline', paths=dirty)"
+    },
+    {
+      "file": "scripts/kaggle_engine_worker.py",
+      "line": 3371,
+      "kind": "Raise",
+      "expression": "raise PreparationContractViolation(report_path, 'Cline preparation omitted the real baseline or default branch')"
+    },
+    {
+      "file": "scripts/kaggle_engine_worker.py",
+      "line": 3455,
+      "kind": "ReturnCodes",
+      "codes": [
+        "CHECKS_PENDING",
+        "NO_FAILED_CHECKS_OBSERVED"
+      ]
+    },
+    {
+      "file": "scripts/kaggle_engine_worker.py",
+      "line": 3465,
+      "kind": "ReturnCodes",
+      "codes": [
+        "REMOTE_CI_REPAIR_BLOCKED"
+      ]
+    },
+    {
+      "file": "scripts/kaggle_engine_worker.py",
+      "line": 3469,
+      "kind": "ReturnCodes",
+      "codes": [
+        "REMOTE_CI_REPAIR_BLOCKED"
+      ]
+    },
+    {
+      "file": "scripts/kaggle_engine_worker.py",
+      "line": 3476,
+      "kind": "ReturnCodes",
+      "codes": [
+        "REMOTE_CI_REPAIR_BLOCKED"
+      ]
+    },
+    {
+      "file": "scripts/kaggle_engine_worker.py",
+      "line": 3478,
+      "kind": "ReturnCodes",
+      "codes": [
+        "REMOTE_CI_REPAIR_BLOCKED"
+      ]
+    },
+    {
+      "file": "scripts/kaggle_engine_worker.py",
+      "line": 3481,
+      "kind": "ReturnCodes",
+      "codes": [
+        "REMOTE_CI_REPAIR_PUSHED_AWAITING_CHECKS",
+        "REMOTE_CI_REPAIR_BLOCKED"
+      ]
+    },
+    {
+      "file": "scripts/kaggle_engine_worker.py",
+      "line": 3718,
+      "kind": "Raise",
+      "expression": "raise RuntimeError('Go archive checksum mismatch; bootstrap refused.')"
+    },
+    {
+      "file": "scripts/kaggle_engine_worker.py",
+      "line": 3729,
+      "kind": "Raise",
+      "expression": "raise RuntimeError('Go runtime verification failed.')"
+    },
+    {
+      "file": "scripts/kaggle_engine_worker.py",
+      "line": 3755,
+      "kind": "Raise",
+      "expression": "raise RuntimeError('Node 22 LTS archive checksum mismatch; bootstrap refused.')"
+    },
+    {
+      "file": "scripts/kaggle_engine_worker.py",
+      "line": 3763,
+      "kind": "Raise",
+      "expression": "raise RuntimeError('Node 22 LTS runtime verification failed.')"
+    },
+    {
+      "file": "scripts/kaggle_engine_worker.py",
+      "line": 3872,
+      "kind": "Raise",
+      "expression": "raise RuntimeError('Cline bootstrap failed: npm is unavailable in this Kaggle runtime.')"
+    },
+    {
+      "file": "scripts/kaggle_engine_worker.py",
+      "line": 3880,
+      "kind": "Raise",
+      "expression": "raise RuntimeError('Cline bootstrap failed: npm install did not complete successfully.')"
+    },
+    {
+      "file": "scripts/kaggle_engine_worker.py",
+      "line": 3882,
+      "kind": "Raise",
+      "expression": "raise RuntimeError('Cline bootstrap failed: executable is not on PATH after installation.')"
+    },
+    {
+      "file": "scripts/kaggle_engine_worker.py",
+      "line": 4019,
+      "kind": "Raise",
+      "expression": "raise ValueError('invalid ledger response')"
+    },
+    {
+      "file": "scripts/kaggle_engine_worker.py",
+      "line": 4024,
+      "kind": "Raise",
+      "expression": "raise RuntimeError(f'Unable to verify {body} ledger; dispatch is blocked') from None"
+    },
+    {
+      "file": "scripts/kaggle_engine_worker.py",
+      "line": 4304,
+      "kind": "Raise",
+      "expression": "raise"
+    },
+    {
+      "file": "scripts/kaggle_engine_worker.py",
+      "line": 4309,
+      "kind": "Raise",
+      "expression": "raise RuntimeError('Private TokenHarbor dataset is missing its expected key-count contract.')"
+    },
+    {
+      "file": "scripts/kaggle_engine_worker.py",
+      "line": 4312,
+      "kind": "Raise",
+      "expression": "raise RuntimeError('TokenHarbor engine shard failed its key-count check; worker will not claim tasks.')"
+    },
+    {
+      "file": "scripts/kaggle_engine_worker.py",
+      "line": 4319,
+      "kind": "Raise",
+      "expression": "raise"
+    },
+    {
+      "file": "scripts/kaggle_engine_worker.py",
+      "line": 4327,
+      "kind": "Raise",
+      "expression": "raise RuntimeError(cline_message)"
+    },
+    {
+      "file": "scripts/live_pipeline_resume.py",
+      "line": 16,
+      "kind": "Raise",
+      "expression": "raise ValueError('Checkpoint must belong to this unfiltered production campaign')"
+    },
+    {
+      "file": "scripts/live_pipeline_resume.py",
+      "line": 18,
+      "kind": "Raise",
+      "expression": "raise ValueError('Refusing to overwrite another campaign journal')"
+    },
+    {
+      "file": "scripts/live_pipeline_resume.py",
+      "line": 59,
+      "kind": "Raise",
+      "expression": "raise ValueError('Resume source must be a GitHub Actions run ID')"
+    },
+    {
+      "file": "scripts/live_pipeline_resume.py",
+      "line": 64,
+      "kind": "Raise",
+      "expression": "raise ValueError('Resume requires a completed master integration run from this control repository')"
+    },
+    {
+      "file": "scripts/nvidia_router.py",
+      "line": 68,
+      "kind": "Raise",
+      "expression": "raise ValueError(f'{source} must be a JSON key list or {{\"keys\": [...]}}.')"
+    },
+    {
+      "file": "scripts/payment_gates.py",
+      "line": 15,
+      "kind": "Raise",
+      "expression": "raise ValueError('Paid offer evidence missing')"
+    },
+    {
+      "file": "scripts/payment_gates.py",
+      "line": 18,
+      "kind": "Raise",
+      "expression": "raise ValueError('Paid offer funding missing')"
+    },
+    {
+      "file": "scripts/payment_gates.py",
+      "line": 24,
+      "kind": "Raise",
+      "expression": "raise ValueError('Dispatch blocked: unpriced issue violates No Free Service policy')"
+    },
+    {
+      "file": "scripts/payment_gates.py",
+      "line": 31,
+      "kind": "Raise",
+      "expression": "raise ValueError('Paid offer USD valuation missing or invalid') from None"
+    },
+    {
+      "file": "scripts/payment_gates.py",
+      "line": 33,
+      "kind": "Raise",
+      "expression": "raise ValueError('Paid offer USD valuation must be finite and positive')"
+    },
+    {
+      "file": "scripts/payment_gates.py",
+      "line": 50,
+      "kind": "Raise",
+      "expression": "raise ValueError('Issue creation timezone missing')"
+    },
+    {
+      "file": "scripts/payment_gates.py",
+      "line": 53,
+      "kind": "ReturnCodes",
+      "codes": [
+        "FUNDING_FRESHNESS_UNVERIFIED"
+      ]
+    },
+    {
+      "file": "scripts/payment_gates.py",
+      "line": 62,
+      "kind": "Raise",
+      "expression": "raise ValueError('Offer publication timezone missing')"
+    },
+    {
+      "file": "scripts/payment_gates.py",
+      "line": 64,
+      "kind": "ReturnCodes",
+      "codes": [
+        "FUNDING_FRESHNESS_REVIEW_REQUIRED"
+      ]
+    },
+    {
+      "file": "scripts/payment_gates.py",
+      "line": 66,
+      "kind": "ReturnCodes",
+      "codes": [
+        "FUNDING_FRESHNESS_UNVERIFIED"
+      ]
+    },
+    {
+      "file": "scripts/pipeline_evidence.py",
+      "line": 26,
+      "kind": "Raise",
+      "expression": "raise ValueError('Sovereign admission evidence missing')"
+    },
+    {
+      "file": "scripts/pipeline_evidence.py",
+      "line": 29,
+      "kind": "Raise",
+      "expression": "raise ValueError('Admission proof missing')"
+    },
+    {
+      "file": "scripts/pipeline_evidence.py",
+      "line": 31,
+      "kind": "Raise",
+      "expression": "raise ValueError('Competition evidence missing or blocking')"
+    },
+    {
+      "file": "scripts/pipeline_evidence.py",
+      "line": 33,
+      "kind": "Raise",
+      "expression": "raise ValueError('Competition observation unavailable')"
+    },
+    {
+      "file": "scripts/pipeline_evidence.py",
+      "line": 37,
+      "kind": "Raise",
+      "expression": "raise ValueError('Admission task identity mismatch')"
+    },
+    {
+      "file": "scripts/pipeline_evidence.py",
+      "line": 39,
+      "kind": "Raise",
+      "expression": "raise ValueError('Admission source changed; agent reconsideration required')"
+    },
+    {
+      "file": "scripts/pipeline_evidence.py",
+      "line": 41,
+      "kind": "Raise",
+      "expression": "raise ValueError('Admitted issue is no longer open')"
+    },
+    {
+      "file": "scripts/pipeline_evidence.py",
+      "line": 43,
+      "kind": "Raise",
+      "expression": "raise ValueError('Admission source comments incomplete')"
+    },
+    {
+      "file": "scripts/pipeline_evidence.py",
+      "line": 45,
+      "kind": "Raise",
+      "expression": "raise ValueError('Repository is unavailable')"
+    },
+    {
+      "file": "scripts/pr_conversion_watch.py",
+      "line": 73,
+      "kind": "ReturnCodes",
+      "codes": [
+        "MERGED"
+      ]
+    },
+    {
+      "file": "scripts/pr_conversion_watch.py",
+      "line": 75,
+      "kind": "ReturnCodes",
+      "codes": [
+        "CLOSED"
+      ]
+    },
+    {
+      "file": "scripts/pr_conversion_watch.py",
+      "line": 77,
+      "kind": "ReturnCodes",
+      "codes": [
+        "DRAFT"
+      ]
+    },
+    {
+      "file": "scripts/pr_conversion_watch.py",
+      "line": 82,
+      "kind": "ReturnCodes",
+      "codes": [
+        "BLOCKED_CI"
+      ]
+    },
+    {
+      "file": "scripts/pr_conversion_watch.py",
+      "line": 85,
+      "kind": "ReturnCodes",
+      "codes": [
+        "CI_RUNNING"
+      ]
+    },
+    {
+      "file": "scripts/pr_conversion_watch.py",
+      "line": 90,
+      "kind": "ReturnCodes",
+      "codes": [
+        "CHANGES_REQUESTED"
+      ]
+    },
+    {
+      "file": "scripts/pr_conversion_watch.py",
+      "line": 93,
+      "kind": "ReturnCodes",
+      "codes": [
+        "APPROVED"
+      ]
+    },
+    {
+      "file": "scripts/pr_conversion_watch.py",
+      "line": 96,
+      "kind": "ReturnCodes",
+      "codes": [
+        "NEEDS_REVIEW"
+      ]
+    },
+    {
+      "file": "scripts/pr_conversion_watch.py",
+      "line": 101,
+      "kind": "ReturnCodes",
+      "codes": [
+        "NEEDS_NUDGE"
+      ]
+    },
+    {
+      "file": "scripts/pr_conversion_watch.py",
+      "line": 105,
+      "kind": "ReturnCodes",
+      "codes": [
+        "WAITING_FRESH"
+      ]
+    },
+    {
+      "file": "scripts/pr_conversion_watch.py",
+      "line": 108,
+      "kind": "ReturnCodes",
+      "codes": [
+        "STALE_WITH_COMMENTS"
+      ]
+    },
+    {
+      "file": "scripts/pr_conversion_watch.py",
+      "line": 110,
+      "kind": "ReturnCodes",
+      "codes": [
+        "IN_REVIEW"
+      ]
+    },
+    {
+      "file": "scripts/pr_conversion_watch.py",
+      "line": 124,
+      "kind": "Raise",
+      "expression": "raise RuntimeError('gh %s failed: %s' % (' '.join(args[:3]), (result.stderr or result.stdout or '').strip()[:300]))"
+    },
+    {
+      "file": "scripts/pr_conversion_watch.py",
+      "line": 128,
+      "kind": "Raise",
+      "expression": "raise RuntimeError('gh %s returned no output' % ' '.join(args[:3]))"
+    },
+    {
+      "file": "scripts/pr_conversion_watch.py",
+      "line": 132,
+      "kind": "Raise",
+      "expression": "raise RuntimeError('gh %s returned unparseable output: %s' % (' '.join(args[:3]), exc))"
+    },
+    {
+      "file": "scripts/pr_conversion_watch.py",
+      "line": 144,
+      "kind": "Raise",
+      "expression": "raise RuntimeError('search returned no items field: ' + str(payload)[:200])"
+    },
+    {
+      "file": "scripts/pr_conversion_watch.py",
+      "line": 255,
+      "kind": "ReturnCodes",
+      "codes": [
+        "MERGED",
+        "APPROVED",
+        "CHANGES_REQUESTED",
+        "IN_REVIEW",
+        "STALE_WITH_COMMENTS",
+        "MERGED"
+      ]
+    },
+    {
+      "file": "scripts/publication_access_probe.py",
+      "line": 57,
+      "kind": "Raise",
+      "expression": "raise SystemExit(main())"
+    },
+    {
+      "file": "scripts/run_pipeline_live_probes.py",
+      "line": 78,
+      "kind": "ReturnCodes",
+      "codes": [
+        "PASS",
+        "PASS"
+      ]
+    },
+    {
+      "file": "scripts/run_pipeline_live_probes.py",
+      "line": 100,
+      "kind": "ReturnCodes",
+      "codes": [
+        "PASS",
+        "PASS"
+      ]
+    },
+    {
+      "file": "scripts/sovereign_discovery.py",
+      "line": 64,
+      "kind": "Raise",
+      "expression": "raise ValueError('OUT_OF_LANE')"
+    },
+    {
+      "file": "scripts/sovereign_discovery.py",
+      "line": 69,
+      "kind": "Raise",
+      "expression": "raise ValueError('CAPACITY_EXCLUDED')"
+    },
+    {
+      "file": "scripts/sovereign_discovery.py",
+      "line": 146,
+      "kind": "Raise",
+      "expression": "raise"
+    },
+    {
+      "file": "scripts/tokenharbor_router.py",
+      "line": 71,
+      "kind": "Raise",
+      "expression": "raise ValueError(f'{TOKEN_HARBOR_KEYS_ENV} must contain a JSON key list.') from exc"
+    },
+    {
+      "file": "scripts/tokenharbor_router.py",
+      "line": 90,
+      "kind": "Raise",
+      "expression": "raise ValueError('Token Harbor key file must contain a key list.')"
+    },
+    {
+      "file": "scripts/tokenharbor_router.py",
+      "line": 92,
+      "kind": "Raise",
+      "expression": "raise ValueError('Token Harbor key file contains invalid key entries.')"
+    }
+  ],
+  "reason_tables": [
+    {
+      "file": "scripts/cline_entry_door.py",
+      "name": "GATE_CHECKS",
+      "values": [
+        [
+          "MALFORMED_ROW",
+          "the row is not a complete JSON record with repo and issue."
+        ],
+        [
+          "DUPLICATE_ROW",
+          "that issue already appears in the shortlist; someone already has this task open."
+        ],
+        [
+          "ISSUE_NOT_FOUND",
+          "repo or issue does not exist on GitHub."
+        ],
+        [
+          "ISSUE_UNREADABLE",
+          "GitHub could not answer (rate limit, server error); not a verdict."
+        ],
+        [
+          "ISSUE_NOT_OPEN",
+          "the issue is closed or read-only."
+        ],
+        [
+          "AGENT_NOT_A_CODE_TASK",
+          "the issue is not engineering work you could submit a fix for."
+        ],
+        [
+          "STALE_ISSUE",
+          "the older age check asks for review; age alone does not prove that funding ended. Read the actual offer chronology."
+        ],
+        [
+          "FUNDING_WITHDRAWN",
+          "legacy withdrawal signal requires interpretation in context. The model path reviews the latest actual payment commitment."
+        ],
+        [
+          "REWARD_QUOTE_NOT_IN_ISSUE",
+          "the quoted sentence is not in the issue text, byte for byte."
+        ],
+        [
+          "REWARD_QUOTE_HAS_NO_AMOUNT",
+          "the quoted sentence exists but names no amount."
+        ],
+        [
+          "REWARD_QUOTE_NOT_IN_SOURCE",
+          "the reward quote is not in the document funding.source_url names."
+        ],
+        [
+          "SCOPE_QUOTE_NOT_IN_SOURCE",
+          "the scope quote is in none of the issue's own documents."
+        ],
+        [
+          "AGENT_DECISION_MISSING",
+          "admission_reason is empty; say why this is funded, bounded work."
+        ],
+        [
+          "FUNDING_SOURCE_MISSING",
+          "funding.source_url names no document in this issue or its comments."
+        ],
+        [
+          "PAYER_SOURCE_MISMATCH",
+          "funding.payer is not the login that wrote funding.source_url."
+        ],
+        [
+          "QUOTED_AMOUNT_MISMATCH",
+          "funding.amount and currency do not appear in the reward quote."
+        ],
+        [
+          "INCOMPLETE_COMMENTS",
+          "the comment thread could not be read in full, so the offer is unproven."
+        ],
+        [
+          "FOUNDER_OWNERSHIP_UNVERIFIED",
+          "an unpriced owner request must be the OWNER's own issue, quoted from it."
+        ],
+        [
+          "PRODUCT_SOURCE_EVIDENCE_MISSING",
+          "code_evidence needs is_product_code true, a path and a quote."
+        ],
+        [
+          "PRODUCT_SOURCE_PATH_INVALID",
+          "code_evidence.path is absolute, escapes the repository, or uses backslashes."
+        ],
+        [
+          "PRODUCT_SOURCE_REVISION_MISMATCH",
+          "code_evidence.sha is not the current blob at that path."
+        ],
+        [
+          "PRODUCT_SOURCE_QUOTE_MISMATCH",
+          "code_evidence.quote is not in the file at that sha."
+        ],
+        [
+          "DECISION_EVIDENCE_INVALID",
+          "the row's evidence fields are the wrong shape to check."
+        ],
+        [
+          "COMMERCIAL_REVIEW_REQUIRED",
+          "Use commercial_context.py, read the actual sources, and submit a source-bound commercial_review; a warning is a review hold, not a proven fraud verdict."
+        ],
+        [
+          "COMMERCIAL_CONTEXT_UNAVAILABLE",
+          "The linked discussion/policy evidence is incomplete or unreadable; do not infer safe payment from missing evidence."
+        ],
+        [
+          "COMMERCIAL_REVIEW_STALE",
+          "The commercial sources changed since review; reread them and preserve the old diagnosis."
+        ],
+        [
+          "COMMERCIAL_REVIEW_NOT_APPROVED",
+          "The review is hold/reject or lacks an explanation; do not dispatch it."
+        ],
+        [
+          "COMMERCIAL_REVIEW_EVIDENCE_MISSING",
+          "Cite literal excerpts at actual source URLs and acknowledge every warning source."
+        ],
+        [
+          "FUNDING_FRESHNESS_REVIEW_REQUIRED",
+          "The actual cited payment promise is old; a fresh unrelated comment or bot identity does not renew it."
+        ],
+        [
+          "FUNDING_FRESHNESS_UNVERIFIED",
+          "The cited offer timestamp could not be established; this is unknown, not proof that the offer is current or escrowed."
+        ],
+        [
+          "ADMISSION_UNAVAILABLE",
+          "the admission module could not be loaded; nothing was decided."
+        ],
+        [
+          "REFUSED_BY_ADMISSION",
+          "admission refused the row without naming a narrower reason."
+        ]
+      ]
+    },
+    {
+      "file": "scripts/cline_entry_door.py",
+      "name": "DOWNSTREAM_CHECKS",
+      "values": [
+        [
+          "CURRENT_ISSUER_OFFER_MISSING",
+          "no offer survives from a party that can commit the project's money. Only the repository OWNER, a MEMBER or COLLABORATOR, or a bounty platform bot (algora-pbc, polar-sh, opire, bountyhub) can fund a row. An amount written by any other commenter - a reader, a fan, a copied aggregator blurb - is not an offer, however real the number looks."
+        ],
+        [
+          "HARD_ISSUE_EVIDENCE_MISSING",
+          "the issue states no concrete engineering evidence: no error text, stack trace, failing test, reproduction steps, file or function names. A title and a wish is not evidence that a defect exists."
+        ],
+        [
+          "COMPETING_OPEN_PRS",
+          "a real claimant already has an open pull request on this issue, or has landed work here and is climbing the same tree. Never compete on pre-empted work."
+        ],
+        [
+          "ISSUE_ALREADY_RESOLVED",
+          "the issue is already closed as resolved."
+        ],
+        [
+          "COMPETITION_UNAVAILABLE",
+          "GitHub could not answer the competition check; not a verdict."
+        ],
+        [
+          "UNBOUNDED_SCOPE",
+          "the issue is a whole-product roadmap or rewrite rather than a bounded, deliverable engineering fix."
+        ],
+        [
+          "REPORTED_BEHAVIOUR_DECLARED_BY_DESIGN",
+          "the issue states the behaviour is by design."
+        ],
+        [
+          "REPOSITORY_DOES_NOT_MERGE",
+          "the repository's history shows it does not merge outside work."
+        ],
+        [
+          "REPOSITORY_MERGES_STALE",
+          "the repository has been dormant with no merged pull requests for over 60 days."
+        ],
+        [
+          "CLOSED_OR_READ_ONLY",
+          "the issue is closed or the repository is read-only."
+        ],
+        [
+          "EXPIRED_OFFER",
+          "the offer carried a deadline that has already passed."
+        ],
+        [
+          "REFUSED_NOT_A_CODE_CHANGE",
+          "the issue is a digest, aggregator or news feed, not engineering work."
+        ],
+        [
+          "MIRROR_OR_NON_ENGINEERING",
+          "the issue is a mirror, chat room or status post, not a deliverable."
+        ],
+        [
+          "MARKETING_OR_EXPERIMENT",
+          "the issue asks for marketing, market validation or willingness to pay."
+        ],
+        [
+          "NON_PAYMENT_OR_INSTRUCTION_EXFILTRATION",
+          "the issue is test money, or asks you to hand over your own instructions. That is bait."
+        ],
+        [
+          "ADVERT_OR_ESCROW_SPAM",
+          "an escrow advert that prints a wallet and gives nothing to engineer."
+        ],
+        [
+          "BOUNTY_FLOOR",
+          "the reward is below the floor this pipeline will work for."
+        ],
+        [
+          "UNVERIFIED_HIGH_VALUE_REPOSITORY_INTENT",
+          "legacy admission lacks repository observations for a high-value offer; bot presence is not escrow proof."
+        ]
+      ]
+    }
+  ]
+}

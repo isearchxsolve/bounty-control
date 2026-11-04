@@ -47,6 +47,8 @@ jobs:
       # The production entry door chooses sources and supplies cited decisions. The
       # host verifies their evidence and streams them to generation-fenced dispatch.
       env:
+        GH_TOKEN: ${{ secrets.GH_PAT }}
+        GH_PAT: ${{ secrets.GH_PAT }}
         TOKENHARBOR_KEYS_JSON: ${{ secrets.TOKENHARBOR_KEYS_JSON }}
         NVIDIA_API_KEY: ${{ secrets.NVIDIA_API_KEY }}
         # The whole NVIDIA key pool, however the secret publishes it: a JSON list, a

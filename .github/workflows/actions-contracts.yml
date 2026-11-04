@@ -36,6 +36,7 @@ jobs:
         scripts/actions_release.py scripts/bounty_admission.py scripts/bounty_fx.py scripts/kaggle_engine_worker.py scripts/delivery_supervisor.py
         scripts/discovery_heartbeat.py scripts/delivery_errors.py scripts/f11_refusal_census.py scripts/failure_digest.py scripts/cline_process.py
         scripts/agent_door.py scripts/cline_entry_door.py scripts/pipeline_evidence.py scripts/sovereign_discovery.py scripts/live_pipeline_resume.py
+        scripts/payment_gates.py scripts/commercial_context.py scripts/run_pipeline_live_probes.py
     - name: Refuse credential literals without exposing their values
       run: python3 scripts/check_tracked_secrets.py
     - name: Refuse undefined names on the scheduled pipeline modules
@@ -51,7 +52,8 @@ jobs:
           scripts/bounty_fx.py scripts/kaggle_engine_worker.py scripts/delivery_supervisor.py \
           scripts/delivery_errors.py scripts/discovery_heartbeat.py scripts/failure_digest.py \
           scripts/f11_refusal_census.py scripts/agent_door.py scripts/cline_entry_door.py \
-          scripts/pipeline_evidence.py scripts/sovereign_discovery.py scripts/cline_process.py scripts/live_pipeline_resume.py
+          scripts/pipeline_evidence.py scripts/sovereign_discovery.py scripts/cline_process.py scripts/live_pipeline_resume.py \
+          scripts/payment_gates.py scripts/commercial_context.py scripts/run_pipeline_live_probes.py
     - name: Run master pipeline failure and regression suites
       env:
         PYTHONIOENCODING: utf-8

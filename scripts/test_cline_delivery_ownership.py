@@ -274,7 +274,7 @@ class DeliveryOwnershipTests(unittest.TestCase):
             with self.assertRaisesRegex(ValueError, 'outside the repository'):
                 supervisor.validate_plan(report, root)
 
-    def test_monorepo_citations_prefix_hashes_and_wrapped_commands_are_validated(self):
+    def test_monorepo_citations_use_exact_hashes_and_preserve_wrapped_targets(self):
         with tempfile.TemporaryDirectory() as directory:
             root = Path(directory, 'checkout')
             checkout(root)
@@ -290,13 +290,15 @@ class DeliveryOwnershipTests(unittest.TestCase):
             subprocess.run(['git', '-C', str(root), 'add', '.tool-versions'], check=True, capture_output=True)
             subprocess.run(['git', '-C', str(root), 'commit', '-qm', 'add tool-versions'], check=True, capture_output=True)
 
-            actual_tool_sha = hashlib.sha256(tool.read_bytes()).hexdigest()
-            prefix_tool_sha = actual_tool_sha[:60] + '9999'
+            # Cite the committed object exactly, including Git's LF conversion.
+            actual_tool_sha = hashlib.sha256(subprocess.check_output(
+                ['git', '-C', str(root), 'show', 'HEAD:.tool-versions'])).hexdigest()
 
             report = document(root)
             report['sources'] = [
-                {'path': 'mix.exs', 'sha256': hashlib.sha256(mix.read_bytes()).hexdigest()},
-                {'path': '.tool-versions', 'sha256': prefix_tool_sha}
+                {'path': 'mix.exs', 'sha256': hashlib.sha256(subprocess.check_output(
+                    ['git', '-C', str(root), 'show', 'HEAD:lux/mix.exs'])).hexdigest()},
+                {'path': '.tool-versions', 'sha256': actual_tool_sha}
             ]
             report['plan']['baseline_tests'] = [
                 ['bash', '-lc', 'cd lux && mix test.unit test/unit/lux_test.exs']
@@ -305,11 +307,38 @@ class DeliveryOwnershipTests(unittest.TestCase):
                 ['bash', '-lc', 'cd lux && mix test.unit test/unit/lux_test.exs']
             ]
             old_plan = worker.VerificationPlan(
-                baseline_tests=[['mix', 'test']],
-                final_tests=[['mix', 'test']]
+                baseline_tests=[['mix', 'test.unit', 'test/unit/lux_test.exs']],
+                final_tests=[['mix', 'test.unit', 'test/unit/lux_test.exs']]
             )
             validated = supervisor.validate_plan(report, root, old_plan)
             self.assertEqual(report['sources'][0]['path'], 'lux/mix.exs')
+
+    def test_hash_prefix_or_corrupted_suffix_cannot_be_laundered_into_a_full_citation(self):
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory, 'checkout'); checkout(root)
+            actual = hashlib.sha256((root / 'package.json').read_bytes()).hexdigest()
+            for wrong in (actual[:16], actual[:60] + ('0000' if actual[-4:] != '0000' else '1111')):
+                with self.subTest(wrong=wrong):
+                    report = document(root); report['sources'][0]['sha256'] = wrong
+                    with self.assertRaisesRegex(ValueError, 'SHA-256'):
+                        supervisor.validate_plan(report, root)
+                    self.assertEqual(report['sources'][0]['sha256'], wrong)
+
+    def test_a_different_test_target_cannot_replace_the_original_baseline_suite(self):
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory, 'checkout'); checkout(root)
+            previous = worker.VerificationPlan(baseline_tests=[['npm', 'run', 'test:integration']], final_tests=[])
+            with self.assertRaisesRegex(ValueError, 'dropped'):
+                supervisor.validate_plan(document(root, ['npm', 'test']), root, previous)
+
+    def test_source_path_cannot_escape_then_be_repaired_by_basename_search(self):
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory, 'checkout'); checkout(root)
+            for path in ('../package.json', str(root / 'package.json'), 'C:\\outside\\package.json'):
+                with self.subTest(path=path):
+                    report = document(root); report['sources'][0]['path'] = path
+                    with self.assertRaisesRegex(ValueError, 'unsafe'):
+                        supervisor.validate_plan(report, root)
 
     def test_the_intake_prompt_teaches_hashing_the_committed_object(self):
         """Measured 2026-11-02: the same delivery. The host fix makes the citation valid; the

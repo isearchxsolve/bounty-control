@@ -16,6 +16,10 @@ import unittest
 
 ROOT = Path(__file__).resolve().parents[1]
 MODULES = (
+    'test_commercial_context_live',
+    'test_payment_gates',
+    'test_commercial_context',
+    'test_live_probe_receipts',
     'test_pipeline_transport_live',
     'test_pipeline_state_live',
     'test_cline_process',
@@ -60,6 +64,44 @@ MODULES = (
 )
 
 
+def source_fingerprints():
+    # Include production dependencies, not just the test files. A legacy report
+    # with narrower provenance cannot certify that a repaired gate was exercised.
+    return {str(p.relative_to(ROOT)).replace('\\', '/'): hashlib.sha256(p.read_bytes()).hexdigest()
+            for p in sorted((ROOT / 'scripts').glob('*.py'))}
+
+
+def reusable_methods(report, current_sources):
+    if not report.get('source_files') or report['source_files'] != current_sources:
+        return set()
+    receipts = report.get('results', [])
+    return {r['test'] for r in receipts if r.get('status') == 'PASS' and ' (' not in r['test']
+            and all(c.get('status') == 'PASS' for c in receipts
+                    if c['test'].startswith(r['test'] + ' ('))}
+
+
+def archive_receipts(report, methods, reason):
+    """Superseded observations remain evidence, including every failed attempt."""
+    holders = {phase + ' (' + '.'.join(name.split('.')[:-1]) + ')'
+               for name in methods for phase in ('setUpClass', 'tearDownClass')}
+    holders.update(phase + ' (' + name.split('.')[0] + ')'
+                   for name in methods for phase in ('setUpModule', 'tearDownModule'))
+    removed = [r for r in report.get('results', [])
+               if r['test'].split(' (')[0] in methods or r['test'] in holders]
+    if removed:
+        report.setdefault('receipt_history', []).append({'at': datetime.now(timezone.utc).isoformat(),
+            'reason': reason, 'source_files': report.get('source_files'), 'results': removed})
+        report['results'] = [r for r in report['results'] if r not in removed]
+
+
+def campaign_passed(report):
+    receipts = report.get('results', [])
+    observed = {r['test']: r.get('status') for r in receipts}
+    return bool(report.get('planned_tests')) and all(
+        observed.get(name) == 'PASS' for name in report['planned_tests']) and all(
+            r.get('status') == 'PASS' for r in receipts)
+
+
 class Receipts(unittest.TextTestResult):
     def __init__(self, *args, report, path, **kwargs):
         super().__init__(*args, **kwargs)
@@ -87,7 +129,10 @@ class Receipts(unittest.TextTestResult):
     def receipt(self, test, status, diagnostic=None):
         evidence = {name: getattr(test, name) for name in ('branch', 'control', 'target')
                     if isinstance(getattr(test, name, None), str)}
-        # Replace prior failed receipt for the same test upon resume after repair (Baba Law 86)
+        # Preserve prior observations even when unittest reports the same identity twice.
+        prior = [r for r in self.report['results'] if r['test'] == test.id()]
+        if prior:
+            self.report.setdefault('superseded_receipts', []).extend(prior)
         self.report['results'] = [r for r in self.report['results'] if r['test'] != test.id()]
         self.report['results'].append({
             'test': test.id(), 'status': status,
@@ -135,6 +180,8 @@ def main():
             path = resume_target
         report = json.loads(path.read_text(encoding='utf-8'))
         path = path.with_name('report.json')
+        backup = path.with_name('report-before-resume-' + datetime.now(timezone.utc).strftime('%Y%m%dT%H%M%S%fZ') + '.json')
+        backup.write_text(json.dumps(report, indent=2) + '\n', encoding='utf-8')
         report['resumed_at'] = datetime.now(timezone.utc).isoformat()
         report['resumed_source_sha'] = subprocess.check_output(['git', 'rev-parse', 'HEAD'], cwd=ROOT, text=True).strip()
         report['scope'] = f"resumed from {resume_target.name} under Baba Law 86; prior completed evidence preserved"
@@ -168,8 +215,28 @@ def main():
                 yield from tests(item)
             else:
                 yield item.id()
-    report['planned_tests'] = list(tests(suite))
+    full_plan = list(tests(suite))
+    report['planned_tests'] = full_plan
+    current_sources = source_fingerprints()
+    reusable = reusable_methods(report, current_sources) if args.resume else set()
+    resume_reason = 'Retry failed, blocked or incomplete method and all its subtests'
+    if args.resume and report.get('source_files') != current_sources:
+        resume_reason = 'Source provenance missing or changed; prior observations retained but not current verification'
+    if args.resume and report.get('live_source'):
+        from pipeline_evidence import source_revision
+        try:
+            ctx = live_context()
+            current_live = {'repo': ctx['repo'], 'issue': ctx['issue_number'],
+                            'source_revision': source_revision(ctx)}
+        except Exception as exc:
+            current_live = None
+            report['resume_prerequisite_error'] = str(exc)
+        if current_live != report['live_source']:
+            reusable = set()
+            resume_reason = 'Live source prerequisite changed or unavailable; re-probe instead of fabricating reuse'
     if args.test:
+        if args.resume:
+            archive_receipts(report, set(full_plan) - reusable, resume_reason)
         selected = unittest.TestSuite()
         for name in args.test:
             if not any(identity == name or identity.startswith(name + '.')
@@ -177,12 +244,15 @@ def main():
                 parser.error('Test is outside the wired live manifest: ' + name)
             selected.addTests(unittest.defaultTestLoader.loadTestsFromName(name))
         suite = selected
-        report['planned_tests'] = list(tests(suite))
+        selected_ids = list(tests(suite))
+        # A targeted continuation cannot erase unselected failures from the campaign.
+        if not args.resume:
+            report['planned_tests'] = selected_ids
+        archive_receipts(report, set(selected_ids), 'Explicit selected recheck after repair')
         report['scope'] = 'selected converted checks after repair; full suite verdict remains in source campaign'
     elif args.resume:
-        # Baba Law 86: Preserve completed passes; re-run only failed/errored checks after repair
-        already_done = {entry['test'].split(' (')[0] for entry in report.get('results', [])
-                        if entry.get('status') in ('PASS', 'BLOCKED')}
+        # A passing sibling does not complete a failed method. BLOCKED is unfinished.
+        archive_receipts(report, set(full_plan) - reusable, resume_reason)
         def filter_suite(s):
             if isinstance(s, unittest.TestSuite):
                 filtered = unittest.TestSuite()
@@ -192,13 +262,11 @@ def main():
                         filtered.addTest(f)
                 return filtered
             else:
-                return None if s.id() in already_done else s
+                return None if s.id() in reusable else s
         suite = filter_suite(suite)
-    report['source_files'] = {
-        name: hashlib.sha256((ROOT / 'scripts' / (name + '.py')).read_bytes()).hexdigest()
-        for name in {*[item.split('.')[0] for item in MODULES],
-                     'test_pipeline_failure_master', 'run_pipeline_live_probes', 'live_lease_bindings',
-                     'live_transport_bindings', 'live_durable_bindings', 'live_release_bindings'}}
+    report['executed_plan'] = list(tests(suite))
+    report['reused_methods'] = sorted(reusable - set(report['executed_plan']))
+    report['source_files'] = current_sources
     runner = unittest.TextTestRunner(verbosity=2, failfast=False,
         resultclass=lambda *a, **kw: Receipts(*a, **kw, report=report, path=path))
     print('Live receipts: ' + str(path), flush=True)
@@ -217,8 +285,7 @@ def main():
             report['results'].append({'test': identity,
                 'status': 'FAIL' if any(entry['status'] == 'FAIL' for entry in children) else 'NOT_RUN',
                 'diagnostic': 'Inspect recorded subtest or fixture errors in this report.'})
-    non_blocked = [r for r in report['results'] if r['status'] != 'BLOCKED']
-    all_passed = bool(non_blocked) and all(r['status'] == 'PASS' for r in non_blocked)
+    all_passed = campaign_passed(report)
     report.update(complete=True, tests_run=len({r['test'].split(' (')[0] for r in report['results']}),
                   passed=all_passed)
     result.save()

@@ -637,12 +637,10 @@ def admit(context, quote=None, floor=FLOOR):
         # its quote are recoverable with declared_by_design(context) and are recorded in the
         # verification ledger for the issue this gate was measured on.
         return None, "REPORTED_BEHAVIOUR_DECLARED_BY_DESIGN"
-    # Community whistleblower or non-payment warning in comments:
-    # Measured 2026-11-04 on Spectral-Finance/lux#1059 ("didn't pay me... might be a scam").
-    for c in context.get("comments") or ():
-        c_body = c.get("body") or ""
-        if re.search(r"\b(?:didn['’]t pay|doesn['’]t pay|never paid|not paid|might be a scam|is a scam|scam repo|symbolic bounty)\b", c_body, re.I):
-            return None, "COMMUNITY_UNPAID_WARNING"
+    from commercial_context import review_refusal
+    review_reason, _ = review_refusal(context, context.get('commercial_review'))
+    if review_reason:
+        return None, review_reason
     evidence = engineering_evidence(title, body,
                                     metadata.get("full_name") or context.get("repo"),
                                     issue_context=context)
@@ -698,34 +696,10 @@ def admit(context, quote=None, floor=FLOOR):
         if candidates:
             offer = max(candidates, key=lambda row: Decimal(row["usd_value"]))
     if offer:
-        has_escrow = (programme is not None)
-        if not has_escrow:
-            for comment in context.get("comments") or ():
-                login = (comment.get("user") or {}).get("login", "")
-                if login in TRUSTED_BOTS or login.removesuffix("[bot]") in TRUSTED_BOTS:
-                    has_escrow = True
-                    break
-        if not has_escrow:
-            created_at_str = issue.get("created_at")
-            if created_at_str:
-                try:
-                    c_dt = datetime.fromisoformat(str(created_at_str).replace("Z", "+00:00"))
-                    age_days = (datetime.now(timezone.utc) - c_dt).total_seconds() / 86400.0
-                    if age_days > 60:
-                        recent_maint = False
-                        for comment in context.get("comments") or ():
-                            c_assoc = str(comment.get("author_association") or "").upper()
-                            if c_assoc in MAINTAINER_ASSOCIATIONS:
-                                c_time = comment.get("created_at")
-                                if c_time:
-                                    cm_dt = datetime.fromisoformat(str(c_time).replace("Z", "+00:00"))
-                                    if (datetime.now(timezone.utc) - cm_dt).total_seconds() / 86400.0 <= 30:
-                                        recent_maint = True
-                                        break
-                        if not recent_maint:
-                            return None, "OFFER_STALE_UNESCROWED"
-                except (ValueError, TypeError):
-                    pass
+        from payment_gates import funding_freshness_refusal
+        freshness = funding_freshness_refusal(context, offer)
+        if freshness:
+            return None, freshness
     if not offer:
         assoc = str(issue.get("author_association") or issue.get("authorAssociation") or "").upper()
         is_founder_req = (context.get("lane") == "founder" or os.environ.get("BOUNTY_LANE") == "founder"

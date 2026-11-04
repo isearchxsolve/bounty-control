@@ -14,6 +14,14 @@ from __future__ import annotations
 import re
 
 
+class CommercialReviewRequired(ValueError):
+    """Evidence changed or cannot be read: preserve work for agent reconsideration."""
+
+    def __init__(self, reason, detail=None):
+        self.reason, self.detail = reason, detail
+        super().__init__(str(reason) + ': source-backed commercial review required; retain existing work')
+
+
 class PreparationRace(RuntimeError):
     """The prepared baseline is still on the server's line of history, but upstream
     modified a file the plan will touch. Retryable: not an accusation, not a refusal.

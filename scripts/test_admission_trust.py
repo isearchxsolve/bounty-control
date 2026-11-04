@@ -106,7 +106,7 @@ class FundingAuthorityTests(unittest.TestCase):
         ctx = context([attestation("algora-pbc[bot]", 900), warning_comment])
         proof, reason = admit(ctx)
         self.assertIsNone(proof)
-        self.assertEqual(reason, "COMMUNITY_UNPAID_WARNING")
+        self.assertEqual(reason, "COMMERCIAL_REVIEW_REQUIRED")
 
     def test_unescrowed_stale_issue_without_recent_maintainer_is_refused(self):
         # Stale unescrowed issue: created in 2025 (20 months ago) with plain-text $900 in body
@@ -115,12 +115,21 @@ class FundingAuthorityTests(unittest.TestCase):
         stale_ctx["issue"]["created_at"] = "2025-02-25T10:00:00Z"
         proof, reason = admit(stale_ctx)
         self.assertIsNone(proof)
-        self.assertEqual(reason, "OFFER_STALE_UNESCROWED")
+        self.assertEqual(reason, "FUNDING_FRESHNESS_REVIEW_REQUIRED")
 
-    def test_escrowed_old_issue_is_still_admitted(self):
-        # Even if created in 2025, an issue with an active algora[bot] escrow is admitted
+    def test_bot_presence_does_not_prove_escrow_or_current_funding(self):
         escrow_ctx = context([attestation("algora-pbc[bot]", 900)])
         escrow_ctx["issue"]["created_at"] = "2025-02-25T10:00:00Z"
+        proof, reason = admit(escrow_ctx)
+        self.assertIsNone(proof)
+        self.assertEqual(reason, "FUNDING_FRESHNESS_UNVERIFIED")
+
+    def test_recent_cited_offer_can_fund_an_old_issue(self):
+        from datetime import datetime, timezone
+        offer = attestation('algora-pbc[bot]', 900)
+        offer['created_at'] = datetime.now(timezone.utc).isoformat()
+        escrow_ctx = context([offer])
+        escrow_ctx['issue']['created_at'] = '2025-02-25T10:00:00Z'
         proof, reason = admit(escrow_ctx)
         self.assertIsNotNone(proof)
         self.assertEqual(reason, "")

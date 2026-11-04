@@ -22,6 +22,8 @@ from unittest import mock
 
 import actions_delivery as delivery
 from pipeline_evidence import bind_proof
+from commercial_context import collect, review_revision
+from actions_github import GitHubError
 
 
 class FakeGitHub:
@@ -33,6 +35,14 @@ class FakeGitHub:
 
     def issue_context(self, repo, number):
         return json.loads(json.dumps(self.context))
+
+    def pages(self, path):
+        return []
+
+    def api(self, path, *args, **kwargs):
+        if path == 'graphql':
+            return {'data': {'repository': {'merged': {'totalCount': 1}, 'all': {'totalCount': 1}}}}
+        raise GitHubError('HTTP 404')
 
 
 class FakeStore:
@@ -52,9 +62,19 @@ class FakeStore:
 ISSUE_CONTEXT = {
     "repo": "acme/http", "issue_number": 5, "title": "Retry drops the last attempt",
     "body": "The client gives up after one attempt.", "comments": [],
-    "issue": {"state": "open", "body": "Bounty $250"}, "complete_comments": True,
+    "issue": {"state": "open", "body": "Bounty $250", "html_url": "https://github.com/acme/http/issues/5"}, "complete_comments": True,
     "repository": {"full_name": "acme/http", "default_branch": "main"},
 }
+
+
+def reviewed_proof(extra=None):
+    snapshot = collect(FakeGitHub(ISSUE_CONTEXT), ISSUE_CONTEXT)
+    return bind_proof({"funding": {"amount": "250", "currency": "USD"},
+        "commercial_scope": "linked-discussions", "commercial_review": {
+            "decision": "proceed", "reason": "Controlled evidence fixture for the claim contract",
+            "source_revision": review_revision(snapshot), "evidence": [{
+                "source_url": ISSUE_CONTEXT['issue']['html_url'], "quote": "Bounty $250"}]},
+        **(extra or {})}, ISSUE_CONTEXT)
 
 
 class ClaimTakesTheDoorVerdictAsFact(unittest.TestCase):
@@ -93,7 +113,7 @@ class ClaimTakesTheDoorVerdictAsFact(unittest.TestCase):
         self.assertFalse((self.root / "claim.json").exists())
 
     def test_the_door_proof_travels_into_the_claim(self):
-        proof = bind_proof({"funding": {"amount": "250", "currency": "USD"}, "lane": "founder"}, ISSUE_CONTEXT)
+        proof = reviewed_proof({"lane": "founder"})
         document, _ = self._claim({"admission": proof,
                                    "dispatch_id": "generation-1",
                                    "competition": {"blocking": False, "verdict": "clear: door verdict"}})
@@ -103,11 +123,11 @@ class ClaimTakesTheDoorVerdictAsFact(unittest.TestCase):
 
     def test_a_partial_dispatcher_row_cannot_authorize_an_event(self):
         with self.assertRaisesRegex(ValueError, "dispatch generation required"):
-            self._claim({}, store=FakeStore({"admission": {"funding": {"amount": "250"}}}))
+            self._claim({}, store=FakeStore({"admission": {"funding": {"amount": "250", "currency": "USD"}}}))
 
     def test_the_last_minute_race_check_still_runs(self):
         """Baba 2026-10-31: competing PR checks stay at delivery for race conditions."""
-        proof = bind_proof({"funding": {"amount": "250"}}, ISSUE_CONTEXT)
+        proof = reviewed_proof()
         _, competing = self._claim({"admission": proof, "dispatch_id": "generation-1",
                                     "competition": {"blocking": False}})
         competing.assert_called_once()

@@ -691,10 +691,9 @@ def query_window(api, expression, window=None, fresh=0):
 def merge_evidence(api, repo, cache):
     """Measure how many pull requests this repository has merged, once per cycle.
 
-    A bounty is paid on merge, so merge history is the only durable evidence that a
-    repository pays outside work. Every issue in the same repository reuses the
-    verdict, so the cost tracks the number of repositories that reach candidate
-    status rather than the size of the queue.
+    Merge history is evidence of repository activity, never proof that an outside
+    contributor was paid. Every issue in the same repository reuses these observed
+    facts, so the cost tracks repositories rather than the size of the queue.
 
     This uses GraphQL deliberately. `search/issues` is capped at 30 requests per
     minute for the whole account, and discovery already spends that allowance on its
@@ -801,16 +800,8 @@ def dispatch(api, store, context, proof, lanes, remote_repair=False, preparation
             and metadata.get('permissions', {}).get('push') is False):
         raise ValueError('Publication blocked: collaborator-only pull requests; publisher has no write access')
     identity, dispatch_id = task_id(repo, number), uuid.uuid4().hex
-    allow_unpriced = os.environ.get("ALLOW_UNPRICED_FOUNDER", "false").lower() in ("true", "1")
-    if not allow_unpriced and isinstance(proof, dict):
-        status = proof.get("funding_status")
-        funding = proof.get("funding") or {}
-        usd_str = str(funding.get("usd_value") or "")
-        currency = str(funding.get("currency") or "").upper()
-        if (status == "UNPRICED_OWNER_REQUEST"
-                or currency == "FOUNDER"
-                or (usd_str and Decimal(usd_str) <= 0)):
-            raise ValueError(f"Dispatch blocked: unpriced issue ({status=}, usd={usd_str}) violates No Free Service policy")
+    from payment_gates import require_paid_offer
+    require_paid_offer(proof)
     if isinstance(proof, dict) and "source_revision" not in proof and "issue" in context:
         from pipeline_evidence import bind_proof
         proof = bind_proof(proof, context)
@@ -849,7 +840,7 @@ def dispatch(api, store, context, proof, lanes, remote_repair=False, preparation
     payload = {"event_type": "bounty_task_dispatch", "client_payload": {
         "repo": repo, "issue_number": number, "task_id": identity, "lanes": sorted(set(lanes)),
         "mode": "deliver", "dispatch_id": dispatch_id, "preparation_budget_seconds": budget, **stamps}}
-    api.api(f"repos/{store.repo}/dispatches", "POST", payload)
+    (getattr(store, "api", None) or api).api(f"repos/{store.repo}/dispatches", "POST", payload)
     def acknowledge(old):
         if old and old.get("dispatch_id") == dispatch_id and old["status"] == "DISPATCHING":
             return {**old, "status": "DISPATCHED"}
@@ -1287,7 +1278,8 @@ def discover(lanes, max_dispatches=2, live=False, queries_per_lane=2, state_dir=
     folder = Path(state_dir or os.environ.get("BOUNTY_STATE_DIR", Path(__file__).resolve().parents[1] / "scratch/actions-discovery"))
     folder.mkdir(parents=True, exist_ok=True)
     api = GitHub()
-    store = StateStore(api)
+    control_token = os.environ.get("GH_PAT") or os.environ.get("GH_CONTROL_TOKEN")
+    store = StateStore(GitHub(token=control_token) if control_token else api)
     horizon = Horizon(folder / "horizon.sqlite3")
     con = sqlite3.connect(folder / "discovery.sqlite3", timeout=30)
     con.execute("CREATE TABLE IF NOT EXISTS cursors(lane TEXT PRIMARY KEY, position INTEGER)")
@@ -1596,12 +1588,8 @@ def discover(lanes, max_dispatches=2, live=False, queries_per_lane=2, state_dir=
                     repo_ev = merge_evidence(api, context["repo"], intent_cache)
                     merge_ok, merge_reason = repository_intent(repo_ev)
                     usd_val = Decimal(proof.get("funding", {}).get("usd_value", "0"))
-                    has_escrow_bot = any(
-                        ((c.get("user") or {}).get("login", "") in TRUSTED_BOTS or
-                         (c.get("user") or {}).get("login", "").removesuffix("[bot]") in TRUSTED_BOTS)
-                        for c in context.get("comments") or ()
-                    )
-                    if not has_escrow_bot and usd_val >= Decimal("250"):
+                    # A familiar bot account is not an observed escrow balance.
+                    if usd_val >= Decimal("250"):
                         if not repo_ev or repo_ev.get("unavailable") or repo_ev.get("merged") is None:
                             merge_ok, merge_reason = False, "UNVERIFIED_HIGH_VALUE_REPOSITORY_INTENT"
                     if not merge_ok:
@@ -1642,7 +1630,7 @@ def discover(lanes, max_dispatches=2, live=False, queries_per_lane=2, state_dir=
         dispatched = []
         capacity_excluded = []
         if live:
-            runs = api.api(f"repos/{store.repo}/actions/runs?per_page=100")["workflow_runs"]
+            runs = (getattr(store, "api", None) or api).api(f"repos/{store.repo}/actions/runs?per_page=100")["workflow_runs"]
             active = sum(r["status"] != "completed" and r.get("path", "").endswith("engine2.yml") for r in runs)
             headroom = max(0, 4 - active)
             # F6: measure velocity per repo; queue by priority band, then quietest first

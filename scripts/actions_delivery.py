@@ -24,7 +24,8 @@ from bounty_admission import competition, TRUSTED_BOTS
 # same classes and must never import this adapter back (it is imported lazily here).
 from delivery_errors import (ClineBudgetExhausted, ClineDeliverableInvalid,
                              ClineDeliverableMissing, InfrastructureFault, PreparationRace,
-                             RunnerShutdown, PreparationContractViolation, validate_preparation)
+                             RunnerShutdown, PreparationContractViolation, validate_preparation,
+                             CommercialReviewRequired)
 
 
 def write_json_atomic(path, document):
@@ -33,6 +34,34 @@ def write_json_atomic(path, document):
     tmp = path.with_name(path.name + ".tmp")
     write_json(tmp, document)
     os.replace(tmp, path)
+
+
+def commercial_hold_record(exc, phase):
+    return {"status": "REJECTED_COMMERCIAL_REVIEW", "kind": "commercial_review",
+            "retryable": False, "review_required": True, "resume_phase": phase,
+            "reason": exc.reason, "detail": exc.detail,
+            "diagnostic": str(exc), "at": utcnow()}
+
+
+def revalidate_commercial(api, context, proof, store, identity, phase, *, dispatch_id=None, run_owner=None):
+    from commercial_context import revalidate
+    try:
+        revalidate(api, context, proof)
+    except CommercialReviewRequired as exc:
+        fields = commercial_hold_record(exc, phase)
+        if phase == 'claim':
+            # No worker lease exists yet. Fence the hold by the same dispatch
+            # generation; otherwise a failed claim would look retryable forever.
+            def hold(old):
+                if (not old or old.get('dispatch_id') != dispatch_id
+                        or old.get('status') not in ('DISPATCHING', 'DISPATCHED')
+                        or old.get('admission') != proof):
+                    raise ValueError('Commercial review hold lost its dispatch generation')
+                return {**old, **fields}
+            store.mutate(identity, hold)
+        else:
+            store.owned_update(identity, run_owner, **fields)
+        raise
 
 
 def submodule_without_url(text):
@@ -493,11 +522,14 @@ def claim(event_file):
     if not old or not payload.get("dispatch_id") or old.get("dispatch_id") != payload["dispatch_id"]:
         raise ValueError("Matching admitted dispatch generation required")
     proof, _ = require_evidence(old, context)
+    from payment_gates import require_paid_offer
+    require_paid_offer(proof)
     manual = os.environ.get("GITHUB_EVENT_NAME") == "workflow_dispatch"
     if (payload.get("admission") != proof
             and not (manual and payload.get("admission") is None)):
         raise ValueError("Dispatch payload proof differs from durable evidence")
     context["lane"] = proof.get("lane") or lane
+    revalidate_commercial(api, context, proof, store, identity, 'claim', dispatch_id=payload['dispatch_id'])
     # One competition rule, decided once at the door, keeps a single last-minute race check
     # here. admission's competition() raises on a real claimant and returns on a nominal one;
     # reaching this line IS the verdict, so a claiming PR that appeared while the ticket
@@ -1108,8 +1140,11 @@ def publish():
     # gate, after every expensive test had already passed.
     from pipeline_evidence import require_evidence
     admission_proof, _ = require_evidence(state, context)
+    from payment_gates import require_paid_offer
+    require_paid_offer(admission_proof)
     if receipt.get("admission") != admission_proof:
         raise ValueError("Release admission differs from claimed evidence")
+    revalidate_commercial(api, context, admission_proof, store, identity, 'publish', run_owner=run_owner)
     context["lane"] = (admission_proof.get("lane")
                        or ("founder" if "founder" in state.get("lanes", []) else None)
                        or os.environ.get("BOUNTY_LANE"))
@@ -1272,6 +1307,11 @@ def main():
             publish()
         else:
             finish(args.job_status)
+    except CommercialReviewRequired as exc:
+        # Changed commercial evidence is a review hold, not a request to engineer
+        # the same patch again. REJECTED_* is the existing non-retry terminal contract.
+        write_json(artifacts() / (args.phase + "-failure.json"), commercial_hold_record(exc, args.phase))
+        raise
     except PreparationRace as exc:
         # F4: preparation race is retryable, never an engineer failure.
         write_json(artifacts() / (args.phase + "-failure.json"),

@@ -21,27 +21,38 @@ from actions_reconcile import reconcile, sweep_stale_runs
 import cline_entry_door as door
 from kaggle_engine_worker import VerificationPlan
 from pipeline_evidence import bind_proof, digest, require_evidence
+from commercial_context import collect, review_revision
 from sovereign_discovery import discover
 
 
 def context():
     return {"repo": "acme/http", "issue_number": 7, "title": "Retry fails", "body": "Fix src/retry.py",
-            "issue": {"state": "open", "title": "Retry fails", "body": "Bounty $250. Fix src/retry.py"},
+            "issue": {"state": "open", "title": "Retry fails", "body": "Bounty $250. Fix src/retry.py",
+                      "html_url": "https://github.com/acme/http/issues/7"},
             "comments": [], "complete_comments": True,
             "repository": {"full_name": "acme/http", "default_branch": "main"}}
 
 
 def row(ctx=None):
     ctx = ctx or context()
+    snapshot = collect(Transport(), ctx)
     return {"repo": ctx["repo"], "issue": ctx["issue_number"], "lane": "bounty", "source_lane": "normal",
             "sovereign_admission": True,
-            "admission": bind_proof({"funding": {"amount": "250", "usd_value": "250"}}, ctx),
+            "admission": bind_proof({"funding": {"amount": "250", "usd_value": "250"},
+                "commercial_scope": "linked-discussions", "commercial_review": {
+                    "decision": "proceed", "reason": "Controlled offline commercial evidence fixture",
+                    "source_revision": review_revision(snapshot), "evidence": [{
+                        "source_url": ctx['issue']['html_url'], "quote": ctx['issue']['body']}]}}, ctx),
             "competition": {"blocking": False, "nominal": []}}
 
 
 class Transport:
     def __init__(self): self.posts = []
     def api(self, endpoint, method="GET", data=None, **kwargs):
+        if endpoint == 'graphql':
+            return {'data': {'repository': {'merged': {'totalCount': 1}, 'all': {'totalCount': 1}}}}
+        if '/contents/' in endpoint or endpoint.endswith('/license'):
+            raise GitHubError('HTTP 404')
         if endpoint.endswith('/dispatches'):
             self.posts.append(data)
             return None
@@ -1144,6 +1155,26 @@ class RetryObligationTests(unittest.TestCase):
         self.assertEqual(mine[0]["repair"], "DISPATCHED", receipts)
         self.assertEqual(len(api.posts), 1)
         self.assertEqual(store.rows[rec["task_id"]]["status"], "DISPATCHED")
+
+    def test_repair_capacity_does_not_bypass_the_four_active_delivery_limit(self):
+        rec = self.failed_record('FAILED_ENGINEER')
+        store, api = Store(), Transport(); store.rows[rec['task_id']] = copy.deepcopy(rec)
+        api.workflow_runs = lambda repo, status=None: [{'id': i} for i in range(4)] if status == 'in_progress' else []
+        result = reconcile(repair=True, api=api, store=store)
+        self.assertEqual(api.posts, [])
+        self.assertIn('CAPACITY_WAIT', result[0]['repair_blocked'])
+        self.assertEqual(store.rows[rec['task_id']], rec)
+
+    def test_capacity_observation_failure_does_not_become_permission_to_dispatch(self):
+        rec = self.failed_record('FAILED_ENGINEER')
+        store, api = Store(), Transport(); store.rows[rec['task_id']] = copy.deepcopy(rec)
+        def unavailable(*args, **kwargs):
+            raise GitHubError('HTTP 503')
+        api.workflow_runs = unavailable
+        result = reconcile(repair=True, api=api, store=store)
+        self.assertEqual(api.posts, [])
+        self.assertEqual(result[0]['phase'], 'RECONCILE_DEFERRED')
+        self.assertEqual(store.rows[rec['task_id']], rec)
 
     def test_a_missing_deliverable_is_retried_too(self):
         rec = self.failed_record("FAILED_DELIVERABLE_MISSING", attempt=2)

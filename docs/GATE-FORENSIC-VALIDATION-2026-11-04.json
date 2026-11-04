@@ -1,0 +1,677 @@
+{
+  "generated_at": "2026-11-04T14:50:24.822213+00:00",
+  "base_revision": "20ae33f5d783c4e7889e766ad1b63e931d8e36e2",
+  "scope": "Working-tree validation after repairs; not a deployment or full live E2E receipt",
+  "source_files": {
+    "scripts/agent_door.py": "b1c8dc65191ab088dd224d0b0b3708093d6768767eae01b305764ad5752a76e1",
+    "scripts/cline_entry_door.py": "001bb2a78303b2ee4f33a1332504d4f71fb0131382ed5b6b802eee9a8c04735b",
+    "scripts/bounty_admission.py": "91b78d676cb6aec97ce35c6a3ca6d7cf5e0b4aa221a07fb65f0c3302988af24f",
+    "scripts/issue_scout.py": "3007785bbf2264eb8d1e610a162befeae945a65ab9613adae532c3c58fbe0dcc",
+    "scripts/sovereign_discovery.py": "ba7133fe96739516b977d92460e809184c43814a6af9aa612894aa0d0117c939",
+    "scripts/actions_dispatch.py": "4b9cb7e7b01c7dc6c2c0dadb02c301848b8bdb9a2b195c75f6f5f60134a81afe",
+    "scripts/pipeline_evidence.py": "04df1b62ca0af824c8f1825d2ccaba1774c3db5ad0fc245cc860010f4904c602",
+    "scripts/actions_github.py": "fcedf7f9691986026e67c1467910e078daddf12b0548093db0602256777949fd",
+    "scripts/actions_delivery.py": "5c7620c2eca616f583c1b7775a5a9131a2a00f34288b382eca716a4c50a4b55f",
+    "scripts/actions_release.py": "9281379ff3a0c6ed3789f378f88aa3effdace0676b5c7ca163fabb308cb90e19",
+    "scripts/actions_reconcile.py": "c855d718920ad8aa515165a6df548d7c8e3a8a15c1e7654d5feaba225709f3bf",
+    "scripts/delivery_errors.py": "21ff99b38c175a29e98872c13fa20eccc4a1311c2b530ec761c9f276003e56df",
+    "scripts/delivery_supervisor.py": "000d43c318b32478b32e3acc88dfa831b9257ff3fef0cc611b0baa98e578b2ba",
+    "scripts/publication_access_probe.py": "a3c74eaaa0bf715ef6859cfae15871a85bb86df17ed1f222d83d02ea0a990e26",
+    "scripts/run_pipeline_live_probes.py": "c4e1d2df8408a4aea88970b4cb8c2a703cef3c1d048feb494cce541d7c9cd6ec",
+    "scripts/payment_gates.py": "d1fbbd1559713e464ac6af08dbc44d87b923f59fdb6630ca6d43a6eff540fc36",
+    "scripts/commercial_context.py": "f57dfb58a3e5730c12cea33b9e5a51863f69f120c328fbc618f28fc788519bd3",
+    "scripts/kaggle_engine_worker.py": "77e1dbf89a4d86e3d0cfdee9fa656e813c46356e0aa053d88c08c546fb8dcb6d",
+    "scripts/check_tracked_secrets.py": "129a0b61aec5584f8be5c65e8481175f2a080c8aa1cbc54d39e9017c11e08d2d",
+    "scripts/live_pipeline_resume.py": "ebe455251bb003d71d4babd3b22cd5d3c055eab83b3291f5b08b76925811569b",
+    "scripts/pipeline_lineage.py": "c67e874183f6a2d946d88672dad47e24c6b269834122e696d384d7e55b814970",
+    "scripts/nvidia_router.py": "4ca8dd4ce8c628a7754c2bd1f24463d0a44e9792a5a52170ba2cd9a8c7f90c39",
+    "scripts/tokenharbor_router.py": "cfbb834129dded1b5ac28f911f17aedb63cb39aea917f11f40d1cb7c4b8512b6",
+    "scripts/cline_process.py": "70c4fadec16c46c67390585cede5ea2b210a949e7ebde9d9095a0f05b679f035",
+    "scripts/discovery_heartbeat.py": "bc40138e027e8a4f050e20334d2ea5633e977596dcee9f1c1b599c80d41b0ecf",
+    "scripts/pr_conversion_watch.py": "c89ed2426c9c13ac2cd50ebb61dd9792f276e0c4123850750e64dfc5e6fa4809"
+  },
+  "offline": {
+    "suite_count": 71,
+    "passed": true,
+    "method": "Full manifest followed by affected-suite continuations. Original failed reports are unchanged.",
+    "original_failures": [
+      {
+        "suite": "test_cline_delivery_ownership.py",
+        "status": "FAIL",
+        "returncode": 1,
+        "log": "test_cline_delivery_ownership.py.log",
+        "seconds": 32.984
+      },
+      {
+        "suite": "test_cline_entry_door.py",
+        "status": "FAIL",
+        "returncode": 1,
+        "log": "test_cline_entry_door.py.log",
+        "seconds": 22.516
+      }
+    ],
+    "results": [
+      {
+        "suite": "test_live_pipeline_resume.py",
+        "status": "PASS",
+        "returncode": 0,
+        "log": "test_live_pipeline_resume.py.log",
+        "seconds": 0.875,
+        "source_report": "scratch/gate-forensics-20261104/verified-master/20261104T144401348064Z/report.json"
+      },
+      {
+        "suite": "test_cline_process.py",
+        "status": "PASS",
+        "returncode": 0,
+        "log": "test_cline_process.py.log",
+        "seconds": 13.219,
+        "source_report": "scratch/gate-forensics-20261104/verified-master/20261104T144401348064Z/report.json"
+      },
+      {
+        "suite": "test_live_pipeline_scope.py",
+        "status": "PASS",
+        "returncode": 0,
+        "log": "test_live_pipeline_scope.py.log",
+        "seconds": 1.078,
+        "source_report": "scratch/gate-forensics-20261104/verified-master/20261104T144401348064Z/report.json"
+      },
+      {
+        "suite": "test_nvidia_router.py",
+        "status": "PASS",
+        "returncode": 0,
+        "log": "test_nvidia_router.py.log",
+        "seconds": 1.047,
+        "source_report": "scratch/gate-forensics-20261104/verified-master/20261104T144401348064Z/report.json"
+      },
+      {
+        "suite": "test_actions_migration.py",
+        "status": "PASS",
+        "returncode": 0,
+        "log": "test_actions_migration.py.log",
+        "seconds": 24.984,
+        "source_report": "scratch/gate-forensics-20261104/verified-master/20261104T144401348064Z/report.json"
+      },
+      {
+        "suite": "test_partition_regressions.py",
+        "status": "PASS",
+        "returncode": 0,
+        "log": "test_partition_regressions.py.log",
+        "seconds": 5.454,
+        "source_report": "scratch/gate-forensics-20261104/verified-master/20261104T144401348064Z/report.json"
+      },
+      {
+        "suite": "test_cline_delivery_ownership.py",
+        "status": "PASS",
+        "returncode": 0,
+        "log": "test_cline_delivery_ownership.py.log",
+        "seconds": 41.906,
+        "source_report": "scratch/gate-forensics-20261104/final-hash-fixture/20261104T144704644060Z/report.json"
+      },
+      {
+        "suite": "test_icu_pipeline_suite.py",
+        "status": "PASS",
+        "returncode": 0,
+        "log": "test_icu_pipeline_suite.py.log",
+        "seconds": 2.0,
+        "source_report": "scratch/gate-forensics-20261104/verified-master/20261104T144401348064Z/report.json"
+      },
+      {
+        "suite": "test_discovery_breadth.py",
+        "status": "PASS",
+        "returncode": 0,
+        "log": "test_discovery_breadth.py.log",
+        "seconds": 0.828,
+        "source_report": "scratch/gate-forensics-20261104/verified-master/20261104T144401348064Z/report.json"
+      },
+      {
+        "suite": "test_admission_trust.py",
+        "status": "PASS",
+        "returncode": 0,
+        "log": "test_admission_trust.py.log",
+        "seconds": 0.657,
+        "source_report": "scratch/gate-forensics-20261104/verified-master/20261104T144401348064Z/report.json"
+      },
+      {
+        "suite": "test_funding_evidence_required.py",
+        "status": "PASS",
+        "returncode": 0,
+        "log": "test_funding_evidence_required.py.log",
+        "seconds": 0.703,
+        "source_report": "scratch/gate-forensics-20261104/verified-master/20261104T144401348064Z/report.json"
+      },
+      {
+        "suite": "test_repository_intent.py",
+        "status": "PASS",
+        "returncode": 0,
+        "log": "test_repository_intent.py.log",
+        "seconds": 0.922,
+        "source_report": "scratch/gate-forensics-20261104/verified-master/20261104T144401348064Z/report.json"
+      },
+      {
+        "suite": "test_program_offers.py",
+        "status": "PASS",
+        "returncode": 0,
+        "log": "test_program_offers.py.log",
+        "seconds": 0.75,
+        "source_report": "scratch/gate-forensics-20261104/verified-master/20261104T144401348064Z/report.json"
+      },
+      {
+        "suite": "test_queue_ordering.py",
+        "status": "PASS",
+        "returncode": 0,
+        "log": "test_queue_ordering.py.log",
+        "seconds": 1.391,
+        "source_report": "scratch/gate-forensics-20261104/verified-master/20261104T144401348064Z/report.json"
+      },
+      {
+        "suite": "test_by_design_gate.py",
+        "status": "PASS",
+        "returncode": 0,
+        "log": "test_by_design_gate.py.log",
+        "seconds": 0.703,
+        "source_report": "scratch/gate-forensics-20261104/verified-master/20261104T144401348064Z/report.json"
+      },
+      {
+        "suite": "test_advert_escrow.py",
+        "status": "PASS",
+        "returncode": 0,
+        "log": "test_advert_escrow.py.log",
+        "seconds": 0.656,
+        "source_report": "scratch/gate-forensics-20261104/verified-master/20261104T144401348064Z/report.json"
+      },
+      {
+        "suite": "test_query_encoding.py",
+        "status": "PASS",
+        "returncode": 0,
+        "log": "test_query_encoding.py.log",
+        "seconds": 0.609,
+        "source_report": "scratch/gate-forensics-20261104/verified-master/20261104T144401348064Z/report.json"
+      },
+      {
+        "suite": "test_preparation_terminal.py",
+        "status": "PASS",
+        "returncode": 0,
+        "log": "test_preparation_terminal.py.log",
+        "seconds": 1.328,
+        "source_report": "scratch/gate-forensics-20261104/verified-master/20261104T144401348064Z/report.json"
+      },
+      {
+        "suite": "test_discovery_heartbeat.py",
+        "status": "PASS",
+        "returncode": 0,
+        "log": "test_discovery_heartbeat.py.log",
+        "seconds": 1.312,
+        "source_report": "scratch/gate-forensics-20261104/verified-master/20261104T144401348064Z/report.json"
+      },
+      {
+        "suite": "test_fresh_discovery_schedule.py",
+        "status": "PASS",
+        "returncode": 0,
+        "log": "test_fresh_discovery_schedule.py.log",
+        "seconds": 1.734,
+        "source_report": "scratch/gate-forensics-20261104/verified-master/20261104T144401348064Z/report.json"
+      },
+      {
+        "suite": "test_engineering_evidence.py",
+        "status": "PASS",
+        "returncode": 0,
+        "log": "test_engineering_evidence.py.log",
+        "seconds": 0.813,
+        "source_report": "scratch/gate-forensics-20261104/verified-master/20261104T144401348064Z/report.json"
+      },
+      {
+        "suite": "test_baseline_relationship.py",
+        "status": "PASS",
+        "returncode": 0,
+        "log": "test_baseline_relationship.py.log",
+        "seconds": 0.812,
+        "source_report": "scratch/gate-forensics-20261104/verified-master/20261104T144401348064Z/report.json"
+      },
+      {
+        "suite": "test_base_branch.py",
+        "status": "PASS",
+        "returncode": 0,
+        "log": "test_base_branch.py.log",
+        "seconds": 0.906,
+        "source_report": "scratch/gate-forensics-20261104/verified-master/20261104T144401348064Z/report.json"
+      },
+      {
+        "suite": "test_cline_deliverable.py",
+        "status": "PASS",
+        "returncode": 0,
+        "log": "test_cline_deliverable.py.log",
+        "seconds": 1.297,
+        "source_report": "scratch/gate-forensics-20261104/verified-master/20261104T144401348064Z/report.json"
+      },
+      {
+        "suite": "test_failure_taxonomy.py",
+        "status": "PASS",
+        "returncode": 0,
+        "log": "test_failure_taxonomy.py.log",
+        "seconds": 1.594,
+        "source_report": "scratch/gate-forensics-20261104/verified-master/20261104T144401348064Z/report.json"
+      },
+      {
+        "suite": "test_claim_lease.py",
+        "status": "PASS",
+        "returncode": 0,
+        "log": "test_claim_lease.py.log",
+        "seconds": 1.047,
+        "source_report": "scratch/gate-forensics-20261104/verified-master/20261104T144401348064Z/report.json"
+      },
+      {
+        "suite": "test_e2e_flow.py",
+        "status": "PASS",
+        "returncode": 0,
+        "log": "test_e2e_flow.py.log",
+        "seconds": 0.797,
+        "source_report": "scratch/gate-forensics-20261104/verified-master/20261104T144401348064Z/report.json"
+      },
+      {
+        "suite": "test_e2e_walk.py",
+        "status": "PASS",
+        "returncode": 0,
+        "log": "test_e2e_walk.py.log",
+        "seconds": 0.844,
+        "source_report": "scratch/gate-forensics-20261104/verified-master/20261104T144401348064Z/report.json"
+      },
+      {
+        "suite": "test_gate_centralization.py",
+        "status": "PASS",
+        "returncode": 0,
+        "log": "test_gate_centralization.py.log",
+        "seconds": 28.344,
+        "source_report": "scratch/gate-forensics-20261104/verified-master/20261104T144401348064Z/report.json"
+      },
+      {
+        "suite": "test_dispatch_velocity.py",
+        "status": "PASS",
+        "returncode": 0,
+        "log": "test_dispatch_velocity.py.log",
+        "seconds": 1.188,
+        "source_report": "scratch/gate-forensics-20261104/verified-master/20261104T144401348064Z/report.json"
+      },
+      {
+        "suite": "test_liquidity_ordering.py",
+        "status": "PASS",
+        "returncode": 0,
+        "log": "test_liquidity_ordering.py.log",
+        "seconds": 0.937,
+        "source_report": "scratch/gate-forensics-20261104/verified-master/20261104T144401348064Z/report.json"
+      },
+      {
+        "suite": "test_lane_partition.py",
+        "status": "PASS",
+        "returncode": 0,
+        "log": "test_lane_partition.py.log",
+        "seconds": 0.891,
+        "source_report": "scratch/gate-forensics-20261104/verified-master/20261104T144401348064Z/report.json"
+      },
+      {
+        "suite": "test_engine_identity.py",
+        "status": "PASS",
+        "returncode": 0,
+        "log": "test_engine_identity.py.log",
+        "seconds": 7.39,
+        "source_report": "scratch/gate-forensics-20261104/verified-master/20261104T144401348064Z/report.json"
+      },
+      {
+        "suite": "test_capacity_gate.py",
+        "status": "PASS",
+        "returncode": 0,
+        "log": "test_capacity_gate.py.log",
+        "seconds": 1.094,
+        "source_report": "scratch/gate-forensics-20261104/verified-master/20261104T144401348064Z/report.json"
+      },
+      {
+        "suite": "test_hydration_capacity.py",
+        "status": "PASS",
+        "returncode": 0,
+        "log": "test_hydration_capacity.py.log",
+        "seconds": 1.031,
+        "source_report": "scratch/gate-forensics-20261104/verified-master/20261104T144401348064Z/report.json"
+      },
+      {
+        "suite": "test_preparation_contract.py",
+        "status": "PASS",
+        "returncode": 0,
+        "log": "test_preparation_contract.py.log",
+        "seconds": 1.469,
+        "source_report": "scratch/gate-forensics-20261104/verified-master/20261104T144401348064Z/report.json"
+      },
+      {
+        "suite": "test_preflight.py",
+        "status": "PASS",
+        "returncode": 0,
+        "log": "test_preflight.py.log",
+        "seconds": 1.109,
+        "source_report": "scratch/gate-forensics-20261104/verified-master/20261104T144401348064Z/report.json"
+      },
+      {
+        "suite": "test_download_patch_submodule.py",
+        "status": "PASS",
+        "returncode": 0,
+        "log": "test_download_patch_submodule.py.log",
+        "seconds": 12.375,
+        "source_report": "scratch/gate-forensics-20261104/verified-master/20261104T144401348064Z/report.json"
+      },
+      {
+        "suite": "test_heartbeat.py",
+        "status": "PASS",
+        "returncode": 0,
+        "log": "test_heartbeat.py.log",
+        "seconds": 0.672,
+        "source_report": "scratch/gate-forensics-20261104/verified-master/20261104T144401348064Z/report.json"
+      },
+      {
+        "suite": "test_code_change_class.py",
+        "status": "PASS",
+        "returncode": 0,
+        "log": "test_code_change_class.py.log",
+        "seconds": 1.094,
+        "source_report": "scratch/gate-forensics-20261104/verified-master/20261104T144401348064Z/report.json"
+      },
+      {
+        "suite": "test_f9_class_gate.py",
+        "status": "PASS",
+        "returncode": 0,
+        "log": "test_f9_class_gate.py.log",
+        "seconds": 1.063,
+        "source_report": "scratch/gate-forensics-20261104/verified-master/20261104T144401348064Z/report.json"
+      },
+      {
+        "suite": "test_refusal_census.py",
+        "status": "PASS",
+        "returncode": 0,
+        "log": "test_refusal_census.py.log",
+        "seconds": 0.672,
+        "source_report": "scratch/gate-forensics-20261104/verified-master/20261104T144401348064Z/report.json"
+      },
+      {
+        "suite": "test_failure_digest.py",
+        "status": "PASS",
+        "returncode": 0,
+        "log": "test_failure_digest.py.log",
+        "seconds": 0.609,
+        "source_report": "scratch/gate-forensics-20261104/verified-master/20261104T144401348064Z/report.json"
+      },
+      {
+        "suite": "test_hardness_ordering.py",
+        "status": "PASS",
+        "returncode": 0,
+        "log": "test_hardness_ordering.py.log",
+        "seconds": 0.906,
+        "source_report": "scratch/gate-forensics-20261104/verified-master/20261104T144401348064Z/report.json"
+      },
+      {
+        "suite": "test_competition_evidence.py",
+        "status": "PASS",
+        "returncode": 0,
+        "log": "test_competition_evidence.py.log",
+        "seconds": 0.563,
+        "source_report": "scratch/gate-forensics-20261104/verified-master/20261104T144401348064Z/report.json"
+      },
+      {
+        "suite": "test_urgency_ordering.py",
+        "status": "PASS",
+        "returncode": 0,
+        "log": "test_urgency_ordering.py.log",
+        "seconds": 0.969,
+        "source_report": "scratch/gate-forensics-20261104/verified-master/20261104T144401348064Z/report.json"
+      },
+      {
+        "suite": "test_hydrate_only_path.py",
+        "status": "PASS",
+        "returncode": 0,
+        "log": "test_hydrate_only_path.py.log",
+        "seconds": 1.0,
+        "source_report": "scratch/gate-forensics-20261104/verified-master/20261104T144401348064Z/report.json"
+      },
+      {
+        "suite": "test_competition_linked.py",
+        "status": "PASS",
+        "returncode": 0,
+        "log": "test_competition_linked.py.log",
+        "seconds": 0.766,
+        "source_report": "scratch/gate-forensics-20261104/verified-master/20261104T144401348064Z/report.json"
+      },
+      {
+        "suite": "test_unbounded_scope.py",
+        "status": "PASS",
+        "returncode": 0,
+        "log": "test_unbounded_scope.py.log",
+        "seconds": 0.781,
+        "source_report": "scratch/gate-forensics-20261104/verified-master/20261104T144401348064Z/report.json"
+      },
+      {
+        "suite": "test_non_code_deliverable.py",
+        "status": "PASS",
+        "returncode": 0,
+        "log": "test_non_code_deliverable.py.log",
+        "seconds": 1.39,
+        "source_report": "scratch/gate-forensics-20261104/verified-master/20261104T144401348064Z/report.json"
+      },
+      {
+        "suite": "test_search_planner.py",
+        "status": "PASS",
+        "returncode": 0,
+        "log": "test_search_planner.py.log",
+        "seconds": 1.359,
+        "source_report": "scratch/gate-forensics-20261104/verified-master/20261104T144401348064Z/report.json"
+      },
+      {
+        "suite": "test_planner_attribution.py",
+        "status": "PASS",
+        "returncode": 0,
+        "log": "test_planner_attribution.py.log",
+        "seconds": 1.188,
+        "source_report": "scratch/gate-forensics-20261104/verified-master/20261104T144401348064Z/report.json"
+      },
+      {
+        "suite": "test_agent_door.py",
+        "status": "PASS",
+        "returncode": 0,
+        "log": "test_agent_door.py.log",
+        "seconds": 21.547,
+        "source_report": "scratch/gate-forensics-20261104/verified-master/20261104T144401348064Z/report.json"
+      },
+      {
+        "suite": "test_agent_queue.py",
+        "status": "PASS",
+        "returncode": 0,
+        "log": "test_agent_queue.py.log",
+        "seconds": 1.406,
+        "source_report": "scratch/gate-forensics-20261104/verified-master/20261104T144401348064Z/report.json"
+      },
+      {
+        "suite": "test_cline_entry_door.py",
+        "status": "PASS",
+        "returncode": 0,
+        "log": "test_cline_entry_door.py.log",
+        "seconds": 18.64,
+        "source_report": "scratch/gate-forensics-20261104/continuation/20261104T144825423023Z/report.json"
+      },
+      {
+        "suite": "test_sovereign_stamps.py",
+        "status": "PASS",
+        "returncode": 0,
+        "log": "test_sovereign_stamps.py.log",
+        "seconds": 1.906,
+        "source_report": "scratch/gate-forensics-20261104/verified-master/20261104T144401348064Z/report.json"
+      },
+      {
+        "suite": "test_sovereign_delivery.py",
+        "status": "PASS",
+        "returncode": 0,
+        "log": "test_sovereign_delivery.py.log",
+        "seconds": 1.672,
+        "source_report": "scratch/gate-forensics-20261104/continuation/20261104T144825423023Z/report.json"
+      },
+      {
+        "suite": "test_pipeline_repairs.py",
+        "status": "PASS",
+        "returncode": 0,
+        "log": "test_pipeline_repairs.py.log",
+        "seconds": 4.516,
+        "source_report": "scratch/gate-forensics-20261104/continuation/20261104T144825423023Z/report.json"
+      },
+      {
+        "suite": "test_e2e_door_to_claim.py",
+        "status": "PASS",
+        "returncode": 0,
+        "log": "test_e2e_door_to_claim.py.log",
+        "seconds": 1.329,
+        "source_report": "scratch/gate-forensics-20261104/verified-master/20261104T144401348064Z/report.json"
+      },
+      {
+        "suite": "test_e2e_full_pipeline.py",
+        "status": "PASS",
+        "returncode": 0,
+        "log": "test_e2e_full_pipeline.py.log",
+        "seconds": 1.86,
+        "source_report": "scratch/gate-forensics-20261104/verified-master/20261104T144401348064Z/report.json"
+      },
+      {
+        "suite": "test_pipeline_failure_master.py",
+        "status": "PASS",
+        "returncode": 0,
+        "log": "test_pipeline_failure_master.py.log",
+        "seconds": 68.172,
+        "source_report": "scratch/gate-forensics-20261104/verified-master/20261104T144401348064Z/report.json"
+      },
+      {
+        "suite": "test_pipeline_master_runner.py",
+        "status": "PASS",
+        "returncode": 0,
+        "log": "test_pipeline_master_runner.py.log",
+        "seconds": 1.093,
+        "source_report": "scratch/gate-forensics-20261104/verified-master/20261104T144401348064Z/report.json"
+      },
+      {
+        "suite": "test_engineering_contract_handoff.py",
+        "status": "PASS",
+        "returncode": 0,
+        "log": "test_engineering_contract_handoff.py.log",
+        "seconds": 1.375,
+        "source_report": "scratch/gate-forensics-20261104/verified-master/20261104T144401348064Z/report.json"
+      },
+      {
+        "suite": "test_live_pipeline_driver.py",
+        "status": "PASS",
+        "returncode": 0,
+        "log": "test_live_pipeline_driver.py.log",
+        "seconds": 1.516,
+        "source_report": "scratch/gate-forensics-20261104/verified-master/20261104T144401348064Z/report.json"
+      },
+      {
+        "suite": "test_live_defect_regressions.py",
+        "status": "PASS",
+        "returncode": 0,
+        "log": "test_live_defect_regressions.py.log",
+        "seconds": 0.844,
+        "source_report": "scratch/gate-forensics-20261104/verified-master/20261104T144401348064Z/report.json"
+      },
+      {
+        "suite": "test_live_phase_offline.py",
+        "status": "PASS",
+        "returncode": 0,
+        "log": "test_live_phase_offline.py.log",
+        "seconds": 1.031,
+        "source_report": "scratch/gate-forensics-20261104/verified-master/20261104T144401348064Z/report.json"
+      },
+      {
+        "suite": "test_live_dispatch_offline.py",
+        "status": "PASS",
+        "returncode": 0,
+        "log": "test_live_dispatch_offline.py.log",
+        "seconds": 1.343,
+        "source_report": "scratch/gate-forensics-20261104/verified-master/20261104T144401348064Z/report.json"
+      },
+      {
+        "suite": "test_row_shape_repair.py",
+        "status": "PASS",
+        "returncode": 0,
+        "log": "test_row_shape_repair.py.log",
+        "seconds": 0.782,
+        "source_report": "scratch/gate-forensics-20261104/verified-master/20261104T144401348064Z/report.json"
+      },
+      {
+        "suite": "test_payment_gates.py",
+        "status": "PASS",
+        "returncode": 0,
+        "log": "test_payment_gates.py.log",
+        "seconds": 1.516,
+        "source_report": "scratch/gate-forensics-20261104/verified-master/20261104T144401348064Z/report.json"
+      },
+      {
+        "suite": "test_commercial_context.py",
+        "status": "PASS",
+        "returncode": 0,
+        "log": "test_commercial_context.py.log",
+        "seconds": 1.781,
+        "source_report": "scratch/gate-forensics-20261104/continuation/20261104T144825423023Z/report.json"
+      },
+      {
+        "suite": "test_live_probe_receipts.py",
+        "status": "PASS",
+        "returncode": 0,
+        "log": "test_live_probe_receipts.py.log",
+        "seconds": 0.75,
+        "source_report": "scratch/gate-forensics-20261104/verified-master/20261104T144401348064Z/report.json"
+      }
+    ]
+  },
+  "connected_and_factual": {
+    "source_report": "scratch/gate-forensics-20261104/final-live/20261104T144826020880Z/report.json",
+    "passed": true,
+    "methods": 28,
+    "receipts": 46,
+    "blocked": 0,
+    "live_methods": [
+      {
+        "test": "test_commercial_context_live.CommercialLive.test_actual_linked_pr_warning_is_collected_from_the_issue_entry",
+        "status": "PASS",
+        "at": "2026-11-04T14:49:18.261106+00:00",
+        "seconds": 0.0,
+        "evidence": {
+          "control": "0c80dd8525add7d9ce91c5d5699200be60e603ba9b7633a0045d131b4dd81a52",
+          "target": "https://github.com/Spectral-Finance/lux/pull/1059#issuecomment-6584678943"
+        }
+      },
+      {
+        "test": "test_commercial_context_live.CommercialLive.test_citing_only_the_offer_cannot_acknowledge_the_real_warning",
+        "status": "PASS",
+        "at": "2026-11-04T14:49:18.277360+00:00",
+        "seconds": 0.0,
+        "evidence": {
+          "control": "0c80dd8525add7d9ce91c5d5699200be60e603ba9b7633a0045d131b4dd81a52",
+          "target": "https://github.com/Spectral-Finance/lux/pull/1059#issuecomment-6584678943"
+        }
+      },
+      {
+        "test": "test_commercial_context_live.CommercialLive.test_forged_source_revision_is_refused_against_live_bytes",
+        "status": "PASS",
+        "at": "2026-11-04T14:49:18.299447+00:00",
+        "seconds": 0.0,
+        "evidence": {
+          "control": "0c80dd8525add7d9ce91c5d5699200be60e603ba9b7633a0045d131b4dd81a52",
+          "target": "https://github.com/Spectral-Finance/lux/pull/1059#issuecomment-6584678943"
+        }
+      },
+      {
+        "test": "test_commercial_context_live.CommercialLive.test_real_model_entry_path_cannot_bypass_missing_review",
+        "status": "PASS",
+        "at": "2026-11-04T14:49:18.312548+00:00",
+        "seconds": 0.016,
+        "evidence": {
+          "control": "0c80dd8525add7d9ce91c5d5699200be60e603ba9b7633a0045d131b4dd81a52",
+          "target": "https://github.com/Spectral-Finance/lux/pull/1059#issuecomment-6584678943"
+        }
+      }
+    ],
+    "classification": "Four actual GitHub-source probes; remaining methods exercise local factual guards with controlled inputs"
+  },
+  "full_live_e2e_passed": false,
+  "payment_settlement_verified": false,
+  "deployed": false
+}

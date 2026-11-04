@@ -54,6 +54,7 @@ from delivery_errors import (  # noqa: E402
 # set is either undocumented or a typo; test 8 decides which by reading the source.
 DOCUMENTED = {
     "REJECTED_PREPARATION",
+    "REJECTED_COMMERCIAL_REVIEW",
     "FAILED_DELIVERABLE_MISSING",
     "FAILED_PREPARATION_RACE",
     "FAILED_RUNNER_SHUTDOWN",
@@ -311,6 +312,8 @@ class FailureRecordTests(unittest.TestCase):
         self.assertIn('"FAILED_" + args.phase.upper()', main_body,
                       "the catch-all must stay reachable (F4: narrowed, not deleted)")
         emitted = literals | {"FAILED_ENGINEER"}
+        self.assertIn('commercial_hold_record(exc, args.phase)', main_body)
+        emitted |= set(re.findall(r'"status": "(REJECTED_[A-Z_]+)"', block('commercial_hold_record')))
 
         refusal = set(re.findall(r'"status": "(REJECTED_[A-Z_]+)"', block("reject_preparation")))
         self.assertEqual(refusal, {"REJECTED_PREPARATION"},

@@ -12,3 +12,7 @@ __pycache__/
 _probe/
 .coverage
 coverage.json
+
+.local/
+.perch/
+_*.py

@@ -272,6 +272,18 @@
     {
       "file": "test_row_shape_repair.py",
       "mode": "script"
+    },
+    {
+      "file": "test_payment_gates.py",
+      "mode": "script"
+    },
+    {
+      "file": "test_commercial_context.py",
+      "mode": "script"
+    },
+    {
+      "file": "test_live_probe_receipts.py",
+      "mode": "script"
     }
   ]
 }

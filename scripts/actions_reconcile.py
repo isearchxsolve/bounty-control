@@ -274,6 +274,7 @@ def reconcile(repair=False, api=None, store=None):
     receipts = list(sweep_stale_runs(api, store, records=records))
     swept_ids = {r["task_id"] for r in receipts if r.get("swept")}
     observed = {r.get("task_id"): dict(r) for r in records}
+    repair_capacity_used = None
     for record in records:
         try:
             if record.get("task_id") in swept_ids:
@@ -370,12 +371,25 @@ def reconcile(repair=False, api=None, store=None):
                 from bounty_admission import competition
                 from pipeline_evidence import require_evidence
                 try:
+                    if repair_capacity_used is None:
+                        active = []
+                        for run_status in ('queued', 'in_progress', 'waiting', 'pending', 'requested'):
+                            active.extend(api.workflow_runs(store.repo, status=run_status))
+                        reserved = {r['task_id'] for r in store.records()
+                                    if r.get('status') in ('DISPATCHING', 'DISPATCHED', 'CLAIMED',
+                                                           'ENGINEERING', 'VERIFIED', 'PUBLISHING')}
+                        repair_capacity_used = max(len({r['id'] for r in active}), len(reserved))
+                    # Repairs consume the same four delivery slots as intake.
+                    # Capacity waits retain the obligation and spend no attempt.
+                    if repair_capacity_used >= 4:
+                        raise ValueError('CAPACITY_WAIT: repair shares the global delivery capacity of 4')
                     context = api.issue_context(state["repo"], state["issue_number"])
                     proof, verdict = require_evidence(state, context)
                     competition(api, state["repo"], state["issue_number"],
                                 own_head=state.get("head_sha"))
                     dispatch(api, store, context, proof, state.get("lanes", []), remote_repair=True,
                              sovereign_admission=True, competition=verdict)
+                    repair_capacity_used += 1
                     receipt["repair"] = "DISPATCHED"
                 except ValueError as exc:
                     receipt["repair_blocked"] = str(exc)

@@ -279,7 +279,7 @@ class DurableStateFaults(unittest.TestCase):
     def test_ambiguous_dispatch_failure_keeps_reservation_and_blocks_duplicate(self):
         store, api, ctx = self.dispatch_fixture()
         api.api.side_effect = GitHubError("response lost after POST")
-        proof = bind_proof({}, ctx)
+        proof = bind_proof({'funding': {'amount': '250', 'currency': 'USD', 'usd_value': '250'}, 'fault_fixture': True}, ctx)
         with self.assertRaises(GitHubError):
             dispatch.dispatch(api, store, ctx, proof, ["normal"],
                               sovereign_admission=True, competition={"blocking": False})
@@ -301,14 +301,14 @@ class DurableStateFaults(unittest.TestCase):
         """
         store, api, ctx = self.dispatch_fixture()
         # The first attempt succeeds, so a successful dispatch still works.
-        dispatch.dispatch(api, store, ctx, bind_proof({}, ctx), ["normal"],
+        dispatch.dispatch(api, store, ctx, bind_proof({'funding': {'amount': '250', 'currency': 'USD', 'usd_value': '250'}, 'fault_fixture': True}, ctx), ["normal"],
                           sovereign_admission=True, competition={"blocking": False})
         identity = task_id(ctx['repo'], ctx['issue_number'])
         self.assertEqual(api.api.call_count, 1)
         # A task left in a non-retryable state is refused with the durable state named, which
         # is the guard a duplicate dispatch actually meets.
         with self.assertRaisesRegex(ValueError, "Existing durable task state"):
-            dispatch.dispatch(api, store, ctx, bind_proof({}, ctx), ["normal"],
+            dispatch.dispatch(api, store, ctx, bind_proof({'funding': {'amount': '250', 'currency': 'USD', 'usd_value': '250'}, 'fault_fixture': True}, ctx), ["normal"],
                              sovereign_admission=True, competition={"blocking": False})
         self.assertEqual(api.api.call_count, 1, "the refusal happened before any POST")
         # And the bound itself: a request whose attempt counter is already at the ceiling is
@@ -316,7 +316,7 @@ class DurableStateFaults(unittest.TestCase):
         store.rows[identity]["dispatch_attempt"] = 3
         store.rows[identity]["status"] = "REJECTED_PREPARATION"
         with self.assertRaisesRegex(ValueError, "Bounded dispatch attempts exhausted"):
-            dispatch.dispatch(api, store, ctx, bind_proof({}, ctx), ["normal"],
+            dispatch.dispatch(api, store, ctx, bind_proof({'funding': {'amount': '250', 'currency': 'USD', 'usd_value': '250'}, 'fault_fixture': True}, ctx), ["normal"],
                              sovereign_admission=True, competition={"blocking": False})
         self.assertEqual(api.api.call_count, 1)
 
@@ -327,7 +327,7 @@ class DurableStateFaults(unittest.TestCase):
             store.claim(ctx['repo'], ctx['issue_number'], "123:1", "https://example.invalid/run", "a" * 40,
                         dispatch_id=store.rows[identity]["dispatch_id"])
         api.api.side_effect = accepted
-        dispatch.dispatch(api, store, ctx, bind_proof({}, ctx), ["normal"],
+        dispatch.dispatch(api, store, ctx, bind_proof({'funding': {'amount': '250', 'currency': 'USD', 'usd_value': '250'}, 'fault_fixture': True}, ctx), ["normal"],
                           sovereign_admission=True, competition={"blocking": False})
         self.assertEqual(store.rows[identity]["status"], "CLAIMED")
         self.assertEqual(store.rows[identity]["owner"], "123:1")
@@ -336,7 +336,7 @@ class DurableStateFaults(unittest.TestCase):
         store, api, ctx = self.dispatch_fixture()
         with self.reservation_failure(store):
             with self.assertRaises(GitHubError):
-                dispatch.dispatch(api, store, ctx, bind_proof({}, ctx), ["normal"],
+                dispatch.dispatch(api, store, ctx, bind_proof({'funding': {'amount': '250', 'currency': 'USD', 'usd_value': '250'}, 'fault_fixture': True}, ctx), ["normal"],
                                   sovereign_admission=True, competition={"blocking": False})
         api.api.assert_not_called()
 

@@ -2,7 +2,7 @@
 from datetime import datetime, timezone
 import hashlib
 import json
-from pathlib import Path
+from pathlib import Path, PurePosixPath
 import re
 import subprocess
 import uuid
@@ -49,6 +49,10 @@ def validate_plan(document, worktree, previous=None):
         if not isinstance(source, dict):
             raise ValueError('Invalid repository source citation')
         source_path = source.get('path', '')
+        if (not isinstance(source_path, str) or not source_path
+                or PurePosixPath(source_path).is_absolute() or '\\' in source_path
+                or '..' in PurePosixPath(source_path).parts):
+            raise ValueError('Native plan source path is unsafe')
         path = (root / source_path).resolve()
         if not path.is_relative_to(root) or not path.is_file():
             # In monorepos, Cline may cite relative to the subproject or basename
@@ -69,19 +73,10 @@ def validate_plan(document, worktree, previous=None):
             capture_output=True, timeout=120)
         expected = object_bytes.stdout if object_bytes.returncode == 0 else path.read_bytes()
         actual_sha = hashlib.sha256(expected).hexdigest()
-        disk_sha = hashlib.sha256(path.read_bytes()).hexdigest()
-        norm_actual_sha = hashlib.sha256(expected.replace(b'\r\n', b'\n')).hexdigest()
-        norm_disk_sha = hashlib.sha256(path.read_bytes().replace(b'\r\n', b'\n')).hexdigest()
         given_sha = source.get('sha256', '')
-
-        # Baba Law 85: Check facts, do not let minor formatting or truncation reject working software.
-        # Match committed blob, disk bytes, CRLF-normalized bytes, or 16+ char prefix match.
-        valid_shas = {actual_sha, disk_sha, norm_actual_sha, norm_disk_sha}
-        matched = (given_sha in valid_shas
-                   or (isinstance(given_sha, str) and len(given_sha) >= 16 and any(
-                       s.startswith(given_sha) or given_sha.startswith(s[:16]) for s in valid_shas
-                   )))
-        if not matched:
+        # A hash is a factual claim about exact source bytes, not a judgment that
+        # can be repaired by accepting a matching prefix and inventing the rest.
+        if given_sha != actual_sha:
             raise ValueError('Native plan source SHA-256 does not match the checkout')
         source['sha256'] = actual_sha
     fields = ('bootstrap', 'baseline_tests', 'targeted_tests', 'final_tests', 'linters', 'format_checks', 'builds')
@@ -131,7 +126,7 @@ def validate_plan(document, worktree, previous=None):
         prev_targets = targets(previous.baseline_tests)
         res_targets = targets(result['baseline_tests'])
         # Allow target matches across shell wrappers and monorepo command variants
-        if not (prev_targets.issubset(res_targets) or any(t.startswith('test') for t in res_targets)):
+        if not prev_targets.issubset(res_targets):
             raise ValueError('Preparation repair dropped an existing baseline test target')
         if previous.linters and not result['linters']:
             raise ValueError('Preparation repair dropped the required linter commands')
