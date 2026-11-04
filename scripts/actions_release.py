@@ -4,6 +4,7 @@ from __future__ import annotations
 import hashlib
 import json
 import os
+import shlex
 from pathlib import Path, PurePosixPath
 import re
 import subprocess
@@ -309,7 +310,7 @@ def regression_proof(root, base_sha, document, execute):
         cmd_str = " ".join(command)
         if not ("cd " in cmd_str and rel_p in cmd_str):
             if command and command[0] != "bash":
-                joined_cmd = " ".join(command)
+                joined_cmd = shlex.join(command)
                 command = ["bash", "-lc", f"cd {rel_p} && {joined_cmd}"]
     final = manifest(root, changed)
     backups = {}
