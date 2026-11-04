@@ -1,0 +1,60 @@
+{
+  "task_id": "e0e701d96bf8e24f771fc02e27d32f07",
+  "repo": "stride3d/stride",
+  "issue_number": 2553,
+  "status": "DISPATCHING",
+  "dispatch_id": "719e6c86ada0470ab0386fe8b105bd59",
+  "admission": {
+    "funding": {
+      "amount": "700",
+      "currency": "USD",
+      "payer": "Aggror",
+      "source_url": "https://github.com/stride3d/stride/issues/2553",
+      "usd_value": "700",
+      "quote": {
+        "basis": "USD face value",
+        "usd_rate": "1"
+      },
+      "raw": "### Funding: $700,- USD",
+      "source_author_association": "MEMBER",
+      "source_author_login": "Aggror"
+    },
+    "agent_reason": "Aggror (MEMBER on stride3d/stride) hung a $700 USD OpenCollective-funded bounty in the issue body ('### Funding: $700,- USD'); the request is a bounded feature to add a hierarchical FBX import toggle in the model-import pipeline (sources/engine/Stride.Assets.Models/ImportModelCommand.cs), and the repo merges outside work (1493+ merged PRs, latest 2026-11-04) with no open competing pull request on this issue.",
+    "scope_quote": "We aim to develop an enhancement for our engine that introduces a much-needed feature: the option to split an FBX file into multiple model assets based on its internal hierarchy.",
+    "code_evidence": {
+      "is_product_code": true,
+      "path": "sources/engine/Stride.Assets.Models/ImportModelCommand.cs",
+      "quote": "public abstract partial class ImportModelCommand : SingleFileImportCommand",
+      "sha": "d5648141e6ac21231b0b02074c32d430a14f5d55"
+    },
+    "source_issue": "https://github.com/stride3d/stride/issues/2553",
+    "funding_status": "PRICED_OFFER",
+    "lane": "startup",
+    "commercial_scope": "linked-discussions",
+    "commercial_review": {
+      "decision": "proceed",
+      "source_revision": "a208469b82877d7b9882f5757da8abe2cd315ad68a87b59cf51bb6003a98e438",
+      "reason": "Aggror (MEMBER) states a $700 USD bounty in the issue body, funded through the repository's own OpenCollective project; the issue is still open and unassigned after the prior author moved on (maintainer Eideren, 2026-03-06), the repository merges outside work (1493+ merged PRs, latest 2026-11-04), and no warning/settlement/withdrawal text appears in the commercial sources (complete, no payment-warning matches).",
+      "evidence": [
+        {
+          "source_url": "https://github.com/stride3d/stride/issues/2553",
+          "quote": "### Funding: $700,- USD"
+        }
+      ]
+    },
+    "task_id": "e0e701d96bf8e24f771fc02e27d32f07",
+    "source_revision": "14f1424893cb0cbd9ef0d43d18cc577301db2f14591b7b576dfad14c6e8aecc6"
+  },
+  "dispatch_attempt": 1,
+  "sovereign_admission": true,
+  "competition": {
+    "blocking": false,
+    "nominal": []
+  },
+  "lanes": [
+    "startup"
+  ],
+  "dispatched_at": "2026-11-04T15:25:46.797892+00:00",
+  "attempt": 0,
+  "updated_at": "2026-11-04T15:25:46.797914+00:00"
+}
