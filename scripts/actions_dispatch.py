@@ -1350,10 +1350,17 @@ def discover(lanes, max_dispatches=2, live=False, queries_per_lane=2, state_dir=
     last_search = {}
     nonlocal_context = {"lane": "", "expression": ""}
     def search_and_queue(lane, expression):
-        window = horizon.window(expression)
-        rows, total, saturated, branch_totals = query_expression_window(api, expression, window)
-        recent, fresh_total, _fresh_saturated, fresh_branch_totals = query_expression_window(
-            api, expression, fresh=30)
+        try:
+            window = horizon.window(expression)
+            rows, total, saturated, branch_totals = query_expression_window(api, expression, window)
+            recent, fresh_total, _fresh_saturated, fresh_branch_totals = query_expression_window(
+                api, expression, fresh=30)
+        except GitHubError as exc:
+            print(json.dumps({"phase": "SEARCH_FAILED", "lane": lane, "expression": expression,
+                              "error": str(exc)}), flush=True)
+            last_search["saturated"] = False
+            last_search["returned"] = 0
+            return
         counts[lane + ".raw"] += len(rows) + len(recent)
         last_search["saturated"] = bool(saturated)
         last_search["returned"] = len(rows) + len(recent)
