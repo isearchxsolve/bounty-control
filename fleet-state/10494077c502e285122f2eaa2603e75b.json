@@ -2,7 +2,7 @@
   "task_id": "10494077c502e285122f2eaa2603e75b",
   "repo": "stride3d/stride",
   "issue_number": 339,
-  "status": "DISPATCHING",
+  "status": "DISPATCHED",
   "dispatch_id": "e666d94b3b4646bf93e596d592d957ea",
   "admission": {
     "funding": {
@@ -60,7 +60,7 @@
   ],
   "dispatched_at": "2026-11-04T21:34:08.752123+00:00",
   "attempt": 2,
-  "updated_at": "2026-11-04T21:34:08.752141+00:00",
+  "updated_at": "2026-11-04T21:34:10.956937+00:00",
   "kind": "engineer",
   "retryable": true,
   "review_required": true,
