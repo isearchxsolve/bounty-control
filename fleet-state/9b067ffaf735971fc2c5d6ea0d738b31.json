@@ -361,7 +361,7 @@
   ],
   "dispatched_at": "2026-11-04T04:32:18.799404+00:00",
   "attempt": 2,
-  "updated_at": "2026-11-04T04:53:22.356962+00:00",
+  "updated_at": "2026-11-04T04:53:35.427366+00:00",
   "owner": "41773804832:1",
   "previous_owner": "41764654941:1",
   "previous_status": "DISPATCHED",
@@ -373,7 +373,7 @@
   "kind": "engineer",
   "retryable": true,
   "diagnostic": "Bounded Cline delivery repair exhausted: Independent release verification failed: Base regression did not fail on the specified defect assertion:\nExpected assertion: ** (CompileError) test/unit/lux/web3/event_monitor_test.exs: cannot compile module Lux.Web3.EventMonitorTest\nActual exit code: 127\nActual output:\n\nbash: line 1: m: command not found\n\nHINT: Set 'expected_failure' in regression.json to the exact literal error message or failure line printed by the test in 'Actual output' above (e.g. an exact failure string); do not write English prose sentences.\nRead complete native receipts at /tmp/fleet-artifacts. Repair the actual failure, preserving completed edits and master tests.",
-  "at": "2026-11-04T04:28:37.308382+00:00",
+  "at": "2026-11-04T04:53:23.205699+00:00",
   "failures": [
     {
       "run_url": "https://github.com/isearchxsolve/bounty-control/actions/runs/41764654941",
@@ -384,7 +384,7 @@
       "at": "2026-11-04T04:28:37.308382+00:00"
     }
   ],
-  "finished_at": "2026-11-04T04:28:48.903380+00:00",
+  "finished_at": "2026-11-04T04:53:34.869859+00:00",
   "proposed_head": "e0c61e96bcfda7bb24f6149fc5463efff02f9b63",
   "proposed_branch": "fix/bounty-75-9b067f-2",
   "verified_run": "https://github.com/isearchxsolve/bounty-control/actions/runs/41773804832",
