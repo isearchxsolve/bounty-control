@@ -2,8 +2,8 @@
   "task_id": "53b72f29ccaf11ed97d68b238fcc9256",
   "repo": "Spectral-Finance/lux",
   "issue_number": 100,
-  "status": "FAILED_DISPATCH",
-  "dispatch_id": "f3cebf02155b47f58006e9da162fba60",
+  "status": "DISPATCHING",
+  "dispatch_id": "6600d91226b4423a8d67fb19ecd77599",
   "admission": {
     "funding": {
       "amount": "300",
@@ -15,25 +15,25 @@
         "basis": "USD face value",
         "usd_rate": "1"
       },
-      "raw": "Budget: $300",
+      "raw": "Cargo Package Management Integration $300",
       "source_author_association": "COLLABORATOR",
       "source_author_login": "rparcus"
     },
-    "agent_reason": "Spectral-Finance COLLABORATOR rparcus committed $300 via issue; implement Cargo package management for Rust in Lux.",
-    "scope_quote": "Implement Cargo.toml management system",
+    "agent_reason": "rparcus (COLLABORATOR of Spectral-Finance/lux, a funded Elixir startup) hangs a $300 bounty on this open issue for a bounded integration; the repo merges outside work.",
+    "scope_quote": "Implement Cargo package management integration for Rust in Lux, enabling seamless dependency management and build system integration.",
     "code_evidence": {
       "is_product_code": true,
-      "path": "lux/lib/lux.ex",
-      "quote": "defmodule Lux do",
-      "sha": "f5d04af20932be46cd0cc10adbb79f677eb1876a"
+      "path": "lux/lib/lux/beam.ex",
+      "quote": "defmodule Lux.Beam do",
+      "sha": "0e61dce359b3672cb77d072df9b65a0a7ddcb429"
     },
     "source_issue": "https://github.com/Spectral-Finance/lux/issues/100",
     "funding_status": "PRICED_OFFER",
-    "lane": "programs",
+    "lane": "startup",
     "task_id": "53b72f29ccaf11ed97d68b238fcc9256",
     "source_revision": "d168924507302960b471504ec7caaf4601e7941340d5c5e8a1bfc5ae76c768b1"
   },
-  "dispatch_attempt": 1,
+  "dispatch_attempt": 2,
   "sovereign_admission": true,
   "competition": {
     "blocking": false,
@@ -43,6 +43,7 @@
         "author": "nepreby",
         "number": 1081,
         "author_merged_in_repo": 0,
+        "history_cached": true,
         "check_runs": 0,
         "maintainer_engagement": 0,
         "reason": "nominal_attempt_only"
@@ -52,6 +53,7 @@
         "author": "milindchatrabhuji",
         "number": 1032,
         "author_merged_in_repo": 0,
+        "history_cached": true,
         "check_runs": 0,
         "maintainer_engagement": 0,
         "reason": "nominal_attempt_only"
@@ -70,6 +72,7 @@
         "author": "lienhoatienphung-svg",
         "number": 1019,
         "author_merged_in_repo": 0,
+        "history_cached": true,
         "check_runs": 0,
         "maintainer_engagement": 0,
         "reason": "nominal_attempt_only"
@@ -79,6 +82,7 @@
         "author": "ahavahdev1",
         "number": 976,
         "author_merged_in_repo": 0,
+        "history_cached": true,
         "check_runs": 0,
         "maintainer_engagement": 0,
         "reason": "nominal_attempt_only"
@@ -97,6 +101,7 @@
         "author": "jackmercy",
         "number": 971,
         "author_merged_in_repo": 0,
+        "history_cached": true,
         "check_runs": 0,
         "maintainer_engagement": 0,
         "reason": "nominal_attempt_only"
@@ -116,6 +121,7 @@
         "author": "zhaog100",
         "number": 936,
         "author_merged_in_repo": 0,
+        "history_cached": true,
         "check_runs": 0,
         "maintainer_engagement": 0,
         "reason": "nominal_attempt_only"
@@ -125,6 +131,7 @@
         "author": "elevasyncsolutions-jpg",
         "number": 933,
         "author_merged_in_repo": 0,
+        "history_cached": true,
         "check_runs": 0,
         "maintainer_engagement": 0,
         "reason": "nominal_attempt_only"
@@ -134,6 +141,7 @@
         "author": "bwm0223",
         "number": 859,
         "author_merged_in_repo": 0,
+        "history_cached": true,
         "check_runs": 0,
         "maintainer_engagement": 0,
         "reason": "nominal_attempt_only"
@@ -143,6 +151,7 @@
         "author": "jamesji79",
         "number": 689,
         "author_merged_in_repo": 0,
+        "history_cached": true,
         "check_runs": 0,
         "maintainer_engagement": 0,
         "reason": "nominal_attempt_only"
@@ -152,6 +161,7 @@
         "author": "jira44",
         "number": 639,
         "author_merged_in_repo": 0,
+        "history_cached": true,
         "check_runs": 0,
         "maintainer_engagement": 0,
         "reason": "nominal_attempt_only"
@@ -161,6 +171,7 @@
         "author": "genesisrevelationinc-debug",
         "number": 637,
         "author_merged_in_repo": 0,
+        "history_cached": true,
         "check_runs": 0,
         "maintainer_engagement": 0,
         "reason": "nominal_attempt_only"
@@ -188,6 +199,7 @@
         "author": "bigpolarbear",
         "number": 587,
         "author_merged_in_repo": 0,
+        "history_cached": true,
         "check_runs": 0,
         "maintainer_engagement": 0,
         "reason": "nominal_attempt_only"
@@ -197,6 +209,7 @@
         "author": "susuhome",
         "number": 457,
         "author_merged_in_repo": 0,
+        "history_cached": true,
         "check_runs": 0,
         "maintainer_engagement": 0,
         "reason": "nominal_attempt_only"
@@ -206,6 +219,7 @@
         "author": "saimuren",
         "number": 357,
         "author_merged_in_repo": 0,
+        "history_cached": true,
         "check_runs": 0,
         "maintainer_engagement": 0,
         "reason": "nominal_attempt_only"
@@ -413,11 +427,11 @@
     ]
   },
   "lanes": [
-    "programs"
+    "startup"
   ],
-  "dispatched_at": "2026-11-03T04:39:51.713283+00:00",
+  "dispatched_at": "2026-11-04T02:12:50.409119+00:00",
   "attempt": 0,
-  "updated_at": "2026-11-03T06:29:32.216197+00:00",
+  "updated_at": "2026-11-04T02:12:50.409137+00:00",
   "diagnostic": "Dispatch run completed without acquiring ownership",
   "owner_revoked": null,
   "observed_at": "2026-11-03T06:29:32.216183+00:00"
