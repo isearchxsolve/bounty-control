@@ -43,7 +43,7 @@
   ],
   "dispatched_at": "2026-11-03T15:14:54.022061+00:00",
   "attempt": 3,
-  "updated_at": "2026-11-04T03:00:14.642439+00:00",
+  "updated_at": "2026-11-04T04:31:06.627271+00:00",
   "owner": "41678172894:1",
   "previous_owner": "41671619124:1",
   "previous_status": "FAILED_ENGINEER",
@@ -101,5 +101,5 @@
     "latest_reviewer": null,
     "latest_review_at": null
   },
-  "observed_at": "2026-11-04T03:00:14.642426+00:00"
+  "observed_at": "2026-11-04T04:31:06.627255+00:00"
 }
