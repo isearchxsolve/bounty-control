@@ -862,7 +862,8 @@ def engineer():
         git(root, "config", "user.name", BOUNTY_ACCOUNT)
         git(root, "config", "user.email", "isearch.xsolve@gmail.com")
         git(root, "add", "--", *paths)
-        git(root, "-c", "commit.gpgsign=false", "commit", "-m", f"fix: #{number} - {task['title']}")
+        git(root, "-c", "commit.gpgsign=false", "commit", "-m",
+            f"fix: #{number} - {task['title']}\n\nCo-authored-by: isearchxsolve <isearch.xsolve@gmail.com>")
         head = git(root, "rev-parse", "HEAD").stdout.decode().strip()
         if git(root, "rev-list", "--count", base + ".." + head).stdout.strip() != b"1":
             raise ValueError("Expected exactly one verified task commit")
@@ -1052,7 +1053,11 @@ SPONSOR_URL = "https://github.com/sponsors/isearchxsolve"
 
 def pr_body(context, number, receipt, head, rows, claim=""):
     """The public PR body. ``claim`` is the platform claim command, empty when none applies."""
-    footer = f"\n\n---\n*Sponsorship & Direct Payout Rail:* [{SPONSOR_URL}]({SPONSOR_URL})"
+    footer = (
+        f"\n\n---\n"
+        f"*Contribution authored by isearchxsolve <isearch.xsolve@gmail.com>*\n"
+        f"*Sponsorship & Direct Payout Rail:* [{SPONSOR_URL}]({SPONSOR_URL})"
+    )
     return (f"Resolves #{number}: {context['title']}.\n\n"
             + (claim + "\n\n" if claim else "")
             + f"Verified base: {receipt['base_sha']}\nVerified head: {head}\n\n"

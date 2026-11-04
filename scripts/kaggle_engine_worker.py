@@ -3092,7 +3092,10 @@ def commit_and_open_pr(
     if error:
         fail(error)
         return None
-    commit_msg = f"fix: #{number} - {title}"
+    commit_msg = (
+        f"fix: #{number} - {title}\n\n"
+        f"Co-authored-by: isearchxsolve <isearch.xsolve@gmail.com>"
+    )
     _, error = _git_checked(["git", "-C", worktree, "commit", "-m", commit_msg], 15, "commit")
     if error:
         fail(error)

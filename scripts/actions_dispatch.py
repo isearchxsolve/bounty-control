@@ -806,7 +806,11 @@ def dispatch(api, store, context, proof, lanes, remote_repair=False, preparation
         status = proof.get("funding_status")
         funding = proof.get("funding") or {}
         usd_str = str(funding.get("usd_value") or "")
-        if status == "UNPRICED_OWNER_REQUEST" or (usd_str and Decimal(usd_str) <= 0):
+        try:
+            usd_val = Decimal(usd_str) if usd_str else Decimal("0")
+        except Exception:
+            usd_val = Decimal("0")
+        if status == "UNPRICED_OWNER_REQUEST" or usd_val <= Decimal("0"):
             raise ValueError(f"Dispatch blocked: unpriced issue ({status=}, usd={usd_str}) violates No Free Service policy")
     if isinstance(proof, dict) and "source_revision" not in proof and "issue" in context:
         from pipeline_evidence import bind_proof
