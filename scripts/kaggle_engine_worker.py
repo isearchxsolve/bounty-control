@@ -27,7 +27,7 @@ import subprocess
 import signal
 import shlex
 import uuid
-from http.server import HTTPServer, BaseHTTPRequestHandler
+from http.server import ThreadingHTTPServer, BaseHTTPRequestHandler
 from datetime import datetime, timezone
 from dataclasses import dataclass, field
 from typing import List, Dict, Tuple, Optional, Any, Callable
@@ -2168,7 +2168,7 @@ class _ClineProxyHandler(BaseHTTPRequestHandler):
 
 def run_cline_proxy_server() -> None:
     """Run the local-only Cline gateway inside this engine process tree."""
-    HTTPServer(("127.0.0.1", 8080), _ClineProxyHandler).serve_forever()
+    ThreadingHTTPServer(("127.0.0.1", 8080), _ClineProxyHandler).serve_forever()
 
 
 def _proxy_free_urlopen(url: str, timeout: float):
@@ -2324,7 +2324,7 @@ def verify_cline_provider_wire() -> Tuple[bool, str]:
             before = json.load(response)
         result = run_command_safe(
             cline_worktree_command(os.path.dirname(source_path), prompt, retries=1),
-            cwd=os.path.dirname(source_path), timeout=180,
+            cwd=os.path.dirname(source_path), timeout=240,
         )
         with _proxy_free_urlopen(CLINE_PROXY_HEALTH_URL, timeout=5) as response:
             after = json.load(response)

@@ -11,6 +11,7 @@ import re
 import subprocess
 import tempfile
 import threading
+import time
 from types import SimpleNamespace
 
 from actions_github import (BOUNTY_ACCOUNT, GitHub, GitHubError, StateStore, http_status,
@@ -584,6 +585,9 @@ def runtime():
     if status["states"].get("READY", 0) < 1:
         raise RuntimeError("Gateway has no ready provider key")
     ok, diagnostic = worker.verify_cline_provider_wire()
+    if not ok and worker.is_retryable_failure(diagnostic):
+        time.sleep(15)
+        ok, diagnostic = worker.verify_cline_provider_wire()
     if not ok:
         raise RuntimeError(diagnostic)
     write_json(artifacts() / "model-wire.json", {"at": utcnow(), "diagnostic": diagnostic,
