@@ -657,8 +657,12 @@ def engineer():
         # checks currency against the branch the patch was actually built on instead of
         # silently falling back to the default branch.
         base_branch = baseline_record["base_branch"]
-        if git(root, "remote", "get-url", "upstream").stdout.decode().strip().removesuffix(".git") != (
-                "https://github.com/" + repo):
+        expected_repo = "https://github.com/" + repository(repo)
+        remotes = git(root, "remote", check=False).stdout.decode().split()
+        if "upstream" not in remotes:
+            git(root, "remote", "add", "upstream", expected_repo + ".git")
+        if git(root, "remote", "get-url", "upstream").stdout.decode().strip().removesuffix(".git").lower() != (
+                expected_repo.lower()):
             raise ValueError("Unexpected upstream remote")
         plan = prepared["plan"]
         repair_feedback = None
