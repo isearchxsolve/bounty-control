@@ -170,6 +170,13 @@ def recorded_cause(row):
         value = row.get(key)
         if isinstance(value, str) and value.strip():
             return value.strip()
+    remote = row.get('remote_verification')
+    if isinstance(remote, dict) and remote.get('failures'):
+        names = [f.get('name') or f.get('context') for f in remote['failures'] if isinstance(f, dict)]
+        names = [n for n in names if n]
+        if names:
+            return f"Remote checks failed: {', '.join(names)}"
+        return "Remote checks failed"
     for key in HISTORY_KEYS:
         history = row.get(key)
         if not isinstance(history, list):
@@ -180,8 +187,15 @@ def recorded_cause(row):
                     value = entry.get(inner)
                     if isinstance(value, str) and value.strip():
                         return value.strip()
+                if entry.get('failures') and isinstance(entry['failures'], list):
+                    names = [f.get('name') or f.get('context') for f in entry['failures'] if isinstance(f, dict)]
+                    names = [n for n in names if n]
+                    if names:
+                        return f"Remote checks failed: {', '.join(names)}"
             elif isinstance(entry, str) and entry.strip():
                 return entry.strip()
+    if row.get('status') == 'FAILED_REMOTE_CHECKS':
+        return "Remote checks failed"
     return None
 
 

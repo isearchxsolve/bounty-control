@@ -443,6 +443,26 @@ class ReleaseTests(unittest.TestCase):
         self.assertEqual(proof["green_exit"], 0)
         self.assertEqual(manifest(self.root, status_paths(self.root)), before)
 
+    def test_regression_proof_normalizes_repo_prefix_and_infers_tests(self):
+        (self.root / "product.py").write_text("def value(): return 1\n")
+        test = self.root / "tests/regression.py"
+        test.write_text("from product import value\nassert value() == 1, 'specific regression fixture assertion'\n")
+        def execute(argv):
+            result = subprocess.run(argv, cwd=self.root, text=True, capture_output=True,
+                                    env={**os.environ, "PYTHONPATH": str(self.root), "PYTHONDONTWRITEBYTECODE": "1"}, timeout=10)
+            return SimpleNamespace(stdout=result.stdout, stderr=result.stderr, exit_code=result.returncode)
+        # Prefix match: repo-qualified prefix like 'myrepo/tests/regression.py' resolves to 'tests/regression.py'
+        proof_prefix = regression_proof(self.root, self.base, {"test_files": ["myrepo/tests/regression.py"],
+                "argv": [sys.executable, "-B", str(test)], "expected_failure": "specific regression fixture assertion"}, execute)
+        self.assertNotEqual(proof_prefix["red_exit"], 0)
+        self.assertEqual(proof_prefix["green_exit"], 0)
+
+        # Inference: when test_files is omitted, companion test is inferred from changed tests
+        proof_inferred = regression_proof(self.root, self.base, {
+                "argv": [sys.executable, "-B", str(test)], "expected_failure": "specific regression fixture assertion"}, execute)
+        self.assertNotEqual(proof_inferred["red_exit"], 0)
+        self.assertEqual(proof_inferred["green_exit"], 0)
+
     def test_checkpoint_restores_real_tracked_and_new_companion_bytes(self):
         import zipfile
         (self.root / "product.py").write_text("def value(): return 1\n")

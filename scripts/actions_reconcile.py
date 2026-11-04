@@ -319,10 +319,17 @@ def reconcile(repair=False, api=None, store=None):
                 else:
                     proof = classify_checks(api, record["repo"], record["head_sha"])
                     review = review_verdict(api, record["repo"], record["pr_number"])
+                    failed_names = [r.get("name") or r.get("context") for r in proof.get("failures", []) if isinstance(r, dict)]
+                    failed_names = [n for n in failed_names if n]
+                    diag = (f"Remote checks failed on commit {record.get('head_sha', '')[:8]}: {', '.join(failed_names)}"
+                            if failed_names else f"Remote checks failed on commit {record.get('head_sha', '')[:8]}"
+                            if proof.get("failures") else record.get("diagnostic"))
                     fields = {"status": "FAILED_REMOTE_CHECKS" if proof["failures"] else
                               "CHECKS_HELD_FOR_APPROVAL" if proof["state"] == "HELD" else
                               "PUBLISHED_PENDING_CHECKS" if proof["state"] == "PENDING" else "AWAITING_REVIEW",
                               "remote_verification": proof, "remote_review": review}
+                    if diag:
+                        fields["diagnostic"] = diag
                     if proof["failures"]:
                         fields["failures"] = [*record.get("failures", []), proof]
                     if review["verdict"] == "CHANGES_REQUESTED":

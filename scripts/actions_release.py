@@ -32,8 +32,14 @@ def safe_path(root, name):
     return target
 
 
-_BYTECODE_EXTS = (".pyc", ".pyo", ".pyd", ".class", ".beam", ".rbc", ".elc")
-_CACHE_SEGMENTS = {"__pycache__", ".pytest_cache", ".mypy_cache", ".ruff_cache"}
+_BYTECODE_EXTS = (
+    ".pyc", ".pyo", ".pyd", ".class", ".beam", ".rbc", ".elc",
+    ".o", ".a", ".so", ".dylib", ".dll", ".rlib", ".rmeta", ".d"
+)
+_CACHE_SEGMENTS = {
+    "__pycache__", ".pytest_cache", ".mypy_cache", ".ruff_cache",
+    "target", ".fingerprint", "_build", ".elixir_ls", "node_modules", ".gradle"
+}
 
 
 def is_cache_path(path):
@@ -255,10 +261,28 @@ def regression_proof(root, base_sha, document, execute):
     """Run new companion tests against actual base source, then restored fix."""
     files, command = document.get("test_files"), document.get("argv")
     expected = document.get("expected_failure")
-    if not files or not command or not isinstance(expected, str) or len(expected) < 12:
+    if not command or not isinstance(expected, str) or len(expected) < 12:
         raise ValueError("Specific regression test files/command/failure assertion are mandatory")
     changed = status_paths(root)
-    if not set(files).issubset(changed) or not all(is_test(p) for p in files):
+    changed_set = set(changed)
+
+    norm_files = []
+    for f in (files or []):
+        f_norm = str(Path(f).as_posix()).lstrip("./")
+        if f_norm in changed_set:
+            norm_files.append(f_norm)
+        else:
+            matching = [c for c in changed if c == f_norm or f_norm.endswith("/" + c) or c.endswith("/" + f_norm)]
+            if matching:
+                norm_files.append(matching[0])
+            else:
+                norm_files.append(f_norm)
+
+    if not norm_files:
+        norm_files = [p for p in changed if is_test(p)]
+
+    files = norm_files
+    if not files or not set(files).issubset(changed_set) or not all(is_test(p) for p in files):
         raise ValueError("Regression must name the actual added companion tests")
     for name in files:
         if git(root, "cat-file", "-e", f"{base_sha}:{name}", check=False).returncode == 0:

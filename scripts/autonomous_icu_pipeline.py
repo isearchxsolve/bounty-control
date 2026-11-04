@@ -1776,6 +1776,20 @@ class EngineeringRun:
     error_summary: Optional[str] = None
     modified_files: List[str] = field(default_factory=list)
 
+_BYTECODE_EXTS = (
+    ".pyc", ".pyo", ".pyd", ".class", ".beam", ".rbc", ".elc",
+    ".o", ".a", ".so", ".dylib", ".dll", ".rlib", ".rmeta", ".d"
+)
+_CACHE_SEGMENTS = {
+    "__pycache__", ".pytest_cache", ".mypy_cache", ".ruff_cache",
+    "target", ".fingerprint", "_build", ".elixir_ls", "node_modules", ".gradle"
+}
+
+def is_build_or_cache_path(path: str) -> bool:
+    parts = set(Path(path).parts)
+    return bool(parts & _CACHE_SEGMENTS or path.lower().endswith(_BYTECODE_EXTS))
+
+
 def is_safe_relative_path(worktree: str, rel_path: str) -> bool:
     """
     Fail-closed worktree boundary security gate.
@@ -2373,19 +2387,27 @@ def run_cline_engineering_turn(
         return False, [], [], "Cline completed without modifying repository files; using legacy proposal fallback."
 
     file_changes = []
+    filtered_changed = []
     for rel_path in changed_paths:
         if not is_safe_relative_path(worktree, rel_path):
             return False, [], [], f"Cline attempted unsafe worktree path: {rel_path}"
+        if is_build_or_cache_path(rel_path):
+            continue
         full_path = os.path.join(worktree, rel_path.replace("/", os.sep))
         # A deletion is safe to carry forward; there is no file content to parse.
         if not os.path.exists(full_path):
+            filtered_changed.append(rel_path)
             continue
         try:
             with open(full_path, "r", encoding="utf-8") as source_file:
                 file_changes.append((rel_path, source_file.read()))
-        except (OSError, UnicodeError) as exc:
+                filtered_changed.append(rel_path)
+        except UnicodeError:
+            # Skip non-UTF-8 binary build/compiler artifacts that slipped past extension filter
+            continue
+        except OSError as exc:
             return False, [], [], f"Unable to read Cline-modified file {rel_path}: {exc}"
-    return True, file_changes, changed_paths, f"Cline completed successfully. {status_message}"
+    return True, file_changes, filtered_changed, f"Cline completed successfully. {status_message}"
 
 def verify_baseline(worktree: str, plan: VerificationPlan) -> Tuple[bool, str, List[CommandResult]]:
     results = []
