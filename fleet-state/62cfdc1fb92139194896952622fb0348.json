@@ -2,7 +2,7 @@
   "task_id": "62cfdc1fb92139194896952622fb0348",
   "repo": "Spectral-Finance/lux",
   "issue_number": 79,
-  "status": "DISPATCHING",
+  "status": "DISPATCHED",
   "dispatch_id": "67962e4ff059474a84e73d00846a8662",
   "admission": {
     "funding": {
@@ -333,5 +333,5 @@
   ],
   "dispatched_at": "2026-11-04T09:16:30.161747+00:00",
   "attempt": 0,
-  "updated_at": "2026-11-04T09:16:30.161765+00:00"
+  "updated_at": "2026-11-04T09:16:31.880428+00:00"
 }
