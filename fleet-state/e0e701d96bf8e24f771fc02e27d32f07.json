@@ -2,7 +2,7 @@
   "task_id": "e0e701d96bf8e24f771fc02e27d32f07",
   "repo": "stride3d/stride",
   "issue_number": 2553,
-  "status": "DISPATCHED",
+  "status": "CLAIMED",
   "dispatch_id": "719e6c86ada0470ab0386fe8b105bd59",
   "admission": {
     "funding": {
@@ -55,6 +55,14 @@
     "startup"
   ],
   "dispatched_at": "2026-11-04T15:25:46.797892+00:00",
-  "attempt": 0,
-  "updated_at": "2026-11-04T15:25:48.846997+00:00"
+  "attempt": 1,
+  "updated_at": "2026-11-04T15:26:09.655428+00:00",
+  "owner": "41857659581:1",
+  "previous_owner": null,
+  "previous_status": "DISPATCHED",
+  "run_url": "https://github.com/isearchxsolve/bounty-control/actions/runs/41857659581",
+  "harness_sha": "7f5030552a84243a768914ca1436610d921400f8",
+  "claimed_at": "2026-11-04T15:26:09.655374+00:00",
+  "lease_expires_at": "2026-11-04T19:31:09.655391+00:00",
+  "preparation_budget_seconds": 14400
 }
