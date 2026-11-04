@@ -2,8 +2,8 @@
   "task_id": "3ba86a2f9bb5b606b2af7d3d6b698996",
   "repo": "Spectral-Finance/lux",
   "issue_number": 62,
-  "status": "FAILED_DELIVERABLE_MISSING",
-  "dispatch_id": "1cd0093b908a4dd0b3d0625492d7d51d",
+  "status": "DISPATCHING",
+  "dispatch_id": "65e938fd7b0440d983b1c00b1c0f0de1",
   "admission": {
     "funding": {
       "amount": "2500",
@@ -15,34 +15,55 @@
         "basis": "USD face value",
         "usd_rate": "1"
       },
-      "raw": "## Budget: $2,500",
+      "raw": "Telegram Core API Integration ($2,500)",
       "source_author_association": "COLLABORATOR",
       "source_author_login": "rparcus"
     },
-    "agent_reason": "COLLABORATOR rparcus hung $2,500 for Telegram Bot API integration; issue shows specific features and acceptance criteria.",
+    "agent_reason": "rparcus (COLLABORATOR) funds this bounty on the Spectral-Finance/lux AI-agent framework; the change builds a new integration Beam/Lens on top of the core Lux.Beam orchestrator (code_evidence), so the requested work is bounded product engineering in an actively-merged repo.",
     "scope_quote": "Implement core Telegram Bot API integration for Lux, enabling secure bot communication and management through Lux's lens system.",
     "code_evidence": {
       "is_product_code": true,
-      "path": "lux/lib/lux/integrations/telegram.ex",
-      "quote": "defmodule Lux.Integrations.Telegram do",
-      "sha": "b6ab10f84352af04228861e01ee190be54a1b016"
+      "path": "lux/lib/lux/beam.ex",
+      "quote": "defmodule Lux.Beam do",
+      "sha": "0e61dce359b3672cb77d072df9b65a0a7ddcb429"
     },
     "source_issue": "https://github.com/Spectral-Finance/lux/issues/62",
     "funding_status": "PRICED_OFFER",
-    "lane": "normal",
+    "lane": "startup",
     "task_id": "3ba86a2f9bb5b606b2af7d3d6b698996",
-    "source_revision": "58e5a12c430ee573c36b01208a881a8bb87e4a47156f56e1c70d02bf2eadc189"
+    "source_revision": "67cc9ab92109c0b72aa75f36dfc4e3c76a0c2b7569f1cf589d03ec7f9d228c88"
   },
-  "dispatch_attempt": 2,
+  "dispatch_attempt": 3,
   "sovereign_admission": true,
   "competition": {
     "blocking": false,
     "nominal": [
       {
+        "pr": "https://github.com/Spectral-Finance/lux/pull/1097",
+        "author": "garter-black",
+        "number": 1097,
+        "author_merged_in_repo": 0,
+        "history_cached": true,
+        "check_runs": 0,
+        "maintainer_engagement": 0,
+        "reason": "nominal_attempt_only"
+      },
+      {
+        "pr": "https://github.com/Spectral-Finance/lux/pull/1056",
+        "author": "nepreby",
+        "number": 1056,
+        "author_merged_in_repo": 0,
+        "history_cached": true,
+        "check_runs": 0,
+        "maintainer_engagement": 0,
+        "reason": "nominal_attempt_only"
+      },
+      {
         "pr": "https://github.com/Spectral-Finance/lux/pull/954",
         "author": "konor1743",
         "number": 954,
         "author_merged_in_repo": 0,
+        "history_cached": true,
         "check_runs": 0,
         "maintainer_engagement": 0,
         "reason": "nominal_attempt_only"
@@ -52,6 +73,7 @@
         "author": "parastejpal987-cmyk",
         "number": 947,
         "author_merged_in_repo": 0,
+        "history_cached": true,
         "check_runs": 0,
         "maintainer_engagement": 0,
         "reason": "nominal_attempt_only"
@@ -71,6 +93,7 @@
         "author": "bwm0223",
         "number": 862,
         "author_merged_in_repo": 0,
+        "history_cached": true,
         "check_runs": 0,
         "maintainer_engagement": 0,
         "reason": "nominal_attempt_only"
@@ -80,6 +103,7 @@
         "author": "sureshchouksey8",
         "number": 738,
         "author_merged_in_repo": 0,
+        "history_cached": true,
         "check_runs": 0,
         "maintainer_engagement": 0,
         "reason": "nominal_attempt_only"
@@ -89,6 +113,7 @@
         "author": "utkarsh-sinha0",
         "number": 736,
         "author_merged_in_repo": 0,
+        "history_cached": true,
         "check_runs": 0,
         "maintainer_engagement": 0,
         "reason": "nominal_attempt_only"
@@ -98,6 +123,7 @@
         "author": "xudexing19920829",
         "number": 734,
         "author_merged_in_repo": 0,
+        "history_cached": true,
         "check_runs": 0,
         "maintainer_engagement": 0,
         "reason": "nominal_attempt_only"
@@ -107,6 +133,7 @@
         "author": "bigpolarbear",
         "number": 538,
         "author_merged_in_repo": 0,
+        "history_cached": true,
         "check_runs": 0,
         "maintainer_engagement": 0,
         "reason": "nominal_attempt_only"
@@ -116,6 +143,7 @@
         "author": "treasure520520",
         "number": 508,
         "author_merged_in_repo": 0,
+        "history_cached": true,
         "check_runs": 0,
         "maintainer_engagement": 0,
         "reason": "nominal_attempt_only"
@@ -125,6 +153,7 @@
         "author": "celebritypunks",
         "number": 462,
         "author_merged_in_repo": 0,
+        "history_cached": true,
         "check_runs": 0,
         "maintainer_engagement": 0,
         "reason": "nominal_attempt_only"
@@ -134,6 +163,7 @@
         "author": "susuhome",
         "number": 437,
         "author_merged_in_repo": 0,
+        "history_cached": true,
         "check_runs": 0,
         "maintainer_engagement": 0,
         "reason": "nominal_attempt_only"
@@ -143,6 +173,7 @@
         "author": "milochiang",
         "number": 419,
         "author_merged_in_repo": 0,
+        "history_cached": true,
         "check_runs": 0,
         "maintainer_engagement": 0,
         "reason": "nominal_attempt_only"
@@ -202,6 +233,7 @@
         "author": "yogeshkampalliwar",
         "number": 719,
         "author_merged_in_repo": 0,
+        "history_cached": true,
         "check_runs": 0,
         "maintainer_engagement": 0,
         "reason": "nominal_attempt_only"
@@ -241,6 +273,7 @@
         "author": "nkar123412-hub",
         "number": 740,
         "author_merged_in_repo": 0,
+        "history_cached": true,
         "check_runs": 0,
         "maintainer_engagement": 0,
         "reason": "nominal_attempt_only"
@@ -250,6 +283,7 @@
         "author": "ishant5436",
         "number": 759,
         "author_merged_in_repo": 0,
+        "history_cached": true,
         "check_runs": 0,
         "maintainer_engagement": 0,
         "reason": "nominal_attempt_only"
@@ -293,15 +327,35 @@
         "check_runs": 0,
         "maintainer_engagement": 0,
         "reason": "nominal_attempt_only"
+      },
+      {
+        "pr": "https://github.com/Spectral-Finance/lux/pull/1056",
+        "author": "nepreby",
+        "number": 1056,
+        "author_merged_in_repo": 0,
+        "history_cached": true,
+        "check_runs": 0,
+        "maintainer_engagement": 0,
+        "reason": "nominal_attempt_only"
+      },
+      {
+        "pr": "https://github.com/Spectral-Finance/lux/pull/1097",
+        "author": "garter-black",
+        "number": 1097,
+        "author_merged_in_repo": 0,
+        "history_cached": true,
+        "check_runs": 0,
+        "maintainer_engagement": 0,
+        "reason": "nominal_attempt_only"
       }
     ]
   },
   "lanes": [
     "normal"
   ],
-  "dispatched_at": "2026-11-02T12:31:26.207203+00:00",
+  "dispatched_at": "2026-11-04T02:13:12.260633+00:00",
   "attempt": 2,
-  "updated_at": "2026-11-02T12:48:02.381877+00:00",
+  "updated_at": "2026-11-04T02:13:12.260650+00:00",
   "owner": "41445403962:1",
   "previous_owner": "41439888442:1",
   "previous_status": "DISPATCHED",
