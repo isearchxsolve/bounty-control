@@ -2,7 +2,7 @@
   "task_id": "5819d4bbd803c0edaec45bb4926f168f",
   "repo": "Spectral-Finance/lux",
   "issue_number": 59,
-  "status": "PUBLISHED_PENDING_CHECKS",
+  "status": "AWAITING_REVIEW",
   "dispatch_id": "8daafb9236ad4755953b4ec4a6d18764",
   "admission": {
     "funding": {
@@ -179,7 +179,7 @@
   ],
   "dispatched_at": "2026-11-04T00:06:48.749942+00:00",
   "attempt": 2,
-  "updated_at": "2026-11-04T00:32:48.457709+00:00",
+  "updated_at": "2026-11-04T01:20:33.702789+00:00",
   "owner": "41744357649:1",
   "previous_owner": "41729797683:1",
   "previous_status": "DISPATCHED",
@@ -189,7 +189,7 @@
   "lease_expires_at": "2026-11-04T04:12:33.749999+00:00",
   "preparation_budget_seconds": 14400,
   "diagnostic": "Actions run completed (failure) without terminal callback; artifacts retained",
-  "observed_at": "2026-11-03T23:13:14.451626+00:00",
+  "observed_at": "2026-11-04T01:20:33.702749+00:00",
   "proposed_head": "0ab2047600a0d8c72e21fbda1298bd5e222258d0",
   "proposed_branch": "fix/bounty-59-5819d4-2",
   "verified_run": "https://github.com/isearchxsolve/bounty-control/actions/runs/41744357649",
@@ -203,5 +203,19 @@
   "payment_status": "UNVERIFIED",
   "release_digest": "7c7d5c11036dc0d49a7114143fcf9699a0a06b1c4ccad9ce411ee764e05ebf41",
   "at": "2026-11-04T00:32:36.473465+00:00",
-  "finished_at": "2026-11-04T00:32:48.037327+00:00"
+  "finished_at": "2026-11-04T00:32:48.037327+00:00",
+  "remote_verification": {
+    "head_sha": "0ab2047600a0d8c72e21fbda1298bd5e222258d0",
+    "checks": [],
+    "statuses": [],
+    "failures": [],
+    "held": [],
+    "state": "NO_REMOTE_CHECKS"
+  },
+  "remote_review": {
+    "verdict": "NONE",
+    "review_count": 0,
+    "latest_reviewer": null,
+    "latest_review_at": null
+  }
 }
