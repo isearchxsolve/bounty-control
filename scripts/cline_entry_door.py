@@ -661,7 +661,7 @@ def model_admission_refusal(row, context_builder, source_reader=None):
             usd = amount * Decimal(str(rate['usd_rate']))
             if usd < FLOOR:
                 return 'BOUNTY_FLOOR', None, None
-        if not owner_request and context.get('commercial_context_complete') is not True:
+        if not owner_request:
             from payment_gates import funding_freshness_refusal
             freshness = funding_freshness_refusal(context, funding)
             if freshness:
@@ -845,7 +845,7 @@ def verify_rows(rows: List[dict], fetch: Optional[Callable[[str, int], Optional[
             if reason:
                 refused.append({"row": row, "reason": reason, **({"detail": detail} if detail else {})})
                 continue
-            if INTENT_GATE and (proof or {}).get('commercial_scope') != 'linked-discussions':
+            if INTENT_GATE:
                 # The repository's own merge history, measured once per repository per round.
                 # Runs after admission so a row that is not funded never spends the probe.
                 reason, detail = intent_refusal(repo, admission_client, intent_cache)

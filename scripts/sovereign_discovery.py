@@ -69,6 +69,12 @@ def discover(lanes, max_dispatches=2, live=False, state_dir=None, hydrate_only=F
             context["lane"] = row.get("lane")
             if repository_over_capacity(repository_size_kb(api, context["repo"])):
                 raise ValueError("CAPACITY_EXCLUDED")
+            from bounty_admission import repository_intent
+            from actions_dispatch import merge_evidence
+            repo_ev = merge_evidence(api, context["repo"], {})
+            merge_ok, merge_reason = repository_intent(repo_ev)
+            if not merge_ok:
+                raise ValueError(merge_reason)
             counts["qualified"] += 1
             qualified_ids.add(identity)
             if not live:
