@@ -2,7 +2,7 @@
   "task_id": "10494077c502e285122f2eaa2603e75b",
   "repo": "stride3d/stride",
   "issue_number": 339,
-  "status": "CLAIMED",
+  "status": "FAILED_ENGINEER",
   "dispatch_id": "e666d94b3b4646bf93e596d592d957ea",
   "admission": {
     "funding": {
@@ -60,15 +60,15 @@
   ],
   "dispatched_at": "2026-11-04T21:34:08.752123+00:00",
   "attempt": 3,
-  "updated_at": "2026-11-04T21:34:45.379218+00:00",
+  "updated_at": "2026-11-05T00:43:43.791365+00:00",
   "kind": "engineer",
   "retryable": true,
   "review_required": true,
   "resume_phase": "claim",
   "reason": "COMMERCIAL_REVIEW_STALE",
   "detail": [],
-  "diagnostic": "Cline preparation failed: error: The operation timed out. |",
-  "at": "2026-11-04T21:11:06.556232+00:00",
+  "diagnostic": "Bounded Cline delivery repair exhausted: Independent release verification failed: Regression must name the actual added companion tests\nRead complete native receipts at /tmp/fleet-artifacts. Repair the actual failure, preserving completed edits and master tests.",
+  "at": "2026-11-05T00:43:32.660381+00:00",
   "refusal_history": [
     {
       "status": "REJECTED_COMMERCIAL_REVIEW",
@@ -141,7 +141,15 @@
       "retryable": true,
       "diagnostic": "Cline preparation failed: error: The operation timed out. |",
       "at": "2026-11-04T21:11:06.556232+00:00"
+    },
+    {
+      "run_url": "https://github.com/isearchxsolve/bounty-control/actions/runs/41917314905",
+      "status": "FAILED_ENGINEER",
+      "kind": "engineer",
+      "retryable": true,
+      "diagnostic": "Bounded Cline delivery repair exhausted: Independent release verification failed: Regression must name the actual added companion tests\nRead complete native receipts at /tmp/fleet-artifacts. Repair the actual failure, preserving completed edits and master tests.",
+      "at": "2026-11-05T00:43:32.660381+00:00"
     }
   ],
-  "finished_at": "2026-11-04T21:11:18.593449+00:00"
+  "finished_at": "2026-11-05T00:43:43.151192+00:00"
 }
