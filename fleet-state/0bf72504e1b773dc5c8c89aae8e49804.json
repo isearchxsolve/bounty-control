@@ -1,0 +1,175 @@
+{
+  "task_id": "0bf72504e1b773dc5c8c89aae8e49804",
+  "repo": "Spectral-Finance/lux",
+  "issue_number": 60,
+  "status": "DISPATCHING",
+  "dispatch_id": "a5423b70297d45bdbeec69779281f8e1",
+  "admission": {
+    "funding": {
+      "amount": "2000",
+      "currency": "USD",
+      "payer": "rparcus",
+      "source_url": "https://github.com/Spectral-Finance/lux/issues/60",
+      "usd_value": "2000",
+      "quote": {
+        "basis": "USD face value",
+        "usd_rate": "1"
+      },
+      "raw": "Twitter Analytics and Monitoring ($2,000)",
+      "source_author_association": "COLLABORATOR",
+      "source_author_login": "rparcus"
+    },
+    "agent_reason": "rparcus, a COLLABORATOR on Spectral-Finance/lux (a funded Elixir agent-framework startup that merges outside PRs), authored this open issue carrying the '$2,000' budget in its title and a '## Budget: $2,000' line in its body; the bounded engineering ask is the missing Twitter analytics/monitoring (metrics, sentiment, alerts) surface, whose product code sits in lux/lib/lux/prisms (e.g. Lux.Prisms.SentimentAnalysisPrism) and lux/lib/lux/integrations, which today cover Discord/Telegram/Allora but no Twitter/X analytics.",
+    "scope_quote": "Implement analytics and monitoring capabilities for Twitter engagement, including metrics tracking, sentiment analysis, and trend monitoring.",
+    "code_evidence": {
+      "is_product_code": true,
+      "path": "lux/lib/lux/prisms/sentiment_analysis_prism.ex",
+      "quote": "defmodule Lux.Prisms.SentimentAnalysisPrism do",
+      "sha": "32a34aca631b1ca9a0cc177bda48c312642ed5b5"
+    },
+    "source_issue": "https://github.com/Spectral-Finance/lux/issues/60",
+    "funding_status": "PRICED_OFFER",
+    "lane": "startup",
+    "commercial_scope": "linked-discussions",
+    "commercial_review": {
+      "decision": "proceed",
+      "source_revision": "fc7b232181c519d13bd378676038d0f93b62f2fc4929452fcd2f8178abcdeb13",
+      "reason": "commercial_context.py on Spectral-Finance/lux#60 returned complete=true with no errors and no warning-word documents (no 'didn't pay'/'scam' allegations in the issue, its comments, linked PR conversations, README/CONTRIBUTING or LICENSE). The funding document is the issue itself, authored by rparcus with author_association COLLABORATOR, so the $2,000 figure is written by a party authorized to commit the project's money; the issue was updated 2026-11-04 and the '## Budget: $2,000' line is the current offer. The repo merges outside work (merged PRs by non-owner contributors), linked PRs on this issue are nominal attempts by hunters with no merged work here, and the licence/README impose no publication conflict with a paid fix.",
+      "evidence": [
+        {
+          "source_url": "https://github.com/Spectral-Finance/lux/issues/60",
+          "quote": "## Budget: $2,000"
+        }
+      ]
+    },
+    "task_id": "0bf72504e1b773dc5c8c89aae8e49804",
+    "source_revision": "239c2f397dd64f8366673cdfa348ed55e67d6dc08c22831e0c334c2db401dc7c"
+  },
+  "dispatch_attempt": 1,
+  "sovereign_admission": true,
+  "competition": {
+    "blocking": false,
+    "nominal": [
+      {
+        "pr": "https://github.com/Spectral-Finance/lux/pull/1135",
+        "author": "nepreby",
+        "number": 1135,
+        "author_merged_in_repo": 0,
+        "check_runs": 0,
+        "maintainer_engagement": 0,
+        "reason": "nominal_attempt_only"
+      },
+      {
+        "pr": "https://github.com/Spectral-Finance/lux/pull/880",
+        "author": "bwm0223",
+        "number": 880,
+        "author_merged_in_repo": 0,
+        "check_runs": 0,
+        "maintainer_engagement": 0,
+        "reason": "nominal_attempt_only"
+      },
+      {
+        "pr": "https://github.com/Spectral-Finance/lux/pull/704",
+        "author": "modelsbridgeaicom-ship-it",
+        "number": 704,
+        "author_merged_in_repo": 0,
+        "check_runs": 0,
+        "maintainer_engagement": 0,
+        "reason": "nominal_attempt_only"
+      },
+      {
+        "pr": "https://github.com/Spectral-Finance/lux/pull/550",
+        "author": "bigpolarbear",
+        "number": 550,
+        "author_merged_in_repo": 0,
+        "check_runs": 0,
+        "maintainer_engagement": 0,
+        "reason": "nominal_attempt_only"
+      },
+      {
+        "pr": "https://github.com/Spectral-Finance/lux/pull/517",
+        "author": "treasure520520",
+        "number": 517,
+        "author_merged_in_repo": 0,
+        "check_runs": 0,
+        "maintainer_engagement": 0,
+        "reason": "nominal_attempt_only"
+      },
+      {
+        "pr": "https://github.com/Spectral-Finance/lux/pull/446",
+        "author": "susuhome",
+        "number": 446,
+        "author_merged_in_repo": 0,
+        "check_runs": 0,
+        "maintainer_engagement": 0,
+        "reason": "nominal_attempt_only"
+      },
+      {
+        "pr": "https://github.com/Spectral-Finance/lux/pull/446",
+        "author": "susuhome",
+        "number": 446,
+        "author_merged_in_repo": 0,
+        "history_cached": true,
+        "check_runs": 0,
+        "maintainer_engagement": 0,
+        "reason": "nominal_attempt_only"
+      },
+      {
+        "pr": "https://github.com/Spectral-Finance/lux/pull/517",
+        "author": "treasure520520",
+        "number": 517,
+        "author_merged_in_repo": 0,
+        "history_cached": true,
+        "check_runs": 0,
+        "maintainer_engagement": 0,
+        "reason": "nominal_attempt_only"
+      },
+      {
+        "pr": "https://github.com/Spectral-Finance/lux/pull/550",
+        "author": "bigpolarbear",
+        "number": 550,
+        "author_merged_in_repo": 0,
+        "history_cached": true,
+        "check_runs": 0,
+        "maintainer_engagement": 0,
+        "reason": "nominal_attempt_only"
+      },
+      {
+        "pr": "https://github.com/Spectral-Finance/lux/pull/704",
+        "author": "modelsbridgeaicom-ship-it",
+        "number": 704,
+        "author_merged_in_repo": 0,
+        "history_cached": true,
+        "check_runs": 0,
+        "maintainer_engagement": 0,
+        "reason": "nominal_attempt_only"
+      },
+      {
+        "pr": "https://github.com/Spectral-Finance/lux/pull/880",
+        "author": "bwm0223",
+        "number": 880,
+        "author_merged_in_repo": 0,
+        "history_cached": true,
+        "check_runs": 0,
+        "maintainer_engagement": 0,
+        "reason": "nominal_attempt_only"
+      },
+      {
+        "pr": "https://github.com/Spectral-Finance/lux/pull/1135",
+        "author": "nepreby",
+        "number": 1135,
+        "author_merged_in_repo": 0,
+        "history_cached": true,
+        "check_runs": 0,
+        "maintainer_engagement": 0,
+        "reason": "nominal_attempt_only"
+      }
+    ]
+  },
+  "lanes": [
+    "startup"
+  ],
+  "dispatched_at": "2026-11-05T04:36:46.443042+00:00",
+  "attempt": 0,
+  "updated_at": "2026-11-05T04:36:46.443058+00:00"
+}
