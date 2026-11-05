@@ -56,7 +56,7 @@
   ],
   "dispatched_at": "2026-11-04T18:40:20.107450+00:00",
   "attempt": 3,
-  "updated_at": "2026-11-05T13:47:20.873770+00:00",
+  "updated_at": "2026-11-05T18:24:55.288131+00:00",
   "owner": "41889467615:1",
   "previous_owner": "41867352564:1",
   "previous_status": "DISPATCHED",
@@ -502,10 +502,10 @@
     "state": "PASSED"
   },
   "remote_review": {
-    "verdict": "NONE",
-    "review_count": 0,
-    "latest_reviewer": null,
-    "latest_review_at": null
+    "verdict": "COMMENTED",
+    "review_count": 2,
+    "latest_reviewer": "MsEpsilon",
+    "latest_review_at": "2026-11-05T17:42:16Z"
   },
-  "observed_at": "2026-11-05T13:47:20.873754+00:00"
+  "observed_at": "2026-11-05T18:24:55.288112+00:00"
 }
