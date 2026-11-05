@@ -1037,6 +1037,10 @@ DOWNSTREAM_CHECKS = [
     ("REPORTED_BEHAVIOUR_DECLARED_BY_DESIGN", "the issue states the behaviour is by design."),
     ("REPOSITORY_DOES_NOT_MERGE", "the repository's history shows it does not merge outside work."),
     ("REPOSITORY_MERGES_STALE", "the repository has been dormant with no merged pull requests for over 60 days."),
+    ("CAPACITY_EXCLUDED",
+     "the repository is larger than 750000 KB, so the runner cannot check it out and no work can "
+     "start there. One call before banking a row - `gh api repos/OWNER/REPO --jq .size` - and do "
+     "not bank any tree over 750000 KB; size is a fact about the tree, not a verdict on the fruit."),
     ("CLOSED_OR_READ_ONLY", "the issue is closed or the repository is read-only."),
     ("EXPIRED_OFFER", "the offer carried a deadline that has already passed."),
     ("REFUSED_NOT_A_CODE_CHANGE", "the issue is a digest, aggregator or news feed, not engineering work."),
