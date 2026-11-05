@@ -16,7 +16,7 @@ jobs:
     # raised to 3600 s (below), which is 2 h for two rounds, so 45 min killed the run while
     # the agent was still filtering: measured 2026-11-03 (run 41564183447), 918 raw
     # candidates gathered, zero rows written, both rounds expired with 44 items pending.
-    timeout-minutes: 135
+    timeout-minutes: 45
     env:
       GH_TOKEN: ${{ secrets.GH_DISCOVERY_PAT || secrets.GH_PAT }}
       BOUNTY_STATE_DIR: /tmp/bounty-state
@@ -63,14 +63,14 @@ jobs:
         # the TokenHarbor model name, which nothing read and NVIDIA does not serve, so when
         # TokenHarbor was exhausted every one of the door's turns died before writing a row.
         NVIDIA_ROUTER_MODEL: ${{ vars.NVIDIA_DELIVERY_MODEL || 'mistralai/mistral-large-4-1t-a52b' }}
-        BOUNTY_AGENT_ROUNDS: '2'
+        BOUNTY_AGENT_ROUNDS: '1'
         BOUNTY_AGENT_MEMORY: ${{ env.BOUNTY_STATE_DIR }}/discovery-memory
         # Search is a heavy task: a full lane sweep gathers hundreds of raw candidates and the
         # filtering and evidence check that produces a verified row happens after them. 800 s
         # measured 918 candidates gathered and zero rows written (run 41564183447, both rounds
         # expired mid-filter, 44 items still pending), so the brief now states the larger
         # budget with its cost plainly.
-        BOUNTY_AGENT_TIMEOUT: '3600'
+        BOUNTY_AGENT_TIMEOUT: '900'
       run: python3 -u scripts/actions_dispatch.py --live --once --queries-per-lane 3 --max-dispatches 4 --lane ${{ vars.ACTIVE_LANES || 'all' }}
     - name: Observe published PR review and conversion receipts
       continue-on-error: true
