@@ -88,6 +88,20 @@ class RepositoryIntentTests(unittest.TestCase):
         self.assertFalse(ok)
         self.assertEqual(reason, "REPOSITORY_MERGES_STALE")
 
+    def test_dormant_repository_with_old_push_is_rejected_as_stale(self):
+        """repo.pushedAt 2025-12-15 (Spectral-Finance/lux): no code push in ~11 months,
+        so the repo is dormant even when the merged-PR probe returns no node. This is the
+        measured 2026-11-05 leak: an empty probe let a dead repo through admission."""
+        ok, reason = repository_intent({"merged": 122, "total": 780, "pushed_at": "2025-12-15T00:13:27Z"})
+        self.assertFalse(ok)
+        self.assertEqual(reason, "REPOSITORY_MERGES_STALE")
+
+    def test_active_repository_with_recent_push_is_allowed(self):
+        """A recent push proves code vitality even with no merged-PR node."""
+        from datetime import datetime, timezone
+        recent = datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ")
+        self.assertAllowed({"merged": 5, "total": 100, "pushed_at": recent})
+
     def test_active_repository_with_recent_merge_is_allowed(self):
         """paraspell/xcm-tools: 1272 merged, latest yesterday."""
         from datetime import datetime, timezone

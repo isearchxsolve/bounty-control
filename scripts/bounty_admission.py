@@ -285,6 +285,21 @@ def repository_intent(evidence):
                 return False, "REPOSITORY_MERGES_STALE"
         except (ValueError, TypeError):
             pass
+
+    # Push recency is a direct repository fact (GitHub repository.pushedAt, carried in
+    # merge_evidence) and needs no merged-PR probe. A repo with no push for
+    # MAX_MERGE_IDLE_DAYS is dormant and cannot merge-and-pay, so it is rejected even
+    # when the merged-PR probe returned no node -- measured leak 2026-11-05:
+    # Spectral-Finance/lux (pushedAt 2025-12-15) was re-dispatched on an empty probe.
+    pushed_at = evidence.get("pushed_at")
+    if pushed_at:
+        try:
+            when_push = datetime.fromisoformat(str(pushed_at).replace("Z", "+00:00"))
+            push_idle_days = (datetime.now(timezone.utc) - when_push).total_seconds() / 86400.0
+            if push_idle_days > MAX_MERGE_IDLE_DAYS:
+                return False, "REPOSITORY_MERGES_STALE"
+        except (ValueError, TypeError):
+            pass
     return True, ""
 
 
