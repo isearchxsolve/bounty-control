@@ -54,7 +54,7 @@
   ],
   "dispatched_at": "2026-11-03T16:31:35.389619+00:00",
   "attempt": 1,
-  "updated_at": "2026-11-05T04:11:37.258577+00:00",
+  "updated_at": "2026-11-05T07:55:07.347048+00:00",
   "owner": "41675104890:1",
   "previous_owner": null,
   "previous_status": "DISPATCHED",
@@ -91,5 +91,5 @@
     "latest_reviewer": null,
     "latest_review_at": null
   },
-  "observed_at": "2026-11-05T04:11:37.258563+00:00"
+  "observed_at": "2026-11-05T07:55:07.347031+00:00"
 }
