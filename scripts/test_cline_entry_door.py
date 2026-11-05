@@ -729,7 +729,8 @@ class ScoutWorktree(unittest.TestCase):
         documented = {code for code, _ in door.GATE_CHECKS + door.DOWNSTREAM_CHECKS}
         emitted = set()
         for function in (door.model_admission_refusal, door.admission_refusal,
-                         door.competition_refusal, door.intent_refusal):
+                         door.competition_refusal, door.intent_refusal,
+                         door.capacity_refusal):
             emitted |= set(re.findall(r'["\']([A-Z][A-Z0-9_]{4,})["\']',
                                       inspect.getsource(function)))
         self.assertTrue(emitted, "no reason strings found - the scrape is wrong")
@@ -737,11 +738,28 @@ class ScoutWorktree(unittest.TestCase):
         # not reasons a row comes back with.
         not_reasons = {"FOUNDER", "OWNER", "PRICED_OFFER", "UNPRICED_OWNER_REQUEST",
                        "BOUNTY_LANE", "LABEL", "BY_DESIGN", "founder", "bounty",
-                       "ENTRY_COMPETITION_UNVERIFIED", "ENTRY_INTENT_UNVERIFIED"}
+                       "ENTRY_COMPETITION_UNVERIFIED", "ENTRY_INTENT_UNVERIFIED",
+                       "ENTRY_CAPACITY_UNVERIFIED"}
         missing = emitted - documented - not_reasons
         self.assertEqual(missing, set(),
                          "reasons the live verifier can emit but the brief never names: "
                          + ", ".join(sorted(missing)))
+
+    def test_repository_over_capacity_is_refused_by_capacity_refusal(self):
+        class FakeAPI:
+            def api(self, path, method="GET", body=None):
+                return {"size": 800000}
+        reason, detail = door.capacity_refusal("Expensify/App", client=FakeAPI())
+        self.assertEqual(reason, "CAPACITY_EXCLUDED")
+        self.assertIn("exceeds", detail)
+
+    def test_repository_under_capacity_is_accepted_by_capacity_refusal(self):
+        class FakeAPI:
+            def api(self, path, method="GET", body=None):
+                return {"size": 12000}
+        reason, detail = door.capacity_refusal("small/repo", client=FakeAPI())
+        self.assertIsNone(reason)
+        self.assertIsNone(detail)
 
     def test_every_reason_admission_can_return_is_in_the_table(self):
         """admit() and competition() decide the row too, so their vocabulary is the agent's."""

@@ -459,6 +459,7 @@ COMPETITION_CLEAR = ("clear: no competing claimant at the entry door; nominal op
 # Repository intent belongs at the door for the same reason: it decides whether work should
 # start. Measured 2026-11-01: it ran nowhere on the live path while the brief promised it did.
 INTENT_GATE = os.environ.get("BOUNTY_DOOR_INTENT", "1") != "0"
+CAPACITY_GATE = os.environ.get("BOUNTY_DOOR_CAPACITY", "1") != "0"
 
 
 def _default_context_builder(repo, number):
@@ -585,6 +586,32 @@ def intent_refusal(repo, client=None, cache=None):
     if ok:
         return None, None
     return reason, json.dumps(evidence, sort_keys=True)[:200]
+
+
+def capacity_refusal(repo, client=None, cache=None):
+    """Run runner capacity check at the door.
+
+    Returns ``(reason, detail)`` when the repository exceeds the runner limit
+    (CAPACITY_MAX_REPOSITORY_KB = 750,000 KB), else ``(None, None)``.
+    """
+    if client is None:
+        return None, None
+    try:
+        from actions_dispatch import repository_size_kb, repository_over_capacity, CAPACITY_MAX_REPOSITORY_KB
+    except Exception as exc:  # pragma: no cover - import failure is not a verdict
+        print(json.dumps({"phase": "ENTRY_CAPACITY_UNVERIFIED", "repo": repo,
+                          "detail": str(exc)[:160]}), flush=True)
+        return None, None
+    cache = {} if cache is None else cache
+    try:
+        size = repository_size_kb(client, repo, cache=cache)
+        if repository_over_capacity(size):
+            return "CAPACITY_EXCLUDED", f"Repository {repo} size {size} KB exceeds {CAPACITY_MAX_REPOSITORY_KB} KB limit."
+    except Exception as exc:
+        print(json.dumps({"phase": "ENTRY_CAPACITY_UNVERIFIED", "repo": repo,
+                          "detail": str(exc)[:160]}), flush=True)
+        return None, None
+    return None, None
 
 
 def model_admission_refusal(row, context_builder, source_reader=None):
@@ -826,6 +853,12 @@ def verify_rows(rows: List[dict], fetch: Optional[Callable[[str, int], Optional[
                     refused.append({"row": row, "reason": reason,
                                     **({"detail": detail} if detail else {})})
                     continue
+            if CAPACITY_GATE:
+                reason, detail = capacity_refusal(repo, admission_client, intent_cache)
+                if reason:
+                    refused.append({"row": row, "reason": reason,
+                                    **({"detail": detail} if detail else {})})
+                    continue
             if COMPETITION_GATE:
                 reason, detail, competition_verdict = competition_refusal(
                     repo, number, admission_client)
@@ -1002,6 +1035,7 @@ GATE_CHECKS = [    ("MALFORMED_ROW", "the row is not a complete JSON record with
     ("FUNDING_FRESHNESS_UNVERIFIED", "The cited offer timestamp could not be established; this is unknown, not proof that the offer is current or escrowed."),
     ("ADMISSION_UNAVAILABLE", "the admission module could not be loaded; nothing was decided."),
     ("REFUSED_BY_ADMISSION", "admission refused the row without naming a narrower reason."),
+    ("CAPACITY_EXCLUDED", "the repository is larger than 750000 KB, so the runner cannot check it out and no work can start there."),
 ]
 
 # The refusals that say the row itself was incomplete or malformed, as opposed to the ones that
