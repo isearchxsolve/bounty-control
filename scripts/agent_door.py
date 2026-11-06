@@ -291,7 +291,8 @@ and is backed by pre-funded programmatic escrow (Algora, Polar, Opire, BountyHub
         return {"rows": [], "reason": "OUT_OF_SCOPE", "workspace": workdir}
     print(json.dumps({"phase": "ENTRY_DOOR", "workspace": workdir,
                       "history": outcome.get("history"), "admitted": len(rows),
-                      "refused": len(outcome.get("refused") or [])}), flush=True)
+                      "refused": len(outcome.get("refused") or []),
+                      "brain": cline_entry_door.brain_receipt()}), flush=True)
     return {"rows": rows, "reason": "OK" if rows else "NO_ROWS", "workspace": workdir,
             "history": outcome.get("history"), "refused": outcome.get("refused") or [],
             "unpriced": outcome.get("unpriced") or []}

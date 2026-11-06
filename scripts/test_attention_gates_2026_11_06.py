@@ -88,20 +88,20 @@ class EscrowOnlyTests(unittest.TestCase):
         return admission.admit(ctx, quote=None, floor=80)
 
     def test_platform_bot_attestation_is_escrow_and_admits(self):
-        with mock.patch.object(admission, "ESCROW_ONLY", True):
+        with mock.patch.object(admission, "escrow_only_enabled", return_value=True):
             proof, reason = self.admit(context([attestation("algora-pbc[bot]", 900)]))
         self.assertEqual(reason, "")
         self.assertIsNotNone(proof)
         self.assertTrue(proof["funding"]["escrow"])
 
     def test_bountyhub_bot_attestation_is_escrow(self):
-        with mock.patch.object(admission, "ESCROW_ONLY", True):
+        with mock.patch.object(admission, "escrow_only_enabled", return_value=True):
             proof, reason = self.admit(context([attestation("bountyhub-bot", 300)]))
         self.assertEqual(reason, "")
         self.assertTrue(proof["funding"]["escrow"])
 
     def test_human_owner_verbal_offer_is_refused_under_escrow_only(self):
-        with mock.patch.object(admission, "ESCROW_ONLY", True):
+        with mock.patch.object(admission, "escrow_only_enabled", return_value=True):
             proof, reason = self.admit(context([attestation("maintainer", 900, "OWNER")],
                                                association="OWNER"))
         self.assertIsNone(proof)
@@ -109,14 +109,14 @@ class EscrowOnlyTests(unittest.TestCase):
 
     def test_unpriced_founder_request_is_also_not_escrow(self):
         # Strict gate: a FOUNDER currency offer carries no escrow flag, so it refuses too.
-        with mock.patch.object(admission, "ESCROW_ONLY", True):
+        with mock.patch.object(admission, "escrow_only_enabled", return_value=True):
             proof, reason = self.admit(context([], association="OWNER", lane="founder"))
         self.assertIsNone(proof)
         self.assertEqual(reason, "NO_PLATFORM_ESCROW")
 
     def test_without_the_flag_human_authority_still_admits(self):
         # Backward compatibility: fixtures and older callers keep the funding-authority logic.
-        with mock.patch.object(admission, "ESCROW_ONLY", False):
+        with mock.patch.object(admission, "escrow_only_enabled", return_value=False):
             proof, reason = self.admit(context([attestation("maintainer", 900, "OWNER")],
                                                association="OWNER"))
         self.assertEqual(reason, "")

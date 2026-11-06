@@ -78,7 +78,11 @@ jobs:
       run: python3 -u scripts/actions_dispatch.py --live --once --queries-per-lane 8 --max-dispatches 4 --lane ${{ vars.ACTIVE_LANES || 'all' }}
     - name: Observe published PR review and conversion receipts
       continue-on-error: true
-      timeout-minutes: 3
+      # 100 authored PRs measured past this step's old 3-minute bound on run 42226995018 and
+      # the watcher was killed mid-sweep - inside a run that still reported success, because
+      # continue-on-error hides it. Coverage stays at 100 (86 open PRs are in the author
+      # search); the bound moves instead, still far inside the job's own ceiling.
+      timeout-minutes: 10
       env:
         BOUNTY_ACCOUNT: ${{ github.repository_owner }}
       run: |

@@ -1,5 +1,8 @@
 """Tests for the agent door: it must never be able to take discovery down or invent a row."""
 
+import contextlib
+import io
+import json
 import os
 import unittest
 import tempfile
@@ -84,6 +87,54 @@ class ResearchContinuity(unittest.TestCase):
             self.assertEqual(agent_door.research_memory_path(directory).read_text(encoding='utf-8'),
                              'Unverified lead: revisit its live source before citing.\n')
             self.assertEqual([file.name for file in Path(directory).iterdir()], ['RESEARCH.md'])
+
+
+class TheSummaryNamesTheBrain(unittest.TestCase):
+    """The run's own receipt cannot answer "why zero rows" without naming the model.
+
+    Measured 2026-11-06 on the production path (BOUNTY_ENTRY_DOOR=cline): the static
+    summary already carried a brain receipt, but the door returns early into the agent
+    path, so the only receipt that ever printed stopped at workspace/admitted/refused.
+    A zero-admission run was therefore indistinguishable from a broken one.
+    """
+
+    @mock.patch.object(agent_door.cline_entry_door, "ingest_founder_watch_leads", return_value=[])
+    def test_the_entry_door_summary_carries_the_brain(self, _leads):
+        outcome = {"admitted": [], "refused": [{"reason": "NO_ESCROW"}], "history": []}
+        delivered = io.StringIO()
+        with mock.patch.dict(os.environ, {"BOUNTY_ENTRY_DOOR": "cline",
+                                          "BOUNTY_ENTRY_MODEL": "measured-brain"}, clear=False):
+            with mock.patch.object(agent_door, "ensure_cline", return_value="/usr/bin/cline"):
+                with mock.patch.object(agent_door, "start_gateway", return_value=True):
+                    with mock.patch.object(agent_door.cline_entry_door, "scaffold_workspace",
+                                           return_value="/tmp/w"):
+                        with mock.patch.object(agent_door.cline_entry_door, "iterate",
+                                               return_value=outcome):
+                            with contextlib.redirect_stdout(delivered):
+                                result = agent_door.find_issues()
+        summary = None
+        for line in delivered.getvalue().splitlines():
+            if '"ENTRY_DOOR"' not in line:
+                continue
+            summary = json.loads(line)
+        self.assertIsNotNone(summary, "the door printed no ENTRY_DOOR summary")
+        self.assertEqual(result["reason"], "NO_ROWS")
+        self.assertIn("brain", summary)
+        self.assertEqual(summary["brain"]["entry_model"], "measured-brain")
+        self.assertEqual(summary["brain"]["roster"]["verdict"], "CLEAN")
+
+    def test_the_receipt_never_breaks_the_door_when_the_roster_cannot_be_read(self):
+        # A receipt is evidence, not a dependency: if the audit or the roster file blows
+        # up, the door must still run and the summary must say UNAUDITED. The guard is
+        # inside brain_receipt(), so the fault is injected at the audit seam, not at
+        # builtins.open - pathlib reads through io.open, so patching builtins.open
+        # silently does nothing and the test would pass a working receipt as broken.
+        import query_quality_audit
+        with mock.patch.dict(os.environ, {"BOUNTY_ENTRY_DOOR": "cline"}, clear=False):
+            with mock.patch.object(query_quality_audit, "audit", side_effect=OSError("roster missing")):
+                receipt = agent_door.cline_entry_door.brain_receipt()
+        self.assertEqual(receipt["roster"]["verdict"], "UNAUDITED")
+        self.assertIn("entry_model", receipt)
 
 
 if __name__ == "__main__":

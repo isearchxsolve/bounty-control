@@ -264,6 +264,40 @@ COMPETITION_SWARM = 3
 ESCROW_ONLY = os.environ.get("BOUNTY_ESCROW_ONLY", "0") == "1"
 
 
+def escrow_only_enabled() -> bool:
+    """Escrow-only is on when the variable says so, read now rather than at import.
+
+    Read at call time because a flag frozen at import is only true for the process that
+    imported it. Measured 2026-11-06: the discovery workflow sets BOUNTY_ESCROW_ONLY=1 and
+    the hydration workflow did not set it at all, so the drain ran with the market study's
+    ~0%-conversion class admitted, while every unit test still passed. A gate that only one
+    lane reads is not a mission invariant; it is a lane setting.
+    """
+    raw = os.environ.get("BOUNTY_ESCROW_ONLY")
+    if raw is None:
+        raw = "1" if ESCROW_ONLY else "0"
+    return raw == "1"
+
+
+def escrow_only_refusal(offer):
+    """The escrow-only gate's verdict for one offer, or None when the offer passes.
+
+    Stated once so the entry door and both dispatch lanes - discovery and the hydration
+    drain, which replays rows the door already saw and rows the door never saw - share one
+    rule instead of two that can drift. The gate is a fact about an offer (is a platform
+    bot attestation present), not a judgement, so it belongs in code.
+    """
+    if not escrow_only_enabled():
+        return None
+    if offer and not offer.get("escrow"):
+        # Market study 2026-11-06: non-escrow offers (sponsor pools, OpenCollective
+        # pledges, verbal maintainer promises, unpriced owner/FOUNDER requests) convert at
+        # ~0% - every non-escrow PR of ours in the record was closed unmerged. Strict:
+        # only a platform bot attestation (TRUSTED_BOTS) is escrow, no exemptions.
+        return "NO_PLATFORM_ESCROW"
+    return None
+
+
 def _is_platform_bot(document):
     """Did a recognised escrow platform bot publish this document?"""
     login = ((document.get("user") or {}).get("login") or "").lower()
@@ -746,12 +780,9 @@ def admit(context, quote=None, floor=FLOOR):
                      "payer": (issue.get("user") or {}).get("login", "owner")}
         else:
             return None, "CURRENT_ISSUER_OFFER_MISSING"
-    if ESCROW_ONLY and offer and not offer.get("escrow"):
-        # Market study 2026-11-06: non-escrow offers (sponsor pools, OpenCollective pledges,
-        # verbal maintainer promises, unpriced owner/FOUNDER requests) convert at ~0% -
-        # every non-escrow PR of ours in the record was closed unmerged. Strict: only a
-        # platform bot attestation (TRUSTED_BOTS) is escrow, no currency exemptions.
-        return None, "NO_PLATFORM_ESCROW"
+    refusal = escrow_only_refusal(offer)
+    if refusal:
+        return None, refusal
     return {"funding": offer, "technical_signals": technical, "component_references": components,
             "source_locations": evidence["source_locations"],
             "engineering_evidence_sources": evidence["evidence_sources"],

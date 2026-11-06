@@ -64,6 +64,16 @@ def discover(lanes, max_dispatches=2, live=False, state_dir=None, hydrate_only=F
                 raise ValueError("OUT_OF_LANE")
             context = api.issue_context(row["repo"], row["issue"])
             proof, verdict = require_evidence(row, context)
+            from bounty_admission import escrow_only_refusal
+            escrow_refusal = escrow_only_refusal(proof.get("funding"))
+            if escrow_refusal:
+                # The escrow-only rule lived only in admit(), which this path never calls -
+                # so a row could pass evidence, vitality and capacity here and be dispatched
+                # with no platform attestation at all. Measured 2026-11-06: the hydration
+                # workflow replays a durable queue whose oldest entry predates the
+                # escrow-only door, and it set no escrow variable besides. Raising here is
+                # how the other gates report: a named refusal in the census, the row held.
+                raise ValueError(escrow_refusal)
             from commercial_context import revalidate as revalidate_commercial
             revalidate_commercial(api, context, proof)
             context["lane"] = row.get("lane")

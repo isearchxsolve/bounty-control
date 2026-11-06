@@ -19,9 +19,11 @@ Anything in the first category found outside the door fails here.
 Run: python scripts/test_gate_centralization.py
 """
 import ast
+import os
 import sys
 import unittest
 from pathlib import Path
+from unittest import mock
 
 HERE = Path(__file__).resolve().parent
 sys.path.insert(0, str(HERE))
@@ -168,6 +170,87 @@ class GatesNotYetAtTheDoor(unittest.TestCase):
         # And it is still the same rule, not a second copy of it.
         self.assertIn("from bounty_admission import repository_intent", source,
                       "the door must call admission's rule, not reimplement it")
+
+
+class EscrowOnlyReachesEveryLane(unittest.TestCase):
+    """The escrow-only rule is a mission invariant, not a lane setting.
+
+    Measured 2026-11-06 by a docs-only audit that had no source tree: it found that
+    ``bounty-hydration.yml`` set no ``BOUNTY_ESCROW_ONLY`` while discovery did, and
+    reported the deeper question - does the check live below the env layer - as unproven.
+    It did not. The rule existed only inside ``admit()``, and the hydration drain replays
+    the durable queue through ``sovereign_discovery.ingest``, which never called it. Two
+    lanes, one rule: adding this class is what makes the fix a fix.
+    """
+
+    def test_the_drain_lane_enforces_the_same_escrow_rule(self):
+        callers = callers_of("escrow_only_refusal")
+        self.assertIn("bounty_admission.py", callers,
+                      "admit() must call the shared predicate, not a private copy")
+        self.assertIn("sovereign_discovery.py", callers,
+                      "the drain lane re-admits from the durable queue; it must enforce escrow too")
+
+    def test_the_door_and_the_drain_import_the_one_predicate(self):
+        for name in ("bounty_admission.py", "sovereign_discovery.py"):
+            source = (HERE / name).read_text(encoding="utf-8")
+            self.assertIn("escrow_only_refusal", source, name + " lost the escrow gate")
+        # No second implementation of the rule anywhere in the tree.
+        for path in HERE.glob("*.py"):
+            if path.name.startswith(("test_", "debug_", "fix_", "migrate_", "replay_")):
+                continue
+            body = path.read_text(encoding="utf-8")
+            self.assertNotIn("NO_PLATFORM_ESCROW'", body.replace(
+                "return \"NO_PLATFORM_ESCROW\"", ""), path.name +
+                " defines its own escrow refusal string")
+
+    def test_the_flag_is_read_when_it_is_needed_not_at_import(self):
+        import bounty_admission as admission
+        with mock.patch.object(admission, "ESCROW_ONLY", False):
+            with mock.patch.dict(os.environ, {"BOUNTY_ESCROW_ONLY": "1"}, clear=False):
+                self.assertTrue(admission.escrow_only_enabled(),
+                                "a lane that opts in must be able to, after import")
+            with mock.patch.dict(os.environ, {"BOUNTY_ESCROW_ONLY": "0"}, clear=False):
+                self.assertFalse(admission.escrow_only_enabled(),
+                                 "a lane that opts out must be able to")
+        with mock.patch.object(admission, "ESCROW_ONLY", True):
+            with mock.patch.dict(os.environ, {}, clear=False):
+                os.environ.pop("BOUNTY_ESCROW_ONLY", None)
+                self.assertTrue(admission.escrow_only_enabled(),
+                                "unset must still follow the import-time default")
+
+    def test_every_workflow_that_dispatches_live_sets_the_escrow_flag(self):
+        """The check a script can do that a human missed: read the workflows themselves.
+
+        A mission invariant that one workflow forgets is not an invariant, and the failure
+        is silent because the drain's refusals land in an artifact nobody reads until the
+        next audit. Every job that buys work with ``--live`` declares the same rule.
+
+        The workflow files are read as text, not through a YAML dependency the runner is
+        not guaranteed to have. Jobs are the two-space keys under ``jobs:``, so a job block
+        is delimited by those keys - enough structure to answer the one question asked:
+        does the job that dispatches live declare the flag.
+        """
+        checked = 0
+        for path in sorted((HERE.parent / ".github" / "workflows").glob("*.yml")):
+            lines = path.read_text(encoding="utf-8").splitlines()
+            start = next((i for i, line in enumerate(lines) if line.startswith("jobs:")), None)
+            if start is None:
+                continue
+            jobs, current = [], None
+            for line in lines[start + 1:]:
+                if line.startswith("  ") and not line.startswith("   ") and line.rstrip().endswith(":"):
+                    current = [line]
+                    jobs.append(current)
+                elif current is not None:
+                    current.append(line)
+            for job in jobs:
+                body = "\n".join(job)
+                if "actions_dispatch.py" not in body or "--live" not in body:
+                    continue
+                checked += 1
+                self.assertIn("BOUNTY_ESCROW_ONLY", body,
+                              path.name + " dispatches live without declaring escrow-only")
+        self.assertEqual(2, checked, "the workflow scan matched an unexpected number of jobs")
 
 
 if __name__ == "__main__":

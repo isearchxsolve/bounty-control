@@ -72,6 +72,32 @@ def resolve_cline(cline: Optional[str] = None) -> List[str]:
 DEFAULT_ENTRY_MODEL = os.environ.get("BOUNTY_ENTRY_MODEL", "deepseek-v4.1-flash:free")
 
 
+def brain_receipt() -> dict:
+    """Which brain ran this door and whether the roster it was handed was sound.
+
+    Without this, a run that admits nothing cannot be separated into "the market held no
+    escrowed offer" and "the queries could never surface one". Measured 2026-11-06: the
+    production door printed workspace/history/admitted/refused and stopped there, while the
+    only brain receipt lived on the static path that `BOUNTY_ENTRY_DOOR=cline` never enters.
+    A receipt must never break the run it describes, so every read is guarded.
+    """
+    receipt = {
+        "entry_model": os.environ.get("BOUNTY_ENTRY_MODEL") or DEFAULT_ENTRY_MODEL,
+        "failover_model": os.environ.get("NVIDIA_ROUTER_MODEL") or None,
+    }
+    try:
+        import query_quality_audit as _audit
+        roster = json.loads((Path(__file__).with_name("bounty_queries.json"))
+                            .read_text(encoding="utf-8"))
+        report = _audit.audit(roster)
+        receipt["roster"] = {"verdict": report["verdict"],
+                             "findings": [finding["kind"] for finding in report["findings"]],
+                             "rendered": report["stats"].get("rendered", {})}
+    except Exception as exc:  # a receipt must never break the run it describes
+        receipt["roster"] = {"verdict": "UNAUDITED", "error": str(exc)[:200]}
+    return receipt
+
+
 def prepare_profile(data_dir: str, model: str = DEFAULT_ENTRY_MODEL,
                     base_url: Optional[str] = None, cline: Optional[str] = None, timeout: int = 120) -> bool:
     """Configure one Cline data dir exactly as the delivery engine does; True when readback passes.

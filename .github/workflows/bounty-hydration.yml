@@ -25,6 +25,11 @@ jobs:
       GH_TOKEN: ${{ secrets.GH_PAT }}
       BOUNTY_STATE_DIR: /tmp/bounty-state
       BOUNTY_ENTRY_DOOR: cline
+      # Same invariant as the discovery lane, not a weaker copy of it. The drain replays
+      # rows the door admitted and rows it deferred, and the queue's oldest entry
+      # predates the escrow-only door (measured 2026-11-06: 41 stranded tasks, oldest
+      # 2026-10-31T23:22Z), so this lane can dispatch work no escrow check ever saw.
+      BOUNTY_ESCROW_ONLY: '1'
     steps:
     - uses: actions/checkout@v4
       with:
