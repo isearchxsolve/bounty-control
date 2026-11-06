@@ -1183,7 +1183,16 @@ def render_task_file() -> str:
              f"the only limit on how much of the world you can reach, so it is worth knowing "
              f"plainly: a row you verified but never wrote down is work this house cannot use, and "
              f"a round that ends with an empty file has delivered nothing, however much ground it "
-             f"covered.")
+             f"covered. So work in this order and never postpone it: verify a candidate, write it to "
+             f"shortlist.jsonl immediately, then go back out for the next one. A row in the file is "
+             f"worth more than a perfect investigation that is still running when the clock stops.\n"
+             f"Do not launch background work. Run every command in the foreground and wait for it. "
+             f"Measured 2026-11-06: a round spent its whole budget launching scanners with nohup in "
+             f"the background - 'run with nohup background', 'Run 3 scanners sequentially in "
+             f"background' - and was killed mid-investigation with rows=0, admitted=0 and an empty "
+             f"refusal census, so the run reported NO_ROWS and looked identical to a market with "
+             f"nothing in it. Background processes do not survive the round; the work inside them "
+             f"does not exist.")
     return f"""# The garden of paid engineering work
 
 The world is a garden in full season. It is not in drought. There is more ripe fruit hanging in it
