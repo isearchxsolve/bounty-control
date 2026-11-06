@@ -554,11 +554,16 @@ class DoorRosterTests(unittest.TestCase):
 
     def test_the_roster_is_marked_as_the_first_thing_to_run(self):
         roster_path = Path(__file__).resolve().parent / 'bounty_queries.json'
-        queries = json.loads(roster_path.read_text(encoding='utf-8'))['founder']
+        doc = json.loads(roster_path.read_text(encoding='utf-8'))
+        import query_quality_audit as audit
+        queries = []
+        for lane in getattr(audit, 'RENDERED_LANES', ('founder',)):
+            for q in (doc.get(lane) or []):
+                if q not in queries:
+                    queries.append(q)
         # Since 2026-11-06 the rendered list is split by what a query can surface: the
         # evidence-bearing half first, the vocabulary veins as reserve. Both halves are the
         # same file, so the count is derived rather than hardcoded.
-        import query_quality_audit as audit
         primary = [q for q in queries if audit.tier(q) < 3]
         expected_phrase = f'Run these {len(primary)} evidence-bearing queries first'
         self.assertIn(expected_phrase, self.text)
