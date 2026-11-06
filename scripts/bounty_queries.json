@@ -24,8 +24,6 @@
     "\"will pay\" \"outage\" is:issue is:open",
     "\"will pay\" \"data loss\" is:issue is:open"
     ,
-    "in:comments \"has been created by\" \"$\" is:issue is:open",
-    "in:comments \"bounty of\" \"$\" is:issue is:open",
     "in:title \"bounty\" \"$\" is:issue is:open",
     "in:title \"reward\" \"$\" is:issue is:open",
     "in:title \"$\" \"escrow\" is:issue is:open",
@@ -35,11 +33,6 @@
     "\"happy to pay\" \"$\" is:issue is:open",
     "\"paying for\" \"$\" is:issue is:open",
     "\"payout\" \"$\" bounty is:issue is:open",
-    "commenter:algora-pbc \"$\" is:issue is:open",
-    "commenter:polar-sh \"$\" is:issue is:open",
-    "in:comments algora \"$\" is:issue is:open",
-    "in:comments polar.sh \"$\" is:issue is:open",
-    "in:comments opire \"$\" is:issue is:open",
     "gitcoin bounty is:issue is:open",
     "commenter:gitcoinbot is:issue is:open",
     "onlydust is:issue is:open",
@@ -180,6 +173,16 @@
     "label:bug \"reward\" \"$\" is:issue is:open",
     "label:bug \"prize\" \"$\" is:issue is:open",
     "label:bug \"escrow\" is:issue is:open",
-    "label:bug \"USDC\" is:issue is:open"
+    "label:bug \"USDC\" is:issue is:open",
+    "commenter:algora-pbc is:issue is:open",
+    "commenter:bountyhub-bot is:issue is:open",
+    "commenter:polar-sh is:issue is:open",
+    "in:comments \"has been created by\" \"$\" is:issue is:open",
+    "in:comments \"bounty of $\" is:issue is:open",
+    "in:comments \"reward of $\" is:issue is:open",
+    "in:comments \"escrow\" \"$\" is:issue is:open",
+    "in:comments algora \"$\" is:issue is:open",
+    "in:comments polar.sh \"$\" is:issue is:open",
+    "in:comments opire \"$\" is:issue is:open"
   ]
 }

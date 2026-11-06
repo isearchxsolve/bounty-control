@@ -122,10 +122,15 @@ class TransportTests(unittest.TestCase):
         else:
             os.environ.pop('NVIDIA_API_KEY', None)
         super().tearDown()
-    def test_live_discovery_workflow_advances_three_queries_per_lane(self):
+    def test_live_discovery_workflow_advances_eight_queries_per_lane(self):
+        # Measured 2026-11-06: with 3 slots per lane each widened branch was scanned only
+        # every ~18 cycles, so the high-yield in:comments offer phrases (measured supplies:
+        # "bounty of $" 4.3k, "reward of $" 13.1k, escrow+"$" 4.5k) rotated too slowly.
+        # 8 slots keeps full+fresh search calls within the 30 req/min budget (~48 calls/cycle
+        # over a ~20 min run) while covering ~2.7x more branches per cycle.
         workflow = (Path(__file__).resolve().parents[1] / ".github" / "workflows" /
                     "bounty-discovery.yml").read_text(encoding="utf-8")
-        self.assertRegex(workflow, r"--queries-per-lane\s+3\b")
+        self.assertRegex(workflow, r"--queries-per-lane\s+8\b")
 
     def test_or_search_carries_common_bounty_context_and_trailing_filters(self):
         expressions = [

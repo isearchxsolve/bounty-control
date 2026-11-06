@@ -71,7 +71,7 @@ jobs:
         # expired mid-filter, 44 items still pending), so the brief now states the larger
         # budget with its cost plainly.
         BOUNTY_AGENT_TIMEOUT: '900'
-      run: python3 -u scripts/actions_dispatch.py --live --once --queries-per-lane 3 --max-dispatches 4 --lane ${{ vars.ACTIVE_LANES || 'all' }}
+      run: python3 -u scripts/actions_dispatch.py --live --once --queries-per-lane 8 --max-dispatches 4 --lane ${{ vars.ACTIVE_LANES || 'all' }}
     - name: Observe published PR review and conversion receipts
       continue-on-error: true
       timeout-minutes: 3
