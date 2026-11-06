@@ -1070,7 +1070,12 @@ DOWNSTREAM_CHECKS = [
      "the issue is a whole-product roadmap or rewrite rather than a bounded, deliverable engineering fix."),
     ("REPORTED_BEHAVIOUR_DECLARED_BY_DESIGN", "the issue states the behaviour is by design."),
     ("REPOSITORY_DOES_NOT_MERGE", "the repository's history shows it does not merge outside work."),
-    ("REPOSITORY_MERGES_STALE", "the repository has been dormant with no merged pull requests for over 60 days."),
+    ("REPOSITORY_MERGES_STALE", "the repository has been dormant: no merged pull requests for over 60 days, or no code push in over 30 days (REPO_ACTIVE_DAYS=30, market study 2026-11-06 - ghost repos are the top field-study killer)."),
+    ("NO_PLATFORM_ESCROW",
+     "BOUNTY_ESCROW_ONLY is set and the offer is not attested by a bounty platform bot "
+     "(algora-pbc, polar-sh, opire, bountyhub). Verbal promises, sponsor pools, "
+     "OpenCollective pledges and unpriced owner requests are not escrow and closed "
+     "unmerged in our record; only a platform-bot attestation counts."),
     ("CAPACITY_EXCLUDED",
      "the repository is larger than 750000 KB, so the runner cannot check it out and no work can "
      "start there. One call before banking a row - `gh api repos/OWNER/REPO --jq .size` - and do "

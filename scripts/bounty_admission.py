@@ -248,6 +248,26 @@ def offer_expired(context, today=None):
 
 MERGE_EVIDENCE_MIN = 10
 MAX_MERGE_IDLE_DAYS = 60
+# Market study 2026-11-06 (docs/MARKET-STUDY-2026-11-06.md): in the 240-PR agent field
+# report, repos with no commit in 30+ days were the top failure mode ("ghost town", 35% of
+# closures). Push recency is a hard vitality fact: a repo with no push in REPO_ACTIVE_DAYS
+# cannot provide economic turnaround, whatever its issue text says.
+REPO_ACTIVE_DAYS = 30
+# Same study: bounties with 3+ open competing PRs are a lottery ("race to the bottom", 20%
+# of failures; fresh bounties attract 8-158 competing agent PRs within hours). A swarm of
+# open references is a fact, so it refuses regardless of whether any single PR is "real".
+COMPETITION_SWARM = 3
+# Escrow-only admission (mission invariant: only escrow-backed merged PRs count). A verbal
+# or sponsor-allocated offer from a human is not escrow; only a platform bot attestation
+# (TRUSTED_BOTS) is. Production workflows set BOUNTY_ESCROW_ONLY=1; unit fixtures default
+# off so they keep testing the funding-authority logic itself.
+ESCROW_ONLY = os.environ.get("BOUNTY_ESCROW_ONLY", "0") == "1"
+
+
+def _is_platform_bot(document):
+    """Did a recognised escrow platform bot publish this document?"""
+    login = ((document.get("user") or {}).get("login") or "").lower()
+    return login in TRUSTED_BOTS or login.removesuffix("[bot]") in TRUSTED_BOTS
 
 
 def repository_intent(evidence):
@@ -296,7 +316,7 @@ def repository_intent(evidence):
         try:
             when_push = datetime.fromisoformat(str(pushed_at).replace("Z", "+00:00"))
             push_idle_days = (datetime.now(timezone.utc) - when_push).total_seconds() / 86400.0
-            if push_idle_days > MAX_MERGE_IDLE_DAYS:
+            if push_idle_days > REPO_ACTIVE_DAYS:
                 return False, "REPOSITORY_MERGES_STALE"
         except (ValueError, TypeError):
             pass
@@ -707,7 +727,7 @@ def admit(context, quote=None, floor=FLOOR):
                          else document["user"]["login"])
                 candidates.append({"amount": str(amount), "currency": currency, "usd_value": str(usd),
                                    "quote": rate, "raw": raw, "source_url": document["html_url"],
-                                   "payer": payer})
+                                   "payer": payer, "escrow": _is_platform_bot(document)})
         if candidates:
             offer = max(candidates, key=lambda row: Decimal(row["usd_value"]))
     if offer:
@@ -726,6 +746,12 @@ def admit(context, quote=None, floor=FLOOR):
                      "payer": (issue.get("user") or {}).get("login", "owner")}
         else:
             return None, "CURRENT_ISSUER_OFFER_MISSING"
+    if ESCROW_ONLY and offer and not offer.get("escrow"):
+        # Market study 2026-11-06: non-escrow offers (sponsor pools, OpenCollective pledges,
+        # verbal maintainer promises, unpriced owner/FOUNDER requests) convert at ~0% -
+        # every non-escrow PR of ours in the record was closed unmerged. Strict: only a
+        # platform bot attestation (TRUSTED_BOTS) is escrow, no currency exemptions.
+        return None, "NO_PLATFORM_ESCROW"
     return {"funding": offer, "technical_signals": technical, "component_references": components,
             "source_locations": evidence["source_locations"],
             "engineering_evidence_sources": evidence["evidence_sources"],
@@ -822,12 +848,14 @@ def competition_evidence(api, repo, pull):
 def competition(api, repo, number, own_head=None):
     pattern = re.compile(rf"(?:#\s*|/issues/|\bissue\s+){number}(?!\d)|(?:^|[-_/]){number}(?:$|[-_/])", re.I)
     nominal = []
+    open_refs = 0
     for pr in api.pages(f"repos/{repo}/pulls", state="open"):
         if own_head and pr["head"]["sha"] == own_head and pr["head"]["repo"] and (
                 pr["head"]["repo"]["owner"]["login"] == BOUNTY_ACCOUNT):
             continue
         text = "\n".join([pr.get("title") or "", pr.get("body") or "", pr["head"]["ref"]])
         if pattern.search(text):
+            open_refs += 1
             real, evidence = competition_evidence(api, repo, pr)
             if real:
                 raise ValueError("Competing open PR: " + pr["html_url"])
@@ -844,6 +872,7 @@ def competition(api, repo, number, own_head=None):
         if own_head and pull["head"]["sha"] == own_head:
             continue
         if linked.get("state") == "open":
+            open_refs += 1
             # A link is not a claimant. This branch used to refuse on any open linked pull
             # request while the branch above it had already been taught to weigh evidence, so
             # the same pull request was nominal in one loop and fatal in the other. Measured
@@ -867,4 +896,8 @@ def competition(api, repo, number, own_head=None):
                 "\n".join((pull.get("title") or "", body)), re.I)
             if section_mentions_issue or direct_fix_reference:
                 raise ValueError("Issue already resolved by merged PR: " + pull["html_url"])
+    if open_refs >= COMPETITION_SWARM:
+        # Market study 2026-11-06: 3+ open PRs referencing one ticket is a lottery even when
+        # none is individually "real" - agent swarms post within hours of a fresh bounty.
+        raise ValueError("Competition swarm: %d open PRs reference #%s" % (open_refs, number))
     return {"blocking": False, "nominal": nominal}

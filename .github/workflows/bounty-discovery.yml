@@ -20,6 +20,10 @@ jobs:
     env:
       GH_TOKEN: ${{ secrets.GH_DISCOVERY_PAT || secrets.GH_PAT }}
       BOUNTY_STATE_DIR: /tmp/bounty-state
+      # Market study 2026-11-06 (docs/MARKET-STUDY-2026-11-06.md): only platform-escrow
+      # attestations convert; verbal/sponsor offers closed unmerged 100% of the time in
+      # our record. The door refuses non-bot offers when this is set.
+      BOUNTY_ESCROW_ONLY: '1'
     steps:
     - uses: actions/checkout@v4
       with:
@@ -79,7 +83,10 @@ jobs:
         BOUNTY_ACCOUNT: ${{ github.repository_owner }}
       run: |
         status=0
-        python3 -u scripts/pr_conversion_watch.py --author "$BOUNTY_ACCOUNT" --limit 20 --out "$BOUNTY_STATE_DIR/pr-conversion" || status=$?
+        # ATT-P15 (2026-11-06 attention proposal): observe every authored PR, not the 20
+        # most recently updated - 86 are open in the author search, and the coverage
+        # receipt now reports any remainder as truncated instead of silently dropping it.
+        python3 -u scripts/pr_conversion_watch.py --author "$BOUNTY_ACCOUNT" --limit 100 --out "$BOUNTY_STATE_DIR/pr-conversion" || status=$?
         if [ "$status" -eq 2 ]; then
           echo "Published PRs have follow-up obligations; receipts retained."
         else
