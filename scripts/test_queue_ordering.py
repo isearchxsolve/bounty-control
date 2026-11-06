@@ -222,8 +222,10 @@ class PriorityQueryConfigTests(unittest.TestCase):
         self.assertNotIn('no:assignee', compiled)
         # Additive: the global lanes keep scanning their own horizons, and the generic
         # title query rotates in the normal lane instead of re-flooding the durable
-        # queue on every cycle.
-        self.assertIn('bounty in:title', QUERIES['normal'])
+        # queue on every cycle. The literal carries is:issue since 2026-11-06: without
+        # it the query matched pull requests and spent a lane slot on things that are
+        # not tickets (run 42216544639 gathered 363 candidates, none admissible).
+        self.assertIn('bounty in:title is:issue', QUERIES['normal'])
         self.assertNotIn('bounty in:title', PRIORITY_DISCOVERY_QUERIES)
         self.assertTrue(any(program.startswith('label:"Status: Available"')
                             for program in QUERIES['programs']))
