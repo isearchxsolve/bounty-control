@@ -649,6 +649,63 @@ def resume_preparation(api, state, task, worker):
     return report
 
 
+def maintainer_review_feedback(api, repo, pr_number, account, limit=6):
+    """What a maintainer actually said about our published PR, as resume feedback.
+
+    Measured 2026-11-06: the resume loop feeds the next engineering turn only its own
+    failures - syntax, compiler, linter, network timeout - because ``prior_failures`` comes
+    from our event log. A maintainer's verdict never entered it. On
+    ``fyne-io/fyne#6637`` the reviewer posted a precise, reproducible regression and the
+    path to the fix ("a local version that retains separate upload bytes passes all four
+    too"), and the next turn started from a clean slate with none of it.
+
+    The reviewer's verdict is a fact about the artifact we published, so it belongs in the
+    resume input - and our own comments are excluded, because they are not feedback. This
+    is the same distinction as the issue thread: a constraint withholds, a gate checks.
+    """
+    try:
+        number = int(str(pr_number).rstrip("/").rsplit("/", 1)[-1])
+    except (TypeError, ValueError):
+        return ""
+    mine = {str(account or "").lower(), "isearchxsolve", "niloydassana-maker"}
+    # Integration accounts GitHub does not always type as Bot. They post coverage and
+    # deploy notes, never engineering judgements, and they were passing for a maintainer.
+    machines = {"vercel", "coveralls", "codecov", "netlify", "coderabbitai", "codeclimate",
+                "github-actions", "sonarcloud", "deepsource", "renovate", "dependabot"}
+
+    def is_machine(entry):
+        user = entry.get("user") or {}
+        login = str(user.get("login") or "").lower()
+        return (user.get("type") == "Bot"
+                or login.endswith("[bot]")
+                or login in machines)
+
+    parts = []
+    try:
+        for review in api.api(f"repos/{repo}/pulls/{number}/reviews?per_page=50") or []:
+            author = str((review.get("user") or {}).get("login") or "").lower()
+            if author in mine or is_machine(review):
+                continue
+            body = (review.get("body") or "").strip()
+            if not body:
+                continue
+            parts.append(f"[review by {author}: {review.get('state')}] {body[:2000]}")
+    except (GitHubError, OSError, ValueError, TypeError):
+        pass
+    try:
+        for comment in api.api(f"repos/{repo}/issues/{number}/comments?per_page=50") or []:
+            author = str((comment.get("user") or {}).get("login") or "").lower()
+            if author in mine or is_machine(comment):
+                continue
+            body = (comment.get("body") or "").strip()
+            if not body:
+                continue
+            parts.append(f"[comment by {author}] {body[:2000]}")
+    except (GitHubError, OSError, ValueError, TypeError):
+        pass
+    return "\n---\n".join(parts[:limit])
+
+
 def engineer():
     document = read_json(artifacts() / "claim.json")
     api = GitHub()  # retain read token only in the host transport object
@@ -806,10 +863,21 @@ def engineer():
             body += "\nRead retained previous-run edits and recovery evidence at " + str(artifacts() / "recovery.json")
         if task.get("owned_pr"):
             body += "\nRepair this same owned PR: " + task["owned_pr"] + "\n" + json.dumps(task["prior_failures"])
+            # The resume loop used to feed back only our own failures, so a maintainer's
+            # CHANGES_REQUESTED never reached the next turn: on fyne-io/fyne#6637 the
+            # reviewer named the regression and the fix and the re-run started clean-slated.
+            review_feedback = maintainer_review_feedback(
+                api, repo, task.get("owned_pr_number") or task["owned_pr"], account)
+            if review_feedback:
+                body += ("\nMaintainer review feedback on that PR - this is what the reviewer "
+                         "actually wrote, and it is the state to resume from:\n" + review_feedback)
         arch = prepared["architecture"]
         arch["full_delivery_context"] = prepared["context_path"]
         cases = worker.model_scenarios(task["title"], body, arch)
         feedback = json.dumps(task.get("prior_failures", []))
+        if review_feedback:
+            # The reviewer is the checkpoint; our own errors are only half of it.
+            feedback = review_feedback + "\n" + feedback
         prior_regression = previous_regression_contract(artifacts() / 'previous-run', task)
         if prior_regression is not None:
             feedback += '\nRetained previous regression contract (actual artifact):\n' + json.dumps(prior_regression)
