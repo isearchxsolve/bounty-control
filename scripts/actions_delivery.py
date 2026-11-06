@@ -1307,7 +1307,15 @@ def publish():
                       "base": receipt.get("base_branch") or context["repository"]["default_branch"],
                       "title": _pr_title(context, receipt), "body": body})
         if claim:
-            claim_status = "SUBMITTED_UNCONFIRMED"
+            # The command has to be a comment, not the description. Both platforms read it
+            # when content is created and ignore an edited body, so embedding the claim in
+            # the PR body alone left every newly created PR unclaimed while its status still
+            # read SUBMITTED_UNCONFIRMED. Measured 2026-11-06: 36 published PRs, zero claim
+            # comments, zero CLAIM_POSTED events - the payer is never notified, so no
+            # bounty can ever be released. This branch now claims exactly like the
+            # already-open branch above it.
+            claim_status = ("SUBMITTED_UNCONFIRMED" if post_claim(api, repo, pr["number"], claim)
+                            else "SUBMISSION_FAILED")
     store.owned_update(identity, run_owner, status="PUBLISHED_PENDING_CHECKS", pr_url=pr["html_url"],
                        pr_number=pr["number"], head_sha=head, branch=branch,
                        claim_status=claim_status, claim_command=claim,

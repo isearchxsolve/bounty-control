@@ -11,6 +11,7 @@ The token is emitted only when a trusted bounty bot has actually spoken on the i
 pushed back on in public.
 """
 import unittest
+from pathlib import Path
 from unittest import mock
 
 import actions_delivery as delivery
@@ -198,6 +199,32 @@ class PostClaimTests(unittest.TestCase):
         api = mock.Mock()
         api.api.side_effect = delivery.GitHubError("403")
         self.assertFalse(delivery.post_claim(api, "o/r", 88, "/claim #7"))
+
+
+class BothPublishBranchesClaim(unittest.TestCase):
+    """A claim in the PR body is not a claim, and the new-PR branch forgot that.
+
+    ``post_claim``'s own docstring states the rule - both platforms read the command when
+    content is created and ignore an edited body, so a claim must be a new comment. The
+    newly-created-PR branch nevertheless embedded the claim in the description, set
+    claim_status to SUBMITTED_UNCONFIRMED anyway, and never called post_claim. Since
+    every PR in the record was newly created, that branch was the only one that ever ran:
+    36 published PRs, zero claim comments, zero CLAIM_POSTED events, and the payer was
+    never notified once. Both branches now post.
+    """
+
+    def test_the_publish_path_posts_the_claim_in_both_branches(self):
+        source = Path(delivery.__file__).read_text(encoding="utf-8")
+        branches = source.count("post_claim(api, repo, pr[")
+        self.assertGreaterEqual(
+            branches, 2,
+            "only " + str(branches) + " branch(es) post the claim comment; a claim left in the "
+            "PR body alone is never submitted, which is how 36 PRs stayed unclaimed")
+
+    def test_the_claim_status_comes_from_the_post_not_from_hope(self):
+        source = Path(delivery.__file__).read_text(encoding="utf-8")
+        self.assertIn('"SUBMITTED_UNCONFIRMED" if post_claim(', source,
+                      "claim_status must be derived from the post's result, never assumed")
 
 
 if __name__ == "__main__":
