@@ -1141,6 +1141,7 @@ def generate_grounded_proposal(
     prior_failures=None,
     turn: int = 1,
     worktree: Optional[str] = None,
+    all_comments=None,
 ):
     evidence = collect_repo_evidence(repo, body)
     if not evidence or not evidence.get("commit_sha"):
@@ -1158,7 +1159,25 @@ def generate_grounded_proposal(
     _commit_sha = sanitize_prompt_input(evidence.get("commit_sha", ""))
     _default_branch = sanitize_prompt_input(evidence.get("default_branch", "main"))
 
-    comments_excerpt = "\n---\n".join(author_comments[:2]) if author_comments else "No subsequent author comments."
+    # The whole thread, not a fragment of it. The old line took the first two author
+    # comments and capped the lot at 800 characters, so a requirement pinned across three
+    # comments - which is exactly what bl4ckb4ll/blackball#85 carries - reached the model as
+    # a clipped opening and a missing third. Measured 2026-11-06: the maintainer's
+    # "Interpretive note: austerity cannot manufacture capital" was never delivered, and the
+    # patch that ignored the pinned methodology was then attributed to the model's judgement.
+    # A constraint withholds; it does not check. These are facts about the thread, so every
+    # one of them belongs in the model's input, bounded only so a huge thread cannot crowd
+    # out the code.
+    if all_comments:
+        rendered = []
+        for entry in all_comments:
+            login = str((entry.get("author") or entry.get("login") or "unknown"))
+            text = (entry.get("body") or "")
+            rendered.append(f"[{login}] {text[:4000]}")
+        comments_excerpt = "\n---\n".join(rendered) or "No subsequent author comments."
+    else:
+        comments_excerpt = "\n---\n".join(author_comments[:2]) if author_comments \
+            else "No subsequent author comments."
 
     clean_repo = sanitize_prompt_input(repo)
     clean_stack = sanitize_prompt_input(stack)
@@ -1350,37 +1369,37 @@ def get_issue_fast(repo, number):
         a_out, a_err, a_code = run_cmd(cmd_assoc, timeout=10)
         data["authorAssociation"] = a_out.strip() if a_code == 0 and a_out else "NONE"
 
-    # Check if issue text or comments indicate payment or engineering context
-    body = data.get("body", "")
-    _author = author_login
+    # Every comment travels, always. The old filter fetched comments only when the body
+    # happened to contain one of ~23 trigger tokens, and then kept only the issue author's
+    # own words and the platform bots'. Measured 2026-11-06: that deleted the maintainer's
+    # pinned methodology on any ticket where the pinner was not the issue author, deleted
+    # every other contributor's finding, and on bl4ckb4ll/blackball#85 it deleted our own
+    # prior attempt comment - so a re-run started blind to having been told the requirement
+    # once already. Cline reads what it is given; withholding the thread and then calling
+    # the result a judgement failure is blaming the reader for a blank page.
+    comments = []
+    c_cmd = ["gh", "issue", "view", str(number), "--repo", repo, "--json", "comments"]
+    c_out, c_err, c_code = run_cmd(c_cmd, timeout=20)
+    if c_code == 0 and c_out:
+        try:
+            comments = json.loads(c_out).get("comments", [])
+        except Exception:
+            comments = []
+    data["all_comments"] = comments
+
+    # The author's own thread is still separated, because admission needs to know who
+    # attested the money - but it is a subset now, not the whole of what the engineer reads.
     author_comments = []
-
-    combined_text = (data.get("title", "") + " " + (body or "")).lower()
-    should_fetch_comments = any(token in combined_text for token in [
-        "bounty", "reward", "paid", "pay", "algora", "polar",
-        "gitcoin", "bountysource", "opire", "$", "usdc", "usdt", "eth", "sol",
-        "bug", "error", "crash", "hang", "fail", "runtime", "issue", "fix", "memory", "perf"
-    ])
-
-    if should_fetch_comments:
-        c_cmd = ["gh", "issue", "view", str(number), "--repo", repo, "--json", "comments"]
-        c_out, c_err, c_code = run_cmd(c_cmd, timeout=15)
-        if c_code == 0 and c_out:
-            try:
-                comments = json.loads(c_out).get("comments", [])
-                for comment in comments:
-                    commenter = comment.get("author", {}) or {}
-                    login = (commenter.get("login") or "").lower()
-                    comment_body = comment.get("body", "") or ""
-                    is_platform_actor = login in {
-                        'algora-pbc', 'app/algora', 'gitcoinbot', 'opire-bot',
-                        'opire[bot]', 'polar-sh[bot]', 'issuehunt[bot]', 'bountysource',
-                    }
-                    if login == str(author_login).lower() or is_platform_actor:
-                        author_comments.append(comment_body)
-            except Exception:
-                pass
-
+    for comment in comments:
+        commenter = comment.get("author", {}) or {}
+        login = (commenter.get("login") or "").lower()
+        comment_body = comment.get("body", "") or ""
+        is_platform_actor = login in {
+            'algora-pbc', 'app/algora', 'gitcoinbot', 'opire-bot',
+            'opire[bot]', 'polar-sh[bot]', 'issuehunt[bot]', 'bountysource',
+        }
+        if login == str(author_login).lower() or is_platform_actor:
+            author_comments.append(comment_body)
     data["author_comments"] = author_comments
     return data
 
@@ -4429,6 +4448,12 @@ def run_worker_loop():
                 body = task.get("body", "")
                 author = task.get("author", "")
                 author_comments = task.get("author_comments", [])
+                # The whole thread, not the author's side of it. Measured 2026-11-06: the
+                # requirement Cline "ignored" on bl4ckb4ll/blackball#85 was delivered as the
+                # first two comments truncated to 800 characters, and the maintainer's third
+                # comment never arrived at all. Fetching everything and then delivering a
+                # fragment is the same defect with an extra step.
+                all_comments = task.get("all_comments", [])
                 corridor_info = task.get("corridor_info", "")
                 reason = task.get("reason", "")
 
@@ -4534,7 +4559,8 @@ def run_worker_loop():
 
                 # The authoritative issue assessment belongs in the execution
                 # half of the partition, so the laptop remains a dispatcher.
-                proposal = generate_grounded_proposal(repo, title, body, author, author_comments, turn=1)
+                proposal = generate_grounded_proposal(repo, title, body, author, author_comments, turn=1,
+                                                     all_comments=all_comments)
                 if not proposal:
                     diag_reason = get_last_generation_diagnostic()
                     if not tokenharbor_has_ready_key() and wait_for_tokenharbor_ready():
@@ -4543,7 +4569,8 @@ def run_worker_loop():
                             flush=True,
                         )
                         proposal = generate_grounded_proposal(
-                            repo, title, body, author, author_comments, turn=1
+                            repo, title, body, author, author_comments, turn=1,
+                            all_comments=all_comments
                         )
                         diag_reason = get_last_generation_diagnostic()
                 if not proposal:
