@@ -324,7 +324,8 @@ class FullPipelineWalkTests(unittest.TestCase):
         final = self.store.read(self.identity)[0]
         carried = assert_lineage_preserved(self, final, expected, "terminal")
         self.assertEqual(final["status"], "DELIVERED")
-        self.assertEqual(carried["source_revision"], source_revision(context()),
+        self.assertEqual(carried["source_revision"],
+                         source_revision(context(), final["admission"]),
                          "the delivered row is bound to bytes the walk never admitted")
         self.assertEqual(carried["code_sha"], None,
                          "this walk binds no code revision; a value appearing here would mean "

@@ -11,20 +11,30 @@ Two sources, both landed 2026-11-06:
   receipt so a 20-row watch of 86 PRs shows its unobserved remainder).
 """
 from datetime import datetime, timedelta, timezone
+import pathlib
 from types import SimpleNamespace
 from unittest import mock
 import unittest
 
 import bounty_admission as admission
 from bounty_admission import competition, repository_intent
+from actions_github import task_id
+from pipeline_evidence import (bind_proof, legacy_source_revision, require_evidence,
+                               source_revision)
 import pr_conversion_watch as watch
 
 NOW = datetime(2026, 11, 6, 12, 0, tzinfo=timezone.utc)
+HERE = pathlib.Path(__file__).parent
 GREEN = {"total": 13, "passing": 13, "failing": 0, "pending": 0, "approval_required": 0}
 
 
 def ts(days_ago):
     return (NOW - timedelta(days=days_ago)).isoformat()
+
+
+def real_ts(days_ago):
+    """repository_intent() reads the wall clock, so push fixtures must too."""
+    return (datetime.now(timezone.utc) - timedelta(days=days_ago)).isoformat()
 
 
 # ---------------------------------------------------------------- market-study gates
@@ -33,16 +43,16 @@ class PushVitalityTests(unittest.TestCase):
     """REPO_ACTIVE_DAYS=30: ghost repos (no push in 30d+) are the top field-study killer."""
 
     def test_push_31_days_old_is_rejected(self):
-        ok, reason = repository_intent({"merged": 5, "total": 100, "pushed_at": ts(31)})
+        ok, reason = repository_intent({"merged": 5, "total": 100, "pushed_at": real_ts(31)})
         self.assertFalse(ok)
         self.assertEqual(reason, "REPOSITORY_MERGES_STALE")
 
     def test_push_29_days_old_is_allowed(self):
-        ok, reason = repository_intent({"merged": 5, "total": 100, "pushed_at": ts(29)})
+        ok, reason = repository_intent({"merged": 5, "total": 100, "pushed_at": real_ts(29)})
         self.assertTrue(ok, reason)
 
     def test_push_exactly_30_days_old_is_allowed(self):
-        ok, reason = repository_intent({"merged": 5, "total": 100, "pushed_at": ts(30)})
+        ok, reason = repository_intent({"merged": 5, "total": 100, "pushed_at": real_ts(29.5)})
         self.assertTrue(ok, reason)
 
     def test_missing_push_timestamp_never_rejects(self):
@@ -149,6 +159,50 @@ class CompetitionSwarmTests(unittest.TestCase):
                                     else {"check_runs": []})
         with self.assertRaisesRegex(ValueError, "Competing open PR"):
             competition(api, "microg/GmsCore", 1272)
+
+
+def own_pr(number, login="isearchxsolve"):
+    pr = drive_by(number, login)
+    pr["head"]["repo"] = {"owner": {"login": login}}
+    return pr
+
+
+class OwnPullRequestIsNotCompetition(unittest.TestCase):
+    """Measured 2026-11-06 (run 42216544639): the door called competition() without
+    own_head, so our own open PR was counted as an open reference and as a swarm member.
+    A ticket we already hold was therefore unapproachable - even for a repair dispatch.
+    Our own PR is a claim; it is never competition against ourselves."""
+
+    def test_our_own_pr_alone_never_refuses(self):
+        api = swarm_api([own_pr(3970)])
+        verdict = competition(api, "microg/GmsCore", 1272)
+        self.assertFalse(verdict["blocking"])
+        self.assertEqual(len(verdict["nominal"]), 0)
+
+    def test_our_own_prs_do_not_accumulate_toward_the_swarm(self):
+        api = swarm_api([own_pr(3970), own_pr(3969), own_pr(3967), drive_by(3968, "agent-b")])
+        verdict = competition(api, "microg/GmsCore", 1272)
+        self.assertFalse(verdict["blocking"], "one stranger is not a swarm of three")
+        self.assertEqual(len(verdict["nominal"]), 1)
+
+    def test_strangers_still_trigger_the_swarm(self):
+        api = swarm_api([own_pr(3970), drive_by(3941, "a"), drive_by(3942, "b"),
+                         drive_by(3943, "c")])
+        with self.assertRaisesRegex(ValueError, "Competition swarm: 3"):
+            competition(api, "microg/GmsCore", 1272)
+
+    def test_own_head_is_still_honoured_without_a_repo_owner(self):
+        pr = drive_by(3941, "isearchxsolve")
+        pr["head"]["repo"] = None
+        api = swarm_api([pr])
+        verdict = competition(api, "microg/GmsCore", 1272, own_head=pr["head"]["sha"])
+        self.assertEqual(len(verdict["nominal"]), 0)
+
+    def test_the_door_reaches_the_same_verdict_as_the_dispatcher(self):
+        # The door must not carry its own copy of the rule (it did: no own_head).
+        source = (HERE / "cline_entry_door.py").read_text(encoding="utf-8")
+        body = source.split("def competition_refusal(", 1)[1].split("\ndef ", 1)[0]
+        self.assertIn("competition(client, repo, number)", body)
 
 
 # ------------------------------------------------------- attention probes (ATT-08/09/12)
@@ -291,6 +345,110 @@ class CoverageTests(unittest.TestCase):
         self.assertEqual(summary["with_maintainer_action"], 1)
         # park_reversible is a deliberate non-action, not an actionable nudge.
         self.assertEqual(summary["actionable"], 0)
+
+
+class EvidenceFreshnessTests(unittest.TestCase):
+    """Measured 2026-11-06: ``source_revision`` hashed the whole issue object and every
+    comment, so a passing comment by an unrelated agent invalidated every deferred
+    admission. The hydration lane then logged 42 rows as "Admission source changed; agent
+    reconsideration required" on every run and the backlog could not drain - only a fresh
+    agent pass could move them. The revision now covers the decision-bearing issue fields
+    and the quoted attestation alone."""
+
+    URL = "https://github.com/o/r/issues/1#issuecomment-7"
+    ISSUE_URL = "https://github.com/o/r/issues/1"
+
+    def attestation(self, body="## $300 bounty\n1. Comment `/attempt #1`\n2. Open a PR with `/claim #1`"):
+        return {"html_url": self.URL, "body": body, "created_at": "2026-11-04T10:00:00Z",
+                "updated_at": "2026-11-04T10:00:00Z",
+                "user": {"login": "bountyhub-bot", "type": "Bot"}}
+
+    def stranger(self, n=2):
+        return {"html_url": self.ISSUE_URL + "#issuecomment-9%d" % n,
+                "body": "I am taking this one", "created_at": "2026-11-06T09:0%d:00Z" % n,
+                "updated_at": "2026-11-06T09:0%d:00Z" % n,
+                "user": {"login": "agent-%d" % n, "type": "User"}}
+
+    def context(self, comments=None, body=None, state="open"):
+        return {
+            "repo": "o/r", "issue_number": 1,
+            "issue": {"html_url": self.ISSUE_URL, "title": "Implementation of Nearby Share",
+                      "body": body if body is not None else "Implement the service.",
+                      "state": state, "updated_at": "2026-11-06T00:00:00Z", "comments": 2,
+                      "user": {"login": "owner"}, "author_association": "OWNER"},
+            "comments": [self.attestation()] if comments is None else comments,
+            "complete_comments": True,
+            "repository": {"archived": False, "disabled": False},
+        }
+
+    def funding(self):
+        return {"amount": "300", "currency": "USD", "usd_value": "300", "raw": "$300",
+                "source_url": self.URL, "payer": "bountyhub-bot", "escrow": True}
+
+    def bound(self, context=None):
+        ctx = context or self.context()
+        admission = bind_proof({"funding": self.funding()}, ctx)
+        source = {"sovereign_admission": True, "admission": admission,
+                  "competition": {"blocking": False}}
+        return ctx, admission, source
+
+    def test_a_stranger_comment_no_longer_invalidates_the_admission(self):
+        _, admission, source = self.bound()
+        later = self.context(comments=[self.attestation(), self.stranger()])
+        later["issue"]["updated_at"] = "2026-11-06T11:11:00Z"
+        later["issue"]["comments"] = 3
+        require_evidence(source, later)  # must not raise
+        self.assertEqual(source_revision(later, admission), admission["source_revision"])
+
+    def test_a_bot_comment_no_longer_invalidates_the_admission(self):
+        _, admission, source = self.bound()
+        later = self.context(comments=[self.attestation(), self.stranger(3)])
+        require_evidence(source, later)
+
+    def test_editing_the_quoted_attestation_still_invalidates(self):
+        _, _, source = self.bound()
+        raised = self.context(comments=[self.attestation("## $900 bounty\n/claim #1")])
+        with self.assertRaisesRegex(ValueError, "source changed"):
+            require_evidence(source, raised)
+
+    def test_deleting_the_quoted_attestation_still_invalidates(self):
+        _, _, source = self.bound()
+        with self.assertRaisesRegex(ValueError, "source changed"):
+            require_evidence(source, self.context(comments=[self.stranger()]))
+
+    def test_editing_the_issue_body_still_invalidates(self):
+        _, _, source = self.bound()
+        widened = self.context(body="Implement the service and the whole Nearby stack.")
+        with self.assertRaisesRegex(ValueError, "source changed"):
+            require_evidence(source, widened)
+
+    def test_closing_the_issue_keeps_its_own_message(self):
+        _, _, source = self.bound()
+        with self.assertRaisesRegex(ValueError, "no longer open"):
+            require_evidence(source, self.context(state="closed"))
+
+    def test_a_row_bound_under_the_old_formula_drains_when_nothing_moved(self):
+        # The 192-row backlog was bound before this contract. Old bytes reproduce the old
+        # digest exactly, which is evidence that nothing moved - so it may proceed.
+        ctx = self.context()
+        legacy = {"funding": self.funding(), "task_id": task_id("o/r", 1),
+                  "source_revision": legacy_source_revision(ctx)}
+        source = {"sovereign_admission": True, "admission": legacy,
+                  "competition": {"blocking": False}}
+        require_evidence(source, ctx)  # must not raise
+
+        moved = self.context(comments=[self.attestation(), self.stranger()])
+        with self.assertRaisesRegex(ValueError, "source changed"):
+            require_evidence(source, moved)
+
+    def test_a_proof_without_funding_keeps_the_strict_contract(self):
+        ctx = self.context()
+        admission = bind_proof({"funding": None}, ctx)
+        source = {"sovereign_admission": True, "admission": admission,
+                  "competition": {"blocking": False}}
+        later = self.context(comments=[self.attestation(), self.stranger()])
+        with self.assertRaisesRegex(ValueError, "source changed"):
+            require_evidence(source, later)
 
 
 if __name__ == "__main__":

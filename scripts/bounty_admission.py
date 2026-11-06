@@ -845,13 +845,28 @@ def competition_evidence(api, repo, pull):
 
 
 
+def _own_pull_request(pr, own_head=None):
+    """Our own open PR on a ticket is a claim, never competition against ourselves.
+
+    Measured 2026-11-06 (run 42216544639): the door's ``competition_refusal`` called
+    ``competition()`` without ``own_head``, so our own open PR was counted as an open
+    reference and as a swarm member. Any ticket we already hold a PR on was therefore
+    unapproachable, including for a repair dispatch. The head repository's owner is the
+    fact that identifies our work; ``own_head`` covers a head we know by sha alone.
+    """
+    head = pr.get("head") or {}
+    owner = ((((head.get("repo") or {}).get("owner")) or {}).get("login") or "")
+    if owner and owner.lower() == str(BOUNTY_ACCOUNT).lower():
+        return True
+    return bool(own_head) and head.get("sha") == own_head
+
+
 def competition(api, repo, number, own_head=None):
     pattern = re.compile(rf"(?:#\s*|/issues/|\bissue\s+){number}(?!\d)|(?:^|[-_/]){number}(?:$|[-_/])", re.I)
     nominal = []
     open_refs = 0
     for pr in api.pages(f"repos/{repo}/pulls", state="open"):
-        if own_head and pr["head"]["sha"] == own_head and pr["head"]["repo"] and (
-                pr["head"]["repo"]["owner"]["login"] == BOUNTY_ACCOUNT):
+        if _own_pull_request(pr, own_head):
             continue
         text = "\n".join([pr.get("title") or "", pr.get("body") or "", pr["head"]["ref"]])
         if pattern.search(text):

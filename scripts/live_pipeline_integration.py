@@ -698,7 +698,9 @@ class LiveRun:
 
         def close_issue(r, c):
             c['issue']['state'] = 'closed'
-            r['admission']['source_revision'] = source_revision(c)
+            # Rebind with the proof so the probe tests the state gate, not a revision
+            # mismatch: closing an issue is not a change to the evidence that was read.
+            r['admission']['source_revision'] = source_revision(c, r['admission'])
 
         mutations = {
             'identity': ('Admission task identity mismatch', lambda r, c: r['admission'].update(task_id='0' * 32)),

@@ -10,15 +10,74 @@ def digest(document):
                                     ensure_ascii=True).encode()).hexdigest()
 
 
-def source_revision(context):
-    # Branch head and fetch time are deliberately excluded: this is issue evidence,
-    # not the engineering baseline. All issue/comment edits participate in the hash.
-    return digest({"issue": context["issue"], "comments": context["comments"]})
+# These fields move whenever anyone merely comments (the counter, the last-activity stamp
+# and the reaction tally) or the issue is closed. Measured 2026-11-06: hashing the whole
+# issue object meant every passing comment invalidated every deferred admission, so the
+# hydration lane re-deferred the same rows forever and only a fresh agent pass could move
+# them - the backlog could not drain. Content that a decision rests on (title, body,
+# labels) stays in the hash; "is it still open" is a separate gate with its own message.
+VOLATILE_ISSUE_FIELDS = frozenset({"updated_at", "comments", "reactions",
+                                   "state", "state_reason", "closed_at"})
+VOLATILE_COMMENT_FIELDS = frozenset({"updated_at", "reactions", "node_id"})
+
+
+def _issue_projection(issue):
+    return {k: v for k, v in (issue or {}).items() if k not in VOLATILE_ISSUE_FIELDS}
+
+
+def _comment_projection(comment):
+    comment = comment or {}
+    return {k: v for k, v in comment.items() if k not in VOLATILE_COMMENT_FIELDS}
+
+
+def _quoted_source(context, funding):
+    """The exact document the funding amount was read from, looked up live."""
+    url = str(funding.get("source_url") or "")
+    if not url:
+        return None
+    for comment in context.get("comments") or []:
+        if (comment or {}).get("html_url") == url:
+            return comment
+    issue = context.get("issue") or {}
+    return issue if issue.get("html_url") == url else None
+
+
+def source_revision(context, proof=None):
+    """Revision of the evidence a decision was made from.
+
+    With a proof, the revision covers the issue's decision-bearing fields and only the
+    quoted funding document: a new unrelated comment (agent swarms post constantly on
+    bounty tickets) no longer invalidates an admission, while an edit or deletion of the
+    quoted attestation still does. Without a proof, every comment is covered, which is
+    the stricter legacy contract used by callers that hold no admission.
+    """
+    funding = ((proof or {}).get("funding") or {})
+    if funding:
+        quoted = _quoted_source(context, funding)
+        if quoted is None:
+            # The attestation itself is gone. That is not noise; it invalidates the proof.
+            return digest({"missing_source": funding.get("source_url"),
+                           "issue": _issue_projection(context.get("issue"))})
+        return digest({"issue": _issue_projection(context.get("issue")),
+                       "quoted": _comment_projection(quoted)})
+    return digest({"issue": _issue_projection(context.get("issue")),
+                   "comments": [_comment_projection(c) for c in context.get("comments") or []]})
 
 
 def bind_proof(proof, context):
     return {**proof, "task_id": task_id(context["repo"], context["issue_number"]),
-            "source_revision": source_revision(context)}
+            "source_revision": source_revision(context, proof)}
+
+
+def legacy_source_revision(context):
+    """The pre-2026-11-06 revision: the whole issue object and every comment.
+
+    Kept only to recognise admissions bound before the quoted-evidence contract, so the
+    existing backlog can drain without weakening the gate. If the bytes are unchanged,
+    this function reproduces the stored value exactly - which is proof that nothing moved,
+    not a bypass. Any real edit or deletion changes this digest too and is still refused.
+    """
+    return digest({"issue": context["issue"], "comments": context["comments"]})
 
 
 def require_evidence(source, context=None):
@@ -35,7 +94,8 @@ def require_evidence(source, context=None):
         identity = task_id(context["repo"], context["issue_number"])
         if proof.get("task_id") != identity:
             raise ValueError("Admission task identity mismatch")
-        if proof.get("source_revision") != source_revision(context):
+        bound = proof.get("source_revision")
+        if bound != source_revision(context, proof) and bound != legacy_source_revision(context):
             raise ValueError("Admission source changed; agent reconsideration required")
         if context["issue"].get("state", "").lower() != "open":
             raise ValueError("Admitted issue is no longer open")

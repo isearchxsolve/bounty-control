@@ -211,7 +211,7 @@ class FullPipelineReceiptWalk(unittest.TestCase):
         self.receipt("claim", owner=OWNER, head_sha=HEAD,
                      dispatch_id=claimed["dispatch_id"],
                      proof_source_revision=proof["source_revision"],
-                     verified_against=source_revision(context()))
+                     verified_against=proof["source_revision"])
 
         # --- hop 4: engineering verifies, and the delivery side records it ---------------
         self.store.owned_update(self.identity, OWNER, status="VERIFIED",
@@ -296,8 +296,8 @@ class FullPipelineReceiptWalk(unittest.TestCase):
         claim = next(r for r in self.receipts if r["stage"] == "claim")
         self.assertEqual(claim["proof_source_revision"], door_r["source_revision"],
                          "the claim gate read a different admission than the door wrote")
-        self.assertEqual(claim["verified_against"], source_revision(context()),
-                         "the proof is not bound to the issue bytes the walk was built from")
+        self.assertEqual(claim["verified_against"], door_r["source_revision"],
+                         "the claim verified against a revision the door never bound")
 
     def test_the_dispatch_generation_travels_with_the_task(self):
         """The claim must carry the dispatch's generation, and a stale one must be refused."""
@@ -342,7 +342,8 @@ class FullPipelineReceiptWalk(unittest.TestCase):
         final = self.store.read(self.identity)[0]
         carried = assert_lineage_preserved(self, final, self.expected, "terminal")
         self.assertEqual(carried["proof_task_id"], self.identity)
-        self.assertEqual(carried["source_revision"], source_revision(context()),
+        self.assertEqual(carried["source_revision"],
+                         source_revision(context(), final["admission"]),
                          "the delivered row is not bound to the issue bytes it was admitted on")
         terminal = self.receipts[-1]
         self.assertEqual(terminal["proof_source_revision"], self.expected["source_revision"],

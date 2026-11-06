@@ -321,7 +321,7 @@ class LiveSeam(unittest.TestCase):
         """The bound revision is recomputed from live bytes, so lineage is measured, not assumed."""
         state = self.dispatch_admitted()
         bound = state["admission"]["source_revision"]
-        self.assertEqual(bound, source_revision(self.context),
+        self.assertEqual(bound, source_revision(self.context, state["admission"]),
                          "the door bound a revision the live issue bytes do not produce")
         self.assertEqual(state["admission"]["task_id"], self.identity)
 
@@ -466,14 +466,14 @@ class LiveSeam(unittest.TestCase):
         """The claim gate refuses on the door's revision the moment the issue bytes move."""
         state = self.dispatch_admitted()
         bound = state["admission"]["source_revision"]
-        self.assertEqual(bound, source_revision(self.context),
+        self.assertEqual(bound, source_revision(self.context, state["admission"]),
                          "the bound proof is not the proof the live issue bytes produce")
 
         edited = {**self.context,
                   "issue": {**self.context["issue"],
                             "body": (self.context["issue"].get("body") or "")
                                     + "\n\nScope widened by the owner while the task waited."}}
-        self.assertNotEqual(source_revision(edited), bound,
+        self.assertNotEqual(source_revision(edited, state["admission"]), bound,
                             "the probe did not actually change the source revision")
         before = self.state()
         with self.assertRaises(ValueError) as caught:
