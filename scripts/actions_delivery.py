@@ -1300,6 +1300,49 @@ def post_claim(api, repo, pr_number, claim):
         return False
 
 
+def boundary_contract_refusal(context, root, repo, number):
+    """Refuse publication when a reviewer-named boundary input is not exercised.
+
+    ``engineering_contract`` pins the inputs a reviewer named on a live PR - for
+    bl4ckb4ll/blackball#85, ``fedtax`` at and either side of $103350. Measured
+    2026-11-06: the companion suite on that ticket passed while exercising nothing near
+    the tax function at all, because it tested the boundary of the ``cover`` calculator
+    instead. A green boundary suite and an uncovered discontinuity coexisted.
+
+    This is a fact gate, not a judgement: whether a named value appears in the tests is
+    checkable, and whether the change satisfies the contract is not - that stays with the
+    model, per Law 85. A boundary claim that does not state the value is a hope.
+    """
+    from engineering_contract import boundary_coverage_gap, required_boundary_inputs
+    if not required_boundary_inputs(repo, number):
+        return None
+    sources = []
+    test_files = []
+    try:
+        test_files = read_json(artifacts() / "regression.json").get("test_files") or []
+    except (OSError, ValueError):
+        # A missing or unreadable regression contract is not a reason to stop checking: it is
+        # the most likely moment for an uncovered boundary to slip through, because the
+        # manifest of what was tested is exactly what is absent.
+        test_files = []
+    try:
+        for rel in test_files:
+            candidate = Path(root) / rel
+            if candidate.is_file():
+                sources.append(candidate.read_text(encoding="utf-8", errors="replace"))
+        if not sources:
+            for path in Path(root).rglob("*.py"):
+                if path.is_file() and path.stat().st_size < 200_000:
+                    sources.append(path.read_text(encoding="utf-8", errors="replace"))
+    except OSError:
+        pass
+    gap = boundary_coverage_gap(repo, number, sources)
+    if gap:
+        return ("Reviewer-named boundary inputs are not exercised by any test in this "
+                "bundle: " + ", ".join(str(value) for value in gap))
+    return None
+
+
 def publish():
     receipt = read_json(artifacts() / "release.json")
     api, store = GitHub(), StateStore()
@@ -1327,6 +1370,9 @@ def publish():
     # The one competition decision kept on the delivery side: a claimant that appeared while
     # this fix was being verified is a race, not a re-judgement (Baba 2026-10-31).
     competition(api, repo, number, own_head=state.get("head_sha") or head)
+    boundary_refusal = boundary_contract_refusal(context, root, repo, number)
+    if boundary_refusal:
+        raise ValueError(boundary_refusal)
     current_base = api.api(f"repos/{repo}/commits/{receipt.get('base_branch') or receipt['default_branch']}")["sha"]
     if current_base != receipt["base_sha"]:
         raise PreparationRace(receipt["base_sha"], current_base, [], unknown=True)
