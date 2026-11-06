@@ -867,7 +867,12 @@ def engineer():
             # CHANGES_REQUESTED never reached the next turn: on fyne-io/fyne#6637 the
             # reviewer named the regression and the fix and the re-run started clean-slated.
             review_feedback = maintainer_review_feedback(
-                api, repo, task.get("owned_pr_number") or task["owned_pr"], account)
+                api, repo, task.get("owned_pr_number") or task["owned_pr"],
+                # BOUNTY_ACCOUNT is what the workflows set (github.repository_owner). The
+                # local ``account`` bound at the branch-push site below is not yet bound at
+                # this point in engineer(), and reading it here raises UnboundLocalError on
+                # exactly the repair path this feedback exists for.
+                os.environ.get("BOUNTY_ACCOUNT") or "isearchxsolve")
             if review_feedback:
                 body += ("\nMaintainer review feedback on that PR - this is what the reviewer "
                          "actually wrote, and it is the state to resume from:\n" + review_feedback)
