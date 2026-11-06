@@ -102,6 +102,50 @@ def mark_issue_blocked_baseline(repo, number, reason):
 def update_delivery_pr(repo, number, pr_url):
     print(f"  [PR RECORDED] {repo}#{number} -> {pr_url}", flush=True)
 
+
+def post_bounty_claim(repo, number, pr_ref):
+    """Post the platform claim on this PR, and return the command posted (or None).
+
+    Both bounty platforms pay on a claim, never on a merge - Algora requires the maintainer
+    to visit their dashboard, Opire states a claim never triggers an automatic payment -
+    and both read the command when content is *created*, so it must be a new comment on the
+    PR, never text embedded in a PR body. Measured 2026-11-06: this engine publishes its own
+    PRs (commit_and_open_pr and resume_verified_publication both call `gh pr create`) and
+    posted no claim on either path, so the payer was never notified once and the only merge
+    on the account is our own.
+
+    The rule is imported from actions_delivery rather than rewritten here: this module
+    already carried its own, different set of bot logins, and two copies of an escrow rule
+    is how a lane ends up ungated while its tests still pass. gh's `issue view` names the
+    comment author `author` where the REST API names it `user`, so the shape claim_line
+    expects is rebuilt here - silently incompatible field names are what would make this
+    call return "" forever.
+    """
+    out, _err, code = run_cmd(["gh", "issue", "view", str(number), "--repo", repo,
+                               "--json", "comments"], timeout=20)
+    if code or not out:
+        return None
+    try:
+        raw = json.loads(out).get("comments") or []
+    except (ValueError, TypeError):
+        return None
+    comments = [{"user": {"login": (c.get("author") or {}).get("login") or ""},
+                 "body": c.get("body") or ""} for c in raw]
+    try:
+        from actions_delivery import claim_line
+        claim = claim_line({"comments": comments}, number)
+    except Exception:  # a claim must never break a delivered PR
+        return None
+    if not claim:
+        return None
+    _out, err, code = run_cmd(["gh", "pr", "comment", pr_ref, "--repo", repo,
+                               "--body", claim], timeout=30)
+    if code:
+        print(f"  [CLAIM POST FAILED] {repo}#{number}: {(err or _out or '')[:200]}", flush=True)
+        return None
+    print(f"  [CLAIM POSTED] {repo}#{number} -> {claim}", flush=True)
+    return claim
+
 # ==============================================================================
 # ENGINE-SCOPED TOKENHARBOR ROUTER (PRIVATE KEYS LOADED AT RUNTIME)
 # ==============================================================================
@@ -3139,6 +3183,7 @@ def commit_and_open_pr(
         print(f"🎉 [AUTONOMOUS PULL REQUEST CREATED & LIVE] {pr_url}")
         update_delivery_pr(repo, number, pr_url)
         auto_resolve_cla_if_needed(repo, pr_url)
+        post_bounty_claim(repo, number, pr_url)
         return pr_url
     fail(f"GitHub pull request creation failed (exit {pr_code}): {pr_err or pr_out or 'no output'}")
     return None
@@ -3439,7 +3484,10 @@ def resume_verified_publication(context, repo, number, title, pr_body):
     if code:
         return None
     match = re.search(r'https://github\.com/' + re.escape(repo) + r'/pull/\d+', output or '')
-    return match.group(0) if match else None
+    pr_url = match.group(0) if match else None
+    if pr_url:
+        post_bounty_claim(repo, number, pr_url)
+    return pr_url
 
 
 def monitor_delivery_checks(context, repo, number, title, body, pr_url):
