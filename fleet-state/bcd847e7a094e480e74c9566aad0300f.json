@@ -2,7 +2,7 @@
   "task_id": "bcd847e7a094e480e74c9566aad0300f",
   "repo": "MetaFam/Fork-The-World",
   "issue_number": 5,
-  "status": "AWAITING_REVIEW",
+  "status": "CLOSED_UNMERGED",
   "dispatch_id": "ec2bb3cf76514ee3af08ad379b9d53c6",
   "admission": {
     "funding": {
@@ -54,7 +54,7 @@
   ],
   "dispatched_at": "2026-11-03T16:31:35.389619+00:00",
   "attempt": 1,
-  "updated_at": "2026-11-06T15:21:47.881133+00:00",
+  "updated_at": "2026-11-06T15:54:55.251365+00:00",
   "owner": "41675104890:1",
   "previous_owner": null,
   "previous_status": "DISPATCHED",
@@ -91,5 +91,5 @@
     "latest_reviewer": null,
     "latest_review_at": null
   },
-  "observed_at": "2026-11-06T15:21:47.881124+00:00"
+  "observed_at": "2026-11-06T15:54:55.251349+00:00"
 }
