@@ -86,6 +86,35 @@ class BoundaryContractRefusal(unittest.TestCase):
             source = handle.read()
         self.assertIn("boundary_contract_refusal(context, root, repo, number)", source,
                       "the gate exists but nothing calls it - a dead gate reads as a fix")
+        self.assertIn("edge_class_contract_refusal(root)", source,
+                      "the edge class gate exists but nothing calls it - a dead gate reads as a fix")
+
+    def test_edge_class_incomplete_matrix_refuses_publication(self):
+        directory = tempfile.mkdtemp()
+        path = Path(directory) / "regression.json"
+        path.write_text(json.dumps({"categories": ["happy_path", "negative"]}), encoding="utf-8")
+        with mock.patch.object(delivery, "artifacts", return_value=Path(directory)):
+            refusal = delivery.edge_class_contract_refusal()
+        self.assertIsNotNone(refusal)
+        self.assertIn("boundary", refusal)
+        self.assertIn("regression", refusal)
+
+    def test_edge_class_complete_matrix_passes(self):
+        directory = tempfile.mkdtemp()
+        path = Path(directory) / "regression.json"
+        path.write_text(json.dumps({"categories": ["happy_path", "boundary", "negative", "regression"]}),
+                        encoding="utf-8")
+        with mock.patch.object(delivery, "artifacts", return_value=Path(directory)):
+            refusal = delivery.edge_class_contract_refusal()
+        self.assertIsNone(refusal)
+
+    def test_edge_class_absent_categories_passes(self):
+        directory = tempfile.mkdtemp()
+        path = Path(directory) / "regression.json"
+        path.write_text(json.dumps({"test_files": ["tests/test_x.py"]}), encoding="utf-8")
+        with mock.patch.object(delivery, "artifacts", return_value=Path(directory)):
+            refusal = delivery.edge_class_contract_refusal()
+        self.assertIsNone(refusal)
 
 
 if __name__ == "__main__":

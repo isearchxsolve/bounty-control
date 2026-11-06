@@ -336,6 +336,22 @@
     {
       "file": "test_bounty_claim_publish.py",
       "mode": "unittest"
+    },
+    {
+      "file": "test_boundary_contract_gate.py",
+      "mode": "unittest"
+    },
+    {
+      "file": "test_owner_allocated_escrow.py",
+      "mode": "unittest"
+    },
+    {
+      "file": "test_resume_review_feedback.py",
+      "mode": "unittest"
+    },
+    {
+      "file": "test_engineering_contract.py",
+      "mode": "unittest"
     }
   ]
 }

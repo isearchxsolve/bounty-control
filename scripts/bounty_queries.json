@@ -78,6 +78,7 @@
   ],
   "founder": [
     "commenter:algora-pbc is:issue is:open sort:created-desc",
+    "commenter:bountyhub-bot is:issue is:open sort:created-desc",
     "commenter:polar-sh is:issue is:open sort:created-desc",
     "commenter:algora-pbc is:issue is:open sort:updated-desc",
     "commenter:algora-pbc agent is:issue is:open",
@@ -91,7 +92,7 @@
     "\"/bounty\" \"$2000\" is:issue is:open",
     "\"will pay\" \"$500\" is:issue is:open sort:created-desc",
     "\"will pay\" \"$1000\" is:issue is:open sort:created-desc",
-    "bountyhub-bot is:issue is:open sort:created-desc",
+    "commenter:bountyhub-app is:issue is:open sort:created-desc",
     "opire.dev is:issue is:open sort:created-desc",
     "issuehunt.io is:issue is:open sort:created-desc",
     "label:bounty is:issue is:open sort:created-desc",

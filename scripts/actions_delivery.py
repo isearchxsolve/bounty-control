@@ -1348,6 +1348,31 @@ def boundary_contract_refusal(context, root, repo, number):
     return None
 
 
+def edge_class_contract_refusal(root=None):
+    """Refuse publication when a declared scenario matrix omits required edge classes.
+
+    ``REQUIRED_EDGE_CLASSES`` in ``engineering_contract`` pins ('happy_path', 'boundary',
+    'negative', 'regression'). If regression.json declares scenario categories or scenarios,
+    all four classes must be present.
+    """
+    from engineering_contract import edge_class_gap
+    doc = {}
+    try:
+        doc = read_json(artifacts() / "regression.json")
+    except (OSError, ValueError):
+        pass
+    categories = doc.get("scenario_categories") or doc.get("categories")
+    if not categories and "scenarios" in doc and isinstance(doc["scenarios"], list):
+        categories = [s.get("category") for s in doc["scenarios"] if isinstance(s, dict) and s.get("category")]
+    if not categories:
+        return None
+    gap = edge_class_gap(categories)
+    if gap:
+        return ("Required edge-case classes are absent from the scenario matrix: "
+                + ", ".join(gap))
+    return None
+
+
 def publish():
     receipt = read_json(artifacts() / "release.json")
     api, store = GitHub(), StateStore()
@@ -1378,6 +1403,9 @@ def publish():
     boundary_refusal = boundary_contract_refusal(context, root, repo, number)
     if boundary_refusal:
         raise ValueError(boundary_refusal)
+    edge_refusal = edge_class_contract_refusal(root)
+    if edge_refusal:
+        raise ValueError(edge_refusal)
     current_base = api.api(f"repos/{repo}/commits/{receipt.get('base_branch') or receipt['default_branch']}")["sha"]
     if current_base != receipt["base_sha"]:
         raise PreparationRace(receipt["base_sha"], current_base, [], unknown=True)

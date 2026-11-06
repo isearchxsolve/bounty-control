@@ -87,7 +87,12 @@ a CI run, never an assertion.
 | Agent turn killed mid-round: background work forbidden, write-early stated | `5bb5bfa`, 4 tests |
 | Closure triage re-audited against reviews | 1 affected PR: `stride3d/stride#3816` |
 | Reviewer-named boundary inputs now block publication | `e41a2a7`, 58 tests |
-| **Owner-allocated funding is a second escrow class** | `14937b8`, 84 tests |
+| Owner-allocated funding is a second escrow class | `14937b8`, 84 tests |
+| **Self-closure mechanism diagnosed**: 44 closures were a 75-minute Oct 25 batch cleanup of issue-farm junk, not a runtime daemon bug | Forensic timeline audit across `owned-*.json` |
+| **BountyHub founder queries added**: `commenter:bountyhub-bot` and `app` in founder lane | `bounty_queries.json`, `query_quality_audit.py` clean (8 attesting queries) |
+| **Edge-case scenario classes wired into pre-publish gate**: `edge_class_gap` blocks publication when required classes absent | `actions_delivery.py`, `test_boundary_contract_gate.py` (8 tests) |
+| **CI master suite manifest updated with recent test suites**: 88/88 suites green | `pipeline_master_suites.json`, `run_pipeline_master.py` |
+| **`fyne#6637` status verified**: ub3dqy P1 GL upload byte fix already committed on GitHub branch | `isearchxsolve/fyne:fix/bounty-1062-a3aa9d-1` commit `294ecd5` |
 
 The last one is the money decision: `fyne-io/fyne#1062` carries **$1000**, allocated and
 partly paid by the repository owner, and it now passes the funding gate. Before this change
