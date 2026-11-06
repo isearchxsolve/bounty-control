@@ -113,10 +113,23 @@ def discover(lanes, max_dispatches=2, live=False, state_dir=None, hydrate_only=F
             save(identity, row, "dispatched")
             event("DISPATCHED", task_id=identity)
         except (ValueError, GitHubError, OSError, KeyError, TypeError) as exc:
-            counts[str(exc)] += 1
-            refusal_counts[str(exc)] += 1
-            save(identity, row, "deferred")
-            event("AGENT_HANDOFF_DEFERRED", task_id=identity, reason=str(exc))
+            reason = str(exc)
+            counts[reason] += 1
+            refusal_counts[reason] += 1
+            # Terminal gate failures under mission policy (escrow, capacity, vitality)
+            # must be marked 'refused' so the hydration drain does not loop on them.
+            terminal = (
+                reason in (
+                    "NO_PLATFORM_ESCROW", "CAPACITY_EXCLUDED", "REPOSITORY_MERGES_STALE",
+                    "REPOSITORY_INTENT_UNMERGED", "OUT_OF_LANE", "COMPETING_OPEN_PRS",
+                    "COMPETITION_SWARM", "REPOSITORY_UNAVAILABLE"
+                )
+                or reason.startswith("Admission source changed")
+                or "not found" in reason.lower()
+            )
+            disposition = "refused" if terminal else "deferred"
+            save(identity, row, disposition)
+            event("AGENT_HANDOFF_DEFERRED", task_id=identity, reason=reason, disposition=disposition)
 
     door = {}
 

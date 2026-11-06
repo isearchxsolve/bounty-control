@@ -1140,8 +1140,14 @@ def render_founder_roster() -> str:
         queries = json.loads(roster_path.read_text(encoding="utf-8"))
     except (OSError, ValueError):
         return "(the roster file could not be read; search on your own judgement)"
-    founders = queries.get("founder") or []
-    if not founders:
+    import query_quality_audit as _audit
+    rendered_lanes = getattr(_audit, "RENDERED_LANES", ("founder", "programs"))
+    combined = []
+    for lane in rendered_lanes:
+        for q in (queries.get(lane) or []):
+            if q not in combined:
+                combined.append(q)
+    if not combined:
         return "(the roster is empty; search on your own judgement)"
     # Which queries can surface an attesting actor is a fact about their text, not a ranking
     # of taste: the same classifier the roster audit uses, so the brief and the audit can
@@ -1149,12 +1155,11 @@ def render_founder_roster() -> str:
     # vein hit still has to show a platform attestation to pass the door, and a vein cannot
     # surface one - so it is reserve, not first line.
     try:
-        import query_quality_audit as _audit
-        tiers = [_audit.tier(query) for query in founders]
+        tiers = [_audit.tier(query) for query in combined]
     except Exception:
-        tiers = [0] * len(founders)
-    primary = [(i, q) for i, (q, t) in enumerate(zip(founders, tiers), 1) if t < 3]
-    reserve = [(i, q) for i, (q, t) in enumerate(zip(founders, tiers), 1) if t == 3]
+        tiers = [0] * len(combined)
+    primary = [(i, q) for i, (q, t) in enumerate(zip(combined, tiers), 1) if t < 3]
+    reserve = [(i, q) for i, (q, t) in enumerate(zip(combined, tiers), 1) if t == 3]
     listing = RSN.join(f"{index}. `{query}`" for index, query in primary)
     message = (f"Run these {len(primary)} evidence-bearing queries first, in order. They name "
                f"the veins that pay: the bounty platforms' own commenters, offers that print an "
@@ -1704,6 +1709,65 @@ def ingest_founder_watch_leads(state_path: Optional[str] = None) -> List[dict]:
             "why_now": "Repository owner announced outage/defect on GitHub",
             "is_code_task": True,
         })
+    return leads
+
+
+def ingest_pre_sweep_leads(output_path: Optional[Path] = None, limit_per_query: int = 5) -> List[dict]:
+    """Pre-sweep the highest-probability platform-escrow queries into qualified search leads.
+
+    Baba's Law 85: Code moves the bytes and checks facts, model reads and interprets.
+    Pre-fetching candidate hits from the top attesting-bot queries spares the agent
+    spending its round budget on manual curl loops.
+    """
+    try:
+        from actions_github import GitHub
+        api = GitHub()
+    except Exception:
+        return []
+
+    top_queries = [
+        "commenter:algora-pbc+is:issue+is:open",
+        "commenter:bountyhub-bot+is:issue+is:open",
+        "commenter:polar-sh+is:issue+is:open",
+    ]
+    leads = []
+    seen = set()
+    for q in top_queries:
+        try:
+            endpoint = f"search/issues?q={q}&sort=created&order=desc&per_page={limit_per_query}"
+            data = api.api(endpoint)
+            for item in (data or {}).get("items") or []:
+                repo_url = item.get("repository_url", "")
+                repo = repo_url.replace("https://api.github.com/repos/", "").strip()
+                num = item.get("number")
+                if not repo or not num:
+                    continue
+                key = (repo.lower(), num)
+                if key in seen:
+                    continue
+                seen.add(key)
+                leads.append({
+                    "repo": repo,
+                    "issue": num,
+                    "title": item.get("title", ""),
+                    "url": item.get("html_url", f"https://github.com/{repo}/issues/{num}"),
+                    "labels": [lbl.get("name", "") for lbl in item.get("labels", []) if isinstance(lbl, dict)],
+                    "created_at": item.get("created_at"),
+                    "lane": "programs",
+                    "source": "pre_sweep_search",
+                    "reason": "PRE_SWEEP_PLATFORM_LEAD",
+                    "is_code_task": True,
+                })
+        except Exception:
+            continue
+
+    if output_path and leads:
+        try:
+            out = Path(output_path)
+            out.parent.mkdir(parents=True, exist_ok=True)
+            out.write_text(json.dumps(leads, indent=2, ensure_ascii=False), encoding="utf-8")
+        except Exception:
+            pass
     return leads
 
 

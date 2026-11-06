@@ -1484,5 +1484,35 @@ class DirectiveShapeTests(unittest.TestCase):
         self.assertIn("reward_usd null", self.task)
 
 
+class PreSweepAndRosterTests(unittest.TestCase):
+    def test_the_rendered_roster_includes_both_founder_and_programs_lanes(self):
+        roster_text = door.render_founder_roster()
+        self.assertIn("commenter:bountyhub-bot", roster_text)
+        self.assertIn("commenter:algora-pbc", roster_text)
+        self.assertIn("commenter:polar-sh", roster_text)
+
+    def test_pre_sweep_leads_parses_search_items_safely(self):
+        fake_api = mock.MagicMock()
+        fake_api.api.return_value = {
+            "items": [
+                {
+                    "repository_url": "https://api.github.com/repos/testowner/testrepo",
+                    "number": 42,
+                    "title": "Fix critical bug in core",
+                    "html_url": "https://github.com/testowner/testrepo/issues/42",
+                    "labels": [{"name": "bounty"}, {"name": "bug"}],
+                    "created_at": "2026-11-06T12:00:00Z",
+                }
+            ]
+        }
+        with mock.patch("actions_github.GitHub", return_value=fake_api):
+            leads = door.ingest_pre_sweep_leads()
+            self.assertEqual(len(leads), 1)
+            self.assertEqual(leads[0]["repo"], "testowner/testrepo")
+            self.assertEqual(leads[0]["issue"], 42)
+            self.assertEqual(leads[0]["lane"], "programs")
+            self.assertEqual(leads[0]["reason"], "PRE_SWEEP_PLATFORM_LEAD")
+
+
 if __name__ == "__main__":
     unittest.main(verbosity=2)

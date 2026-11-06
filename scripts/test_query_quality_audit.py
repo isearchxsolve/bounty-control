@@ -13,16 +13,25 @@ import unittest
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 import query_quality_audit as audit  # noqa: E402
 
-FOUNDER = {"founder": [
-    'commenter:algora-pbc is:issue is:open',
-    'label:bounty "$500" is:issue is:open',
-    '"bounty" is:issue is:open',
-    '"will pay" "crash" is:issue is:open',
-]}
+FOUNDER = {
+    "founder": [
+        'commenter:algora-pbc is:issue is:open',
+        'label:bounty "$500" is:issue is:open',
+        '"bounty" is:issue is:open',
+        '"will pay" "crash" is:issue is:open',
+    ],
+    "programs": [
+        'commenter:bountyhub-bot is:issue is:open',
+    ],
+}
 
 
 def kinds(document, today=None):
-    return [f["kind"] for f in audit.audit(document, today)["findings"]]
+    # Ensure all rendered lanes are present unless explicitly testing missing lanes
+    doc = dict(document)
+    if "programs" not in doc and "founder" in doc:
+        doc["programs"] = ['commenter:polar-sh is:issue is:open']
+    return [f["kind"] for f in audit.audit(doc, today)["findings"]]
 
 
 class CleanRosterTests(unittest.TestCase):
@@ -32,10 +41,11 @@ class CleanRosterTests(unittest.TestCase):
 
     def test_cross_lane_repeats_are_reported_but_never_fail(self):
         document = {"normal": ['commenter:algora-pbc is:issue is:open'],
-                    "founder": ['commenter:algora-pbc is:issue is:open']}
+                    "founder": ['commenter:algora-pbc is:issue is:open'],
+                    "programs": ['commenter:algora-pbc is:issue is:open']}
         report = audit.audit(document)
         self.assertEqual(report["verdict"], "CLEAN", report["findings"])
-        self.assertEqual(report["stats"]["cross_lane_repeats"], {"normal": 1, "founder": 1})
+        self.assertEqual(report["stats"]["cross_lane_repeats"], {"normal": 1, "founder": 1, "programs": 1})
 
 
 class DefectDetectionTests(unittest.TestCase):
@@ -56,7 +66,8 @@ class DefectDetectionTests(unittest.TestCase):
         self.assertGreater(found[0]["age_days"], audit.MAX_ANCHOR_AGE_DAYS)
 
     def test_a_fresh_date_anchor_passes(self):
-        document = {"founder": ['commenter:algora-pbc is:issue is:open created:>=2026-10-20']}
+        document = {"founder": ['commenter:algora-pbc is:issue is:open created:>=2026-10-20'],
+                    "programs": ['commenter:bountyhub-bot is:issue is:open']}
         self.assertEqual(audit.audit(document, audit.date(2026, 11, 6))["verdict"], "CLEAN")
 
     def test_a_vein_rendered_before_an_evidence_query_is_named(self):
@@ -82,6 +93,8 @@ class LiveRosterTests(unittest.TestCase):
                               .read_text(encoding="utf-8"))
         founder = document["founder"]
         self.assertEqual(audit.tier(founder[0]), 0, founder[0])
+        programs = document["programs"]
+        self.assertEqual(audit.tier(programs[0]), 0, programs[0])
 
 
 class ExitCodeTests(unittest.TestCase):

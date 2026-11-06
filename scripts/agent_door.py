@@ -168,6 +168,11 @@ def find_issues(root: Optional[str] = None, rounds: int = 2, timeout: int = 600,
             inbox_leads = email_inbox_watcher.collect_inbox_leads(Path(workdir) / "inbox-leads.json")
         except Exception:
             pass
+        search_leads = []
+        try:
+            search_leads = cline_entry_door.ingest_pre_sweep_leads(Path(workdir) / "search-leads.json")
+        except Exception:
+            pass
         from actions_github import GitHub  # noqa: E402
         prompt = cline_entry_door.WORKTREE_PROMPT
         command = [sys.executable, str(Path(__file__).with_name('check_entry_shortlist.py').resolve()),
@@ -176,6 +181,9 @@ def find_issues(root: Optional[str] = None, rounds: int = 2, timeout: int = 600,
         round_context = ('You can run the actual read-only production evidence verifier: ' + rendered
                          + '. Read its JSON refusals and exact details, correct your evidence from real sources, '
                          'and rerun it before declaring your shortlist verified. This tool does not dispatch or publish.')
+        if search_leads:
+            round_context += (f'\nPre-swept platform candidates from live search: search-leads.json ({len(search_leads)} fresh leads). '
+                              'Inspect and verify these candidates with check_entry_shortlist.py before searching blindly.')
         if os.environ.get('BOUNTY_AGENT_MEMORY'):
             memory = research_memory_path(os.environ['BOUNTY_AGENT_MEMORY'])
             round_context += (f'\nResearch scratchpad: {memory}. It persists across discovery runs. '

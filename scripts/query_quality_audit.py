@@ -26,7 +26,7 @@ import sys
 
 # The lanes that are actually rendered into the agent brief. A query outside these lanes
 # never reaches a searching agent in agent-door mode, however good it is.
-RENDERED_LANES = ("founder",)
+RENDERED_LANES = ("founder", "programs")
 
 # An entity that can attest escrow. Only an attesting actor can produce a row the
 # escrow-only door will admit.
