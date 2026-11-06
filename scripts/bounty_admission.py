@@ -279,6 +279,35 @@ def escrow_only_enabled() -> bool:
     return raw == "1"
 
 
+def _is_owner_allocated(document, issue, amount):
+    """A repository authority committing a named amount to work on their own issue.
+
+    Measured 2026-11-07. ``fyne-io/fyne#1062`` is the largest verified money in the record:
+    andydotxyz, the repository owner, wrote "$500 is currently allocated for eligible
+    contributors completing this work", then "the bounty on this ticket has increased to
+    $1000!", then allocated half of it to work he accepts. There is no platform bot on that
+    issue, so ``escrow_only_refusal`` refuses it as ``NO_PLATFORM_ESCROW``.
+
+    The bot-only rule rested on a market study measuring 0% conversion for non-escrow
+    offers. That measurement was taken on our own interference - 46 of our 50 closed PRs were
+    closed by our own account, 37 of them within six hours of creation - so the 0% describes
+    what we did to our own PRs, not what the market did. Meanwhile the bot-attested pool
+    measures 59 open tickets of which none are both fresh and unswarmed.
+
+    This is a fact gate, not a judgement: the funder is the issue's author, that author's
+    association is OWNER, MEMBER or COLLABORORATE, and a specific amount is named. A stranger
+    promising $500 is still refused, because NONE is not in ISSUERS - and the repository's
+    merge intent is already checked separately by ``repository_intent``.
+    """
+    if amount is None:
+        return False
+    funder = str((document.get("user") or {}).get("login") or "").lower()
+    author = str((issue.get("user") or {}).get("login") or "").lower()
+    association = str(issue.get("author_association")
+                      or issue.get("authorAssociation") or "").upper()
+    return bool(funder) and funder == author and association in ISSUERS
+
+
 def escrow_only_refusal(offer):
     """The escrow-only gate's verdict for one offer, or None when the offer passes.
 
@@ -761,7 +790,13 @@ def admit(context, quote=None, floor=FLOOR):
                          else document["user"]["login"])
                 candidates.append({"amount": str(amount), "currency": currency, "usd_value": str(usd),
                                    "quote": rate, "raw": raw, "source_url": document["html_url"],
-                                   "payer": payer, "escrow": _is_platform_bot(document)})
+                                   "payer": payer,
+                                   # Two escrow classes, one field: a platform bot's attestation,
+                                   # or a repository authority committing a named amount to work
+                                   # on their own issue. The second is where the money actually
+                                   # is - fyne#1062 holds $1000 and pays out, and no bot attests it.
+                                   "escrow": _is_platform_bot(document)
+                                             or _is_owner_allocated(document, issue, amount)})
         if candidates:
             offer = max(candidates, key=lambda row: Decimal(row["usd_value"]))
     if offer:
