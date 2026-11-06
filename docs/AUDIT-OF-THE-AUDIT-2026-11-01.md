@@ -1,4 +1,4 @@
-# Audit of the Audit — Review of `PIPELINE-FORENSIC-AUDIT-2026-11-01.md`
+﻿# Audit of the Audit â€” Review of `PIPELINE-FORENSIC-AUDIT-2026-11-01.md`
 
 **Written:** 2026-11-01
 **Reviewer:** Saffron (Perch operator)
@@ -15,7 +15,7 @@ The audit is a high-quality diagnosis of the **code**. It is wrong on its **own 
 
 | Dimension | Assessment |
 | --- | --- |
-| Code-level findings (F01–F19) | **Strong.** Most reproduce; the P1 ranking is largely correct. |
+| Code-level findings (F01â€“F19) | **Strong.** Most reproduce; the P1 ranking is largely correct. |
 | Evidence integrity | **Failed.** The "130 passing door tests" claim is false. |
 | Scope | **Incomplete.** No secret scan of a public repository. |
 | Root-cause framing | **Misdirected.** Diagnoses the gate; the binding constraint is supply quality. |
@@ -28,22 +28,22 @@ Three material defects in the audit itself, one of which invalidates its validat
 
 Independently confirmed, not taken on trust.
 
-### 2.1 Zero PR deliveries — confirmed
+### 2.1 Zero PR deliveries â€” confirmed
 
 Scanned all **113** ledger records under `fleet-state/` on branch `bounty-control` for any PR reference (`pull/`, `pr_url`, `pull_request`, `pr_number`, `publication`).
 
 - Records containing any PR reference: **1**
-- That record is `xmtplabs/ethshanghai-2022#2`, status `REJECTED_PREPARATION` — a PR *mentioned inside a refusal*, not a delivery.
+- That record is `xmtplabs/ethshanghai-2022#2`, status `REJECTED_PREPARATION` â€” a PR *mentioned inside a refusal*, not a delivery.
 
 **Zero deliveries stands.**
 
-### 2.2 The refusals were correct — confirmed, and understated by the audit
+### 2.2 The refusals were correct â€” confirmed, and understated by the audit
 
 Categorised all 103 `REJECTED_PREPARATION` records by their stated reason:
 
 | Count | Share | Category |
 | ---: | ---: | --- |
-| 46 | 45% | Auto-generated news digest (`[每日信息流]` bot posts) |
+| 46 | 45% | Auto-generated news digest (`[æ¯æ—¥ä¿¡æ¯æµ]` bot posts) |
 | 32 | 31% | Hackathon / prize announcement (Gitcoin GR11, prize bounties) |
 | 12 | 12% | Proposal / grant solicitation |
 | 6 | 6% | Already competing / already paid out |
@@ -59,16 +59,16 @@ This reframes the audit's headline. "113 tasks, 103 preparation refusals" reads 
 
 Confirmed by reading the cited code paths:
 
-- **F01 — sovereign verdict lost in discovery.** Hydration rebuilds the context and re-derives the decision instead of carrying the door's verdict. Real.
-- **F03 — missing evidence becomes approval.** `sovereign_admission({}, {})` manufactures a non-empty proof from empty input. This is the most serious finding in the set: fabricated approval is an integrity defect, not a logic slip.
-- **F06 — refusals become permanent tombstones.** A refusal keyed to the issue forever means a corrected offer can never be reconsidered. This is the finding that compounds.
-- **F04 — duplicate dispatch before claim.** Real ownership-integrity defect.
-- **F05 — release without proof the worker stopped.** Real.
+- **F01 â€” sovereign verdict lost in discovery.** Hydration rebuilds the context and re-derives the decision instead of carrying the door's verdict. Real.
+- **F03 â€” missing evidence becomes approval.** `sovereign_admission({}, {})` manufactures a non-empty proof from empty input. This is the most serious finding in the set: fabricated approval is an integrity defect, not a logic slip.
+- **F06 â€” refusals become permanent tombstones.** A refusal keyed to the issue forever means a corrected offer can never be reconsidered. This is the finding that compounds.
+- **F04 â€” duplicate dispatch before claim.** Real ownership-integrity defect.
+- **F05 â€” release without proof the worker stopped.** Real.
 - **F09, F10, F15, F18, F19.** All accepted.
 
 ---
 
-## 3. Defect 1 — the validation claim is false
+## 3. Defect 1 â€” the validation claim is false
 
 **The audit states:** "Validation included 130 passing door tests and ten defect probes."
 
@@ -94,7 +94,7 @@ Eleven of the thirteen fail with the same error:
 NameError: name 'time' is not defined
 ```
 
-A missing import, in the door test suite — the exact F821 class the audit's own F19 calls "the lint class that reaches production as a crash."
+A missing import, in the door test suite â€” the exact F821 class the audit's own F19 calls "the lint class that reaches production as a crash."
 
 **Why this matters:** the audit's F19 correctly identifies the early-`main()` trap at line 339 and then **stops before executing the consequence**. It diagnosed the mechanism and never ran the suite. The validation paragraph is therefore wrong on both numbers: 92 tests exist, not 130; 29 run, not 130; and 13 fail.
 
@@ -102,7 +102,7 @@ An audit whose validation claim cannot be reproduced has an evidence-integrity p
 
 ---
 
-## 4. Defect 2 — live credentials in a public repository, never examined
+## 4. Defect 2 â€” live credentials in a public repository, never examined
 
 `isearchxsolve/bounty-control` is **public** (`private: false`, `visibility: public`, owner type `User`).
 
@@ -110,27 +110,27 @@ Current HEAD tree contains:
 
 | File | Secret |
 | --- | --- |
-| `scripts/test_icu_pipeline_suite.py` | `github_pat_11A…` (85 chars) |
-| `scripts/autonomous_icu_pipeline.py` | `GOLD24` |
-| `scripts/kaggle_engine_worker.py` | `GOLD24` |
-| `scripts/fleet_local_relay.py` | `GOLD24` |
-| + 6 further files | `GOLD24` / token material |
+| `scripts/test_icu_pipeline_suite.py` | `github_pat_<REDACTED-rotated>â€¦` (85 chars) |
+| `scripts/autonomous_icu_pipeline.py` | `<RELAY-DOOR-TOKEN>` |
+| `scripts/kaggle_engine_worker.py` | `<RELAY-DOOR-TOKEN>` |
+| `scripts/fleet_local_relay.py` | `<RELAY-DOOR-TOKEN>` |
+| + 6 further files | `<RELAY-DOOR-TOKEN>` / token material |
 
-A GitHub personal access token with `repo` scope, committed in a **test suite**, in a **public** repository. `GOLD24` is a relay door token.
+A GitHub personal access token with `repo` scope, committed in a **test suite**, in a **public** repository. `<RELAY-DOOR-TOKEN>` is a relay door token.
 
 **This is the highest-severity item on the board and it is not among the 20 findings.** An audit of a public repository that does not run a secret scan has a hole in its *scope*, not merely its findings. Public-repository secret harvesting is fully automated and continuous.
 
-**Required action, ahead of every code repair in the audit:** revoke the PAT, rotate `GOLD24`, then purge the working tree and decide separately about history.
+**Required action, ahead of every code repair in the audit:** revoke the PAT, rotate `<RELAY-DOOR-TOKEN>`, then purge the working tree and decide separately about history.
 
 ---
 
-## 5. Defect 3 — root cause is supply, not the gate
+## 5. Defect 3 â€” root cause is supply, not the gate
 
 The audit spends 19 findings on the machinery and one line on the fact that the queue is fed rubbish.
 
-45% of everything that reached preparation was a `[每日信息流]` news bot. 31% was hackathon announcements. **76% of the input was never work.**
+45% of everything that reached preparation was a `[æ¯æ—¥ä¿¡æ¯æµ]` news bot. 31% was hackathon announcements. **76% of the input was never work.**
 
-Fix all of F01–F19 and the pipeline will still deliver zero PRs, because the input is still bot spam. The binding constraint is upstream: the discovery queries admit bot-generated content at scale.
+Fix all of F01â€“F19 and the pipeline will still deliver zero PRs, because the input is still bot spam. The binding constraint is upstream: the discovery queries admit bot-generated content at scale.
 
 **This finding is absent from the audit and outranks most of what is present.**
 
@@ -155,7 +155,7 @@ These 8 are buried under the 103. They are the real signal about delivery capabi
 
 ### 6.2 F02's severity is overstated in context
 
-"A refused row cannot be repaired during the same search" is a genuine bug. But given the refusal categories in §2.2, there is almost nothing worth rechecking. It matters once supply is clean; it is not the cause of the current zero.
+"A refused row cannot be repaired during the same search" is a genuine bug. But given the refusal categories in Â§2.2, there is almost nothing worth rechecking. It matters once supply is clean; it is not the cause of the current zero.
 
 ---
 
@@ -165,10 +165,10 @@ These 8 are buried under the 103. They are the real signal about delivery capabi
 | --- | --- | --- |
 | F01 | Sovereign verdict lost in discovery | **Confirmed** |
 | F02 | Refused row cannot be repaired | Confirmed, severity overstated |
-| F03 | Missing evidence becomes approval | **Confirmed — most serious** |
+| F03 | Missing evidence becomes approval | **Confirmed â€” most serious** |
 | F04 | Pending dispatches redispatchable | **Confirmed** |
 | F05 | Sweeper releases without proof | **Confirmed** |
-| F06 | Refusals become tombstones | **Confirmed — compounds** |
+| F06 | Refusals become tombstones | **Confirmed â€” compounds** |
 | F07 | Publication failure masked | Accepted |
 | F08 | Streaming does not dispatch | Accepted |
 | F09 | Queued but unselectable | **Confirmed** |
@@ -182,17 +182,17 @@ These 8 are buried under the 103. They are the real signal about delivery capabi
 | F17 | Capacity cache skips exclusions | Accepted |
 | F18 | Payment outside lifecycle | **Confirmed** |
 | F19 | CI omits critical path | **Confirmed, and understated** |
-| — | **Live credentials in public repo** | **MISSED — P0** |
-| — | **Supply is 76% bot spam** | **MISSED — root cause** |
-| — | **Validation claim false** | **MISSED — evidence integrity** |
+| â€” | **Live credentials in public repo** | **MISSED â€” P0** |
+| â€” | **Supply is 76% bot spam** | **MISSED â€” root cause** |
+| â€” | **Validation claim false** | **MISSED â€” evidence integrity** |
 
 ---
 
 ## 8. Recommended order of work
 
-1. **Revoke the `github_pat_` and rotate `GOLD24`.** Nothing else matters while a `repo`-scoped token sits in a public repository.
+1. **Revoke the `github_pat_` and rotate `<RELAY-DOOR-TOKEN>`.** Nothing else matters while a `repo`-scoped token sits in a public repository.
 2. **Fix the test suite.** Add the missing `time` import; move `unittest.main()` to the end of the file. This makes F19's claim true instead of aspirational, and it is contained.
-3. **Add a secret scan to CI.** The audit's absence of one is why §4 was missed.
+3. **Add a secret scan to CI.** The audit's absence of one is why Â§4 was missed.
 4. **Cut the bot supply at the query layer.** 76% of admitted input is news digests and hackathon announcements. This is the highest-leverage fix and it is cheap.
 5. **Then** work the audit's P1 list, in its own order: F03, F06, F01, F04, F05.
 
