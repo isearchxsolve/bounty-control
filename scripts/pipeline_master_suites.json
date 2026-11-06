@@ -284,6 +284,54 @@
     {
       "file": "test_live_probe_receipts.py",
       "mode": "script"
+    },
+    {
+      "file": "test_attention_gates_2026_11_06.py",
+      "mode": "unittest"
+    },
+    {
+      "file": "test_pr_conversion_watch.py",
+      "mode": "unittest"
+    },
+    {
+      "file": "test_discovery_queries.py",
+      "mode": "unittest"
+    },
+    {
+      "file": "test_funnel_fixes.py",
+      "mode": "unittest"
+    },
+    {
+      "file": "test_discovery_repairs.py",
+      "mode": "unittest"
+    },
+    {
+      "file": "test_f9_refusal_gates.py",
+      "mode": "unittest"
+    },
+    {
+      "file": "test_markup_and_funding_gate.py",
+      "mode": "unittest"
+    },
+    {
+      "file": "test_not_a_defect_exclusion.py",
+      "mode": "unittest"
+    },
+    {
+      "file": "test_plan_memory_budget.py",
+      "mode": "unittest"
+    },
+    {
+      "file": "test_claim_command.py",
+      "mode": "unittest"
+    },
+    {
+      "file": "test_bounty_candidate_index.py",
+      "mode": "unittest"
+    },
+    {
+      "file": "test_dispatcher_horizon.py",
+      "mode": "unittest"
     }
   ]
 }
