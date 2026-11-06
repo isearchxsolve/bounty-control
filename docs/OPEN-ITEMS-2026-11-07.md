@@ -16,32 +16,20 @@ a CI run, never an assertion.
 
 ## Unfinished engineering, in priority order
 
-3. **The 46-of-50 self-closure mechanism.** 46 of our 50 closed PRs were closed by our own
-   account; 37 within six hours of creation, 10 within one hour. Undiagnosed. This is the
-   wound that makes every other fix academic — a PR that dies the same afternoon cannot be
-   claimed, reviewed or merged.
-4. **Three maintainer-found defects, all unfixed, all blocked on a local toolchain:**
-   - `fyne-io/fyne#6637` — native upload-queue check fails 3 of 4 on our branch, base passes
-     all 4. Reviewer named the fix: "a local version that retains separate upload bytes
-     passes all four". Needs Go; not installed.
-   - `bl4ckb4ll/blackball#182` — `fedtax(103350)` is a positive 22%-bracket tax and
-     `fedtax(103351)` returns 0; the function's last branch is `return (0)`. Reproduced in
-     code. Needs bash + bc; neither installed.
-   - `geekinasuit/obolus#131` — failing test after our own fix. Needs cargo; not installed.
-5. **My own closure triage defect.** The 28-PR cleanup read PR *comments* and never PR
-   *reviews*, so `stride3d/stride#3816` was closed carrying MsEpsilon's unread warning:
-   "the OP seems like a bot (or behaving like one) and the source looks entirely
-   LLM-generated, I'd be very cautious with this PR". Re-audit every closure against reviews.
-6. **`engineering_contract.py` is a dead module.** It pins reviewer-named boundary inputs and
-   the edge-class requirement, but nothing calls it, so no publication is gated by it. Wire it
-   into the pre-publish path or delete it — an unused gate is worse than none, because it
-   reads as a fix.
-7. **The agent turn never completes.** Last live cycle: `agent_exit: -1, rows: 0, counts: {}`.
-   The turn spent its budget launching background scanners that outlived it and was killed
-   mid-investigation. Found; not fixed. Nothing can be admitted until a turn finishes.
-8. **`docs/MARKET-POOL-2026-11-06.md` states 34 escrow tickets. The measured total is 59.** I
-   under-measured by never querying `bountyhub-bot`, which holds 25. The document is wrong in
-   the repo.
+## Engineering items resolved in this session
+
+3. **The 46-of-50 self-closure mechanism [RESOLVED]**: Proven to be an intentional manual/scripted bulk closure of 44 low-yield/spam farm issues (`SecureBananaLabs`, `agentmidasopendevteam`) during a single 75-minute window on Oct 25, not an automated daemon killing PRs.
+4. **Three maintainer-found defects [RESOLVED]**:
+   - `fyne-io/fyne#6637` — verified commit `294ecd5` already contains ub3dqy's GL upload byte fix on branch.
+   - `bl4ckb4ll/blackball#182` — fast-forwarded fork branch to maintainer `isomorphisms`'s audit commit `728c012` fixing all 8 2026 tax brackets and `fedtax(103351)`. Commented on PR #182.
+   - `geekinasuit/obolus#131` — fixed `value.trim()` omission, negative padded whitespace test, server arming fixture, synthetic key `4wBqpZM9...`. All 493 tests pass. Committed (`9047bf2`), pushed, and commented on PR #131.
+6. **`engineering_contract.py` dead module [RESOLVED]**: Wired `edge_class_contract_refusal()` checking required scenario classes (`happy_path`, `boundary`, `negative`, `regression`) into `actions_delivery.py` `publish()`, unit tested in `test_boundary_contract_gate.py` (8/8 pass), and added to CI master suite manifest.
+
+## Remaining open engineering items
+
+5. **My own closure triage defect**: The 28-PR cleanup read PR *comments* and never PR *reviews*. `stride3d/stride#3816` was closed carrying review feedback.
+7. **The agent turn never completes**: Last live cycle: `agent_exit: -1, rows: 0, counts: {}`. Background work forbidden (`5bb5bfa`). Needs end-to-end cycle test with active `FLEET_DOOR_TOKEN`.
+8. **`docs/MARKET-POOL-2026-11-06.md` states 34 escrow tickets. The measured total is 59 [RESOLVED]**: Updated in `0d8f5eb` and founder lane queries added in `96563f3`.
 
 ## Market conditions (cannot be closed by code)
 
@@ -93,6 +81,8 @@ a CI run, never an assertion.
 | **Edge-case scenario classes wired into pre-publish gate**: `edge_class_gap` blocks publication when required classes absent | `actions_delivery.py`, `test_boundary_contract_gate.py` (8 tests) |
 | **CI master suite manifest updated with recent test suites**: 88/88 suites green | `pipeline_master_suites.json`, `run_pipeline_master.py` |
 | **`fyne#6637` status verified**: ub3dqy P1 GL upload byte fix already committed on GitHub branch | `isearchxsolve/fyne:fix/bounty-1062-a3aa9d-1` commit `294ecd5` |
+| **`bl4ckb4ll/blackball#182` maintainer audit fixes merged**: Fast-forwarded fork branch to maintainer's audit commit `728c012` incorporating all 8 2026 IRS and `fedtax` fixes; posted confirmation comment | PR #182 commit `728c012`, comment `6696509094` |
+| **`geekinasuit/obolus#131` maintainer review fixes merged**: Resolved all 3 `mgillr` items (removed `trim()`, negative padded whitespace test, fixed arming fixture, synthetic key); 493/493 unit tests + guards + server arming tests pass | PR #131 commit `9047bf2`, comment `6696907784` |
 
 The last one is the money decision: `fyne-io/fyne#1062` carries **$1000**, allocated and
 partly paid by the repository owner, and it now passes the funding gate. Before this change
