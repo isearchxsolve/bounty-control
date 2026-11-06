@@ -1117,11 +1117,32 @@ def render_founder_roster() -> str:
     founders = queries.get("founder") or []
     if not founders:
         return "(the roster is empty; search on your own judgement)"
-    listing = RSN.join(f"{index}. `{query}`" for index, query in enumerate(founders, 1))
-    return (f"Run these {len(founders)} curated queries first, in order. They name the veins that "
-            f"pay: the bounty platforms' own commenters, the founder-wound phrasings, and the "
-            f"outage vocabulary that only an owner writes. Work down the list and stop when your "
-            f"basket is full or the clock is short:{RSN}{RSN}{listing}")
+    # Which queries can surface an attesting actor is a fact about their text, not a ranking
+    # of taste: the same classifier the roster audit uses, so the brief and the audit can
+    # never disagree about which half of the list is which. Under escrow-only admission a
+    # vein hit still has to show a platform attestation to pass the door, and a vein cannot
+    # surface one - so it is reserve, not first line.
+    try:
+        import query_quality_audit as _audit
+        tiers = [_audit.tier(query) for query in founders]
+    except Exception:
+        tiers = [0] * len(founders)
+    primary = [(i, q) for i, (q, t) in enumerate(zip(founders, tiers), 1) if t < 3]
+    reserve = [(i, q) for i, (q, t) in enumerate(zip(founders, tiers), 1) if t == 3]
+    listing = RSN.join(f"{index}. `{query}`" for index, query in primary)
+    message = (f"Run these {len(primary)} evidence-bearing queries first, in order. They name "
+               f"the veins that pay: the bounty platforms' own commenters, offers that print an "
+               f"amount, and the label and platform surfaces where escrowed work is posted. Work "
+               f"down the list and stop when your basket is full or the clock is short:"
+               f"{RSN}{RSN}{listing}")
+    if reserve:
+        reserve_listing = RSN.join(f"{index}. `{query}`" for index, query in reserve)
+        message += (f"{RSN}{RSN}Then, only if the clock still allows, {len(reserve)} vocabulary "
+                    f"veins. These describe what a wounded founder writes - an outage, a crash, "
+                    f"'I will pay'. None of them can surface a platform attestation by itself, so "
+                    f"under escrow-only admission anything you find with one of them still needs an "
+                    f"attesting actor in the thread to pass the door:{RSN}{RSN}{reserve_listing}")
+    return message
 
 
 def render_task_file() -> str:
