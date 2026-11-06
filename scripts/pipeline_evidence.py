@@ -45,21 +45,27 @@ def _quoted_source(context, funding):
 def source_revision(context, proof=None):
     """Revision of the evidence a decision was made from.
 
-    With a proof, the revision covers the issue's decision-bearing fields and only the
-    quoted funding document: a new unrelated comment (agent swarms post constantly on
-    bounty tickets) no longer invalidates an admission, while an edit or deletion of the
-    quoted attestation still does. Without a proof, every comment is covered, which is
-    the stricter legacy contract used by callers that hold no admission.
+    With a proof that quotes a funding document, the revision covers the issue's
+    decision-bearing fields and only that quoted document: a new unrelated comment (agent
+    swarms post constantly on bounty tickets) no longer invalidates an admission, while an
+    edit or deletion of the quoted attestation still does. Without a resolvable quotation -
+    no proof, or a proof carrying an amount but no source_url - every comment is covered,
+    which is the stricter contract, because there is no document to prove unchanged.
     """
     funding = ((proof or {}).get("funding") or {})
     if funding:
         quoted = _quoted_source(context, funding)
-        if quoted is None:
+        if quoted is not None:
+            return digest({"issue": _issue_projection(context.get("issue")),
+                           "quoted": _comment_projection(quoted)})
+        if funding.get("source_url"):
             # The attestation itself is gone. That is not noise; it invalidates the proof.
             return digest({"missing_source": funding.get("source_url"),
                            "issue": _issue_projection(context.get("issue"))})
-        return digest({"issue": _issue_projection(context.get("issue")),
-                       "quoted": _comment_projection(quoted)})
+        # A proof that carries an amount but no source_url quoted nothing, so there is no
+        # document to narrow to. Falling through to the full-comment revision is the only
+        # honest option: measured by test_source_change_requires_agent_reconsideration,
+        # narrowing here produced a revision that could not see "Funding withdrawn".
     return digest({"issue": _issue_projection(context.get("issue")),
                    "comments": [_comment_projection(c) for c in context.get("comments") or []]})
 
