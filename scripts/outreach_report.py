@@ -87,7 +87,7 @@ def _guard_rails(text, object_ids=()):
 
 
 def build_report(impact, affected, steps, proof, fix, detail=None, repo=None,
-                 object_ids=()):
+                 object_ids=(), layout="report"):
     """Build the six-part report. Raises MissingEvidence if anything is unproven.
 
     impact    : one sentence, business impact first. Required.
@@ -116,6 +116,22 @@ def build_report(impact, affected, steps, proof, fix, detail=None, repo=None,
             "assertion, and an assertion is what the guides say gets filtered hardest."
         )
     proof = proof[:MAX_PROOF]
+
+    if layout == "handoff":
+        lines = [impact, "", fix, "", "<details>",
+                 "<summary>Reproduction and checks</summary>", "",
+                 f"Affected: {affected}", "", "Steps:"]
+        lines.extend(f"{i}. {step}" for i, step in enumerate(steps, 1))
+        lines.extend(["", "Recorded checks:"])
+        lines.extend("- " + item for item in proof)
+        if detail and _clean(detail):
+            lines.extend(["", str(detail).strip()])
+        lines.extend(["", "</details>"])
+        body = "\n".join(lines)
+        _guard_rails(body, object_ids)
+        return body
+    if layout != "report":
+        raise ValueError("Unknown report layout: " + str(layout))
 
     lines = []
     lines.append(f"**{impact}**")

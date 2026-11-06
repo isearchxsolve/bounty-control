@@ -1316,8 +1316,13 @@ pr_body = build_peer_pr_body(
     scenarios=scenarios
 )
 assert "Resolves #142." in pr_body
-assert "### Architectural Summary & Root Cause Analysis" in pr_body
-assert "### Verified Scenario Coverage" in pr_body
+assert "<summary>Test commands and review details</summary>" in pr_body
+assert "### Planned regression cases" in pr_body
+assert "only the execution receipts above establish what ran" in pr_body
+assert "comprehensive test matrix" not in pr_body
+assert "Verified base SHA" not in pr_body.split("<details>")[0]
+assert "SCENARIO_CONCURRENCY_RACE" not in pr_body.split("<details>")[0]
+assert "zero warnings or errors" not in pr_body
 assert "SCENARIO_CONCURRENCY_RACE" in pr_body
 assert "Verified base SHA: `master`" in pr_body
 assert "pytest -q" in pr_body and "exit `0`" in pr_body and "duration `1.250s`" in pr_body

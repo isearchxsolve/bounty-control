@@ -51,7 +51,8 @@ class ClaimLineTests(unittest.TestCase):
 
 class PrBodyTests(unittest.TestCase):
 
-    receipt = {"base_sha": "9fee2527", "run_url": "https://example/run/1"}
+    receipt = {"base_sha": "9fee2527", "run_url": "https://example/run/1",
+               "regression": {"red_exit": 1, "green_exit": 0}}
     rows = [{"argv": ["pytest", "-q"], "exit_code": 0, "duration_s": 1.5}]
 
     def test_claim_is_present_when_a_platform_spoke(self):
@@ -76,6 +77,113 @@ class PrBodyTests(unittest.TestCase):
         body = delivery.pr_body(context_with("maintainer"), 42, self.receipt, "abc123", self.rows, "")
         self.assertIn("https://github.com/sponsors/isearchxsolve", body)
         self.assertIn("Sponsorship & Direct Payout Rail:", body)
+
+    def test_actual_change_leads_and_full_evidence_remains_collapsed(self):
+        receipt = {**self.receipt, "review_note": {
+            "summary": "The final page lost its last item because the end index was inclusive.",
+            "changes": ["Use the exclusive upper bound in page_bounds.", "Cover exact-page and short-page results."],
+            "limitations": ["Not exercised on the mobile client."],
+            "disclosure": "Prepared with automated assistance, as required by this fixture's policy."}}
+        body = delivery.pr_body(context_with("maintainer"), 42, receipt, "abc123", self.rows)
+        first_screen = body.split("<details>")[0]
+        self.assertIn(receipt["review_note"]["summary"], first_screen)
+        self.assertIn("exclusive upper bound", first_screen)
+        self.assertIn("Not exercised on the mobile client.", first_screen)
+        self.assertIn(receipt["review_note"]["disclosure"], first_screen)
+        self.assertNotIn("Verified base:", first_screen)
+        self.assertNotIn("pytest -q", first_screen)
+        self.assertNotIn("Sponsorship", first_screen)
+        self.assertEqual(body.count("pytest -q"), 1)
+        self.assertIn("Verified head: abc123", body)
+        self.assertIn("Execution receipt: https://example/run/1", body)
+
+    def test_pr_title_uses_the_author_note_without_a_tracker_prefix(self):
+        context = context_with("maintainer")
+        receipt = {**self.receipt, "review_note": {"title": "Keep the last item on a full page"}}
+        self.assertEqual(delivery._pr_title(context, receipt), "Keep the last item on a full page")
+        self.assertEqual(delivery._pr_title(context, self.receipt), context["title"])
+
+    def test_default_body_is_neutral_about_authorship(self):
+        body = delivery.pr_body(context_with("maintainer"), 42, self.receipt, "head", self.rows)
+        self.assertNotIn("AI-generated", body)
+        self.assertNotIn("automated assistance", body)
+        self.assertNotIn("human-written", body)
+        self.assertNotIn("personally tested", body)
+
+    def test_legacy_worker_separates_planned_scenarios_from_executed_checks(self):
+        from types import SimpleNamespace
+        from kaggle_engine_worker import build_peer_pr_body
+        run = SimpleNamespace(base_sha="base", verification=[
+            SimpleNamespace(argv=["pytest", "tests/a b.py"], exit_code=0, duration_s=1.5)])
+        case = SimpleNamespace(category="concurrency", id="race-case", expected_result="Only one update applies")
+        body = build_peer_pr_body(run, "Keep page boundaries", 42, [case])
+        self.assertNotIn("race-case", body.split("<details>")[0])
+        self.assertIn("Planned regression cases", body)
+        self.assertIn("'tests/a b.py'", body)
+        self.assertNotIn("comprehensive test matrix", body)
+        self.assertNotIn("zero warnings or errors", body)
+
+    def test_missing_evidence_is_not_replaced_by_success_claims(self):
+        body = delivery.pr_body(context_with("maintainer"), 42,
+            {"base_sha": "base", "run_url": "url"}, "head", [])
+        self.assertIn("No native check results", body)
+        self.assertIn("red-to-green regression result was not included", body)
+        self.assertNotIn("All baseline tests pass", body)
+        self.assertNotIn("companion test fails on upstream", body)
+
+    def test_failed_check_is_reported_without_claiming_all_checks_passed(self):
+        rows = [*self.rows, {"argv": ["pytest", "tests/mobile"], "exit_code": 1, "duration_s": 2}]
+        body = delivery.pr_body(context_with("maintainer"), 42, self.receipt, "head", rows)
+        self.assertIn("1 of 2 recorded native checks passed", body)
+        self.assertIn("exit 1", body)
+
+    def test_malformed_regression_receipts_do_not_become_proof(self):
+        for regression in ({"red_exit": "failed", "green_exit": 0},
+                           {"red_exit": 1, "green_exit": False}, [], None):
+            with self.subTest(regression=regression):
+                body = delivery.pr_body(context_with("maintainer"), 42,
+                    {**self.receipt, "regression": regression}, "head", self.rows)
+                self.assertNotIn("companion test fails on upstream", body)
+
+    def test_author_note_cannot_publish_a_credential_literal(self):
+        receipt = {**self.receipt, "review_note": {"summary": "Use ghp_" + "x" * 36}}
+        with self.assertRaisesRegex(ValueError, "credential"):
+            delivery.pr_body(context_with("maintainer"), 42, receipt, "head", self.rows)
+
+    def test_argv_rendering_keeps_cwd_quotes_and_argument_boundaries(self):
+        import shlex
+        for argv in (["bash", "-lc", "cd lux && mix test 'test/a b.exs'"],
+                     ["/tmp/tool with spaces/python", "-m", "pytest", "test/a b.py"],
+                     ["env", "VALUE=one two", "pytest", "-k", "one or two"]):
+            with self.subTest(argv=argv):
+                self.assertEqual(shlex.split(delivery._format_cmd(argv)), argv)
+
+    def test_issue_handoff_has_a_short_opening_and_retains_guarded_evidence(self):
+        context = {**context_with("maintainer"), "repo": "owner/repo", "issue_number": 42}
+        receipt = {**self.receipt, "verification": self.rows, "review_note": {"summary": "Keeps the last item when a page is full."}}
+        api = mock.Mock()
+        with mock.patch.object(delivery, "GitHub", return_value=api):
+            delivery.engagement_comment(receipt, context, "https://github.com/owner/repo/pull/99", "abc123")
+        body = api.api.call_args.args[2]["body"]
+        first_screen = body.split("<details>")[0]
+        self.assertIn("https://github.com/owner/repo/pull/99", first_screen)
+        self.assertIn(receipt["review_note"]["summary"], first_screen)
+        self.assertNotIn("**Who is affected:**", first_screen)
+        self.assertNotIn("pytest", first_screen)
+        self.assertIn("pytest -q", body)
+        self.assertIn("Base SHA: `9fee2527`", body)
+        self.assertIn("Execution receipt: https://example/run/1", body)
+
+    def test_issue_handoff_still_refuses_private_payment_coordinates(self):
+        from outreach_report import MissingEvidence
+        context = {**context_with("maintainer"), "repo": "owner/repo", "issue_number": 42}
+        receipt = {**self.receipt, "verification": self.rows,
+                   "review_note": {"summary": "Send payment to account 55505593812"}}
+        api = mock.Mock()
+        with mock.patch.object(delivery, "GitHub", return_value=api):
+            with self.assertRaises(MissingEvidence):
+                delivery.engagement_comment(receipt, context, "https://github.com/owner/repo/pull/99", "abc123")
+        api.api.assert_not_called()
 
 
 class PostClaimTests(unittest.TestCase):

@@ -790,6 +790,15 @@ def engineer():
             "expected_failure (the exact failure substring or error line printed by the test on unpatched code, e.g. 'want [192.0.2.3]' or 'AssertionError: ...', minimum 12 characters - MUST literally appear in test output; do not write English prose sentences). "
             "The host runs these tests with actual upstream product source restored, then with your fix. "
             "Do not modify any existing master test or verification configuration. "
+            "Also include review_note in that JSON: {title: a short change-focused PR title, "
+            "summary: a short explanation of the actual "
+            "cause and fix, changes: [specific changes], limitations: [anything not verified], "
+            "disclosure: include only when explicitly asked, including a disclosure request "
+            "in the target repository's contribution requirements; otherwise omit it}. "
+            "Write for the reviewer who has not seen this run. Describe only work and tests "
+            "actually performed; do not claim human authorship, manual/device testing, or "
+            "upstream CI results you did not observe. Keep the default text neutral, without "
+            "unsolicited AI labels. Keep credentials and payment details out. "
             "Do not commit, push, create a fork or publish. Preserve complete issue context at "
             + prepared["context_path"] + "."
         )
@@ -920,6 +929,11 @@ def engineer():
                    "regression": regression,
                    "baseline": [asdict(r) for r in baseline], "verification": results,
                    "admission": task["admission"], "run_url": state["run_url"], "at": utcnow()}
+        # Presentation is optional for retained checkpoints. It travels with the
+        # release receipt instead of being invented by a second prose generator.
+        review_note = read_json(regression_file).get("review_note")
+        if isinstance(review_note, dict):
+            receipt["review_note"] = review_note
         write_json(artifacts() / "release.json", receipt)
         write_json(artifacts() / "engineering-result.json", {"status": "VERIFIED", "head_sha": head,
                                                "task_id": task["task_id"], "at": utcnow()})
@@ -1028,7 +1042,7 @@ def is_self_owned(account, repo):
 
 
 def engagement_comment(receipt, context, pr_url, head):
-    """Build and post a natural, human-sounding comment on the ORIGINAL issue.
+    """Post a concise, evidence-backed handoff on the original issue.
 
     Introduces the fix as a contributor would: one sentence about what changed, the PR
     link, and a collapsed diagnostics section with the full verification receipt.
@@ -1040,6 +1054,7 @@ def engagement_comment(receipt, context, pr_url, head):
     repo = context["repo"]
     number = context["issue_number"]
     rows = receipt.get("verification") or []
+    note = _review_note(context, receipt)
 
     # Natural steps: just name the test commands so a reviewer can reproduce
     steps = [
@@ -1049,8 +1064,7 @@ def engagement_comment(receipt, context, pr_url, head):
 
     # Proof: clean command lines (not raw argv arrays), plus base→head linkage
     proof = [
-        f"All baseline tests passed on upstream base `{receipt.get('base_sha', '')[:8]}`"
-        " before any change.",
+        _check_summary(rows),
         *(f"`{_format_cmd(r.get('argv') or [])}` → exit {r.get('exit_code')}, "
           f"{r.get('duration_s') or 0:.2f}s"
           for r in rows[:5]),
@@ -1061,17 +1075,17 @@ def engagement_comment(receipt, context, pr_url, head):
         f"<details><summary>Full diagnostics</summary>\n",
         f"Base SHA: `{receipt.get('base_sha', '')}`",
         f"Head SHA: `{head}`",
-        f"Regression proof: companion test fails on upstream, passes on this branch.",
+        _regression_summary(receipt),
         f"Execution receipt: {receipt.get('run_url', '')}",
         "</details>",
     ]
 
     body = build_report(
-        impact=f"Opened a fix for #{number} ({context['title']}) — see {pr_url}.",
+        impact=f"Opened {pr_url} for #{number}.",
         affected=f"Anyone hitting the behaviour described in #{number} on `{repo}`.",
         steps=steps,
         proof=proof,
-        fix=f"Apply {pr_url} to the default branch.",
+        fix=note["summary"] + ("\n\n" + note["disclosure"] if note["disclosure"] else ""),
         detail="\n".join(detail_lines),
         repo=repo,
         # The rails guard cannot tell a 40-hex commit from a base58 wallet, so the ids this
@@ -1083,6 +1097,7 @@ def engagement_comment(receipt, context, pr_url, head):
             *((f or {}).get("sha256") for f in (receipt.get("files") or {}).values()),
             (receipt.get("regression") or {}).get("red_output_sha256"),
         ],
+        layout="handoff",
     )
     api = GitHub()
     api.api(f"repos/{repo}/issues/{number}/comments", "POST", {"body": body})
@@ -1119,65 +1134,84 @@ SPONSOR_URL = "https://github.com/sponsors/isearchxsolve"
 
 
 def _format_cmd(argv):
-    """Convert a raw argv list into a clean, human-readable shell command string.
+    """Show a shell-quoted argv without changing cwd or argument boundaries."""
+    import shlex
+    return shlex.join(str(part) for part in argv) if argv else ""
 
-    Strips runner-specific paths like ``/tmp/dotnet10/dotnet`` down to the base
-    command name, and unwraps ``bash -lc "cd <dir> && <cmd>"`` into just ``<cmd>``.
-    Result is suitable for display in a markdown code span.
-    """
-    if not argv:
-        return ""
-    # Unwrap bash -lc "cd ... && cmd" -> cmd
-    if len(argv) >= 3 and Path(argv[0]).name in ("bash", "sh") and argv[1] == "-lc":
-        inner = argv[2]
-        if "&&" in inner:
-            inner = inner.split("&&", 1)[1].strip().strip('"')
-        return inner
-    # Replace full runner paths with just the binary name
-    parts = list(argv)
-    # Strip env var prefix tokens (KEY=VALUE) to find the actual command
-    cmd_start = 0
-    for i, p in enumerate(parts):
-        if "=" in p and not p.startswith("-"):
-            cmd_start = i + 1
-        else:
-            break
-    if cmd_start < len(parts):
-        parts[cmd_start] = Path(parts[cmd_start]).name
-    return " ".join(parts)
+
+def _review_note(context, receipt):
+    """Render the author's note, with a factual fallback for earlier receipts."""
+    raw = receipt.get("review_note")
+    raw = raw if isinstance(raw, dict) else {}
+    def text(name):
+        value = raw.get(name)
+        return value.strip() if isinstance(value, str) else ""
+    def items(name):
+        value = raw.get(name)
+        return [item.strip() for item in value if isinstance(item, str) and item.strip()] if isinstance(value, list) else []
+    return {"title": text("title") or context["title"].strip(),
+            "summary": text("summary") or f"Addresses the issue: {context['title'].strip().rstrip('.')}.",
+            "changes": items("changes"), "limitations": items("limitations"),
+            "disclosure": text("disclosure")}
+
+
+def _check_summary(rows):
+    if not rows:
+        return "No native check results were included in this receipt."
+    passed = sum(type(row.get("exit_code")) is int and row["exit_code"] == 0 for row in rows)
+    if passed == len(rows):
+        return f"{passed} recorded native check{'s' if passed != 1 else ''} passed."
+    return f"{passed} of {len(rows)} recorded native checks passed; see the individual results below."
+
+
+def _pr_title(context, receipt):
+    title = _review_note(context, receipt)["title"]
+    scan_diff_secrets(title.encode("utf-8"))
+    return title
+
+
+def _regression_summary(receipt):
+    regression = receipt.get("regression")
+    regression = regression if isinstance(regression, dict) else {}
+    red, green = regression.get("red_exit"), regression.get("green_exit")
+    if type(red) is int and red != 0 and type(green) is int and green == 0:
+        return "Regression: the companion test fails on upstream and passes with this change."
+    return "A red-to-green regression result was not included in this receipt."
 
 
 def pr_body(context, number, receipt, head, rows, claim=""):
     """The public PR body. ``claim`` is the platform claim command, empty when none applies."""
-    # Verification section: clean command lines in a collapsed block so the top of the PR
-    # reads like a human wrote it, while all contract-required fields remain in the HTML.
+    note = _review_note(context, receipt)
     verification_lines = "\n".join(
         f"- `{_format_cmd(r['argv'])}`: exit {r['exit_code']}, {r['duration_s']:.2f}s"
         for r in rows
     )
     details_block = (
-        "<details>\n<summary>Verification details</summary>\n\n"
+        "<details>\n<summary>Test commands and verification details</summary>\n\n"
         f"Verified base: {receipt['base_sha']}\n"
         f"Verified head: {head}\n\n"
-        "Regression: the companion test fails on the upstream source and passes with this change.\n\n"
+        + _regression_summary(receipt) + "\n\n"
         f"### Commands run\n{verification_lines}\n\n"
         f"Execution receipt: {receipt['run_url']}\n"
-        "</details>"
-    )
-    footer = (
         f"\n\n---\n"
         f"*Sponsorship & Direct Payout Rail:* [{SPONSOR_URL}]({SPONSOR_URL})"
+        "\n</details>"
     )
-    return (f"Resolves #{number}: {context['title']}.\n\n"
-            + (claim + "\n\n" if claim else "")
-            + "### Summary\n\n"
-            + "This change addresses the failure described in the issue. "
-              "All baseline tests pass on the upstream source before modification, "
-              "and the targeted test suite passes with the fix applied.\n\n"
-            + "### Verification\n\n"
-            + verification_lines + "\n\n"
-            + details_block
-            + footer)
+    parts = [f"Resolves #{number}."]
+    if claim:
+        parts.append(claim)
+    parts.append(note["summary"])
+    if note["changes"]:
+        parts.append("\n".join("- " + item for item in note["changes"]))
+    if note["disclosure"]:
+        parts.append(note["disclosure"])
+    parts.append("### Testing\n\n" + _check_summary(rows) + " " + _regression_summary(receipt))
+    if note["limitations"]:
+        parts.append("Not verified:\n" + "\n".join("- " + item for item in note["limitations"]))
+    parts.append(details_block)
+    body = "\n\n".join(parts)
+    scan_diff_secrets(body.encode("utf-8"))
+    return body
 
 
 def post_claim(api, repo, pr_number, claim):
@@ -1271,7 +1305,7 @@ def publish():
         pr = api.api(f"repos/{repo}/pulls", "POST",
                      {"head": account + ":" + branch,
                       "base": receipt.get("base_branch") or context["repository"]["default_branch"],
-                      "title": f"fix: #{number} - {context['title']}", "body": body})
+                      "title": _pr_title(context, receipt), "body": body})
         if claim:
             claim_status = "SUBMITTED_UNCONFIRMED"
     store.owned_update(identity, run_owner, status="PUBLISHED_PENDING_CHECKS", pr_url=pr["html_url"],

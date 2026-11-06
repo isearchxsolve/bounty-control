@@ -2845,35 +2845,40 @@ def apply_verified_changes(worktree: str, file_changes: List[Tuple[str, str]]) -
     return True, "All files applied cleanly and safely within worktree."
 
 def build_peer_pr_body(run: EngineeringRun, title: str, number: int, scenarios: List[ScenarioCase]) -> str:
+    """Readable legacy handoff; planned scenarios are not execution receipts."""
     body_lines = [
         f"Resolves #{number}.",
         "",
-        "### Architectural Summary & Root Cause Analysis",
-        f"This pull request resolves issue #{number} (`{title}`).",
+        f"Addresses the issue: {title.strip().rstrip('.')}.",
         "",
-        "### Verified Scenario Coverage",
-        "The implementation was verified against the following comprehensive test matrix:",
-        ""
     ]
-    for s in scenarios:
-        body_lines.append(f"- **{s.category.upper()}** (`{s.id}`): {s.expected_result}")
-
+    if run.verification:
+        passed = sum(result.exit_code == 0 for result in run.verification)
+        body_lines.append(f"Testing: {passed} of {len(run.verification)} recorded native checks passed.")
+    else:
+        body_lines.append("No verification receipts are available; publication remains blocked.")
     body_lines.extend([
         "",
-        "### Verification & Pre-PR Gate Proof",
+        "<details>",
+        "<summary>Test commands and review details</summary>",
+        "",
         f"- Verified base SHA: `{run.base_sha}`.",
-        "- All baseline tests passed on untouched upstream before modification.",
-        "- Native repository test suite and linters passed with zero warnings or errors.",
-        "- Pre-flight check verified zero competing pull requests prior to push.",
         "",
         "### Exact Verification Receipts",
     ])
     if run.verification:
         for result in run.verification:
-            command = " ".join(result.argv)
+            import shlex
+            command = shlex.join(result.argv)
             body_lines.append(f"- `{command}` — exit `{result.exit_code}`, duration `{result.duration_s:.3f}s`.")
     else:
         body_lines.append("- Verification receipts are unavailable; the pre-PR gate blocks publication.")
+    if scenarios:
+        body_lines.extend(["", "### Planned regression cases",
+                           "This checklist describes intended coverage; only the execution receipts above establish what ran.", ""])
+        for scenario in scenarios:
+            body_lines.append(f"- **{scenario.category.upper()}** (`{scenario.id}`): {scenario.expected_result}")
+    body_lines.extend(["", "</details>"])
     return "\n".join(body_lines)
 
 # How much of one native failure travels with the exhausted verdict. The exact compiler or
@@ -3122,7 +3127,7 @@ def commit_and_open_pr(
         "--repo", repo,
         "--head", f"{BOUNTY_ACCOUNT}:{branch_name}",
         "--base", default_branch,
-        "--title", f"fix: #{number} - {title}",
+        "--title", title.strip(),
         "--body", pr_body
     ]
     if not fleet_lease_allows_publication():
@@ -3429,7 +3434,7 @@ def resume_verified_publication(context, repo, number, title, pr_body):
         handle.write(pr_body)
     output, error, code = run_cmd([
         'gh', 'pr', 'create', '--repo', repo, '--head', 'isearchxsolve:' + branch,
-        '--base', context['default_branch'], '--title', f'fix: #{number} - {title}',
+        '--base', context['default_branch'], '--title', title.strip(),
         '--body-file', body_file], timeout=45)
     if code:
         return None
