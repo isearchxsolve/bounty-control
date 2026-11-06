@@ -69,3 +69,27 @@ a CI run, never an assertion.
 | Scheduler engine published with no claim at all | `7545815`, 5 tests |
 | Manifest suite running zero tests scored as a clean pass | `f4df7ae`, 5 tests |
 | Engineer handed a fragment of the issue thread | `da20eb4`, 55 tests |
+
+## Closed during the 2026-11-06/07 session, with receipts
+
+| Item | Receipt |
+| --- | --- |
+| Escrow gate reached the hydration drain; flag no longer frozen at import | `dacfec9`, CI success `42234101654`, 69 tests |
+| Brain receipt printed on the path production runs | `dacfec9` |
+| PR watcher 3-minute timeout hid a mid-sweep kill | `dacfec9` |
+| Leaked relay token and PAT prefix redacted from the public doc | `5796166` |
+| Claim written into the PR body but never posted | `7fd3b9b`, 26 tests |
+| Scheduler engine published with no claim at all | `7545815`, 5 tests |
+| Manifest suite running zero tests scored as a clean pass | `f4df7ae`, 5 tests |
+| Engineer handed a fragment of the issue thread | `da20eb4`, 55 tests |
+| Resume loop blind to maintainer reviews | `6cf298c`, 82 tests |
+| Market pool measured wrong (34 vs 59) | `0d8f5eb` |
+| Agent turn killed mid-round: background work forbidden, write-early stated | `5bb5bfa`, 4 tests |
+| Closure triage re-audited against reviews | 1 affected PR: `stride3d/stride#3816` |
+| Reviewer-named boundary inputs now block publication | `e41a2a7`, 58 tests |
+| **Owner-allocated funding is a second escrow class** | `14937b8`, 84 tests |
+
+The last one is the money decision: `fyne-io/fyne#1062` carries **$1000**, allocated and
+partly paid by the repository owner, and it now passes the funding gate. Before this change
+the escrow-only rule refused it, on a 0%-conversion measurement that was taken on our own
+interference - 46 of 50 closures were ours, 37 within six hours.
