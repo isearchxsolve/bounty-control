@@ -8,6 +8,7 @@ from datetime import datetime, timezone
 import json
 import os
 from pathlib import Path
+import re
 import subprocess
 import sys
 import tempfile
@@ -15,6 +16,17 @@ import time
 
 ROOT = Path(__file__).resolve().parents[1]
 MANIFEST = Path(__file__).with_name("pipeline_master_suites.json")
+
+
+def discovered_no_tests(body: str) -> bool:
+    """Did this suite's own log report that unittest found no assertions?
+
+    ``unittest`` exits 0 and prints a clean OK when a module holds zero tests, so a demo
+    script with a ``test_`` prefix lands in the manifest looking like a green suite. That is
+    a fact about the log, not a judgement about the file, so it is a gate and not a rule:
+    whether the module deserves to stay in the manifest is a human's call.
+    """
+    return bool(re.search(r"^Ran 0 tests", body, re.M)) or bool(re.search(r"^NO TESTS RAN", body, re.M))
 
 
 def execute(suite, output, timeout):
@@ -45,6 +57,22 @@ def execute(suite, output, timeout):
             except OSError as exc:
                 log.write(f"\nMASTER: {type(exc).__name__}: {exc}\n")
     result["seconds"] = round(time.monotonic() - started, 3)
+    if result["status"] == "PASS" and suite["mode"] == "unittest":
+        # A module that discovers zero tests is not a passing suite, it is a demo script
+        # with a test_ prefix, and unittest reports it as a clean OK. Measured 2026-11-06:
+        # test_normalise_rest.py and test_discovery_queries.py both ran zero assertions -
+        # the second only surfaced because CI has no gh credentials while my workstation
+        # does, so a script that silently exits 0 was recorded as a green suite.
+        log_path = output / result["log"]
+        try:
+            body = log_path.read_text(encoding="utf-8", errors="replace")
+        except OSError:
+            body = ""
+        if discovered_no_tests(body):
+            result["status"] = "FAIL"
+            result["zero_tests"] = True
+            with log_path.open("a", encoding="utf-8") as handle:
+                handle.write("\nMASTER: suite discovered zero tests; a manifest entry must assert\n")
     return result
 
 

@@ -294,10 +294,6 @@
       "mode": "unittest"
     },
     {
-      "file": "test_discovery_queries.py",
-      "mode": "unittest"
-    },
-    {
       "file": "test_funnel_fixes.py",
       "mode": "unittest"
     },
@@ -331,6 +327,14 @@
     },
     {
       "file": "test_dispatcher_horizon.py",
+      "mode": "unittest"
+    },
+    {
+      "file": "test_master_runner_zero_tests.py",
+      "mode": "unittest"
+    },
+    {
+      "file": "test_bounty_claim_publish.py",
       "mode": "unittest"
     }
   ]
