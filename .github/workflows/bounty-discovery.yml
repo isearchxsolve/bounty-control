@@ -70,11 +70,10 @@ jobs:
         BOUNTY_AGENT_ROUNDS: '1'
         BOUNTY_AGENT_MEMORY: ${{ env.BOUNTY_STATE_DIR }}/discovery-memory
         # Search is a heavy task: a full lane sweep gathers hundreds of raw candidates and the
-        # filtering and evidence check that produces a verified row happens after them. 800 s
-        # measured 918 candidates gathered and zero rows written (run 41564183447, both rounds
-        # expired mid-filter, 44 items still pending), so the brief now states the larger
-        # budget with its cost plainly.
-        BOUNTY_AGENT_TIMEOUT: '900'
+        # filtering and evidence check that produces a verified row happens after them. 800-900 s
+        # expired mid-filter before rows landed (run 41564183447, run 42310612968), so the
+        # budget is set to 1800 s (30m) inside the 45m job ceiling.
+        BOUNTY_AGENT_TIMEOUT: '1800'
       run: python3 -u scripts/actions_dispatch.py --live --once --queries-per-lane 8 --max-dispatches 4 --lane ${{ vars.ACTIVE_LANES || 'all' }}
     - name: Observe published PR review and conversion receipts
       continue-on-error: true

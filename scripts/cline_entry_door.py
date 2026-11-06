@@ -1233,6 +1233,10 @@ There are two streams of genuine work:
 1. Funded Bounties: An open issue with committed monetary payment figures stated in the issue text or comments.
 2. Wounded Founders: An open issue created by the repository OWNER (author_association: OWNER) announcing production downtime, outages, critical regressions, or backend hardening.
 
+## Fast start: Pre-swept platform candidates
+
+If `search-leads.json` exists in this worktree, inspect it first! It contains pre-swept platform-escrow leads directly from the live API. Run `python scripts/check_entry_shortlist.py` to verify candidates and append qualifying rows to `shortlist.jsonl` immediately before running expansive manual searches.
+
 The roster of queries that pays, in the order to walk them:
 
 {founders}
@@ -1726,7 +1730,10 @@ def ingest_pre_sweep_leads(output_path: Optional[Path] = None, limit_per_query: 
         return []
 
     top_queries = [
-        "commenter:algora-pbc+is:issue+is:open",
+        "repo:Expensify/App+label:External+label:Bug+in:title+\"%24250\"+is:issue+is:open",
+        "label:bounty+\"%24500\"+is:issue+is:open",
+        "label:bounty+\"%24250\"+is:issue+is:open",
+        "commenter:algora-pbc+bounty+is:issue+is:open",
         "commenter:bountyhub-bot+is:issue+is:open",
         "commenter:polar-sh+is:issue+is:open",
     ]
