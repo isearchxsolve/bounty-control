@@ -1756,7 +1756,33 @@ def discover(lanes, max_dispatches=2, live=False, queries_per_lane=2, state_dir=
             median_minutes = ordered[len(ordered) // 2]
         else:
             median_minutes = None
+        # Which brain produced this run, and whether its query roster was sound at all.
+        # Without this, a run that admits nothing cannot distinguish "the market had no
+        # escrowed offer" from "the queries could never surface one", and a defective
+        # widening is only visible to whoever reads the diff. Measured 2026-11-06: a
+        # widened roster reached main with duplicate queries and pull-request matches,
+        # and the run's own receipt said only that it found 363 candidates.
+        try:
+            import query_quality_audit as _roster_audit
+            _roster = _roster_audit.audit(json.loads(
+                Path(__file__).with_name("bounty_queries.json").read_text(encoding="utf-8")))
+            _roster_verdict = {"verdict": _roster["verdict"],
+                               "findings": [f["kind"] for f in _roster["findings"]],
+                               "rendered": _roster["stats"].get("rendered", {})}
+        except Exception as exc:  # a receipt must never break the run it describes
+            _roster_verdict = {"verdict": "UNAUDITED", "error": str(exc)[:200]}
+        try:
+            from cline_entry_door import DEFAULT_ENTRY_MODEL as _default_entry_model
+        except Exception:  # the door is imported lazily elsewhere in this module
+            _default_entry_model = "deepseek-v4.1-flash:free"
+        brain = {
+            "entry_model": os.environ.get("BOUNTY_ENTRY_MODEL", _default_entry_model),
+            "failover_model": os.environ.get("NVIDIA_ROUTER_MODEL") or None,
+            "queries_per_lane": queries_per_lane,
+            "roster": _roster_verdict,
+        }
         summary = {"at": utcnow(), "mode": "LIVE" if live else "READ_ONLY", "counts": dict(counts),
+                   "brain": brain,
                    # F6: the ordering is auditable after the fact, not inferred from logs.
                    "candidate_velocity": {identity: candidate.get("velocity_24h")
                                           for identity, candidate in candidates.items()},
