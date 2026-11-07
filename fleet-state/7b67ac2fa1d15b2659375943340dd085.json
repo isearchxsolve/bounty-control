@@ -2,7 +2,7 @@
   "task_id": "7b67ac2fa1d15b2659375943340dd085",
   "repo": "Expensify/App",
   "issue_number": 102333,
-  "status": "CLAIMED",
+  "status": "FAILED_MISSING_TERMINAL_RECEIPT",
   "dispatch_id": "799d47d058484d7ca46377cff976a7b8",
   "admission": {
     "funding": {
@@ -61,7 +61,7 @@
   ],
   "dispatched_at": "2026-11-07T08:31:08.946901+00:00",
   "attempt": 2,
-  "updated_at": "2026-11-07T08:31:34.532327+00:00",
+  "updated_at": "2026-11-07T08:46:23.559717+00:00",
   "owner": "42355825595:1",
   "previous_owner": "42351868438:1",
   "previous_status": "DISPATCHED",
@@ -72,7 +72,7 @@
   "preparation_budget_seconds": 14400,
   "kind": "commercial_review",
   "retryable": false,
-  "diagnostic": "COMMERCIAL_REVIEW_STALE: source-backed commercial review required; retain existing work",
+  "diagnostic": "Actions run completed (failure) without terminal callback; artifacts retained",
   "at": "2026-11-07T08:19:24.403506+00:00",
   "failures": [
     {
@@ -137,5 +137,6 @@
       },
       "at": "2026-11-07T08:19:24.934604+00:00"
     }
-  ]
+  ],
+  "observed_at": "2026-11-07T08:46:23.559699+00:00"
 }
