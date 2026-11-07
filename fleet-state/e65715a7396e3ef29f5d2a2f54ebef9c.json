@@ -1,0 +1,61 @@
+{
+  "task_id": "e65715a7396e3ef29f5d2a2f54ebef9c",
+  "repo": "Expensify/App",
+  "issue_number": 104060,
+  "status": "DISPATCHING",
+  "dispatch_id": "02ca514cc2aa4d90b07932d96acf67ce",
+  "admission": {
+    "funding": {
+      "amount": "250",
+      "currency": "USD",
+      "payer": "applause-bot[bot]",
+      "source_url": "https://github.com/Expensify/App/issues/104060",
+      "usd_value": "250",
+      "quote": {
+        "basis": "USD face value",
+        "usd_rate": "1"
+      },
+      "raw": "[$250] Different error appear after network reconnect",
+      "source_author_association": "NONE",
+      "source_author_login": "applause-bot[bot]",
+      "escrow": true
+    },
+    "agent_reason": "applause-bot[bot] (NONE) commits $250 USD in the issue title for [$250] Different error appear after network reconnect; the repository's own product code at src/App.tsx implements the affected surface, so the work is a bounded code change here.",
+    "scope_quote": "Error change after network reconnect.",
+    "code_evidence": {
+      "is_product_code": true,
+      "path": "src/App.tsx",
+      "quote": "import {PortalProvider} from '@gorhom/portal';",
+      "sha": "df2eafdb9c98819ec84bf52cc2b3577d81306d17"
+    },
+    "source_issue": "https://github.com/Expensify/App/issues/104060",
+    "funding_status": "PRICED_OFFER",
+    "lane": "programs",
+    "commercial_scope": "linked-discussions",
+    "commercial_review": {
+      "decision": "proceed",
+      "source_revision": "c3454dd9355b00e6bad7301c8f377d2a0b630e05e7bbd8aea6e9ab0b34358348",
+      "reason": "Live read of the issue, its comments, linked pull requests, README/CONTRIBUTING and licence: the payment commitment is written by the issue author (repository authority) in the issue itself, no withdrawal, no unpaid-work allegation and no conflicting terms.",
+      "evidence": [
+        {
+          "source_url": "https://github.com/Expensify/App/issues/104060",
+          "quote": "Error change after network reconnect."
+        }
+      ]
+    },
+    "task_id": "e65715a7396e3ef29f5d2a2f54ebef9c",
+    "source_revision": "b2588137fe0284cd0e7b2da6adfbcd997459e6e766b3ff8da4185f6bb912e49d"
+  },
+  "dispatch_attempt": 1,
+  "sovereign_admission": true,
+  "competition": {
+    "blocking": false,
+    "nominal": []
+  },
+  "lanes": [
+    "programs"
+  ],
+  "dispatched_at": "2026-11-07T07:32:59.635844+00:00",
+  "attempt": 0,
+  "updated_at": "2026-11-07T07:32:59.635862+00:00"
+}
