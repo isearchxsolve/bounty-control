@@ -1,0 +1,69 @@
+{
+  "task_id": "2f232cf043266b0ecec52b2ff28744ea",
+  "repo": "Expensify/App",
+  "issue_number": 101234,
+  "status": "DISPATCHING",
+  "dispatch_id": "8357e3c119b049ca89201cfbe7c5126e",
+  "admission": {
+    "funding": {
+      "amount": "250",
+      "currency": "USD",
+      "payer": "melvin-bot[bot]",
+      "source_url": "https://github.com/Expensify/App/issues/101234",
+      "usd_value": "250",
+      "quote": {
+        "basis": "USD face value",
+        "usd_rate": "1"
+      },
+      "raw": "[$250] Marking a chat as unread doesn't stick",
+      "source_author_association": "NONE",
+      "source_author_login": "melvin-bot[bot]",
+      "escrow": true
+    },
+    "agent_reason": "Expensify funds its own bug-fix backlog at a fixed $250 per issue (title set by melvin-bot, which re-posted the Upwork job); the defect is pinned to Report actions product code, so it is bounded paid engineering.",
+    "scope_quote": "This looks like the report screen still being mounted/focused after the LHN action, so the \"you're viewing this report\" read-receipt fires and clobbers the unread state.",
+    "code_evidence": {
+      "is_product_code": true,
+      "path": "src/libs/actions/Report/MarkAllMessageAsRead.tsx",
+      "quote": "import {isAnonymousUser} from '@libs/actions/Session';",
+      "sha": "50937cd9f6fc40c46afba2a824956f3ffc64ea09"
+    },
+    "source_issue": "https://github.com/Expensify/App/issues/101234",
+    "funding_status": "PRICED_OFFER",
+    "lane": "programs",
+    "commercial_scope": "linked-discussions",
+    "commercial_review": {
+      "decision": "proceed",
+      "source_revision": "f3cd58be5135b5313d7dbc0c6227005846c4f678e81f7d4a03d8c7025f8da55d",
+      "reason": "Expensify's own bot set the [$250] price and re-posted the Upwork job; repository observations show 41239/49826 merges with a merge today. Warning assessed: PR #106068 references the issue but is CLOSED (a prior attempt), not an open competing PR.",
+      "evidence": [
+        {
+          "source_url": "https://github.com/Expensify/App/issues/101234",
+          "quote": "**If you haven\u2019t already, check out our [contributing guidelines](https://github.com/Expensify/ReactNativeChat/blob/main"
+        },
+        {
+          "source_url": "https://github.com/Expensify/App/issues/101234#issuecomment-6420282271",
+          "quote": "Job added to Upwork: https://www.upwork.com/jobs/~022114744549108293422"
+        },
+        {
+          "source_url": "https://github.com/Expensify/App/pull/106068",
+          "quote": "## Summary\n\nThis PR addresses an issue where marking a chat as unread does not persist correctly. Specifically, the clie"
+        }
+      ]
+    },
+    "task_id": "2f232cf043266b0ecec52b2ff28744ea",
+    "source_revision": "8d02db508038c887534f9c15dd10c08357aa8ef3dae6a172a90efa386b62cdeb"
+  },
+  "dispatch_attempt": 1,
+  "sovereign_admission": true,
+  "competition": {
+    "blocking": false,
+    "nominal": []
+  },
+  "lanes": [
+    "programs"
+  ],
+  "dispatched_at": "2026-11-07T07:59:47.148070+00:00",
+  "attempt": 0,
+  "updated_at": "2026-11-07T07:59:47.148090+00:00"
+}
