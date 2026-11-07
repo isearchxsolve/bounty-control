@@ -2,8 +2,8 @@
   "task_id": "e65715a7396e3ef29f5d2a2f54ebef9c",
   "repo": "Expensify/App",
   "issue_number": 104060,
-  "status": "FAILED_ENGINEER",
-  "dispatch_id": "02ca514cc2aa4d90b07932d96acf67ce",
+  "status": "DISPATCHING",
+  "dispatch_id": "75d715e8abdd431ea4ee2cb1b320d77a",
   "admission": {
     "funding": {
       "amount": "250",
@@ -20,13 +20,13 @@
       "source_author_login": "applause-bot[bot]",
       "escrow": true
     },
-    "agent_reason": "applause-bot[bot] (NONE) commits $250 USD in the issue title for [$250] Different error appear after network reconnect; the repository's own product code at src/App.tsx implements the affected surface, so the work is a bounded code change here.",
-    "scope_quote": "Error change after network reconnect.",
+    "agent_reason": "Expensify/App's documented US$250 bounty programme (a [$N] title funded through the Upwork job that melvin-bot[bot] attests on the issue) covers this open bug in src/pages/ReimbursementAccount/NonUSD/BankInfo/BankInfo.tsx.",
+    "scope_quote": "Error should be same as previous.",
     "code_evidence": {
       "is_product_code": true,
-      "path": "src/App.tsx",
-      "quote": "import {PortalProvider} from '@gorhom/portal';",
-      "sha": "df2eafdb9c98819ec84bf52cc2b3577d81306d17"
+      "path": "src/pages/ReimbursementAccount/NonUSD/BankInfo/BankInfo.tsx",
+      "quote": "import FullScreenLoadingIndicator from '@components/FullscreenLoadingIndicator';",
+      "sha": "e77db1eb9dd356534450bf1669870da76f8ab7ac"
     },
     "source_issue": "https://github.com/Expensify/App/issues/104060",
     "funding_status": "PRICED_OFFER",
@@ -34,19 +34,19 @@
     "commercial_scope": "linked-discussions",
     "commercial_review": {
       "decision": "proceed",
-      "source_revision": "c3454dd9355b00e6bad7301c8f377d2a0b630e05e7bbd8aea6e9ab0b34358348",
-      "reason": "Live read of the issue, its comments, linked pull requests, README/CONTRIBUTING and licence: the payment commitment is written by the issue author (repository authority) in the issue itself, no withdrawal, no unpaid-work allegation and no conflicting terms.",
+      "source_revision": "676d33441a1714be45d896460e4714724fe7754f9f1eab9a4dcbd2f09a1177a1",
+      "reason": "Expensify pays its [$N] Search/App bugs through a documented Upwork job programme; melvin-bot[bot] published the Upwork attestation on this issue and the repository merges constantly, so the offer is current, authority is the repository's own programme automation, the scope is a bounded source-level fix and no unpaid-work allegation or withdrawal appears in the collected sources.",
       "evidence": [
         {
-          "source_url": "https://github.com/Expensify/App/issues/104060",
-          "quote": "Error change after network reconnect."
+          "source_url": "https://github.com/Expensify/App/issues/104060#issuecomment-6185798720",
+          "quote": "Job added to Upwork: https://www.upwork.com/jobs/~022110615659031263975"
         }
       ]
     },
     "task_id": "e65715a7396e3ef29f5d2a2f54ebef9c",
-    "source_revision": "b2588137fe0284cd0e7b2da6adfbcd997459e6e766b3ff8da4185f6bb912e49d"
+    "source_revision": "e65a21ebc77706e33903e33b4aff59636224bd9a26b59b2ae505e6f9fdc52f48"
   },
-  "dispatch_attempt": 1,
+  "dispatch_attempt": 2,
   "sovereign_admission": true,
   "competition": {
     "blocking": false,
@@ -55,9 +55,9 @@
   "lanes": [
     "programs"
   ],
-  "dispatched_at": "2026-11-07T07:32:59.635844+00:00",
+  "dispatched_at": "2026-11-07T08:28:19.116502+00:00",
   "attempt": 1,
-  "updated_at": "2026-11-07T07:48:50.778059+00:00",
+  "updated_at": "2026-11-07T08:28:19.116523+00:00",
   "owner": "42351746091:1",
   "previous_owner": null,
   "previous_status": "DISPATCHED",
