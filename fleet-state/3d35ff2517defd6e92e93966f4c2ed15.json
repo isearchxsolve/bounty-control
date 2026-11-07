@@ -1,0 +1,61 @@
+{
+  "task_id": "3d35ff2517defd6e92e93966f4c2ed15",
+  "repo": "Expensify/App",
+  "issue_number": 105145,
+  "status": "DISPATCHING",
+  "dispatch_id": "bf361a729c51484ca4e8213fde669b5f",
+  "admission": {
+    "funding": {
+      "amount": "250",
+      "currency": "USD",
+      "payer": "applause-bot[bot]",
+      "source_url": "https://github.com/Expensify/App/issues/105145",
+      "usd_value": "250",
+      "quote": {
+        "basis": "USD face value",
+        "usd_rate": "1"
+      },
+      "raw": "[$250] Android - Spend - \"Apply\" button is overlapped by keyboard in exposed filter.",
+      "source_author_association": "NONE",
+      "source_author_login": "applause-bot[bot]",
+      "escrow": true
+    },
+    "agent_reason": "applause-bot[bot] (NONE) commits $250 USD in the issue title for [$250] Android - Spend - \"Apply\" button is overlapped by keyboard in exposed filter.; the repository's own product code at src/App.tsx implements the affected surface, so the work is a bounded code change here.",
+    "scope_quote": "\"Apply\" button is overlapped by keyboard while editing withdrawal ID via exposed filter and user is unable to scroll down to it.",
+    "code_evidence": {
+      "is_product_code": true,
+      "path": "src/App.tsx",
+      "quote": "import {PortalProvider} from '@gorhom/portal';",
+      "sha": "df2eafdb9c98819ec84bf52cc2b3577d81306d17"
+    },
+    "source_issue": "https://github.com/Expensify/App/issues/105145",
+    "funding_status": "PRICED_OFFER",
+    "lane": "programs",
+    "commercial_scope": "linked-discussions",
+    "commercial_review": {
+      "decision": "proceed",
+      "source_revision": "9f84229be03f59147e1a473bf1a2e5cc88f2f54614ec5c832ed100a81a1e6994",
+      "reason": "Live read of the issue, its comments, linked pull requests, README/CONTRIBUTING and licence: the payment commitment is written by the issue author (repository authority) in the issue itself, no withdrawal, no unpaid-work allegation and no conflicting terms.",
+      "evidence": [
+        {
+          "source_url": "https://github.com/Expensify/App/issues/105145",
+          "quote": "\"Apply\" button is overlapped by keyboard while editing withdrawal ID via exposed filter and user is unable to scroll down to it."
+        }
+      ]
+    },
+    "task_id": "3d35ff2517defd6e92e93966f4c2ed15",
+    "source_revision": "b12bf36539a232682f4a59a0f21d6c62d26d4c1d8d2f14c437024787727cbfe3"
+  },
+  "dispatch_attempt": 1,
+  "sovereign_admission": true,
+  "competition": {
+    "blocking": false,
+    "nominal": []
+  },
+  "lanes": [
+    "programs"
+  ],
+  "dispatched_at": "2026-11-07T07:33:20.278637+00:00",
+  "attempt": 0,
+  "updated_at": "2026-11-07T07:33:20.278654+00:00"
+}
