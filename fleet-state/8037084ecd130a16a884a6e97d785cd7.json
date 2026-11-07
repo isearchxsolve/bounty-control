@@ -1,0 +1,61 @@
+{
+  "task_id": "8037084ecd130a16a884a6e97d785cd7",
+  "repo": "Expensify/App",
+  "issue_number": 106153,
+  "status": "DISPATCHING",
+  "dispatch_id": "5ee85b82f9fc4d07945aae8283c962ac",
+  "admission": {
+    "funding": {
+      "amount": "175",
+      "currency": "USD",
+      "payer": "melvin-bot[bot]",
+      "source_url": "https://github.com/Expensify/App/issues/106153",
+      "usd_value": "175",
+      "quote": {
+        "basis": "USD face value",
+        "usd_rate": "1"
+      },
+      "raw": "[$175] Receipt retention bug",
+      "source_author_association": "CONTRIBUTOR",
+      "source_author_login": "mountiny",
+      "escrow": true
+    },
+    "agent_reason": "melvin-bot[bot] Upwork-attested $175 Expensify bounty; bounded product bug in the NewDot app.",
+    "scope_quote": "Receipts added to expenses remain accessible, and saved descriptions persist unless explicitly changed or removed.",
+    "code_evidence": {
+      "is_product_code": true,
+      "path": "src/components/EReceipt.tsx",
+      "quote": "import {useCurrencyListActions} from '@hooks/useCurrencyList';",
+      "sha": "a4a9aab404cfaaee9455b94af334c4e0d7e2cfd6"
+    },
+    "source_issue": "https://github.com/Expensify/App/issues/106153",
+    "funding_status": "PRICED_OFFER",
+    "lane": "programs",
+    "commercial_scope": "linked-discussions",
+    "commercial_review": {
+      "decision": "proceed",
+      "source_revision": "6677bf0f71f0a691034ffd8861580573504fbdac8c45bec6657e2e4f91d77ae1",
+      "reason": "Current $175 offer attested by melvin-bot[bot] Upwork job URL; no warning documents in the linked context; escrow-only satisfied via the expensify/app funding program.",
+      "evidence": [
+        {
+          "source_url": "https://github.com/Expensify/App/issues/106153#issuecomment-6671338562",
+          "quote": "Job added to Upwork: https://www.upwork.com/jobs/~022118472441771038138"
+        }
+      ]
+    },
+    "task_id": "8037084ecd130a16a884a6e97d785cd7",
+    "source_revision": "f835a233d7d9d5734162b5b3c53bd17972d0adb84bc0612be00ad08ae6e09857"
+  },
+  "dispatch_attempt": 1,
+  "sovereign_admission": true,
+  "competition": {
+    "blocking": false,
+    "nominal": []
+  },
+  "lanes": [
+    "programs"
+  ],
+  "dispatched_at": "2026-11-07T12:08:22.592649+00:00",
+  "attempt": 0,
+  "updated_at": "2026-11-07T12:08:22.592666+00:00"
+}
