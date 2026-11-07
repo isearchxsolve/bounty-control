@@ -43,26 +43,26 @@ def render_email_subject(repo: str, pr_number: int) -> str:
     return f"{repo} PR #{pr_number} Bounty Remittance Coordinates (Kunal Das / isearchxsolve)"
 
 
-def render_email_body(maintainer_name: str, repo: str, pr_number: int) -> str:
+def render_email_body(maintainer_name: str, repo: str, pr_number: int, stripe_link: Optional[str] = None) -> str:
     first_name = maintainer_name.split()[0] if maintainer_name else "there"
+    stripe_section = f"2. Direct Stripe / Card Payment:\n   {stripe_link}\n" if stripe_link else "2. Direct Stripe / Card Payment:\n   Available instantly upon request (Stripe Payment Link / Invoice).\n"
     return f"""Hi {first_name},
 
 Thank you for merging PR #{pr_number} on {repo}!
 
-If you prefer settling the bounty via Wise / direct transfer (which settles via domestic IMPS in ~15-30 mins), here are my coordinates:
+For bounty settlement, whichever rail is most convenient for your accounting:
 
-Wise Registered Email: isearch.xsolve@gmail.com
+1. Direct Bank Deposit (Instant IMPS / Wire / Wise-compatible):
+   Beneficiary Name: KUNAL DAS
+   Bank: UCO Bank
+   Account Number: 17700110071793
+   Account Type: Savings (SBA)
+   IFSC Code: UCBA0001770
+   Branch: Santoshpur - Kolkata (163 Santoshpur Avenue, Kolkata, WB 700075)
 
-Direct Bank Details:
-Beneficiary Name: KUNAL DAS
-Bank: UCO Bank
-Account Number: 17700110071793
-Account Type: Savings (SBA)
-IFSC Code: UCBA0001770
-Branch: Santoshpur - Kolkata (163 Santoshpur Avenue, Kolkata, WB 700075)
-
-Alternatively, if you prefer the GitHub Sponsors rail, my profile is active at:
-https://github.com/sponsors/isearchxsolve
+{stripe_section}
+3. GitHub Sponsors (Native Platform):
+   https://github.com/sponsors/isearchxsolve
 
 Thank you again for maintaining such a fantastic project and for the thoughtful guidance throughout the review process!
 
@@ -106,6 +106,7 @@ def send_remittance(
     pr_number: int,
     recipient_email: str,
     recipient_name: str,
+    stripe_link: Optional[str] = None,
     dry_run: bool = False
 ) -> bool:
     receipt_file = get_receipt_path(repo, pr_number)
@@ -114,7 +115,7 @@ def send_remittance(
         return True
 
     subject = render_email_subject(repo, pr_number)
-    body = render_email_body(recipient_name, repo, pr_number)
+    body = render_email_body(recipient_name, repo, pr_number, stripe_link=stripe_link)
 
     msg = MIMEMultipart("alternative")
     msg["Subject"] = subject
@@ -158,13 +159,14 @@ def main():
     parser.add_argument("--pr", type=int, default=DEFAULT_PR, help=f"PR number (default: {DEFAULT_PR})")
     parser.add_argument("--maintainer-email", default=DEFAULT_RECIPIENT_EMAIL, help=f"Recipient email (default: {DEFAULT_RECIPIENT_EMAIL})")
     parser.add_argument("--maintainer-name", default=DEFAULT_RECIPIENT_NAME, help=f"Recipient name (default: {DEFAULT_RECIPIENT_NAME})")
+    parser.add_argument("--stripe-link", default=None, help="Direct Stripe payment link URL")
     parser.add_argument("--dry-run", action="store_true", help="Print draft without sending")
     parser.add_argument("--force-send", action="store_true", help="Send email regardless of merge state")
     parser.add_argument("--check-and-send", action="store_true", help="Check if PR is merged; send if true")
     args = parser.parse_args()
 
     if args.dry_run:
-        send_remittance(args.repo, args.pr, args.maintainer_email, args.maintainer_name, dry_run=True)
+        send_remittance(args.repo, args.pr, args.maintainer_email, args.maintainer_name, stripe_link=args.stripe_link, dry_run=True)
         return 0
 
     if args.check_and_send:
@@ -173,16 +175,16 @@ def main():
             print(f"PR {args.repo}#{args.pr} is not yet merged. No email sent.")
             return 0
         print(f"PR {args.repo}#{args.pr} is MERGED! Proceeding with remittance dispatch...")
-        send_remittance(args.repo, args.pr, args.maintainer_email, args.maintainer_name, dry_run=False)
+        send_remittance(args.repo, args.pr, args.maintainer_email, args.maintainer_name, stripe_link=args.stripe_link, dry_run=False)
         return 0
 
     if args.force_send:
         print(f"Force-sending remittance email for {args.repo}#{args.pr}...")
-        send_remittance(args.repo, args.pr, args.maintainer_email, args.maintainer_name, dry_run=False)
+        send_remittance(args.repo, args.pr, args.maintainer_email, args.maintainer_name, stripe_link=args.stripe_link, dry_run=False)
         return 0
 
     # Default action: dry-run
-    send_remittance(args.repo, args.pr, args.maintainer_email, args.maintainer_name, dry_run=True)
+    send_remittance(args.repo, args.pr, args.maintainer_email, args.maintainer_name, stripe_link=args.stripe_link, dry_run=True)
     return 0
 
 
