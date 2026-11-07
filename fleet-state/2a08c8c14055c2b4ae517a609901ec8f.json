@@ -2,7 +2,7 @@
   "task_id": "2a08c8c14055c2b4ae517a609901ec8f",
   "repo": "Expensify/App",
   "issue_number": 104504,
-  "status": "CLAIMED",
+  "status": "FAILED_ENGINEER",
   "dispatch_id": "009a772982204403a78d4c733343fb05",
   "admission": {
     "funding": {
@@ -57,7 +57,7 @@
   ],
   "dispatched_at": "2026-11-07T08:29:09.548274+00:00",
   "attempt": 2,
-  "updated_at": "2026-11-07T08:29:29.871622+00:00",
+  "updated_at": "2026-11-07T08:35:08.215265+00:00",
   "owner": "42355679341:1",
   "previous_owner": "42351625233:1",
   "previous_status": "DISPATCHED",
@@ -66,10 +66,10 @@
   "claimed_at": "2026-11-07T08:29:29.871500+00:00",
   "lease_expires_at": "2026-11-07T12:34:29.871523+00:00",
   "preparation_budget_seconds": 14400,
-  "kind": "commercial_review",
-  "retryable": false,
-  "diagnostic": "COMMERCIAL_REVIEW_STALE: source-backed commercial review required; retain existing work",
-  "at": "2026-11-07T08:18:51.516963+00:00",
+  "kind": "engineer",
+  "retryable": true,
+  "diagnostic": "Command '['git', '-c', 'submodule.recurse=false', 'clone', '--no-checkout', 'https://github.com/Expensify/App.git', '/tmp/bounty-workspaces/repos/Expensify--App--104504']' timed out after 180 seconds",
+  "at": "2026-11-07T08:34:52.427998+00:00",
   "failures": [
     {
       "run_url": "https://github.com/isearchxsolve/bounty-control/actions/runs/42351625233",
@@ -78,9 +78,17 @@
       "retryable": true,
       "diagnostic": "cannot access local variable 'review_feedback' where it is not associated with a value",
       "at": "2026-11-07T07:52:17.571081+00:00"
+    },
+    {
+      "run_url": "https://github.com/isearchxsolve/bounty-control/actions/runs/42355679341",
+      "status": "FAILED_ENGINEER",
+      "kind": "engineer",
+      "retryable": true,
+      "diagnostic": "Command '['git', '-c', 'submodule.recurse=false', 'clone', '--no-checkout', 'https://github.com/Expensify/App.git', '/tmp/bounty-workspaces/repos/Expensify--App--104504']' timed out after 180 seconds",
+      "at": "2026-11-07T08:34:52.427998+00:00"
     }
   ],
-  "finished_at": "2026-11-07T07:52:28.716346+00:00",
+  "finished_at": "2026-11-07T08:35:07.711944+00:00",
   "review_required": true,
   "resume_phase": "claim",
   "reason": "COMMERCIAL_REVIEW_STALE",
