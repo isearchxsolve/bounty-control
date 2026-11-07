@@ -2,7 +2,7 @@
   "task_id": "2a08c8c14055c2b4ae517a609901ec8f",
   "repo": "Expensify/App",
   "issue_number": 104504,
-  "status": "DISPATCHED",
+  "status": "REJECTED_COMMERCIAL_REVIEW",
   "dispatch_id": "3ef3a402a968488cb49d99a026ec6da9",
   "admission": {
     "funding": {
@@ -57,7 +57,7 @@
   ],
   "dispatched_at": "2026-11-07T08:18:39.085628+00:00",
   "attempt": 1,
-  "updated_at": "2026-11-07T08:18:40.823066+00:00",
+  "updated_at": "2026-11-07T08:18:52.050309+00:00",
   "owner": "42351625233:1",
   "previous_owner": null,
   "previous_status": "DISPATCHED",
@@ -66,10 +66,10 @@
   "claimed_at": "2026-11-07T07:31:40.909385+00:00",
   "lease_expires_at": "2026-11-07T11:36:40.909400+00:00",
   "preparation_budget_seconds": 14400,
-  "kind": "engineer",
-  "retryable": true,
-  "diagnostic": "cannot access local variable 'review_feedback' where it is not associated with a value",
-  "at": "2026-11-07T07:52:17.571081+00:00",
+  "kind": "commercial_review",
+  "retryable": false,
+  "diagnostic": "COMMERCIAL_REVIEW_STALE: source-backed commercial review required; retain existing work",
+  "at": "2026-11-07T08:18:51.516963+00:00",
   "failures": [
     {
       "run_url": "https://github.com/isearchxsolve/bounty-control/actions/runs/42351625233",
@@ -80,5 +80,9 @@
       "at": "2026-11-07T07:52:17.571081+00:00"
     }
   ],
-  "finished_at": "2026-11-07T07:52:28.716346+00:00"
+  "finished_at": "2026-11-07T07:52:28.716346+00:00",
+  "review_required": true,
+  "resume_phase": "claim",
+  "reason": "COMMERCIAL_REVIEW_STALE",
+  "detail": []
 }
