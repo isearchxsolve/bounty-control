@@ -2,31 +2,31 @@
   "task_id": "d1a5770a24eaa277b7bc7facafcfbbb9",
   "repo": "Expensify/App",
   "issue_number": 103875,
-  "status": "FAILED_ENGINEER",
-  "dispatch_id": "a697ddf94e974c68a1c81878e45efbb1",
+  "status": "DISPATCHING",
+  "dispatch_id": "cd9b738846f64b44ac07bc9a6b90ceb2",
   "admission": {
     "funding": {
       "amount": "250",
       "currency": "USD",
-      "payer": "m-natarajan",
+      "payer": "melvin-bot[bot]",
       "source_url": "https://github.com/Expensify/App/issues/103875",
       "usd_value": "250",
       "quote": {
         "basis": "USD face value",
         "usd_rate": "1"
       },
-      "raw": "[$250] Pressing Delete while selecting text inside a composer duplicates the content instead of clearing it.",
+      "raw": "[$250] Pressing Delete while selecting text",
       "source_author_association": "NONE",
       "source_author_login": "m-natarajan",
       "escrow": true
     },
-    "agent_reason": "m-natarajan (NONE) commits $250 USD in the issue title for [$250] Pressing Delete while selecting text inside a composer duplicates the content instead of clearing it.; the repository's own product code at src/App.tsx implements the affected surface, so the work is a bounded code change here.",
-    "scope_quote": "The content gets duplicated",
+    "agent_reason": "melvin-bot[bot] attests the $250 Upwork job for this open Expensify composer bug; pressing Delete with text selected duplicates instead of clearing it, a bounded composer input fix in src/components/Composer.",
+    "scope_quote": "Selected content deleted",
     "code_evidence": {
       "is_product_code": true,
-      "path": "src/App.tsx",
-      "quote": "import {PortalProvider} from '@gorhom/portal';",
-      "sha": "df2eafdb9c98819ec84bf52cc2b3577d81306d17"
+      "path": "src/components/Composer/index.tsx",
+      "sha": "d9474effa47818b6344a6f54a0384acbe136e169",
+      "quote": "import Composer from './implementation';"
     },
     "source_issue": "https://github.com/Expensify/App/issues/103875",
     "funding_status": "PRICED_OFFER",
@@ -34,19 +34,19 @@
     "commercial_scope": "linked-discussions",
     "commercial_review": {
       "decision": "proceed",
-      "source_revision": "0a2bc7ecea318be1927374b02a39160548d8aaaee7daf6dad8d38bc62cb0d92b",
-      "reason": "Live read of the issue, its comments, linked pull requests, README/CONTRIBUTING and licence: the payment commitment is written by the issue author (repository authority) in the issue itself, no withdrawal, no unpaid-work allegation and no conflicting terms.",
+      "source_revision": "e248fb30e190ab30e3b5eeb6f4b9176a9f856a4bdaa62a4f7f296868df2fa70d",
+      "reason": "Authorized program funding: melvin-bot[bot] published the Upwork job attestation on this open Expensify issue; no payment dispute, unpaid-work allegation or licence restriction appears in the issue, comments or repository terms.",
       "evidence": [
         {
           "source_url": "https://github.com/Expensify/App/issues/103875",
-          "quote": "The content gets duplicated"
+          "quote": "Selected content deleted"
         }
       ]
     },
     "task_id": "d1a5770a24eaa277b7bc7facafcfbbb9",
-    "source_revision": "d712a586f6c600f4aada7f406bdb9f0a4e7de6fcc3e70b3e1a210e1fb8bee2a7"
+    "source_revision": "4e99c16ec74ceba2f89cc5c30ccc4e1a1bd336d3085585e89271f92538f35138"
   },
-  "dispatch_attempt": 1,
+  "dispatch_attempt": 2,
   "sovereign_admission": true,
   "competition": {
     "blocking": false,
@@ -55,9 +55,9 @@
   "lanes": [
     "programs"
   ],
-  "dispatched_at": "2026-11-07T07:32:07.820268+00:00",
+  "dispatched_at": "2026-11-07T17:02:19.970863+00:00",
   "attempt": 1,
-  "updated_at": "2026-11-07T07:50:29.502503+00:00",
+  "updated_at": "2026-11-07T17:02:19.970882+00:00",
   "owner": "42351686439:1",
   "previous_owner": null,
   "previous_status": "DISPATCHED",
