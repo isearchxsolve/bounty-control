@@ -629,7 +629,7 @@ def resume_preparation(api, state, task, worker):
         raise ValueError('Preparation resume requires a fresh isolated checkout')
     root.parent.mkdir(parents=True, exist_ok=True)
     url = 'https://github.com/' + repository(task['repo']) + '.git'
-    subprocess.run(['git', '-c', 'submodule.recurse=false', 'clone', '--no-checkout', url, str(root)], check=True, timeout=180)
+    subprocess.run(['git', '-c', 'submodule.recurse=false', 'clone', '--no-checkout', url, str(root)], check=True, timeout=600)
     git(root, 'fetch', 'origin', report['base_sha'])
     git(root, 'checkout', '--detach', report['base_sha'])
     git(root, 'remote', 'add', 'upstream', url)
@@ -1028,7 +1028,7 @@ def validate_bundle(receipt, bundle, root):
     # F10: Disable submodule recursion to avoid .gitmodules failures blocking delivery.
     subprocess.run(["git", "-c", "core.hooksPath=/dev/null", "-c", "submodule.recurse=false",
                     "clone", "--no-checkout",
-                    "https://github.com/" + repo + ".git", str(root)], check=True, timeout=180)
+                    "https://github.com/" + repo + ".git", str(root)], check=True, timeout=600)
     git(root, "fetch", str(bundle), "HEAD")
     head, base = receipt["head_sha"], receipt["base_sha"]
     if git(root, "rev-parse", "FETCH_HEAD").stdout.decode().strip() != head:
