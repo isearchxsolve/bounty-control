@@ -2,7 +2,7 @@
   "task_id": "2f232cf043266b0ecec52b2ff28744ea",
   "repo": "Expensify/App",
   "issue_number": 101234,
-  "status": "DISPATCHED",
+  "status": "CLAIMED",
   "dispatch_id": "30ffeb8e98a54c7ba81979b731c5a29a",
   "admission": {
     "funding": {
@@ -56,15 +56,15 @@
     "programs"
   ],
   "dispatched_at": "2026-11-07T17:05:50.555249+00:00",
-  "attempt": 1,
-  "updated_at": "2026-11-07T17:05:52.078562+00:00",
-  "owner": "42353553355:1",
-  "previous_owner": null,
+  "attempt": 2,
+  "updated_at": "2026-11-07T17:06:19.053043+00:00",
+  "owner": "42394597581:1",
+  "previous_owner": "42353553355:1",
   "previous_status": "DISPATCHED",
-  "run_url": "https://github.com/isearchxsolve/bounty-control/actions/runs/42353553355",
-  "harness_sha": "1f1c37f87ae33fa56c38141a1c53a3c7feb9c6a9",
-  "claimed_at": "2026-11-07T08:00:13.713806+00:00",
-  "lease_expires_at": "2026-11-07T12:05:13.713822+00:00",
+  "run_url": "https://github.com/isearchxsolve/bounty-control/actions/runs/42394597581",
+  "harness_sha": "e25dcca3eb51820b68101378afc6cea439280779",
+  "claimed_at": "2026-11-07T17:06:19.052977+00:00",
+  "lease_expires_at": "2026-11-07T21:11:19.052991+00:00",
   "preparation_budget_seconds": 14400,
   "diagnostic": "Actions run completed (failure) without terminal callback; artifacts retained",
   "observed_at": "2026-11-07T08:46:06.334033+00:00"
