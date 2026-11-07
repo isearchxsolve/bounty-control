@@ -101,7 +101,8 @@ def discover(lanes, max_dispatches=2, live=False, state_dir=None, hydrate_only=F
                 reservations = {r["task_id"] for r in records()
                                 if r.get("status") in ("DISPATCHING", "DISPATCHED", "CLAIMED", "ENGINEERING", "VERIFIED", "PUBLISHING")}
                 capacity["used"] = max(len({r["id"] for r in active}), len(reservations))
-            if capacity["used"] >= 4:
+            concurrency_limit = max(max_dispatches, 4)
+            if capacity["used"] >= concurrency_limit:
                 save(identity, row, "capacity_wait")
                 counts["capacity_wait"] += 1
                 return
@@ -116,18 +117,22 @@ def discover(lanes, max_dispatches=2, live=False, state_dir=None, hydrate_only=F
             reason = str(exc)
             counts[reason] += 1
             refusal_counts[reason] += 1
-            # Terminal gate failures under mission policy (escrow, capacity, vitality)
+            # Terminal gate failures under mission policy (escrow, vitality)
             # must be marked 'refused' so the hydration drain does not loop on them.
-            terminal = (
-                reason in (
-                    "NO_PLATFORM_ESCROW", "CAPACITY_EXCLUDED", "REPOSITORY_MERGES_STALE",
-                    "REPOSITORY_INTENT_UNMERGED", "OUT_OF_LANE", "COMPETING_OPEN_PRS",
-                    "COMPETITION_SWARM", "REPOSITORY_UNAVAILABLE"
+            # Capacity exclusions are transient queue waits rather than permanent task deaths.
+            if reason == "CAPACITY_EXCLUDED":
+                disposition = "capacity_wait"
+            else:
+                terminal = (
+                    reason in (
+                        "NO_PLATFORM_ESCROW", "REPOSITORY_MERGES_STALE",
+                        "REPOSITORY_INTENT_UNMERGED", "OUT_OF_LANE", "COMPETING_OPEN_PRS",
+                        "COMPETITION_SWARM", "REPOSITORY_UNAVAILABLE"
+                    )
+                    or reason.startswith("Admission source changed")
+                    or "not found" in reason.lower()
                 )
-                or reason.startswith("Admission source changed")
-                or "not found" in reason.lower()
-            )
-            disposition = "refused" if terminal else "deferred"
+                disposition = "refused" if terminal else "deferred"
             save(identity, row, disposition)
             event("AGENT_HANDOFF_DEFERRED", task_id=identity, reason=reason, disposition=disposition)
 

@@ -736,6 +736,10 @@ def model_admission_refusal(row, context_builder, source_reader=None):
         proof['commercial_scope'] = 'linked-discussions' if context.get('commercial_context_complete') else 'primary-only'
         if row.get('commercial_review'):
             proof['commercial_review'] = row['commercial_review']
+        from bounty_admission import escrow_only_refusal
+        escrow_refusal = escrow_only_refusal(proof['funding'])
+        if escrow_refusal:
+            return escrow_refusal, 'Escrow attestation missing from recognized bot or documented funding program.', None
         return None, None, bind_proof(proof, context)
     except (GitHubError, OSError) as exc:
         return 'ISSUE_UNREADABLE', str(exc), None

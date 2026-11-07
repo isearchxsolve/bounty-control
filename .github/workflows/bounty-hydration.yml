@@ -31,6 +31,8 @@ jobs:
       # 2026-10-31T23:22Z), so this lane can dispatch work no escrow check ever saw.
       BOUNTY_ESCROW_ONLY: '1'
       BOUNTY_MAX_REPOSITORY_KB: '10000000'
+      # Floor aligned to $175 to capture high-velocity, Upwork-backed monorepo bugs (Expensify 2026-11 standard tier).
+      BOUNTY_FLOOR: '175'
     steps:
     - uses: actions/checkout@v4
       with:

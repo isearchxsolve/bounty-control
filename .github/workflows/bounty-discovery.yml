@@ -27,6 +27,8 @@ jobs:
       # Expanded capacity ceiling to 10 GB so major funded monorepos (e.g. Expensify/App at 3.4 GB)
       # are not blocked by the default 750 MB runner gate.
       BOUNTY_MAX_REPOSITORY_KB: '10000000'
+      # Floor aligned to $175 to capture high-velocity, Upwork-backed monorepo bugs (Expensify 2026-11 standard tier).
+      BOUNTY_FLOOR: '175'
     steps:
     - uses: actions/checkout@v4
       with:
