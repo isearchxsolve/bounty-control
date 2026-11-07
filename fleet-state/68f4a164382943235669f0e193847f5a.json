@@ -1,0 +1,61 @@
+{
+  "task_id": "68f4a164382943235669f0e193847f5a",
+  "repo": "Expensify/App",
+  "issue_number": 106032,
+  "status": "DISPATCHING",
+  "dispatch_id": "0afe15ec48284ad1814e8089508e7c35",
+  "admission": {
+    "funding": {
+      "amount": "175",
+      "currency": "USD",
+      "payer": "melvin-bot[bot]",
+      "source_url": "https://github.com/Expensify/App/issues/106032",
+      "usd_value": "175",
+      "quote": {
+        "basis": "USD face value",
+        "usd_rate": "1"
+      },
+      "raw": "[$175] Chat - Supported emoji shortcodes stay as plain text on the first paste after reload",
+      "source_author_association": "CONTRIBUTOR",
+      "source_author_login": "amyevans",
+      "escrow": true
+    },
+    "agent_reason": "melvin-bot[bot] Upwork-attested $175 Expensify bounty; bounded product bug in the NewDot app.",
+    "scope_quote": "Supported emojis appear as normal emoji characters on the first paste, including immediately after reload.",
+    "code_evidence": {
+      "is_product_code": true,
+      "path": "src/components/Composer/implementation/index.tsx",
+      "quote": "import type {ComposerProps, WebComposerRef} from '@components/Composer",
+      "sha": "12c7324da68bd02f8a10567335131dcdf32c804e"
+    },
+    "source_issue": "https://github.com/Expensify/App/issues/106032",
+    "funding_status": "PRICED_OFFER",
+    "lane": "programs",
+    "commercial_scope": "linked-discussions",
+    "commercial_review": {
+      "decision": "proceed",
+      "source_revision": "43f3e00b70439d93d58d8ddae1182f6e81b2695c17c3ba77384d0d3d0c5a282f",
+      "reason": "Current $175 offer attested by melvin-bot[bot] Upwork job URL; no warning documents in the linked context; escrow-only satisfied via the expensify/app funding program.",
+      "evidence": [
+        {
+          "source_url": "https://github.com/Expensify/App/issues/106032#issuecomment-6644232535",
+          "quote": "Job added to Upwork: https://www.upwork.com/jobs/~022118114516708137041"
+        }
+      ]
+    },
+    "task_id": "68f4a164382943235669f0e193847f5a",
+    "source_revision": "7fe36b6c5530ae1a5d2f6175badcdad3b9709af2c2cb7f046bed7cd6f06e997b"
+  },
+  "dispatch_attempt": 1,
+  "sovereign_admission": true,
+  "competition": {
+    "blocking": false,
+    "nominal": []
+  },
+  "lanes": [
+    "programs"
+  ],
+  "dispatched_at": "2026-11-07T12:14:21.845561+00:00",
+  "attempt": 0,
+  "updated_at": "2026-11-07T12:14:21.845587+00:00"
+}
