@@ -2,8 +2,8 @@
   "task_id": "fe67d95d0dbcd098ed5f20406c1a8be0",
   "repo": "Expensify/App",
   "issue_number": 104341,
-  "status": "FAILED_ENGINEER",
-  "dispatch_id": "cc5dbd21dd294c7b86ae44091081b523",
+  "status": "DISPATCHING",
+  "dispatch_id": "db8daa37b44f4e3c90cc331505f55b44",
   "admission": {
     "funding": {
       "amount": "250",
@@ -20,13 +20,13 @@
       "source_author_login": "applause-bot[bot]",
       "escrow": true
     },
-    "agent_reason": "applause-bot[bot] (NONE) commits $250 USD in the issue title for [$250] Expense - Both approved & held expenses' total is shown after approving; the repository's own product code at src/App.tsx implements the affected surface, so the work is a bounded code change here.",
-    "scope_quote": "Both approved and held expenses' total is shown instead of only approved expenses' total (Expense 1 + Expense 2 [Split expense] + Expense 3 [Split expense]). Once the user clicks on the approved split expense and then navigates back to the report, the correct total is shown.",
+    "agent_reason": "Expensify/App's documented US$250 bounty programme (a [$N] title funded through the Upwork job that melvin-bot[bot] attests on the issue) covers this open bug in src/libs/actions/IOU/MoneyRequestBuilder.ts.",
+    "scope_quote": "The total should only include unheld expenses (Expense 1 + Expense 2 [Split expense])",
     "code_evidence": {
       "is_product_code": true,
-      "path": "src/App.tsx",
-      "quote": "import {PortalProvider} from '@gorhom/portal';",
-      "sha": "df2eafdb9c98819ec84bf52cc2b3577d81306d17"
+      "path": "src/libs/actions/IOU/MoneyRequestBuilder.ts",
+      "quote": "import type {LocaleContextProps} from '@components/LocaleContextProvider';",
+      "sha": "010c3340c614517a508d95c6c9da72999a003234"
     },
     "source_issue": "https://github.com/Expensify/App/issues/104341",
     "funding_status": "PRICED_OFFER",
@@ -34,19 +34,19 @@
     "commercial_scope": "linked-discussions",
     "commercial_review": {
       "decision": "proceed",
-      "source_revision": "44caeb490afa6ab0bd6d4cb1761ad5d24e1d47b8d0b226638802953dba9bd46e",
-      "reason": "Live read of the issue, its comments, linked pull requests, README/CONTRIBUTING and licence: the payment commitment is written by the issue author (repository authority) in the issue itself, no withdrawal, no unpaid-work allegation and no conflicting terms.",
+      "source_revision": "2acf7faf4d0d557c7abebe1042311ae12b661c01f0f864a5dadac2fc88524ce4",
+      "reason": "Expensify pays its [$N] Search/App bugs through a documented Upwork job programme; melvin-bot[bot] published the Upwork attestation on this issue and the repository merges constantly, so the offer is current, authority is the repository's own programme automation, the scope is a bounded source-level fix and no unpaid-work allegation or withdrawal appears in the collected sources.",
       "evidence": [
         {
-          "source_url": "https://github.com/Expensify/App/issues/104341",
-          "quote": "Both approved and held expenses' total is shown instead of only approved expenses' total (Expense 1 + Expense 2 [Split expense] + Expense 3 [Split expense]). Once the user clicks on the approved split expense and then navigates back to the report, the correct total is shown."
+          "source_url": "https://github.com/Expensify/App/issues/104341#issuecomment-6265618187",
+          "quote": "Job added to Upwork: https://www.upwork.com/jobs/~022112136231790515292"
         }
       ]
     },
     "task_id": "fe67d95d0dbcd098ed5f20406c1a8be0",
     "source_revision": "44a3cd6af149dc8258b2bfb62d33495342fa5f07a3945b4afb26a8f383ed8ef8"
   },
-  "dispatch_attempt": 1,
+  "dispatch_attempt": 2,
   "sovereign_admission": true,
   "competition": {
     "blocking": false,
@@ -55,9 +55,9 @@
   "lanes": [
     "programs"
   ],
-  "dispatched_at": "2026-11-07T07:31:43.441350+00:00",
+  "dispatched_at": "2026-11-07T08:28:42.001890+00:00",
   "attempt": 1,
-  "updated_at": "2026-11-07T07:48:24.913355+00:00",
+  "updated_at": "2026-11-07T08:28:42.001907+00:00",
   "owner": "42351656979:1",
   "previous_owner": null,
   "previous_status": "DISPATCHED",
