@@ -2,7 +2,7 @@
   "task_id": "fe67d95d0dbcd098ed5f20406c1a8be0",
   "repo": "Expensify/App",
   "issue_number": 104341,
-  "status": "CLAIMED",
+  "status": "FAILED_ENGINEER",
   "dispatch_id": "db8daa37b44f4e3c90cc331505f55b44",
   "admission": {
     "funding": {
@@ -57,7 +57,7 @@
   ],
   "dispatched_at": "2026-11-07T08:28:42.001890+00:00",
   "attempt": 2,
-  "updated_at": "2026-11-07T08:29:01.379104+00:00",
+  "updated_at": "2026-11-07T08:34:35.237292+00:00",
   "owner": "42355649748:1",
   "previous_owner": "42351656979:1",
   "previous_status": "DISPATCHED",
@@ -68,8 +68,8 @@
   "preparation_budget_seconds": 14400,
   "kind": "engineer",
   "retryable": true,
-  "diagnostic": "cannot access local variable 'review_feedback' where it is not associated with a value",
-  "at": "2026-11-07T07:48:14.720481+00:00",
+  "diagnostic": "Command '['git', '-c', 'submodule.recurse=false', 'clone', '--no-checkout', 'https://github.com/Expensify/App.git', '/tmp/bounty-workspaces/repos/Expensify--App--104341']' timed out after 180 seconds",
+  "at": "2026-11-07T08:34:20.438454+00:00",
   "failures": [
     {
       "run_url": "https://github.com/isearchxsolve/bounty-control/actions/runs/42351656979",
@@ -78,7 +78,15 @@
       "retryable": true,
       "diagnostic": "cannot access local variable 'review_feedback' where it is not associated with a value",
       "at": "2026-11-07T07:48:14.720481+00:00"
+    },
+    {
+      "run_url": "https://github.com/isearchxsolve/bounty-control/actions/runs/42355649748",
+      "status": "FAILED_ENGINEER",
+      "kind": "engineer",
+      "retryable": true,
+      "diagnostic": "Command '['git', '-c', 'submodule.recurse=false', 'clone', '--no-checkout', 'https://github.com/Expensify/App.git', '/tmp/bounty-workspaces/repos/Expensify--App--104341']' timed out after 180 seconds",
+      "at": "2026-11-07T08:34:20.438454+00:00"
     }
   ],
-  "finished_at": "2026-11-07T07:48:24.384638+00:00"
+  "finished_at": "2026-11-07T08:34:34.806815+00:00"
 }
