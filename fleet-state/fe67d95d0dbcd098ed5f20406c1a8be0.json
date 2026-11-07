@@ -1,0 +1,61 @@
+{
+  "task_id": "fe67d95d0dbcd098ed5f20406c1a8be0",
+  "repo": "Expensify/App",
+  "issue_number": 104341,
+  "status": "DISPATCHING",
+  "dispatch_id": "cc5dbd21dd294c7b86ae44091081b523",
+  "admission": {
+    "funding": {
+      "amount": "250",
+      "currency": "USD",
+      "payer": "applause-bot[bot]",
+      "source_url": "https://github.com/Expensify/App/issues/104341",
+      "usd_value": "250",
+      "quote": {
+        "basis": "USD face value",
+        "usd_rate": "1"
+      },
+      "raw": "[$250] Expense - Both approved & held expenses' total is shown after approving",
+      "source_author_association": "NONE",
+      "source_author_login": "applause-bot[bot]",
+      "escrow": true
+    },
+    "agent_reason": "applause-bot[bot] (NONE) commits $250 USD in the issue title for [$250] Expense - Both approved & held expenses' total is shown after approving; the repository's own product code at src/App.tsx implements the affected surface, so the work is a bounded code change here.",
+    "scope_quote": "Both approved and held expenses' total is shown instead of only approved expenses' total (Expense 1 + Expense 2 [Split expense] + Expense 3 [Split expense]). Once the user clicks on the approved split expense and then navigates back to the report, the correct total is shown.",
+    "code_evidence": {
+      "is_product_code": true,
+      "path": "src/App.tsx",
+      "quote": "import {PortalProvider} from '@gorhom/portal';",
+      "sha": "df2eafdb9c98819ec84bf52cc2b3577d81306d17"
+    },
+    "source_issue": "https://github.com/Expensify/App/issues/104341",
+    "funding_status": "PRICED_OFFER",
+    "lane": "programs",
+    "commercial_scope": "linked-discussions",
+    "commercial_review": {
+      "decision": "proceed",
+      "source_revision": "44caeb490afa6ab0bd6d4cb1761ad5d24e1d47b8d0b226638802953dba9bd46e",
+      "reason": "Live read of the issue, its comments, linked pull requests, README/CONTRIBUTING and licence: the payment commitment is written by the issue author (repository authority) in the issue itself, no withdrawal, no unpaid-work allegation and no conflicting terms.",
+      "evidence": [
+        {
+          "source_url": "https://github.com/Expensify/App/issues/104341",
+          "quote": "Both approved and held expenses' total is shown instead of only approved expenses' total (Expense 1 + Expense 2 [Split expense] + Expense 3 [Split expense]). Once the user clicks on the approved split expense and then navigates back to the report, the correct total is shown."
+        }
+      ]
+    },
+    "task_id": "fe67d95d0dbcd098ed5f20406c1a8be0",
+    "source_revision": "44a3cd6af149dc8258b2bfb62d33495342fa5f07a3945b4afb26a8f383ed8ef8"
+  },
+  "dispatch_attempt": 1,
+  "sovereign_admission": true,
+  "competition": {
+    "blocking": false,
+    "nominal": []
+  },
+  "lanes": [
+    "programs"
+  ],
+  "dispatched_at": "2026-11-07T07:31:43.441350+00:00",
+  "attempt": 0,
+  "updated_at": "2026-11-07T07:31:43.441369+00:00"
+}
