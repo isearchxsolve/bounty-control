@@ -715,9 +715,16 @@ def model_admission_refusal(row, context_builder, source_reader=None):
         actual = base64.b64decode(product['content']).decode('utf-8', errors='replace')
         if not quote_is_present(code['quote'], actual):
             return 'PRODUCT_SOURCE_QUOTE_MISMATCH', None, None
+        from bounty_admission import _is_platform_bot, _is_owner_allocated, funding_program
+        is_escrow = bool(
+            _is_platform_bot(source)
+            or _is_owner_allocated(source, context['issue'], amount if not owner_request else None)
+            or funding_program(context)
+        )
         proof = {'funding': {**funding, 'usd_value': str(usd), 'quote': rate, 'raw': quote,
                              'source_author_association': source.get('author_association'),
-                             'source_author_login': (source.get('user') or {}).get('login')},
+                             'source_author_login': (source.get('user') or {}).get('login'),
+                             'escrow': is_escrow},
                  'agent_reason': row['admission_reason'], 'scope_quote': scope,
                  'code_evidence': code,
                  'source_issue': context['issue'].get('html_url'),
