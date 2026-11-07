@@ -2,7 +2,7 @@
   "task_id": "c3268d9fb9218015c98bee3612ecce3e",
   "repo": "Expensify/App",
   "issue_number": 104951,
-  "status": "CLAIMED",
+  "status": "FAILED_DELIVERABLE_MISSING",
   "dispatch_id": "bcb0166f73464d1cab9ff5d8e8116707",
   "admission": {
     "funding": {
@@ -57,7 +57,7 @@
   ],
   "dispatched_at": "2026-11-07T08:56:55.704823+00:00",
   "attempt": 3,
-  "updated_at": "2026-11-07T08:57:13.858811+00:00",
+  "updated_at": "2026-11-07T09:42:49.146704+00:00",
   "owner": "42357610536:1",
   "previous_owner": "42355553848:1",
   "previous_status": "DISPATCHED",
@@ -66,10 +66,10 @@
   "claimed_at": "2026-11-07T08:57:13.858749+00:00",
   "lease_expires_at": "2026-11-07T13:02:13.858764+00:00",
   "preparation_budget_seconds": 14400,
-  "kind": "engineer",
+  "kind": "deliverable_invalid",
   "retryable": true,
-  "diagnostic": "Command '['git', '-c', 'submodule.recurse=false', 'clone', '--no-checkout', 'https://github.com/Expensify/App.git', '/tmp/bounty-workspaces/repos/Expensify--App--104951']' timed out after 180 seconds",
-  "at": "2026-11-07T08:33:43.962643+00:00",
+  "diagnostic": "Cline deliverable invalid at /tmp/fleet-artifacts/delivery-supervisor/9a3ac11a4cf944a9af6f6012a68af814.preparation.json: Bypassed or synthetic native verification command in phase bootstrap: bash -lc set -euo pipefail; cd \"$(git rev-parse --show-toplevel)\"; TC=/tmp/bounty-toolchain; if [ \"$(node -v 2>/dev/null || true)\" != \"v26.12.1\" ]; then mkdir -p \"$TC\"; [ -x \"$TC/node/bin/node\" ] || { curl -fsSL https://nodejs.org/dist/v26.12.1/node-v26.12.1-linux-x64.tar.xz -o \"$TC/node.tar.xz\"; mkdir -p \"$TC/node\"; tar -xJf \"$TC/node.tar.xz\" -C \"$TC/node\" --strip-components=1; }; export PATH=\"$TC/node/bin:$PATH\"; fi; node -v; npm -v; npm ci",
+  "at": "2026-11-07T09:42:38.152295+00:00",
   "failures": [
     {
       "run_url": "https://github.com/isearchxsolve/bounty-control/actions/runs/42351597977",
@@ -86,7 +86,19 @@
       "retryable": true,
       "diagnostic": "Command '['git', '-c', 'submodule.recurse=false', 'clone', '--no-checkout', 'https://github.com/Expensify/App.git', '/tmp/bounty-workspaces/repos/Expensify--App--104951']' timed out after 180 seconds",
       "at": "2026-11-07T08:33:43.962643+00:00"
+    },
+    {
+      "run_url": "https://github.com/isearchxsolve/bounty-control/actions/runs/42357610536",
+      "status": "FAILED_DELIVERABLE_MISSING",
+      "kind": "deliverable_invalid",
+      "retryable": true,
+      "diagnostic": "Cline deliverable invalid at /tmp/fleet-artifacts/delivery-supervisor/9a3ac11a4cf944a9af6f6012a68af814.preparation.json: Bypassed or synthetic native verification command in phase bootstrap: bash -lc set -euo pipefail; cd \"$(git rev-parse --show-toplevel)\"; TC=/tmp/bounty-toolchain; if [ \"$(node -v 2>/dev/null || true)\" != \"v26.12.1\" ]; then mkdir -p \"$TC\"; [ -x \"$TC/node/bin/node\" ] || { curl -fsSL https://nodejs.org/dist/v26.12.1/node-v26.12.1-linux-x64.tar.xz -o \"$TC/node.tar.xz\"; mkdir -p \"$TC/node\"; tar -xJf \"$TC/node.tar.xz\" -C \"$TC/node\" --strip-components=1; }; export PATH=\"$TC/node/bin:$PATH\"; fi; node -v; npm -v; npm ci",
+      "path": "/tmp/fleet-artifacts/delivery-supervisor/9a3ac11a4cf944a9af6f6012a68af814.preparation.json",
+      "reason": "Bypassed or synthetic native verification command in phase bootstrap: bash -lc set -euo pipefail; cd \"$(git rev-parse --show-toplevel)\"; TC=/tmp/bounty-toolchain; if [ \"$(node -v 2>/dev/null || true)\" != \"v26.12.1\" ]; then mkdir -p \"$TC\"; [ -x \"$TC/node/bin/node\" ] || { curl -fsSL https://nodejs.org/dist/v26.12.1/node-v26.12.1-linux-x64.tar.xz -o \"$TC/node.tar.xz\"; mkdir -p \"$TC/node\"; tar -xJf \"$TC/node.tar.xz\" -C \"$TC/node\" --strip-components=1; }; export PATH=\"$TC/node/bin:$PATH\"; fi; node -v; npm -v; npm ci",
+      "at": "2026-11-07T09:42:38.152295+00:00"
     }
   ],
-  "finished_at": "2026-11-07T08:33:59.456366+00:00"
+  "finished_at": "2026-11-07T09:42:48.483588+00:00",
+  "path": "/tmp/fleet-artifacts/delivery-supervisor/9a3ac11a4cf944a9af6f6012a68af814.preparation.json",
+  "reason": "Bypassed or synthetic native verification command in phase bootstrap: bash -lc set -euo pipefail; cd \"$(git rev-parse --show-toplevel)\"; TC=/tmp/bounty-toolchain; if [ \"$(node -v 2>/dev/null || true)\" != \"v26.12.1\" ]; then mkdir -p \"$TC\"; [ -x \"$TC/node/bin/node\" ] || { curl -fsSL https://nodejs.org/dist/v26.12.1/node-v26.12.1-linux-x64.tar.xz -o \"$TC/node.tar.xz\"; mkdir -p \"$TC/node\"; tar -xJf \"$TC/node.tar.xz\" -C \"$TC/node\" --strip-components=1; }; export PATH=\"$TC/node/bin:$PATH\"; fi; node -v; npm -v; npm ci"
 }
