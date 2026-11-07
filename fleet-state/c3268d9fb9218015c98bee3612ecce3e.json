@@ -2,8 +2,8 @@
   "task_id": "c3268d9fb9218015c98bee3612ecce3e",
   "repo": "Expensify/App",
   "issue_number": 104951,
-  "status": "FAILED_ENGINEER",
-  "dispatch_id": "8fd62ed1bd494458bd3c41a7b97d75c6",
+  "status": "DISPATCHING",
+  "dispatch_id": "bcb0166f73464d1cab9ff5d8e8116707",
   "admission": {
     "funding": {
       "amount": "250",
@@ -20,12 +20,12 @@
       "source_author_login": "applause-bot[bot]",
       "escrow": true
     },
-    "agent_reason": "Expensify/App's documented US$250 bounty programme (a [$N] title funded through the Upwork job that melvin-bot[bot] attests on the issue) covers this open bug in src/components/Table/TableBody.tsx.",
+    "agent_reason": "Expensify's documented [$250] Upwork bounty programme funds this specific bug; melvin-bot[bot] attests the Upwork job, and the change lives in the workspace-list row layout that overlaps the newly created workspace.",
     "scope_quote": "After step 6, all workspaces in the list should be displayed fully and clearly.",
     "code_evidence": {
       "is_product_code": true,
       "path": "src/components/Table/TableBody.tsx",
-      "quote": "import ScrollView from '@components/ScrollView';",
+      "quote": "const columnScrollPageHeaderStyle = {position: 'sticky', left: 0} as ViewStyle;",
       "sha": "11228b302e0b323fd0aa72c1e4ed8a04cb30fe18"
     },
     "source_issue": "https://github.com/Expensify/App/issues/104951",
@@ -35,18 +35,18 @@
     "commercial_review": {
       "decision": "proceed",
       "source_revision": "a7a0acc48f09f1fdb667ba1ac9db2116cf05fec17255c0ede105c347dfb21984",
-      "reason": "Expensify pays its [$N] Search/App bugs through a documented Upwork job programme; melvin-bot[bot] published the Upwork attestation on this issue and the repository merges constantly, so the offer is current, authority is the repository's own programme automation, the scope is a bounded source-level fix and no unpaid-work allegation or withdrawal appears in the collected sources.",
+      "reason": "The only monetary document is Expensify's own [$250] bounty title plus melvin-bot[bot]'s Upwork job attestation; no withdrawal, unpaid-work allegation, stale funding or licence conflict appears in the issue, its comments, README/CONTRIBUTING or LICENSE.",
       "evidence": [
         {
           "source_url": "https://github.com/Expensify/App/issues/104951#issuecomment-6592126579",
-          "quote": "Job added to Upwork: https://www.upwork.com/jobs/~022117414243327436901"
+          "quote": "https://www.upwork.com/jobs/~022117414243327436901"
         }
       ]
     },
     "task_id": "c3268d9fb9218015c98bee3612ecce3e",
     "source_revision": "f7c9bd34dfe31d7f4998422330f4f4c1dd7501965628f071612d99ef0fde95fb"
   },
-  "dispatch_attempt": 2,
+  "dispatch_attempt": 3,
   "sovereign_admission": true,
   "competition": {
     "blocking": false,
@@ -55,9 +55,9 @@
   "lanes": [
     "programs"
   ],
-  "dispatched_at": "2026-11-07T08:27:15.664852+00:00",
+  "dispatched_at": "2026-11-07T08:56:55.704823+00:00",
   "attempt": 2,
-  "updated_at": "2026-11-07T08:33:59.941391+00:00",
+  "updated_at": "2026-11-07T08:56:55.704842+00:00",
   "owner": "42355553848:1",
   "previous_owner": "42351597977:1",
   "previous_status": "DISPATCHED",
