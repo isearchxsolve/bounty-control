@@ -2,8 +2,8 @@
   "task_id": "2f232cf043266b0ecec52b2ff28744ea",
   "repo": "Expensify/App",
   "issue_number": 101234,
-  "status": "FAILED_MISSING_TERMINAL_RECEIPT",
-  "dispatch_id": "8357e3c119b049ca89201cfbe7c5126e",
+  "status": "DISPATCHING",
+  "dispatch_id": "30ffeb8e98a54c7ba81979b731c5a29a",
   "admission": {
     "funding": {
       "amount": "250",
@@ -15,18 +15,18 @@
         "basis": "USD face value",
         "usd_rate": "1"
       },
-      "raw": "[$250] Marking a chat as unread doesn't stick",
+      "raw": "[$250] Marking a chat as unread",
       "source_author_association": "NONE",
       "source_author_login": "melvin-bot[bot]",
       "escrow": true
     },
-    "agent_reason": "Expensify funds its own bug-fix backlog at a fixed $250 per issue (title set by melvin-bot, which re-posted the Upwork job); the defect is pinned to Report actions product code, so it is bounded paid engineering.",
-    "scope_quote": "This looks like the report screen still being mounted/focused after the LHN action, so the \"you're viewing this report\" read-receipt fires and clobbers the unread state.",
+    "agent_reason": "melvin-bot[bot] attests the $250 Upwork job for this open Expensify bug; marking a chat unread is immediately undone by a ReadNewestAction from the still-mounted report screen, in the report actions of src/libs/actions/Report/index.ts, a bounded fix.",
+    "scope_quote": "the marking client immediately re-marks the chat as read",
     "code_evidence": {
       "is_product_code": true,
-      "path": "src/libs/actions/Report/MarkAllMessageAsRead.tsx",
-      "quote": "import {isAnonymousUser} from '@libs/actions/Session';",
-      "sha": "50937cd9f6fc40c46afba2a824956f3ffc64ea09"
+      "path": "src/libs/actions/Report/index.ts",
+      "sha": "7b90d4de4dc71d29eb8ab23857f08bb9430791f5",
+      "quote": "import type {LocaleContextProps, LocalizedTranslate} from '@components/LocaleContextProvider';"
     },
     "source_issue": "https://github.com/Expensify/App/issues/101234",
     "funding_status": "PRICED_OFFER",
@@ -34,27 +34,19 @@
     "commercial_scope": "linked-discussions",
     "commercial_review": {
       "decision": "proceed",
-      "source_revision": "f3cd58be5135b5313d7dbc0c6227005846c4f678e81f7d4a03d8c7025f8da55d",
-      "reason": "Expensify's own bot set the [$250] price and re-posted the Upwork job; repository observations show 41239/49826 merges with a merge today. Warning assessed: PR #106068 references the issue but is CLOSED (a prior attempt), not an open competing PR.",
+      "source_revision": "3ba0acb914a13d05627e30b855453f7ea87b2471917d96bd24d33b58520800e2",
+      "reason": "Authorized program funding: melvin-bot[bot] published the Upwork job attestation on this open Expensify issue; no payment dispute, unpaid-work allegation or licence restriction appears in the issue, comments or repository terms.",
       "evidence": [
         {
           "source_url": "https://github.com/Expensify/App/issues/101234",
-          "quote": "**If you haven\u2019t already, check out our [contributing guidelines](https://github.com/Expensify/ReactNativeChat/blob/main"
-        },
-        {
-          "source_url": "https://github.com/Expensify/App/issues/101234#issuecomment-6420282271",
-          "quote": "Job added to Upwork: https://www.upwork.com/jobs/~022114744549108293422"
-        },
-        {
-          "source_url": "https://github.com/Expensify/App/pull/106068",
-          "quote": "## Summary\n\nThis PR addresses an issue where marking a chat as unread does not persist correctly. Specifically, the clie"
+          "quote": "the marking client immediately re-marks the chat as read"
         }
       ]
     },
     "task_id": "2f232cf043266b0ecec52b2ff28744ea",
-    "source_revision": "8d02db508038c887534f9c15dd10c08357aa8ef3dae6a172a90efa386b62cdeb"
+    "source_revision": "f948db764059e85e1ebfa193db6b213053134c022fa359f5b8e42f0e722eb81e"
   },
-  "dispatch_attempt": 1,
+  "dispatch_attempt": 2,
   "sovereign_admission": true,
   "competition": {
     "blocking": false,
@@ -63,9 +55,9 @@
   "lanes": [
     "programs"
   ],
-  "dispatched_at": "2026-11-07T07:59:47.148070+00:00",
+  "dispatched_at": "2026-11-07T17:05:50.555249+00:00",
   "attempt": 1,
-  "updated_at": "2026-11-07T08:46:06.334051+00:00",
+  "updated_at": "2026-11-07T17:05:50.555266+00:00",
   "owner": "42353553355:1",
   "previous_owner": null,
   "previous_status": "DISPATCHED",
