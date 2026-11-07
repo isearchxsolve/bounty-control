@@ -2,7 +2,7 @@
   "task_id": "4bea6822cb2ae0a1724df2cad8948f0c",
   "repo": "Expensify/App",
   "issue_number": 105767,
-  "status": "CLAIMED",
+  "status": "FAILED_DELIVERABLE_MISSING",
   "dispatch_id": "da2b0a53b9b64fa3bc369e00c45879c8",
   "admission": {
     "funding": {
@@ -57,7 +57,7 @@
   ],
   "dispatched_at": "2026-11-07T07:33:44.840974+00:00",
   "attempt": 1,
-  "updated_at": "2026-11-07T07:34:09.581614+00:00",
+  "updated_at": "2026-11-07T07:51:22.747615+00:00",
   "owner": "42351796195:1",
   "previous_owner": null,
   "previous_status": "DISPATCHED",
@@ -65,5 +65,24 @@
   "harness_sha": "a6cc904c9ea00be1b73aa81b123e4a5790e5d336",
   "claimed_at": "2026-11-07T07:34:09.581550+00:00",
   "lease_expires_at": "2026-11-07T11:39:09.581565+00:00",
-  "preparation_budget_seconds": 14400
+  "preparation_budget_seconds": 14400,
+  "kind": "deliverable_invalid",
+  "retryable": true,
+  "diagnostic": "Cline deliverable invalid at /tmp/fleet-artifacts/delivery-supervisor/187639b917124dbe989fdcf395b7c7cd.preparation.json: Bypassed or synthetic native verification command in phase bootstrap: bash -lc set -euo pipefail; TOOLS=/tmp/bounty-tools; mkdir -p \"$TOOLS\"; if [ \"$(node -v 2>/dev/null || true)\" != \"v26.12.1\" ] && [ ! -x \"$TOOLS/node-v26.12.1-linux-x64/bin/node\" ]; then curl -sSL https://nodejs.org/dist/v26.12.1/node-v26.12.1-linux-x64.tar.xz -o \"$TOOLS/node.tar.xz\"; tar -xf \"$TOOLS/node.tar.xz\" -C \"$TOOLS\"; fi; if [ ! -x \"$TOOLS/bun-linux-x64/bun\" ]; then curl -sSL -o \"$TOOLS/bun.zip\" https://github.com/oven-sh/bun/releases/download/bun-v1.4.4/bun-linux-x64.zip; if command -v unzip >/dev/null 2>&1; then unzip -oq \"$TOOLS/bun.zip\" -d \"$TOOLS\"; else python3 -c \"import zipfile,sys;zipfile.ZipFile(sys.argv[1]).extractall(sys.argv[2])\" \"$TOOLS/bun.zip\" \"$TOOLS\"; fi; chmod +x \"$TOOLS/bun-linux-x64/bun\"; fi",
+  "path": "/tmp/fleet-artifacts/delivery-supervisor/187639b917124dbe989fdcf395b7c7cd.preparation.json",
+  "reason": "Bypassed or synthetic native verification command in phase bootstrap: bash -lc set -euo pipefail; TOOLS=/tmp/bounty-tools; mkdir -p \"$TOOLS\"; if [ \"$(node -v 2>/dev/null || true)\" != \"v26.12.1\" ] && [ ! -x \"$TOOLS/node-v26.12.1-linux-x64/bin/node\" ]; then curl -sSL https://nodejs.org/dist/v26.12.1/node-v26.12.1-linux-x64.tar.xz -o \"$TOOLS/node.tar.xz\"; tar -xf \"$TOOLS/node.tar.xz\" -C \"$TOOLS\"; fi; if [ ! -x \"$TOOLS/bun-linux-x64/bun\" ]; then curl -sSL -o \"$TOOLS/bun.zip\" https://github.com/oven-sh/bun/releases/download/bun-v1.4.4/bun-linux-x64.zip; if command -v unzip >/dev/null 2>&1; then unzip -oq \"$TOOLS/bun.zip\" -d \"$TOOLS\"; else python3 -c \"import zipfile,sys;zipfile.ZipFile(sys.argv[1]).extractall(sys.argv[2])\" \"$TOOLS/bun.zip\" \"$TOOLS\"; fi; chmod +x \"$TOOLS/bun-linux-x64/bun\"; fi",
+  "at": "2026-11-07T07:51:12.841690+00:00",
+  "failures": [
+    {
+      "run_url": "https://github.com/isearchxsolve/bounty-control/actions/runs/42351796195",
+      "status": "FAILED_DELIVERABLE_MISSING",
+      "kind": "deliverable_invalid",
+      "retryable": true,
+      "diagnostic": "Cline deliverable invalid at /tmp/fleet-artifacts/delivery-supervisor/187639b917124dbe989fdcf395b7c7cd.preparation.json: Bypassed or synthetic native verification command in phase bootstrap: bash -lc set -euo pipefail; TOOLS=/tmp/bounty-tools; mkdir -p \"$TOOLS\"; if [ \"$(node -v 2>/dev/null || true)\" != \"v26.12.1\" ] && [ ! -x \"$TOOLS/node-v26.12.1-linux-x64/bin/node\" ]; then curl -sSL https://nodejs.org/dist/v26.12.1/node-v26.12.1-linux-x64.tar.xz -o \"$TOOLS/node.tar.xz\"; tar -xf \"$TOOLS/node.tar.xz\" -C \"$TOOLS\"; fi; if [ ! -x \"$TOOLS/bun-linux-x64/bun\" ]; then curl -sSL -o \"$TOOLS/bun.zip\" https://github.com/oven-sh/bun/releases/download/bun-v1.4.4/bun-linux-x64.zip; if command -v unzip >/dev/null 2>&1; then unzip -oq \"$TOOLS/bun.zip\" -d \"$TOOLS\"; else python3 -c \"import zipfile,sys;zipfile.ZipFile(sys.argv[1]).extractall(sys.argv[2])\" \"$TOOLS/bun.zip\" \"$TOOLS\"; fi; chmod +x \"$TOOLS/bun-linux-x64/bun\"; fi",
+      "path": "/tmp/fleet-artifacts/delivery-supervisor/187639b917124dbe989fdcf395b7c7cd.preparation.json",
+      "reason": "Bypassed or synthetic native verification command in phase bootstrap: bash -lc set -euo pipefail; TOOLS=/tmp/bounty-tools; mkdir -p \"$TOOLS\"; if [ \"$(node -v 2>/dev/null || true)\" != \"v26.12.1\" ] && [ ! -x \"$TOOLS/node-v26.12.1-linux-x64/bin/node\" ]; then curl -sSL https://nodejs.org/dist/v26.12.1/node-v26.12.1-linux-x64.tar.xz -o \"$TOOLS/node.tar.xz\"; tar -xf \"$TOOLS/node.tar.xz\" -C \"$TOOLS\"; fi; if [ ! -x \"$TOOLS/bun-linux-x64/bun\" ]; then curl -sSL -o \"$TOOLS/bun.zip\" https://github.com/oven-sh/bun/releases/download/bun-v1.4.4/bun-linux-x64.zip; if command -v unzip >/dev/null 2>&1; then unzip -oq \"$TOOLS/bun.zip\" -d \"$TOOLS\"; else python3 -c \"import zipfile,sys;zipfile.ZipFile(sys.argv[1]).extractall(sys.argv[2])\" \"$TOOLS/bun.zip\" \"$TOOLS\"; fi; chmod +x \"$TOOLS/bun-linux-x64/bun\"; fi",
+      "at": "2026-11-07T07:51:12.841690+00:00"
+    }
+  ],
+  "finished_at": "2026-11-07T07:51:22.204551+00:00"
 }
