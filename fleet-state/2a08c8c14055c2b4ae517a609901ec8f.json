@@ -1,0 +1,61 @@
+{
+  "task_id": "2a08c8c14055c2b4ae517a609901ec8f",
+  "repo": "Expensify/App",
+  "issue_number": 104504,
+  "status": "DISPATCHING",
+  "dispatch_id": "b9a630cebccf43048cfe58c3e819bc9b",
+  "admission": {
+    "funding": {
+      "amount": "250",
+      "currency": "USD",
+      "payer": "mountiny",
+      "source_url": "https://github.com/Expensify/App/issues/104504",
+      "usd_value": "250",
+      "quote": {
+        "basis": "USD face value",
+        "usd_rate": "1"
+      },
+      "raw": "[$250] [Sentry: APP-JVF] Web: useSidebarOrderedReports setState loop, \"Maximum update depth exceeded\"",
+      "source_author_association": "CONTRIBUTOR",
+      "source_author_login": "mountiny",
+      "escrow": true
+    },
+    "agent_reason": "mountiny (CONTRIBUTOR) commits $250 USD in the issue title for [$250] [Sentry: APP-JVF] Web: useSidebarOrderedReports setState loop, \"Maximum update depth exceeded\"; the repository's own product code at src/hooks/useSidebarOrderedReports.tsx implements the affected surface, so the work is a bounded code change here.",
+    "scope_quote": "The effect at `useSidebarOrderedReports.tsx:328` copies `reportsToDisplayInLHN` into state each time the memo returns a new object. The memo at line 229 leaves `currentReportsToDisplay` out of its dependencies on purpose, to avoid a loop. So a loop here means that one of the memo's other dependencies gets a new identity on every render on `/search`.",
+    "code_evidence": {
+      "is_product_code": true,
+      "path": "src/hooks/useSidebarOrderedReports.tsx",
+      "quote": "import {setInboxTab} from '@libs/actions/User';",
+      "sha": "7c1a4aff3e85bd1c04e87dd584717776a125a039"
+    },
+    "source_issue": "https://github.com/Expensify/App/issues/104504",
+    "funding_status": "PRICED_OFFER",
+    "lane": "programs",
+    "commercial_scope": "linked-discussions",
+    "commercial_review": {
+      "decision": "proceed",
+      "source_revision": "fa3fdc0bbf644343a7032a68f995c4c35623bee61601cd9ac85a7975f19f9283",
+      "reason": "Live read of the issue, its comments, linked pull requests, README/CONTRIBUTING and licence: the payment commitment is written by the issue author (repository authority) in the issue itself, no withdrawal, no unpaid-work allegation and no conflicting terms.",
+      "evidence": [
+        {
+          "source_url": "https://github.com/Expensify/App/issues/104504",
+          "quote": "The effect at `useSidebarOrderedReports.tsx:328` copies `reportsToDisplayInLHN` into state each time the memo returns a new object. The memo at line 229 leaves `currentReportsToDisplay` out of its dependencies on purpose, to avoid a loop. So a loop here means that one of the memo's other dependencies gets a new identity on every render on `/search`."
+        }
+      ]
+    },
+    "task_id": "2a08c8c14055c2b4ae517a609901ec8f",
+    "source_revision": "1f1a30b5f0370512dc23f56cf319510a104aad1c773d6e61672e3508e5de05c0"
+  },
+  "dispatch_attempt": 1,
+  "sovereign_admission": true,
+  "competition": {
+    "blocking": false,
+    "nominal": []
+  },
+  "lanes": [
+    "programs"
+  ],
+  "dispatched_at": "2026-11-07T07:31:17.340757+00:00",
+  "attempt": 0,
+  "updated_at": "2026-11-07T07:31:17.340776+00:00"
+}
