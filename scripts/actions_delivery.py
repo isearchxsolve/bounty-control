@@ -861,6 +861,7 @@ def engineer():
         )
         if (artifacts() / "recovery.json").exists():
             body += "\nRead retained previous-run edits and recovery evidence at " + str(artifacts() / "recovery.json")
+        review_feedback = None
         if task.get("owned_pr"):
             body += "\nRepair this same owned PR: " + task["owned_pr"] + "\n" + json.dumps(task["prior_failures"])
             # The resume loop used to feed back only our own failures, so a maintainer's
