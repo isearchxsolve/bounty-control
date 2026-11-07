@@ -2,7 +2,7 @@
   "task_id": "1ba8c032d0dd651667166cdb60b18517",
   "repo": "Expensify/App",
   "issue_number": 106240,
-  "status": "DISPATCHED",
+  "status": "REJECTED_COMMERCIAL_REVIEW",
   "dispatch_id": "1ac91aeb227c4835a9e3f0f4f16ed755",
   "admission": {
     "funding": {
@@ -57,7 +57,7 @@
   ],
   "dispatched_at": "2026-11-07T14:53:40.071401+00:00",
   "attempt": 1,
-  "updated_at": "2026-11-07T14:53:41.963472+00:00",
+  "updated_at": "2026-11-07T14:53:55.804385+00:00",
   "owner": "42371663911:1",
   "previous_owner": null,
   "previous_status": "DISPATCHED",
@@ -66,10 +66,10 @@
   "claimed_at": "2026-11-07T12:15:44.365419+00:00",
   "lease_expires_at": "2026-11-07T16:20:44.365433+00:00",
   "preparation_budget_seconds": 14400,
-  "kind": "engineer",
-  "retryable": true,
-  "diagnostic": "Cline preparation failed: error: The operation timed out. |",
-  "at": "2026-11-07T13:13:22.473582+00:00",
+  "kind": "commercial_review",
+  "retryable": false,
+  "diagnostic": "COMMERCIAL_REVIEW_STALE: source-backed commercial review required; retain existing work",
+  "at": "2026-11-07T14:53:55.150316+00:00",
   "failures": [
     {
       "run_url": "https://github.com/isearchxsolve/bounty-control/actions/runs/42371663911",
@@ -80,5 +80,9 @@
       "at": "2026-11-07T13:13:22.473582+00:00"
     }
   ],
-  "finished_at": "2026-11-07T13:13:31.360435+00:00"
+  "finished_at": "2026-11-07T13:13:31.360435+00:00",
+  "review_required": true,
+  "resume_phase": "claim",
+  "reason": "COMMERCIAL_REVIEW_STALE",
+  "detail": []
 }
