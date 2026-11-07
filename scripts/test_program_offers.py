@@ -182,6 +182,15 @@ class FundingProgramTests(unittest.TestCase):
         self.assertIsNone(verdict)
         self.assertEqual(reason, "INCOMPLETE_COMMENTS")
 
+    def test_documented_funding_program_passes_escrow_only_gate(self):
+        import bounty_admission
+        from unittest import mock
+        with mock.patch.object(bounty_admission, "escrow_only_enabled", return_value=True):
+            verdict, reason = admit(context(HARD_TITLE, HARD_BODY, [attestation()]))
+            self.assertEqual(reason, "")
+            self.assertIsNotNone(verdict)
+            self.assertTrue(verdict["funding"]["escrow"])
+
     def test_programme_issue_still_requires_an_open_issue(self):
         ctx = context(HARD_TITLE, HARD_BODY, [attestation()])
         ctx["issue"]["state"] = "closed"

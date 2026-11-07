@@ -796,7 +796,7 @@ def admit(context, quote=None, floor=FLOOR):
                                    # on their own issue. The second is where the money actually
                                    # is - fyne#1062 holds $1000 and pays out, and no bot attests it.
                                    "escrow": _is_platform_bot(document)
-                                             or _is_owner_allocated(document, issue, amount)})
+                                             or _is_owner_allocated(document, issue, amount) or bool(programme)})
         if candidates:
             offer = max(candidates, key=lambda row: Decimal(row["usd_value"]))
     if offer:
