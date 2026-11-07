@@ -430,10 +430,12 @@ def funding_program(context):
     artifact on this very issue. A missing attestation returns ``None`` and the ordinary
     issuer check applies unchanged.
     """
-    entry = FUNDING_PROGRAMS.get((context["repository"].get("full_name") or "").lower())
+    repo_info = context.get("repository") or {}
+    entry = FUNDING_PROGRAMS.get((repo_info.get("full_name") or "").lower())
     if not entry:
         return None
-    if not re.search(entry["title_marker"], context["issue"].get("title") or ""):
+    issue_info = context.get("issue") or {}
+    if not re.search(entry["title_marker"], issue_info.get("title") or ""):
         return None
     login = entry["attestation_login"].lower()
     pattern = re.compile(entry["attestation_pattern"], re.I)

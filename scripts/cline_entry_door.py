@@ -673,6 +673,7 @@ def model_admission_refusal(row, context_builder, source_reader=None):
         if not str(row.get('admission_reason') or '').strip():
             return 'AGENT_DECISION_MISSING', None, None
         owner_request = row.get('is_founder_wound') is True and not quote_states_an_amount(quote)
+        amount = None
         if owner_request:
             if (context['issue'].get('author_association') != 'OWNER'
                     or source is not context['issue']):
