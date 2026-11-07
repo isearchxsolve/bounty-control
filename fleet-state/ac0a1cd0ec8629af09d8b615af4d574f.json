@@ -2,7 +2,7 @@
   "task_id": "ac0a1cd0ec8629af09d8b615af4d574f",
   "repo": "Expensify/App",
   "issue_number": 102742,
-  "status": "CLAIMED",
+  "status": "FAILED_ENGINEER",
   "dispatch_id": "4491d858068d42ee9e7f566e8ad789d1",
   "admission": {
     "funding": {
@@ -57,7 +57,7 @@
   ],
   "dispatched_at": "2026-11-07T07:32:32.261516+00:00",
   "attempt": 1,
-  "updated_at": "2026-11-07T07:32:56.016004+00:00",
+  "updated_at": "2026-11-07T07:54:16.182982+00:00",
   "owner": "42351716892:1",
   "previous_owner": null,
   "previous_status": "DISPATCHED",
@@ -65,5 +65,20 @@
   "harness_sha": "a6cc904c9ea00be1b73aa81b123e4a5790e5d336",
   "claimed_at": "2026-11-07T07:32:56.015944+00:00",
   "lease_expires_at": "2026-11-07T11:37:56.015958+00:00",
-  "preparation_budget_seconds": 14400
+  "preparation_budget_seconds": 14400,
+  "kind": "engineer",
+  "retryable": true,
+  "diagnostic": "cannot access local variable 'review_feedback' where it is not associated with a value",
+  "at": "2026-11-07T07:54:03.375343+00:00",
+  "failures": [
+    {
+      "run_url": "https://github.com/isearchxsolve/bounty-control/actions/runs/42351716892",
+      "status": "FAILED_ENGINEER",
+      "kind": "engineer",
+      "retryable": true,
+      "diagnostic": "cannot access local variable 'review_feedback' where it is not associated with a value",
+      "at": "2026-11-07T07:54:03.375343+00:00"
+    }
+  ],
+  "finished_at": "2026-11-07T07:54:15.800950+00:00"
 }
