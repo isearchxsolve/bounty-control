@@ -2,7 +2,7 @@
   "task_id": "c1806b523a219e0accec69c350bbf74f",
   "repo": "Expensify/App",
   "issue_number": 106242,
-  "status": "CLAIMED",
+  "status": "FAILED_DELIVERABLE_MISSING",
   "dispatch_id": "4eff3ba316cb4ded85382270f0946832",
   "admission": {
     "funding": {
@@ -57,7 +57,7 @@
   ],
   "dispatched_at": "2026-11-07T12:15:46.119539+00:00",
   "attempt": 1,
-  "updated_at": "2026-11-07T12:16:10.440059+00:00",
+  "updated_at": "2026-11-07T13:29:59.040281+00:00",
   "owner": "42371691095:1",
   "previous_owner": null,
   "previous_status": "DISPATCHED",
@@ -65,5 +65,24 @@
   "harness_sha": "6685c1e7083725541faff7cd41767626e3a3fe1b",
   "claimed_at": "2026-11-07T12:16:10.439994+00:00",
   "lease_expires_at": "2026-11-07T16:21:10.440009+00:00",
-  "preparation_budget_seconds": 14400
+  "preparation_budget_seconds": 14400,
+  "kind": "deliverable_invalid",
+  "retryable": true,
+  "diagnostic": "Cline deliverable invalid at /tmp/fleet-artifacts/delivery-supervisor/4614485fcad740ad950991faa99f6696.preparation.json: Cline delivery repair failed: \u001b[31merror:\u001b[0m The operation timed out.\n",
+  "path": "/tmp/fleet-artifacts/delivery-supervisor/4614485fcad740ad950991faa99f6696.preparation.json",
+  "reason": "Cline delivery repair failed: \u001b[31merror:\u001b[0m The operation timed out.\n",
+  "at": "2026-11-07T13:29:49.313279+00:00",
+  "failures": [
+    {
+      "run_url": "https://github.com/isearchxsolve/bounty-control/actions/runs/42371691095",
+      "status": "FAILED_DELIVERABLE_MISSING",
+      "kind": "deliverable_invalid",
+      "retryable": true,
+      "diagnostic": "Cline deliverable invalid at /tmp/fleet-artifacts/delivery-supervisor/4614485fcad740ad950991faa99f6696.preparation.json: Cline delivery repair failed: \u001b[31merror:\u001b[0m The operation timed out.\n",
+      "path": "/tmp/fleet-artifacts/delivery-supervisor/4614485fcad740ad950991faa99f6696.preparation.json",
+      "reason": "Cline delivery repair failed: \u001b[31merror:\u001b[0m The operation timed out.\n",
+      "at": "2026-11-07T13:29:49.313279+00:00"
+    }
+  ],
+  "finished_at": "2026-11-07T13:29:58.447650+00:00"
 }
