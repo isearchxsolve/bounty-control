@@ -1,0 +1,61 @@
+{
+  "task_id": "fcf3a1fea596cd9211279cb2bb164380",
+  "repo": "Expensify/App",
+  "issue_number": 105907,
+  "status": "DISPATCHING",
+  "dispatch_id": "85e0726bb19b49f69155ceb41769e7a7",
+  "admission": {
+    "funding": {
+      "amount": "175",
+      "currency": "USD",
+      "payer": "melvin-bot[bot]",
+      "source_url": "https://github.com/Expensify/App/issues/105907",
+      "usd_value": "175",
+      "quote": {
+        "basis": "USD face value",
+        "usd_rate": "1"
+      },
+      "raw": "[$175] Card statements displays the same cards and transactions regardless of the selected CSV feed.",
+      "source_author_association": "NONE",
+      "source_author_login": "m-natarajan",
+      "escrow": true
+    },
+    "agent_reason": "melvin-bot[bot] Upwork-attested $175 Expensify bounty; bounded product bug in the NewDot app.",
+    "scope_quote": "The results should display only the cards and transactions associated with the selected feed and posted period.",
+    "code_evidence": {
+      "is_product_code": true,
+      "path": "src/libs/ExpensifyCardStatementUtils.ts",
+      "quote": "import type {LocalizedTranslate} from '@components/LocaleContextProvid",
+      "sha": "632b878082ec20296f76b9adbfad8a700ed28ee1"
+    },
+    "source_issue": "https://github.com/Expensify/App/issues/105907",
+    "funding_status": "PRICED_OFFER",
+    "lane": "programs",
+    "commercial_scope": "linked-discussions",
+    "commercial_review": {
+      "decision": "proceed",
+      "source_revision": "6993120ec33c931be55150f9555b23b9c825ef87535e3bf1081ce2e017cad6ea",
+      "reason": "Current $175 offer attested by melvin-bot[bot] Upwork job URL; no warning documents in the linked context; escrow-only satisfied via the expensify/app funding program.",
+      "evidence": [
+        {
+          "source_url": "https://github.com/Expensify/App/issues/105907#issuecomment-6631990423",
+          "quote": "Job added to Upwork: https://www.upwork.com/jobs/~022117973447745311673"
+        }
+      ]
+    },
+    "task_id": "fcf3a1fea596cd9211279cb2bb164380",
+    "source_revision": "180d9c74e7be36c207580c9a31b1fb12572e0d5d6de35284092c29cd62a53520"
+  },
+  "dispatch_attempt": 1,
+  "sovereign_admission": true,
+  "competition": {
+    "blocking": false,
+    "nominal": []
+  },
+  "lanes": [
+    "programs"
+  ],
+  "dispatched_at": "2026-11-07T12:14:59.943581+00:00",
+  "attempt": 0,
+  "updated_at": "2026-11-07T12:14:59.943597+00:00"
+}
