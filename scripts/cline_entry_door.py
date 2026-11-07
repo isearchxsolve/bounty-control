@@ -668,7 +668,15 @@ def model_admission_refusal(row, context_builder, source_reader=None):
         quote = row.get('reward_quote') or ''
         if not quote_is_present(quote, text):
             return 'REWARD_QUOTE_NOT_IN_SOURCE', None, None
-        if funding.get('payer') != (source.get('user') or {}).get('login'):
+        from bounty_admission import funding_program
+        programme = funding_program(context)
+        source_login = (source.get('user') or {}).get('login')
+        valid_payers = {source_login}
+        if programme and source is context['issue']:
+            if programme.get('attestation_login'):
+                valid_payers.add(programme['attestation_login'])
+            valid_payers.update(programme.get('automation_logins') or ())
+        if funding.get('payer') not in valid_payers:
             return 'PAYER_SOURCE_MISMATCH', None, None
         if not str(row.get('admission_reason') or '').strip():
             return 'AGENT_DECISION_MISSING', None, None
@@ -1055,7 +1063,7 @@ GATE_CHECKS = [    ("MALFORMED_ROW", "the row is not a complete JSON record with
     ("SCOPE_QUOTE_NOT_IN_SOURCE", "the scope quote is in none of the issue's own documents."),
     ("AGENT_DECISION_MISSING", "admission_reason is empty; say why this is funded, bounded work."),
     ("FUNDING_SOURCE_MISSING", "funding.source_url names no document in this issue or its comments."),
-    ("PAYER_SOURCE_MISMATCH", "funding.payer is not the login that wrote funding.source_url."),
+    ("PAYER_SOURCE_MISMATCH", "funding.payer is not the login that wrote funding.source_url (or the attesting program bot)."),
     ("QUOTED_AMOUNT_MISMATCH", "funding.amount and currency do not appear in the reward quote."),
     ("INCOMPLETE_COMMENTS", "the comment thread could not be read in full, so the offer is unproven."),
     ("FOUNDER_OWNERSHIP_UNVERIFIED", "an unpriced owner request must be the OWNER's own issue, quoted from it."),
@@ -1420,7 +1428,7 @@ Where each of these comes from, because every one is a lookup and not a judgemen
 Every row stands or falls on one question, and it is answered in a single read: did a party that
 can commit the money write a figure on this page. That party is the repository's own OWNER, a
 MEMBER or COLLABORATOR, or a bounty platform bot - algora-pbc, algora-io[bot], polar-sh[bot],
-opire[bot], bountyhub-app, bountyhub-bot. Nobody else's number is money here: a reader, a fan, a
+opire[bot], bountyhub-app, bountyhub-bot, or an attesting program bot (like melvin-bot[bot] for Expensify/App where the amount is in the issue title [$250]/[$175] and payer is melvin-bot[bot]). Nobody else's number is money here: a reader, a fan, a
 copied aggregator blurb or a well-meaning bystander cannot fund this row, however real the figure
 looks. `CURRENT_ISSUER_OFFER_MISSING` is what a row from anyone else is refused by, downstream of
 this door.
@@ -1743,6 +1751,7 @@ def ingest_pre_sweep_leads(output_path: Optional[Path] = None, limit_per_query: 
 
     top_queries = [
         "repo:Expensify/App+label:External+label:Bug+in:title+\"%24250\"+is:issue+is:open",
+        "repo:Expensify/App+label:External+label:Bug+in:title+\"%24175\"+is:issue+is:open",
         "label:bounty+\"%24500\"+is:issue+is:open",
         "label:bounty+\"%24250\"+is:issue+is:open",
         "commenter:algora-pbc+bounty+is:issue+is:open",

@@ -137,6 +137,56 @@ class EvidenceAndHandoffTests(unittest.TestCase):
         self.assertEqual(reason,'PAYER_SOURCE_MISMATCH')
         self.assertIsNone(proof)
 
+    def test_funding_program_melvin_payer_admitted(self):
+        ctx = context()
+        ctx['repo'] = 'Expensify/App'
+        ctx['repository'] = {'full_name': 'Expensify/App', 'default_branch': 'main'}
+        ctx['issue'].update(
+            html_url='https://github.com/Expensify/App/issues/102333',
+            title='[$250] Reports - Back button returns to different position',
+            body='When clicking back button...',
+            user={'login': 'reporter-stranger'},
+            author_association='NONE'
+        )
+        ctx['comments'] = [
+            {
+                'html_url': 'https://github.com/Expensify/App/issues/102333#issuecomment-12345',
+                'user': {'login': 'melvin-bot[bot]'},
+                'author_association': 'CONTRIBUTOR',
+                'body': 'Job added to Upwork: https://www.upwork.com/jobs/~022108002387844305757'
+            }
+        ]
+        candidate = {
+            'repo': 'Expensify/App',
+            'issue': 102333,
+            'reward_quote': '[$250] Reports - Back button returns to different position',
+            'scope_quote': 'When clicking back button...',
+            'admission_reason': 'Expensify bug with Upwork escrow attestation from melvin-bot',
+            'funding': {
+                'amount': '250',
+                'currency': 'USD',
+                'payer': 'melvin-bot[bot]',
+                'source_url': 'https://github.com/Expensify/App/issues/102333'
+            },
+            'code_evidence': {
+                'path': 'src/pages/home/ReportScreen.tsx',
+                'sha': 'b'*40,
+                'quote': 'export default ReportScreen;',
+                'is_product_code': True
+            }
+        }
+        blob = {
+            'type': 'file',
+            'sha': 'b'*40,
+            'encoding': 'base64',
+            'content': base64.b64encode(b'export default ReportScreen;\n').decode()
+        }
+        reason, detail, proof = door.model_admission_refusal(candidate, lambda *a: ctx, source_reader=lambda *a: blob)
+        self.assertIsNone(reason, f"Unexpected refusal: {reason} detail: {detail}")
+        self.assertIsNotNone(proof)
+        self.assertEqual(proof['funding']['payer'], 'melvin-bot[bot]')
+        self.assertTrue(proof['funding']['escrow'])
+
     def test_model_path_preserves_unpriced_owner_incidents_without_inventing_payment(self):
         with patch.dict(os.environ, {"ALLOW_UNPRICED_FOUNDER": "true"}):
             ctx=context()

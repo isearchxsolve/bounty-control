@@ -431,7 +431,8 @@ def funding_program(context):
     issuer check applies unchanged.
     """
     repo_info = context.get("repository") or {}
-    entry = FUNDING_PROGRAMS.get((repo_info.get("full_name") or "").lower())
+    repo_name = repo_info.get("full_name") or context.get("repo") or ""
+    entry = FUNDING_PROGRAMS.get(repo_name.lower())
     if not entry:
         return None
     issue_info = context.get("issue") or {}
