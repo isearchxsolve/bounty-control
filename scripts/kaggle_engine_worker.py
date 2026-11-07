@@ -2480,7 +2480,16 @@ Required scenarios:
 Prior failures from the immediately preceding attempt:
 {failure_context}
 
-Own the delivery of this issue, including any required installation, configuration and repairs. Inspect the existing code and tests before editing. Add companion tests for applicable null, empty, boundary, negative, concurrency and regression cases. Do not weaken or rewrite existing master tests or CI workflows. Use the native package manager, pins and test plan you resolved from the repository. Run the relevant repository tests and linters when practical; every required native check must actually pass before publication. Runtime tools and caches may be provisioned outside the worktree; keep product changes in this isolated checkout. Do not add corporate signatures, credentials, payment details or unrelated changes. Preserve completed work and leave the actual changes for the host's independent verification and publication gates.
+CUSTOMER IS GOD: ZERO MAINTAINER BURDEN & FULL TURNKEY DELIVERY MANDATE.
+The maintainer is the paying customer. They are paying for a complete, production-grade engineering resolution, NOT to become your co-debugger, QA tester, or architectural mentor. Never deliver a partial, superficial, or speculative change that forces the maintainer to hammer their head discovering edge-case regressions, buffer corruptions, or lifecycle flaws.
+
+Own the delivery of this issue in full, including any required installation, configuration and repairs. Inspect the existing code, architecture, and tests before editing:
+1. FULL IMPLEMENTATION: Solve the problem completely across all supported platforms and execution paths. Do not stop at the happy path.
+2. ADVERSARIAL EDGE-CASE & CONCURRENCY VERIFICATION: If your fix introduces or touches asynchronous flows, queues, buffers, shared state, caching, threading, or event lifecycles, you MUST author companion tests that aggressively attempt to break the fix (e.g. concurrent rapid updates, buffer mutation mid-flight, boundary inputs, nulls, out-of-order packets, resource cleanup). Never assume the repository's baseline test suite is sufficient if it only exercises synchronous single-threaded execution.
+3. ZERO REGRESSIONS: Do not weaken or rewrite existing master tests or CI workflows. Every native build, test, lint, and format check must pass cleanly.
+4. TURNKEY PROFESSIONALISM: The deliverable must be clean, defensive, and immediately mergeable without requiring a single corrective edit from the maintainer.
+
+Runtime tools and caches may be provisioned outside the worktree; keep product changes in this isolated checkout. Do not add corporate signatures, credentials, payment details or unrelated changes. Preserve completed work and leave the actual changes for the host's independent verification and publication gates.
 
 Use the runner's available RAM/CPU deliberately. Inspect scripts for internal parallel fan-out before full-repository checks, run heavyweight builds/typechecks/tests serially, and poll any live command to completion before starting another. Preserve the full native check set with supported concurrency limits or serial repository-defined component commands; never omit targets or relax warnings/tests to fit memory. If resource pressure interrupts a command, report the exact command and observed evidence, then repair the execution plan rather than treating it as a product defect."""
 
