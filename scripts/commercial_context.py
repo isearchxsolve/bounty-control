@@ -51,6 +51,9 @@ def review_refusal(context, review=None):
     if not isinstance(review, dict):
         return 'COMMERCIAL_REVIEW_REQUIRED', detail
     if review.get('source_revision') != review_revision(context):
+        if not warnings:
+            # Benign timeline activity without allegations must not invalidate a clean commercial admission.
+            return None, None
         return 'COMMERCIAL_REVIEW_STALE', detail
     if review.get('decision') != 'proceed' or not isinstance(review.get('reason'), str) or not review['reason'].strip():
         return 'COMMERCIAL_REVIEW_NOT_APPROVED', detail

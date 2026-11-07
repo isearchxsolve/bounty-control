@@ -1249,6 +1249,9 @@ somewhere for you to find.
 
 {DOMAIN.strip()}
 
+### Velocity & Liquidity Principle: Prioritize High-Velocity Commercial Targets
+Prioritize repositories owned by established commercial organizations and venture-backed entities with active automated bounty programs (e.g. Expensify, Algora-funded startups, Polar, Opire). These organizations maintain full-time paid engineering staff, contractually enforced 24-48h review SLAs, and automated escrow rails. Favor them over hobbyist, solo-volunteer, or low-cadence repositories where commits and maintainer reviews take weeks.
+
 There are two streams of genuine work:
 1. Funded Bounties: An open issue with committed monetary payment figures stated in the issue text or comments.
 2. Wounded Founders: An open issue created by the repository OWNER (author_association: OWNER) announcing production downtime, outages, critical regressions, or backend hardening.
@@ -1736,7 +1739,7 @@ def ingest_founder_watch_leads(state_path: Optional[str] = None) -> List[dict]:
     return leads
 
 
-def ingest_pre_sweep_leads(output_path: Optional[Path] = None, limit_per_query: int = 5) -> List[dict]:
+def ingest_pre_sweep_leads(output_path: Optional[Path] = None, limit_per_query: int = 10) -> List[dict]:
     """Pre-sweep the highest-probability platform-escrow queries into qualified search leads.
 
     Baba's Law 85: Code moves the bytes and checks facts, model reads and interprets.
@@ -1750,13 +1753,16 @@ def ingest_pre_sweep_leads(output_path: Optional[Path] = None, limit_per_query: 
         return []
 
     top_queries = [
+        "repo:Expensify/App+label:External+label:Bug+in:title+\"%241000\"+is:issue+is:open",
+        "repo:Expensify/App+label:External+label:Bug+in:title+\"%24500\"+is:issue+is:open",
         "repo:Expensify/App+label:External+label:Bug+in:title+\"%24250\"+is:issue+is:open",
         "repo:Expensify/App+label:External+label:Bug+in:title+\"%24175\"+is:issue+is:open",
+        "commenter:algora-pbc+bounty+is:issue+is:open",
+        "commenter:polar-sh+is:issue+is:open",
+        "commenter:opire+bounty+is:issue+is:open",
+        "commenter:bountyhub-bot+is:issue+is:open",
         "label:bounty+\"%24500\"+is:issue+is:open",
         "label:bounty+\"%24250\"+is:issue+is:open",
-        "commenter:algora-pbc+bounty+is:issue+is:open",
-        "commenter:bountyhub-bot+is:issue+is:open",
-        "commenter:polar-sh+is:issue+is:open",
     ]
     leads = []
     seen = set()
