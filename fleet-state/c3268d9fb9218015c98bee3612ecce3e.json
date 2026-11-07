@@ -2,8 +2,8 @@
   "task_id": "c3268d9fb9218015c98bee3612ecce3e",
   "repo": "Expensify/App",
   "issue_number": 104951,
-  "status": "FAILED_ENGINEER",
-  "dispatch_id": "7f876eb79c7e41fc8624ad8dc9543bf7",
+  "status": "DISPATCHING",
+  "dispatch_id": "8fd62ed1bd494458bd3c41a7b97d75c6",
   "admission": {
     "funding": {
       "amount": "250",
@@ -20,13 +20,13 @@
       "source_author_login": "applause-bot[bot]",
       "escrow": true
     },
-    "agent_reason": "applause-bot[bot] (NONE) commits $250 USD in the issue title for [$250] [Exploratory] Web-Workspace-The newly created workspace is obscured by another workspace.; the repository's own product code at src/App.tsx implements the affected surface, so the work is a bounded code change here.",
-    "scope_quote": "After step 6, the user observes that the row for the newly created workspace in the list is partially obscured by the workspace below it. If another workspace is created, the first workspace's row becomes completely obscured.",
+    "agent_reason": "Expensify/App's documented US$250 bounty programme (a [$N] title funded through the Upwork job that melvin-bot[bot] attests on the issue) covers this open bug in src/components/Table/TableBody.tsx.",
+    "scope_quote": "After step 6, all workspaces in the list should be displayed fully and clearly.",
     "code_evidence": {
       "is_product_code": true,
-      "path": "src/App.tsx",
-      "quote": "import {PortalProvider} from '@gorhom/portal';",
-      "sha": "df2eafdb9c98819ec84bf52cc2b3577d81306d17"
+      "path": "src/components/Table/TableBody.tsx",
+      "quote": "import ScrollView from '@components/ScrollView';",
+      "sha": "11228b302e0b323fd0aa72c1e4ed8a04cb30fe18"
     },
     "source_issue": "https://github.com/Expensify/App/issues/104951",
     "funding_status": "PRICED_OFFER",
@@ -34,19 +34,19 @@
     "commercial_scope": "linked-discussions",
     "commercial_review": {
       "decision": "proceed",
-      "source_revision": "173958e1c153ebdae7ba47f732358fc3a662fb00b78fd07e565c65a7c98dead3",
-      "reason": "Live read of the issue, its comments, linked pull requests, README/CONTRIBUTING and licence: the payment commitment is written by the issue author (repository authority) in the issue itself, no withdrawal, no unpaid-work allegation and no conflicting terms.",
+      "source_revision": "a7a0acc48f09f1fdb667ba1ac9db2116cf05fec17255c0ede105c347dfb21984",
+      "reason": "Expensify pays its [$N] Search/App bugs through a documented Upwork job programme; melvin-bot[bot] published the Upwork attestation on this issue and the repository merges constantly, so the offer is current, authority is the repository's own programme automation, the scope is a bounded source-level fix and no unpaid-work allegation or withdrawal appears in the collected sources.",
       "evidence": [
         {
-          "source_url": "https://github.com/Expensify/App/issues/104951",
-          "quote": "After step 6, the user observes that the row for the newly created workspace in the list is partially obscured by the workspace below it. If another workspace is created, the first workspace's row becomes completely obscured."
+          "source_url": "https://github.com/Expensify/App/issues/104951#issuecomment-6592126579",
+          "quote": "Job added to Upwork: https://www.upwork.com/jobs/~022117414243327436901"
         }
       ]
     },
     "task_id": "c3268d9fb9218015c98bee3612ecce3e",
     "source_revision": "f7c9bd34dfe31d7f4998422330f4f4c1dd7501965628f071612d99ef0fde95fb"
   },
-  "dispatch_attempt": 1,
+  "dispatch_attempt": 2,
   "sovereign_admission": true,
   "competition": {
     "blocking": false,
@@ -55,9 +55,9 @@
   "lanes": [
     "programs"
   ],
-  "dispatched_at": "2026-11-07T07:30:54.074604+00:00",
+  "dispatched_at": "2026-11-07T08:27:15.664852+00:00",
   "attempt": 1,
-  "updated_at": "2026-11-07T07:51:45.192728+00:00",
+  "updated_at": "2026-11-07T08:27:15.664871+00:00",
   "owner": "42351597977:1",
   "previous_owner": null,
   "previous_status": "DISPATCHED",
