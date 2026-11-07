@@ -1,0 +1,61 @@
+{
+  "task_id": "5bda0ca3998ec0be774a1919b047f2d4",
+  "repo": "Expensify/App",
+  "issue_number": 105908,
+  "status": "DISPATCHING",
+  "dispatch_id": "35b13c7e92dc4bd99c9ae2a6ad7e627c",
+  "admission": {
+    "funding": {
+      "amount": "175",
+      "currency": "USD",
+      "payer": "melvin-bot[bot]",
+      "source_url": "https://github.com/Expensify/App/issues/105908",
+      "usd_value": "175",
+      "quote": {
+        "basis": "USD face value",
+        "usd_rate": "1"
+      },
+      "raw": "[$175] Invoices - Internal Bill created from a submitted Invoice can't find the domain primary contact's \"Submits To\" and routes to the primary contact for approval first",
+      "source_author_association": "NONE",
+      "source_author_login": "m-natarajan",
+      "escrow": true
+    },
+    "agent_reason": "melvin-bot[bot] Upwork-attested $175 Expensify bounty; bounded product bug in the NewDot app.",
+    "scope_quote": "The internal Bill goes straight into the approval process starting at the primary contact's",
+    "code_evidence": {
+      "is_product_code": true,
+      "path": "src/components/MoneyRequestConfirmationList/variants/InvoiceConfirmationList.tsx",
+      "quote": "import ConfirmationListLayout from '@components/MoneyRequestConfirmationList/Con",
+      "sha": "9aa59ddc3e88c752644b33a109fd6d4adc78fef2"
+    },
+    "source_issue": "https://github.com/Expensify/App/issues/105908",
+    "funding_status": "PRICED_OFFER",
+    "lane": "programs",
+    "commercial_scope": "linked-discussions",
+    "commercial_review": {
+      "decision": "proceed",
+      "source_revision": "42fb80d8e08530a893bd0ea5769e7592d6f3e3e881027fa3c3cfb1cf825320a4",
+      "reason": "Current $175 offer attested by melvin-bot[bot] Upwork job URL; no warning documents in the linked context; escrow-only satisfied via the expensify/app funding program.",
+      "evidence": [
+        {
+          "source_url": "https://github.com/Expensify/App/issues/105908#issuecomment-6632433696",
+          "quote": "Job added to Upwork: https://www.upwork.com/jobs/~022117978554261919880"
+        }
+      ]
+    },
+    "task_id": "5bda0ca3998ec0be774a1919b047f2d4",
+    "source_revision": "4aae3160aa04f3fbfe63777d468455791603a09347c7127f77952db3e83d5c24"
+  },
+  "dispatch_attempt": 1,
+  "sovereign_admission": true,
+  "competition": {
+    "blocking": false,
+    "nominal": []
+  },
+  "lanes": [
+    "programs"
+  ],
+  "dispatched_at": "2026-11-07T12:08:00.570648+00:00",
+  "attempt": 0,
+  "updated_at": "2026-11-07T12:08:00.570666+00:00"
+}
