@@ -2,7 +2,7 @@
   "task_id": "9bc47d3a1a760487ab8b4c1928a1dc09",
   "repo": "Expensify/App",
   "issue_number": 105972,
-  "status": "DISPATCHED",
+  "status": "CLAIMED",
   "dispatch_id": "9695cfbdab274e87b7552a598054456b",
   "admission": {
     "funding": {
@@ -56,6 +56,14 @@
     "programs"
   ],
   "dispatched_at": "2026-11-07T12:07:39.029689+00:00",
-  "attempt": 0,
-  "updated_at": "2026-11-07T12:07:40.982714+00:00"
+  "attempt": 1,
+  "updated_at": "2026-11-07T12:08:01.275305+00:00",
+  "owner": "42371094915:1",
+  "previous_owner": null,
+  "previous_status": "DISPATCHED",
+  "run_url": "https://github.com/isearchxsolve/bounty-control/actions/runs/42371094915",
+  "harness_sha": "6685c1e7083725541faff7cd41767626e3a3fe1b",
+  "claimed_at": "2026-11-07T12:08:01.275232+00:00",
+  "lease_expires_at": "2026-11-07T16:13:01.275250+00:00",
+  "preparation_budget_seconds": 14400
 }
