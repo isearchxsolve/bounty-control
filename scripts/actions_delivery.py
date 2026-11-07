@@ -1419,9 +1419,14 @@ def publish():
             if http_status(exc) != 404:
                 raise
             fork = api.api(f"repos/{repo}/forks", "POST", {"default_branch_only": True})
-        if (fork.get("parent") or {}).get("full_name", "").lower() != repo.lower():
+        def is_target_fork(f: dict) -> bool:
+            parent_full = (f.get("parent") or {}).get("full_name", "").lower()
+            source_full = (f.get("source") or {}).get("full_name", "").lower()
+            return repo.lower() in (parent_full, source_full)
+
+        if not is_target_fork(fork):
             fork = api.api(f"repos/{account}/{name}")
-            if (fork.get("parent") or {}).get("full_name", "").lower() != repo.lower():
+            if not is_target_fork(fork):
                 raise ValueError("Fork parent mismatch")
     branch = state.get("branch") or f"fix/bounty-{number}-{identity[:6]}-{state['attempt']}"
     prior_head = state.get("head_sha")

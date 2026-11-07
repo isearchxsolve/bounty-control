@@ -81,6 +81,11 @@ class PublicationTargetTests(unittest.TestCase):
         self.assertIn("if not is_self_owned(account, repo):", source)
         self.assertIn('raise ValueError("Fork parent mismatch")', source)
 
+    def test_fork_source_matching_upstream_is_accepted(self):
+        source = (HERE / "actions_delivery.py").read_text(encoding="utf-8-sig")
+        self.assertIn("source_full = (f.get(\"source\") or {}).get(\"full_name\", \"\").lower()", source)
+        self.assertIn("repo.lower() in (parent_full, source_full)", source)
+
 
 class ReportPathWiringTests(unittest.TestCase):
     """The adapter must read the path the worker actually used.
