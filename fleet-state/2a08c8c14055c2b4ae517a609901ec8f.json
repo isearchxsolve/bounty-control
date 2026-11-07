@@ -2,8 +2,8 @@
   "task_id": "2a08c8c14055c2b4ae517a609901ec8f",
   "repo": "Expensify/App",
   "issue_number": 104504,
-  "status": "FAILED_ENGINEER",
-  "dispatch_id": "b9a630cebccf43048cfe58c3e819bc9b",
+  "status": "DISPATCHING",
+  "dispatch_id": "3ef3a402a968488cb49d99a026ec6da9",
   "admission": {
     "funding": {
       "amount": "250",
@@ -46,7 +46,7 @@
     "task_id": "2a08c8c14055c2b4ae517a609901ec8f",
     "source_revision": "1f1a30b5f0370512dc23f56cf319510a104aad1c773d6e61672e3508e5de05c0"
   },
-  "dispatch_attempt": 1,
+  "dispatch_attempt": 2,
   "sovereign_admission": true,
   "competition": {
     "blocking": false,
@@ -55,9 +55,9 @@
   "lanes": [
     "programs"
   ],
-  "dispatched_at": "2026-11-07T07:31:17.340757+00:00",
+  "dispatched_at": "2026-11-07T08:18:39.085628+00:00",
   "attempt": 1,
-  "updated_at": "2026-11-07T07:52:29.075256+00:00",
+  "updated_at": "2026-11-07T08:18:39.085650+00:00",
   "owner": "42351625233:1",
   "previous_owner": null,
   "previous_status": "DISPATCHED",
