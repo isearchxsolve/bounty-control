@@ -2,7 +2,7 @@
   "task_id": "68f4a164382943235669f0e193847f5a",
   "repo": "Expensify/App",
   "issue_number": 106032,
-  "status": "CLAIMED",
+  "status": "FAILED_ENGINEER",
   "dispatch_id": "0afe15ec48284ad1814e8089508e7c35",
   "admission": {
     "funding": {
@@ -57,7 +57,7 @@
   ],
   "dispatched_at": "2026-11-07T12:14:21.845561+00:00",
   "attempt": 1,
-  "updated_at": "2026-11-07T12:14:42.842395+00:00",
+  "updated_at": "2026-11-07T12:39:57.926492+00:00",
   "owner": "42371586222:1",
   "previous_owner": null,
   "previous_status": "DISPATCHED",
@@ -65,5 +65,20 @@
   "harness_sha": "6685c1e7083725541faff7cd41767626e3a3fe1b",
   "claimed_at": "2026-11-07T12:14:42.842330+00:00",
   "lease_expires_at": "2026-11-07T16:19:42.842347+00:00",
-  "preparation_budget_seconds": 14400
+  "preparation_budget_seconds": 14400,
+  "kind": "engineer",
+  "retryable": true,
+  "diagnostic": "Cline preparation failed: error: The operation timed out. |",
+  "at": "2026-11-07T12:39:41.848297+00:00",
+  "failures": [
+    {
+      "run_url": "https://github.com/isearchxsolve/bounty-control/actions/runs/42371586222",
+      "status": "FAILED_ENGINEER",
+      "kind": "engineer",
+      "retryable": true,
+      "diagnostic": "Cline preparation failed: error: The operation timed out. |",
+      "at": "2026-11-07T12:39:41.848297+00:00"
+    }
+  ],
+  "finished_at": "2026-11-07T12:39:57.476450+00:00"
 }
