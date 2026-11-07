@@ -2,7 +2,7 @@
   "task_id": "e5972fd1ed5bf199509dea35bb3df21e",
   "repo": "Expensify/App",
   "issue_number": 106126,
-  "status": "DISPATCHING",
+  "status": "DISPATCHED",
   "dispatch_id": "a9d550b875884767922457829316705f",
   "admission": {
     "funding": {
@@ -57,5 +57,5 @@
   ],
   "dispatched_at": "2026-11-07T12:17:54.194133+00:00",
   "attempt": 0,
-  "updated_at": "2026-11-07T12:17:54.194152+00:00"
+  "updated_at": "2026-11-07T12:17:56.094580+00:00"
 }
