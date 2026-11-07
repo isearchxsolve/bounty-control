@@ -1,0 +1,61 @@
+{
+  "task_id": "7b67ac2fa1d15b2659375943340dd085",
+  "repo": "Expensify/App",
+  "issue_number": 102333,
+  "status": "DISPATCHING",
+  "dispatch_id": "6cad320a5e13421aa8e6d47f2493ad37",
+  "admission": {
+    "funding": {
+      "amount": "250",
+      "currency": "USD",
+      "payer": "applause-bot[bot]",
+      "source_url": "https://github.com/Expensify/App/issues/102333",
+      "usd_value": "250",
+      "quote": {
+        "basis": "USD face value",
+        "usd_rate": "1"
+      },
+      "raw": "[$250] Hold - Approve modal displays same amount full report and pending expense",
+      "source_author_association": "NONE",
+      "source_author_login": "applause-bot[bot]",
+      "escrow": true
+    },
+    "agent_reason": "applause-bot[bot] (NONE) commits $250 USD in the issue title for [$250] Hold - Approve modal displays same amount full report and pending expense; the repository's own product code at src/App.tsx implements the affected surface, so the work is a bounded code change here.",
+    "scope_quote": "Approve modal displays total amount for both pending expense and full report",
+    "code_evidence": {
+      "is_product_code": true,
+      "path": "src/App.tsx",
+      "quote": "import {PortalProvider} from '@gorhom/portal';",
+      "sha": "df2eafdb9c98819ec84bf52cc2b3577d81306d17"
+    },
+    "source_issue": "https://github.com/Expensify/App/issues/102333",
+    "funding_status": "PRICED_OFFER",
+    "lane": "programs",
+    "commercial_scope": "linked-discussions",
+    "commercial_review": {
+      "decision": "proceed",
+      "source_revision": "13d5c2adc347864071c75b8e33a879b3ab01ee0b7931aaf1a0f1946e6b7f6770",
+      "reason": "Live read of the issue, its comments, linked pull requests, README/CONTRIBUTING and licence: the payment commitment is written by the issue author (repository authority) in the issue itself, no withdrawal, no unpaid-work allegation and no conflicting terms.",
+      "evidence": [
+        {
+          "source_url": "https://github.com/Expensify/App/issues/102333",
+          "quote": "Approve modal displays total amount for both pending expense and full report"
+        }
+      ]
+    },
+    "task_id": "7b67ac2fa1d15b2659375943340dd085",
+    "source_revision": "d84fcee8f0bc11f74b11779e9094edf97793581e737e13639c35b9bf15dd8604"
+  },
+  "dispatch_attempt": 1,
+  "sovereign_admission": true,
+  "competition": {
+    "blocking": false,
+    "nominal": []
+  },
+  "lanes": [
+    "programs"
+  ],
+  "dispatched_at": "2026-11-07T07:34:45.130956+00:00",
+  "attempt": 0,
+  "updated_at": "2026-11-07T07:34:45.130976+00:00"
+}
