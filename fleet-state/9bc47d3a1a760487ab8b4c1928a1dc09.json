@@ -2,7 +2,7 @@
   "task_id": "9bc47d3a1a760487ab8b4c1928a1dc09",
   "repo": "Expensify/App",
   "issue_number": 105972,
-  "status": "CLAIMED",
+  "status": "FAILED_PUBLISH",
   "dispatch_id": "95bce8d059ee41bd8a7051d17ce07055",
   "admission": {
     "funding": {
@@ -57,7 +57,7 @@
   ],
   "dispatched_at": "2026-11-07T16:39:10.215047+00:00",
   "attempt": 2,
-  "updated_at": "2026-11-07T16:39:31.108658+00:00",
+  "updated_at": "2026-11-07T18:04:42.584938+00:00",
   "owner": "42392370466:1",
   "previous_owner": "42371094915:1",
   "previous_status": "DISPATCHED",
@@ -68,8 +68,8 @@
   "preparation_budget_seconds": 14400,
   "kind": "engineer",
   "retryable": true,
-  "diagnostic": "Cline preparation failed: error: The operation timed out. |",
-  "at": "2026-11-07T12:23:48.687436+00:00",
+  "diagnostic": "Fork parent mismatch",
+  "at": "2026-11-07T18:04:33.219395+00:00",
   "failures": [
     {
       "run_url": "https://github.com/isearchxsolve/bounty-control/actions/runs/42371094915",
@@ -78,7 +78,15 @@
       "retryable": true,
       "diagnostic": "Cline preparation failed: error: The operation timed out. |",
       "at": "2026-11-07T12:23:48.687436+00:00"
+    },
+    {
+      "run_url": "https://github.com/isearchxsolve/bounty-control/actions/runs/42392370466",
+      "status": "FAILED_PUBLISH",
+      "kind": "engineer",
+      "retryable": true,
+      "diagnostic": "Fork parent mismatch",
+      "at": "2026-11-07T18:04:33.219395+00:00"
     }
   ],
-  "finished_at": "2026-11-07T12:24:03.409778+00:00"
+  "finished_at": "2026-11-07T18:04:42.211011+00:00"
 }
