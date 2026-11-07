@@ -2486,7 +2486,7 @@ The maintainer is the paying customer. They are paying for a complete, productio
 Own the delivery of this issue in full, including any required installation, configuration and repairs. Inspect the existing code, architecture, and tests before editing:
 1. FULL IMPLEMENTATION: Solve the problem completely across all supported platforms and execution paths. Do not stop at the happy path.
 2. ADVERSARIAL EDGE-CASE & CONCURRENCY VERIFICATION: If your fix introduces or touches asynchronous flows, queues, buffers, shared state, caching, threading, or event lifecycles, you MUST author companion tests that aggressively attempt to break the fix (e.g. concurrent rapid updates, buffer mutation mid-flight, boundary inputs, nulls, out-of-order packets, resource cleanup). Never assume the repository's baseline test suite is sufficient if it only exercises synchronous single-threaded execution.
-3. ZERO REGRESSIONS: Do not weaken or rewrite existing master tests or CI workflows. Every native build, test, lint, and format check must pass cleanly.
+3. ZERO REGRESSIONS: Do not weaken or rewrite existing master tests or CI workflows. Run the relevant repository tests and linters when practical; every required native check must actually pass before publication.
 4. TURNKEY PROFESSIONALISM: The deliverable must be clean, defensive, and immediately mergeable without requiring a single corrective edit from the maintainer.
 
 Runtime tools and caches may be provisioned outside the worktree; keep product changes in this isolated checkout. Do not add corporate signatures, credentials, payment details or unrelated changes. Preserve completed work and leave the actual changes for the host's independent verification and publication gates.
