@@ -1,9 +1,6 @@
 {
   "priority_discovery": [
-    "repo:Expensify/App label:External label:Bug in:title \"$175\" -label:\"Awaiting Payment\" is:issue is:open",
-    "repo:Expensify/App label:External label:Bug in:title \"$250\" -label:\"Awaiting Payment\" is:issue is:open",
-    "repo:Expensify/App label:External label:Bug in:title \"$500\" -label:\"Awaiting Payment\" is:issue is:open",
-    "repo:Expensify/App label:External label:Bug in:title \"$1000\" -label:\"Awaiting Payment\" is:issue is:open"
+    "repo:Expensify/App label:External label:Bug in:title \"$250\" -label:\"Awaiting Payment\" is:issue is:open"
   ],
   "normal": [
     "commenter:algora-pbc is:issue is:open \"bounty\"",
