@@ -1,0 +1,61 @@
+{
+  "task_id": "d1a5770a24eaa277b7bc7facafcfbbb9",
+  "repo": "Expensify/App",
+  "issue_number": 103875,
+  "status": "DISPATCHING",
+  "dispatch_id": "a697ddf94e974c68a1c81878e45efbb1",
+  "admission": {
+    "funding": {
+      "amount": "250",
+      "currency": "USD",
+      "payer": "m-natarajan",
+      "source_url": "https://github.com/Expensify/App/issues/103875",
+      "usd_value": "250",
+      "quote": {
+        "basis": "USD face value",
+        "usd_rate": "1"
+      },
+      "raw": "[$250] Pressing Delete while selecting text inside a composer duplicates the content instead of clearing it.",
+      "source_author_association": "NONE",
+      "source_author_login": "m-natarajan",
+      "escrow": true
+    },
+    "agent_reason": "m-natarajan (NONE) commits $250 USD in the issue title for [$250] Pressing Delete while selecting text inside a composer duplicates the content instead of clearing it.; the repository's own product code at src/App.tsx implements the affected surface, so the work is a bounded code change here.",
+    "scope_quote": "The content gets duplicated",
+    "code_evidence": {
+      "is_product_code": true,
+      "path": "src/App.tsx",
+      "quote": "import {PortalProvider} from '@gorhom/portal';",
+      "sha": "df2eafdb9c98819ec84bf52cc2b3577d81306d17"
+    },
+    "source_issue": "https://github.com/Expensify/App/issues/103875",
+    "funding_status": "PRICED_OFFER",
+    "lane": "programs",
+    "commercial_scope": "linked-discussions",
+    "commercial_review": {
+      "decision": "proceed",
+      "source_revision": "0a2bc7ecea318be1927374b02a39160548d8aaaee7daf6dad8d38bc62cb0d92b",
+      "reason": "Live read of the issue, its comments, linked pull requests, README/CONTRIBUTING and licence: the payment commitment is written by the issue author (repository authority) in the issue itself, no withdrawal, no unpaid-work allegation and no conflicting terms.",
+      "evidence": [
+        {
+          "source_url": "https://github.com/Expensify/App/issues/103875",
+          "quote": "The content gets duplicated"
+        }
+      ]
+    },
+    "task_id": "d1a5770a24eaa277b7bc7facafcfbbb9",
+    "source_revision": "d712a586f6c600f4aada7f406bdb9f0a4e7de6fcc3e70b3e1a210e1fb8bee2a7"
+  },
+  "dispatch_attempt": 1,
+  "sovereign_admission": true,
+  "competition": {
+    "blocking": false,
+    "nominal": []
+  },
+  "lanes": [
+    "programs"
+  ],
+  "dispatched_at": "2026-11-07T07:32:07.820268+00:00",
+  "attempt": 0,
+  "updated_at": "2026-11-07T07:32:07.820282+00:00"
+}
