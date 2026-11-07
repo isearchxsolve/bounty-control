@@ -2,7 +2,7 @@
   "task_id": "ac0a1cd0ec8629af09d8b615af4d574f",
   "repo": "Expensify/App",
   "issue_number": 102742,
-  "status": "CLAIMED",
+  "status": "FAILED_ENGINEER",
   "dispatch_id": "ce6099a8b62a4065b422c5d67d7b47e2",
   "admission": {
     "funding": {
@@ -61,7 +61,7 @@
   ],
   "dispatched_at": "2026-11-07T10:29:24.826115+00:00",
   "attempt": 3,
-  "updated_at": "2026-11-07T10:29:48.515441+00:00",
+  "updated_at": "2026-11-07T10:44:26.522109+00:00",
   "owner": "42364159570:1",
   "previous_owner": "42355783437:1",
   "previous_status": "DISPATCHED",
@@ -72,8 +72,8 @@
   "preparation_budget_seconds": 14400,
   "kind": "engineer",
   "retryable": true,
-  "diagnostic": "Command '['git', '-c', 'submodule.recurse=false', 'clone', '--no-checkout', 'https://github.com/Expensify/App.git', '/tmp/bounty-workspaces/repos/Expensify--App--102742']' timed out after 180 seconds",
-  "at": "2026-11-07T08:36:31.657199+00:00",
+  "diagnostic": "Cline preparation failed: error: The operation timed out. |",
+  "at": "2026-11-07T10:44:15.533717+00:00",
   "failures": [
     {
       "run_url": "https://github.com/isearchxsolve/bounty-control/actions/runs/42351716892",
@@ -90,9 +90,17 @@
       "retryable": true,
       "diagnostic": "Command '['git', '-c', 'submodule.recurse=false', 'clone', '--no-checkout', 'https://github.com/Expensify/App.git', '/tmp/bounty-workspaces/repos/Expensify--App--102742']' timed out after 180 seconds",
       "at": "2026-11-07T08:36:31.657199+00:00"
+    },
+    {
+      "run_url": "https://github.com/isearchxsolve/bounty-control/actions/runs/42364159570",
+      "status": "FAILED_ENGINEER",
+      "kind": "engineer",
+      "retryable": true,
+      "diagnostic": "Cline preparation failed: error: The operation timed out. |",
+      "at": "2026-11-07T10:44:15.533717+00:00"
     }
   ],
-  "finished_at": "2026-11-07T08:36:47.302620+00:00",
+  "finished_at": "2026-11-07T10:44:26.106387+00:00",
   "review_required": true,
   "resume_phase": "claim",
   "reason": "COMMERCIAL_REVIEW_STALE",
