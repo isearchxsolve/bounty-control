@@ -2,7 +2,7 @@
   "task_id": "8037084ecd130a16a884a6e97d785cd7",
   "repo": "Expensify/App",
   "issue_number": 106153,
-  "status": "CLAIMED",
+  "status": "FAILED_PUBLISH",
   "dispatch_id": "1546e2e482cc4aef98426086b965ad73",
   "admission": {
     "funding": {
@@ -57,7 +57,7 @@
   ],
   "dispatched_at": "2026-11-07T16:38:15.083245+00:00",
   "attempt": 2,
-  "updated_at": "2026-11-07T16:38:35.764197+00:00",
+  "updated_at": "2026-11-07T17:26:43.336076+00:00",
   "owner": "42392295450:1",
   "previous_owner": "42371148977:1",
   "previous_status": "DISPATCHED",
@@ -68,8 +68,8 @@
   "preparation_budget_seconds": 14400,
   "kind": "engineer",
   "retryable": true,
-  "diagnostic": "Bounded Cline delivery repair exhausted: Previous agent process experienced an upstream network timeout. Preserved worktree edits intact; resume engineering and complete the release contract.",
-  "at": "2026-11-07T15:11:06.705481+00:00",
+  "diagnostic": "Fork parent mismatch",
+  "at": "2026-11-07T17:26:33.015419+00:00",
   "failures": [
     {
       "run_url": "https://github.com/isearchxsolve/bounty-control/actions/runs/42371148977",
@@ -78,7 +78,15 @@
       "retryable": true,
       "diagnostic": "Bounded Cline delivery repair exhausted: Previous agent process experienced an upstream network timeout. Preserved worktree edits intact; resume engineering and complete the release contract.",
       "at": "2026-11-07T15:11:06.705481+00:00"
+    },
+    {
+      "run_url": "https://github.com/isearchxsolve/bounty-control/actions/runs/42392295450",
+      "status": "FAILED_PUBLISH",
+      "kind": "engineer",
+      "retryable": true,
+      "diagnostic": "Fork parent mismatch",
+      "at": "2026-11-07T17:26:33.015419+00:00"
     }
   ],
-  "finished_at": "2026-11-07T15:11:19.324037+00:00"
+  "finished_at": "2026-11-07T17:26:42.800317+00:00"
 }
