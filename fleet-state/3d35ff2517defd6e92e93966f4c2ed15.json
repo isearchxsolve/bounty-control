@@ -2,8 +2,8 @@
   "task_id": "3d35ff2517defd6e92e93966f4c2ed15",
   "repo": "Expensify/App",
   "issue_number": 105145,
-  "status": "FAILED_ENGINEER",
-  "dispatch_id": "b2d4accc143147b7bdea1c13fb85fe32",
+  "status": "DISPATCHING",
+  "dispatch_id": "16151ed80e0243b880b2b30ae108edc3",
   "admission": {
     "funding": {
       "amount": "250",
@@ -20,13 +20,13 @@
       "source_author_login": "applause-bot[bot]",
       "escrow": true
     },
-    "agent_reason": "Expensify/App's documented US$250 bounty program ($N title convention attested by melvin-bot[bot]'s 'Job added to Upwork' comment) funds this open Android bug where the keyboard covers the Apply button in an exposed Search filter.",
+    "agent_reason": "Expensify's documented [$250] Upwork bounty program (melvin-bot[bot] attests the Upwork job) funds a fix for the Android search-filter Apply button being hidden by the soft keyboard; the affected UI is rendered by useSearchFiltersBar.tsx and its TextFilterPopup.",
     "scope_quote": "\"Apply\" button should be completelly visible while editing withdrawal ID via exposed filter.",
     "code_evidence": {
       "is_product_code": true,
-      "path": "src/components/Search/FilterDropdowns/FilterPopupButton.tsx",
-      "quote": "import useBottomSafeSafeAreaPaddingStyle from '@hooks/useBottomSafeSafeAreaPaddingStyle';",
-      "sha": "c34e778a5de96334575a3adb794792f305b9a4b6"
+      "path": "src/components/Search/SearchPageHeader/useSearchFiltersBar.tsx",
+      "quote": "import TextFilterPopup from '@components/Search/FilterDropdowns/TextFilterPopup';",
+      "sha": "87533e0a1666235bfd172a28e326f0bc881e1b2f"
     },
     "source_issue": "https://github.com/Expensify/App/issues/105145",
     "funding_status": "PRICED_OFFER",
@@ -34,8 +34,8 @@
     "commercial_scope": "linked-discussions",
     "commercial_review": {
       "decision": "proceed",
-      "source_revision": "826323dffb02c02fee06f42a38662f73085462545cdb0e1d8b3e761f3713dbf4",
-      "reason": "Expensify pays Search bugs through its Upwork job programme; melvin-bot[bot] published the Upwork attestation on this issue on 2026-10-27 and the [$250] title is the payout convention. The repository merges heavily (tens of thousands of merged PRs, last merge 2026-11-07) and its CONTRIBUTING/licence terms are open source, so there is no unpaid-work allegation, conflicting withdrawal or publication restriction in the collected sources.",
+      "source_revision": "09c17d83e0dae675de896b5cb2a91eaac9763d75ef22d9802b44098cb5cec499",
+      "reason": "The only monetary document on the page is Expensify's own bounty programme: a [$250] issue title plus melvin-bot[bot]'s 'Job added to Upwork' attestation; no withdrawal, unpaid-work allegation or licence conflict appears anywhere in the issue, comments, README/CONTRIBUTING or LICENSE.",
       "evidence": [
         {
           "source_url": "https://github.com/Expensify/App/issues/105145#issuecomment-6446047467",
@@ -44,20 +44,20 @@
       ]
     },
     "task_id": "3d35ff2517defd6e92e93966f4c2ed15",
-    "source_revision": "ac2d90591d9c4d1bf01455a55f08743ad140c0b3e5897ba68b4feb323b368524"
+    "source_revision": "879b602821857982ded99400449dd52b773adc5b7799a5210214291e484aeac9"
   },
-  "dispatch_attempt": 2,
+  "dispatch_attempt": 3,
   "sovereign_admission": true,
   "competition": {
     "blocking": false,
     "nominal": []
   },
   "lanes": [
-    "programs"
+    "normal"
   ],
-  "dispatched_at": "2026-11-07T08:24:52.697574+00:00",
+  "dispatched_at": "2026-11-07T08:55:22.874226+00:00",
   "attempt": 2,
-  "updated_at": "2026-11-07T08:32:07.071581+00:00",
+  "updated_at": "2026-11-07T08:55:22.874245+00:00",
   "owner": "42355387110:1",
   "previous_owner": "42351769071:1",
   "previous_status": "DISPATCHED",
