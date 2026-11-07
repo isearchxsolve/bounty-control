@@ -2,7 +2,7 @@
   "task_id": "4bea6822cb2ae0a1724df2cad8948f0c",
   "repo": "Expensify/App",
   "issue_number": 105767,
-  "status": "CLAIMED",
+  "status": "FAILED_ENGINEER",
   "dispatch_id": "a6e0f7072cc34c4190a1182d67f17102",
   "admission": {
     "funding": {
@@ -57,7 +57,7 @@
   ],
   "dispatched_at": "2026-11-07T08:36:51.615724+00:00",
   "attempt": 2,
-  "updated_at": "2026-11-07T08:37:12.602174+00:00",
+  "updated_at": "2026-11-07T08:43:42.541234+00:00",
   "owner": "42356237611:1",
   "previous_owner": "42351796195:1",
   "previous_status": "DISPATCHED",
@@ -66,12 +66,12 @@
   "claimed_at": "2026-11-07T08:37:12.602104+00:00",
   "lease_expires_at": "2026-11-07T12:42:12.602119+00:00",
   "preparation_budget_seconds": 14400,
-  "kind": "deliverable_invalid",
+  "kind": "engineer",
   "retryable": true,
-  "diagnostic": "Cline deliverable invalid at /tmp/fleet-artifacts/delivery-supervisor/187639b917124dbe989fdcf395b7c7cd.preparation.json: Bypassed or synthetic native verification command in phase bootstrap: bash -lc set -euo pipefail; TOOLS=/tmp/bounty-tools; mkdir -p \"$TOOLS\"; if [ \"$(node -v 2>/dev/null || true)\" != \"v26.12.1\" ] && [ ! -x \"$TOOLS/node-v26.12.1-linux-x64/bin/node\" ]; then curl -sSL https://nodejs.org/dist/v26.12.1/node-v26.12.1-linux-x64.tar.xz -o \"$TOOLS/node.tar.xz\"; tar -xf \"$TOOLS/node.tar.xz\" -C \"$TOOLS\"; fi; if [ ! -x \"$TOOLS/bun-linux-x64/bun\" ]; then curl -sSL -o \"$TOOLS/bun.zip\" https://github.com/oven-sh/bun/releases/download/bun-v1.4.4/bun-linux-x64.zip; if command -v unzip >/dev/null 2>&1; then unzip -oq \"$TOOLS/bun.zip\" -d \"$TOOLS\"; else python3 -c \"import zipfile,sys;zipfile.ZipFile(sys.argv[1]).extractall(sys.argv[2])\" \"$TOOLS/bun.zip\" \"$TOOLS\"; fi; chmod +x \"$TOOLS/bun-linux-x64/bun\"; fi",
+  "diagnostic": "Command '['git', '-c', 'submodule.recurse=false', 'clone', '--no-checkout', 'https://github.com/Expensify/App.git', '/tmp/bounty-workspaces/repos/Expensify--App--105767']' timed out after 180 seconds",
   "path": "/tmp/fleet-artifacts/delivery-supervisor/187639b917124dbe989fdcf395b7c7cd.preparation.json",
   "reason": "Bypassed or synthetic native verification command in phase bootstrap: bash -lc set -euo pipefail; TOOLS=/tmp/bounty-tools; mkdir -p \"$TOOLS\"; if [ \"$(node -v 2>/dev/null || true)\" != \"v26.12.1\" ] && [ ! -x \"$TOOLS/node-v26.12.1-linux-x64/bin/node\" ]; then curl -sSL https://nodejs.org/dist/v26.12.1/node-v26.12.1-linux-x64.tar.xz -o \"$TOOLS/node.tar.xz\"; tar -xf \"$TOOLS/node.tar.xz\" -C \"$TOOLS\"; fi; if [ ! -x \"$TOOLS/bun-linux-x64/bun\" ]; then curl -sSL -o \"$TOOLS/bun.zip\" https://github.com/oven-sh/bun/releases/download/bun-v1.4.4/bun-linux-x64.zip; if command -v unzip >/dev/null 2>&1; then unzip -oq \"$TOOLS/bun.zip\" -d \"$TOOLS\"; else python3 -c \"import zipfile,sys;zipfile.ZipFile(sys.argv[1]).extractall(sys.argv[2])\" \"$TOOLS/bun.zip\" \"$TOOLS\"; fi; chmod +x \"$TOOLS/bun-linux-x64/bun\"; fi",
-  "at": "2026-11-07T07:51:12.841690+00:00",
+  "at": "2026-11-07T08:41:55.020286+00:00",
   "failures": [
     {
       "run_url": "https://github.com/isearchxsolve/bounty-control/actions/runs/42351796195",
@@ -82,7 +82,15 @@
       "path": "/tmp/fleet-artifacts/delivery-supervisor/187639b917124dbe989fdcf395b7c7cd.preparation.json",
       "reason": "Bypassed or synthetic native verification command in phase bootstrap: bash -lc set -euo pipefail; TOOLS=/tmp/bounty-tools; mkdir -p \"$TOOLS\"; if [ \"$(node -v 2>/dev/null || true)\" != \"v26.12.1\" ] && [ ! -x \"$TOOLS/node-v26.12.1-linux-x64/bin/node\" ]; then curl -sSL https://nodejs.org/dist/v26.12.1/node-v26.12.1-linux-x64.tar.xz -o \"$TOOLS/node.tar.xz\"; tar -xf \"$TOOLS/node.tar.xz\" -C \"$TOOLS\"; fi; if [ ! -x \"$TOOLS/bun-linux-x64/bun\" ]; then curl -sSL -o \"$TOOLS/bun.zip\" https://github.com/oven-sh/bun/releases/download/bun-v1.4.4/bun-linux-x64.zip; if command -v unzip >/dev/null 2>&1; then unzip -oq \"$TOOLS/bun.zip\" -d \"$TOOLS\"; else python3 -c \"import zipfile,sys;zipfile.ZipFile(sys.argv[1]).extractall(sys.argv[2])\" \"$TOOLS/bun.zip\" \"$TOOLS\"; fi; chmod +x \"$TOOLS/bun-linux-x64/bun\"; fi",
       "at": "2026-11-07T07:51:12.841690+00:00"
+    },
+    {
+      "run_url": "https://github.com/isearchxsolve/bounty-control/actions/runs/42356237611",
+      "status": "FAILED_ENGINEER",
+      "kind": "engineer",
+      "retryable": true,
+      "diagnostic": "Command '['git', '-c', 'submodule.recurse=false', 'clone', '--no-checkout', 'https://github.com/Expensify/App.git', '/tmp/bounty-workspaces/repos/Expensify--App--105767']' timed out after 180 seconds",
+      "at": "2026-11-07T08:41:55.020286+00:00"
     }
   ],
-  "finished_at": "2026-11-07T07:51:22.204551+00:00"
+  "finished_at": "2026-11-07T08:43:42.130438+00:00"
 }
