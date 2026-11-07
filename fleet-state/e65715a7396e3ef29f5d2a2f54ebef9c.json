@@ -2,13 +2,13 @@
   "task_id": "e65715a7396e3ef29f5d2a2f54ebef9c",
   "repo": "Expensify/App",
   "issue_number": 104060,
-  "status": "FAILED_ENGINEER",
-  "dispatch_id": "75d715e8abdd431ea4ee2cb1b320d77a",
+  "status": "DISPATCHING",
+  "dispatch_id": "282bae023f1548339d2c03b558c21a4b",
   "admission": {
     "funding": {
       "amount": "250",
       "currency": "USD",
-      "payer": "applause-bot[bot]",
+      "payer": "melvin-bot[bot]",
       "source_url": "https://github.com/Expensify/App/issues/104060",
       "usd_value": "250",
       "quote": {
@@ -20,13 +20,13 @@
       "source_author_login": "applause-bot[bot]",
       "escrow": true
     },
-    "agent_reason": "Expensify/App's documented US$250 bounty programme (a [$N] title funded through the Upwork job that melvin-bot[bot] attests on the issue) covers this open bug in src/pages/ReimbursementAccount/NonUSD/BankInfo/BankInfo.tsx.",
+    "agent_reason": "melvin-bot[bot] attests the $250 Upwork job for this open Expensify bug; a bank-account confirmation shows a different error after a network reconnect, and the ReimbursementAccount action module drives that confirm flow.",
     "scope_quote": "Error should be same as previous.",
     "code_evidence": {
       "is_product_code": true,
-      "path": "src/pages/ReimbursementAccount/NonUSD/BankInfo/BankInfo.tsx",
-      "quote": "import FullScreenLoadingIndicator from '@components/FullscreenLoadingIndicator';",
-      "sha": "e77db1eb9dd356534450bf1669870da76f8ab7ac"
+      "path": "src/libs/actions/ReimbursementAccount/index.ts",
+      "sha": "f56217ca6b519684234bdb991dfe22b82ab734cf",
+      "quote": "import mapCurrencyToCountry from '@libs/mapCurrencyToCountry';"
     },
     "source_issue": "https://github.com/Expensify/App/issues/104060",
     "funding_status": "PRICED_OFFER",
@@ -34,19 +34,19 @@
     "commercial_scope": "linked-discussions",
     "commercial_review": {
       "decision": "proceed",
-      "source_revision": "676d33441a1714be45d896460e4714724fe7754f9f1eab9a4dcbd2f09a1177a1",
-      "reason": "Expensify pays its [$N] Search/App bugs through a documented Upwork job programme; melvin-bot[bot] published the Upwork attestation on this issue and the repository merges constantly, so the offer is current, authority is the repository's own programme automation, the scope is a bounded source-level fix and no unpaid-work allegation or withdrawal appears in the collected sources.",
+      "source_revision": "4a581991d94a393860ad9a750a4ad1a44b8e6801d1f13f5fa694a5bbbed481b0",
+      "reason": "Authorized program funding: melvin-bot[bot] published the Upwork job attestation on this open Expensify issue; no payment dispute, unpaid-work allegation or licence restriction appears in the issue, comments or repository terms.",
       "evidence": [
         {
-          "source_url": "https://github.com/Expensify/App/issues/104060#issuecomment-6185798720",
-          "quote": "Job added to Upwork: https://www.upwork.com/jobs/~022110615659031263975"
+          "source_url": "https://github.com/Expensify/App/issues/104060",
+          "quote": "Error should be same as previous."
         }
       ]
     },
     "task_id": "e65715a7396e3ef29f5d2a2f54ebef9c",
-    "source_revision": "e65a21ebc77706e33903e33b4aff59636224bd9a26b59b2ae505e6f9fdc52f48"
+    "source_revision": "99786b2b8ad06d3eef551a652546f41f8e819632146b197bc6963a3ebc46bc39"
   },
-  "dispatch_attempt": 2,
+  "dispatch_attempt": 3,
   "sovereign_admission": true,
   "competition": {
     "blocking": false,
@@ -55,9 +55,9 @@
   "lanes": [
     "programs"
   ],
-  "dispatched_at": "2026-11-07T08:28:19.116502+00:00",
+  "dispatched_at": "2026-11-07T16:56:53.063901+00:00",
   "attempt": 2,
-  "updated_at": "2026-11-07T08:35:40.505564+00:00",
+  "updated_at": "2026-11-07T16:56:53.063920+00:00",
   "owner": "42355624504:1",
   "previous_owner": "42351746091:1",
   "previous_status": "DISPATCHED",
