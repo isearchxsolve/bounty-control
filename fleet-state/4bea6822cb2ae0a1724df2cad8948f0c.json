@@ -1,0 +1,61 @@
+{
+  "task_id": "4bea6822cb2ae0a1724df2cad8948f0c",
+  "repo": "Expensify/App",
+  "issue_number": 105767,
+  "status": "DISPATCHING",
+  "dispatch_id": "da2b0a53b9b64fa3bc369e00c45879c8",
+  "admission": {
+    "funding": {
+      "amount": "250",
+      "currency": "USD",
+      "payer": "MelvinBot",
+      "source_url": "https://github.com/Expensify/App/issues/105767",
+      "usd_value": "250",
+      "quote": {
+        "basis": "USD face value",
+        "usd_rate": "1"
+      },
+      "raw": "[$250] Focus mode: single-expense report with a new comment stays hidden after Clear cache and restart",
+      "source_author_association": "CONTRIBUTOR",
+      "source_author_login": "MelvinBot",
+      "escrow": true
+    },
+    "agent_reason": "MelvinBot (CONTRIBUTOR) commits $250 USD in the issue title for [$250] Focus mode: single-expense report with a new comment stays hidden after Clear cache and restart; the repository's own product code at src/libs/ReportActionsUtils.ts implements the affected surface, so the work is a bounded code change here.",
+    "scope_quote": "Comments on a single-expense report land on its transaction thread. The [single-expense resolver](https://github.com/Expensify/App/blob/406fd2ec23618e2e8e7e8757949414219dcb0a30/src/libs/ReportActionsUtils.ts#L2596-L2667) requires the parent expense report's IOU action to identify that thread. Missing parent actions after a cache clear prevent the thread's comments from contributing to the parent's unread state and derived association.",
+    "code_evidence": {
+      "is_product_code": true,
+      "path": "src/libs/ReportActionsUtils.ts",
+      "quote": "import type {LocaleContextProps, LocalizedTranslate} from '@components/LocaleContextProvider';",
+      "sha": "ac0f6ef759c35b10cf06bfb193f0c6458a931c2b"
+    },
+    "source_issue": "https://github.com/Expensify/App/issues/105767",
+    "funding_status": "PRICED_OFFER",
+    "lane": "programs",
+    "commercial_scope": "linked-discussions",
+    "commercial_review": {
+      "decision": "proceed",
+      "source_revision": "2d692dec1e236763daef3c09fd41a5eeda8d4b8836bb230fbc6e58e6d5a7a9d5",
+      "reason": "Live read of the issue, its comments, linked pull requests, README/CONTRIBUTING and licence: the payment commitment is written by the issue author (repository authority) in the issue itself, no withdrawal, no unpaid-work allegation and no conflicting terms.",
+      "evidence": [
+        {
+          "source_url": "https://github.com/Expensify/App/issues/105767",
+          "quote": "Comments on a single-expense report land on its transaction thread. The [single-expense resolver](https://github.com/Expensify/App/blob/406fd2ec23618e2e8e7e8757949414219dcb0a30/src/libs/ReportActionsUtils.ts#L2596-L2667) requires the parent expense report's IOU action to identify that thread. Missing parent actions after a cache clear prevent the thread's comments from contributing to the parent's unread state and derived association."
+        }
+      ]
+    },
+    "task_id": "4bea6822cb2ae0a1724df2cad8948f0c",
+    "source_revision": "65d7683b6acf11e41bf3bfe375d96616989d94c7d3eef8c5d4fe7cb6c03099ce"
+  },
+  "dispatch_attempt": 1,
+  "sovereign_admission": true,
+  "competition": {
+    "blocking": false,
+    "nominal": []
+  },
+  "lanes": [
+    "programs"
+  ],
+  "dispatched_at": "2026-11-07T07:33:44.840974+00:00",
+  "attempt": 0,
+  "updated_at": "2026-11-07T07:33:44.840990+00:00"
+}
