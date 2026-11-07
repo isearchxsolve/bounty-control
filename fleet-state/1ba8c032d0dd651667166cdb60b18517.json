@@ -1,0 +1,61 @@
+{
+  "task_id": "1ba8c032d0dd651667166cdb60b18517",
+  "repo": "Expensify/App",
+  "issue_number": 106240,
+  "status": "DISPATCHING",
+  "dispatch_id": "acc33523bcd445c1acb9eb2ec9ed1596",
+  "admission": {
+    "funding": {
+      "amount": "175",
+      "currency": "USD",
+      "payer": "melvin-bot[bot]",
+      "source_url": "https://github.com/Expensify/App/issues/106240",
+      "usd_value": "175",
+      "quote": {
+        "basis": "USD face value",
+        "usd_rate": "1"
+      },
+      "raw": "[$175] Scan- There was an error uploading your receipt displayed after scan a receipt",
+      "source_author_association": "NONE",
+      "source_author_login": "applause-bot[bot]",
+      "escrow": true
+    },
+    "agent_reason": "melvin-bot[bot] Upwork-attested $175 Expensify bounty; bounded product bug in the NewDot app.",
+    "scope_quote": "Receipt is scanned and details are filled on the expense",
+    "code_evidence": {
+      "is_product_code": true,
+      "path": "src/components/ReceiptScanDropZone/index.tsx",
+      "quote": "import {DragAndDropStateContext} from '@components/DragAndDrop/Provide",
+      "sha": "ccb8bc1850924ba90967b94e7eab4bddf8ffae30"
+    },
+    "source_issue": "https://github.com/Expensify/App/issues/106240",
+    "funding_status": "PRICED_OFFER",
+    "lane": "programs",
+    "commercial_scope": "linked-discussions",
+    "commercial_review": {
+      "decision": "proceed",
+      "source_revision": "74d9c80ebf07903e6a52446380013f8386d3f656443e9e05f3d7aa9a1ccb6777",
+      "reason": "Current $175 offer attested by melvin-bot[bot] Upwork job URL; no warning documents in the linked context; escrow-only satisfied via the expensify/app funding program.",
+      "evidence": [
+        {
+          "source_url": "https://github.com/Expensify/App/issues/106240#issuecomment-6692812322",
+          "quote": "Job added to Upwork: https://www.upwork.com/jobs/~022118778726659235572"
+        }
+      ]
+    },
+    "task_id": "1ba8c032d0dd651667166cdb60b18517",
+    "source_revision": "cc1d3866d125d59d54710affff748abd6544f6c54238e8b45e3ed548e37a6f53"
+  },
+  "dispatch_attempt": 1,
+  "sovereign_admission": true,
+  "competition": {
+    "blocking": false,
+    "nominal": []
+  },
+  "lanes": [
+    "programs"
+  ],
+  "dispatched_at": "2026-11-07T12:15:24.065454+00:00",
+  "attempt": 0,
+  "updated_at": "2026-11-07T12:15:24.065472+00:00"
+}
