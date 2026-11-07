@@ -2,8 +2,8 @@
   "task_id": "3d35ff2517defd6e92e93966f4c2ed15",
   "repo": "Expensify/App",
   "issue_number": 105145,
-  "status": "FAILED_ENGINEER",
-  "dispatch_id": "bf361a729c51484ca4e8213fde669b5f",
+  "status": "DISPATCHING",
+  "dispatch_id": "b2d4accc143147b7bdea1c13fb85fe32",
   "admission": {
     "funding": {
       "amount": "250",
@@ -20,13 +20,13 @@
       "source_author_login": "applause-bot[bot]",
       "escrow": true
     },
-    "agent_reason": "applause-bot[bot] (NONE) commits $250 USD in the issue title for [$250] Android - Spend - \"Apply\" button is overlapped by keyboard in exposed filter.; the repository's own product code at src/App.tsx implements the affected surface, so the work is a bounded code change here.",
-    "scope_quote": "\"Apply\" button is overlapped by keyboard while editing withdrawal ID via exposed filter and user is unable to scroll down to it.",
+    "agent_reason": "Expensify/App's documented US$250 bounty program ($N title convention attested by melvin-bot[bot]'s 'Job added to Upwork' comment) funds this open Android bug where the keyboard covers the Apply button in an exposed Search filter.",
+    "scope_quote": "\"Apply\" button should be completelly visible while editing withdrawal ID via exposed filter.",
     "code_evidence": {
       "is_product_code": true,
-      "path": "src/App.tsx",
-      "quote": "import {PortalProvider} from '@gorhom/portal';",
-      "sha": "df2eafdb9c98819ec84bf52cc2b3577d81306d17"
+      "path": "src/components/Search/FilterDropdowns/FilterPopupButton.tsx",
+      "quote": "import useBottomSafeSafeAreaPaddingStyle from '@hooks/useBottomSafeSafeAreaPaddingStyle';",
+      "sha": "c34e778a5de96334575a3adb794792f305b9a4b6"
     },
     "source_issue": "https://github.com/Expensify/App/issues/105145",
     "funding_status": "PRICED_OFFER",
@@ -34,19 +34,19 @@
     "commercial_scope": "linked-discussions",
     "commercial_review": {
       "decision": "proceed",
-      "source_revision": "9f84229be03f59147e1a473bf1a2e5cc88f2f54614ec5c832ed100a81a1e6994",
-      "reason": "Live read of the issue, its comments, linked pull requests, README/CONTRIBUTING and licence: the payment commitment is written by the issue author (repository authority) in the issue itself, no withdrawal, no unpaid-work allegation and no conflicting terms.",
+      "source_revision": "826323dffb02c02fee06f42a38662f73085462545cdb0e1d8b3e761f3713dbf4",
+      "reason": "Expensify pays Search bugs through its Upwork job programme; melvin-bot[bot] published the Upwork attestation on this issue on 2026-10-27 and the [$250] title is the payout convention. The repository merges heavily (tens of thousands of merged PRs, last merge 2026-11-07) and its CONTRIBUTING/licence terms are open source, so there is no unpaid-work allegation, conflicting withdrawal or publication restriction in the collected sources.",
       "evidence": [
         {
-          "source_url": "https://github.com/Expensify/App/issues/105145",
-          "quote": "\"Apply\" button is overlapped by keyboard while editing withdrawal ID via exposed filter and user is unable to scroll down to it."
+          "source_url": "https://github.com/Expensify/App/issues/105145#issuecomment-6446047467",
+          "quote": "Job added to Upwork: https://www.upwork.com/jobs/~022115102803454012561"
         }
       ]
     },
     "task_id": "3d35ff2517defd6e92e93966f4c2ed15",
-    "source_revision": "b12bf36539a232682f4a59a0f21d6c62d26d4c1d8d2f14c437024787727cbfe3"
+    "source_revision": "ac2d90591d9c4d1bf01455a55f08743ad140c0b3e5897ba68b4feb323b368524"
   },
-  "dispatch_attempt": 1,
+  "dispatch_attempt": 2,
   "sovereign_admission": true,
   "competition": {
     "blocking": false,
@@ -55,9 +55,9 @@
   "lanes": [
     "programs"
   ],
-  "dispatched_at": "2026-11-07T07:33:20.278637+00:00",
+  "dispatched_at": "2026-11-07T08:24:52.697574+00:00",
   "attempt": 1,
-  "updated_at": "2026-11-07T07:50:40.134464+00:00",
+  "updated_at": "2026-11-07T08:24:52.697594+00:00",
   "owner": "42351769071:1",
   "previous_owner": null,
   "previous_status": "DISPATCHED",
