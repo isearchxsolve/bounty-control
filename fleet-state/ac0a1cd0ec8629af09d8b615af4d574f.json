@@ -1,0 +1,61 @@
+{
+  "task_id": "ac0a1cd0ec8629af09d8b615af4d574f",
+  "repo": "Expensify/App",
+  "issue_number": 102742,
+  "status": "DISPATCHING",
+  "dispatch_id": "4491d858068d42ee9e7f566e8ad789d1",
+  "admission": {
+    "funding": {
+      "amount": "250",
+      "currency": "USD",
+      "payer": "mountiny",
+      "source_url": "https://github.com/Expensify/App/issues/102742",
+      "usd_value": "250",
+      "quote": {
+        "basis": "USD face value",
+        "usd_rate": "1"
+      },
+      "raw": "[$250] [Sentry: APP-MDA] FragmentManager race in legacy OldDot navigation (yapl)",
+      "source_author_association": "CONTRIBUTOR",
+      "source_author_login": "mountiny",
+      "escrow": true
+    },
+    "agent_reason": "mountiny (CONTRIBUTOR) commits $250 USD in the issue title for [$250] [Sentry: APP-MDA] FragmentManager race in legacy OldDot navigation (yapl); the repository's own product code at src/App.tsx implements the affected surface, so the work is a bounded code change here.",
+    "scope_quote": "Legacy OldDot (yapl) NavigationManager calls `commitNowAllowingStateLoss` while FragmentManager is already executing another transaction. Likely two navigation commands (dismissModal and popLastPage) firing back-to-back without waiting for the first to finish.",
+    "code_evidence": {
+      "is_product_code": true,
+      "path": "src/App.tsx",
+      "quote": "import {PortalProvider} from '@gorhom/portal';",
+      "sha": "df2eafdb9c98819ec84bf52cc2b3577d81306d17"
+    },
+    "source_issue": "https://github.com/Expensify/App/issues/102742",
+    "funding_status": "PRICED_OFFER",
+    "lane": "programs",
+    "commercial_scope": "linked-discussions",
+    "commercial_review": {
+      "decision": "proceed",
+      "source_revision": "4d1937438014b0e1c6ad951d3e8671e286838a96a0de1d4f88e2a0f8e54cfcf6",
+      "reason": "Live read of the issue, its comments, linked pull requests, README/CONTRIBUTING and licence: the payment commitment is written by the issue author (repository authority) in the issue itself, no withdrawal, no unpaid-work allegation and no conflicting terms.",
+      "evidence": [
+        {
+          "source_url": "https://github.com/Expensify/App/issues/102742",
+          "quote": "Legacy OldDot (yapl) NavigationManager calls `commitNowAllowingStateLoss` while FragmentManager is already executing another transaction. Likely two navigation commands (dismissModal and popLastPage) firing back-to-back without waiting for the first to finish."
+        }
+      ]
+    },
+    "task_id": "ac0a1cd0ec8629af09d8b615af4d574f",
+    "source_revision": "5df4832ef48f739209fc9f93bec804bfd3219228f19245d053c6006ad6ebe054"
+  },
+  "dispatch_attempt": 1,
+  "sovereign_admission": true,
+  "competition": {
+    "blocking": false,
+    "nominal": []
+  },
+  "lanes": [
+    "programs"
+  ],
+  "dispatched_at": "2026-11-07T07:32:32.261516+00:00",
+  "attempt": 0,
+  "updated_at": "2026-11-07T07:32:32.261535+00:00"
+}
