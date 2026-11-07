@@ -2,7 +2,7 @@
   "task_id": "e65715a7396e3ef29f5d2a2f54ebef9c",
   "repo": "Expensify/App",
   "issue_number": 104060,
-  "status": "CLAIMED",
+  "status": "FAILED_ENGINEER",
   "dispatch_id": "282bae023f1548339d2c03b558c21a4b",
   "admission": {
     "funding": {
@@ -57,7 +57,7 @@
   ],
   "dispatched_at": "2026-11-07T16:56:53.063901+00:00",
   "attempt": 3,
-  "updated_at": "2026-11-07T16:57:14.639333+00:00",
+  "updated_at": "2026-11-07T18:35:37.580494+00:00",
   "owner": "42393833513:1",
   "previous_owner": "42355624504:1",
   "previous_status": "DISPATCHED",
@@ -68,8 +68,8 @@
   "preparation_budget_seconds": 14400,
   "kind": "engineer",
   "retryable": true,
-  "diagnostic": "Command '['git', '-c', 'submodule.recurse=false', 'clone', '--no-checkout', 'https://github.com/Expensify/App.git', '/tmp/bounty-workspaces/repos/Expensify--App--104060']' timed out after 180 seconds",
-  "at": "2026-11-07T08:35:24.706275+00:00",
+  "diagnostic": "Bounded Cline delivery repair exhausted: Previous agent process experienced an upstream network timeout. Preserved worktree edits intact; resume engineering and complete the release contract.",
+  "at": "2026-11-07T18:35:24.794311+00:00",
   "failures": [
     {
       "run_url": "https://github.com/isearchxsolve/bounty-control/actions/runs/42351746091",
@@ -86,7 +86,15 @@
       "retryable": true,
       "diagnostic": "Command '['git', '-c', 'submodule.recurse=false', 'clone', '--no-checkout', 'https://github.com/Expensify/App.git', '/tmp/bounty-workspaces/repos/Expensify--App--104060']' timed out after 180 seconds",
       "at": "2026-11-07T08:35:24.706275+00:00"
+    },
+    {
+      "run_url": "https://github.com/isearchxsolve/bounty-control/actions/runs/42393833513",
+      "status": "FAILED_ENGINEER",
+      "kind": "engineer",
+      "retryable": true,
+      "diagnostic": "Bounded Cline delivery repair exhausted: Previous agent process experienced an upstream network timeout. Preserved worktree edits intact; resume engineering and complete the release contract.",
+      "at": "2026-11-07T18:35:24.794311+00:00"
     }
   ],
-  "finished_at": "2026-11-07T08:35:40.093843+00:00"
+  "finished_at": "2026-11-07T18:35:37.135762+00:00"
 }
