@@ -1,0 +1,61 @@
+{
+  "task_id": "1a5f5e566a822ad425e048091f7bf5d8",
+  "repo": "Expensify/App",
+  "issue_number": 104360,
+  "status": "DISPATCHING",
+  "dispatch_id": "57a91a2ffc63400e8c753d4e54b84cdb",
+  "admission": {
+    "funding": {
+      "amount": "250",
+      "currency": "USD",
+      "payer": "melvin-bot[bot]",
+      "source_url": "https://github.com/Expensify/App/issues/104360",
+      "usd_value": "250",
+      "quote": {
+        "basis": "USD face value",
+        "usd_rate": "1"
+      },
+      "raw": "[$250] Web-Chat- Edit comment input is not focused",
+      "source_author_association": "NONE",
+      "source_author_login": "applause-bot[bot]",
+      "escrow": true
+    },
+    "agent_reason": "melvin-bot[bot] attests the $250 Upwork job for this open Expensify chat bug; editing a comment leaves the composer unfocused, and InputFocus/index.ts is the focus action the fix targets.",
+    "scope_quote": "Verify that the input of the message whose element you have selected is in focus",
+    "code_evidence": {
+      "is_product_code": true,
+      "path": "src/libs/actions/InputFocus/index.ts",
+      "sha": "86a335b1c47c97b6e23fb1087abbc226071d1525",
+      "quote": "function inputFocusChange(focus: boolean) {}"
+    },
+    "source_issue": "https://github.com/Expensify/App/issues/104360",
+    "funding_status": "PRICED_OFFER",
+    "lane": "programs",
+    "commercial_scope": "linked-discussions",
+    "commercial_review": {
+      "decision": "proceed",
+      "source_revision": "581f009e7184566bc988a94ae9337a965ceac8868e5fab493e1cec4232ab5882",
+      "reason": "Authorized program funding: melvin-bot[bot] published the Upwork job attestation on this open Expensify issue; no payment dispute, unpaid-work allegation or licence restriction appears in the issue, comments or repository terms.",
+      "evidence": [
+        {
+          "source_url": "https://github.com/Expensify/App/issues/104360",
+          "quote": "Verify that the input of the message whose element you have selected is in focus"
+        }
+      ]
+    },
+    "task_id": "1a5f5e566a822ad425e048091f7bf5d8",
+    "source_revision": "f104601a404ecf3c8f5151a5fba812022a9d13e3a6e9cdace7dba28440aff0da"
+  },
+  "dispatch_attempt": 1,
+  "sovereign_admission": true,
+  "competition": {
+    "blocking": false,
+    "nominal": []
+  },
+  "lanes": [
+    "programs"
+  ],
+  "dispatched_at": "2026-11-07T16:56:25.399422+00:00",
+  "attempt": 0,
+  "updated_at": "2026-11-07T16:56:25.399442+00:00"
+}
