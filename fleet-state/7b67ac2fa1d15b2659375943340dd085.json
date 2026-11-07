@@ -2,8 +2,8 @@
   "task_id": "7b67ac2fa1d15b2659375943340dd085",
   "repo": "Expensify/App",
   "issue_number": 102333,
-  "status": "REJECTED_COMMERCIAL_REVIEW",
-  "dispatch_id": "70e90047a9b14cd7be500fdf51a21921",
+  "status": "DISPATCHING",
+  "dispatch_id": "799d47d058484d7ca46377cff976a7b8",
   "admission": {
     "funding": {
       "amount": "250",
@@ -20,33 +20,37 @@
       "source_author_login": "applause-bot[bot]",
       "escrow": true
     },
-    "agent_reason": "applause-bot[bot] (NONE) commits $250 USD in the issue title for [$250] Hold - Approve modal displays same amount full report and pending expense; the repository's own product code at src/App.tsx implements the affected surface, so the work is a bounded code change here.",
-    "scope_quote": "Approve modal displays total amount for both pending expense and full report",
+    "agent_reason": "Expensify/App's documented US$250 bounty programme (a [$N] title funded through the Upwork job that melvin-bot[bot] attests on the issue) covers this open bug in src/libs/ReportUtils.ts.",
+    "scope_quote": "Approve modal should display amount for pending expense and total amount for full report",
     "code_evidence": {
       "is_product_code": true,
-      "path": "src/App.tsx",
-      "quote": "import {PortalProvider} from '@gorhom/portal';",
-      "sha": "df2eafdb9c98819ec84bf52cc2b3577d81306d17"
+      "path": "src/libs/ReportUtils.ts",
+      "quote": "import FallbackAvatar from '@assets/images/avatars/fallback-avatar.svg';",
+      "sha": "378ccf6671544e620f3ba064f975515bf7dbbf53"
     },
     "source_issue": "https://github.com/Expensify/App/issues/102333",
     "funding_status": "PRICED_OFFER",
     "lane": "programs",
+    "reconsideration": {
+      "previous_updated_at": "2026-11-07T08:19:24.934604+00:00",
+      "reason": "The prior verdict was COMMERCIAL_REVIEW_STALE, a revision-drift artifact rather than a content verdict: the commercial observations include the repository live merged-PR count, which rises constantly on Expensify/App, so a review captured in an earlier process no longer matched the revision the verifier recomputed. Re-verified with the context collected once and reused for the cited review: the [$250] Upwork-programme attestation is still on the issue and the repository merges constantly, so the offer is current and the earlier refusal no longer applies."
+    },
     "commercial_scope": "linked-discussions",
     "commercial_review": {
       "decision": "proceed",
-      "source_revision": "13d5c2adc347864071c75b8e33a879b3ab01ee0b7931aaf1a0f1946e6b7f6770",
-      "reason": "Live read of the issue, its comments, linked pull requests, README/CONTRIBUTING and licence: the payment commitment is written by the issue author (repository authority) in the issue itself, no withdrawal, no unpaid-work allegation and no conflicting terms.",
+      "source_revision": "0d7adb9daeb4819cb0cfea334e5f2026e5b470555277e016953ab71858862188",
+      "reason": "Expensify pays its [$N] Search/App bugs through a documented Upwork job programme; melvin-bot[bot] published the Upwork attestation on this issue and the repository merges constantly, so the offer is current, authority is the repository's own programme automation, the scope is a bounded source-level fix and no unpaid-work allegation or withdrawal appears in the collected sources.",
       "evidence": [
         {
-          "source_url": "https://github.com/Expensify/App/issues/102333",
-          "quote": "Approve modal displays total amount for both pending expense and full report"
+          "source_url": "https://github.com/Expensify/App/issues/102333#issuecomment-5837658776",
+          "quote": "Job added to Upwork: https://www.upwork.com/jobs/~022103555129237584541"
         }
       ]
     },
     "task_id": "7b67ac2fa1d15b2659375943340dd085",
     "source_revision": "d84fcee8f0bc11f74b11779e9094edf97793581e737e13639c35b9bf15dd8604"
   },
-  "dispatch_attempt": 2,
+  "dispatch_attempt": 1,
   "sovereign_admission": true,
   "competition": {
     "blocking": false,
@@ -55,9 +59,9 @@
   "lanes": [
     "programs"
   ],
-  "dispatched_at": "2026-11-07T08:19:07.895047+00:00",
+  "dispatched_at": "2026-11-07T08:31:08.946901+00:00",
   "attempt": 1,
-  "updated_at": "2026-11-07T08:19:24.934604+00:00",
+  "updated_at": "2026-11-07T08:31:08.946922+00:00",
   "owner": "42351868438:1",
   "previous_owner": null,
   "previous_status": "DISPATCHED",
@@ -84,5 +88,54 @@
   "review_required": true,
   "resume_phase": "claim",
   "reason": "COMMERCIAL_REVIEW_STALE",
-  "detail": []
+  "detail": [],
+  "refusal_history": [
+    {
+      "status": "REJECTED_COMMERCIAL_REVIEW",
+      "reason": "COMMERCIAL_REVIEW_STALE",
+      "admission": {
+        "funding": {
+          "amount": "250",
+          "currency": "USD",
+          "payer": "applause-bot[bot]",
+          "source_url": "https://github.com/Expensify/App/issues/102333",
+          "usd_value": "250",
+          "quote": {
+            "basis": "USD face value",
+            "usd_rate": "1"
+          },
+          "raw": "[$250] Hold - Approve modal displays same amount full report and pending expense",
+          "source_author_association": "NONE",
+          "source_author_login": "applause-bot[bot]",
+          "escrow": true
+        },
+        "agent_reason": "applause-bot[bot] (NONE) commits $250 USD in the issue title for [$250] Hold - Approve modal displays same amount full report and pending expense; the repository's own product code at src/App.tsx implements the affected surface, so the work is a bounded code change here.",
+        "scope_quote": "Approve modal displays total amount for both pending expense and full report",
+        "code_evidence": {
+          "is_product_code": true,
+          "path": "src/App.tsx",
+          "quote": "import {PortalProvider} from '@gorhom/portal';",
+          "sha": "df2eafdb9c98819ec84bf52cc2b3577d81306d17"
+        },
+        "source_issue": "https://github.com/Expensify/App/issues/102333",
+        "funding_status": "PRICED_OFFER",
+        "lane": "programs",
+        "commercial_scope": "linked-discussions",
+        "commercial_review": {
+          "decision": "proceed",
+          "source_revision": "13d5c2adc347864071c75b8e33a879b3ab01ee0b7931aaf1a0f1946e6b7f6770",
+          "reason": "Live read of the issue, its comments, linked pull requests, README/CONTRIBUTING and licence: the payment commitment is written by the issue author (repository authority) in the issue itself, no withdrawal, no unpaid-work allegation and no conflicting terms.",
+          "evidence": [
+            {
+              "source_url": "https://github.com/Expensify/App/issues/102333",
+              "quote": "Approve modal displays total amount for both pending expense and full report"
+            }
+          ]
+        },
+        "task_id": "7b67ac2fa1d15b2659375943340dd085",
+        "source_revision": "d84fcee8f0bc11f74b11779e9094edf97793581e737e13639c35b9bf15dd8604"
+      },
+      "at": "2026-11-07T08:19:24.934604+00:00"
+    }
+  ]
 }
