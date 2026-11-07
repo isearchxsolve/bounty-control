@@ -45,25 +45,21 @@ def render_email_subject(repo: str, pr_number: int) -> str:
 
 def render_email_body(maintainer_name: str, repo: str, pr_number: int, stripe_link: Optional[str] = None) -> str:
     first_name = maintainer_name.split()[0] if maintainer_name else "there"
-    stripe_section = f"2. Direct Stripe / Card Payment:\n   {stripe_link}\n" if stripe_link else "2. Direct Stripe / Card Payment:\n   Available instantly upon request (Stripe Payment Link / Invoice).\n"
+    card_fallback = f"\n(If your organization requires card checkout or a Stripe link instead, please let me know and I will provide one immediately: {stripe_link})\n" if stripe_link else "\n(If your organization requires card payment or an invoice instead, please let me know and I will provide one immediately.)\n"
     return f"""Hi {first_name},
 
 Thank you for merging PR #{pr_number} on {repo}!
 
-For bounty settlement, whichever rail is most convenient for your accounting:
+For bounty settlement, please use the direct bank rail below for immediate same-day clearing:
 
-1. Direct Bank Deposit (Instant IMPS / Wire / Wise-compatible):
-   Beneficiary Name: KUNAL DAS
-   Bank: UCO Bank
-   Account Number: 17700110071793
-   Account Type: Savings (SBA)
-   IFSC Code: UCBA0001770
-   Branch: Santoshpur - Kolkata (163 Santoshpur Avenue, Kolkata, WB 700075)
-
-{stripe_section}
-3. GitHub Sponsors (Native Platform):
-   https://github.com/sponsors/isearchxsolve
-
+Direct Bank Deposit (Instant IMPS / Wire / Wise-compatible):
+  Beneficiary Name: KUNAL DAS
+  Bank: UCO Bank
+  Account Number: 17700110071793
+  Account Type: Savings (SBA)
+  IFSC Code: UCBA0001770
+  Branch: Santoshpur - Kolkata (163 Santoshpur Avenue, Kolkata, WB 700075)
+{card_fallback}
 Thank you again for maintaining such a fantastic project and for the thoughtful guidance throughout the review process!
 
 Best regards,
