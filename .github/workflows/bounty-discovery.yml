@@ -24,6 +24,9 @@ jobs:
       # attestations convert; verbal/sponsor offers closed unmerged 100% of the time in
       # our record. The door refuses non-bot offers when this is set.
       BOUNTY_ESCROW_ONLY: '1'
+      # Expanded capacity ceiling to 10 GB so major funded monorepos (e.g. Expensify/App at 3.4 GB)
+      # are not blocked by the default 750 MB runner gate.
+      BOUNTY_MAX_REPOSITORY_KB: '10000000'
     steps:
     - uses: actions/checkout@v4
       with:
@@ -74,7 +77,7 @@ jobs:
         # expired mid-filter before rows landed (run 41564183447, run 42310612968), so the
         # budget is set to 1800 s (30m) inside the 45m job ceiling.
         BOUNTY_AGENT_TIMEOUT: '1800'
-      run: python3 -u scripts/actions_dispatch.py --live --once --queries-per-lane 8 --max-dispatches 4 --lane ${{ vars.ACTIVE_LANES || 'all' }}
+      run: python3 -u scripts/actions_dispatch.py --live --once --queries-per-lane 8 --max-dispatches 12 --lane ${{ vars.ACTIVE_LANES || 'all' }}
     - name: Observe published PR review and conversion receipts
       continue-on-error: true
       # 100 authored PRs measured past this step's old 3-minute bound on run 42226995018 and

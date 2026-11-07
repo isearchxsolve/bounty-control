@@ -30,6 +30,7 @@ jobs:
       # predates the escrow-only door (measured 2026-11-06: 41 stranded tasks, oldest
       # 2026-10-31T23:22Z), so this lane can dispatch work no escrow check ever saw.
       BOUNTY_ESCROW_ONLY: '1'
+      BOUNTY_MAX_REPOSITORY_KB: '10000000'
     steps:
     - uses: actions/checkout@v4
       with:
@@ -51,7 +52,7 @@ jobs:
       # budget and is not throttled by the 65-second secondary search waits. Shared durable
       # ownership (bounty-control branch, Contents-API CAS) keeps dispatch safe against the
       # concurrent discovery lane.
-      run: python3 -u scripts/actions_dispatch.py --live --once --hydrate-only --hydrate-batch 300 --max-dispatches 4 --lane all
+      run: python3 -u scripts/actions_dispatch.py --live --once --hydrate-only --hydrate-batch 300 --max-dispatches 12 --lane all
     - uses: actions/upload-artifact@v4
       if: always()
       with:
