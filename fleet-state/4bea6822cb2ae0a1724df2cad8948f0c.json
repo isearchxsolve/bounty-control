@@ -2,8 +2,8 @@
   "task_id": "4bea6822cb2ae0a1724df2cad8948f0c",
   "repo": "Expensify/App",
   "issue_number": 105767,
-  "status": "FAILED_DELIVERABLE_MISSING",
-  "dispatch_id": "da2b0a53b9b64fa3bc369e00c45879c8",
+  "status": "DISPATCHING",
+  "dispatch_id": "a6e0f7072cc34c4190a1182d67f17102",
   "admission": {
     "funding": {
       "amount": "250",
@@ -20,13 +20,13 @@
       "source_author_login": "MelvinBot",
       "escrow": true
     },
-    "agent_reason": "MelvinBot (CONTRIBUTOR) commits $250 USD in the issue title for [$250] Focus mode: single-expense report with a new comment stays hidden after Clear cache and restart; the repository's own product code at src/libs/ReportActionsUtils.ts implements the affected surface, so the work is a bounded code change here.",
-    "scope_quote": "Comments on a single-expense report land on its transaction thread. The [single-expense resolver](https://github.com/Expensify/App/blob/406fd2ec23618e2e8e7e8757949414219dcb0a30/src/libs/ReportActionsUtils.ts#L2596-L2667) requires the parent expense report's IOU action to identify that thread. Missing parent actions after a cache clear prevent the thread's comments from contributing to the parent's unread state and derived association.",
+    "agent_reason": "Expensify/App's documented US$250 bounty programme (a [$N] title funded through the Upwork job that melvin-bot[bot] attests on the issue) covers this open bug in src/hooks/useSidebarOrderedReports.tsx.",
+    "scope_quote": "In Focus mode, a single-expense report with a new unread comment stays hidden from the LHN and the Unread tab after **Settings > Troubleshoot > Clear cache and restart**. The report shows as unread only after the user opens it.",
     "code_evidence": {
       "is_product_code": true,
-      "path": "src/libs/ReportActionsUtils.ts",
-      "quote": "import type {LocaleContextProps, LocalizedTranslate} from '@components/LocaleContextProvider';",
-      "sha": "ac0f6ef759c35b10cf06bfb193f0c6458a931c2b"
+      "path": "src/hooks/useSidebarOrderedReports.tsx",
+      "quote": "import {setInboxTab} from '@libs/actions/User';",
+      "sha": "7c1a4aff3e85bd1c04e87dd584717776a125a039"
     },
     "source_issue": "https://github.com/Expensify/App/issues/105767",
     "funding_status": "PRICED_OFFER",
@@ -34,19 +34,19 @@
     "commercial_scope": "linked-discussions",
     "commercial_review": {
       "decision": "proceed",
-      "source_revision": "2d692dec1e236763daef3c09fd41a5eeda8d4b8836bb230fbc6e58e6d5a7a9d5",
-      "reason": "Live read of the issue, its comments, linked pull requests, README/CONTRIBUTING and licence: the payment commitment is written by the issue author (repository authority) in the issue itself, no withdrawal, no unpaid-work allegation and no conflicting terms.",
+      "source_revision": "3cecdbbaef8ad4d7c0cfe8884efec74d6a835eec647c43114f0b72f1f6d8a113",
+      "reason": "Expensify pays its [$N] Search/App bugs through a documented Upwork job programme; melvin-bot[bot] published the Upwork attestation on this issue and the repository merges constantly, so the offer is current, authority is the repository's own programme automation, the scope is a bounded source-level fix and no unpaid-work allegation or withdrawal appears in the collected sources.",
       "evidence": [
         {
-          "source_url": "https://github.com/Expensify/App/issues/105767",
-          "quote": "Comments on a single-expense report land on its transaction thread. The [single-expense resolver](https://github.com/Expensify/App/blob/406fd2ec23618e2e8e7e8757949414219dcb0a30/src/libs/ReportActionsUtils.ts#L2596-L2667) requires the parent expense report's IOU action to identify that thread. Missing parent actions after a cache clear prevent the thread's comments from contributing to the parent's unread state and derived association."
+          "source_url": "https://github.com/Expensify/App/issues/105767#issuecomment-6687606315",
+          "quote": "Job added to Upwork: https://www.upwork.com/jobs/~022118716950844917973"
         }
       ]
     },
     "task_id": "4bea6822cb2ae0a1724df2cad8948f0c",
-    "source_revision": "65d7683b6acf11e41bf3bfe375d96616989d94c7d3eef8c5d4fe7cb6c03099ce"
+    "source_revision": "8bee258e48358ef279e0045a3eb1ae4b1002e27d183ee8e756694562e491456b"
   },
-  "dispatch_attempt": 1,
+  "dispatch_attempt": 2,
   "sovereign_admission": true,
   "competition": {
     "blocking": false,
@@ -55,9 +55,9 @@
   "lanes": [
     "programs"
   ],
-  "dispatched_at": "2026-11-07T07:33:44.840974+00:00",
+  "dispatched_at": "2026-11-07T08:36:51.615724+00:00",
   "attempt": 1,
-  "updated_at": "2026-11-07T07:51:22.747615+00:00",
+  "updated_at": "2026-11-07T08:36:51.615744+00:00",
   "owner": "42351796195:1",
   "previous_owner": null,
   "previous_status": "DISPATCHED",
